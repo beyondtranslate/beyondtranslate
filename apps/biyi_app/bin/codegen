@@ -1,6 +1,0 @@
-#!/bin/bash
-dart run easy_localization:generate
-dart run easy_localization:generate -f keys -o locale_keys.g.dart
-dart run build_runner build --delete-conflicting-outputs
-dart format lib/generated/codegen_loader.g.dart
-dart format lib/generated/locale_keys.g.dart
