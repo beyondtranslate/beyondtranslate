@@ -5,10 +5,10 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shortid/shortid.dart';
 
-const List<String> _kAllScopes = [
-  kScopeDetectLanguage,
-  kScopeLookUp,
-  kScopeTranslate,
+const List<TranslationEngineScope> _kAllScopes = [
+  TranslationEngineScope.detectLanguage,
+  TranslationEngineScope.lookUp,
+  TranslationEngineScope.translate,
 ];
 
 class TranslationEngineCreateOrEditPage extends StatefulWidget {
@@ -167,10 +167,8 @@ class _TranslationEngineCreateOrEditPageState
                     left: 12,
                     right: 12,
                   ),
-                  title: Text(
-                    'engine_scope.${scope.toLowerCase()}'.tr(),
-                  ),
-                  summary: Text(scope),
+                  title: Text('engine_scope.${scope.name.toLowerCase()}'.tr()),
+                  summary: Text(scope.name),
                   accessoryView: Container(
                     margin: EdgeInsets.zero,
                     child: Builder(

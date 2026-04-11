@@ -28,21 +28,9 @@ class ShortcutService {
   void start() async {
     await hotKeyManager.unregisterAll();
     await hotKeyManager.register(
-      _configuration.shortcutInputSettingSubmitWithMetaEnter,
-      keyDownHandler: (_) {
-        _listener?.onShortcutKeyDownSubmitWithMateEnter();
-      },
-    );
-    await hotKeyManager.register(
       _configuration.shortcutShowOrHide,
       keyDownHandler: (_) {
         _listener?.onShortcutKeyDownShowOrHide();
-      },
-    );
-    await hotKeyManager.register(
-      _configuration.shortcutHide,
-      keyDownHandler: (_) {
-        _listener?.onShortcutKeyDownHide();
       },
     );
     await hotKeyManager.register(

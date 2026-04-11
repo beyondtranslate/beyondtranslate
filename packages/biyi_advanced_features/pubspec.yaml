@@ -13,9 +13,9 @@ dependencies:
   dio: ^5.1.2
   flutter:
     sdk: flutter
-  package_info_plus: ^4.0.1
+  package_info_plus: ^9.0.0
   uni_ocr_client: ^0.1.1
-  uni_translate_client: ^0.1.3
+  uni_translate_client: ^0.1.6
   
 dev_dependencies:
   flutter_test:

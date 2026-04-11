@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
 import 'package:biyi_app/includes.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 
@@ -114,8 +115,8 @@ class Configuration {
   HotKey get shortcutShowOrHide {
     return _getShortcut(kShortcutShowOrHide) ??
         HotKey(
-          KeyCode.digit1,
-          modifiers: [KeyModifier.alt],
+          key: PhysicalKeyboardKey.digit1,
+          modifiers: [HotKeyModifier.alt],
           identifier: kShortcutShowOrHide,
         );
   }
@@ -127,7 +128,7 @@ class Configuration {
   HotKey get shortcutHide {
     return _getShortcut(kShortcutHide) ??
         HotKey(
-          KeyCode.escape,
+          key: PhysicalKeyboardKey.escape,
           modifiers: [],
           identifier: kShortcutHide,
           scope: HotKeyScope.inapp,
@@ -141,8 +142,8 @@ class Configuration {
   HotKey get shortcutExtractFromScreenSelection {
     return _getShortcut(kShortcutExtractFromScreenSelection) ??
         HotKey(
-          KeyCode.keyQ,
-          modifiers: [KeyModifier.alt],
+          key: PhysicalKeyboardKey.keyQ,
+          modifiers: [HotKeyModifier.alt],
           identifier: kShortcutExtractFromScreenSelection,
         );
   }
@@ -154,8 +155,8 @@ class Configuration {
   HotKey get shortcutExtractFromScreenCapture {
     return _getShortcut(kShortcutExtractFromScreenCapture) ??
         HotKey(
-          KeyCode.keyW,
-          modifiers: [KeyModifier.alt],
+          key: PhysicalKeyboardKey.keyW,
+          modifiers: [HotKeyModifier.alt],
           identifier: kShortcutExtractFromScreenCapture,
         );
   }
@@ -167,8 +168,8 @@ class Configuration {
   HotKey get shortcutExtractFromClipboard {
     return _getShortcut(kShortcutExtractFromClipboard) ??
         HotKey(
-          KeyCode.keyE,
-          modifiers: [KeyModifier.alt],
+          key: PhysicalKeyboardKey.keyE,
+          modifiers: [HotKeyModifier.alt],
           identifier: kShortcutExtractFromClipboard,
         );
   }
@@ -180,8 +181,8 @@ class Configuration {
   HotKey get shortcutTranslateInputContent {
     return _getShortcut(kPrefShortcutTranslateInputContent) ??
         HotKey(
-          KeyCode.keyZ,
-          modifiers: [KeyModifier.alt],
+          key: PhysicalKeyboardKey.keyZ,
+          modifiers: [HotKeyModifier.alt],
           identifier: kPrefShortcutTranslateInputContent,
         );
   }
@@ -193,14 +194,14 @@ class Configuration {
   HotKey get shortcutInputSettingSubmitWithMetaEnter {
     if (kIsMacOS) {
       return HotKey(
-        KeyCode.enter,
-        modifiers: [KeyModifier.meta],
+        key: PhysicalKeyboardKey.enter,
+        modifiers: [HotKeyModifier.meta],
         scope: HotKeyScope.inapp,
       );
     }
     return HotKey(
-      KeyCode.enter,
-      modifiers: [KeyModifier.control],
+      key: PhysicalKeyboardKey.enter,
+      modifiers: [HotKeyModifier.control],
       scope: HotKeyScope.inapp,
     );
   }

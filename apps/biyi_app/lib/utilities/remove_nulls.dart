@@ -16,6 +16,6 @@ extension ListExtension on List {
   List removeNulls() => removeNullsFromList(this);
 }
 
-extension MapExtension on Map {
+extension MapExtension2 on Map {
   Map removeNulls() => removeNullsFromMap(this as Map<String, dynamic>);
 }

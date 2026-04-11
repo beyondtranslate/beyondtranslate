@@ -6,22 +6,17 @@ PODS:
   - device_info_plus (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
-  - HotKey (0.1.2)
-  - hotkey_manager (0.0.1):
+  - HotKey (0.2.1)
+  - hotkey_manager_macos (0.0.1):
     - FlutterMacOS
     - HotKey
-  - keypress_simulator (0.0.1):
+  - keypress_simulator_macos (0.0.1):
     - FlutterMacOS
   - ocr_engine_builtin (0.0.1):
     - FlutterMacOS
-  - package_info_plus (0.0.1):
-    - FlutterMacOS
-  - path_provider_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - protocol_handler (0.0.1):
     - FlutterMacOS
-  - screen_capturer (0.1.0):
+  - screen_capturer_macos (0.0.1):
     - FlutterMacOS
   - screen_retriever (0.0.1):
     - FlutterMacOS
@@ -32,8 +27,6 @@ PODS:
     - FlutterMacOS
   - tray_manager (0.0.1):
     - FlutterMacOS
-  - url_launcher_macos (0.0.1):
-    - FlutterMacOS
   - window_manager (0.2.0):
     - FlutterMacOS
 
@@ -42,18 +35,15 @@ DEPENDENCIES:
   - clipboard_watcher (from `Flutter/ephemeral/.symlinks/plugins/clipboard_watcher/macos`)
   - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - hotkey_manager (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager/macos`)
-  - keypress_simulator (from `Flutter/ephemeral/.symlinks/plugins/keypress_simulator/macos`)
+  - hotkey_manager_macos (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos`)
+  - keypress_simulator_macos (from `Flutter/ephemeral/.symlinks/plugins/keypress_simulator_macos/macos`)
   - ocr_engine_builtin (from `Flutter/ephemeral/.symlinks/plugins/ocr_engine_builtin/macos`)
-  - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
-  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - protocol_handler (from `Flutter/ephemeral/.symlinks/plugins/protocol_handler/macos`)
-  - screen_capturer (from `Flutter/ephemeral/.symlinks/plugins/screen_capturer/macos`)
+  - screen_capturer_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos`)
   - screen_retriever (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos`)
   - screen_text_extractor (from `Flutter/ephemeral/.symlinks/plugins/screen_text_extractor/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - tray_manager (from `Flutter/ephemeral/.symlinks/plugins/tray_manager/macos`)
-  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
   - window_manager (from `Flutter/ephemeral/.symlinks/plugins/window_manager/macos`)
 
 SPEC REPOS:
@@ -69,20 +59,16 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
-  hotkey_manager:
-    :path: Flutter/ephemeral/.symlinks/plugins/hotkey_manager/macos
-  keypress_simulator:
-    :path: Flutter/ephemeral/.symlinks/plugins/keypress_simulator/macos
+  hotkey_manager_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos
+  keypress_simulator_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/keypress_simulator_macos/macos
   ocr_engine_builtin:
     :path: Flutter/ephemeral/.symlinks/plugins/ocr_engine_builtin/macos
-  package_info_plus:
-    :path: Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos
-  path_provider_foundation:
-    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   protocol_handler:
     :path: Flutter/ephemeral/.symlinks/plugins/protocol_handler/macos
-  screen_capturer:
-    :path: Flutter/ephemeral/.symlinks/plugins/screen_capturer/macos
+  screen_capturer_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos
   screen_retriever:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos
   screen_text_extractor:
@@ -91,31 +77,26 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
   tray_manager:
     :path: Flutter/ephemeral/.symlinks/plugins/tray_manager/macos
-  url_launcher_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
   window_manager:
     :path: Flutter/ephemeral/.symlinks/plugins/window_manager/macos
 
 SPEC CHECKSUMS:
-  audioplayers_darwin: dcad41de4fbd0099cb3749f7ab3b0cb8f70b810c
-  clipboard_watcher: a71da520051c24c1b969a411b3e152d4dcc93ca5
-  device_info_plus: 5401765fde0b8d062a2f8eb65510fb17e77cf07f
-  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  HotKey: ad59450195936c10992438c4210f673de5aee43e
-  hotkey_manager: c32bf0bfe8f934b7bc17ab4ad5c4c142960b023c
-  keypress_simulator: c9697f52dc29725ce0185dcd52b6731718e0b9ca
-  ocr_engine_builtin: 99c65f8f4a156830ceaf0da86940610fefe50f50
-  package_info_plus: 02d7a575e80f194102bef286361c6c326e4c29ce
-  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
-  protocol_handler: 587e1caf6c0b92ce351ab14081968dae49cb8cc6
-  screen_capturer: 696de78ce7beff63eecf8aa709f839985a7836d7
-  screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
-  screen_text_extractor: 2c310f54af1dee881522e2b76bec9a668ebfe0cf
-  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
-  tray_manager: 9064e219c56d75c476e46b9a21182087930baf90
-  url_launcher_macos: 5335912b679c073563f29d89d33d10d459f95451
-  window_manager: 3a1844359a6295ab1e47659b1a777e36773cd6e8
+  audioplayers_darwin: 761f2948df701d05b5db603220c384fb55720012
+  clipboard_watcher: e9c9d88b3aea4889fe80025037e690e73600b160
+  device_info_plus: b0fafc687fb901e2af612763340f1b0d4352f8e5
+  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
+  HotKey: 400beb7caa29054ea8d864c96f5ba7e5b4852277
+  hotkey_manager_macos: a4317849af96d2430fa89944d3c58977ca089fbe
+  keypress_simulator_macos: b5c87294b03ab5a2e743873a7dabe1ff5589129d
+  ocr_engine_builtin: 825f9e1a6f6a79a6a647d78ee1218bcce19b45e8
+  protocol_handler: f4d1317b2b828d6370e140077be5155feb3f06c7
+  screen_capturer_macos: 229306903c56767a7c7d3a48167ba303e95c6d29
+  screen_retriever: 4f97c103641aab8ce183fa5af3b87029df167936
+  screen_text_extractor: a23062e637bc69e2737476011ef192e2a77cb2f5
+  shared_preferences_foundation: 84ce365ee5ce19a94de8ece53db7142d35141a5b
+  tray_manager: a104b5c81b578d83f3c3d0f40a997c8b10810166
+  window_manager: 1d01fa7ac65a6e6f83b965471b1a7fdd3f06166c
 
-PODFILE CHECKSUM: 353c8bcc5d5b0994e508d035b5431cfe18c1dea7
+PODFILE CHECKSUM: 54d867c82ac51cbd61b565781b9fada492027009
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.16.2

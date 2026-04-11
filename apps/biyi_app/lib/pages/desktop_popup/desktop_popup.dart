@@ -503,7 +503,7 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
           LookUpResponse? lookUpResponse;
           UniTranslateClientError? lookUpError;
           if ((translateClient.use(identifier).supportedScopes)
-              .contains(kScopeLookUp)) {
+              .contains(TranslationEngineScope.lookUp)) {
             try {
               lookUpRequest = LookUpRequest(
                 sourceLanguage: translationTarget!.sourceLanguage!,
@@ -525,7 +525,7 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
           UniTranslateClientError? translateError;
 
           if ((translateClient.use(identifier).supportedScopes)
-              .contains(kScopeTranslate)) {
+              .contains(TranslationEngineScope.translate)) {
             try {
               translateRequest = TranslateRequest(
                 sourceLanguage: translationTarget!.sourceLanguage,
@@ -535,12 +535,14 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
               translateResponse = await translateClient //
                   .use(identifier)
                   .translate(translateRequest);
-              translateResponse.stream.listen(
+              if (translateResponse is StreamTranslateResponse) {
+                translateResponse.stream.listen(
                 (event) {
                   setState(() {});
                 },
                 onDone: () {},
-              );
+                );
+              }
             } on UniTranslateClientError catch (error) {
               translateError = error;
             } catch (error) {
@@ -665,7 +667,6 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
             .recognizeText(
               RecognizeTextRequest(
                 imagePath: _capturedData?.imagePath,
-                base64Image: _capturedData?.base64Image,
               ),
             );
         _isTextDetecting = false;
@@ -955,18 +956,17 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
 
   @override
   void onShortcutKeyDownTranslateInputContent() async {
-    await keyPressSimulator.simulateKeyPress(
-      key: LogicalKeyboardKey.keyA,
-      modifiers: [
+    await keyPressSimulator.simulateKeyDown(
+      PhysicalKeyboardKey.keyA,
+      [
         kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
       ],
     );
-    await keyPressSimulator.simulateKeyPress(
-      key: LogicalKeyboardKey.keyA,
-      modifiers: [
+    await keyPressSimulator.simulateKeyUp(
+      PhysicalKeyboardKey.keyA,
+      [
         kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
       ],
-      keyDown: false,
     );
 
     try {
@@ -989,7 +989,7 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
           );
 
       TextTranslation? textTranslation =
-          (translateResponse.translations ?? []).firstOrNull;
+          translateResponse.translations.firstOrNull;
 
       if (textTranslation != null) {
         Clipboard.setData(ClipboardData(text: textTranslation.text));
@@ -998,31 +998,29 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
       return;
     }
 
-    await keyPressSimulator.simulateKeyPress(
-      key: LogicalKeyboardKey.keyA,
-      modifiers: [
+    await keyPressSimulator.simulateKeyDown(
+      PhysicalKeyboardKey.keyA,
+      [
         kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
       ],
     );
-    await keyPressSimulator.simulateKeyPress(
-      key: LogicalKeyboardKey.keyA,
-      modifiers: [
-        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
-      ],
-      keyDown: false,
-    );
-    await keyPressSimulator.simulateKeyPress(
-      key: LogicalKeyboardKey.keyV,
-      modifiers: [
+    await keyPressSimulator.simulateKeyUp(
+      PhysicalKeyboardKey.keyA,
+      [
         kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
       ],
     );
-    await keyPressSimulator.simulateKeyPress(
-      key: LogicalKeyboardKey.keyV,
-      modifiers: [
+    await keyPressSimulator.simulateKeyDown(
+      PhysicalKeyboardKey.keyV,
+      [
         kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
       ],
-      keyDown: false,
+    );
+    await keyPressSimulator.simulateKeyUp(
+      PhysicalKeyboardKey.keyV,
+      [
+        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
+      ],
     );
   }
 

@@ -5,10 +5,10 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   clipboard_watcher
-  hotkey_manager
-  keypress_simulator
+  hotkey_manager_windows
+  keypress_simulator_windows
   protocol_handler
-  screen_capturer
+  screen_capturer_windows
   screen_retriever
   screen_text_extractor
   tray_manager
@@ -18,6 +18,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
+  jni
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

@@ -17,9 +17,9 @@ class _HotKeyDisplayView extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (KeyModifier keyModifier in hotKey.modifiers ?? []) ...[
+        for (HotKeyModifier keyModifier in hotKey.modifiers ?? []) ...[
           Kbd(
-            keyModifier.keyLabel,
+            keyModifier.physicalKeys.first.keyLabel,
             size: NamedSize.tiny,
           ),
           const Padding(
@@ -34,7 +34,7 @@ class _HotKeyDisplayView extends StatelessWidget {
           ),
         ],
         Kbd(
-          hotKey.keyCode.keyLabel,
+          hotKey.physicalKey.keyLabel,
           size: NamedSize.tiny,
         ),
       ],
@@ -85,7 +85,12 @@ class _SettingShortcutsPageState extends State<SettingShortcutsPage> {
           onHotKeyRecorded: (newHotKey) {
             _configuration.setShortcut(
               shortcutKey,
-              newHotKey..scope = shortcutScope,
+              HotKey(
+                identifier: newHotKey.identifier,
+                key: newHotKey.key,
+                modifiers: newHotKey.modifiers,
+                scope: shortcutScope,
+              ),
             );
           },
         );
