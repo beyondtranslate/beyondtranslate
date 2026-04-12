@@ -1,7 +1,11 @@
 import 'dart:io';
 
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/includes.dart';
+import 'i18n/i18n.dart';
+import 'pages/pages.dart';
+import 'services/services.dart';
+import 'themes/themes.dart';
+import 'utilities/utilities.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
@@ -105,7 +109,7 @@ class _MyAppState extends State<MyApp> with LocalDbListener {
           child = Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(7),
                   topRight: Radius.circular(7),
                 ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GeneratingCursor extends StatefulWidget {
+  const GeneratingCursor({super.key});
+
   @override
   State<GeneratingCursor> createState() => _GeneratingCursorState();
 }
@@ -14,7 +16,7 @@ class _GeneratingCursorState extends State<GeneratingCursor>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
     )..repeat(reverse: true);
   }
 
@@ -28,7 +30,7 @@ class _GeneratingCursorState extends State<GeneratingCursor>
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Padding(
-      padding: EdgeInsets.only(left: 2),
+      padding: const EdgeInsets.only(left: 2),
       child: AnimatedBuilder(
         animation: _animationController,
         builder: (context, child) {

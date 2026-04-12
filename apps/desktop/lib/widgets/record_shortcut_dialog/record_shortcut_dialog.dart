@@ -1,4 +1,5 @@
-import 'package:biyi_app/includes.dart';
+import '../../i18n/i18n.dart';
+import '../widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 

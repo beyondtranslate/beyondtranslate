@@ -1,4 +1,6 @@
-import 'package:biyi_app/includes.dart';
+import 'package:uni_translate_client/uni_translate_client.dart';
+import '../../models/models.dart';
+import '../widgets.dart';
 import 'package:flutter/material.dart';
 
 class WordPronunciationView extends StatelessWidget {

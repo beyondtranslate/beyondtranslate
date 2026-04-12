@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/includes.dart';
-import 'package:flutter/foundation.dart';
+import '../services.dart';
+import '../../utilities/utilities.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
@@ -95,13 +95,12 @@ class Configuration {
   }
 
   ThemeMode get themeMode {
-    String themeModeString =
-        _getString(kPrefThemeMode) ?? describeEnum(ThemeMode.light);
+    String themeModeString = _getString(kPrefThemeMode) ?? ThemeMode.light.name;
     return kKnownThemeModes[themeModeString]!;
   }
 
   set themeMode(value) {
-    _setString(kPrefThemeMode, describeEnum(value));
+    _setString(kPrefThemeMode, value.name);
   }
 
   String get inputSetting {

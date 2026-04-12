@@ -159,7 +159,7 @@ class TranslationResultRecordView extends StatelessWidget {
               children: [
                 TextSpan(text: textTranslation.text),
                 if (_isGenerating)
-                  WidgetSpan(
+                  const WidgetSpan(
                     child: GeneratingCursor(),
                     alignment: PlaceholderAlignment.middle,
                   ),
@@ -400,7 +400,7 @@ class TranslationResultRecordView extends StatelessWidget {
           borderRadius: BorderRadius.circular(2),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               offset: const Offset(0.0, 1.0),
               blurRadius: 3.0,
             ),

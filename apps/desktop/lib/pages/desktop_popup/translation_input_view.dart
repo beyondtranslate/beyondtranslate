@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/includes.dart';
+import '../../i18n/i18n.dart';
+import '../../services/services.dart';
+import '../../widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +76,9 @@ class TranslationInputView extends StatelessWidget {
                         bottom: 3,
                         child: Container(
                           decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0.9),
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(2),
                           ),
                           padding: const EdgeInsets.only(
@@ -232,7 +235,7 @@ class TranslationInputView extends StatelessWidget {
           borderRadius: BorderRadius.circular(2),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               offset: const Offset(0.0, 1.0),
               blurRadius: 3.0,
             ),
@@ -262,7 +265,8 @@ class TranslationInputView extends StatelessWidget {
                     ),
                     placeholder: 'page_desktop_popup.input_hint'.tr(),
                     placeholderStyle: textTheme.bodyMedium?.copyWith(
-                      color: textTheme.bodyMedium?.color?.withOpacity(0.5),
+                      color:
+                          textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                       height: 1.2,
                     ),
                     maxLines:

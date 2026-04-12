@@ -1,4 +1,4 @@
-import 'package:biyi_app/includes.dart';
+import '../widgets.dart';
 import 'package:flutter/material.dart';
 
 const kDialogActionTypePrimary = 'primary';
@@ -50,7 +50,8 @@ class CustomAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
+    ThemeData theme = Theme.of(context);
+    TextTheme textTheme = theme.textTheme;
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.only(
@@ -63,7 +64,7 @@ class CustomAlertDialog extends StatelessWidget {
             minHeight: 100,
           ),
           decoration: BoxDecoration(
-            color: Theme.of(context).dialogBackgroundColor,
+            color: theme.dialogTheme.backgroundColor ?? theme.canvasColor,
             borderRadius: BorderRadius.circular(2),
           ),
           margin: const EdgeInsets.only(left: 40, right: 40),

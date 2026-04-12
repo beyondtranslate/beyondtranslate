@@ -1,5 +1,7 @@
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/includes.dart';
+import '../../models/models.dart';
+import '../../utilities/utilities.dart';
+import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
@@ -41,7 +43,7 @@ class TranslationResultsView extends StatelessWidget {
           borderRadius: BorderRadius.circular(2),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               offset: const Offset(0.0, 1.0),
               blurRadius: 3.0,
             ),

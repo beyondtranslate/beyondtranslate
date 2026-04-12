@@ -1,4 +1,4 @@
-import 'package:biyi_app/includes.dart';
+import '../../../models/models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shortid/shortid.dart';

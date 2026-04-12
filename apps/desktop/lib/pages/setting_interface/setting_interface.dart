@@ -1,4 +1,6 @@
-import 'package:biyi_app/includes.dart';
+import '../../i18n/i18n.dart';
+import '../../services/services.dart';
+import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 const List<double> _kMaxWindowHeightOptions = [700, 800, 900, 1000];

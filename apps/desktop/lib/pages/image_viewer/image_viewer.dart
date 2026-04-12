@@ -48,7 +48,7 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
       body: Stack(
         children: <Widget>[
           Container(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withValues(alpha: 0.5),
             child: PhotoViewGallery.builder(
               scrollPhysics: const BouncingScrollPhysics(),
               builder: _buildItem,
@@ -75,7 +75,7 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
                     bottom: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.8),
+                    color: Colors.black.withValues(alpha: 0.8),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Text(

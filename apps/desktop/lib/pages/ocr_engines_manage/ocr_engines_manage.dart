@@ -1,5 +1,8 @@
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/includes.dart';
+import '../../i18n/i18n.dart';
+import '../pages.dart';
+import '../../services/services.dart';
+import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:reorderables/reorderables.dart';
 

@@ -1,5 +1,9 @@
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/includes.dart';
+import '../../i18n/i18n.dart';
+import '../../models/models.dart';
+import '../pages.dart';
+import '../../services/services.dart';
+import '../../widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 

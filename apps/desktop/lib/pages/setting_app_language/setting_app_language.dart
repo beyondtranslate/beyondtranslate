@@ -1,4 +1,7 @@
-import 'package:biyi_app/includes.dart';
+import '../../i18n/i18n.dart';
+import '../../services/services.dart';
+import '../../utilities/utilities.dart';
+import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class SettingAppLanguagePage extends StatefulWidget {

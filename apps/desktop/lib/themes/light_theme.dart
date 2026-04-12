@@ -24,9 +24,11 @@ final lightThemeData = ThemeData(
   primaryColor: _kPrimaryColor,
   canvasColor: _kCanvasColor,
   scaffoldBackgroundColor: _kScaffoldBackgroundColor,
-  dividerColor: Colors.grey.withOpacity(0.2),
-  dialogBackgroundColor: _kCanvasColor,
+  dividerColor: Colors.grey.withValues(alpha: 0.2),
   fontFamily: 'MiSans',
+  dialogTheme: const DialogThemeData(
+    backgroundColor: _kCanvasColor,
+  ),
   textTheme: TextTheme(
     titleLarge: _kDefaultTextStyle.copyWith(
       fontSize: 18,
@@ -47,13 +49,13 @@ final lightThemeData = ThemeData(
       fontSize: 14,
     ),
     bodySmall: _kDefaultTextStyle.copyWith(
-      color: _kDefaultTextColor.withOpacity(0.5),
+      color: _kDefaultTextColor.withValues(alpha: 0.5),
       fontSize: 12,
     ),
   ),
   appBarTheme: AppBarTheme(
     systemOverlayStyle: SystemUiOverlayStyle.dark,
-    color: _kCanvasColor,
+    backgroundColor: _kCanvasColor,
     elevation: 0,
     iconTheme: const IconThemeData(
       color: Colors.black,

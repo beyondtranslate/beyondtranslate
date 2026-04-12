@@ -177,7 +177,7 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
     // 初始化托盘图标
     await _initTrayIcon();
     await Future.delayed(const Duration(milliseconds: 100));
-    WindowOptions windowOptions = WindowOptions(
+    WindowOptions windowOptions = const WindowOptions(
       titleBarStyle: TitleBarStyle.hidden,
       windowButtonVisibility: false,
       skipTaskbar: true,
@@ -536,10 +536,10 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
                   .translate(translateRequest);
               if (translateResponse is StreamTranslateResponse) {
                 translateResponse.stream.listen(
-                (event) {
-                  setState(() {});
-                },
-                onDone: () {},
+                  (event) {
+                    setState(() {});
+                  },
+                  onDone: () {},
                 );
               }
             } on UniTranslateClientError catch (error) {
@@ -1037,7 +1037,7 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
   void onTrayMenuItemClick(MenuItem menuItem) async {
     switch (menuItem.key) {
       case kMenuItemKeyShow:
-        await Future.delayed(Duration(milliseconds: 300));
+        await Future.delayed(const Duration(milliseconds: 300));
         await _windowShow();
         break;
       case kMenuItemKeyQuickStartGuide:

@@ -1,4 +1,4 @@
-import 'package:biyi_app/includes.dart';
+import '../../utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -25,7 +25,7 @@ class LanguageFlagView extends StatelessWidget {
           Radius.circular(size / 2),
         ),
         border: Border.all(
-          color: borderColor ?? Colors.black.withOpacity(0.1),
+          color: borderColor ?? Colors.black.withValues(alpha: 0.1),
           width: 0.8,
         ),
       ),

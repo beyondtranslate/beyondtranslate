@@ -1,4 +1,4 @@
-import 'package:biyi_app/includes.dart';
+import '../../pages.dart';
 import 'package:flutter/material.dart';
 
 class TabSettingsScene extends StatelessWidget {

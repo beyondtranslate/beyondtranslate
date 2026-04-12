@@ -24,8 +24,10 @@ final darkThemeData = ThemeData(
   primaryColor: _kPrimaryColor,
   canvasColor: _kCanvasColor,
   scaffoldBackgroundColor: _kScaffoldBackgroundColor,
-  dialogBackgroundColor: _kCanvasColor,
   fontFamily: 'MiSans',
+  dialogTheme: const DialogThemeData(
+    backgroundColor: _kCanvasColor,
+  ),
   iconTheme: const IconThemeData(
     color: Colors.white,
   ),
@@ -49,13 +51,13 @@ final darkThemeData = ThemeData(
       fontSize: 14,
     ),
     bodySmall: _kDefaultTextStyle.copyWith(
-      color: _kDefaultTextColor.withOpacity(0.5),
+      color: _kDefaultTextColor.withValues(alpha: 0.5),
       fontSize: 12,
     ),
   ),
   appBarTheme: AppBarTheme(
     systemOverlayStyle: SystemUiOverlayStyle.light,
-    color: _kCanvasColor,
+    backgroundColor: _kCanvasColor,
     elevation: 0,
     iconTheme: const IconThemeData(
       color: Colors.white,

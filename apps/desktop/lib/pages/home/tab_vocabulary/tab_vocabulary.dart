@@ -1,4 +1,4 @@
-import 'package:biyi_app/includes.dart';
+import '../../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class TabVocabularyScene extends StatelessWidget {

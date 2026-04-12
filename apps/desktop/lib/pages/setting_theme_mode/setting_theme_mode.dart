@@ -1,5 +1,6 @@
-import 'package:biyi_app/includes.dart';
-import 'package:flutter/foundation.dart';
+import '../../i18n/i18n.dart';
+import '../../services/services.dart';
+import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class SettingThemeModePage extends StatefulWidget {
@@ -44,7 +45,7 @@ class _SettingThemeModePageState extends State<SettingThemeModePage> {
               groupValue: _configuration.themeMode,
               onChanged: _handleThemeModeChanged,
               title: Text(
-                'theme_mode.${describeEnum(ThemeMode.light)}'.tr(),
+                'theme_mode.${ThemeMode.light.name}'.tr(),
               ),
             ),
             PreferenceListRadioItem(
@@ -52,7 +53,7 @@ class _SettingThemeModePageState extends State<SettingThemeModePage> {
               groupValue: _configuration.themeMode,
               onChanged: _handleThemeModeChanged,
               title: Text(
-                'theme_mode.${describeEnum(ThemeMode.dark)}'.tr(),
+                'theme_mode.${ThemeMode.dark.name}'.tr(),
               ),
             ),
             PreferenceListRadioItem(
@@ -60,7 +61,7 @@ class _SettingThemeModePageState extends State<SettingThemeModePage> {
               groupValue: _configuration.themeMode,
               onChanged: _handleThemeModeChanged,
               title: Text(
-                'theme_mode.${describeEnum(ThemeMode.system)}'.tr(),
+                'theme_mode.${ThemeMode.system.name}'.tr(),
               ),
             ),
           ],

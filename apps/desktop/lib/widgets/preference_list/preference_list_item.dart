@@ -212,7 +212,7 @@ class PreferenceListSwitchItem extends PreferenceListItem {
         child: CupertinoSwitch(
           value: value,
           onChanged: onChanged,
-          activeColor: Theme.of(context).primaryColor,
+          activeTrackColor: Theme.of(context).primaryColor,
         ),
       ),
     );
@@ -262,7 +262,7 @@ class PreferenceListTextFieldItem extends PreferenceListItem {
         ),
         placeholder: placeholder,
         placeholderStyle: textTheme.bodyMedium?.copyWith(
-          color: textTheme.bodyMedium?.color?.withOpacity(0.5),
+          color: textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
           height: 1.2,
         ),
         onChanged: onChanged,

@@ -1,4 +1,5 @@
-import 'package:biyi_app/includes.dart';
+import 'package:uni_translate_client/uni_translate_client.dart';
+import '../widgets.dart';
 import 'package:flutter/material.dart';
 
 class WordTranslationView extends StatefulWidget {
@@ -56,7 +57,7 @@ class _WordTranslationViewState extends State<WordTranslationView> {
               padding: const EdgeInsets.only(left: 2, right: 2),
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: const Color(0xff80838a).withOpacity(0.6),
+                  color: const Color(0xff80838a).withValues(alpha: 0.6),
                 ),
                 borderRadius: BorderRadius.circular(2),
               ),

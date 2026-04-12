@@ -1,4 +1,8 @@
-import 'package:biyi_app/includes.dart';
+import '../../i18n/i18n.dart';
+import '../../models/models.dart';
+import '../pages.dart';
+import '../../services/services.dart';
+import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class TranslationTargetNewPage extends StatefulWidget {
