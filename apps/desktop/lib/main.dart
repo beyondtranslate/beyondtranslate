@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/generated/codegen_loader.g.dart';
 import 'package:biyi_app/includes.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:window_manager/window_manager.dart';
 
 Future<void> _ensureInitialized() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
   if (kIsLinux || kIsMacOS || kIsWindows) {
     await windowManager.ensureInitialized();
   }
@@ -33,16 +31,12 @@ Future<void> _ensureInitialized() async {
 
 void main() async {
   await _ensureInitialized();
+  await LocaleSettings.setLocaleRaw(
+    languageToLocale(localDb.configuration.appLanguage).languageCode,
+  );
 
   runApp(
-    EasyLocalization(
-      supportedLocales: const [
-        Locale(kLanguageEN),
-        Locale(kLanguageZH),
-      ],
-      path: 'resources/langs',
-      assetLoader: CodegenLoader(),
-      fallbackLocale: const Locale(kLanguageEN),
+    TranslationProvider(
       child: const MyApp(),
     ),
   );

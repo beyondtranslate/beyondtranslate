@@ -1,5 +1,4 @@
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/generated/locale_keys.g.dart';
 import 'package:biyi_app/includes.dart';
 import 'package:flutter/material.dart';
 import 'package:ocr_engine_youdao/ocr_engine_youdao.dart';
@@ -81,7 +80,7 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
       actions: [
         if (widget.editable)
           CustomAppBarActionItem(
-            text: LocaleKeys.ok.tr(),
+            text: 'ok'.tr(),
             onPressed: _handleClickOk,
           ),
       ],
@@ -149,7 +148,7 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
               PreferenceListItem(
                 title: Center(
                   child: Text(
-                    LocaleKeys.delete.tr(),
+                    'delete'.tr(),
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),

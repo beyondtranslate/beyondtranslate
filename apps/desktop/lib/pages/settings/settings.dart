@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/generated/locale_keys.g.dart';
 import 'package:biyi_app/includes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -266,13 +265,13 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(t('exit_app_dialog.title')),
                       actions: <Widget>[
                         CustomDialogAction(
-                          child: Text(LocaleKeys.cancel.tr()),
+                          child: Text('cancel'.tr()),
                           onPressed: () async {
                             Navigator.of(ctx).pop();
                           },
                         ),
                         CustomDialogAction(
-                          child: Text(LocaleKeys.ok.tr()),
+                          child: Text('ok'.tr()),
                           onPressed: () async {
                             await trayManager.destroy();
                             exit(0);

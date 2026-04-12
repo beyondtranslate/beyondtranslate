@@ -1,5 +1,5 @@
 import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:biyi_app/i18n/i18n.dart';
 
 extension ExtOcrEngineConfig on OcrEngineConfig {
   String get typeName {
