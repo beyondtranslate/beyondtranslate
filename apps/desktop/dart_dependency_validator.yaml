@@ -1,2 +1,3 @@
 ignore:
+  - flutter_test
   - vclibs

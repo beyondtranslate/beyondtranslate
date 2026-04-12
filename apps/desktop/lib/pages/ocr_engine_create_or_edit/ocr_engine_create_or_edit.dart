@@ -73,6 +73,7 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
 
     (sharedOcrClient.adapter as AutoloadOcrClientAdapter).renew(_identifier!);
 
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 
@@ -159,6 +160,7 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
                 accessoryView: Container(),
                 onTap: () async {
                   await localDb.privateOcrEngine(_identifier).delete();
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
               ),

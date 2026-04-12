@@ -39,6 +39,7 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
           targetLanguage: _targetLanguage,
         );
 
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 
@@ -116,6 +117,7 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
                       .translationTarget(widget.translationTarget?.id)
                       .delete();
 
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
               ),

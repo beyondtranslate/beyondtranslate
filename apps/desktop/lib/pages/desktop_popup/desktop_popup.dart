@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 import 'dart:io';
 
@@ -138,7 +140,6 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
   @override
   void didChangePlatformBrightness() {
     Brightness newBrightness =
-        // ignore: deprecated_member_use
         WidgetsBinding.instance.window.platformBrightness;
 
     if (newBrightness != _brightness) {
@@ -953,19 +954,22 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
     _handleButtonTappedTrans();
   }
 
+  List<ModifierKey> get _commandModifiers {
+    // keypress_simulator still expects ModifierKey on the current package version.
+    final modifier =
+        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier;
+    return [modifier];
+  }
+
   @override
   void onShortcutKeyDownTranslateInputContent() async {
     await keyPressSimulator.simulateKeyDown(
       PhysicalKeyboardKey.keyA,
-      [
-        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
-      ],
+      _commandModifiers,
     );
     await keyPressSimulator.simulateKeyUp(
       PhysicalKeyboardKey.keyA,
-      [
-        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
-      ],
+      _commandModifiers,
     );
 
     try {
@@ -999,27 +1003,19 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
 
     await keyPressSimulator.simulateKeyDown(
       PhysicalKeyboardKey.keyA,
-      [
-        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
-      ],
+      _commandModifiers,
     );
     await keyPressSimulator.simulateKeyUp(
       PhysicalKeyboardKey.keyA,
-      [
-        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
-      ],
+      _commandModifiers,
     );
     await keyPressSimulator.simulateKeyDown(
       PhysicalKeyboardKey.keyV,
-      [
-        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
-      ],
+      _commandModifiers,
     );
     await keyPressSimulator.simulateKeyUp(
       PhysicalKeyboardKey.keyV,
-      [
-        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier,
-      ],
+      _commandModifiers,
     );
   }
 

@@ -108,6 +108,7 @@ class _TranslationEngineCreateOrEditPageState
     (translateClient.adapter as AutoloadTranslateClientAdapter)
         .renew(_identifier!);
 
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 
@@ -230,6 +231,7 @@ class _TranslationEngineCreateOrEditPageState
                 onTap: () async {
                   await localDb.privateEngine(_identifier).delete();
 
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
               ),
