@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
-import 'package:rise_ui/rise_ui.dart' as rise_ui;
 import 'package:window_manager/window_manager.dart';
 
 Future<void> _ensureInitialized() async {
@@ -125,14 +124,6 @@ class _MyAppState extends State<MyApp> with LocalDbListener {
           );
         }
         child = botToastBuilder(context, child);
-        child = rise_ui.Theme(
-          data: rise_ui.ThemeData(
-            brightness: _configuration.themeMode == ThemeMode.dark
-                ? Brightness.dark
-                : Brightness.light,
-          ),
-          child: child,
-        );
         return child;
       },
       navigatorObservers: [BotToastNavigatorObserver()],

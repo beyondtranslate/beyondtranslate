@@ -35,10 +35,6 @@ dependencies:
   photo_view: ^0.14.0
   protocol_handler: ^0.1.6
   reorderables: ^0.6.0
-  rise_ui:
-    git:
-      path: packages/rise_ui
-      url: https://github.com/leanflutter/rise_ui.git
   screen_capturer: ^0.2.2
   screen_retriever: ^0.1.6
   screen_text_extractor: ^0.1.3

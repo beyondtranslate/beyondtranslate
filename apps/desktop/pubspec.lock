@@ -636,14 +636,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  non_uniform_border:
-    dependency: transitive
-    description:
-      name: non_uniform_border
-      sha256: a2676d171f7493cb3faf6339552570dba96512a90b5955b921602782153f3c81
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   ocr_engine_builtin:
     dependency: "direct main"
     description:
@@ -836,15 +828,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
-  rise_ui:
-    dependency: "direct main"
-    description:
-      path: "packages/rise_ui"
-      ref: HEAD
-      resolved-ref: e36aa1adbeb1709884b829421f40d764ff8adf57
-      url: "https://github.com/leanflutter/rise_ui.git"
-    source: git
-    version: "0.1.0"
   screen_capturer:
     dependency: "direct main"
     description:
