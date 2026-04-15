@@ -38,4 +38,5 @@ If you use Cloudflare Workers Builds with a connected Git repository, set:
 - Deploy command: `npm run deploy`
 
 Workers Builds does not provide Rust by default, so the build step must install it
-before Wrangler runs the deploy step.
+before Wrangler runs the deploy step. The deploy script also reloads
+`$HOME/.cargo/env`, because Builds runs deploy in a fresh shell.

@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "./scripts/cloudflare-build.sh",
-    "deploy": "wrangler deploy",
+    "deploy": "./scripts/cloudflare-deploy.sh",
     "dev": "wrangler dev"
   },
   "devDependencies": {
