@@ -1,0 +1,12 @@
+{
+  "name": "beyondtranslate-api",
+  "private": true,
+  "scripts": {
+    "build": "./scripts/cloudflare-build.sh",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "4.83.0"
+  }
+}
