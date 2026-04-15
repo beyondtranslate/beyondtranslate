@@ -1,0 +1,6 @@
+name = "beyondtranslate-api"
+main = "build/worker/shim.mjs"
+compatibility_date = "2026-04-15"
+
+[build]
+command = "cargo install -q worker-build && worker-build --release"

@@ -6,3 +6,11 @@
 .dart_tool/
 
 **/pubspec_overrides.yaml
+
+# Rust related
+/target/
+**/target/
+/Cargo.lock
+
+# macOS related
+.DS_Store

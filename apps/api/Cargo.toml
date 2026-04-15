@@ -1,0 +1,11 @@
+[package]
+name = "beyondtranslate_api"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+worker = "0.8"
+console_error_panic_hook = "0.1.7"
