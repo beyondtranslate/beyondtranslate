@@ -1,6 +1,6 @@
-import 'package:biyi_advanced_features/networking/api_client/apis/engines.dart';
-import 'package:biyi_advanced_features/networking/api_client/apis/ocr_engines.dart';
-import 'package:biyi_advanced_features/networking/api_client/apis/versions.dart';
+import 'package:biyi_app/networking/api_client/apis/engines.dart';
+import 'package:biyi_app/networking/api_client/apis/ocr_engines.dart';
+import 'package:biyi_app/networking/api_client/apis/versions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 

@@ -1,6 +1,13 @@
 export 'ext_ocr_engine_config.dart';
 export 'ext_translation_engine_config.dart';
 export 'ext_word_pronunciation.dart';
+export 'ocr_engine_config.dart';
+export 'result.dart';
+export 'translation_engine_config.dart';
 export 'translation_result.dart';
 export 'translation_result_record.dart';
 export 'translation_target.dart';
+export 'user.dart';
+export 'user_preference.dart';
+export 'user_property.dart';
+export 'version.dart';

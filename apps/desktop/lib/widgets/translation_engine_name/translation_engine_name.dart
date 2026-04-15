@@ -1,5 +1,4 @@
-import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/models/ext_translation_engine_config.dart';
+import 'package:biyi_app/models/models.dart';
 import 'package:flutter/material.dart';
 
 class TranslationEngineName extends StatelessWidget {

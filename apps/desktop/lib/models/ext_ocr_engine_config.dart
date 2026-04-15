@@ -1,4 +1,4 @@
-import 'package:biyi_advanced_features/biyi_advanced_features.dart';
+import 'package:biyi_app/models/models.dart';
 import 'package:biyi_app/i18n/i18n.dart';
 
 extension ExtOcrEngineConfig on OcrEngineConfig {

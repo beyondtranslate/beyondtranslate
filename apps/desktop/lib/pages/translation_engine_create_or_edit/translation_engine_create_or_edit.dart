@@ -1,7 +1,7 @@
-import 'package:biyi_advanced_features/biyi_advanced_features.dart';
+import 'package:biyi_app/models/models.dart';
 import 'package:uni_translate_client/uni_translate_client.dart';
 import '../../i18n/i18n.dart';
-import '../../networking/networking.dart';
+import '../../networking/translate_client/translate_client.dart';
 import '../pages.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';

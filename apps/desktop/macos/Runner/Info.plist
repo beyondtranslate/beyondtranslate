@@ -46,6 +46,7 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>beyondtranslate</string>
 				<string>biyiapp</string>
 			</array>
 		</dict>

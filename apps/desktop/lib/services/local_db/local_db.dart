@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import '../../networking/networking.dart';
+import 'package:biyi_app/models/models.dart';
+import 'package:biyi_app/networking/networking.dart';
 import '../services.dart';
 import '../../utilities/utilities.dart';
 import 'package:biyi_app/services/local_db/init_data_if_need.dart';

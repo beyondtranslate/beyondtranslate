@@ -3,10 +3,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:biyi_advanced_features/biyi_advanced_features.dart';
-import 'package:biyi_app/i18n/i18n.dart';
 import 'package:biyi_app/models/models.dart';
 import 'package:biyi_app/networking/networking.dart';
+import 'package:biyi_app/i18n/i18n.dart';
 import 'package:biyi_app/pages/desktop_popup/limited_functionality_banner.dart';
 import 'package:biyi_app/pages/desktop_popup/new_version_found_banner.dart';
 import 'package:biyi_app/pages/desktop_popup/toolbar_item_always_on_top.dart';

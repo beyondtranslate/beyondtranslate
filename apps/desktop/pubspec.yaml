@@ -9,10 +9,10 @@ environment:
 
 dependencies:
   audioplayers: ^5.2.1
-  biyi_advanced_features:
-    path: ../../packages/biyi_advanced_features
   bot_toast: ^4.1.3
   collection: ^1.18.0
+  crypto: ^3.0.3
+  dio: ^5.1.2
   fluentui_system_icons: ^1.1.255
   flutter:
     sdk: flutter
@@ -55,6 +55,7 @@ dependencies:
   uni_translate_client: ^0.1.7
   url_launcher: ^6.2.2
   vclibs: ^0.1.0
+  nativeapi: ^0.1.0
   window_manager: ^0.3.4
 
 dev_dependencies:
@@ -66,12 +67,11 @@ dev_dependencies:
   slang_build_runner: ^4.13.0
 
 dependency_overrides:
-  # biyi_advanced_features:
-  #   path: ../../../biyi_advanced_features
-  # dart_openai:
-  #   git:
-  #     ref: fix/stream-mode-error-handling
-  #     url: https://github.com/biyidev/openai.git
+  cnativeapi:
+    path: ../../../../libnativeapi/nativeapi-flutter/packages/cnativeapi
+  nativeapi:
+    path: ../../../../libnativeapi/nativeapi-flutter/packages/nativeapi
+
 
 flutter:
   uses-material-design: false

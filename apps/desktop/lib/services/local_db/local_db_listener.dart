@@ -1,4 +1,4 @@
-import 'package:biyi_advanced_features/biyi_advanced_features.dart';
+import 'package:biyi_app/models/models.dart';
 
 abstract mixin class LocalDbListener {
   void onUserChanged(User oldUser, User newUser) {}

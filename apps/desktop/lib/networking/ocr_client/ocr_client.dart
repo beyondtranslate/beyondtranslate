@@ -1,8 +1,9 @@
-import 'package:biyi_advanced_features/biyi_advanced_features.dart';
+import 'package:biyi_app/models/models.dart';
 import 'package:uni_ocr_client/uni_ocr_client.dart';
 import '../../services/services.dart';
 import 'package:ocr_engine_builtin/ocr_engine_builtin.dart';
 import 'package:ocr_engine_youdao/ocr_engine_youdao.dart';
+import 'pro_ocr_engine.dart';
 
 final kDefaultBuiltInOcrEngine = BuiltInOcrEngine(
   identifier: 'builtin',

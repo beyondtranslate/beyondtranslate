@@ -7,7 +7,6 @@ import Foundation
 
 import audioplayers_darwin
 import clipboard_watcher
-import device_info_plus
 import hotkey_manager_macos
 import keypress_simulator_macos
 import ocr_engine_builtin
@@ -24,7 +23,6 @@ import window_manager
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AudioplayersDarwinPlugin.register(with: registry.registrar(forPlugin: "AudioplayersDarwinPlugin"))
   ClipboardWatcherPlugin.register(with: registry.registrar(forPlugin: "ClipboardWatcherPlugin"))
-  DeviceInfoPlusMacosPlugin.register(with: registry.registrar(forPlugin: "DeviceInfoPlusMacosPlugin"))
   HotkeyManagerMacosPlugin.register(with: registry.registrar(forPlugin: "HotkeyManagerMacosPlugin"))
   KeypressSimulatorMacosPlugin.register(with: registry.registrar(forPlugin: "KeypressSimulatorMacosPlugin"))
   OcrEngineBuiltinPlugin.register(with: registry.registrar(forPlugin: "OcrEngineBuiltinPlugin"))
