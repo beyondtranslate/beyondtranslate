@@ -2,6 +2,7 @@ import 'package:biyi_app/i18n/i18n.dart';
 import 'package:biyi_app/models/models.dart';
 import 'package:biyi_app/pages/pages.dart';
 import 'package:biyi_app/services/services.dart';
+import 'package:biyi_app/utilities/utilities.dart';
 import 'package:biyi_app/widgets/translation_result_record_view/translation_engine_tag.dart';
 import 'package:biyi_app/widgets/translation_result_record_view/word_image_view.dart';
 import 'package:biyi_app/widgets/translation_result_record_view/word_pronunciation_view.dart';
@@ -13,7 +14,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:uni_translate_client/uni_translate_client.dart';
 
 class TranslationResultRecordView extends StatelessWidget {
@@ -284,9 +284,8 @@ class TranslationResultRecordView extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            child: ImageViewerPage(
+                          buildFadePageRoute(
+                            ImageViewerPage(
                               images!.map((e) => e.url).toList(),
                               initialIndex: i,
                             ),

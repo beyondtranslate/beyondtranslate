@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 // 请按文件名排序放置
 export './env.dart';
+export './fade_page_route.dart';
 export './global_audio_player.dart';
 export './global_key_ex.dart';
 export './language_util.dart';

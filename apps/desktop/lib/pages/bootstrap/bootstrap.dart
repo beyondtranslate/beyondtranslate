@@ -3,7 +3,6 @@ import '../../utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:page_transition/page_transition.dart';
 
 class BootstrapPage extends StatefulWidget {
   const BootstrapPage({Key? key}) : super(key: key);
@@ -22,17 +21,11 @@ class _BootstrapPageState extends State<BootstrapPage> {
   Future<void> _init() async {
     if (kIsAndroid || kIsIOS) {
       Navigator.of(context).pushReplacement(
-        PageTransition(
-          type: PageTransitionType.fade,
-          child: const HomePage(),
-        ),
+        buildFadePageRoute(const HomePage()),
       );
     } else {
       Navigator.of(context).pushReplacement(
-        PageTransition(
-          type: PageTransitionType.fade,
-          child: const DesktopPopupPage(),
-        ),
+        buildFadePageRoute(const DesktopPopupPage()),
       );
     }
   }
