@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:biyi_app/models/models.dart';
 import '../../i18n/i18n.dart';
 import '../../services/services.dart';
+import '../../widgets/ui/loading_indicator.dart';
 import '../../widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 
 class TranslationInputView extends StatelessWidget {
@@ -291,7 +291,7 @@ class TranslationInputView extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                SpinKitDoubleBounce(
+                                LoadingIndicator.doubleBounce(
                                   color: textTheme.bodySmall!.color,
                                   size: 18.0,
                                 ),

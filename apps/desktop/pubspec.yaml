@@ -18,7 +18,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_spinkit: ^5.2.0
   flutter_svg: ^2.0.9
   hive: ^2.2.3
   hive_flutter: ^1.1.0

@@ -9,11 +9,11 @@ import 'package:biyi_app/widgets/translation_result_record_view/word_pronunciati
 import 'package:biyi_app/widgets/translation_result_record_view/word_tag_view.dart';
 import 'package:biyi_app/widgets/translation_result_record_view/word_translation_view.dart';
 import 'package:biyi_app/widgets/widgets.dart';
+import '../ui/loading_indicator.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:uni_translate_client/uni_translate_client.dart';
 
 class TranslationResultRecordView extends StatelessWidget {
@@ -62,7 +62,7 @@ class TranslationResultRecordView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SpinKitThreeBounce(
+          LoadingIndicator.threeBounce(
             color: Theme.of(context).textTheme.bodySmall!.color,
             size: 12.0,
           ),

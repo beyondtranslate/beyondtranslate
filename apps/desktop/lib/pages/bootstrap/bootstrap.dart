@@ -1,8 +1,8 @@
 import '../pages.dart';
 import '../../utilities/utilities.dart';
+import '../../widgets/ui/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class BootstrapPage extends StatefulWidget {
   const BootstrapPage({Key? key}) : super(key: key);
@@ -51,7 +51,7 @@ class _BootstrapPageState extends State<BootstrapPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SpinKitThreeBounce(
+                          LoadingIndicator.threeBounce(
                             color: Theme.of(context).primaryColor,
                             size: 14.0,
                           ),

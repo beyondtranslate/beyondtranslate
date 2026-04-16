@@ -1,6 +1,6 @@
+import '../ui/loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 const EdgeInsets _kButtonPadding = EdgeInsets.zero;
 
@@ -310,8 +310,10 @@ class _CustomButtonState extends State<CustomButton>
                     child: IconTheme(
                       data: IconThemeData(color: foregroundColor),
                       child: widget.processing == true
-                          ? SpinKitThreeBounce(
-                              color: foregroundColor, size: 14.0)
+                          ? LoadingIndicator.threeBounce(
+                              color: foregroundColor,
+                              size: 14.0,
+                            )
                           : widget.child,
                     ),
                   ),
