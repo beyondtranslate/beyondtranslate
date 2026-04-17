@@ -3,6 +3,7 @@ import '../../i18n/i18n.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class OcrEngineChooserPage extends StatefulWidget {
   const OcrEngineChooserPage({
@@ -43,7 +44,7 @@ class _OcrEngineChooserPageState extends State<OcrEngineChooserPage> {
       widget.onChoosed!(ocrEngineConfig!);
     }
 
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   Widget _buildBody(BuildContext context) {

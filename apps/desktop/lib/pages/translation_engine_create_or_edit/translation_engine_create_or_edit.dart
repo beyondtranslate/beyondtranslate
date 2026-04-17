@@ -7,6 +7,7 @@ import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shortid/shortid.dart';
 
 const List<TranslationEngineScope> _kAllScopes = [
@@ -109,7 +110,7 @@ class _TranslationEngineCreateOrEditPageState
         .renew(_identifier!);
 
     if (!mounted) return;
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
@@ -150,7 +151,7 @@ class _TranslationEngineCreateOrEditPageState
                                 _type = newEngineType;
                               });
 
-                              Navigator.of(context).pop();
+                              context.pop();
                             },
                           ),
                         ),
@@ -232,7 +233,7 @@ class _TranslationEngineCreateOrEditPageState
                   await localDb.privateEngine(_identifier).delete();
 
                   if (!context.mounted) return;
-                  Navigator.of(context).pop();
+                  context.pop();
                 },
               ),
             ],

@@ -1,4 +1,4 @@
-import '../pages.dart';
+import '../../routes/routes.dart';
 import '../../utilities/utilities.dart';
 import '../../widgets/ui/loading_indicator.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +20,9 @@ class _BootstrapPageState extends State<BootstrapPage> {
 
   Future<void> _init() async {
     if (kIsAndroid || kIsIOS) {
-      Navigator.of(context).pushReplacement(
-        buildFadePageRoute(const HomePage()),
-      );
+      const HomeRoute().go(context);
     } else {
-      Navigator.of(context).pushReplacement(
-        buildFadePageRoute(const DesktopPopupPage()),
-      );
+      const DesktopPopupRoute().go(context);
     }
   }
 

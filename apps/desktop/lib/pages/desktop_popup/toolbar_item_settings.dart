@@ -5,6 +5,7 @@ import '../pages.dart';
 import '../../widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ToolbarItemSettings extends StatefulWidget {
   const ToolbarItemSettings({
@@ -90,7 +91,7 @@ class _ToolbarItemSettingsState extends State<ToolbarItemSettings> {
             builder: (ctx) {
               return SettingsPage(
                 onDismiss: () {
-                  Navigator.of(ctx).pop();
+                  ctx.pop();
                   _handleDismiss();
                 },
               );

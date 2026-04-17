@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomAppBarActionItem extends StatelessWidget {
   const CustomAppBarActionItem({
@@ -49,7 +50,9 @@ class CustomAppBarActionItem extends StatelessWidget {
           onPressed!();
           return;
         }
-        Navigator.maybePop(context);
+        if (context.canPop()) {
+          context.pop();
+        }
       },
     );
   }

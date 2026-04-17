@@ -4,6 +4,7 @@ import '../pages.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TranslationTargetNewPage extends StatefulWidget {
   const TranslationTargetNewPage({
@@ -40,7 +41,7 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
         );
 
     if (!mounted) return;
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
@@ -118,7 +119,7 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
                       .delete();
 
                   if (!context.mounted) return;
-                  Navigator.of(context).pop();
+                  context.pop();
                 },
               ),
             ],

@@ -1,6 +1,7 @@
 import '../../i18n/i18n.dart';
 import '../widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 
 class RecordHotKeyDialog extends StatefulWidget {
@@ -53,7 +54,7 @@ class _RecordHotKeyDialogState extends State<RecordHotKeyDialog> {
         CustomDialogAction(
           child: Text('cancel'.tr()),
           onPressed: () {
-            Navigator.of(context).pop();
+            context.pop();
           },
         ),
         CustomDialogAction(
@@ -61,7 +62,7 @@ class _RecordHotKeyDialogState extends State<RecordHotKeyDialog> {
               ? null
               : () {
                   widget.onHotKeyRecorded(_hotKey!);
-                  Navigator.of(context).pop();
+                  context.pop();
                 },
           child: Text('ok'.tr()),
         ),

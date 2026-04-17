@@ -2,6 +2,7 @@ import '../../i18n/i18n.dart';
 import '../../utilities/utilities.dart';
 import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LanguageChooserPage extends StatefulWidget {
   const LanguageChooserPage({
@@ -29,7 +30,7 @@ class _LanguageChooserPageState extends State<LanguageChooserPage> {
   void _handleClickOk() async {
     widget.onChoosed?.call(_language!);
 
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {

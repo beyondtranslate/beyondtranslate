@@ -1,0 +1,15 @@
+export '__root.dart' hide $appRoutes;
+export 'app_router.dart';
+export 'bootstrap.dart' hide $appRoutes;
+export 'desktop_popup.dart' hide $appRoutes;
+export 'home.dart' hide $appRoutes;
+export 'ocr_engines_manage.dart' hide $appRoutes;
+export 'route_tree.dart';
+export 'settings/app_language.dart' hide $appRoutes;
+export 'settings/extract_text.dart' hide $appRoutes;
+export 'settings/index.dart' hide $appRoutes;
+export 'settings/interface.dart' hide $appRoutes;
+export 'settings/shortcuts.dart' hide $appRoutes;
+export 'settings/theme_mode.dart' hide $appRoutes;
+export 'settings/translate.dart' hide $appRoutes;
+export 'translation_engines_manage.dart' hide $appRoutes;

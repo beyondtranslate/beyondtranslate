@@ -20,6 +20,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:keypress_simulator/keypress_simulator.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 import 'package:screen_capturer/screen_capturer.dart';
@@ -328,7 +329,7 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
   }
 
   void _windowResize() {
-    if (Navigator.of(context).canPop()) return;
+    if (context.canPop()) return;
 
     if (_resizeTimer != null && _resizeTimer!.isActive) {
       _resizeTimer?.cancel();

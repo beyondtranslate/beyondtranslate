@@ -3,6 +3,7 @@ import '../../i18n/i18n.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TranslationEngineChooserPage extends StatefulWidget {
   const TranslationEngineChooserPage({
@@ -48,7 +49,7 @@ class _TranslationEngineChooserPageState
       widget.onChoosed!(engineConfig!);
     }
 
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   Widget _buildBody(BuildContext context) {

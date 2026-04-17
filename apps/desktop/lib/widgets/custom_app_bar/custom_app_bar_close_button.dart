@@ -1,6 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomAppBarCloseButton extends StatelessWidget {
   const CustomAppBarCloseButton({
@@ -24,7 +25,9 @@ class CustomAppBarCloseButton extends StatelessWidget {
           onPressed!();
           return;
         }
-        Navigator.maybePop(context);
+        if (context.canPop()) {
+          context.pop();
+        }
       },
     );
   }

@@ -5,6 +5,7 @@ import '../pages.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ocr_engine_youdao/ocr_engine_youdao.dart';
 import 'package:shortid/shortid.dart';
 
@@ -74,7 +75,7 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
     (sharedOcrClient.adapter as AutoloadOcrClientAdapter).renew(_identifier!);
 
     if (!mounted) return;
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
@@ -115,7 +116,7 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
                                 _type = newEngineType;
                               });
 
-                              Navigator.of(context).pop();
+                              context.pop();
                             },
                           ),
                         ),
@@ -161,7 +162,7 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
                 onTap: () async {
                   await localDb.privateOcrEngine(_identifier).delete();
                   if (!context.mounted) return;
-                  Navigator.of(context).pop();
+                  context.pop();
                 },
               ),
             ],

@@ -8,10 +8,13 @@ import 'themes/themes.dart';
 import 'utilities/utilities.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 import 'package:window_manager/window_manager.dart';
+
+import 'routes/routes.dart';
 
 Future<void> _ensureInitialized() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +58,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with LocalDbListener {
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  late final GoRouter _router = createAppRouter();
 
   Configuration get _configuration => localDb.configuration;
 
@@ -89,17 +92,12 @@ class _MyAppState extends State<MyApp> with LocalDbListener {
     if (mounted) setState(() {});
   }
 
-  Widget _buildHome(BuildContext context) {
-    return const BootstrapPage();
-  }
-
   @override
   Widget build(BuildContext context) {
     final botToastBuilder = BotToastInit();
 
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      navigatorKey: _navigatorKey,
       theme: lightThemeData,
       darkTheme: darkThemeData,
       themeMode: _configuration.themeMode,
@@ -126,11 +124,10 @@ class _MyAppState extends State<MyApp> with LocalDbListener {
         child = botToastBuilder(context, child);
         return child;
       },
-      navigatorObservers: [BotToastNavigatorObserver()],
+      routerConfig: _router,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: _buildHome(context),
     );
   }
 

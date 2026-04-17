@@ -1,4 +1,5 @@
 import '../../pages.dart';
+import '../../../routes/routes.dart';
 import '../../../widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +16,7 @@ class TabMeScene extends StatelessWidget {
           CustomAppBarActionItem(
             icon: FluentIcons.settings_20_regular,
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const SettingsPage(),
-                ),
-              );
+              const SettingsRoute().push(context);
             },
           ),
         ],

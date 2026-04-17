@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:biyi_app/models/models.dart';
+import 'package:biyi_app/routes/routes.dart';
 import '../../i18n/i18n.dart';
 import '../pages.dart';
 import '../../services/services.dart';
 import '../../utilities/utilities.dart';
 import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 // import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -68,21 +70,13 @@ class _SettingsPageState extends State<SettingsPage> {
             PreferenceListItem(
               title: Text(t('pref_item_title_extract_text')),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const SettingExtractTextPage(),
-                  ),
-                );
+                const SettingExtractTextRoute().push(context);
               },
             ),
             PreferenceListItem(
               title: Text(t('pref_item_title_translate')),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const SettingTranslatePage(),
-                  ),
-                );
+                const SettingTranslateRoute().push(context);
               },
             ),
           ],
@@ -93,24 +87,16 @@ class _SettingsPageState extends State<SettingsPage> {
             PreferenceListItem(
               title: Text(t('pref_item_title_interface')),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const SettingInterfacePage(),
-                  ),
-                );
+                const SettingInterfaceRoute().push(context);
               },
             ),
             PreferenceListItem(
               title: Text(t('pref_item_title_app_language')),
               detailText: Text(getLanguageName(_configuration.appLanguage)),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => SettingAppLanguagePage(
-                      initialLanguage: _configuration.appLanguage,
-                    ),
-                  ),
-                );
+                SettingAppLanguageRoute(
+                  initialLanguage: _configuration.appLanguage,
+                ).push(context);
               },
             ),
             PreferenceListItem(
@@ -119,11 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 'theme_mode.${_configuration.themeMode.name}'.tr(),
               ),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const SettingThemeModePage(),
-                  ),
-                );
+                const SettingThemeModeRoute().push(context);
               },
             ),
           ],
@@ -134,11 +116,7 @@ class _SettingsPageState extends State<SettingsPage> {
             PreferenceListItem(
               title: Text(t('pref_item_title_keyboard_shortcuts')),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const SettingShortcutsPage(),
-                  ),
-                );
+                const SettingShortcutsRoute().push(context);
               },
             ),
           ],
@@ -202,11 +180,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const TranslationEnginesManagePage(),
-                  ),
-                );
+                const TranslationEnginesManageRoute().push(context);
               },
             ),
             PreferenceListItem(
@@ -224,11 +198,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const OcrEnginesManagePage(),
-                  ),
-                );
+                const OcrEnginesManageRoute().push(context);
               },
             ),
           ],
@@ -270,7 +240,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         CustomDialogAction(
                           child: Text('cancel'.tr()),
                           onPressed: () async {
-                            Navigator.of(ctx).pop();
+                            ctx.pop();
                           },
                         ),
                         CustomDialogAction(

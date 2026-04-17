@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -117,7 +118,7 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
                         size: 30,
                         color: Colors.white,
                       ),
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () => context.pop(),
                     ),
                   ),
                 ],
