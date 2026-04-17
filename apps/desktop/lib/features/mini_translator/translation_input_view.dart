@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:biyi_app/models/models.dart';
-import '../../i18n/i18n.dart';
-import '../../services/services.dart';
-import '../../widgets/ui/loading_indicator.dart';
-import '../../widgets/widgets.dart';
+import 'package:biyi_app/i18n/i18n.dart';
+import 'package:biyi_app/services/services.dart';
+import 'package:biyi_app/widgets/ui/loading_indicator.dart';
+import 'package:biyi_app/widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -162,15 +162,6 @@ class TranslationInputView extends StatelessWidget {
             ),
           ),
         ),
-        // const SizedBox(
-        //   height: 20,
-        //   child: VerticalDivider(
-        //     width: 8,
-        //   ),
-        // ),
-        // _ToolbarItemAddToNewWord(
-        //   controller: controller,
-        // )
       ],
     );
   }

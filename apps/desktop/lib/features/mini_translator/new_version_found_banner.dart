@@ -1,6 +1,6 @@
 import 'package:biyi_app/models/models.dart';
-import '../../i18n/i18n.dart';
-import '../../utilities/utilities.dart';
+import 'package:biyi_app/i18n/i18n.dart';
+import 'package:biyi_app/utilities/utilities.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

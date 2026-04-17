@@ -1,6 +1,5 @@
 // 请按文件名排序放置
 export './bootstrap/bootstrap.dart';
-export './desktop_popup/desktop_popup.dart';
 export './desktop_settings/desktop_settings.dart';
 export './home/home.dart';
 export './image_viewer/image_viewer.dart';

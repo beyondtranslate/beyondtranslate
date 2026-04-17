@@ -6,13 +6,13 @@ import 'dart:io';
 import 'package:biyi_app/models/models.dart';
 import 'package:biyi_app/networking/networking.dart';
 import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/pages/desktop_popup/limited_functionality_banner.dart';
-import 'package:biyi_app/pages/desktop_popup/new_version_found_banner.dart';
-import 'package:biyi_app/pages/desktop_popup/toolbar_item_always_on_top.dart';
-import 'package:biyi_app/pages/desktop_popup/toolbar_item_settings.dart';
-import 'package:biyi_app/pages/desktop_popup/translation_input_view.dart';
-import 'package:biyi_app/pages/desktop_popup/translation_results_view.dart';
-import 'package:biyi_app/pages/desktop_popup/translation_target_select_view.dart';
+import 'package:biyi_app/features/mini_translator/limited_functionality_banner.dart';
+import 'package:biyi_app/features/mini_translator/new_version_found_banner.dart';
+import 'package:biyi_app/features/mini_translator/toolbar_item_always_on_top.dart';
+import 'package:biyi_app/features/mini_translator/toolbar_item_settings.dart';
+import 'package:biyi_app/features/mini_translator/translation_input_view.dart';
+import 'package:biyi_app/features/mini_translator/translation_results_view.dart';
+import 'package:biyi_app/features/mini_translator/translation_target_select_view.dart';
 import 'package:biyi_app/services/services.dart';
 import 'package:biyi_app/utilities/utilities.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -40,14 +40,14 @@ const kMenuItemKeyQuitApp = 'quit-app';
 const kMenuSubItemKeyJoinDiscord = 'subitem-join-discord';
 const kMenuSubItemKeyJoinQQGroup = 'subitem-join-qq';
 
-class DesktopPopupPage extends StatefulWidget {
-  const DesktopPopupPage({Key? key}) : super(key: key);
+class MiniTranslatorPage extends StatefulWidget {
+  const MiniTranslatorPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DesktopPopupPageState();
+  State<StatefulWidget> createState() => _MiniTranslatorPageState();
 }
 
-class _DesktopPopupPageState extends State<DesktopPopupPage>
+class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     with
         WidgetsBindingObserver,
         ProtocolListener,
@@ -175,7 +175,6 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
 
     ShortcutService.instance.start();
 
-    // 初始化托盘图标
     await _initTrayIcon();
     await Future.delayed(const Duration(milliseconds: 100));
     WindowOptions windowOptions = const WindowOptions(
@@ -314,7 +313,6 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
       await windowManager.focus();
     }
 
-    // Linux 下无法激活窗口临时解决方案
     if (kIsLinux && !isAlwaysOnTop) {
       await windowManager.setAlwaysOnTop(true);
       await Future.delayed(const Duration(milliseconds: 10));
@@ -368,7 +366,7 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
           await windowManager.setSize(newSize, animate: true);
         }
       } catch (error) {
-        // print(error);
+        // ignore
       }
 
       if (_resizeTimer != null) {
@@ -433,7 +431,7 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
             .where((e) => e.sourceLanguage == _textDetectedLanguage)
             .toList();
       } catch (error) {
-        // print(error);
+        // ignore
       }
 
       for (var translationTarget in filteredTranslationTargetList) {
@@ -595,9 +593,7 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
     bool isRequery = false,
   }) {
     setState(() {
-      // 移除前后多余的空格
       _text = (newValue ?? '').trim();
-      // 当使用 Enter 键触发翻译时用空格替换换行符
       if (_configuration.inputSetting == kInputSettingSubmitWithEnter) {
         _text = _text.replaceAll('\n', ' ');
       }
@@ -955,7 +951,6 @@ class _DesktopPopupPageState extends State<DesktopPopupPage>
   }
 
   List<ModifierKey> get _commandModifiers {
-    // keypress_simulator still expects ModifierKey on the current package version.
     final modifier =
         kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier;
     return [modifier];

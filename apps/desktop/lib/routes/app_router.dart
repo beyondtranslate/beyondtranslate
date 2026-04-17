@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '__root.dart';
 import 'bootstrap.dart' as bootstrap_route;
-import 'desktop_popup.dart' as desktop_popup_route;
+import 'mini_translator.dart' as mini_translator_route;
 import 'home.dart' as home_route;
 import 'ocr_engines_manage.dart' as ocr_engines_manage_route;
 import 'settings/app_language.dart' as app_language_route;
@@ -24,7 +24,7 @@ GoRouter createAppRouter() {
     routes: <RouteBase>[
       ...$appRoutes,
       ...bootstrap_route.$appRoutes,
-      ...desktop_popup_route.$appRoutes,
+      ...mini_translator_route.$appRoutes,
       ...home_route.$appRoutes,
       ...ocr_engines_manage_route.$appRoutes,
       ...settings_route.$appRoutes,

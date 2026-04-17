@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:biyi_app/models/models.dart';
-import '../../utilities/utilities.dart';
-import '../../widgets/widgets.dart';
+import 'package:biyi_app/utilities/utilities.dart';
+import 'package:biyi_app/widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +67,6 @@ class _AvailableLanguageSelector extends StatelessWidget {
 class TranslationTargetSelectView extends StatefulWidget {
   const TranslationTargetSelectView({
     Key? key,
-    // this.viewKey,
     required this.translationMode,
     required this.isShowSourceLanguageSelector,
     required this.isShowTargetLanguageSelector,
@@ -77,7 +76,7 @@ class TranslationTargetSelectView extends StatefulWidget {
     required this.targetLanguage,
     required this.onChanged,
   }) : super(key: key);
-  // final Key viewKey;
+
   final String translationMode;
   final bool isShowSourceLanguageSelector;
   final bool isShowTargetLanguageSelector;

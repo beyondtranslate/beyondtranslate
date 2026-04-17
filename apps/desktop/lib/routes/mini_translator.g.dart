@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'desktop_popup.dart';
+part of 'mini_translator.dart';
 
 // **************************************************************************
 // GoRouterGenerator
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $desktopPopupRoute,
+      $miniTranslatorRoute,
     ];
 
-RouteBase get $desktopPopupRoute => GoRouteData.$route(
-      path: '/desktop-popup',
-      factory: $DesktopPopupRoute._fromState,
+RouteBase get $miniTranslatorRoute => GoRouteData.$route(
+      path: '/mini-translator',
+      factory: $MiniTranslatorRoute._fromState,
     );
 
-mixin $DesktopPopupRoute on GoRouteData {
-  static DesktopPopupRoute _fromState(GoRouterState state) =>
-      const DesktopPopupRoute();
+mixin $MiniTranslatorRoute on GoRouteData {
+  static MiniTranslatorRoute _fromState(GoRouterState state) =>
+      const MiniTranslatorRoute();
 
   @override
   String get location => GoRouteData.$location(
-        '/desktop-popup',
+        '/mini-translator',
       );
 
   @override

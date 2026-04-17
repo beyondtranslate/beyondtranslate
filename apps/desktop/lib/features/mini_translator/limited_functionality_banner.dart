@@ -1,5 +1,5 @@
-import '../../i18n/i18n.dart';
-import '../../utilities/utilities.dart';
+import 'package:biyi_app/i18n/i18n.dart';
+import 'package:biyi_app/utilities/utilities.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';

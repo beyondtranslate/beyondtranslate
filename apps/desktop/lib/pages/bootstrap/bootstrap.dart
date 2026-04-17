@@ -22,7 +22,7 @@ class _BootstrapPageState extends State<BootstrapPage> {
     if (kIsAndroid || kIsIOS) {
       const HomeRoute().go(context);
     } else {
-      const DesktopPopupRoute().go(context);
+      const MiniTranslatorRoute().go(context);
     }
   }
 
