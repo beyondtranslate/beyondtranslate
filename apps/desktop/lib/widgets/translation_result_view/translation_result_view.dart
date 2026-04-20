@@ -2,8 +2,8 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/translation_result.dart';
-import '../custom_button/custom_button.dart';
 import '../language_label/language_label.dart';
+import '../ui/button.dart';
 
 class TranslationResultView extends StatelessWidget {
   const TranslationResultView(
@@ -44,7 +44,7 @@ class TranslationResultView extends StatelessWidget {
         padding: EdgeInsets.zero,
         child: Row(
           children: [
-            CustomButton(
+            Button(
               padding: const EdgeInsets.only(left: 12, right: 12),
               child: LanguageLabel(
                 sourceLanguage,
@@ -55,7 +55,7 @@ class TranslationResultView extends StatelessWidget {
             SizedBox(
               width: 20,
               height: 38,
-              child: CustomButton(
+              child: Button(
                 padding: EdgeInsets.zero,
                 child: Container(
                   margin: EdgeInsets.zero,
@@ -68,7 +68,7 @@ class TranslationResultView extends StatelessWidget {
                 onPressed: () {},
               ),
             ),
-            CustomButton(
+            Button(
               padding: const EdgeInsets.only(left: 12, right: 12),
               child: LanguageLabel(
                 targetLanguage,

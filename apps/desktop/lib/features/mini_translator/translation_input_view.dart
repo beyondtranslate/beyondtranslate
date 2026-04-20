@@ -8,7 +8,7 @@ import 'package:screen_capturer/screen_capturer.dart';
 import '../../i18n/i18n.dart';
 import '../../models/preference_item.dart';
 import '../../services/local_db/local_db.dart';
-import '../../widgets/custom_button/custom_button.dart';
+import '../../widgets/ui/button.dart';
 import '../../widgets/ui/loading_indicator.dart';
 
 class TranslationInputView extends StatelessWidget {
@@ -57,7 +57,7 @@ class TranslationInputView extends StatelessWidget {
           child: SizedBox(
             width: 30,
             height: 26,
-            child: CustomButton(
+            child: Button(
               padding: EdgeInsets.zero,
               child: SizedBox(
                 width: 30,
@@ -136,7 +136,7 @@ class TranslationInputView extends StatelessWidget {
           child: SizedBox(
             width: 30,
             height: 26,
-            child: CustomButton(
+            child: Button(
               padding: EdgeInsets.zero,
               onPressed: onClickExtractTextFromScreenCapture,
               child: Icon(
@@ -152,7 +152,7 @@ class TranslationInputView extends StatelessWidget {
           child: SizedBox(
             width: 30,
             height: 26,
-            child: CustomButton(
+            child: Button(
               padding: EdgeInsets.zero,
               onPressed: onClickExtractTextFromClipboard,
               child: Icon(
@@ -175,7 +175,7 @@ class TranslationInputView extends StatelessWidget {
           constraints: const BoxConstraints(
             minWidth: 56,
           ),
-          child: CustomButton.outlined(
+          child: Button.outlined(
             padding: const EdgeInsets.only(
               left: 12,
               right: 12,
@@ -194,7 +194,7 @@ class TranslationInputView extends StatelessWidget {
           constraints: const BoxConstraints(
             minWidth: 56,
           ),
-          child: CustomButton.filled(
+          child: Button.filled(
             padding: const EdgeInsets.only(
               left: 12,
               right: 12,

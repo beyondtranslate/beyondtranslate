@@ -1,7 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
-import '../../widgets/custom_button/custom_button.dart';
+import '../../widgets/ui/button.dart';
 import '../../windowing/window_controllers.dart';
 
 class ToolbarItemSettings extends StatelessWidget {
@@ -17,7 +17,7 @@ class ToolbarItemSettings extends StatelessWidget {
     return SizedBox(
       width: 24,
       height: 24,
-      child: CustomButton(
+      child: Button(
         padding: EdgeInsets.zero,
         borderRadius: BorderRadius.zero,
         child: Icon(

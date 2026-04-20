@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../../models/preference_item.dart';
 import '../../utils/language_util.dart';
-import '../../widgets/custom_button/custom_button.dart';
 import '../../widgets/language_label/language_label.dart';
+import '../../widgets/ui/button.dart';
 
 class _AvailableLanguageSelector extends StatelessWidget {
   const _AvailableLanguageSelector({
@@ -45,13 +45,13 @@ class _AvailableLanguageSelector extends StatelessWidget {
                 );
 
                 return isSelected
-                    ? CustomButton.filled(
+                    ? Button.filled(
                         padding: padding,
                         borderRadius: BorderRadius.circular(2),
                         onPressed: () => onChanged(supportedLanguage),
                         child: child,
                       )
-                    : CustomButton.outlined(
+                    : Button.outlined(
                         padding: padding,
                         color: Theme.of(context).dividerColor,
                         borderRadius: BorderRadius.circular(2),
@@ -137,7 +137,7 @@ class _TranslationTargetSelectViewState
               height: 40,
               child: Row(
                 children: [
-                  CustomButton(
+                  Button(
                     padding: const EdgeInsets.only(left: 12, right: 12),
                     borderRadius: BorderRadius.zero,
                     child: Row(
@@ -184,7 +184,7 @@ class _TranslationTargetSelectViewState
                   SizedBox(
                     width: 20,
                     height: 38,
-                    child: CustomButton(
+                    child: Button(
                       padding: EdgeInsets.zero,
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
@@ -210,7 +210,7 @@ class _TranslationTargetSelectViewState
                       },
                     ),
                   ),
-                  CustomButton(
+                  Button(
                     padding: const EdgeInsets.only(left: 12, right: 12),
                     borderRadius: BorderRadius.zero,
                     child: Row(

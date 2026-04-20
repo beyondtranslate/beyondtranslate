@@ -1,42 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
-import '../ui/loading_indicator.dart';
+import 'loading_indicator.dart';
 
 const EdgeInsets _kButtonPadding = EdgeInsets.zero;
 
-const double _kCustomButtonMinHeight = 48;
+const double _kButtonMinHeight = 48;
+const double _kOutlinedButtonMinHeight = 44;
 
-/// An iOS-style button.
+/// A lightweight app button.
 ///
-/// Takes in a text or an icon that fades out and in on touch. May optionally have a
-/// background.
+/// Takes in a text or an icon that fades out and in on touch. It may
+/// optionally have a background.
 ///
-/// The [padding] defaults to 16.0 pixels. When using a [CustomButton] within
-/// a fixed height parent, like a [CupertinoNavigationBar], a smaller, or even
+/// The [padding] defaults to 16.0 pixels. When using a [Button] within a fixed
+/// height parent, like an [AppBar], a smaller, or even
 /// [EdgeInsets.zero], should be used to prevent clipping larger [child]
 /// widgets.
-///
-/// {@tool dartpad}
-/// This sample shows produces an enabled and disabled [CustomButton] and
-/// [CustomButton.filled].
-///
-/// ** See code in examples/api/lib/cupertino/button/cupertino_button.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * <https://developer.apple.com/ios/human-interface-guidelines/controls/buttons/>
-class CustomButton extends StatefulWidget {
-  /// Creates an iOS-style button.
-  const CustomButton({
+class Button extends StatefulWidget {
+  /// Creates a button.
+  const Button({
     Key? key,
     this.processing = false,
     required this.child,
     this.padding,
     this.color,
-    this.disabledColor = CupertinoColors.quaternarySystemFill,
-    this.minSize = _kCustomButtonMinHeight,
+    this.disabledColor = const Color(0x14000000),
+    this.minSize = _kButtonMinHeight,
     this.pressedOpacity = 0.4,
     this.borderRadius = const BorderRadius.all(Radius.circular(4.0)),
     this.alignment = Alignment.center,
@@ -47,19 +37,19 @@ class CustomButton extends StatefulWidget {
         _outlined = false,
         super(key: key);
 
-  /// Creates an iOS-style button with a filled background.
+  /// Creates a button with a filled background.
   ///
-  /// The background color is derived from the [CupertinoTheme]'s `primaryColor`.
+  /// The background color is derived from the current theme's primary color.
   ///
   /// To specify a custom background color, use the [color] argument of the
   /// default constructor.
-  const CustomButton.filled({
+  const Button.filled({
     Key? key,
     this.processing = false,
     required this.child,
     this.padding,
-    this.disabledColor = CupertinoColors.quaternarySystemFill,
-    this.minSize = _kCustomButtonMinHeight,
+    this.disabledColor = const Color(0x14000000),
+    this.minSize = _kButtonMinHeight,
     this.pressedOpacity = 0.4,
     this.borderRadius = const BorderRadius.all(Radius.circular(4.0)),
     this.alignment = Alignment.center,
@@ -71,13 +61,13 @@ class CustomButton extends StatefulWidget {
         _outlined = false,
         super(key: key);
 
-  const CustomButton.outlined({
+  const Button.outlined({
     Key? key,
     this.processing = false,
     required this.child,
     this.padding,
     this.disabledColor = const Color(0x3D1A2B48),
-    this.minSize = kMinInteractiveDimensionCupertino,
+    this.minSize = _kOutlinedButtonMinHeight,
     this.pressedOpacity = 0.4,
     this.color,
     this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
@@ -105,16 +95,15 @@ class CustomButton extends StatefulWidget {
   ///
   /// Defaults to null which produces a button with no background or border.
   ///
-  /// Defaults to the [CupertinoTheme]'s `primaryColor` when the
-  /// [CustomButton.filled] constructor is used.
+  /// Defaults to the current theme's primary color when the
+  /// [Button.filled] constructor is used.
   final Color? color;
 
   /// The color of the button's background when the button is disabled.
   ///
-  /// Ignored if the [CustomButton] doesn't also have a [color].
+  /// Ignored if the [Button] doesn't also have a [color].
   ///
-  /// Defaults to [CupertinoColors.quaternarySystemFill] when [color] is
-  /// specified. Must not be null.
+  /// Must not be null.
   final Color disabledColor;
 
   /// The callback that is called when the button is tapped or otherwise activated.
@@ -124,15 +113,14 @@ class CustomButton extends StatefulWidget {
 
   /// Minimum size of the button.
   ///
-  /// Defaults to _kCustomButtonMinHeight which the iOS Human
-  /// Interface Guidelines recommends as the minimum tappable area.
+  /// Defaults to _kButtonMinHeight.
   final double? minSize;
 
   /// The opacity that the button will fade to when it is pressed.
   /// The button will have an opacity of 1.0 when it is not pressed.
   ///
-  /// This defaults to 0.4. If null, opacity will not change on pressed if using
-  /// your own custom effects is desired.
+  /// This defaults to 0.4. If null, opacity will not change on pressed if
+  /// using your own custom effects is desired.
   final double? pressedOpacity;
 
   /// The radius of the button's corners when it has a background color.
@@ -142,10 +130,10 @@ class CustomButton extends StatefulWidget {
 
   /// The alignment of the button's [child].
   ///
-  /// Typically buttons are sized to be just big enough to contain the child and its
-  /// [padding]. If the button's size is constrained to a fixed size, for example by
-  /// enclosing it with a [SizedBox], this property defines how the child is aligned
-  /// within the available space.
+  /// Typically buttons are sized to be just big enough to contain the child and
+  /// its [padding]. If the button's size is constrained to a fixed size, for
+  /// example by enclosing it with a [SizedBox], this property defines how the
+  /// child is aligned within the available space.
   ///
   /// Always defaults to [Alignment.center].
   final AlignmentGeometry alignment;
@@ -153,12 +141,13 @@ class CustomButton extends StatefulWidget {
   final bool _filled;
   final bool _outlined;
 
-  /// Whether the button is enabled or disabled. Buttons are disabled by default. To
-  /// enable a button, set its [onPressed] property to a non-null value.
+  /// Whether the button is enabled or disabled. Buttons are disabled by
+  /// default. To enable a button, set its [onPressed] property to a non-null
+  /// value.
   bool get enabled => onPressed != null;
 
   @override
-  State<CustomButton> createState() => _CustomButtonState();
+  State<Button> createState() => _ButtonState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -168,8 +157,7 @@ class CustomButton extends StatefulWidget {
   }
 }
 
-class _CustomButtonState extends State<CustomButton>
-    with SingleTickerProviderStateMixin {
+class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
   // Eyeballed values. Feel free to tweak.
   static const Duration kFadeOutDuration = Duration(milliseconds: 120);
   static const Duration kFadeInDuration = Duration(milliseconds: 180);
@@ -193,7 +181,7 @@ class _CustomButtonState extends State<CustomButton>
   }
 
   @override
-  void didUpdateWidget(CustomButton old) {
+  void didUpdateWidget(Button old) {
     super.didUpdateWidget(old);
     _setTween();
   }
@@ -247,25 +235,23 @@ class _CustomButtonState extends State<CustomButton>
   @override
   Widget build(BuildContext context) {
     final bool enabled = widget.enabled;
-    final CupertinoThemeData themeData = CupertinoTheme.of(context);
-    final Color primaryColor = themeData.primaryColor;
-    Color? backgroundColor = widget.color == null
-        ? (widget._filled ? primaryColor : null)
-        : CupertinoDynamicColor.maybeResolve(widget.color, context);
+    final ThemeData themeData = Theme.of(context);
+    final Color primaryColor = themeData.colorScheme.primary;
+    Color? backgroundColor = widget.color ?? (widget._filled ? primaryColor : null);
 
     Color foregroundColor = backgroundColor != null
-        ? themeData.primaryContrastingColor
+        ? themeData.colorScheme.onPrimary
         : enabled
             ? primaryColor
-            : CupertinoDynamicColor.resolve(
-                CupertinoColors.placeholderText, context);
+            : themeData.disabledColor;
 
     if (widget._outlined && widget.color != null) {
       backgroundColor = null;
       foregroundColor = widget.color ?? primaryColor;
     }
 
-    final TextStyle textStyle = themeData.textTheme.textStyle.copyWith(
+    final TextStyle textStyle =
+        (themeData.textTheme.bodyMedium ?? const TextStyle()).copyWith(
       color: foregroundColor,
       fontWeight: FontWeight.w500,
     );
@@ -296,8 +282,7 @@ class _CustomButtonState extends State<CustomButton>
                     : null,
                 borderRadius: widget.borderRadius,
                 color: backgroundColor != null && !enabled
-                    ? CupertinoDynamicColor.resolve(
-                        widget.disabledColor, context)
+                    ? widget.disabledColor
                     : backgroundColor,
               ),
               child: Padding(
@@ -310,7 +295,7 @@ class _CustomButtonState extends State<CustomButton>
                     style: textStyle,
                     child: IconTheme(
                       data: IconThemeData(color: foregroundColor),
-                      child: widget.processing == true
+                      child: widget.processing
                           ? LoadingIndicator.threeBounce(
                               color: foregroundColor,
                               size: 14.0,

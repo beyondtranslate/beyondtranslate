@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../custom_button/custom_button.dart';
+import '../ui/button.dart';
 
 const kDialogActionTypePrimary = 'primary';
 const kDialogActionTypeSecondary = 'secondary';
@@ -27,7 +27,7 @@ class CustomDialogAction extends StatelessWidget {
     return Container(
       margin: EdgeInsets.zero,
       height: 38,
-      child: CustomButton.filled(
+      child: Button.filled(
         borderRadius: const BorderRadius.all(Radius.circular(2.0)),
         padding: EdgeInsets.zero,
         processing: processing,
