@@ -31,7 +31,8 @@ import 'package:tray_manager/tray_manager.dart';
 import 'package:uni_ocr_client/uni_ocr_client.dart';
 import 'package:uni_translate_client/uni_translate_client.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:window_manager/window_manager.dart';
+import 'package:nativeapi/nativeapi.dart' as nativeapi;
+import 'package:biyi_app/windowing/window_controllers.dart';
 
 const kMenuItemKeyShow = 'show';
 const kMenuItemKeyQuickStartGuide = 'quick-start-guide';
@@ -52,8 +53,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         WidgetsBindingObserver,
         ProtocolListener,
         ShortcutListener,
-        TrayListener,
-        WindowListener {
+        TrayListener {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -89,6 +89,9 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   List<Future> _futureList = [];
 
   Timer? _resizeTimer;
+  int? _windowFocusedListenerId;
+  int? _windowBlurredListenerId;
+  int? _windowMovedListenerId;
 
   List<TranslationEngineConfig> get _translationEngineList {
     return localDb.engines.list(
@@ -108,6 +111,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     return localDb.translationTargets.list();
   }
 
+  nativeapi.Window get _window => miniTranslatorWindowController.window;
+
   @override
   void initState() {
     localDb.preferences.addListener(_handleChanged);
@@ -116,7 +121,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       protocolHandler.addListener(this);
       ShortcutService.instance.setListener(this);
       trayManager.addListener(this);
-      windowManager.addListener(this);
+      _registerWindowEvents();
       _init();
     }
     _loadData();
@@ -131,7 +136,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       protocolHandler.removeListener(this);
       ShortcutService.instance.setListener(null);
       trayManager.removeListener(this);
-      windowManager.removeListener(this);
+      _unregisterWindowEvents();
       _uninit();
     }
     super.dispose();
@@ -177,34 +182,59 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     await _initTrayIcon();
     await Future.delayed(const Duration(milliseconds: 100));
-    WindowOptions windowOptions = const WindowOptions(
-      titleBarStyle: TitleBarStyle.hidden,
-      windowButtonVisibility: false,
-      skipTaskbar: true,
-      backgroundColor: Colors.transparent,
-    );
-    windowManager.waitUntilReadyToShow(windowOptions, () async {
-      if (kIsMacOS) {
-        await windowManager.setVisibleOnAllWorkspaces(
-          true,
-          visibleOnFullScreen: true,
-        );
-      }
-      if (kIsLinux || kIsWindows) {
-        Display primaryDisplay = await screenRetriever.getPrimaryDisplay();
-        Size windowSize = await windowManager.getSize();
-        _lastShownPosition = Offset(
-          primaryDisplay.size.width - windowSize.width - 50,
-          50,
-        );
-        await windowManager.setPosition(_lastShownPosition);
-      }
-      await Future.delayed(const Duration(milliseconds: 100));
-      await _windowShow(
-        isShowBelowTray: kIsMacOS,
+    if (kIsLinux || kIsWindows) {
+      final primaryDisplay = await screenRetriever.getPrimaryDisplay();
+      final windowSize = _window.size;
+      _lastShownPosition = Offset(
+        primaryDisplay.size.width - windowSize.width - 50,
+        50,
       );
-    });
+      _window.setPosition(_lastShownPosition.dx, _lastShownPosition.dy);
+    }
+    await Future.delayed(const Duration(milliseconds: 100));
+    await _windowShow(
+      isShowBelowTray: kIsMacOS,
+    );
     setState(() {});
+  }
+
+  void _registerWindowEvents() {
+    _windowFocusedListenerId = nativeapi.WindowManager.instance
+        .on<nativeapi.WindowFocusedEvent>((event) {
+      if (event.windowId == _window.id) {
+        _focusNode.requestFocus();
+      }
+    });
+    _windowBlurredListenerId = nativeapi.WindowManager.instance
+        .on<nativeapi.WindowBlurredEvent>((event) {
+      if (event.windowId == _window.id) {
+        _focusNode.unfocus();
+        if (!_window.isAlwaysOnTop) {
+          _window.hide();
+        }
+      }
+    });
+    _windowMovedListenerId = nativeapi.WindowManager.instance
+        .on<nativeapi.WindowMovedEvent>((event) {
+      if (event.windowId == _window.id) {
+        _lastShownPosition = event.position;
+      }
+    });
+  }
+
+  void _unregisterWindowEvents() {
+    if (_windowFocusedListenerId != null) {
+      nativeapi.WindowManager.instance.off(_windowFocusedListenerId!);
+      _windowFocusedListenerId = null;
+    }
+    if (_windowBlurredListenerId != null) {
+      nativeapi.WindowManager.instance.off(_windowBlurredListenerId!);
+      _windowBlurredListenerId = null;
+    }
+    if (_windowMovedListenerId != null) {
+      nativeapi.WindowManager.instance.off(_windowMovedListenerId!);
+      _windowMovedListenerId = null;
+    }
   }
 
   Future<void> _initTrayIcon() async {
@@ -282,11 +312,11 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   Future<void> _windowShow({
     bool isShowBelowTray = false,
   }) async {
-    bool isAlwaysOnTop = await windowManager.isAlwaysOnTop();
-    Size windowSize = await windowManager.getSize();
+    final isAlwaysOnTop = _window.isAlwaysOnTop;
+    final windowSize = _window.size;
 
     if (kIsLinux) {
-      await windowManager.setPosition(_lastShownPosition);
+      _window.setPosition(_lastShownPosition.dx, _lastShownPosition.dy);
     }
 
     if (kIsMacOS && isShowBelowTray) {
@@ -301,29 +331,29 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         );
 
         if (!isAlwaysOnTop) {
-          await windowManager.setPosition(newPosition);
+          _window.setPosition(newPosition.dx, newPosition.dy);
         }
       }
     }
 
-    bool isVisible = await windowManager.isVisible();
+    final isVisible = _window.isVisible;
     if (!isVisible) {
-      await windowManager.show();
+      _window.show();
     } else {
-      await windowManager.focus();
+      _window.focus();
     }
 
     if (kIsLinux && !isAlwaysOnTop) {
-      await windowManager.setAlwaysOnTop(true);
+      _window.isAlwaysOnTop = true;
       await Future.delayed(const Duration(milliseconds: 10));
-      await windowManager.setAlwaysOnTop(false);
+      _window.isAlwaysOnTop = false;
       await Future.delayed(const Duration(milliseconds: 10));
-      await windowManager.focus();
+      _window.focus();
     }
   }
 
   Future<void> _windowHide() async {
-    await windowManager.hide();
+    _window.hide();
   }
 
   void _windowResize() {
@@ -354,7 +384,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             inputViewHeight +
             resultsViewHeight +
             (kIsWindows ? 5 : 0);
-        Size oldSize = await windowManager.getSize();
+        final oldSize = _window.size;
         Size newSize = Size(
           oldSize.width,
           newWindowHeight < _configuration.maxWindowHeight
@@ -363,7 +393,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         );
         if (oldSize.width != newSize.width ||
             oldSize.height != newSize.height) {
-          await windowManager.setSize(newSize, animate: true);
+          _window.setSize(newSize.width, newSize.height, animate: true);
         }
       } catch (error) {
         // ignore
@@ -687,7 +717,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   void _handleExtractTextFromClipboard() async {
-    bool windowIsVisible = await windowManager.isVisible();
+    final windowIsVisible = _window.isVisible;
     if (!windowIsVisible) {
       await _windowShow();
       await Future.delayed(const Duration(milliseconds: 10));
@@ -914,7 +944,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   @override
   void onShortcutKeyDownShowOrHide() async {
-    bool isVisible = await windowManager.isVisible();
+    final isVisible = _window.isVisible;
     if (isVisible) {
       _windowHide();
     } else {
@@ -1044,24 +1074,5 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         await trayManager.destroy();
         exit(0);
     }
-  }
-
-  @override
-  void onWindowFocus() async {
-    _focusNode.requestFocus();
-  }
-
-  @override
-  void onWindowBlur() async {
-    _focusNode.unfocus();
-    bool isAlwaysOnTop = await windowManager.isAlwaysOnTop();
-    if (!isAlwaysOnTop) {
-      windowManager.hide();
-    }
-  }
-
-  @override
-  void onWindowMove() async {
-    _lastShownPosition = await windowManager.getPosition();
   }
 }

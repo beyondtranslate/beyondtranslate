@@ -4,16 +4,14 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:photo_view/photo_view_gallery.dart';
 
 class ImageViewerPage extends StatefulWidget {
   ImageViewerPage(
     this.imageList, {
-    Key? key,
+    super.key,
     this.initialIndex = 0,
-  })  : pageController = PageController(initialPage: initialIndex),
-        super(key: key);
+  }) : pageController = PageController(initialPage: initialIndex);
 
   final List<String> imageList;
   final int initialIndex;

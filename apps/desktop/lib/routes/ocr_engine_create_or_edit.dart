@@ -1,21 +1,23 @@
-import 'package:biyi_app/models/models.dart';
-import '../../i18n/i18n.dart';
-import '../../networking/ocr_client/ocr_client.dart';
-import '../pages.dart';
-import '../../services/services.dart';
-import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ocr_engine_youdao/ocr_engine_youdao.dart';
 import 'package:shortid/shortid.dart';
 
+import 'package:biyi_app/i18n/i18n.dart';
+import 'package:biyi_app/models/models.dart';
+import 'package:biyi_app/networking/ocr_client/ocr_client.dart';
+import 'package:biyi_app/services/services.dart';
+import 'package:biyi_app/widgets/widgets.dart';
+
+import 'ocr_engine_type_chooser.dart';
+
 class OcrEngineCreateOrEditPage extends StatefulWidget {
   const OcrEngineCreateOrEditPage({
-    Key? key,
+    super.key,
     this.editable = true,
     this.ocrEngineType,
     this.ocrEngineConfig,
-  }) : super(key: key);
+  });
 
   final bool editable;
   final String? ocrEngineType;
@@ -65,9 +67,7 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
   }
 
   void _handleClickOk() async {
-    await localDb //
-        .privateOcrEngine(_identifier)
-        .updateOrCreate(
+    await localDb.privateOcrEngine(_identifier).updateOrCreate(
           type: _type,
           option: _option,
         );

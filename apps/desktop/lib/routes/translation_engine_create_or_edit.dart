@@ -1,14 +1,16 @@
-import 'package:biyi_app/models/models.dart';
-import 'package:uni_translate_client/uni_translate_client.dart';
-import '../../i18n/i18n.dart';
-import '../../networking/translate_client/translate_client.dart';
-import '../pages.dart';
-import '../../services/services.dart';
-import '../../widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shortid/shortid.dart';
+import 'package:uni_translate_client/uni_translate_client.dart';
+
+import 'package:biyi_app/i18n/i18n.dart';
+import 'package:biyi_app/models/models.dart';
+import 'package:biyi_app/networking/translate_client/translate_client.dart';
+import 'package:biyi_app/services/services.dart';
+import 'package:biyi_app/widgets/widgets.dart';
+
+import 'translation_engine_type_chooser.dart';
 
 const List<TranslationEngineScope> _kAllScopes = [
   TranslationEngineScope.detectLanguage,
@@ -18,11 +20,11 @@ const List<TranslationEngineScope> _kAllScopes = [
 
 class TranslationEngineCreateOrEditPage extends StatefulWidget {
   const TranslationEngineCreateOrEditPage({
-    Key? key,
+    super.key,
     this.editable = true,
     this.engineType,
     this.engineConfig,
-  }) : super(key: key);
+  });
 
   final bool editable;
   final String? engineType;
@@ -86,22 +88,7 @@ class _TranslationEngineCreateOrEditPageState
   }
 
   void _handleClickOk() async {
-    // try {
-    //   var resp = await translationEngine?.lookUp(
-    //     LookUpRequest(
-    //       sourceLanguage: kLanguageEN,
-    //       targetLanguage: kLanguageZH,
-    //       word: 'hello',
-    //     ),
-    //   );
-    //   print(resp?.toJson());
-    // } catch (error) {
-    //   print((error as UniTranslateClientError).message);
-    // }
-
-    await localDb //
-        .privateEngine(_identifier)
-        .updateOrCreate(
+    await localDb.privateEngine(_identifier).updateOrCreate(
           type: _type,
           option: _option,
         );

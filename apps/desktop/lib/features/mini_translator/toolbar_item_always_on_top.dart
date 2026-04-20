@@ -1,7 +1,7 @@
 import 'package:biyi_app/widgets/widgets.dart';
+import 'package:biyi_app/windowing/window_controllers.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:window_manager/window_manager.dart';
 
 class ToolbarItemAlwaysOnTop extends StatefulWidget {
   const ToolbarItemAlwaysOnTop({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class _ToolbarItemAlwaysOnTopState extends State<ToolbarItemAlwaysOnTop> {
   }
 
   void _init() async {
-    _isAlwaysOnTop = await windowManager.isAlwaysOnTop();
+    _isAlwaysOnTop = miniTranslatorWindowController.window.isAlwaysOnTop;
     setState(() {});
   }
 
@@ -52,7 +52,7 @@ class _ToolbarItemAlwaysOnTopState extends State<ToolbarItemAlwaysOnTop> {
           setState(() {
             _isAlwaysOnTop = !_isAlwaysOnTop;
           });
-          windowManager.setAlwaysOnTop(_isAlwaysOnTop);
+          miniTranslatorWindowController.window.isAlwaysOnTop = _isAlwaysOnTop;
         },
       ),
     );

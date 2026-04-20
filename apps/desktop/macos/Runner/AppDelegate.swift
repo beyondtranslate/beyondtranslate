@@ -12,5 +12,8 @@ class AppDelegate: FlutterAppDelegate {
   override func applicationDidFinishLaunching(_ notification: Notification) {
     engine = FlutterEngine(name: "project", project: nil)
     engine?.run(withEntrypoint:nil)
+    if let engine {
+      RegisterGeneratedPlugins(registry: engine)
+    }
   }
 }

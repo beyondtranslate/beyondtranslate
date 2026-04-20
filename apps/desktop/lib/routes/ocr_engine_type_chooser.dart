@@ -1,36 +1,35 @@
-import '../../i18n/i18n.dart';
-import '../../utilities/utilities.dart';
-import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-class LanguageChooserPage extends StatefulWidget {
-  const LanguageChooserPage({
-    Key? key,
-    this.initialLanguage,
+import 'package:biyi_app/i18n/i18n.dart';
+import 'package:biyi_app/networking/networking.dart';
+import 'package:biyi_app/widgets/widgets.dart';
+
+class OcrEngineTypeChooserPage extends StatefulWidget {
+  const OcrEngineTypeChooserPage({
+    super.key,
+    this.engineType,
     this.onChoosed,
-  }) : super(key: key);
+  });
 
-  final String? initialLanguage;
+  final String? engineType;
   final ValueChanged<String>? onChoosed;
 
   @override
-  State<StatefulWidget> createState() => _LanguageChooserPageState();
+  State<OcrEngineTypeChooserPage> createState() =>
+      _OcrEngineTypeChooserPageState();
 }
 
-class _LanguageChooserPageState extends State<LanguageChooserPage> {
-  String? _language;
+class _OcrEngineTypeChooserPageState extends State<OcrEngineTypeChooserPage> {
+  String? _type;
 
   @override
   void initState() {
-    _language = widget.initialLanguage;
+    _type = widget.engineType;
     super.initState();
   }
 
   void _handleClickOk() async {
-    widget.onChoosed?.call(_language!);
-
-    context.pop();
+    widget.onChoosed?.call(_type!);
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
@@ -49,16 +48,15 @@ class _LanguageChooserPageState extends State<LanguageChooserPage> {
     return PreferenceList(
       children: [
         PreferenceListSection(
-          title: Text(t('pref_section_title_all')),
           children: [
-            for (var supportedLanguage in kSupportedLanguages)
+            for (var engineType in kSupportedOcrEngineTypes)
               PreferenceListRadioItem(
-                title: LanguageLabel(supportedLanguage),
-                accessoryView: Container(),
-                value: supportedLanguage,
-                groupValue: _language,
+                icon: OcrEngineIcon(engineType),
+                title: Text('ocr_engine.$engineType'.tr()),
+                value: engineType,
+                groupValue: _type,
                 onChanged: (newGroupValue) {
-                  _language = supportedLanguage;
+                  _type = engineType;
                   setState(() {});
                 },
               ),
@@ -77,6 +75,6 @@ class _LanguageChooserPageState extends State<LanguageChooserPage> {
   }
 
   String t(String key, {List<String> args = const []}) {
-    return 'page_language_chooser.$key'.tr(args: args);
+    return 'page_ocr_engine_type_chooser.$key'.tr(args: args);
   }
 }

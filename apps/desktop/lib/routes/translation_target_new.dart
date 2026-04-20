@@ -1,16 +1,18 @@
-import '../../i18n/i18n.dart';
-import '../../models/models.dart';
-import '../pages.dart';
-import '../../services/services.dart';
-import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:biyi_app/i18n/i18n.dart';
+import 'package:biyi_app/models/models.dart';
+import 'package:biyi_app/services/services.dart';
+import 'package:biyi_app/widgets/widgets.dart';
+
+import 'language_chooser.dart';
+
 class TranslationTargetNewPage extends StatefulWidget {
   const TranslationTargetNewPage({
-    Key? key,
+    super.key,
     this.translationTarget,
-  }) : super(key: key);
+  });
 
   final TranslationTarget? translationTarget;
 
@@ -33,7 +35,7 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
   }
 
   void _handleClickOk() async {
-    await localDb //
+    await localDb
         .translationTarget(widget.translationTarget?.id)
         .updateOrCreate(
           sourceLanguage: _sourceLanguage,

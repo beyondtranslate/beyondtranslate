@@ -19,7 +19,9 @@ import 'translation_engines_manage.dart' as translation_engines_manage_route;
 /// TanStack Start-inspired organization:
 /// - each route lives in its own module/file
 /// - this file is the composition root for router setup
-GoRouter createAppRouter() {
+GoRouter createAppRouter({
+  String? initialLocation,
+}) {
   return GoRouter(
     routes: <RouteBase>[
       ...$appRoutes,
@@ -36,7 +38,7 @@ GoRouter createAppRouter() {
       ...extract_text_route.$appRoutes,
       ...translation_engines_manage_route.$appRoutes,
     ],
-    initialLocation: const RootRoute().location,
+    initialLocation: initialLocation ?? const RootRoute().location,
     debugLogDiagnostics: false,
   );
 }

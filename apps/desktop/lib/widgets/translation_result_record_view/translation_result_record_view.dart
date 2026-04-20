@@ -1,6 +1,6 @@
 import 'package:biyi_app/i18n/i18n.dart';
 import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/pages/pages.dart';
+import 'package:biyi_app/routes/image_viewer.dart';
 import 'package:biyi_app/services/services.dart';
 import 'package:biyi_app/utilities/utilities.dart';
 import 'package:biyi_app/widgets/translation_result_record_view/translation_engine_tag.dart';

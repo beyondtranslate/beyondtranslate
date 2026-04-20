@@ -1,25 +1,31 @@
-import '../../i18n/i18n.dart';
-import '../../networking/networking.dart';
-import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-class OcrEngineTypeChooserPage extends StatefulWidget {
-  const OcrEngineTypeChooserPage({
-    Key? key,
+import 'package:biyi_app/i18n/i18n.dart';
+import 'package:biyi_app/networking/networking.dart';
+import 'package:biyi_app/widgets/widgets.dart';
+
+class TranslationEngineTypeChooserPage extends StatefulWidget {
+  const TranslationEngineTypeChooserPage({
+    super.key,
     this.engineType,
     this.onChoosed,
-  }) : super(key: key);
+  });
 
   final String? engineType;
   final ValueChanged<String>? onChoosed;
 
   @override
-  State<OcrEngineTypeChooserPage> createState() =>
-      _OcrEngineTypeChooserPageState();
+  State<TranslationEngineTypeChooserPage> createState() =>
+      _TranslationEngineTypeChooserPageState();
 }
 
-class _OcrEngineTypeChooserPageState extends State<OcrEngineTypeChooserPage> {
+class _TranslationEngineTypeChooserPageState
+    extends State<TranslationEngineTypeChooserPage> {
   String? _type;
+
+  String t(String key, {List<String> args = const []}) {
+    return 'page_translation_engine_type_chooser.$key'.tr(args: args);
+  }
 
   @override
   void initState() {
@@ -48,10 +54,10 @@ class _OcrEngineTypeChooserPageState extends State<OcrEngineTypeChooserPage> {
       children: [
         PreferenceListSection(
           children: [
-            for (var engineType in kSupportedOcrEngineTypes)
+            for (var engineType in kSupportedEngineTypes)
               PreferenceListRadioItem(
-                icon: OcrEngineIcon(engineType),
-                title: Text('ocr_engine.$engineType'.tr()),
+                icon: TranslationEngineIcon(engineType),
+                title: Text('engine.$engineType'.tr()),
                 value: engineType,
                 groupValue: _type,
                 onChanged: (newGroupValue) {
@@ -71,9 +77,5 @@ class _OcrEngineTypeChooserPageState extends State<OcrEngineTypeChooserPage> {
       appBar: _buildAppBar(context),
       body: _buildBody(context),
     );
-  }
-
-  String t(String key, {List<String> args = const []}) {
-    return 'page_ocr_engine_type_chooser.$key'.tr(args: args);
   }
 }

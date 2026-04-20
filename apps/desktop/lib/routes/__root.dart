@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:biyi_app/pages/pages.dart';
+import 'bootstrap.dart';
 
 part '__root.g.dart';
 

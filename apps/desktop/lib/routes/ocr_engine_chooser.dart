@@ -1,52 +1,48 @@
-import 'package:biyi_app/models/models.dart';
-import '../../i18n/i18n.dart';
-import '../../services/services.dart';
-import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class TranslationEngineChooserPage extends StatefulWidget {
-  const TranslationEngineChooserPage({
-    Key? key,
-    this.initialEngineConfig,
-    this.onChoosed,
-  }) : super(key: key);
+import 'package:biyi_app/i18n/i18n.dart';
+import 'package:biyi_app/models/models.dart';
+import 'package:biyi_app/services/services.dart';
+import 'package:biyi_app/widgets/widgets.dart';
 
-  final TranslationEngineConfig? initialEngineConfig;
-  final ValueChanged<TranslationEngineConfig>? onChoosed;
+class OcrEngineChooserPage extends StatefulWidget {
+  const OcrEngineChooserPage({
+    super.key,
+    this.initialOcrEngineConfig,
+    this.onChoosed,
+  });
+
+  final OcrEngineConfig? initialOcrEngineConfig;
+  final ValueChanged<OcrEngineConfig>? onChoosed;
 
   @override
-  State<StatefulWidget> createState() => _TranslationEngineChooserPageState();
+  State<StatefulWidget> createState() => _OcrEngineChooserPageState();
 }
 
-class _TranslationEngineChooserPageState
-    extends State<TranslationEngineChooserPage> {
-  List<TranslationEngineConfig> get _proEngineList {
-    return localDb.proEngines.list(where: ((e) => !e.disabled));
+class _OcrEngineChooserPageState extends State<OcrEngineChooserPage> {
+  List<OcrEngineConfig> get _proOcrEngineList {
+    return localDb.proOcrEngines.list(where: ((e) => !e.disabled));
   }
 
-  List<TranslationEngineConfig> get _privateEngineList {
-    return localDb.privateEngines.list(where: ((e) => !e.disabled));
+  List<OcrEngineConfig> get _privateOcrEngineList {
+    return localDb.privateOcrEngines.list(where: ((e) => !e.disabled));
   }
 
   String? _identifier;
-
-  String t(String key, {List<String> args = const []}) {
-    return 'page_translation_engine_chooser.$key'.tr(args: args);
-  }
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      _identifier = widget.initialEngineConfig?.identifier;
+      _identifier = widget.initialOcrEngineConfig?.identifier;
     });
   }
 
   void _handleClickOk() async {
     if (widget.onChoosed != null) {
-      TranslationEngineConfig? engineConfig = localDb.engine(_identifier).get();
-      widget.onChoosed!(engineConfig!);
+      OcrEngineConfig? ocrEngineConfig = localDb.ocrEngine(_identifier).get();
+      widget.onChoosed!(ocrEngineConfig!);
     }
 
     context.pop();
@@ -55,14 +51,14 @@ class _TranslationEngineChooserPageState
   Widget _buildBody(BuildContext context) {
     return PreferenceList(
       children: [
-        if (_proEngineList.isNotEmpty)
+        if (_proOcrEngineList.isNotEmpty)
           PreferenceListSection(
             children: [
-              for (var engineConfig in _proEngineList)
+              for (var ocrEngineConfig in _proOcrEngineList)
                 PreferenceListRadioItem<String>(
-                  icon: TranslationEngineIcon(engineConfig.type),
-                  title: TranslationEngineName(engineConfig),
-                  value: engineConfig.identifier,
+                  icon: OcrEngineIcon(ocrEngineConfig.type),
+                  title: OcrEngineName(ocrEngineConfig),
+                  value: ocrEngineConfig.identifier,
                   groupValue: _identifier ?? '',
                   onChanged: (newValue) {
                     setState(() {
@@ -75,11 +71,11 @@ class _TranslationEngineChooserPageState
         PreferenceListSection(
           title: Text(t('pref_section_title_private')),
           children: [
-            for (var engineConfig in _privateEngineList)
+            for (var ocrEngineConfig in _privateOcrEngineList)
               PreferenceListRadioItem<String>(
-                icon: TranslationEngineIcon(engineConfig.type),
-                title: TranslationEngineName(engineConfig),
-                value: engineConfig.identifier,
+                icon: OcrEngineIcon(ocrEngineConfig.type),
+                title: OcrEngineName(ocrEngineConfig),
+                value: ocrEngineConfig.identifier,
                 groupValue: _identifier ?? '',
                 onChanged: (newValue) {
                   setState(() {
@@ -87,7 +83,7 @@ class _TranslationEngineChooserPageState
                   });
                 },
               ),
-            if (_privateEngineList.isEmpty)
+            if (_privateOcrEngineList.isEmpty)
               PreferenceListItem(
                 title: Text(t('pref_item_title_no_available_engines')),
                 accessoryView: Container(),
@@ -116,5 +112,9 @@ class _TranslationEngineChooserPageState
   @override
   Widget build(BuildContext context) {
     return _build(context);
+  }
+
+  String t(String key, {List<String> args = const []}) {
+    return 'page_ocr_engine_chooser.$key'.tr(args: args);
   }
 }

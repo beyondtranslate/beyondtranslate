@@ -1,4 +1,4 @@
-import 'package:biyi_app/routes/routes.dart';
+import 'package:biyi_app/windowing/window_controllers.dart';
 import 'package:biyi_app/widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,9 @@ class ToolbarItemSettings extends StatelessWidget {
           color: Theme.of(context).iconTheme.color,
         ),
         onPressed: () async {
-          await const SettingsRoute().push(context);
+          final mainWindow = mainWindowController.window;
+          mainWindow.show();
+          mainWindow.focus();
           await Future.delayed(const Duration(milliseconds: 200));
           onSubPageDismissed();
         },
