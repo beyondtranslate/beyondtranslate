@@ -1,13 +1,14 @@
+// ignore_for_file: implementation_imports, invalid_use_of_internal_member
+
 import 'dart:io';
 
 import 'i18n/i18n.dart';
 import 'services/services.dart';
-import 'utilities/utilities.dart';
+import 'utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
-import 'package:biyi_app/models/models.dart';
 import 'package:flutter/src/widgets/_window.dart';
 import 'package:biyi_app/themes/themes.dart';
 import 'package:biyi_app/routes/routes.dart';
@@ -22,7 +23,7 @@ class MainApp extends StatefulWidget {
   State<MainApp> createState() => _MainAppState();
 }
 
-class _MainAppState extends State<MainApp> with LocalDbListener {
+class _MainAppState extends State<MainApp> {
   late final GoRouter _router = createAppRouter(
     initialLocation: const SettingsRoute().location,
   );
@@ -31,14 +32,12 @@ class _MainAppState extends State<MainApp> with LocalDbListener {
 
   @override
   void initState() {
-    localDb.addListener(this);
     localDb.preferences.addListener(_handleChanged);
     super.initState();
   }
 
   @override
   void dispose() {
-    localDb.removeListener(this);
     localDb.preferences.removeListener(_handleChanged);
     super.dispose();
   }
@@ -82,11 +81,6 @@ class _MainAppState extends State<MainApp> with LocalDbListener {
         locale: context.locale,
       ),
     );
-  }
-
-  @override
-  void onUserChanged(User oldUser, User newUser) {
-    _handleChanged();
   }
 }
 

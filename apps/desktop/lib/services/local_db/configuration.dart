@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:biyi_app/models/models.dart';
 import '../services.dart';
-import '../../utilities/utilities.dart';
+import '../../utils/utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
@@ -210,7 +210,7 @@ class Configuration {
   }
 
   String? _getString(String key) {
-    UserPreference? pref = localDb.preference(key).get();
+    PreferenceItem? pref = localDb.preference(key).get();
     return pref?.value;
   }
 
@@ -223,7 +223,7 @@ class Configuration {
   }
 
   bool? _getBool(String key) {
-    UserPreference? pref = localDb.preference(key).get();
+    PreferenceItem? pref = localDb.preference(key).get();
     return pref?.boolValue;
   }
 

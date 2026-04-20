@@ -2,10 +2,9 @@
 
 import 'package:biyi_app/features/mini_translator/mini_translator.dart';
 import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/models/models.dart';
 import 'package:biyi_app/services/services.dart';
 import 'package:biyi_app/themes/themes.dart';
-import 'package:biyi_app/utilities/utilities.dart';
+import 'package:biyi_app/utils/utils.dart';
 import 'package:biyi_app/windowing/window_controllers.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -18,20 +17,17 @@ class MiniTranslatorApp extends StatefulWidget {
   State<MiniTranslatorApp> createState() => _MiniTranslatorAppState();
 }
 
-class _MiniTranslatorAppState extends State<MiniTranslatorApp>
-    with LocalDbListener {
+class _MiniTranslatorAppState extends State<MiniTranslatorApp> {
   Configuration get _configuration => localDb.configuration;
 
   @override
   void initState() {
-    localDb.addListener(this);
     localDb.preferences.addListener(_handleChanged);
     super.initState();
   }
 
   @override
   void dispose() {
-    localDb.removeListener(this);
     localDb.preferences.removeListener(_handleChanged);
     super.dispose();
   }
@@ -78,10 +74,5 @@ class _MiniTranslatorAppState extends State<MiniTranslatorApp>
         home: const MiniTranslatorPage(),
       ),
     );
-  }
-
-  @override
-  void onUserChanged(User oldUser, User newUser) {
-    _handleChanged();
   }
 }

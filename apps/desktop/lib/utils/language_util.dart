@@ -1,5 +1,5 @@
 import '../i18n/i18n.dart';
-import 'utilities.dart';
+import 'utils.dart';
 import 'package:flutter/material.dart';
 
 const kLanguageDE = 'de';

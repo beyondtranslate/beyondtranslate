@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import '../services/services.dart';
-import 'utilities.dart';
+import 'env.dart';
+import 'platform_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -40,14 +40,6 @@ Future<Directory> getAppDirectory() async {
   return _dataDirectory!;
 }
 
-Future<Directory> getUserDataDirectory() async {
-  final appDirectory = await getAppDirectory();
-  final currentUser = await getCurrentUser();
-
-  final userDataDirectory = Directory(path.join(
-    appDirectory.path,
-    currentUser.id == -1 ? 'local' : currentUser.email,
-  ));
-
-  return userDataDirectory;
+Future<Directory> getAppDataDirectory() async {
+  return getAppDirectory();
 }

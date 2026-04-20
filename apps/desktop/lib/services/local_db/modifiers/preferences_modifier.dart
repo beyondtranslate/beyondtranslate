@@ -28,13 +28,13 @@ class PreferencesModifier extends Listenable {
     _box.listenable().removeListener(listener);
   }
 
-  List<UserPreference> list() {
-    return _box.values.map((e) => UserPreference.fromJson(e)).toList();
+  List<PreferenceItem> list() {
+    return _box.values.map((e) => PreferenceItem.fromJson(e)).toList();
   }
 
-  UserPreference? get() {
+  PreferenceItem? get() {
     if (exists()) {
-      return UserPreference.fromJson(_box.get(_key));
+      return PreferenceItem.fromJson(_box.get(_key));
     }
     return null;
   }
@@ -44,7 +44,7 @@ class PreferencesModifier extends Listenable {
     String type = 'string',
     required String value,
   }) async {
-    UserPreference preference = UserPreference(
+    PreferenceItem preference = PreferenceItem(
       key: key,
       type: type,
       value: value,
@@ -56,7 +56,7 @@ class PreferencesModifier extends Listenable {
     String? type,
     String? value,
   }) async {
-    UserPreference preference = UserPreference.fromJson(_box.get(_key));
+    PreferenceItem preference = PreferenceItem.fromJson(_box.get(_key));
     preference.type = type ?? preference.type;
     preference.value = value ?? preference.value;
     _box.put(preference.key, preference.toJson());

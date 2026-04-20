@@ -49,15 +49,15 @@ const Map<String, ThemeMode> kKnownThemeModes = <String, ThemeMode>{
   'system': ThemeMode.system,
 };
 
-class UserPreference {
-  UserPreference({
+class PreferenceItem {
+  PreferenceItem({
     this.key,
     this.type,
     this.value,
   });
 
-  factory UserPreference.fromJson(Map<dynamic, dynamic> json) {
-    return UserPreference(
+  factory PreferenceItem.fromJson(Map<dynamic, dynamic> json) {
+    return PreferenceItem(
       key: json['key'],
       type: json['type'],
       value: json['value'],

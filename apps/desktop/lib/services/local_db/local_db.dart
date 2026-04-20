@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:biyi_app/models/models.dart';
 import 'package:biyi_app/networking/networking.dart';
 import '../services.dart';
-import '../../utilities/utilities.dart';
+import '../../utils/utils.dart';
 import 'package:biyi_app/services/local_db/init_data_if_need.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -13,86 +12,19 @@ import 'package:ocr_engine_builtin/ocr_engine_builtin.dart';
 import 'package:path/path.dart' as path;
 
 export 'configuration.dart';
-export 'local_db_listener.dart';
 
 export 'modifiers/engines_modifier.dart';
 export 'modifiers/ocr_engines_modifier.dart';
 export 'modifiers/preferences_modifier.dart';
 export 'modifiers/translation_targets_modifier.dart';
 
-Future<User> getCurrentUser() {
-  return _getCurrentUser();
-}
-
-Future<User> _getCurrentUser() async {
-  try {
-    final appDir = await getAppDirectory();
-    final file = File('${appDir.path}/user.json');
-
-    if (file.existsSync()) {
-      String jsonString = await file.readAsString();
-      return User.fromJson(json.decode(jsonString));
-    }
-  } catch (e) {
-    // 忽略异常
-  }
-  return User(id: -1);
-}
-
-Future<void> _setCurrentUser(User user) async {
-  final appDir = await getAppDirectory();
-  final file = File('${appDir.path}/user.json');
-
-  final String jsonString = prettyJsonString(
-    user.toJson().removeNulls(),
-  );
-  await file.writeAsString(jsonString);
-}
-
 class LocalDb {
-  User user = User(id: -1);
   Configuration configuration = Configuration();
 
   EnginesModifier? _enginesModifier;
   OcrEnginesModifier? _ocrEnginesModifier;
   PreferencesModifier? _preferencesModifier;
   TranslationTargetsModifier? _translationTargetsModifier;
-
-  final ObserverList<LocalDbListener> _listeners =
-      ObserverList<LocalDbListener>();
-
-  List<LocalDbListener> get listeners {
-    final List<LocalDbListener> localListeners =
-        List<LocalDbListener>.from(_listeners);
-    return localListeners;
-  }
-
-  bool get hasListeners {
-    return _listeners.isNotEmpty;
-  }
-
-  void addListener(LocalDbListener listener) {
-    _listeners.add(listener);
-  }
-
-  void removeListener(LocalDbListener listener) {
-    _listeners.remove(listener);
-  }
-
-  Future<void> setCurrentUser(User newUser) async {
-    User oldUser = user;
-
-    await _setCurrentUser(newUser);
-    user = newUser;
-
-    if (oldUser.id != newUser.id) {
-      await initLocalDb();
-    }
-
-    for (final LocalDbListener listener in listeners) {
-      listener.onUserChanged(oldUser, newUser);
-    }
-  }
 
   Future<void> loadFromCloudServer() async {
     var oldProEngineList = proEngines.list();
@@ -307,19 +239,15 @@ Future<void> _safeOpenBox(Directory userDataDirectory, String name) async {
 }
 
 Future<void> initLocalDb() async {
-  if (!kIsWeb) {
-    localDb.user = await getCurrentUser();
-  }
-
-  Directory userDataDirectory = await getUserDataDirectory();
+  Directory dataDirectory = await getAppDataDirectory();
 
   await Hive.close();
-  Hive.init(userDataDirectory.path);
-  await _safeOpenBox(userDataDirectory, 'preferences');
-  await _safeOpenBox(userDataDirectory, 'engines');
-  await _safeOpenBox(userDataDirectory, 'ocr_engines');
-  await _safeOpenBox(userDataDirectory, 'translation_targets');
-  await _safeOpenBox(userDataDirectory, 'newwords');
+  Hive.init(dataDirectory.path);
+  await _safeOpenBox(dataDirectory, 'preferences');
+  await _safeOpenBox(dataDirectory, 'engines');
+  await _safeOpenBox(dataDirectory, 'ocr_engines');
+  await _safeOpenBox(dataDirectory, 'translation_targets');
+  await _safeOpenBox(dataDirectory, 'newwords');
   // await migrateOldDb();
   if (!kIsWeb) {
     await initDataIfNeed();

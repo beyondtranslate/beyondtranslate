@@ -1,5 +1,5 @@
 import '../services.dart';
-import '../../utilities/utilities.dart';
+import '../../utils/utils.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 
 abstract mixin class ShortcutListener {

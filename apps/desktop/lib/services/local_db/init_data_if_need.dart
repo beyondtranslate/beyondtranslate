@@ -2,12 +2,12 @@ import 'dart:io';
 
 import '../../models/models.dart';
 import '../services.dart';
-import '../../utilities/utilities.dart';
+import '../../utils/utils.dart';
 import 'package:shortid/shortid.dart';
 
 Future<void> initDataIfNeed() async {
-  final userDataDir = await getUserDataDirectory();
-  final file = File('${userDataDir.path}/init_data_completed.json');
+  final dataDir = await getAppDataDirectory();
+  final file = File('${dataDir.path}/init_data_completed.json');
   if (file.existsSync()) {
     return;
   }

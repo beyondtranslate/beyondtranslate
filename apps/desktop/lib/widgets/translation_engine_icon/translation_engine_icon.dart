@@ -1,4 +1,4 @@
-import '../../utilities/utilities.dart';
+import '../../utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class TranslationEngineIcon extends StatelessWidget {

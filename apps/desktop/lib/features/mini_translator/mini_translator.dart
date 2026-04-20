@@ -14,7 +14,7 @@ import 'package:biyi_app/features/mini_translator/translation_input_view.dart';
 import 'package:biyi_app/features/mini_translator/translation_results_view.dart';
 import 'package:biyi_app/features/mini_translator/translation_target_select_view.dart';
 import 'package:biyi_app/services/services.dart';
-import 'package:biyi_app/utilities/utilities.dart';
+import 'package:biyi_app/utils/utils.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -408,13 +408,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   void _loadData() async {
     try {
-      await localDb.setCurrentUser(
-        localDb.user,
-      );
-    } catch (error) {
-      // skip
-    }
-    try {
       _latestVersion = await apiClient.version('latest').get();
       setState(() {});
     } catch (error) {
@@ -665,10 +658,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     String? imagePath;
     if (!kIsWeb) {
-      Directory userDataDirectory = await getUserDataDirectory();
+      Directory dataDirectory = await getAppDataDirectory();
       int timestamp = DateTime.now().millisecondsSinceEpoch;
       String fileName = 'Screenshot-$timestamp.png';
-      imagePath = '${userDataDirectory.path}/Screenshots/$fileName';
+      imagePath = '${dataDirectory.path}/Screenshots/$fileName';
     }
     _capturedData = await ScreenCapturer.instance.capture(
       imagePath: imagePath,

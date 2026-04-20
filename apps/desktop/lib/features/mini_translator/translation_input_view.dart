@@ -106,7 +106,7 @@ class TranslationInputView extends StatelessWidget {
                         ? kTranslationModeManual
                         : kTranslationModeAuto;
 
-                UserPreference? userPreference =
+                PreferenceItem? userPreference =
                     localDb.preference(kPrefTranslationMode).get();
                 if (userPreference != null) {
                   localDb.preference(kPrefTranslationMode).update(

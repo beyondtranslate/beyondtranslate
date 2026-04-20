@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:biyi_app/i18n/i18n.dart';
 import 'package:biyi_app/services/services.dart';
-import 'package:biyi_app/utilities/utilities.dart';
+import 'package:biyi_app/utils/utils.dart';
 import 'package:biyi_app/widgets/widgets.dart';
 
 part 'app_language.g.dart';
