@@ -1,5 +1,5 @@
-import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/i18n/i18n.dart';
+import '../i18n/i18n.dart';
+import './ocr_engine_config.dart';
 
 extension ExtOcrEngineConfig on OcrEngineConfig {
   String get typeName {

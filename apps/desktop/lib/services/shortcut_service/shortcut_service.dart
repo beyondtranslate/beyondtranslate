@@ -1,6 +1,8 @@
-import '../services.dart';
-import '../../utils/utils.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
+
+import '../../utils/platform_util.dart';
+import '../local_db/configuration.dart';
+import '../local_db/local_db.dart';
 
 abstract mixin class ShortcutListener {
   void onShortcutKeyDownShowOrHide();

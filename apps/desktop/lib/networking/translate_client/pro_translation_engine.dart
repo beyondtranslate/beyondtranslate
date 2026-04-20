@@ -1,5 +1,6 @@
-import 'package:biyi_app/models/models.dart';
 import 'package:uni_translate_client/uni_translate_client.dart';
+
+import '../../models/translation_engine_config.dart';
 
 class ProTranslationEngine extends TranslationEngine {
   ProTranslationEngine(

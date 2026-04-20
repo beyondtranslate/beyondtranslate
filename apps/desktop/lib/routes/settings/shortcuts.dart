@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 
-import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/services/services.dart';
-import 'package:biyi_app/utils/utils.dart';
-import 'package:biyi_app/widgets/widgets.dart';
+import '../../i18n/i18n.dart';
+import '../../models/preference_item.dart';
+import '../../services/local_db/configuration.dart';
+import '../../services/local_db/local_db.dart';
+import '../../services/shortcut_service/shortcut_service.dart';
+import '../../utils/platform_util.dart';
+import '../../widgets/custom_app_bar/custom_app_bar.dart';
+import '../../widgets/preference_list/preference_list.dart';
+import '../../widgets/preference_list/preference_list_item.dart';
+import '../../widgets/preference_list/preference_list_section.dart';
+import '../../widgets/record_shortcut_dialog/record_shortcut_dialog.dart';
 
 part 'shortcuts.g.dart';
 

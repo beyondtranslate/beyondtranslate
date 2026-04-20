@@ -1,6 +1,7 @@
-import 'package:biyi_app/models/models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../../models/preference_item.dart';
 
 class PreferencesModifier extends Listenable {
   Box? _boxInstance;

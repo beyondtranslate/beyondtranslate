@@ -1,7 +1,9 @@
-import '../../models/models.dart';
-import '../widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/translation_result.dart';
+import '../custom_button/custom_button.dart';
+import '../language_label/language_label.dart';
 
 class TranslationResultView extends StatelessWidget {
   const TranslationResultView(

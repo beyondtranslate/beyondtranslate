@@ -1,6 +1,7 @@
-import 'package:uni_translate_client/uni_translate_client.dart';
-import '../widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:uni_translate_client/uni_translate_client.dart';
+
+import '../sound_play_button/sound_play_button.dart';
 
 class WordTranslationView extends StatefulWidget {
   const WordTranslationView(

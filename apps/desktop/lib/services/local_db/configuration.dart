@@ -1,11 +1,14 @@
 import 'dart:convert';
 
-import 'package:biyi_app/models/models.dart';
-import '../services.dart';
-import '../../utils/utils.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
+
+import '../../models/preference_item.dart';
+import '../../models/translation_engine_config.dart';
+import '../../utils/language_util.dart';
+import '../../utils/platform_util.dart';
+import './local_db.dart';
 
 class Configuration {
   String get translationMode {

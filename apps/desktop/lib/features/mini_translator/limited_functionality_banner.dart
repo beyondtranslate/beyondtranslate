@@ -1,5 +1,3 @@
-import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/utils/utils.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screen_text_extractor/screen_text_extractor.dart';
+
+import '../../i18n/i18n.dart';
+import '../../utils/platform_util.dart';
+import '../../utils/utils.dart';
 
 class _AllowAccessListItem extends StatelessWidget {
   const _AllowAccessListItem({

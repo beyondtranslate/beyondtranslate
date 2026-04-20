@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/utils/utils.dart';
-import 'package:biyi_app/widgets/widgets.dart';
+import '../i18n/i18n.dart';
+import '../utils/language_util.dart';
+import '../widgets/custom_app_bar/custom_app_bar.dart';
+import '../widgets/custom_app_bar/custom_app_bar_action_item.dart';
+import '../widgets/language_label/language_label.dart';
+import '../widgets/preference_list/preference_list.dart';
+import '../widgets/preference_list/preference_list_item.dart';
+import '../widgets/preference_list/preference_list_section.dart';
 
 class LanguageChooserPage extends StatefulWidget {
   const LanguageChooserPage({

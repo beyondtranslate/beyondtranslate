@@ -2,8 +2,8 @@ import 'package:go_router/go_router.dart';
 
 import '__root.dart';
 import 'bootstrap.dart' as bootstrap_route;
-import 'mini_translator.dart' as mini_translator_route;
 import 'home.dart' as home_route;
+import 'mini_translator.dart' as mini_translator_route;
 import 'ocr_engines_manage.dart' as ocr_engines_manage_route;
 import 'settings/app_language.dart' as app_language_route;
 import 'settings/extract_text.dart' as extract_text_route;

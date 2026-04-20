@@ -1,8 +1,8 @@
-import 'package:biyi_app/i18n/strings.g.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-export 'package:biyi_app/i18n/strings.g.dart';
+import 'strings.g.dart';
+
 
 String _replacePositionalArgs(String value, List<String> args) {
   var result = value;

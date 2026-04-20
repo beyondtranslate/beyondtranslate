@@ -1,14 +1,18 @@
 // ignore_for_file: implementation_imports, invalid_use_of_internal_member
 
-import 'package:biyi_app/features/mini_translator/mini_translator.dart';
-import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/services/services.dart';
-import 'package:biyi_app/themes/themes.dart';
-import 'package:biyi_app/utils/utils.dart';
-import 'package:biyi_app/windowing/window_controllers.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/_window.dart';
+
+import '../../i18n/i18n.dart';
+import '../../services/local_db/configuration.dart';
+import '../../services/local_db/local_db.dart';
+import '../../themes/dark_theme.dart';
+import '../../themes/light_theme.dart';
+import '../../utils/language_util.dart';
+import '../../utils/platform_util.dart';
+import '../../windowing/window_controllers.dart';
+import 'mini_translator.dart';
 
 class MiniTranslatorApp extends StatefulWidget {
   const MiniTranslatorApp({super.key});

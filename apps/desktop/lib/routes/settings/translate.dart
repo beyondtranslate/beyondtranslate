@@ -1,12 +1,19 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
-import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/services/services.dart';
-import 'package:biyi_app/widgets/widgets.dart';
-
+import '../../i18n/i18n.dart';
+import '../../models/preference_item.dart';
+import '../../models/translation_target.dart';
+import '../../services/local_db/configuration.dart';
+import '../../services/local_db/local_db.dart';
+import '../../widgets/custom_app_bar/custom_app_bar.dart';
+import '../../widgets/language_label/language_label.dart';
+import '../../widgets/preference_list/preference_list.dart';
+import '../../widgets/preference_list/preference_list_item.dart';
+import '../../widgets/preference_list/preference_list_section.dart';
+import '../../widgets/translation_engine_icon/translation_engine_icon.dart';
+import '../../widgets/translation_engine_name/translation_engine_name.dart';
 import '../translation_engine_chooser.dart';
 import '../translation_target_new.dart';
 

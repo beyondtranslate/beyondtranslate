@@ -1,6 +1,7 @@
-import '../../utils/utils.dart';
-import '../widgets.dart';
 import 'package:flutter/material.dart';
+
+import '../../utils/language_util.dart';
+import '../language_flag_view/language_flag_view.dart';
 
 class LanguageLabel extends StatelessWidget {
   const LanguageLabel(

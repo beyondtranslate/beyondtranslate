@@ -1,5 +1,5 @@
-import 'package:biyi_app/models/translation_result_record.dart';
-import 'package:biyi_app/models/translation_target.dart';
+import 'translation_result_record.dart';
+import 'translation_target.dart';
 
 class TranslationResult {
   TranslationResult({

@@ -1,6 +1,7 @@
-import '../../utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../utils/language_util.dart';
 
 class LanguageFlagView extends StatelessWidget {
   const LanguageFlagView(

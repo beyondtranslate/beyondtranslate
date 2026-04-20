@@ -1,5 +1,6 @@
-import 'package:biyi_app/models/models.dart';
 import 'package:uni_ocr_client/uni_ocr_client.dart';
+
+import '../../models/ocr_engine_config.dart';
 
 class ProOcrEngine extends OcrEngine {
   ProOcrEngine(

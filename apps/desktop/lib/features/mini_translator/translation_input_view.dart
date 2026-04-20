@@ -1,14 +1,15 @@
 import 'dart:ui';
 
-import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/services/services.dart';
-import 'package:biyi_app/widgets/ui/loading_indicator.dart';
-import 'package:biyi_app/widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:screen_capturer/screen_capturer.dart';
+
+import '../../i18n/i18n.dart';
+import '../../models/preference_item.dart';
+import '../../services/local_db/local_db.dart';
+import '../../widgets/custom_button/custom_button.dart';
+import '../../widgets/ui/loading_indicator.dart';
 
 class TranslationInputView extends StatelessWidget {
   const TranslationInputView({

@@ -2,17 +2,24 @@
 
 import 'dart:io';
 
-import 'i18n/i18n.dart';
-import 'services/services.dart';
-import 'utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/_window.dart';
+import 'package:go_router/go_router.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
-import 'package:flutter/src/widgets/_window.dart';
-import 'package:biyi_app/themes/themes.dart';
-import 'package:biyi_app/routes/routes.dart';
-import 'package:go_router/go_router.dart';
+
+import './i18n/i18n.dart';
+import './i18n/strings.g.dart';
+import './routes/app_router.dart';
+import './routes/settings/index.dart';
+import './services/local_db/configuration.dart';
+import './services/local_db/local_db.dart';
+import './themes/dark_theme.dart';
+import './themes/light_theme.dart';
+import './utils/env.dart';
+import './utils/language_util.dart';
+import './utils/platform_util.dart';
 import 'features/mini_translator/mini_translator_app.dart';
 import 'windowing/window_controllers.dart';
 

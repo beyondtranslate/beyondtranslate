@@ -1,6 +1,7 @@
-import '../i18n/i18n.dart';
-import 'utils.dart';
 import 'package:flutter/material.dart';
+
+import '../i18n/i18n.dart';
+import './r.dart';
 
 const kLanguageDE = 'de';
 const kLanguageEN = 'en';

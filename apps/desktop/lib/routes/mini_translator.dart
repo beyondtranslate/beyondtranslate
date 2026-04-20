@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:biyi_app/features/mini_translator.dart';
+import '../features/mini_translator/mini_translator.dart';
 
 part 'mini_translator.g.dart';
 

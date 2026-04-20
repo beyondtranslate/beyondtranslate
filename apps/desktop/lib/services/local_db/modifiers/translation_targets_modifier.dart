@@ -1,7 +1,8 @@
-import '../../../models/models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shortid/shortid.dart';
+
+import '../../../models/translation_target.dart';
 
 class TranslationTargetsModifier extends Listenable {
   Box? _boxInstance;

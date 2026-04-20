@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:biyi_app/models/models.dart';
+import '../../../models/ocr_engine_config.dart';
 
 class OcrEnginesApi {
   Future<List<OcrEngineConfig>> list() async {

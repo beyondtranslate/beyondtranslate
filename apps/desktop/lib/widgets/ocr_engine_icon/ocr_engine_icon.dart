@@ -1,5 +1,6 @@
-import '../../utils/utils.dart';
 import 'package:flutter/material.dart';
+
+import '../../utils/r.dart';
 
 class OcrEngineIcon extends StatelessWidget {
   const OcrEngineIcon(

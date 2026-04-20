@@ -1,10 +1,12 @@
 import 'dart:math' as math;
 
-import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/utils/utils.dart';
-import 'package:biyi_app/widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/preference_item.dart';
+import '../../utils/language_util.dart';
+import '../../widgets/custom_button/custom_button.dart';
+import '../../widgets/language_label/language_label.dart';
 
 class _AvailableLanguageSelector extends StatelessWidget {
   const _AvailableLanguageSelector({

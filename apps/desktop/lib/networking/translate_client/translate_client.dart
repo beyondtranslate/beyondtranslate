@@ -1,5 +1,3 @@
-import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/services/local_db/local_db.dart';
 import 'package:translation_engine_baidu/translation_engine_baidu.dart';
 import 'package:translation_engine_caiyun/translation_engine_caiyun.dart';
 import 'package:translation_engine_deepl/translation_engine_deepl.dart';
@@ -9,6 +7,9 @@ import 'package:translation_engine_openai/translation_engine_openai.dart';
 import 'package:translation_engine_tencent/translation_engine_tencent.dart';
 import 'package:translation_engine_youdao/translation_engine_youdao.dart';
 import 'package:uni_translate_client/uni_translate_client.dart';
+
+import '../../models/translation_engine_config.dart';
+import '../../services/local_db/local_db.dart';
 import 'pro_translation_engine.dart';
 
 const kSupportedEngineTypes = [

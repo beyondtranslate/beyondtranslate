@@ -1,11 +1,10 @@
-import '../../utils/utils.dart';
-import '../widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-export './custom_app_bar_action_item.dart';
-export './custom_app_bar_back_button.dart';
-export './custom_app_bar_close_button.dart';
+import '../../utils/platform_util.dart';
+import './custom_app_bar_back_button.dart';
+import './custom_app_bar_close_button.dart';
+
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:biyi_app/utils/utils.dart';
-import 'package:biyi_app/widgets/ui/loading_indicator.dart';
-
+import '../utils/platform_util.dart';
+import '../widgets/ui/loading_indicator.dart';
 import 'home.dart';
 import 'mini_translator.dart';
 

@@ -1,7 +1,8 @@
-import 'package:uni_translate_client/uni_translate_client.dart';
-import '../widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:uni_translate_client/uni_translate_client.dart';
+
+import '../custom_image/custom_image.dart';
 
 const kWordImageSize = 74.0;
 

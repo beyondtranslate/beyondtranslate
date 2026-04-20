@@ -1,20 +1,23 @@
-import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/routes/image_viewer.dart';
-import 'package:biyi_app/services/services.dart';
-import 'package:biyi_app/utils/utils.dart';
-import 'package:biyi_app/widgets/translation_result_record_view/translation_engine_tag.dart';
-import 'package:biyi_app/widgets/translation_result_record_view/word_image_view.dart';
-import 'package:biyi_app/widgets/translation_result_record_view/word_pronunciation_view.dart';
-import 'package:biyi_app/widgets/translation_result_record_view/word_tag_view.dart';
-import 'package:biyi_app/widgets/translation_result_record_view/word_translation_view.dart';
-import 'package:biyi_app/widgets/widgets.dart';
-import '../ui/loading_indicator.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uni_translate_client/uni_translate_client.dart';
+
+import '../../i18n/i18n.dart';
+import '../../models/translation_result.dart';
+import '../../models/translation_result_record.dart';
+import '../../routes/image_viewer.dart';
+import '../../services/local_db/configuration.dart';
+import '../../services/local_db/local_db.dart';
+import '../../utils/fade_page_route.dart';
+import '../generating_cursor/generating_cursor.dart';
+import '../ui/loading_indicator.dart';
+import 'translation_engine_tag.dart';
+import 'word_image_view.dart';
+import 'word_pronunciation_view.dart';
+import 'word_tag_view.dart';
+import 'word_translation_view.dart';
 
 class TranslationResultRecordView extends StatelessWidget {
   const TranslationResultRecordView({

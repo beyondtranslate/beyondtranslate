@@ -1,9 +1,10 @@
-import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/i18n/i18n.dart';
-import 'package:biyi_app/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
+
+import '../../i18n/i18n.dart';
+import '../../models/version.dart';
+import '../../utils/utils.dart';
 
 class NewVersionFoundBanner extends StatelessWidget {
   const NewVersionFoundBanner({

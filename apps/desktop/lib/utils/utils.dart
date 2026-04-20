@@ -1,21 +1,13 @@
 import 'dart:io';
 
-import 'env.dart';
-import 'platform_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
+import 'env.dart';
+import 'platform_util.dart';
+
 // 请按文件名排序放置
-export './env.dart';
-export './fade_page_route.dart';
-export './global_audio_player.dart';
-export './global_key_ex.dart';
-export './language_util.dart';
-export './platform_util.dart';
-export './pretty_json.dart';
-export './r.dart';
-export './remove_nulls.dart';
 
 final sharedEnv = Env.instance;
 

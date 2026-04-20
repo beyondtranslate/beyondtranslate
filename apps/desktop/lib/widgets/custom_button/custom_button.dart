@@ -1,6 +1,7 @@
-import '../ui/loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+
+import '../ui/loading_indicator.dart';
 
 const EdgeInsets _kButtonPadding = EdgeInsets.zero;
 

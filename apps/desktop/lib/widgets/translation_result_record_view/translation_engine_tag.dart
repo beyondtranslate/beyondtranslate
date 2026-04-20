@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../models/models.dart';
-import '../../services/services.dart';
-import '../../widgets/widgets.dart';
+
+import '../../models/ext_translation_engine_config.dart';
+import '../../models/translation_engine_config.dart';
+import '../../models/translation_result_record.dart';
+import '../../services/local_db/local_db.dart';
+import '../translation_engine_icon/translation_engine_icon.dart';
 
 class TranslationEngineTag extends StatefulWidget {
   const TranslationEngineTag({

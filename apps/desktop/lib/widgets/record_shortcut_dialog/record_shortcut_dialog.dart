@@ -1,8 +1,9 @@
-import '../../i18n/i18n.dart';
-import '../widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
+
+import '../../i18n/i18n.dart';
+import '../custom_alert_dialog/custom_alert_dialog.dart';
 
 class RecordHotKeyDialog extends StatefulWidget {
   const RecordHotKeyDialog({

@@ -1,6 +1,8 @@
 import 'dart:async';
-import 'package:biyi_app/models/models.dart';
+
 import 'package:dio/dio.dart';
+
+import '../../../models/version.dart';
 
 class VersionsApi {
   VersionsApi(this._http);

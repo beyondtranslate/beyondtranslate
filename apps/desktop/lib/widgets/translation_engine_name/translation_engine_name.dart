@@ -1,5 +1,7 @@
-import 'package:biyi_app/models/models.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/ext_translation_engine_config.dart';
+import '../../models/translation_engine_config.dart';
 
 class TranslationEngineName extends StatelessWidget {
   const TranslationEngineName(

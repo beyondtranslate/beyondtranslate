@@ -1,5 +1,6 @@
-import '../widgets.dart';
 import 'package:flutter/material.dart';
+
+import '../custom_button/custom_button.dart';
 
 const kDialogActionTypePrimary = 'primary';
 const kDialogActionTypeSecondary = 'secondary';

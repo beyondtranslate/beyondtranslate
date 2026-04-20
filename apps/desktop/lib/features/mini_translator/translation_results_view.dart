@@ -1,8 +1,11 @@
-import 'package:biyi_app/models/models.dart';
-import 'package:biyi_app/utils/utils.dart';
-import 'package:biyi_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+
+import '../../models/preference_item.dart';
+import '../../models/translation_result.dart';
+import '../../utils/language_util.dart';
+import '../../widgets/translation_result_record_view/translation_result_record_view.dart';
+import '../../widgets/translation_result_view/translation_result_view.dart';
 
 class TranslationResultsView extends StatelessWidget {
   const TranslationResultsView({

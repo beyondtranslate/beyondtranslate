@@ -1,8 +1,9 @@
-import 'package:biyi_app/networking/api_client/apis/engines.dart';
-import 'package:biyi_app/networking/api_client/apis/ocr_engines.dart';
-import 'package:biyi_app/networking/api_client/apis/versions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+
+import 'apis/engines.dart';
+import 'apis/ocr_engines.dart';
+import 'apis/versions.dart';
 
 class ApiClient {
   ApiClient._() {
