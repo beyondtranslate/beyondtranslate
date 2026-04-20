@@ -11,8 +11,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   screen_capturer_windows
   screen_retriever
   screen_text_extractor
-  tray_manager
-  url_launcher_windows
   vclibs
   window_manager
 )

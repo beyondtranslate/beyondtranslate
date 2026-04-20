@@ -9,8 +9,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   screen_capturer_linux
   screen_retriever
   screen_text_extractor
-  tray_manager
-  url_launcher_linux
   window_manager
 )
 

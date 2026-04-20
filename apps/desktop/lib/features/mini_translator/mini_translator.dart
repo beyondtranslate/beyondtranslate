@@ -27,10 +27,8 @@ import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:screen_text_extractor/screen_text_extractor.dart';
 import 'package:shortid/shortid.dart';
-import 'package:tray_manager/tray_manager.dart';
 import 'package:uni_ocr_client/uni_ocr_client.dart';
 import 'package:uni_translate_client/uni_translate_client.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
 import 'package:biyi_app/windowing/window_controllers.dart';
 
@@ -49,11 +47,7 @@ class MiniTranslatorPage extends StatefulWidget {
 }
 
 class _MiniTranslatorPageState extends State<MiniTranslatorPage>
-    with
-        WidgetsBindingObserver,
-        ProtocolListener,
-        ShortcutListener,
-        TrayListener {
+    with WidgetsBindingObserver, ProtocolListener, ShortcutListener {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -92,6 +86,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   int? _windowFocusedListenerId;
   int? _windowBlurredListenerId;
   int? _windowMovedListenerId;
+  nativeapi.TrayIcon? _trayIcon;
+  nativeapi.Image? _trayIconImage;
+  final List<nativeapi.Menu> _trayMenus = <nativeapi.Menu>[];
+  final List<nativeapi.MenuItem> _trayMenuItems = <nativeapi.MenuItem>[];
 
   List<TranslationEngineConfig> get _translationEngineList {
     return localDb.engines.list(
@@ -120,7 +118,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     if (kIsLinux || kIsMacOS || kIsWindows) {
       protocolHandler.addListener(this);
       ShortcutService.instance.setListener(this);
-      trayManager.addListener(this);
       _registerWindowEvents();
       _init();
     }
@@ -135,7 +132,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     if (kIsLinux || kIsMacOS || kIsWindows) {
       protocolHandler.removeListener(this);
       ShortcutService.instance.setListener(null);
-      trayManager.removeListener(this);
       _unregisterWindowEvents();
       _uninit();
     }
@@ -240,73 +236,127 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   Future<void> _initTrayIcon() async {
     if (kIsWeb) return;
 
-    String trayIconName = platformSelect<String>(
-      () => 'tray_icon_black.png',
-      windows: () => 'tray_icon_black.ico',
-      linux: () => 'tray_icon.ico',
-    );
+    String trayIconName = 'tray_icon_black.png';
     if (_brightness == Brightness.dark) {
-      trayIconName = platformSelect<String>(
-        () => 'tray_icon.png',
-        windows: () => 'tray_icon.ico',
-      );
+      trayIconName = 'tray_icon.png';
     }
 
-    await trayManager.destroy();
-    if (_configuration.showTrayIcon) {
-      await trayManager.setIcon(
-        R.image(trayIconName),
-        isTemplate: kIsMacOS ? true : false,
-      );
-      await Future.delayed(const Duration(milliseconds: 10));
-      Menu menu = Menu(
-        items: [
-          MenuItem(
-            label:
-                '${'app_name'.tr()} v${sharedEnv.appVersion} (BUILD ${sharedEnv.appBuildNumber})',
-            disabled: true,
-          ),
-          MenuItem.separator(),
-          if (kIsLinux)
-            MenuItem(
-              key: kMenuItemKeyShow,
-              label: 'tray_context_menu.item_show'.tr(),
-            ),
-          MenuItem(
-            key: kMenuItemKeyQuickStartGuide,
-            label: 'tray_context_menu.item_quick_start_guide'.tr(),
-          ),
-          MenuItem.submenu(
-            label: 'tray_context_menu.item_discussion'.tr(),
-            submenu: Menu(
-              items: [
-                MenuItem(
-                  key: kMenuSubItemKeyJoinDiscord,
-                  label:
-                      'tray_context_menu.item_discussion_subitem_discord_server'
-                          .tr(),
-                ),
-                MenuItem(
-                  key: kMenuSubItemKeyJoinQQGroup,
-                  label:
-                      'tray_context_menu.item_discussion_subitem_qq_group'.tr(),
-                ),
-              ],
-            ),
-          ),
-          MenuItem.separator(),
-          MenuItem(
-            key: kMenuItemKeyQuitApp,
-            label: 'tray_context_menu.item_quit_app'.tr(),
-          ),
-        ],
-      );
-      await trayManager.setContextMenu(menu);
+    _destroyTrayIcon();
+    if (!_configuration.showTrayIcon ||
+        !nativeapi.TrayManager.instance.isSupported) {
+      return;
     }
+
+    _trayIcon = nativeapi.TrayIcon();
+    _trayIconImage =
+        nativeapi.Image.fromAsset('resources/images/$trayIconName');
+    if (_trayIconImage != null) {
+      _trayIcon!.icon = _trayIconImage;
+    }
+    _trayIcon!.title = 'app_name'.tr();
+    _trayIcon!.tooltip = 'app_name'.tr();
+    _trayIcon!.contextMenuTrigger = nativeapi.ContextMenuTrigger.none;
+    _trayIcon!.on<nativeapi.TrayIconClickedEvent>((event) {
+      _handleTrayIconMouseDown();
+    });
+    _trayIcon!.on<nativeapi.TrayIconRightClickedEvent>((event) {
+      _handleTrayIconRightMouseDown();
+    });
+    _trayIcon!.contextMenu = _buildTrayMenu();
+    _trayIcon!.isVisible = true;
+  }
+
+  nativeapi.Menu _buildTrayMenu() {
+    final menu = nativeapi.Menu();
+    _trayMenus.add(menu);
+
+    final versionItem = nativeapi.MenuItem(
+      '${'app_name'.tr()} v${sharedEnv.appVersion} (BUILD ${sharedEnv.appBuildNumber})',
+    );
+    versionItem.enabled = false;
+    _trayMenuItems.add(versionItem);
+    menu.addItem(versionItem);
+    menu.addSeparator();
+
+    if (kIsLinux) {
+      final showItem = nativeapi.MenuItem('tray_context_menu.item_show'.tr());
+      showItem.on<nativeapi.MenuItemClickedEvent>((event) {
+        _handleTrayMenuItemClick(kMenuItemKeyShow);
+      });
+      _trayMenuItems.add(showItem);
+      menu.addItem(showItem);
+    }
+
+    final quickStartGuideItem =
+        nativeapi.MenuItem('tray_context_menu.item_quick_start_guide'.tr());
+    quickStartGuideItem.on<nativeapi.MenuItemClickedEvent>((event) {
+      _handleTrayMenuItemClick(kMenuItemKeyQuickStartGuide);
+    });
+    _trayMenuItems.add(quickStartGuideItem);
+    menu.addItem(quickStartGuideItem);
+
+    final discussionMenu = nativeapi.Menu();
+    _trayMenus.add(discussionMenu);
+
+    final joinDiscordItem = nativeapi.MenuItem(
+      'tray_context_menu.item_discussion_subitem_discord_server'.tr(),
+    );
+    joinDiscordItem.on<nativeapi.MenuItemClickedEvent>((event) {
+      _handleTrayMenuItemClick(kMenuSubItemKeyJoinDiscord);
+    });
+    _trayMenuItems.add(joinDiscordItem);
+    discussionMenu.addItem(joinDiscordItem);
+
+    final joinQQGroupItem = nativeapi.MenuItem(
+      'tray_context_menu.item_discussion_subitem_qq_group'.tr(),
+    );
+    joinQQGroupItem.on<nativeapi.MenuItemClickedEvent>((event) {
+      _handleTrayMenuItemClick(kMenuSubItemKeyJoinQQGroup);
+    });
+    _trayMenuItems.add(joinQQGroupItem);
+    discussionMenu.addItem(joinQQGroupItem);
+
+    final discussionItem = nativeapi.MenuItem(
+      'tray_context_menu.item_discussion'.tr(),
+      nativeapi.MenuItemType.submenu,
+    );
+    discussionItem.submenu = discussionMenu;
+    _trayMenuItems.add(discussionItem);
+    menu.addItem(discussionItem);
+
+    menu.addSeparator();
+
+    final quitItem = nativeapi.MenuItem('tray_context_menu.item_quit_app'.tr());
+    quitItem.on<nativeapi.MenuItemClickedEvent>((event) {
+      _handleTrayMenuItemClick(kMenuItemKeyQuitApp);
+    });
+    _trayMenuItems.add(quitItem);
+    menu.addItem(quitItem);
+
+    return menu;
+  }
+
+  void _destroyTrayIcon() {
+    _trayIcon?.dispose();
+    _trayIcon = null;
+
+    for (final item in _trayMenuItems) {
+      item.dispose();
+    }
+    _trayMenuItems.clear();
+
+    for (final menu in _trayMenus) {
+      menu.dispose();
+    }
+    _trayMenus.clear();
+
+    _trayIconImage?.dispose();
+    _trayIconImage = null;
   }
 
   void _uninit() {
     ShortcutService.instance.stop();
+    _destroyTrayIcon();
   }
 
   Future<void> _windowShow({
@@ -320,10 +370,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     }
 
     if (kIsMacOS && isShowBelowTray) {
-      Rect? trayIconBounds = await trayManager.getBounds();
+      final trayIconBounds = _trayIcon?.bounds;
       if (trayIconBounds != null) {
-        Size trayIconSize = trayIconBounds.size;
-        Offset trayIconPosition = trayIconBounds.topLeft;
+        final trayIconSize = trayIconBounds.size;
+        final trayIconPosition = trayIconBounds.topLeft;
 
         Offset newPosition = Offset(
           trayIconPosition.dx - ((windowSize.width - trayIconSize.width) / 2),
@@ -1037,34 +1087,33 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     );
   }
 
-  @override
-  void onTrayIconMouseDown() async {
+  void _handleTrayIconMouseDown() async {
     _windowShow(isShowBelowTray: true);
   }
 
-  @override
-  void onTrayIconRightMouseDown() {
-    trayManager.popUpContextMenu();
+  void _handleTrayIconRightMouseDown() {
+    _trayIcon?.openContextMenu();
   }
 
-  @override
-  void onTrayMenuItemClick(MenuItem menuItem) async {
-    switch (menuItem.key) {
+  void _handleTrayMenuItemClick(String key) async {
+    switch (key) {
       case kMenuItemKeyShow:
         await Future.delayed(const Duration(milliseconds: 300));
         await _windowShow();
         break;
       case kMenuItemKeyQuickStartGuide:
-        await launchUrlString('${sharedEnv.webUrl}/docs');
+        nativeapi.UrlOpener.instance.open('${sharedEnv.webUrl}/docs');
         break;
       case kMenuSubItemKeyJoinDiscord:
-        await launchUrlString('https://discord.gg/yRF62CKza8');
+        nativeapi.UrlOpener.instance.open('https://discord.gg/yRF62CKza8');
         break;
       case kMenuSubItemKeyJoinQQGroup:
-        await launchUrlString('https://jq.qq.com/?_wv=1027&k=vYQ5jW7y');
+        nativeapi.UrlOpener.instance.open(
+          'https://jq.qq.com/?_wv=1027&k=vYQ5jW7y',
+        );
         break;
       case kMenuItemKeyQuitApp:
-        await trayManager.destroy();
+        _destroyTrayIcon();
         exit(0);
     }
   }

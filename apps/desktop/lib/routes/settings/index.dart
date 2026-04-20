@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tray_manager/tray_manager.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:nativeapi/nativeapi.dart' as nativeapi;
 
 import 'package:biyi_app/i18n/i18n.dart';
 import 'package:biyi_app/models/models.dart';
@@ -209,9 +208,11 @@ class _SettingsPageState extends State<SettingsPage> {
             PreferenceListItem(
               title: Text(t('pref_item_title_about')),
               onTap: () async {
-                final url = Uri.parse('https://github.com/biyidev/biyi');
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
+                final result = nativeapi.UrlOpener.instance.open(
+                  'https://github.com/biyidev/biyi',
+                );
+                if (!result.success) {
+                  throw result.errorMessage;
                 }
               },
             ),
@@ -246,7 +247,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         CustomDialogAction(
                           child: Text('ok'.tr()),
                           onPressed: () async {
-                            await trayManager.destroy();
                             exit(0);
                           },
                         ),

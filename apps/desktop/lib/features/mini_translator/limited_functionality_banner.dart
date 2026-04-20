@@ -5,9 +5,9 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:nativeapi/nativeapi.dart' as nativeapi;
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screen_text_extractor/screen_text_extractor.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class _AllowAccessListItem extends StatelessWidget {
   const _AllowAccessListItem({
@@ -178,11 +178,10 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                         size: 18,
                       ),
                       onPressed: () async {
-                        Uri url = Uri.parse('${sharedEnv.webUrl}/docs');
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url);
-                        } else {
-                          throw 'Could not launch $url';
+                        final url = '${sharedEnv.webUrl}/docs';
+                        final result = nativeapi.UrlOpener.instance.open(url);
+                        if (!result.success) {
+                          throw 'Could not launch $url: ${result.errorMessage}';
                         }
                       },
                     ),

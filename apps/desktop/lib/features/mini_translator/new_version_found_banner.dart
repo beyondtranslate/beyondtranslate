@@ -3,7 +3,7 @@ import 'package:biyi_app/i18n/i18n.dart';
 import 'package:biyi_app/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:nativeapi/nativeapi.dart' as nativeapi;
 
 class NewVersionFoundBanner extends StatelessWidget {
   const NewVersionFoundBanner({
@@ -60,12 +60,11 @@ class NewVersionFoundBanner extends StatelessWidget {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
-                        Uri url = Uri.parse(
-                            '${sharedEnv.webUrl}/release-notes#${latestVersion.version}');
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url);
-                        } else {
-                          throw 'Could not launch $url';
+                        final url =
+                            '${sharedEnv.webUrl}/release-notes#${latestVersion.version}';
+                        final result = nativeapi.UrlOpener.instance.open(url);
+                        if (!result.success) {
+                          throw 'Could not launch $url: ${result.errorMessage}';
                         }
                       },
                   ),
