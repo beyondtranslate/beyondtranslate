@@ -120,8 +120,10 @@ class _TranslationEnginesManagePageState
     }
 
     return PreferenceListSection(
-      title: Text(t('pref_section_title_private')),
-      description: Text(t('pref_section_description_private')),
+      title: Text(t.page_translation_engines_manage.pref_section_title_private),
+      description: Text(
+        t.page_translation_engines_manage.pref_section_description_private,
+      ),
       children: [
         ReorderableColumn(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +162,7 @@ class _TranslationEnginesManagePageState
         ),
         PreferenceListItem(
           title: Text(
-            'add'.tr(),
+            t.add,
             style: TextStyle(
               color: Theme.of(context).primaryColor,
             ),
@@ -185,13 +187,9 @@ class _TranslationEnginesManagePageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text(t('title')),
+        title: Text(t.page_translation_engines_manage.title),
       ),
       body: _buildBody(context),
     );
-  }
-
-  String t(String key, {List<String> args = const []}) {
-    return 'page_translation_engines_manage.$key'.tr(args: args);
   }
 }

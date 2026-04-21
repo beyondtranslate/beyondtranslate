@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../i18n/i18n.dart';
+import '../models/ext_translation_engine_config.dart';
 import '../networking/translate_client/translate_client.dart';
 import '../widgets/custom_app_bar/custom_app_bar.dart';
 import '../widgets/custom_app_bar/custom_app_bar_action_item.dart';
@@ -28,10 +29,6 @@ class _TranslationEngineTypeChooserPageState
     extends State<TranslationEngineTypeChooserPage> {
   String? _type;
 
-  String t(String key, {List<String> args = const []}) {
-    return 'page_translation_engine_type_chooser.$key'.tr(args: args);
-  }
-
   @override
   void initState() {
     _type = widget.engineType;
@@ -44,10 +41,10 @@ class _TranslationEngineTypeChooserPageState
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-      title: Text(t('title')),
+      title: Text(t.page_translation_engine_type_chooser.title),
       actions: [
         CustomAppBarActionItem(
-          text: 'ok'.tr(),
+          text: t.ok,
           onPressed: _handleClickOk,
         ),
       ],
@@ -62,7 +59,7 @@ class _TranslationEngineTypeChooserPageState
             for (var engineType in kSupportedEngineTypes)
               PreferenceListRadioItem(
                 icon: TranslationEngineIcon(engineType),
-                title: Text('engine.$engineType'.tr()),
+                title: Text(getTranslationEngineTypeName(engineType)),
                 value: engineType,
                 groupValue: _type,
                 onChanged: (newGroupValue) {

@@ -51,9 +51,10 @@ class TranslationInputView extends StatelessWidget {
     return Row(
       children: [
         Tooltip(
-          message: 'page_desktop_popup.tip_translation_mode'.tr(args: [
-            'translation_mode.$translationMode'.tr(),
-          ]),
+          message: formatTranslation(
+            t.mini_translator.tip_translation_mode,
+            args: [_translationModeText()],
+          ),
           child: SizedBox(
             width: 30,
             height: 26,
@@ -131,8 +132,7 @@ class TranslationInputView extends StatelessWidget {
           ),
         ),
         Tooltip(
-          message:
-              'page_desktop_popup.tip_extract_text_from_screen_capture'.tr(),
+          message: t.mini_translator.tip_extract_text_from_screen_capture,
           child: SizedBox(
             width: 30,
             height: 26,
@@ -148,7 +148,7 @@ class TranslationInputView extends StatelessWidget {
           ),
         ),
         Tooltip(
-          message: 'page_desktop_popup.tip_extract_text_from_clipboard'.tr(),
+          message: t.mini_translator.tip_extract_text_from_clipboard,
           child: SizedBox(
             width: 30,
             height: 26,
@@ -183,7 +183,7 @@ class TranslationInputView extends StatelessWidget {
             borderRadius: BorderRadius.circular(2),
             onPressed: onButtonTappedClear,
             child: Text(
-              'page_desktop_popup.btn_clear'.tr(),
+              t.mini_translator.btn_clear,
               style: const TextStyle(fontSize: 12),
             ),
           ),
@@ -202,7 +202,7 @@ class TranslationInputView extends StatelessWidget {
             borderRadius: BorderRadius.circular(2),
             onPressed: onButtonTappedTrans,
             child: Text(
-              'page_desktop_popup.btn_trans'.tr(),
+              t.mini_translator.btn_trans,
               style: const TextStyle(fontSize: 12),
             ),
           ),
@@ -255,7 +255,7 @@ class TranslationInputView extends StatelessWidget {
                     style: textTheme.bodyMedium?.copyWith(
                       height: 1.2,
                     ),
-                    placeholder: 'page_desktop_popup.input_hint'.tr(),
+                    placeholder: t.mini_translator.input_hint,
                     placeholderStyle: textTheme.bodyMedium?.copyWith(
                       color:
                           textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
@@ -289,8 +289,7 @@ class TranslationInputView extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
-                                  'page_desktop_popup.text_extracting_text'
-                                      .tr(),
+                                  t.mini_translator.text_extracting_text,
                                   style: TextStyle(
                                     color: textTheme.bodySmall!.color,
                                     fontSize: 13,
@@ -330,5 +329,16 @@ class TranslationInputView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _translationModeText() {
+    switch (translationMode) {
+      case kTranslationModeAuto:
+        return t.translation_mode.auto;
+      case kTranslationModeManual:
+        return t.translation_mode.manual;
+      default:
+        return translationMode;
+    }
   }
 }

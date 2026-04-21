@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../i18n/i18n.dart';
+import '../models/ext_ocr_engine_config.dart';
 import '../networking/ocr_client/ocr_client.dart';
 import '../widgets/custom_app_bar/custom_app_bar.dart';
 import '../widgets/custom_app_bar/custom_app_bar_action_item.dart';
@@ -39,10 +40,10 @@ class _OcrEngineTypeChooserPageState extends State<OcrEngineTypeChooserPage> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-      title: Text(t('title')),
+      title: Text(t.page_ocr_engine_type_chooser.title),
       actions: [
         CustomAppBarActionItem(
-          text: 'ok'.tr(),
+          text: t.ok,
           onPressed: _handleClickOk,
         ),
       ],
@@ -57,7 +58,7 @@ class _OcrEngineTypeChooserPageState extends State<OcrEngineTypeChooserPage> {
             for (var engineType in kSupportedOcrEngineTypes)
               PreferenceListRadioItem(
                 icon: OcrEngineIcon(engineType),
-                title: Text('ocr_engine.$engineType'.tr()),
+                title: Text(getOcrEngineTypeName(engineType)),
                 value: engineType,
                 groupValue: _type,
                 onChanged: (newGroupValue) {
@@ -77,9 +78,5 @@ class _OcrEngineTypeChooserPageState extends State<OcrEngineTypeChooserPage> {
       appBar: _buildAppBar(context),
       body: _buildBody(context),
     );
-  }
-
-  String t(String key, {List<String> args = const []}) {
-    return 'page_ocr_engine_type_chooser.$key'.tr(args: args);
   }
 }

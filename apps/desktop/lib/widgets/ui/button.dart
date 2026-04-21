@@ -237,7 +237,8 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
     final bool enabled = widget.enabled;
     final ThemeData themeData = Theme.of(context);
     final Color primaryColor = themeData.colorScheme.primary;
-    Color? backgroundColor = widget.color ?? (widget._filled ? primaryColor : null);
+    Color? backgroundColor =
+        widget.color ?? (widget._filled ? primaryColor : null);
 
     Color foregroundColor = backgroundColor != null
         ? themeData.colorScheme.onPrimary

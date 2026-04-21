@@ -10,7 +10,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 
 import './i18n/i18n.dart';
-import './i18n/strings.g.dart';
 import './routes/app_router.dart';
 import './routes/settings/index.dart';
 import './services/local_db/configuration.dart';
@@ -32,7 +31,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   late final GoRouter _router = createAppRouter(
-    initialLocation: const SettingsRoute().location,
+    initialLocation: const GeneralSettingsRoute().location,
   );
 
   Configuration get _configuration => localDb.configuration;

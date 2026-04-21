@@ -23,7 +23,7 @@ class _RecordHotKeyDialogState extends State<RecordHotKeyDialog> {
   @override
   Widget build(BuildContext context) {
     return CustomAlertDialog(
-      title: Text('widget_record_shortcut_dialog.title'.tr()),
+      title: Text(t.widget_record_shortcut_dialog.title),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
@@ -53,7 +53,7 @@ class _RecordHotKeyDialogState extends State<RecordHotKeyDialog> {
       ),
       actions: <Widget>[
         CustomDialogAction(
-          child: Text('cancel'.tr()),
+          child: Text(t.cancel),
           onPressed: () {
             context.pop();
           },
@@ -65,7 +65,7 @@ class _RecordHotKeyDialogState extends State<RecordHotKeyDialog> {
                   widget.onHotKeyRecorded(_hotKey!);
                   context.pop();
                 },
-          child: Text('ok'.tr()),
+          child: Text(t.ok),
         ),
       ],
     );

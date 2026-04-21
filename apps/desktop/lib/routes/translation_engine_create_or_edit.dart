@@ -5,6 +5,7 @@ import 'package:shortid/shortid.dart';
 import 'package:uni_translate_client/uni_translate_client.dart';
 
 import '../i18n/i18n.dart';
+import '../models/ext_translation_engine_config.dart';
 import '../models/translation_engine_config.dart';
 import '../networking/translate_client/translate_client.dart';
 import '../services/local_db/local_db.dart';
@@ -109,11 +110,11 @@ class _TranslationEngineCreateOrEditPageState
     return CustomAppBar(
       title: widget.engineConfig != null
           ? TranslationEngineName(widget.engineConfig!)
-          : Text(t('title')),
+          : Text(t.page_translation_engine_create_or_edit.title),
       actions: [
         if (widget.editable)
           CustomAppBarActionItem(
-            text: 'ok'.tr(),
+            text: t.ok,
             onPressed: _handleClickOk,
           ),
       ],
@@ -124,13 +125,16 @@ class _TranslationEngineCreateOrEditPageState
     return PreferenceList(
       children: [
         PreferenceListSection(
-          title: Text(t('pref_section_title_engine_type')),
+          title: Text(
+            t.page_translation_engine_create_or_edit
+                .pref_section_title_engine_type,
+          ),
           children: [
             PreferenceListItem(
               icon: _type == null ? null : TranslationEngineIcon(_type!),
               title: _type == null
-                  ? Text('please_choose'.tr())
-                  : Text('engine.$_type'.tr()),
+                  ? Text(t.please_choose)
+                  : Text(getTranslationEngineTypeName(_type!)),
               accessoryView: widget.editable ? null : Container(),
               onTap: widget.editable
                   ? () {
@@ -155,7 +159,10 @@ class _TranslationEngineCreateOrEditPageState
         ),
         if (translationEngine != null)
           PreferenceListSection(
-            title: Text(t('pref_section_title_support_interface')),
+            title: Text(
+              t.page_translation_engine_create_or_edit
+                  .pref_section_title_support_interface,
+            ),
             children: [
               for (var scope in _kAllScopes)
                 PreferenceListItem(
@@ -165,7 +172,7 @@ class _TranslationEngineCreateOrEditPageState
                     left: 12,
                     right: 12,
                   ),
-                  title: Text('engine_scope.${scope.name.toLowerCase()}'.tr()),
+                  title: Text(_scopeTitle(scope)),
                   summary: Text(scope.name),
                   accessoryView: Container(
                     margin: EdgeInsets.zero,
@@ -190,7 +197,10 @@ class _TranslationEngineCreateOrEditPageState
           ),
         if (widget.editable && _type != null)
           PreferenceListSection(
-            title: Text(t('pref_section_title_option')),
+            title: Text(
+              t.page_translation_engine_create_or_edit
+                  .pref_section_title_option,
+            ),
             children: [
               for (var optionKey in _engineOptionKeys)
                 PreferenceListTextFieldItem(
@@ -216,7 +226,7 @@ class _TranslationEngineCreateOrEditPageState
               PreferenceListItem(
                 title: Center(
                   child: Text(
-                    'delete'.tr(),
+                    t.delete,
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
@@ -242,7 +252,14 @@ class _TranslationEngineCreateOrEditPageState
     );
   }
 
-  String t(String key, {List<String> args = const []}) {
-    return 'page_translation_engine_create_or_edit.$key'.tr(args: args);
+  String _scopeTitle(TranslationEngineScope scope) {
+    switch (scope) {
+      case TranslationEngineScope.detectLanguage:
+        return t.engine_scope.detectlanguage;
+      case TranslationEngineScope.lookUp:
+        return t.engine_scope.lookup;
+      case TranslationEngineScope.translate:
+        return t.engine_scope.translate;
+    }
   }
 }

@@ -92,8 +92,8 @@ class TranslationsZh extends Translations
   late final _TranslationsTrayContextMenuZh tray_context_menu =
       _TranslationsTrayContextMenuZh._(_root);
   @override
-  late final _TranslationsPageDesktopPopupZh page_desktop_popup =
-      _TranslationsPageDesktopPopupZh._(_root);
+  late final _TranslationsMiniTranslatorZh mini_translator =
+      _TranslationsMiniTranslatorZh._(_root);
   @override
   late final _TranslationsPageLanguageChooserZh page_language_chooser =
       _TranslationsPageLanguageChooserZh._(_root);
@@ -529,9 +529,9 @@ class _TranslationsTrayContextMenuZh extends TranslationsTrayContextMenuEn {
   String get item_discussion_subitem_qq_group => '加入 QQ 群';
 }
 
-// Path: page_desktop_popup
-class _TranslationsPageDesktopPopupZh extends TranslationsPageDesktopPopupEn {
-  _TranslationsPageDesktopPopupZh._(TranslationsZh root)
+// Path: mini_translator
+class _TranslationsMiniTranslatorZh extends TranslationsMiniTranslatorEn {
+  _TranslationsMiniTranslatorZh._(TranslationsZh root)
       : this._root = root,
         super.internal(root);
 
@@ -1160,31 +1160,29 @@ extension on TranslationsZh {
       'tray_context_menu.item_discussion_subitem_discord_server' =>
         '加入 Discord',
       'tray_context_menu.item_discussion_subitem_qq_group' => '加入 QQ 群',
-      'page_desktop_popup.newversion_banner_text_found_new_version' =>
-        '发现新版本：{}',
-      'page_desktop_popup.newversion_banner_btn_update' => '立即更新',
-      'page_desktop_popup.limited_banner_title' => '功能受限，请根据提示进行检查。',
-      'page_desktop_popup.limited_banner_text_screen_capture' => '授予屏幕录制权限',
-      'page_desktop_popup.limited_banner_text_screen_selection' => '授予辅助功能权限',
-      'page_desktop_popup.limited_banner_btn_allow' => '允许',
-      'page_desktop_popup.limited_banner_btn_go_settings' => '前往设置',
-      'page_desktop_popup.limited_banner_btn_check_again' => '重新检查',
-      'page_desktop_popup.limited_banner_tip_help' => '查看帮助文档',
-      'page_desktop_popup.limited_banner_msg_allow_access_tip' =>
+      'mini_translator.newversion_banner_text_found_new_version' => '发现新版本：{}',
+      'mini_translator.newversion_banner_btn_update' => '立即更新',
+      'mini_translator.limited_banner_title' => '功能受限，请根据提示进行检查。',
+      'mini_translator.limited_banner_text_screen_capture' => '授予屏幕录制权限',
+      'mini_translator.limited_banner_text_screen_selection' => '授予辅助功能权限',
+      'mini_translator.limited_banner_btn_allow' => '允许',
+      'mini_translator.limited_banner_btn_go_settings' => '前往设置',
+      'mini_translator.limited_banner_btn_check_again' => '重新检查',
+      'mini_translator.limited_banner_tip_help' => '查看帮助文档',
+      'mini_translator.limited_banner_msg_allow_access_tip' =>
         '点击「授权」后如无任何响应，请点击「前往设置」进行手动设置。',
-      'page_desktop_popup.limited_banner_msg_all_access_allowed' => '屏幕取词功能已启用',
-      'page_desktop_popup.limited_banner_msg_all_access_not_allowed' =>
+      'mini_translator.limited_banner_msg_all_access_allowed' => '屏幕取词功能已启用',
+      'mini_translator.limited_banner_msg_all_access_not_allowed' =>
         '未获得所需权限，\n请重新检查并进行设置。',
-      'page_desktop_popup.input_hint' => '在此处输入单词或文本',
-      'page_desktop_popup.text_extracting_text' => '正在提取文字...',
-      'page_desktop_popup.tip_translation_mode' => '当前翻译模式：{}',
-      'page_desktop_popup.tip_extract_text_from_screen_capture' =>
-        '截取屏幕区域并识别文字',
-      'page_desktop_popup.tip_extract_text_from_clipboard' => '读取剪切板内容',
-      'page_desktop_popup.btn_clear' => '清空',
-      'page_desktop_popup.btn_trans' => '翻译',
-      'page_desktop_popup.msg_please_enter_word_or_text' => '未输入或未提取到文本',
-      'page_desktop_popup.msg_capture_screen_area_canceled' => '截取屏幕区域已取消',
+      'mini_translator.input_hint' => '在此处输入单词或文本',
+      'mini_translator.text_extracting_text' => '正在提取文字...',
+      'mini_translator.tip_translation_mode' => '当前翻译模式：{}',
+      'mini_translator.tip_extract_text_from_screen_capture' => '截取屏幕区域并识别文字',
+      'mini_translator.tip_extract_text_from_clipboard' => '读取剪切板内容',
+      'mini_translator.btn_clear' => '清空',
+      'mini_translator.btn_trans' => '翻译',
+      'mini_translator.msg_please_enter_word_or_text' => '未输入或未提取到文本',
+      'mini_translator.msg_capture_screen_area_canceled' => '截取屏幕区域已取消',
       'page_language_chooser.title' => '选择语言',
       'page_language_chooser.pref_section_title_all' => '全部',
       'page_ocr_engine_chooser.title' => '文字识别引擎',

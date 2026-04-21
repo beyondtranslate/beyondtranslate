@@ -38,10 +38,6 @@ class _TranslationEngineChooserPageState
 
   String? _identifier;
 
-  String t(String key, {List<String> args = const []}) {
-    return 'page_translation_engine_chooser.$key'.tr(args: args);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -80,7 +76,8 @@ class _TranslationEngineChooserPageState
             ],
           ),
         PreferenceListSection(
-          title: Text(t('pref_section_title_private')),
+          title: Text(
+              t.page_translation_engine_chooser.pref_section_title_private),
           children: [
             for (var engineConfig in _privateEngineList)
               PreferenceListRadioItem<String>(
@@ -96,7 +93,10 @@ class _TranslationEngineChooserPageState
               ),
             if (_privateEngineList.isEmpty)
               PreferenceListItem(
-                title: Text(t('pref_item_title_no_available_engines')),
+                title: Text(
+                  t.page_translation_engine_chooser
+                      .pref_item_title_no_available_engines,
+                ),
                 accessoryView: Container(),
               ),
           ],
@@ -108,10 +108,10 @@ class _TranslationEngineChooserPageState
   Widget _build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text(t('title')),
+        title: Text(t.page_translation_engine_chooser.title),
         actions: [
           CustomAppBarActionItem(
-            text: 'ok'.tr(),
+            text: t.ok,
             onPressed: _handleClickOk,
           ),
         ],

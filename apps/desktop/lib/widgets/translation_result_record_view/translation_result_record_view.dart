@@ -141,7 +141,7 @@ class TranslationResultRecordView extends StatelessWidget {
           if (_configuration.doubleClickCopyResult) {
             Clipboard.setData(ClipboardData(text: textTranslation.text));
             BotToast.showText(
-              text: 'copied'.tr(),
+              text: t.copied,
               align: Alignment.center,
             );
           }

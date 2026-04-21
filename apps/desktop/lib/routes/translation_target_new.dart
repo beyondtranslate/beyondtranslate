@@ -53,11 +53,11 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
       title: widget.translationTarget != null
-          ? Text(t('title_with_edit'))
-          : Text(t('title')),
+          ? Text(t.page_translation_target_new.title_with_edit)
+          : Text(t.page_translation_target_new.title),
       actions: [
         CustomAppBarActionItem(
-          text: 'ok'.tr(),
+          text: t.ok,
           onPressed: _handleClickOk,
         ),
       ],
@@ -70,10 +70,10 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
         PreferenceListSection(
           children: [
             PreferenceListItem(
-              title: Text(t('source_language')),
+              title: Text(t.page_translation_target_new.source_language),
               detailText: _sourceLanguage != null
                   ? LanguageLabel(_sourceLanguage!)
-                  : Text('please_choose'.tr()),
+                  : Text(t.please_choose),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -88,10 +88,10 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
               },
             ),
             PreferenceListItem(
-              title: Text(t('target_language')),
+              title: Text(t.page_translation_target_new.target_language),
               detailText: _targetLanguage != null
                   ? LanguageLabel(_targetLanguage!)
-                  : Text('please_choose'.tr()),
+                  : Text(t.please_choose),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -114,7 +114,7 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
               PreferenceListItem(
                 title: Center(
                   child: Text(
-                    'delete'.tr(),
+                    t.delete,
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
@@ -140,9 +140,5 @@ class _TranslationTargetNewPageState extends State<TranslationTargetNewPage> {
       appBar: _buildAppBar(context),
       body: _buildBody(context),
     );
-  }
-
-  String t(String key, {List<String> args = const []}) {
-    return 'page_translation_target_new.$key'.tr(args: args);
   }
 }

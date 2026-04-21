@@ -40,10 +40,10 @@ class _LanguageChooserPageState extends State<LanguageChooserPage> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-      title: Text(t('title')),
+      title: Text(t.page_language_chooser.title),
       actions: [
         CustomAppBarActionItem(
-          text: 'ok'.tr(),
+          text: t.ok,
           onPressed: _handleClickOk,
         ),
       ],
@@ -54,7 +54,7 @@ class _LanguageChooserPageState extends State<LanguageChooserPage> {
     return PreferenceList(
       children: [
         PreferenceListSection(
-          title: Text(t('pref_section_title_all')),
+          title: Text(t.page_language_chooser.pref_section_title_all),
           children: [
             for (var supportedLanguage in kSupportedLanguages)
               PreferenceListRadioItem(
@@ -79,9 +79,5 @@ class _LanguageChooserPageState extends State<LanguageChooserPage> {
       appBar: _buildAppBar(context),
       body: _buildBody(context),
     );
-  }
-
-  String t(String key, {List<String> args = const []}) {
-    return 'page_language_chooser.$key'.tr(args: args);
   }
 }

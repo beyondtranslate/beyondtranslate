@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class PreferenceList extends StatelessWidget {
   const PreferenceList({
     Key? key,

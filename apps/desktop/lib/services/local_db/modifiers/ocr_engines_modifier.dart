@@ -54,8 +54,8 @@ class OcrEnginesModifier extends Listenable {
   }
 
   OcrEngineConfig? get() {
-    dynamic value = _box.get(_id);
-    if (value != null) {
+    if (_id != null && _box.containsKey(_id)) {
+      dynamic value = _box.get(_id);
       return OcrEngineConfig.fromJson(value);
     }
     return null;

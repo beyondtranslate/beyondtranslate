@@ -88,8 +88,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
       TranslationsWordPronunciationEn.internal(_root);
   late final TranslationsTrayContextMenuEn tray_context_menu =
       TranslationsTrayContextMenuEn.internal(_root);
-  late final TranslationsPageDesktopPopupEn page_desktop_popup =
-      TranslationsPageDesktopPopupEn.internal(_root);
+  late final TranslationsMiniTranslatorEn mini_translator =
+      TranslationsMiniTranslatorEn.internal(_root);
   late final TranslationsPageLanguageChooserEn page_language_chooser =
       TranslationsPageLanguageChooserEn.internal(_root);
   late final TranslationsPageOcrEngineChooserEn page_ocr_engine_chooser =
@@ -630,9 +630,9 @@ class TranslationsTrayContextMenuEn {
   String get item_discussion_subitem_qq_group => 'Join QQ Group';
 }
 
-// Path: page_desktop_popup
-class TranslationsPageDesktopPopupEn {
-  TranslationsPageDesktopPopupEn.internal(this._root);
+// Path: mini_translator
+class TranslationsMiniTranslatorEn {
+  TranslationsMiniTranslatorEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
@@ -1331,38 +1331,37 @@ extension on Translations {
       'tray_context_menu.item_discussion_subitem_discord_server' =>
         'Join Discord',
       'tray_context_menu.item_discussion_subitem_qq_group' => 'Join QQ Group',
-      'page_desktop_popup.newversion_banner_text_found_new_version' =>
+      'mini_translator.newversion_banner_text_found_new_version' =>
         'New version found: {}',
-      'page_desktop_popup.newversion_banner_btn_update' => 'Update',
-      'page_desktop_popup.limited_banner_title' =>
+      'mini_translator.newversion_banner_btn_update' => 'Update',
+      'mini_translator.limited_banner_title' =>
         'Functionality is limited, please follow the tips to check.',
-      'page_desktop_popup.limited_banner_text_screen_capture' =>
+      'mini_translator.limited_banner_text_screen_capture' =>
         'Grant screen recording access',
-      'page_desktop_popup.limited_banner_text_screen_selection' =>
+      'mini_translator.limited_banner_text_screen_selection' =>
         'Grant accessibility access',
-      'page_desktop_popup.limited_banner_btn_allow' => 'Allow',
-      'page_desktop_popup.limited_banner_btn_go_settings' => 'Go Settings',
-      'page_desktop_popup.limited_banner_btn_check_again' => 'Check Again',
-      'page_desktop_popup.limited_banner_tip_help' => 'View the help document',
-      'page_desktop_popup.limited_banner_msg_allow_access_tip' =>
+      'mini_translator.limited_banner_btn_allow' => 'Allow',
+      'mini_translator.limited_banner_btn_go_settings' => 'Go Settings',
+      'mini_translator.limited_banner_btn_check_again' => 'Check Again',
+      'mini_translator.limited_banner_tip_help' => 'View the help document',
+      'mini_translator.limited_banner_msg_allow_access_tip' =>
         'If there is no response after clicking "Allow", please click "Go Settings" to set it manually.',
-      'page_desktop_popup.limited_banner_msg_all_access_allowed' =>
+      'mini_translator.limited_banner_msg_all_access_allowed' =>
         'The Screen extract text is enabled',
-      'page_desktop_popup.limited_banner_msg_all_access_not_allowed' =>
+      'mini_translator.limited_banner_msg_all_access_not_allowed' =>
         'The required access are not allowed.\nPlease check and set again.',
-      'page_desktop_popup.input_hint' => 'Enter the word or text here',
-      'page_desktop_popup.text_extracting_text' => 'Extracting text...',
-      'page_desktop_popup.tip_translation_mode' =>
-        'Current translation mode: {}',
-      'page_desktop_popup.tip_extract_text_from_screen_capture' =>
+      'mini_translator.input_hint' => 'Enter the word or text here',
+      'mini_translator.text_extracting_text' => 'Extracting text...',
+      'mini_translator.tip_translation_mode' => 'Current translation mode: {}',
+      'mini_translator.tip_extract_text_from_screen_capture' =>
         'Capture screen area and recognize text',
-      'page_desktop_popup.tip_extract_text_from_clipboard' =>
+      'mini_translator.tip_extract_text_from_clipboard' =>
         'Read clipboard content',
-      'page_desktop_popup.btn_clear' => 'Clear',
-      'page_desktop_popup.btn_trans' => 'Translate',
-      'page_desktop_popup.msg_please_enter_word_or_text' =>
+      'mini_translator.btn_clear' => 'Clear',
+      'mini_translator.btn_trans' => 'Translate',
+      'mini_translator.msg_please_enter_word_or_text' =>
         'No text entered or text not extracted',
-      'page_desktop_popup.msg_capture_screen_area_canceled' =>
+      'mini_translator.msg_capture_screen_area_canceled' =>
         'Capture screen area has been canceled',
       'page_language_chooser.title' => 'Choose language',
       'page_language_chooser.pref_section_title_all' => 'All',

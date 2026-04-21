@@ -38,7 +38,7 @@ class _AllowAccessListItem extends StatelessWidget {
           const TextSpan(text: '      '),
           if (onTappedTryAllow != null)
             TextSpan(
-              text: 'page_desktop_popup.limited_banner_btn_allow'.tr(),
+              text: t.mini_translator.limited_banner_btn_allow,
               style: const TextStyle(
                 decoration: TextDecoration.underline,
                 decorationColor: Colors.white,
@@ -48,7 +48,7 @@ class _AllowAccessListItem extends StatelessWidget {
           if (onTappedTryAllow != null) const TextSpan(text: ' / '),
           if (onTappedGoSettings != null)
             TextSpan(
-              text: 'page_desktop_popup.limited_banner_btn_go_settings'.tr(),
+              text: t.mini_translator.limited_banner_btn_go_settings,
               style: const TextStyle(
                 decoration: TextDecoration.underline,
                 decorationColor: Colors.white,
@@ -105,7 +105,7 @@ class LimitedFunctionalityBanner extends StatelessWidget {
           children: [
             Text.rich(
               TextSpan(
-                text: 'page_desktop_popup.limited_banner_title'.tr(),
+                text: t.mini_translator.limited_banner_title,
               ),
               style: textTheme.bodyMedium!.copyWith(
                 color: Colors.white,
@@ -121,15 +121,13 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                   if (kIsMacOS)
                     _AllowAccessListItem(
                       title:
-                          'page_desktop_popup.limited_banner_text_screen_capture'
-                              .tr(),
+                          t.mini_translator.limited_banner_text_screen_capture,
                       allowed: isAllowedScreenCaptureAccess,
                       onTappedTryAllow: () {
                         ScreenCapturer.instance.requestAccess();
                         BotToast.showText(
-                          text:
-                              'page_desktop_popup.limited_banner_msg_allow_access_tip'
-                                  .tr(),
+                          text: t.mini_translator
+                              .limited_banner_msg_allow_access_tip,
                           align: Alignment.center,
                           duration: const Duration(seconds: 5),
                         );
@@ -142,16 +140,14 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                     ),
                   if (kIsMacOS)
                     _AllowAccessListItem(
-                      title:
-                          'page_desktop_popup.limited_banner_text_screen_selection'
-                              .tr(),
+                      title: t
+                          .mini_translator.limited_banner_text_screen_selection,
                       allowed: isAllowedScreenSelectionAccess,
                       onTappedTryAllow: () {
                         screenTextExtractor.requestAccess();
                         BotToast.showText(
-                          text:
-                              'page_desktop_popup.limited_banner_msg_allow_access_tip'
-                                  .tr(),
+                          text: t.mini_translator
+                              .limited_banner_msg_allow_access_tip,
                           align: Alignment.center,
                           duration: const Duration(seconds: 5),
                         );
@@ -171,7 +167,7 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                   width: 18,
                   height: 18,
                   child: Tooltip(
-                    message: 'page_desktop_popup.limited_banner_tip_help'.tr(),
+                    message: t.mini_translator.limited_banner_tip_help,
                     child: CupertinoButton(
                       padding: EdgeInsets.zero,
                       child: const Icon(
@@ -196,9 +192,7 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text:
-                            'page_desktop_popup.limited_banner_btn_check_again'
-                                .tr(),
+                        text: t.mini_translator.limited_banner_btn_check_again,
                         style: const TextStyle(
                           color: Colors.white,
                           height: 1.3,

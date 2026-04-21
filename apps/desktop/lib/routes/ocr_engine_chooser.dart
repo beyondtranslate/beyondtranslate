@@ -75,7 +75,7 @@ class _OcrEngineChooserPageState extends State<OcrEngineChooserPage> {
             ],
           ),
         PreferenceListSection(
-          title: Text(t('pref_section_title_private')),
+          title: Text(t.page_ocr_engine_chooser.pref_section_title_private),
           children: [
             for (var ocrEngineConfig in _privateOcrEngineList)
               PreferenceListRadioItem<String>(
@@ -91,7 +91,10 @@ class _OcrEngineChooserPageState extends State<OcrEngineChooserPage> {
               ),
             if (_privateOcrEngineList.isEmpty)
               PreferenceListItem(
-                title: Text(t('pref_item_title_no_available_engines')),
+                title: Text(
+                  t.page_ocr_engine_chooser
+                      .pref_item_title_no_available_engines,
+                ),
                 accessoryView: Container(),
               ),
           ],
@@ -103,10 +106,10 @@ class _OcrEngineChooserPageState extends State<OcrEngineChooserPage> {
   Widget _build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: Text(t('title')),
+        title: Text(t.page_ocr_engine_chooser.title),
         actions: [
           CustomAppBarActionItem(
-            text: 'ok'.tr(),
+            text: t.ok,
             onPressed: _handleClickOk,
           ),
         ],
@@ -118,9 +121,5 @@ class _OcrEngineChooserPageState extends State<OcrEngineChooserPage> {
   @override
   Widget build(BuildContext context) {
     return _build(context);
-  }
-
-  String t(String key, {List<String> args = const []}) {
-    return 'page_ocr_engine_chooser.$key'.tr(args: args);
   }
 }

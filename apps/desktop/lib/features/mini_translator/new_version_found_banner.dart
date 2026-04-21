@@ -37,9 +37,10 @@ class NewVersionFoundBanner extends StatelessWidget {
           children: [
             Text.rich(
               TextSpan(
-                text:
-                    'page_desktop_popup.newversion_banner_text_found_new_version'
-                        .tr(args: [latestVersion.version]),
+                text: formatTranslation(
+                  t.mini_translator.newversion_banner_text_found_new_version,
+                  args: [latestVersion.version],
+                ),
               ),
               style: textTheme.bodyMedium!.copyWith(
                 color: Colors.white,
@@ -51,8 +52,7 @@ class NewVersionFoundBanner extends StatelessWidget {
               TextSpan(
                 children: [
                   TextSpan(
-                    text:
-                        'page_desktop_popup.newversion_banner_btn_update'.tr(),
+                    text: t.mini_translator.newversion_banner_btn_update,
                     style: const TextStyle(
                       color: Colors.white,
                       height: 1.3,

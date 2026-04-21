@@ -162,7 +162,7 @@
       "item_discussion_subitem_discord_server": "Join Discord",
       "item_discussion_subitem_qq_group": "Join QQ Group"
     },
-    "page_desktop_popup": {
+    "mini_translator": {
       "newversion_banner_text_found_new_version": "New version found: {}",
       "newversion_banner_btn_update": "Update",
       "limited_banner_title": "Functionality is limited, please follow the tips to check.",

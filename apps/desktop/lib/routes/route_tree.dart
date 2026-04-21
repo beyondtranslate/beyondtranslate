@@ -15,19 +15,19 @@ library route_tree;
 /// for organizing route files in a TanStack-style mental model.
 abstract final class RouteTree {
   static const String root = '/';
-  static const String bootstrap = '/bootstrap';
-  static const String desktopPopup = '/desktop-popup';
-  static const String home = '/home';
-  static const String ocrEnginesManage = '/settings/ocr-engines';
-  static const String settings = '/settings';
-  static const String settingsAppLanguage = '/settings/app-language';
-  static const String settingsExtractText = '/settings/extract-text';
-  static const String settingsInterface = '/settings/interface';
-  static const String settingsShortcuts = '/settings/shortcuts';
-  static const String settingsThemeMode = '/settings/theme-mode';
-  static const String settingsTranslate = '/settings/translate';
-  static const String translationEnginesManage =
-      '/settings/translation-engines';
+  static const SettingsRouteTree settings = SettingsRouteTree();
+}
+
+class SettingsRouteTree {
+  const SettingsRouteTree();
+
+  final String path = '/settings';
+  final String general = '/settings/general';
+  final String appearance = '/settings/appearance';
+  final String keybinds = '/settings/keybinds';
+  final String advanced = '/settings/advanced';
+  final String ocrEnginesManage = '/settings/ocr-engines';
+  final String translationEnginesManage = '/settings/translation-engines';
 }
 
 /// Optional metadata carrier for future route registration/indexing.
@@ -45,54 +45,41 @@ class RouteNode {
 
 /// Flat list placeholder for future expansion.
 /// Keep this list sorted by `path` for readability.
-const List<RouteNode> routeNodes = <RouteNode>[
-  RouteNode(id: 'root', path: RouteTree.root),
-  RouteNode(id: 'bootstrap', path: RouteTree.bootstrap, parentId: 'root'),
-  RouteNode(
-    id: 'desktop-popup',
-    path: RouteTree.desktopPopup,
-    parentId: 'root',
-  ),
-  RouteNode(id: 'home', path: RouteTree.home, parentId: 'root'),
+final List<RouteNode> routeNodes = <RouteNode>[
+  const RouteNode(id: 'root', path: RouteTree.root),
   RouteNode(
     id: 'ocr-engines-manage',
-    path: RouteTree.ocrEnginesManage,
-    parentId: 'settings',
-  ),
-  RouteNode(id: 'settings', path: RouteTree.settings, parentId: 'root'),
-  RouteNode(
-    id: 'settings-app-language',
-    path: RouteTree.settingsAppLanguage,
+    path: RouteTree.settings.ocrEnginesManage,
     parentId: 'settings',
   ),
   RouteNode(
-    id: 'settings-extract-text',
-    path: RouteTree.settingsExtractText,
+    id: 'settings',
+    path: RouteTree.settings.path,
+    parentId: 'root',
+  ),
+  RouteNode(
+    id: 'settings-advanced',
+    path: RouteTree.settings.advanced,
     parentId: 'settings',
   ),
   RouteNode(
-    id: 'settings-interface',
-    path: RouteTree.settingsInterface,
+    id: 'settings-appearance',
+    path: RouteTree.settings.appearance,
     parentId: 'settings',
   ),
   RouteNode(
-    id: 'settings-shortcuts',
-    path: RouteTree.settingsShortcuts,
+    id: 'settings-general',
+    path: RouteTree.settings.general,
     parentId: 'settings',
   ),
   RouteNode(
-    id: 'settings-theme-mode',
-    path: RouteTree.settingsThemeMode,
-    parentId: 'settings',
-  ),
-  RouteNode(
-    id: 'settings-translate',
-    path: RouteTree.settingsTranslate,
+    id: 'settings-keybinds',
+    path: RouteTree.settings.keybinds,
     parentId: 'settings',
   ),
   RouteNode(
     id: 'translation-engines-manage',
-    path: RouteTree.translationEnginesManage,
+    path: RouteTree.settings.translationEnginesManage,
     parentId: 'settings',
   ),
 ];

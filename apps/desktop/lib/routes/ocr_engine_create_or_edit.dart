@@ -4,6 +4,7 @@ import 'package:ocr_engine_youdao/ocr_engine_youdao.dart';
 import 'package:shortid/shortid.dart';
 
 import '../i18n/i18n.dart';
+import '../models/ext_ocr_engine_config.dart';
 import '../models/ocr_engine_config.dart';
 import '../networking/ocr_client/ocr_client.dart';
 import '../services/local_db/local_db.dart';
@@ -48,10 +49,6 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
     return [];
   }
 
-  String t(String key, {List<String> args = const []}) {
-    return 'page_ocr_engine_create_or_edit.$key'.tr(args: args);
-  }
-
   @override
   void initState() {
     if (widget.ocrEngineConfig != null) {
@@ -87,11 +84,11 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
     return CustomAppBar(
       title: widget.ocrEngineConfig != null
           ? OcrEngineName(widget.ocrEngineConfig!)
-          : Text(t('title')),
+          : Text(t.page_ocr_engine_create_or_edit.title),
       actions: [
         if (widget.editable)
           CustomAppBarActionItem(
-            text: 'ok'.tr(),
+            text: t.ok,
             onPressed: _handleClickOk,
           ),
       ],
@@ -102,13 +99,14 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
     return PreferenceList(
       children: [
         PreferenceListSection(
-          title: Text(t('pref_section_title_engine_type')),
+          title: Text(
+              t.page_ocr_engine_create_or_edit.pref_section_title_engine_type),
           children: [
             PreferenceListItem(
               icon: _type == null ? null : OcrEngineIcon(_type!),
               title: _type == null
-                  ? Text('please_choose'.tr())
-                  : Text('ocr_engine.$_type'.tr()),
+                  ? Text(t.please_choose)
+                  : Text(getOcrEngineTypeName(_type!)),
               accessoryView: widget.editable ? null : Container(),
               onTap: widget.editable
                   ? () {
@@ -133,7 +131,8 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
         ),
         if (widget.editable && _type != null)
           PreferenceListSection(
-            title: Text(t('pref_section_title_option')),
+            title: Text(
+                t.page_ocr_engine_create_or_edit.pref_section_title_option),
             children: [
               for (var optionKey in _engineOptionKeys)
                 PreferenceListTextFieldItem(
@@ -159,7 +158,7 @@ class _OcrEngineCreateOrEditPageState extends State<OcrEngineCreateOrEditPage> {
               PreferenceListItem(
                 title: Center(
                   child: Text(
-                    'delete'.tr(),
+                    t.delete,
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),

@@ -18,7 +18,6 @@ import './modifiers/preferences_modifier.dart';
 import './modifiers/translation_targets_modifier.dart';
 import 'init_data_if_need.dart';
 
-
 class LocalDb {
   Configuration configuration = Configuration();
 

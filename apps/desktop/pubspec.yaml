@@ -1,6 +1,6 @@
-name: biyi_app
+name: beyondtranslate_desktop
 description: A convenient translation and dictionary app written in Flutter.
-homepage: https://github.com/biyidev/biyi
+homepage: https://github.com/beyondtranslate/beyondtranslate
 publish_to: "none"
 version: 0.5.0+18
 

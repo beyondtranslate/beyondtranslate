@@ -265,8 +265,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     if (_trayIconImage != null) {
       _trayIcon!.icon = _trayIconImage;
     }
-    _trayIcon!.title = 'app_name'.tr();
-    _trayIcon!.tooltip = 'app_name'.tr();
+    _trayIcon!.title = t.app_name;
+    _trayIcon!.tooltip = t.app_name;
     _trayIcon!.contextMenuTrigger = nativeapi.ContextMenuTrigger.none;
     _trayIcon!.on<nativeapi.TrayIconClickedEvent>((event) {
       _handleTrayIconMouseDown();
@@ -283,7 +283,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     _trayMenus.add(menu);
 
     final versionItem = nativeapi.MenuItem(
-      '${'app_name'.tr()} v${sharedEnv.appVersion} (BUILD ${sharedEnv.appBuildNumber})',
+      '${t.app_name} v${sharedEnv.appVersion} (BUILD ${sharedEnv.appBuildNumber})',
     );
     versionItem.enabled = false;
     _trayMenuItems.add(versionItem);
@@ -291,7 +291,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     menu.addSeparator();
 
     if (kIsLinux) {
-      final showItem = nativeapi.MenuItem('tray_context_menu.item_show'.tr());
+      final showItem = nativeapi.MenuItem(t.tray_context_menu.item_show);
       showItem.on<nativeapi.MenuItemClickedEvent>((event) {
         _handleTrayMenuItemClick(kMenuItemKeyShow);
       });
@@ -300,7 +300,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     }
 
     final quickStartGuideItem =
-        nativeapi.MenuItem('tray_context_menu.item_quick_start_guide'.tr());
+        nativeapi.MenuItem(t.tray_context_menu.item_quick_start_guide);
     quickStartGuideItem.on<nativeapi.MenuItemClickedEvent>((event) {
       _handleTrayMenuItemClick(kMenuItemKeyQuickStartGuide);
     });
@@ -311,7 +311,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     _trayMenus.add(discussionMenu);
 
     final joinDiscordItem = nativeapi.MenuItem(
-      'tray_context_menu.item_discussion_subitem_discord_server'.tr(),
+      t.tray_context_menu.item_discussion_subitem_discord_server,
     );
     joinDiscordItem.on<nativeapi.MenuItemClickedEvent>((event) {
       _handleTrayMenuItemClick(kMenuSubItemKeyJoinDiscord);
@@ -320,7 +320,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     discussionMenu.addItem(joinDiscordItem);
 
     final joinQQGroupItem = nativeapi.MenuItem(
-      'tray_context_menu.item_discussion_subitem_qq_group'.tr(),
+      t.tray_context_menu.item_discussion_subitem_qq_group,
     );
     joinQQGroupItem.on<nativeapi.MenuItemClickedEvent>((event) {
       _handleTrayMenuItemClick(kMenuSubItemKeyJoinQQGroup);
@@ -329,7 +329,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     discussionMenu.addItem(joinQQGroupItem);
 
     final discussionItem = nativeapi.MenuItem(
-      'tray_context_menu.item_discussion'.tr(),
+      t.tray_context_menu.item_discussion,
       nativeapi.MenuItemType.submenu,
     );
     discussionItem.submenu = discussionMenu;
@@ -338,7 +338,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     menu.addSeparator();
 
-    final quitItem = nativeapi.MenuItem('tray_context_menu.item_quit_app'.tr());
+    final quitItem = nativeapi.MenuItem(t.tray_context_menu.item_quit_app);
     quitItem.on<nativeapi.MenuItemClickedEvent>((event) {
       _handleTrayMenuItemClick(kMenuItemKeyQuitApp);
     });
@@ -733,7 +733,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     if (_capturedData == null) {
       BotToast.showText(
-        text: 'page_desktop_popup.msg_capture_screen_area_canceled'.tr(),
+        text: t.mini_translator.msg_capture_screen_area_canceled,
         align: Alignment.center,
       );
       setState(() {});
@@ -800,7 +800,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   void _handleButtonTappedTrans() async {
     if (_text.isEmpty) {
       BotToast.showText(
-        text: 'page_desktop_popup.msg_please_enter_word_or_text'.tr(),
+        text: t.mini_translator.msg_please_enter_word_or_text,
         align: Alignment.center,
       );
       _focusNode.requestFocus();
@@ -845,15 +845,13 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
                     _isAllowedScreenSelectionAccess) {
                   BotToast.showText(
                     text:
-                        'page_desktop_popup.limited_banner_msg_all_access_allowed'
-                            .tr(),
+                        t.mini_translator.limited_banner_msg_all_access_allowed,
                     align: Alignment.center,
                   );
                 } else {
                   BotToast.showText(
-                    text:
-                        'page_desktop_popup.limited_banner_msg_all_access_not_allowed'
-                            .tr(),
+                    text: t.mini_translator
+                        .limited_banner_msg_all_access_not_allowed,
                     align: Alignment.center,
                   );
                 }
