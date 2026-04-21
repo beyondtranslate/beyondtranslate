@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../i18n/i18n.dart';
-import './r.dart';
 
 const kLanguageDE = 'de';
 const kLanguageEN = 'en';
@@ -32,19 +31,6 @@ final List<String> kSupportedLanguages = [
   kLanguageZH,
 ];
 
-final Map<String, String> _knownFlagIcons = {
-  kLanguageDE: 'de',
-  kLanguageEN: 'gb',
-  kLanguageES: 'es',
-  kLanguageFR: 'fr',
-  kLanguageIT: 'in',
-  kLanguageJA: 'jp',
-  kLanguageKO: 'kr',
-  kLanguagePT: 'pt',
-  kLanguageRU: 'ru',
-  kLanguageZH: 'cn',
-};
-
 String getLanguageName(String language) {
   switch (language) {
     case kLanguageDE:
@@ -70,10 +56,6 @@ String getLanguageName(String language) {
     default:
       return language;
   }
-}
-
-String getLanguageFlag(String language) {
-  return R.image('flag_icons/${_knownFlagIcons[language]}.svg');
 }
 
 Locale languageToLocale(String language) {

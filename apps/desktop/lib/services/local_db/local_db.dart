@@ -243,11 +243,11 @@ Future<void> initLocalDb() async {
 
   await Hive.close();
   Hive.init(dataDirectory.path);
-  await _safeOpenBox(dataDirectory, 'preferences');
   await _safeOpenBox(dataDirectory, 'engines');
   await _safeOpenBox(dataDirectory, 'ocr_engines');
   await _safeOpenBox(dataDirectory, 'translation_targets');
   await _safeOpenBox(dataDirectory, 'newwords');
+  await PreferencesModifier.initialize(dataDirectory);
   // await migrateOldDb();
   if (!kIsWeb) {
     await initDataIfNeed();

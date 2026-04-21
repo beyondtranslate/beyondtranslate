@@ -1,42 +1,26 @@
 import 'package:flutter/material.dart';
 
 import '../../utils/language_util.dart';
-import '../language_flag_view/language_flag_view.dart';
 
 class LanguageLabel extends StatelessWidget {
   const LanguageLabel(
     this.language, {
     Key? key,
-    this.flagSize = 22,
-    this.flagBorderColor,
     this.style,
   }) : super(key: key);
 
   final String language;
-  final double flagSize;
-  final Color? flagBorderColor;
   final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        LanguageFlagView(
-          language,
-          size: flagSize,
-          borderColor: flagBorderColor,
-        ),
-        const SizedBox(width: 5),
-        DefaultTextStyle(
-          style: textTheme.bodyMedium!,
-          child: Text(
-            getLanguageName(language),
-            style: style,
-          ),
-        ),
-      ],
+    return DefaultTextStyle(
+      style: textTheme.bodyMedium!,
+      child: Text(
+        getLanguageName(language),
+        style: style,
+      ),
     );
   }
 }

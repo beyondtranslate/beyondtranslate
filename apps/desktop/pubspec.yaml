@@ -19,7 +19,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_svg: ^2.0.9
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   hotkey_manager: ^0.2.3
@@ -51,6 +50,7 @@ dependencies:
   translation_engine_youdao: ^0.1.6
   uni_ocr_client: ^0.1.1
   uni_translate_client: ^0.1.7
+  unified_persistence: ^0.0.2
   vclibs: ^0.1.0
   nativeapi: ^0.1.0
   window_manager: ^0.3.4
@@ -75,7 +75,6 @@ flutter:
 
   assets:
     - resources/images/
-    - resources/images/flag_icons/
     - resources/images/ocr_engine_icons/
     - resources/images/translation_engine_icons/
 

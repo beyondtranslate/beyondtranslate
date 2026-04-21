@@ -38,7 +38,6 @@ class _AvailableLanguageSelector extends StatelessWidget {
                 EdgeInsets padding = const EdgeInsets.only(left: 6, right: 6);
                 Widget child = LanguageLabel(
                   supportedLanguage,
-                  flagSize: 18,
                   style: TextStyle(
                     color: !isSelected ? null : Colors.white,
                   ),
@@ -144,10 +143,6 @@ class _TranslationTargetSelectViewState
                       children: [
                         LanguageLabel(
                           widget.sourceLanguage,
-                          flagSize: 18,
-                          flagBorderColor: widget.isShowSourceLanguageSelector
-                              ? Theme.of(context).primaryColor
-                              : null,
                           style: textTheme.bodyMedium!.copyWith(
                             color: widget.isShowSourceLanguageSelector
                                 ? Theme.of(context).primaryColor
@@ -217,10 +212,6 @@ class _TranslationTargetSelectViewState
                       children: [
                         LanguageLabel(
                           widget.targetLanguage,
-                          flagSize: 18,
-                          flagBorderColor: widget.isShowTargetLanguageSelector
-                              ? Theme.of(context).primaryColor
-                              : null,
                           style: textTheme.bodyMedium!.copyWith(
                             color: widget.isShowTargetLanguageSelector
                                 ? Theme.of(context).primaryColor

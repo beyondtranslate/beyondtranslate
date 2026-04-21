@@ -48,7 +48,6 @@ class TranslationResultView extends StatelessWidget {
               padding: const EdgeInsets.only(left: 12, right: 12),
               child: LanguageLabel(
                 sourceLanguage,
-                flagSize: 18,
               ),
               onPressed: () => {},
             ),
@@ -72,7 +71,6 @@ class TranslationResultView extends StatelessWidget {
               padding: const EdgeInsets.only(left: 12, right: 12),
               child: LanguageLabel(
                 targetLanguage,
-                flagSize: 18,
               ),
               onPressed: () => {},
             ),
