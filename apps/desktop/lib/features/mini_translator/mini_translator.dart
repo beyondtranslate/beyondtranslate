@@ -983,7 +983,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   @override
   void onProtocolUrlReceived(String url) async {
     Uri uri = Uri.parse(url);
-    if (uri.scheme != 'biyiapp') return;
+    if (uri.scheme != 'beyondtranslate') return;
 
     if (uri.authority == 'translate') {
       if (_text.isNotEmpty) _handleButtonTappedClear();

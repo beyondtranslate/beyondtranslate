@@ -53,7 +53,6 @@ dependencies:
   unified_persistence: ^0.0.2
   vclibs: ^0.1.0
   nativeapi: ^0.1.0
-  window_manager: ^0.3.4
 
 dev_dependencies:
   build_runner: ^2.10.1

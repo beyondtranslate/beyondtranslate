@@ -15,7 +15,6 @@
 #include <screen_retriever/screen_retriever_plugin.h>
 #include <screen_text_extractor/screen_text_extractor_plugin.h>
 #include <vclibs/vclibs_plugin.h>
-#include <window_manager/window_manager_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   AudioplayersWindowsPluginRegisterWithRegistrar(
@@ -36,6 +35,4 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("ScreenTextExtractorPlugin"));
   VclibsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("VclibsPlugin"));
-  WindowManagerPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("WindowManagerPlugin"));
 }

@@ -12,7 +12,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   screen_retriever
   screen_text_extractor
   vclibs
-  window_manager
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

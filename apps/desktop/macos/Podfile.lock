@@ -20,8 +20,6 @@ PODS:
     - FlutterMacOS
   - screen_text_extractor (0.1.0):
     - FlutterMacOS
-  - window_manager (0.2.0):
-    - FlutterMacOS
 
 DEPENDENCIES:
   - audioplayers_darwin (from `Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos`)
@@ -34,7 +32,6 @@ DEPENDENCIES:
   - screen_capturer_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos`)
   - screen_retriever (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos`)
   - screen_text_extractor (from `Flutter/ephemeral/.symlinks/plugins/screen_text_extractor/macos`)
-  - window_manager (from `Flutter/ephemeral/.symlinks/plugins/window_manager/macos`)
 
 SPEC REPOS:
   trunk:
@@ -61,8 +58,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos
   screen_text_extractor:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_text_extractor/macos
-  window_manager:
-    :path: Flutter/ephemeral/.symlinks/plugins/window_manager/macos
 
 SPEC CHECKSUMS:
   audioplayers_darwin: 761f2948df701d05b5db603220c384fb55720012
@@ -76,7 +71,6 @@ SPEC CHECKSUMS:
   screen_capturer_macos: 229306903c56767a7c7d3a48167ba303e95c6d29
   screen_retriever: 4f97c103641aab8ce183fa5af3b87029df167936
   screen_text_extractor: a23062e637bc69e2737476011ef192e2a77cb2f5
-  window_manager: 1d01fa7ac65a6e6f83b965471b1a7fdd3f06166c
 
 PODFILE CHECKSUM: 54d867c82ac51cbd61b565781b9fada492027009
 
