@@ -30,6 +30,10 @@ impl HttpClient {
         self.client.post(self.join_url(path))
     }
 
+    pub fn get(&self, path: &str) -> RequestBuilder {
+        self.client.get(self.join_url(path))
+    }
+
     pub async fn execute(&self, request: RequestBuilder) -> reqwest::Result<Response> {
         request.send().await
     }

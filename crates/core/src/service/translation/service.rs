@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use crate::{
-    DetectLanguageRequest, DetectLanguageResponse, LanguagePair, LookUpRequest, LookUpResponse,
-    TranslateRequest, TranslateResponse,
+    DetectLanguageRequest, DetectLanguageResponse, LanguagePair, TranslateRequest,
+    TranslateResponse,
 };
 
 use super::error::{TranslationError, TranslationServiceError, TranslationServiceResult};
@@ -44,22 +44,6 @@ impl TranslationService {
 
         for provider in std::iter::once(&self.primary).chain(self.fallbacks.iter()) {
             match provider.detect_language(request.clone()).await {
-                Ok(result) => return Ok(result),
-                Err(error) => last_error = Some(error),
-            }
-        }
-
-        Err(map_last_error(last_error))
-    }
-
-    pub async fn look_up(
-        &self,
-        request: LookUpRequest,
-    ) -> TranslationServiceResult<LookUpResponse> {
-        let mut last_error = None;
-
-        for provider in std::iter::once(&self.primary).chain(self.fallbacks.iter()) {
-            match provider.look_up(request.clone()).await {
                 Ok(result) => return Ok(result),
                 Err(error) => last_error = Some(error),
             }

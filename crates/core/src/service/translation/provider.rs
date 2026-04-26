@@ -1,8 +1,8 @@
 use async_trait::async_trait;
 
 use crate::{
-    DetectLanguageRequest, DetectLanguageResponse, LanguagePair, LookUpRequest, LookUpResponse,
-    TranslateRequest, TranslateResponse,
+    DetectLanguageRequest, DetectLanguageResponse, LanguagePair, TranslateRequest,
+    TranslateResponse,
 };
 
 use super::error::TranslationResult;
@@ -22,10 +22,6 @@ pub trait TranslationProvider: Send + Sync {
         Err(super::error::TranslationError::UnsupportedMethod(
             "detect_language",
         ))
-    }
-
-    async fn look_up(&self, _request: LookUpRequest) -> TranslationResult<LookUpResponse> {
-        Err(super::error::TranslationError::UnsupportedMethod("look_up"))
     }
 
     async fn translate(&self, request: TranslateRequest) -> TranslationResult<TranslateResponse>;
