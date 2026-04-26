@@ -57,7 +57,7 @@ impl DeepLProviderBuilder {
     }
 }
 
-#[async_trait]
+#[async_trait(?Send)]
 impl TranslationProvider for DeepLProvider {
     async fn translate(&self, request: TranslateRequest) -> TranslationResult<TranslateResponse> {
         let mut form_fields = vec![

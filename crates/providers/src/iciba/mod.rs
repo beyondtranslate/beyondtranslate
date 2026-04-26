@@ -58,7 +58,7 @@ impl IcibaProviderBuilder {
     }
 }
 
-#[async_trait]
+#[async_trait(?Send)]
 impl DictionaryProvider for IcibaProvider {
     async fn look_up(&self, request: LookUpRequest) -> DictionaryResult<LookUpResponse> {
         if !(request.source_language == "en" && request.target_language == "zh") {
@@ -196,7 +196,7 @@ impl DictionaryProvider for IcibaProvider {
     }
 }
 
-#[async_trait]
+#[async_trait(?Send)]
 impl TranslationProvider for IcibaProvider {
     async fn translate(&self, _request: TranslateRequest) -> TranslationResult<TranslateResponse> {
         Err(TranslationError::UnsupportedMethod("translate"))

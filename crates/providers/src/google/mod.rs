@@ -57,7 +57,7 @@ impl GoogleProviderBuilder {
     }
 }
 
-#[async_trait]
+#[async_trait(?Send)]
 impl TranslationProvider for GoogleProvider {
     async fn detect_language(
         &self,

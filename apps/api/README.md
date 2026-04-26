@@ -4,7 +4,50 @@ Cloudflare Worker API app written in Rust.
 
 ## Endpoints
 
-- `GET /health` -> `200 ok`
+- `GET /health`
+- `POST /dictionaries/{provider}/lookup`
+- `POST /translations/{provider}/translate`
+
+### `POST /dictionaries/{provider}/lookup`
+
+Request body:
+
+```json
+{
+  "sourceLanguage": "en",
+  "targetLanguage": "zh",
+  "word": "hello"
+}
+```
+
+Currently implemented dictionary provider:
+
+- `iciba`
+
+### `POST /translations/{provider}/translate`
+
+Request body:
+
+```json
+{
+  "sourceLanguage": "en",
+  "targetLanguage": "zh",
+  "text": "hello"
+}
+```
+
+The translation domain is separated from dictionaries, but this route is still a
+placeholder. It currently returns a "no translation providers configured" error
+until a real translation provider is wired in.
+
+Currently accepted translation path provider:
+
+- `iciba`
+
+## Environment variables
+
+- `ICIBA_API_KEY` (required)
+- `ICIBA_BASE_URL` (optional)
 
 ## Local development
 

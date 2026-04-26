@@ -10,14 +10,16 @@ resolver = "2"
 [workspace.dependencies]
 async-trait = "0.1"
 base64 = "0.22"
+getrandom = { version = "0.2", features = ["js"] }
 bytes = "1"
 hmac = "0.12"
 md5 = "0.7"
 mockito = "1"
 rand = "0.8"
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+serde_yaml = "0.9"
 sha1 = "0.10"
 sha2 = "0.10"
 thiserror = "2"

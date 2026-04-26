@@ -87,7 +87,7 @@ impl YoudaoProviderBuilder {
     }
 }
 
-#[async_trait]
+#[async_trait(?Send)]
 impl DictionaryProvider for YoudaoProvider {
     async fn look_up(&self, request: LookUpRequest) -> DictionaryResult<LookUpResponse> {
         let input = truncate_input(&request.word);
@@ -281,7 +281,7 @@ impl DictionaryProvider for YoudaoProvider {
     }
 }
 
-#[async_trait]
+#[async_trait(?Send)]
 impl TranslationProvider for YoudaoProvider {
     async fn translate(&self, _request: TranslateRequest) -> TranslationResult<TranslateResponse> {
         Err(TranslationError::UnsupportedMethod("translate"))

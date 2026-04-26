@@ -68,7 +68,7 @@ impl CaiyunProviderBuilder {
     }
 }
 
-#[async_trait]
+#[async_trait(?Send)]
 impl TranslationProvider for CaiyunProvider {
     async fn get_supported_language_pairs(&self) -> TranslationResult<Vec<LanguagePair>> {
         Ok(vec![

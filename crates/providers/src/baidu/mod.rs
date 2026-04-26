@@ -69,7 +69,7 @@ impl BaiduProviderBuilder {
     }
 }
 
-#[async_trait]
+#[async_trait(?Send)]
 impl TranslationProvider for BaiduProvider {
     async fn detect_language(
         &self,

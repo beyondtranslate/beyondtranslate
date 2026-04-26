@@ -7,7 +7,7 @@ use crate::{
 
 use super::error::TranslationResult;
 
-#[async_trait]
+#[async_trait(?Send)]
 pub trait TranslationProvider: Send + Sync {
     async fn get_supported_language_pairs(&self) -> TranslationResult<Vec<LanguagePair>> {
         Err(super::error::TranslationError::UnsupportedMethod(

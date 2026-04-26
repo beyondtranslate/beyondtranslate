@@ -1,5 +1,5 @@
 [package]
-name = "beyondtranslate_api"
+name = "beyondtranslate-api"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,3 +9,8 @@ crate-type = ["cdylib"]
 [dependencies]
 worker = "0.8"
 console_error_panic_hook = "0.1.7"
+beyondtranslate-core = { path = "../../crates/core" }
+beyondtranslate-runtime = { path = "../../crates/runtime", features = ["iciba"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+serde_yaml.workspace = true

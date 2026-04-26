@@ -1,0 +1,315 @@
+openapi: 3.1.0
+info:
+  title: BeyondTranslate API
+  version: 0.1.0
+  description: HTTP API for translation and dictionary lookups.
+servers:
+  - url: /
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponseEnvelope'
+  /dictionaries/{provider}/lookup:
+    post:
+      operationId: lookupDictionaryEntry
+      summary: Lookup a dictionary entry
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - iciba
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookUpRequest'
+      responses:
+        '200':
+          description: Lookup result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookUpResponseEnvelope'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '502':
+          $ref: '#/components/responses/ErrorResponse'
+  /translations/{provider}/translate:
+    post:
+      operationId: translateText
+      summary: Translate text
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - iciba
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslateRequest'
+      responses:
+        '200':
+          description: Translation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslateResponseEnvelope'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '502':
+          $ref: '#/components/responses/ErrorResponse'
+components:
+  responses:
+    ErrorResponse:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseEnvelope'
+  schemas:
+    HealthResponseEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          const: true
+        data:
+          $ref: '#/components/schemas/HealthResponse'
+    LookUpResponseEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          const: true
+        data:
+          $ref: '#/components/schemas/LookUpResponse'
+    TranslateResponseEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          const: true
+        data:
+          $ref: '#/components/schemas/TranslateResponse'
+    ErrorResponseEnvelope:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          const: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+    ErrorBody:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        provider:
+          type: string
+    HealthResponse:
+      type: object
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+    LookUpRequest:
+      type: object
+      required:
+        - source_language
+        - target_language
+        - word
+      properties:
+        source_language:
+          type: string
+        target_language:
+          type: string
+        word:
+          type: string
+    TranslateRequest:
+      type: object
+      required:
+        - text
+      properties:
+        source_language:
+          type: string
+        target_language:
+          type: string
+        text:
+          type: string
+    TranslateResponse:
+      type: object
+      required:
+        - translations
+      properties:
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/TextTranslation'
+    LookUpResponse:
+      type: object
+      required:
+        - translations
+      properties:
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/TextTranslation'
+        word:
+          type: string
+        tip:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordTag'
+        definitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordDefinition'
+        pronunciations:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordPronunciation'
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordImage'
+        phrases:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordPhrase'
+        tenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordTense'
+        sentences:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordSentence'
+    TextTranslation:
+      type: object
+      required:
+        - text
+      properties:
+        detected_source_language:
+          type: string
+        text:
+          type: string
+        audio_url:
+          type: string
+    WordDefinition:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+    WordImage:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+    WordPhrase:
+      type: object
+      required:
+        - text
+        - translations
+      properties:
+        text:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+    WordPronunciation:
+      type: object
+      properties:
+        type:
+          type: string
+        phonetic_symbol:
+          type: string
+        audio_url:
+          type: string
+    WordSentence:
+      type: object
+      required:
+        - text
+        - translations
+      properties:
+        text:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+    WordTag:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    WordTense:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
