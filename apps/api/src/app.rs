@@ -8,6 +8,17 @@ pub async fn handle(req: Request, env: Env) -> Result<Response, ApiError> {
         Method::Get if req.path() == "/health" => crate::routes::health::handle().await,
         Method::Get if req.path() == "/openapi.json" => crate::routes::openapi::handle().await,
         Method::Get if req.path() == "/reference" => crate::routes::reference::handle().await,
+        Method::Get => {
+            if let Some(provider) = match_provider_route(
+                req.path().as_str(),
+                "translations",
+                "supported-language-pairs",
+            ) {
+                return handlers::translations::handle_supported_language_pairs(env, provider).await;
+            }
+
+            Err(ApiError::not_found("Route not found"))
+        }
         Method::Post => {
             if let Some(provider) = match_provider_route(req.path().as_str(), "dictionaries", "lookup")
             {
@@ -17,7 +28,15 @@ pub async fn handle(req: Request, env: Env) -> Result<Response, ApiError> {
             if let Some(provider) =
                 match_provider_route(req.path().as_str(), "translations", "translate")
             {
-                return handlers::translations::handle(req, env, provider).await;
+                return handlers::translations::handle_translate(req, env, provider).await;
+            }
+
+            if let Some(provider) = match_provider_route(
+                req.path().as_str(),
+                "translations",
+                "detect-language",
+            ) {
+                return handlers::translations::handle_detect_language(req, env, provider).await;
             }
 
             Err(ApiError::not_found("Route not found"))
@@ -56,6 +75,30 @@ mod tests {
         assert_eq!(
             match_provider_route("/dictionaries/iciba/translate", "dictionaries", "lookup"),
             None
+        );
+    }
+
+    #[test]
+    fn matches_translation_detect_language_route() {
+        assert_eq!(
+            match_provider_route(
+                "/translations/iciba/detect-language",
+                "translations",
+                "detect-language",
+            ),
+            Some("iciba")
+        );
+    }
+
+    #[test]
+    fn matches_translation_supported_language_pairs_route() {
+        assert_eq!(
+            match_provider_route(
+                "/translations/iciba/supported-language-pairs",
+                "translations",
+                "supported-language-pairs",
+            ),
+            Some("iciba")
         );
     }
 }

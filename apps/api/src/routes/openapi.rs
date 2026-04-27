@@ -31,5 +31,7 @@ mod tests {
         assert!(paths.contains_key("/health"));
         assert!(paths.contains_key("/dictionaries/{provider}/lookup"));
         assert!(paths.contains_key("/translations/{provider}/translate"));
+        assert!(paths.contains_key("/translations/{provider}/detect-language"));
+        assert!(paths.contains_key("/translations/{provider}/supported-language-pairs"));
     }
 }

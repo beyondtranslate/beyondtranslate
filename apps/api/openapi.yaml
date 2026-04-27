@@ -5,9 +5,18 @@ info:
   description: HTTP API for translation and dictionary lookups.
 servers:
   - url: /
+tags:
+  - name: system
+    description: System and documentation endpoints.
+  - name: dictionaries
+    description: Dictionary lookup endpoints.
+  - name: translations
+    description: Translation-related endpoints.
 paths:
   /health:
     get:
+      tags:
+        - system
       operationId: getHealth
       summary: Health check
       responses:
@@ -19,6 +28,8 @@ paths:
                 $ref: '#/components/schemas/HealthResponseEnvelope'
   /dictionaries/{provider}/lookup:
     post:
+      tags:
+        - dictionaries
       operationId: lookupDictionaryEntry
       summary: Lookup a dictionary entry
       parameters:
@@ -54,6 +65,8 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
   /translations/{provider}/translate:
     post:
+      tags:
+        - translations
       operationId: translateText
       summary: Translate text
       parameters:
@@ -77,6 +90,74 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TranslateResponseEnvelope'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '502':
+          $ref: '#/components/responses/ErrorResponse'
+  /translations/{provider}/detect-language:
+    post:
+      tags:
+        - translations
+      operationId: detectLanguage
+      summary: Detect the language of input texts
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - iciba
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetectLanguageRequest'
+      responses:
+        '200':
+          description: Language detection result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetectLanguageResponseEnvelope'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+        '502':
+          $ref: '#/components/responses/ErrorResponse'
+  /translations/{provider}/supported-language-pairs:
+    get:
+      tags:
+        - translations
+      operationId: getSupportedLanguagePairs
+      summary: List supported translation language pairs
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - iciba
+      responses:
+        '200':
+          description: Supported language pairs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguagePairListEnvelope'
         '400':
           $ref: '#/components/responses/ErrorResponse'
         '401':
@@ -129,6 +210,30 @@ components:
           const: true
         data:
           $ref: '#/components/schemas/TranslateResponse'
+    DetectLanguageResponseEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          const: true
+        data:
+          $ref: '#/components/schemas/DetectLanguageResponse'
+    LanguagePairListEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          const: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LanguagePair'
     ErrorResponseEnvelope:
       type: object
       required:
@@ -183,6 +288,15 @@ components:
           type: string
         text:
           type: string
+    DetectLanguageRequest:
+      type: object
+      required:
+        - texts
+      properties:
+        texts:
+          type: array
+          items:
+            type: string
     TranslateResponse:
       type: object
       required:
@@ -192,6 +306,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TextTranslation'
+    DetectLanguageResponse:
+      type: object
+      properties:
+        detections:
+          type: array
+          items:
+            $ref: '#/components/schemas/TextDetection'
+    LanguagePair:
+      type: object
+      properties:
+        source_language:
+          type: string
+        source_language_id:
+          type: string
+        target_language:
+          type: string
+        target_language_id:
+          type: string
     LookUpResponse:
       type: object
       required:
@@ -243,6 +375,16 @@ components:
         text:
           type: string
         audio_url:
+          type: string
+    TextDetection:
+      type: object
+      required:
+        - detected_language
+        - text
+      properties:
+        detected_language:
+          type: string
+        text:
           type: string
     WordDefinition:
       type: object
