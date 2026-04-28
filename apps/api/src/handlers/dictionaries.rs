@@ -1,50 +1,32 @@
-use std::sync::Arc;
-
-use beyondtranslate_core::{
-    DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider,
-};
+use beyondtranslate_core::{DictionaryError, LookUpRequest};
 use worker::{Env, Request, Response};
 
-use crate::ApiError;
+use crate::{
+    error::{json_ok, ApiError},
+    services::provider_registry,
+    utils,
+};
 
-pub async fn handle(mut req: Request, env: Env, provider: &str) -> Result<Response, ApiError> {
+pub async fn lookup(mut req: Request, env: Env, provider: &str) -> Result<Response, ApiError> {
     let request: LookUpRequest = req
         .json()
         .await
         .map_err(|error| ApiError::bad_request("INVALID_JSON", error.to_string()))?;
-    let request = validate_request(request)?;
+    let request = validate_lookup_request(request)?;
 
-    let service = DictionaryHandlerService::from_env(&env, provider)?;
-    let result = service.lookup(request).await.map_err(ApiError::from)?;
+    let provider = provider_registry::load_provider(&env, provider)?;
+    let service = provider
+        .dictionary()
+        .ok_or_else(|| ApiError::from(DictionaryError::UnsupportedMethod("look_up")))?;
+    let response = service.look_up(request).await.map_err(ApiError::from)?;
 
-    crate::json_ok(&result).map_err(ApiError::from_worker_error)
+    json_ok(&response).map_err(ApiError::from_worker_error)
 }
 
-struct DictionaryHandlerService {
-    inner: Arc<dyn Provider>,
-}
-
-impl DictionaryHandlerService {
-    fn from_env(env: &Env, provider: &str) -> Result<Self, ApiError> {
-        let inner = crate::provider_registry::load_provider(env, provider)?;
-        Ok(Self { inner })
-    }
-
-    async fn lookup(&self, request: LookUpRequest) -> Result<LookUpResponse, DictionaryError> {
-        self.dictionary_service()?.look_up(request).await
-    }
-
-    fn dictionary_service(&self) -> Result<&dyn DictionaryService, DictionaryError> {
-        self.inner
-            .dictionary()
-            .ok_or(DictionaryError::UnsupportedMethod("look_up"))
-    }
-}
-
-fn validate_request(request: LookUpRequest) -> Result<LookUpRequest, ApiError> {
-    let source_language = request.source_language.trim().to_ascii_lowercase();
-    let target_language = request.target_language.trim().to_ascii_lowercase();
-    let word = request.word.trim().to_owned();
+fn validate_lookup_request(request: LookUpRequest) -> Result<LookUpRequest, ApiError> {
+    let source_language = utils::normalize_required_language(request.source_language);
+    let target_language = utils::normalize_required_language(request.target_language);
+    let word = utils::trim_required_text(request.word);
 
     if word.is_empty() {
         return Err(ApiError::bad_request(
@@ -71,7 +53,7 @@ fn validate_request(request: LookUpRequest) -> Result<LookUpRequest, ApiError> {
 mod tests {
     use beyondtranslate_core::LookUpRequest;
 
-    use super::validate_request;
+    use super::validate_lookup_request;
 
     #[test]
     fn validates_lookup_request() {
@@ -80,7 +62,7 @@ mod tests {
             target_language: "zh".to_owned(),
             word: "hello".to_owned(),
         };
-        let request = validate_request(request).expect("valid lookup request");
+        let request = validate_lookup_request(request).expect("valid lookup request");
 
         assert_eq!(request.word, "hello");
     }

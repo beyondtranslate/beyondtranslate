@@ -1,7 +1,7 @@
 use serde_json::Value;
 use worker::Response;
 
-use crate::ApiError;
+use crate::error::ApiError;
 
 const OPENAPI_YAML: &str = include_str!("../../openapi.yaml");
 
