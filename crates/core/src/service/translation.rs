@@ -1,11 +1,14 @@
+use async_trait::async_trait;
 use reqwest::{Response, StatusCode};
 use thiserror::Error;
 
-pub type DictionaryResult<T> = Result<T, DictionaryError>;
-pub type DictionaryServiceResult<T> = Result<T, DictionaryServiceError>;
+use crate::{
+    DetectLanguageRequest, DetectLanguageResponse, LanguagePair, TranslateRequest,
+    TranslateResponse,
+};
 
 #[derive(Debug, Error, Clone)]
-pub enum DictionaryError {
+pub enum TranslationError {
     #[error("unsupported method: {0}")]
     UnsupportedMethod(&'static str),
     #[error("configuration error: {0}")]
@@ -16,18 +19,13 @@ pub enum DictionaryError {
     RateLimitError(String),
     #[error("invalid request: {0}")]
     InvalidRequest(String),
-    #[error("provider error ({provider}): {message}")]
-    ProviderError {
-        provider: &'static str,
-        message: String,
-    },
     #[error("network error: {0}")]
     NetworkError(String),
     #[error("serialization error: {0}")]
     SerializationError(String),
 }
 
-impl DictionaryError {
+impl TranslationError {
     pub fn from_network_error(error: reqwest::Error) -> Self {
         Self::NetworkError(error.to_string())
     }
@@ -35,7 +33,7 @@ impl DictionaryError {
     pub async fn from_response(
         provider: &'static str,
         response: Response,
-    ) -> DictionaryResult<Response> {
+    ) -> Result<Response, TranslationError> {
         let status = response.status();
         if status.is_success() {
             return Ok(response);
@@ -52,17 +50,32 @@ impl DictionaryError {
             StatusCode::UNAUTHORIZED | StatusCode::FORBIDDEN => Self::AuthError(message),
             StatusCode::TOO_MANY_REQUESTS => Self::RateLimitError(message),
             status if status.is_client_error() => Self::InvalidRequest(message),
-            _ => Self::ProviderError { provider, message },
+            _ => Self::NetworkError(format!("{provider}: {message}")),
         };
 
         Err(error)
     }
 }
 
-#[derive(Debug, Error, Clone)]
-pub enum DictionaryServiceError {
-    #[error("no dictionary providers configured")]
-    NoProvidersConfigured,
-    #[error(transparent)]
-    Dictionary(#[from] DictionaryError),
+#[async_trait(?Send)]
+pub trait TranslationService: Send + Sync {
+    async fn get_supported_language_pairs(&self) -> Result<Vec<LanguagePair>, TranslationError> {
+        Err(crate::TranslationError::UnsupportedMethod(
+            "get_supported_language_pairs",
+        ))
+    }
+
+    async fn detect_language(
+        &self,
+        _request: DetectLanguageRequest,
+    ) -> Result<DetectLanguageResponse, TranslationError> {
+        Err(crate::TranslationError::UnsupportedMethod(
+            "detect_language",
+        ))
+    }
+
+    async fn translate(
+        &self,
+        request: TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError>;
 }
