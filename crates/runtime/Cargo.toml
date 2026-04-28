@@ -16,3 +16,6 @@ youdao = ["beyondtranslate-providers/youdao"]
 [dependencies]
 beyondtranslate-core = { path = "../core" }
 beyondtranslate-providers = { path = "../providers", default-features = false }
+serde.workspace = true
+serde_yaml.workspace = true
+thiserror.workspace = true

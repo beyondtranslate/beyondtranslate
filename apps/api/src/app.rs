@@ -1,6 +1,6 @@
 use worker::{Env, Method, Request, Response};
 
-use crate::{ApiError, handlers};
+use crate::{handlers, ApiError};
 
 pub async fn handle(req: Request, env: Env) -> Result<Response, ApiError> {
     match req.method() {
@@ -14,13 +14,15 @@ pub async fn handle(req: Request, env: Env) -> Result<Response, ApiError> {
                 "translations",
                 "supported-language-pairs",
             ) {
-                return handlers::translations::handle_supported_language_pairs(env, provider).await;
+                return handlers::translations::handle_supported_language_pairs(env, provider)
+                    .await;
             }
 
             Err(ApiError::not_found("Route not found"))
         }
         Method::Post => {
-            if let Some(provider) = match_provider_route(req.path().as_str(), "dictionaries", "lookup")
+            if let Some(provider) =
+                match_provider_route(req.path().as_str(), "dictionaries", "lookup")
             {
                 return handlers::dictionaries::handle(req, env, provider).await;
             }
@@ -31,11 +33,9 @@ pub async fn handle(req: Request, env: Env) -> Result<Response, ApiError> {
                 return handlers::translations::handle_translate(req, env, provider).await;
             }
 
-            if let Some(provider) = match_provider_route(
-                req.path().as_str(),
-                "translations",
-                "detect-language",
-            ) {
+            if let Some(provider) =
+                match_provider_route(req.path().as_str(), "translations", "detect-language")
+            {
                 return handlers::translations::handle_detect_language(req, env, provider).await;
             }
 

@@ -14,16 +14,16 @@ pub mod tencent;
 pub mod youdao;
 
 #[cfg(feature = "baidu")]
-pub use baidu::{BaiduProvider, BaiduProviderBuilder};
+pub use baidu::{BaiduProvider, BaiduProviderConfig};
 #[cfg(feature = "caiyun")]
-pub use caiyun::{CaiyunProvider, CaiyunProviderBuilder};
+pub use caiyun::{CaiyunProvider, CaiyunProviderConfig};
 #[cfg(feature = "deepl")]
-pub use deepl::{DeepLProvider, DeepLProviderBuilder};
+pub use deepl::{DeepLProvider, DeepLProviderConfig};
 #[cfg(feature = "google")]
-pub use google::{GoogleProvider, GoogleProviderBuilder};
+pub use google::{GoogleProvider, GoogleProviderConfig};
 #[cfg(feature = "iciba")]
-pub use iciba::{IcibaProvider, IcibaProviderBuilder};
+pub use iciba::{IcibaProvider, IcibaProviderConfig};
 #[cfg(feature = "tencent")]
-pub use tencent::{TencentProvider, TencentProviderBuilder};
+pub use tencent::{TencentProvider, TencentProviderConfig};
 #[cfg(feature = "youdao")]
-pub use youdao::{YoudaoProvider, YoudaoProviderBuilder};
+pub use youdao::{YoudaoProvider, YoudaoProviderConfig};

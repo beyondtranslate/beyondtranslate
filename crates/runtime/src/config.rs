@@ -1,58 +1,38 @@
-#[derive(Debug, Clone)]
-pub enum TranslationProviderConfig {
-    Baidu {
-        app_id: String,
-        app_key: String,
-        base_url: Option<String>,
-    },
-    Caiyun {
-        token: String,
-        request_id: String,
-        base_url: Option<String>,
-    },
-    DeepL {
-        api_key: String,
-        base_url: Option<String>,
-    },
-    Google {
-        api_key: String,
-        base_url: Option<String>,
-    },
-    Iciba {
-        api_key: String,
-        base_url: Option<String>,
-    },
-    Tencent {
-        secret_id: String,
-        secret_key: String,
-        base_url: Option<String>,
-    },
-    Youdao {
-        app_key: String,
-        app_secret: String,
-        base_url: Option<String>,
-        picture_base_url: Option<String>,
-    },
-    Chain {
-        primary: Box<TranslationProviderConfig>,
-        fallbacks: Vec<TranslationProviderConfig>,
-    },
+use std::{collections::BTreeMap, fs, path::Path};
+
+use serde::Deserialize;
+use serde_yaml::Value;
+
+use crate::{builder::build_provider, ProviderRegistry, RuntimeError};
+
+#[derive(Debug, Deserialize)]
+struct RuntimeConfig {
+    #[serde(default)]
+    providers: BTreeMap<String, Value>,
 }
 
-#[derive(Debug, Clone)]
-pub enum DictionaryProviderConfig {
-    Iciba {
-        api_key: String,
-        base_url: Option<String>,
-    },
-    Youdao {
-        app_key: String,
-        app_secret: String,
-        base_url: Option<String>,
-        picture_base_url: Option<String>,
-    },
-    Chain {
-        primary: Box<DictionaryProviderConfig>,
-        fallbacks: Vec<DictionaryProviderConfig>,
-    },
+pub fn load_from_file(path: impl AsRef<Path>) -> Result<ProviderRegistry, RuntimeError> {
+    let path = path.as_ref();
+    let content = fs::read_to_string(path).map_err(|source| RuntimeError::ReadConfigFile {
+        path: path.display().to_string(),
+        source,
+    })?;
+
+    from_yaml_str(&content)
+}
+
+pub fn from_yaml_str(content: &str) -> Result<ProviderRegistry, RuntimeError> {
+    let config: RuntimeConfig = serde_yaml::from_str(content)?;
+    from_config(config)
+}
+
+fn from_config(config: RuntimeConfig) -> Result<ProviderRegistry, RuntimeError> {
+    let mut registry = ProviderRegistry::new();
+
+    for (name, value) in config.providers {
+        let provider = build_provider(&name, value)?;
+        registry.insert(name, provider);
+    }
+
+    Ok(registry)
 }

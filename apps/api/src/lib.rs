@@ -1,11 +1,10 @@
 mod app;
 mod handlers;
+mod provider_registry;
 mod routes;
 mod schemas;
 
-use beyondtranslate_core::{
-    DictionaryError, DictionaryServiceError, TranslationError, TranslationServiceError,
-};
+use beyondtranslate_core::{DictionaryError, TranslationError};
 use serde::Serialize;
 use worker::*;
 
@@ -38,33 +37,28 @@ struct ErrorResponse<'a, T: Serialize> {
 
 impl ApiError {
     pub fn bad_request(code: impl Into<String>, message: impl Into<String>) -> Self {
-        Self::new(400, code, message, None)
+        Self::new(400, code, message)
     }
 
     pub fn internal(code: impl Into<String>, message: impl Into<String>) -> Self {
-        Self::new(500, code, message, None)
+        Self::new(500, code, message)
     }
 
     pub fn not_found(message: impl Into<String>) -> Self {
-        Self::new(404, "NOT_FOUND", message, None)
+        Self::new(404, "NOT_FOUND", message)
     }
 
     pub fn from_worker_error(error: worker::Error) -> Self {
         Self::internal("INTERNAL_ERROR", error.to_string())
     }
 
-    pub fn new(
-        status: u16,
-        code: impl Into<String>,
-        message: impl Into<String>,
-        provider: Option<&str>,
-    ) -> Self {
+    pub fn new(status: u16, code: impl Into<String>, message: impl Into<String>) -> Self {
         Self {
             status,
             body: ErrorBody {
                 code: code.into(),
                 message: message.into(),
-                provider: provider.map(ToOwned::to_owned),
+                provider: None,
             },
         }
     }
@@ -89,56 +83,23 @@ pub fn json_error<T: Serialize>(status: u16, error: &T) -> Result<Response> {
     .with_status(status))
 }
 
-impl From<TranslationServiceError> for ApiError {
-    fn from(error: TranslationServiceError) -> Self {
-        match error {
-            TranslationServiceError::NoProvidersConfigured => Self::internal(
-                "INTERNAL_CONFIG_ERROR",
-                "No translation providers configured",
-            ),
-            TranslationServiceError::Translation(error) => error.into(),
-        }
-    }
-}
-
-impl From<DictionaryServiceError> for ApiError {
-    fn from(error: DictionaryServiceError) -> Self {
-        match error {
-            DictionaryServiceError::NoProvidersConfigured => Self::internal(
-                "INTERNAL_CONFIG_ERROR",
-                "No dictionary providers configured",
-            ),
-            DictionaryServiceError::Dictionary(error) => error.into(),
-        }
-    }
-}
-
 impl From<TranslationError> for ApiError {
     fn from(error: TranslationError) -> Self {
         match error {
             TranslationError::UnsupportedMethod(method) => {
-                Self::new(400, "UNSUPPORTED_OPERATION", method, None)
+                Self::new(400, "UNSUPPORTED_OPERATION", method)
             }
             TranslationError::ConfigError(message) => {
-                Self::new(500, "INTERNAL_CONFIG_ERROR", message, None)
+                Self::new(500, "INTERNAL_CONFIG_ERROR", message)
             }
-            TranslationError::AuthError(message) => {
-                Self::new(401, "PROVIDER_AUTH_ERROR", message, None)
-            }
+            TranslationError::AuthError(message) => Self::new(401, "PROVIDER_AUTH_ERROR", message),
             TranslationError::RateLimitError(message) => {
-                Self::new(429, "PROVIDER_RATE_LIMIT", message, None)
+                Self::new(429, "PROVIDER_RATE_LIMIT", message)
             }
-            TranslationError::InvalidRequest(message) => {
-                Self::new(400, "INVALID_REQUEST", message, None)
-            }
-            TranslationError::ProviderError { provider, message } => {
-                Self::new(502, "PROVIDER_ERROR", message, Some(provider))
-            }
-            TranslationError::NetworkError(message) => {
-                Self::new(502, "NETWORK_ERROR", message, None)
-            }
+            TranslationError::InvalidRequest(message) => Self::new(400, "INVALID_REQUEST", message),
+            TranslationError::NetworkError(message) => Self::new(502, "NETWORK_ERROR", message),
             TranslationError::SerializationError(message) => {
-                Self::new(502, "PROVIDER_RESPONSE_INVALID", message, None)
+                Self::new(502, "PROVIDER_RESPONSE_INVALID", message)
             }
         }
     }
@@ -148,28 +109,19 @@ impl From<DictionaryError> for ApiError {
     fn from(error: DictionaryError) -> Self {
         match error {
             DictionaryError::UnsupportedMethod(method) => {
-                Self::new(400, "UNSUPPORTED_OPERATION", method, None)
+                Self::new(400, "UNSUPPORTED_OPERATION", method)
             }
             DictionaryError::ConfigError(message) => {
-                Self::new(500, "INTERNAL_CONFIG_ERROR", message, None)
+                Self::new(500, "INTERNAL_CONFIG_ERROR", message)
             }
-            DictionaryError::AuthError(message) => {
-                Self::new(401, "PROVIDER_AUTH_ERROR", message, None)
-            }
+            DictionaryError::AuthError(message) => Self::new(401, "PROVIDER_AUTH_ERROR", message),
             DictionaryError::RateLimitError(message) => {
-                Self::new(429, "PROVIDER_RATE_LIMIT", message, None)
+                Self::new(429, "PROVIDER_RATE_LIMIT", message)
             }
-            DictionaryError::InvalidRequest(message) => {
-                Self::new(400, "INVALID_REQUEST", message, None)
-            }
-            DictionaryError::ProviderError { provider, message } => {
-                Self::new(502, "PROVIDER_ERROR", message, Some(provider))
-            }
-            DictionaryError::NetworkError(message) => {
-                Self::new(502, "NETWORK_ERROR", message, None)
-            }
+            DictionaryError::InvalidRequest(message) => Self::new(400, "INVALID_REQUEST", message),
+            DictionaryError::NetworkError(message) => Self::new(502, "NETWORK_ERROR", message),
             DictionaryError::SerializationError(message) => {
-                Self::new(502, "PROVIDER_RESPONSE_INVALID", message, None)
+                Self::new(502, "PROVIDER_RESPONSE_INVALID", message)
             }
         }
     }
@@ -201,14 +153,11 @@ mod tests {
     }
 
     #[test]
-    fn maps_provider_error_with_original_provider_name() {
-        let error = ApiError::from(TranslationError::ProviderError {
-            provider: "iciba",
-            message: "broken".to_owned(),
-        });
+    fn maps_network_error_without_provider_name() {
+        let error = ApiError::from(TranslationError::NetworkError("broken".to_owned()));
 
         assert_eq!(error.status, 502);
-        assert_eq!(error.body.code, "PROVIDER_ERROR");
-        assert_eq!(error.body.provider.as_deref(), Some("iciba"));
+        assert_eq!(error.body.code, "NETWORK_ERROR");
+        assert_eq!(error.body.provider.as_deref(), None);
     }
 }

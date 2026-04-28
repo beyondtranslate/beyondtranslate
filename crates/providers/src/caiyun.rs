@@ -1,76 +1,52 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    HttpClient, LanguagePair, TextTranslation, TranslateRequest, TranslateResponse,
-    TranslationError, TranslationProvider, TranslationResult,
+    HttpClient, LanguagePair, Provider, ProviderConfig, TextTranslation, TranslateRequest,
+    TranslateResponse, TranslationError, TranslationService,
 };
-use reqwest::Client;
+use serde::Deserialize;
 use serde_json::{json, Value};
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct CaiyunProviderConfig {
+    pub token: String,
+    pub request_id: String,
+    pub base_url: Option<String>,
+}
+
+impl ProviderConfig for CaiyunProviderConfig {}
+
 pub struct CaiyunProvider {
+    config: CaiyunProviderConfig,
+    translation_service: CaiyunTranslationService,
+}
+
+struct CaiyunTranslationService {
     token: String,
     request_id: String,
     http: HttpClient,
 }
 
-pub struct CaiyunProviderBuilder {
-    token: Option<String>,
-    request_id: Option<String>,
-    base_url: Option<String>,
-    client: Option<Client>,
-}
-
 impl CaiyunProvider {
-    pub fn builder() -> CaiyunProviderBuilder {
-        CaiyunProviderBuilder {
-            token: None,
-            request_id: None,
-            base_url: None,
-            client: None,
+    pub fn new(config: CaiyunProviderConfig) -> Self {
+        Self {
+            config: config.clone(),
+            translation_service: CaiyunTranslationService {
+                token: config.token,
+                request_id: config.request_id,
+                http: HttpClient::new(
+                    config
+                        .base_url
+                        .unwrap_or_else(|| "http://api.interpreter.caiyunai.com".to_owned()),
+                    Default::default(),
+                ),
+            },
         }
     }
 }
 
-impl CaiyunProviderBuilder {
-    pub fn token(mut self, token: impl Into<String>) -> Self {
-        self.token = Some(token.into());
-        self
-    }
-
-    pub fn request_id(mut self, request_id: impl Into<String>) -> Self {
-        self.request_id = Some(request_id.into());
-        self
-    }
-
-    pub fn base_url(mut self, base_url: impl Into<String>) -> Self {
-        self.base_url = Some(base_url.into());
-        self
-    }
-
-    pub fn client(mut self, client: Client) -> Self {
-        self.client = Some(client);
-        self
-    }
-
-    pub fn build(self) -> TranslationResult<CaiyunProvider> {
-        Ok(CaiyunProvider {
-            token: self.token.ok_or_else(|| {
-                TranslationError::ConfigError("Caiyun token is required".to_owned())
-            })?,
-            request_id: self.request_id.ok_or_else(|| {
-                TranslationError::ConfigError("Caiyun request_id is required".to_owned())
-            })?,
-            http: HttpClient::new(
-                self.base_url
-                    .unwrap_or_else(|| "http://api.interpreter.caiyunai.com".to_owned()),
-                self.client.unwrap_or_default(),
-            ),
-        })
-    }
-}
-
 #[async_trait(?Send)]
-impl TranslationProvider for CaiyunProvider {
-    async fn get_supported_language_pairs(&self) -> TranslationResult<Vec<LanguagePair>> {
+impl TranslationService for CaiyunTranslationService {
+    async fn get_supported_language_pairs(&self) -> Result<Vec<LanguagePair>, TranslationError> {
         Ok(vec![
             LanguagePair {
                 source_language: Some("en".to_owned()),
@@ -99,7 +75,10 @@ impl TranslationProvider for CaiyunProvider {
         ])
     }
 
-    async fn translate(&self, request: TranslateRequest) -> TranslationResult<TranslateResponse> {
+    async fn translate(
+        &self,
+        request: TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError> {
         let trans_type = match (
             request.source_language.as_deref(),
             request.target_language.as_deref(),
@@ -131,10 +110,7 @@ impl TranslationProvider for CaiyunProvider {
             .map_err(|error| TranslationError::SerializationError(error.to_string()))?;
 
         if let Some(message) = data["message"].as_str() {
-            return Err(TranslationError::ProviderError {
-                provider: "caiyun",
-                message: message.to_owned(),
-            });
+            return Err(TranslationError::NetworkError(format!("caiyun: {message}")));
         }
 
         let translations = data["target"]
@@ -152,5 +128,19 @@ impl TranslationProvider for CaiyunProvider {
             .collect();
 
         Ok(TranslateResponse { translations })
+    }
+}
+
+impl Provider for CaiyunProvider {
+    fn name(&self) -> &'static str {
+        "caiyun"
+    }
+
+    fn config(&self) -> &dyn ProviderConfig {
+        &self.config
+    }
+
+    fn translation(&self) -> Option<&dyn TranslationService> {
+        Some(&self.translation_service)
     }
 }

@@ -1,95 +1,65 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DictionaryError, DictionaryProvider, DictionaryResult, HttpClient, LookUpRequest,
-    LookUpResponse, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
-    TranslationProvider, TranslationResult, WordDefinition, WordImage, WordPronunciation, WordTag,
+    DictionaryError, DictionaryService, HttpClient, LookUpRequest, LookUpResponse, Provider,
+    ProviderConfig, TextTranslation, WordDefinition, WordImage, WordPronunciation, WordTag,
     WordTense,
 };
-use reqwest::Client;
+use serde::Deserialize;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct YoudaoProviderConfig {
+    pub app_key: String,
+    pub app_secret: String,
+    pub base_url: Option<String>,
+    pub picture_base_url: Option<String>,
+}
+
+impl ProviderConfig for YoudaoProviderConfig {}
+
 pub struct YoudaoProvider {
+    config: YoudaoProviderConfig,
+    dictionary_service: YoudaoDictionaryService,
+}
+
+struct YoudaoDictionaryService {
     app_key: String,
     app_secret: String,
     http: HttpClient,
     picture_http: HttpClient,
 }
 
-pub struct YoudaoProviderBuilder {
-    app_key: Option<String>,
-    app_secret: Option<String>,
-    base_url: Option<String>,
-    picture_base_url: Option<String>,
-    client: Option<Client>,
-}
-
 impl YoudaoProvider {
-    pub fn builder() -> YoudaoProviderBuilder {
-        YoudaoProviderBuilder {
-            app_key: None,
-            app_secret: None,
-            base_url: None,
-            picture_base_url: None,
-            client: None,
+    pub fn new(config: YoudaoProviderConfig) -> Self {
+        let client = reqwest::Client::default();
+
+        Self {
+            config: config.clone(),
+            dictionary_service: YoudaoDictionaryService {
+                app_key: config.app_key,
+                app_secret: config.app_secret,
+                http: HttpClient::new(
+                    config
+                        .base_url
+                        .unwrap_or_else(|| "https://openapi.youdao.com".to_owned()),
+                    client.clone(),
+                ),
+                picture_http: HttpClient::new(
+                    config
+                        .picture_base_url
+                        .unwrap_or_else(|| "https://picdict.youdao.com".to_owned()),
+                    client,
+                ),
+            },
         }
     }
 }
 
-impl YoudaoProviderBuilder {
-    pub fn app_key(mut self, app_key: impl Into<String>) -> Self {
-        self.app_key = Some(app_key.into());
-        self
-    }
-
-    pub fn app_secret(mut self, app_secret: impl Into<String>) -> Self {
-        self.app_secret = Some(app_secret.into());
-        self
-    }
-
-    pub fn base_url(mut self, base_url: impl Into<String>) -> Self {
-        self.base_url = Some(base_url.into());
-        self
-    }
-
-    pub fn picture_base_url(mut self, picture_base_url: impl Into<String>) -> Self {
-        self.picture_base_url = Some(picture_base_url.into());
-        self
-    }
-
-    pub fn client(mut self, client: Client) -> Self {
-        self.client = Some(client);
-        self
-    }
-
-    pub fn build(self) -> DictionaryResult<YoudaoProvider> {
-        let client = self.client.unwrap_or_default();
-
-        Ok(YoudaoProvider {
-            app_key: self.app_key.ok_or_else(|| {
-                DictionaryError::ConfigError("Youdao app_key is required".to_owned())
-            })?,
-            app_secret: self.app_secret.ok_or_else(|| {
-                DictionaryError::ConfigError("Youdao app_secret is required".to_owned())
-            })?,
-            http: HttpClient::new(
-                self.base_url
-                    .unwrap_or_else(|| "https://openapi.youdao.com".to_owned()),
-                client.clone(),
-            ),
-            picture_http: HttpClient::new(
-                self.picture_base_url
-                    .unwrap_or_else(|| "https://picdict.youdao.com".to_owned()),
-                client,
-            ),
-        })
-    }
-}
-
 #[async_trait(?Send)]
-impl DictionaryProvider for YoudaoProvider {
-    async fn look_up(&self, request: LookUpRequest) -> DictionaryResult<LookUpResponse> {
+impl DictionaryService for YoudaoDictionaryService {
+    async fn look_up(&self, request: LookUpRequest) -> Result<LookUpResponse, DictionaryError> {
         let input = truncate_input(&request.word);
         let curtime = current_timestamp().to_string();
         let salt = format!("{:x}", md5::compute("translation_engine_youdao"));
@@ -127,10 +97,10 @@ impl DictionaryProvider for YoudaoProvider {
 
         let error_code = data["errorCode"].as_str().unwrap_or("0");
         if error_code != "0" {
-            return Err(DictionaryError::ProviderError {
-                provider: "youdao",
-                message: youdao_error_message(error_code).to_owned(),
-            });
+            return Err(DictionaryError::NetworkError(format!(
+                "youdao: {}",
+                youdao_error_message(error_code)
+            )));
         }
 
         let mut translations = data["translation"]
@@ -281,14 +251,21 @@ impl DictionaryProvider for YoudaoProvider {
     }
 }
 
-#[async_trait(?Send)]
-impl TranslationProvider for YoudaoProvider {
-    async fn translate(&self, _request: TranslateRequest) -> TranslationResult<TranslateResponse> {
-        Err(TranslationError::UnsupportedMethod("translate"))
+impl Provider for YoudaoProvider {
+    fn name(&self) -> &'static str {
+        "youdao"
+    }
+
+    fn config(&self) -> &dyn ProviderConfig {
+        &self.config
+    }
+
+    fn dictionary(&self) -> Option<&dyn DictionaryService> {
+        Some(&self.dictionary_service)
     }
 }
 
-impl YoudaoProvider {
+impl YoudaoDictionaryService {
     async fn fetch_images(&self, word: &str, language: &str) -> Option<Vec<WordImage>> {
         let response = self
             .picture_http

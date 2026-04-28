@@ -1,68 +1,53 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, HttpClient, TextDetection, TextTranslation,
-    TranslateRequest, TranslateResponse, TranslationError, TranslationProvider, TranslationResult,
+    DetectLanguageRequest, DetectLanguageResponse, HttpClient, Provider, ProviderConfig,
+    TextDetection, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
+    TranslationService,
 };
-use reqwest::Client;
+use serde::Deserialize;
 use serde_json::{json, Value};
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct GoogleProviderConfig {
+    pub api_key: String,
+    pub base_url: Option<String>,
+}
+
+impl ProviderConfig for GoogleProviderConfig {}
+
 pub struct GoogleProvider {
+    config: GoogleProviderConfig,
+    translation_service: GoogleTranslationService,
+}
+
+struct GoogleTranslationService {
     api_key: String,
     http: HttpClient,
 }
 
-pub struct GoogleProviderBuilder {
-    api_key: Option<String>,
-    base_url: Option<String>,
-    client: Option<Client>,
-}
-
 impl GoogleProvider {
-    pub fn builder() -> GoogleProviderBuilder {
-        GoogleProviderBuilder {
-            api_key: None,
-            base_url: None,
-            client: None,
+    pub fn new(config: GoogleProviderConfig) -> Self {
+        Self {
+            config: config.clone(),
+            translation_service: GoogleTranslationService {
+                api_key: config.api_key,
+                http: HttpClient::new(
+                    config
+                        .base_url
+                        .unwrap_or_else(|| "https://translation.googleapis.com".to_owned()),
+                    Default::default(),
+                ),
+            },
         }
     }
 }
 
-impl GoogleProviderBuilder {
-    pub fn api_key(mut self, api_key: impl Into<String>) -> Self {
-        self.api_key = Some(api_key.into());
-        self
-    }
-
-    pub fn base_url(mut self, base_url: impl Into<String>) -> Self {
-        self.base_url = Some(base_url.into());
-        self
-    }
-
-    pub fn client(mut self, client: Client) -> Self {
-        self.client = Some(client);
-        self
-    }
-
-    pub fn build(self) -> TranslationResult<GoogleProvider> {
-        Ok(GoogleProvider {
-            api_key: self.api_key.ok_or_else(|| {
-                TranslationError::ConfigError("Google api_key is required".to_owned())
-            })?,
-            http: HttpClient::new(
-                self.base_url
-                    .unwrap_or_else(|| "https://translation.googleapis.com".to_owned()),
-                self.client.unwrap_or_default(),
-            ),
-        })
-    }
-}
-
 #[async_trait(?Send)]
-impl TranslationProvider for GoogleProvider {
+impl TranslationService for GoogleTranslationService {
     async fn detect_language(
         &self,
         request: DetectLanguageRequest,
-    ) -> TranslationResult<DetectLanguageResponse> {
+    ) -> Result<DetectLanguageResponse, TranslationError> {
         let text = request
             .texts
             .into_iter()
@@ -105,7 +90,10 @@ impl TranslationProvider for GoogleProvider {
         })
     }
 
-    async fn translate(&self, request: TranslateRequest) -> TranslationResult<TranslateResponse> {
+    async fn translate(
+        &self,
+        request: TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError> {
         let target_language = request.target_language.ok_or_else(|| {
             TranslationError::InvalidRequest("target_language is required".to_owned())
         })?;
@@ -147,5 +135,19 @@ impl TranslationProvider for GoogleProvider {
             .collect();
 
         Ok(TranslateResponse { translations })
+    }
+}
+
+impl Provider for GoogleProvider {
+    fn name(&self) -> &'static str {
+        "google"
+    }
+
+    fn config(&self) -> &dyn ProviderConfig {
+        &self.config
+    }
+
+    fn translation(&self) -> Option<&dyn TranslationService> {
+        Some(&self.translation_service)
     }
 }

@@ -1,7 +1,8 @@
+use std::sync::Arc;
+
 use beyondtranslate_core::{
-    DictionaryService, DictionaryServiceError, LookUpRequest, LookUpResponse,
+    DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider,
 };
-use beyondtranslate_runtime::{create_dictionary, DictionaryProviderConfig};
 use worker::{Env, Request, Response};
 
 use crate::ApiError;
@@ -20,44 +21,23 @@ pub async fn handle(mut req: Request, env: Env, provider: &str) -> Result<Respon
 }
 
 struct DictionaryHandlerService {
-    inner: DictionaryService,
+    inner: Arc<dyn Provider>,
 }
 
 impl DictionaryHandlerService {
     fn from_env(env: &Env, provider: &str) -> Result<Self, ApiError> {
-        match provider {
-            "iciba" => Self::from_iciba_env(env),
-            _ => Err(ApiError::bad_request(
-                "INVALID_PROVIDER",
-                format!("Unsupported dictionary provider: {provider}"),
-            )),
-        }
-    }
-
-    fn from_iciba_env(env: &Env) -> Result<Self, ApiError> {
-        let api_key = env
-            .var("ICIBA_API_KEY")
-            .map(|value| value.to_string())
-            .map_err(|_| {
-                ApiError::internal(
-                    "INTERNAL_CONFIG_ERROR",
-                    "Missing required environment variable: ICIBA_API_KEY",
-                )
-            })?;
-
-        let base_url = env.var("ICIBA_BASE_URL").ok().map(|value| value.to_string());
-
-        let inner = create_dictionary(DictionaryProviderConfig::Iciba { api_key, base_url })
-            .map_err(ApiError::from)?;
-
+        let inner = crate::provider_registry::load_provider(env, provider)?;
         Ok(Self { inner })
     }
 
-    async fn lookup(
-        &self,
-        request: LookUpRequest,
-    ) -> Result<LookUpResponse, DictionaryServiceError> {
-        self.inner.look_up(request).await
+    async fn lookup(&self, request: LookUpRequest) -> Result<LookUpResponse, DictionaryError> {
+        self.dictionary_service()?.look_up(request).await
+    }
+
+    fn dictionary_service(&self) -> Result<&dyn DictionaryService, DictionaryError> {
+        self.inner
+            .dictionary()
+            .ok_or(DictionaryError::UnsupportedMethod("look_up"))
     }
 }
 
@@ -67,7 +47,10 @@ fn validate_request(request: LookUpRequest) -> Result<LookUpRequest, ApiError> {
     let word = request.word.trim().to_owned();
 
     if word.is_empty() {
-        return Err(ApiError::bad_request("INVALID_REQUEST", "`word` is required"));
+        return Err(ApiError::bad_request(
+            "INVALID_REQUEST",
+            "`word` is required",
+        ));
     }
 
     if source_language != "en" || target_language != "zh" {

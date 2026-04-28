@@ -1,80 +1,57 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, HttpClient, TextDetection, TextTranslation,
-    TranslateRequest, TranslateResponse, TranslationError, TranslationProvider, TranslationResult,
+    DetectLanguageRequest, DetectLanguageResponse, HttpClient, Provider, ProviderConfig,
+    TextDetection, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
+    TranslationService,
 };
 use rand::random;
-use reqwest::Client;
+use serde::Deserialize;
 use serde_json::Value;
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct BaiduProviderConfig {
+    pub app_id: String,
+    pub app_key: String,
+    pub base_url: Option<String>,
+}
+
+impl ProviderConfig for BaiduProviderConfig {}
+
 pub struct BaiduProvider {
+    config: BaiduProviderConfig,
+    translation_service: BaiduTranslationService,
+}
+
+struct BaiduTranslationService {
     app_id: String,
     app_key: String,
     http: HttpClient,
 }
 
-pub struct BaiduProviderBuilder {
-    app_id: Option<String>,
-    app_key: Option<String>,
-    base_url: Option<String>,
-    client: Option<Client>,
-}
-
 impl BaiduProvider {
-    pub fn builder() -> BaiduProviderBuilder {
-        BaiduProviderBuilder {
-            app_id: None,
-            app_key: None,
-            base_url: None,
-            client: None,
+    pub fn new(config: BaiduProviderConfig) -> Self {
+        Self {
+            config: config.clone(),
+            translation_service: BaiduTranslationService {
+                app_id: config.app_id,
+                app_key: config.app_key,
+                http: HttpClient::new(
+                    config
+                        .base_url
+                        .unwrap_or_else(|| "https://fanyi-api.baidu.com".to_owned()),
+                    Default::default(),
+                ),
+            },
         }
     }
 }
 
-impl BaiduProviderBuilder {
-    pub fn app_id(mut self, app_id: impl Into<String>) -> Self {
-        self.app_id = Some(app_id.into());
-        self
-    }
-
-    pub fn app_key(mut self, app_key: impl Into<String>) -> Self {
-        self.app_key = Some(app_key.into());
-        self
-    }
-
-    pub fn base_url(mut self, base_url: impl Into<String>) -> Self {
-        self.base_url = Some(base_url.into());
-        self
-    }
-
-    pub fn client(mut self, client: Client) -> Self {
-        self.client = Some(client);
-        self
-    }
-
-    pub fn build(self) -> TranslationResult<BaiduProvider> {
-        Ok(BaiduProvider {
-            app_id: self.app_id.ok_or_else(|| {
-                TranslationError::ConfigError("Baidu app_id is required".to_owned())
-            })?,
-            app_key: self.app_key.ok_or_else(|| {
-                TranslationError::ConfigError("Baidu app_key is required".to_owned())
-            })?,
-            http: HttpClient::new(
-                self.base_url
-                    .unwrap_or_else(|| "https://fanyi-api.baidu.com".to_owned()),
-                self.client.unwrap_or_default(),
-            ),
-        })
-    }
-}
-
 #[async_trait(?Send)]
-impl TranslationProvider for BaiduProvider {
+impl TranslationService for BaiduTranslationService {
     async fn detect_language(
         &self,
         request: DetectLanguageRequest,
-    ) -> TranslationResult<DetectLanguageResponse> {
+    ) -> Result<DetectLanguageResponse, TranslationError> {
         let text = request
             .texts
             .into_iter()
@@ -116,7 +93,10 @@ impl TranslationProvider for BaiduProvider {
         })
     }
 
-    async fn translate(&self, request: TranslateRequest) -> TranslationResult<TranslateResponse> {
+    async fn translate(
+        &self,
+        request: TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError> {
         let salt = (random::<u32>() % 999_999).to_string();
         let sign = format!(
             "{:x}",
@@ -171,6 +151,20 @@ impl TranslationProvider for BaiduProvider {
     }
 }
 
+impl Provider for BaiduProvider {
+    fn name(&self) -> &'static str {
+        "baidu"
+    }
+
+    fn config(&self) -> &dyn ProviderConfig {
+        &self.config
+    }
+
+    fn translation(&self) -> Option<&dyn TranslationService> {
+        Some(&self.translation_service)
+    }
+}
+
 fn baidu_language_code(language: Option<&str>) -> Option<&str> {
     match language {
         Some("es") => Some("spa"),
@@ -182,24 +176,22 @@ fn baidu_language_code(language: Option<&str>) -> Option<&str> {
     }
 }
 
-fn ensure_baidu_success(data: &Value) -> TranslationResult<()> {
+fn ensure_baidu_success(data: &Value) -> Result<(), TranslationError> {
     if let Some(code) = data["error_code"].as_i64() {
         if code != 0 {
             let message = data["error_msg"].as_str().unwrap_or("unknown error");
-            return Err(TranslationError::ProviderError {
-                provider: "baidu",
-                message: format!("{code}: {message}"),
-            });
+            return Err(TranslationError::NetworkError(format!(
+                "baidu: {code}: {message}"
+            )));
         }
     }
 
     if let Some(code) = data["error_code"].as_str() {
         if code != "0" {
             let message = data["error_msg"].as_str().unwrap_or("unknown error");
-            return Err(TranslationError::ProviderError {
-                provider: "baidu",
-                message: format!("{code}: {message}"),
-            });
+            return Err(TranslationError::NetworkError(format!(
+                "baidu: {code}: {message}"
+            )));
         }
     }
 

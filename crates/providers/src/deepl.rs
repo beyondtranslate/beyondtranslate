@@ -1,65 +1,51 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    HttpClient, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
-    TranslationProvider, TranslationResult,
+    HttpClient, Provider, ProviderConfig, TextTranslation, TranslateRequest, TranslateResponse,
+    TranslationError, TranslationService,
 };
-use reqwest::Client;
 use serde::Deserialize;
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct DeepLProviderConfig {
+    pub api_key: String,
+    pub base_url: Option<String>,
+}
+
+impl ProviderConfig for DeepLProviderConfig {}
+
 pub struct DeepLProvider {
+    config: DeepLProviderConfig,
+    translation_service: DeepLTranslationService,
+}
+
+struct DeepLTranslationService {
     api_key: String,
     http: HttpClient,
 }
 
-pub struct DeepLProviderBuilder {
-    api_key: Option<String>,
-    base_url: Option<String>,
-    client: Option<Client>,
-}
-
 impl DeepLProvider {
-    pub fn builder() -> DeepLProviderBuilder {
-        DeepLProviderBuilder {
-            api_key: None,
-            base_url: None,
-            client: None,
+    pub fn new(config: DeepLProviderConfig) -> Self {
+        Self {
+            config: config.clone(),
+            translation_service: DeepLTranslationService {
+                api_key: config.api_key,
+                http: HttpClient::new(
+                    config
+                        .base_url
+                        .unwrap_or_else(|| "https://api.deepl.com".to_owned()),
+                    Default::default(),
+                ),
+            },
         }
     }
 }
 
-impl DeepLProviderBuilder {
-    pub fn api_key(mut self, api_key: impl Into<String>) -> Self {
-        self.api_key = Some(api_key.into());
-        self
-    }
-
-    pub fn base_url(mut self, base_url: impl Into<String>) -> Self {
-        self.base_url = Some(base_url.into());
-        self
-    }
-
-    pub fn client(mut self, client: Client) -> Self {
-        self.client = Some(client);
-        self
-    }
-
-    pub fn build(self) -> TranslationResult<DeepLProvider> {
-        Ok(DeepLProvider {
-            api_key: self.api_key.ok_or_else(|| {
-                TranslationError::ConfigError("DeepL api_key is required".to_owned())
-            })?,
-            http: HttpClient::new(
-                self.base_url
-                    .unwrap_or_else(|| "https://api.deepl.com".to_owned()),
-                self.client.unwrap_or_default(),
-            ),
-        })
-    }
-}
-
 #[async_trait(?Send)]
-impl TranslationProvider for DeepLProvider {
-    async fn translate(&self, request: TranslateRequest) -> TranslationResult<TranslateResponse> {
+impl TranslationService for DeepLTranslationService {
+    async fn translate(
+        &self,
+        request: TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError> {
         let mut form_fields = vec![
             ("text".to_owned(), request.text),
             (
@@ -102,6 +88,20 @@ impl TranslationProvider for DeepLProvider {
             .collect();
 
         Ok(TranslateResponse { translations })
+    }
+}
+
+impl Provider for DeepLProvider {
+    fn name(&self) -> &'static str {
+        "deepl"
+    }
+
+    fn config(&self) -> &dyn ProviderConfig {
+        &self.config
+    }
+
+    fn translation(&self) -> Option<&dyn TranslationService> {
+        Some(&self.translation_service)
     }
 }
 

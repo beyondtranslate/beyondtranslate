@@ -1,66 +1,49 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DictionaryError, DictionaryProvider, DictionaryResult, HttpClient, LookUpRequest,
-    LookUpResponse, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
-    TranslationProvider, TranslationResult, WordDefinition, WordPronunciation, WordTense,
+    DictionaryError, DictionaryService, HttpClient, LookUpRequest, LookUpResponse, Provider,
+    ProviderConfig, TextTranslation, WordDefinition, WordPronunciation, WordTense,
 };
-use reqwest::Client;
+use serde::Deserialize;
 use serde_json::Value;
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct IcibaProviderConfig {
+    pub api_key: String,
+    pub base_url: Option<String>,
+}
+
+impl ProviderConfig for IcibaProviderConfig {}
+
 pub struct IcibaProvider {
+    config: IcibaProviderConfig,
+    dictionary_service: IcibaDictionaryService,
+}
+
+struct IcibaDictionaryService {
     api_key: String,
     http: HttpClient,
 }
 
-pub struct IcibaProviderBuilder {
-    api_key: Option<String>,
-    base_url: Option<String>,
-    client: Option<Client>,
-}
-
 impl IcibaProvider {
-    pub fn builder() -> IcibaProviderBuilder {
-        IcibaProviderBuilder {
-            api_key: None,
-            base_url: None,
-            client: None,
+    pub fn new(config: IcibaProviderConfig) -> Self {
+        Self {
+            config: config.clone(),
+            dictionary_service: IcibaDictionaryService {
+                api_key: config.api_key,
+                http: HttpClient::new(
+                    config
+                        .base_url
+                        .unwrap_or_else(|| "http://dict-co.iciba.com".to_owned()),
+                    Default::default(),
+                ),
+            },
         }
     }
 }
 
-impl IcibaProviderBuilder {
-    pub fn api_key(mut self, api_key: impl Into<String>) -> Self {
-        self.api_key = Some(api_key.into());
-        self
-    }
-
-    pub fn base_url(mut self, base_url: impl Into<String>) -> Self {
-        self.base_url = Some(base_url.into());
-        self
-    }
-
-    pub fn client(mut self, client: Client) -> Self {
-        self.client = Some(client);
-        self
-    }
-
-    pub fn build(self) -> DictionaryResult<IcibaProvider> {
-        Ok(IcibaProvider {
-            api_key: self.api_key.ok_or_else(|| {
-                DictionaryError::ConfigError("Iciba api_key is required".to_owned())
-            })?,
-            http: HttpClient::new(
-                self.base_url
-                    .unwrap_or_else(|| "http://dict-co.iciba.com".to_owned()),
-                self.client.unwrap_or_default(),
-            ),
-        })
-    }
-}
-
 #[async_trait(?Send)]
-impl DictionaryProvider for IcibaProvider {
-    async fn look_up(&self, request: LookUpRequest) -> DictionaryResult<LookUpResponse> {
+impl DictionaryService for IcibaDictionaryService {
+    async fn look_up(&self, request: LookUpRequest) -> Result<LookUpResponse, DictionaryError> {
         if !(request.source_language == "en" && request.target_language == "zh") {
             return Err(DictionaryError::InvalidRequest(
                 "Iciba only supports en -> zh lookup".to_owned(),
@@ -175,10 +158,9 @@ impl DictionaryProvider for IcibaProvider {
             .filter(|items| !items.is_empty());
 
         if pronunciations.is_none() && definitions.is_none() {
-            return Err(DictionaryError::ProviderError {
-                provider: "iciba",
-                message: "Resource not found.".to_owned(),
-            });
+            return Err(DictionaryError::NetworkError(
+                "iciba: Resource not found.".to_owned(),
+            ));
         }
 
         Ok(LookUpResponse {
@@ -196,10 +178,17 @@ impl DictionaryProvider for IcibaProvider {
     }
 }
 
-#[async_trait(?Send)]
-impl TranslationProvider for IcibaProvider {
-    async fn translate(&self, _request: TranslateRequest) -> TranslationResult<TranslateResponse> {
-        Err(TranslationError::UnsupportedMethod("translate"))
+impl Provider for IcibaProvider {
+    fn name(&self) -> &'static str {
+        "iciba"
+    }
+
+    fn config(&self) -> &dyn ProviderConfig {
+        &self.config
+    }
+
+    fn dictionary(&self) -> Option<&dyn DictionaryService> {
+        Some(&self.dictionary_service)
     }
 }
 

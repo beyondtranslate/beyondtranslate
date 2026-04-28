@@ -1,8 +1,9 @@
+use std::sync::Arc;
+
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, LanguagePair, TranslateRequest,
-    TranslateResponse, TranslationService, TranslationServiceError,
+    DetectLanguageRequest, DetectLanguageResponse, LanguagePair, Provider, TranslateRequest,
+    TranslateResponse, TranslationError, TranslationService,
 };
-use beyondtranslate_runtime::{create_translator, TranslationProviderConfig};
 use worker::{Env, Request, Response};
 
 use crate::ApiError;
@@ -58,64 +59,56 @@ pub async fn handle_supported_language_pairs(
 }
 
 struct TranslationHandlerService {
-    inner: TranslationService,
+    inner: Arc<dyn Provider>,
 }
 
 impl TranslationHandlerService {
-    fn from_env(_env: &Env, provider: &str) -> Result<Self, ApiError> {
-        match provider {
-            "iciba" => Self::from_iciba_env(_env),
-            _ => Err(ApiError::bad_request(
-                "INVALID_PROVIDER",
-                format!("Unsupported translation provider: {provider}"),
-            )),
-        }
-    }
-
-    fn from_iciba_env(env: &Env) -> Result<Self, ApiError> {
-        let api_key = env
-            .var("ICIBA_API_KEY")
-            .map(|value| value.to_string())
-            .map_err(|_| {
-                ApiError::internal(
-                    "INTERNAL_CONFIG_ERROR",
-                    "Missing required environment variable: ICIBA_API_KEY",
-                )
-            })?;
-
-        let base_url = env.var("ICIBA_BASE_URL").ok().map(|value| value.to_string());
-
-        let inner = create_translator(TranslationProviderConfig::Iciba { api_key, base_url })
-            .map_err(ApiError::from)?;
-
+    fn from_env(env: &Env, provider: &str) -> Result<Self, ApiError> {
+        let inner = crate::provider_registry::load_provider(env, provider)?;
         Ok(Self { inner })
     }
 
     async fn translate(
         &self,
         request: TranslateRequest,
-    ) -> Result<TranslateResponse, TranslationServiceError> {
-        self.inner.translate(request).await
+    ) -> Result<TranslateResponse, TranslationError> {
+        self.translation_service("translate")?
+            .translate(request)
+            .await
     }
 
     async fn detect_language(
         &self,
         request: DetectLanguageRequest,
-    ) -> Result<DetectLanguageResponse, TranslationServiceError> {
-        self.inner.detect_language(request).await
+    ) -> Result<DetectLanguageResponse, TranslationError> {
+        self.translation_service("detect_language")?
+            .detect_language(request)
+            .await
     }
 
-    async fn supported_language_pairs(
+    async fn supported_language_pairs(&self) -> Result<Vec<LanguagePair>, TranslationError> {
+        self.translation_service("get_supported_language_pairs")?
+            .get_supported_language_pairs()
+            .await
+    }
+
+    fn translation_service(
         &self,
-    ) -> Result<Vec<LanguagePair>, TranslationServiceError> {
-        self.inner.get_supported_language_pairs().await
+        method: &'static str,
+    ) -> Result<&dyn TranslationService, TranslationError> {
+        self.inner
+            .translation()
+            .ok_or(TranslationError::UnsupportedMethod(method))
     }
 }
 
 fn validate_request(request: TranslateRequest) -> Result<TranslateRequest, ApiError> {
     let text = request.text.trim().to_owned();
     if text.is_empty() {
-        return Err(ApiError::bad_request("INVALID_REQUEST", "`text` is required"));
+        return Err(ApiError::bad_request(
+            "INVALID_REQUEST",
+            "`text` is required",
+        ));
     }
 
     Ok(TranslateRequest {
