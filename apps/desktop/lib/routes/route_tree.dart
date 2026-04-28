@@ -24,7 +24,7 @@ class SettingsRouteTree {
   final String path = '/settings';
   final String general = '/settings/general';
   final String appearance = '/settings/appearance';
-  final String keybinds = '/settings/keybinds';
+  final String shortcuts = '/settings/shortcuts';
   final String advanced = '/settings/advanced';
   final String ocrEnginesManage = '/settings/ocr-engines';
   final String translationEnginesManage = '/settings/translation-engines';
@@ -73,8 +73,8 @@ final List<RouteNode> routeNodes = <RouteNode>[
     parentId: 'settings',
   ),
   RouteNode(
-    id: 'settings-keybinds',
-    path: RouteTree.settings.keybinds,
+    id: 'settings-shortcuts',
+    path: RouteTree.settings.shortcuts,
     parentId: 'settings',
   ),
   RouteNode(

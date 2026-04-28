@@ -12,14 +12,14 @@ import '../../widgets/preference_list/preference_list_item.dart';
 import '../../widgets/preference_list/preference_list_section.dart';
 import '../../widgets/record_shortcut_dialog/record_shortcut_dialog.dart';
 
-class KeybindsSettingsPage extends StatefulWidget {
-  const KeybindsSettingsPage({super.key});
+class ShortcutsSettingsPage extends StatefulWidget {
+  const ShortcutsSettingsPage({super.key});
 
   @override
-  State<KeybindsSettingsPage> createState() => _KeybindsSettingsPageState();
+  State<ShortcutsSettingsPage> createState() => _ShortcutsSettingsPageState();
 }
 
-class _KeybindsSettingsPageState extends State<KeybindsSettingsPage> {
+class _ShortcutsSettingsPageState extends State<ShortcutsSettingsPage> {
   Configuration get _configuration => localDb.configuration;
 
   @override

@@ -22,12 +22,19 @@
 
 /* Begin PBXBuildFile section */
 		0135BD1CECDB3B64D190C611 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 921317546F1323EEECD70938 /* Pods_RunnerTests.framework */; };
+		2A0D6A402E0A100100A1B2C3 /* NativeSettingsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */; };
+		8F1000012E0A100100A1B2C3 /* SettingsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000112E0A100100A1B2C3 /* SettingsModels.swift */; };
+		8F1000022E0A100100A1B2C3 /* SettingsSectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000122E0A100100A1B2C3 /* SettingsSectionViews.swift */; };
+		8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000132E0A100100A1B2C3 /* SettingsView.swift */; };
+		8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */; };
+		8F1000052E0A100100A1B2C3 /* ActionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000152E0A100100A1B2C3 /* ActionRow.swift */; };
+		8F1000062E0A100100A1B2C3 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000162E0A100100A1B2C3 /* SettingsPage.swift */; };
+		8F1000072E0A100100A1B2C3 /* ShortcutRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000172E0A100100A1B2C3 /* ShortcutRow.swift */; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
 		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
-		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
 		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
 		B6867768A75CBFFF8FFDC94A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
@@ -63,6 +70,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeSettingsPlugin.swift; sourceTree = "<group>"; };
+		8F1000112E0A100100A1B2C3 /* SettingsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; };
+		8F1000122E0A100100A1B2C3 /* SettingsSectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSectionViews.swift; sourceTree = "<group>"; };
+		8F1000132E0A100100A1B2C3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		8F1000152E0A100100A1B2C3 /* ActionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionRow.swift; sourceTree = "<group>"; };
+		8F1000162E0A100100A1B2C3 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
+		8F1000172E0A100100A1B2C3 /* ShortcutRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRow.swift; sourceTree = "<group>"; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
@@ -72,7 +87,6 @@
 		33CC10F22044A3C60003C045 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Runner/Assets.xcassets; sourceTree = "<group>"; };
 		33CC10F52044A3C60003C045 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		33CC10F72044A3C60003C045 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Runner/Info.plist; sourceTree = "<group>"; };
-		33CC11122044BFA00003C045 /* MainFlutterWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFlutterWindow.swift; sourceTree = "<group>"; };
 		33CEB47222A05771004F2AC0 /* Flutter-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Flutter-Debug.xcconfig"; sourceTree = "<group>"; };
 		33CEB47422A05771004F2AC0 /* Flutter-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Flutter-Release.xcconfig"; sourceTree = "<group>"; };
 		33CEB47722A0578A004F2AC0 /* Flutter-Generated.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Flutter-Generated.xcconfig"; path = "ephemeral/Flutter-Generated.xcconfig"; sourceTree = "<group>"; };
@@ -113,6 +127,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A0D6A3B2E0A100100A1B2C3 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				2A0D6A3C2E0A100100A1B2C3 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		2A0D6A3C2E0A100100A1B2C3 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8F1000112E0A100100A1B2C3 /* SettingsModels.swift */,
+				8F1000122E0A100100A1B2C3 /* SettingsSectionViews.swift */,
+				8F1000132E0A100100A1B2C3 /* SettingsView.swift */,
+				8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		2A0D6A3F2E0A100100A1B2C3 /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */,
+			);
+			path = Plugins;
+			sourceTree = "<group>";
+		};
+		8F1000102E0A100100A1B2C3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8F1000152E0A100100A1B2C3 /* ActionRow.swift */,
+				8F1000162E0A100100A1B2C3 /* SettingsPage.swift */,
+				8F1000172E0A100100A1B2C3 /* ShortcutRow.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		331C80D6294CF71000263BE5 /* RunnerTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,7 +231,9 @@
 			isa = PBXGroup;
 			children = (
 				33CC10F02044A3C60003C045 /* AppDelegate.swift */,
-				33CC11122044BFA00003C045 /* MainFlutterWindow.swift */,
+				2A0D6A3F2E0A100100A1B2C3 /* Plugins */,
+				2A0D6A3B2E0A100100A1B2C3 /* Features */,
+				8F1000102E0A100100A1B2C3 /* Views */,
 				33E51913231747F40026EE4D /* DebugProfile.entitlements */,
 				33E51914231749380026EE4D /* Release.entitlements */,
 				33CC11242044D66E0003C045 /* Resources */,
@@ -447,7 +500,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */,
+				2A0D6A402E0A100100A1B2C3 /* NativeSettingsPlugin.swift in Sources */,
+				8F1000012E0A100100A1B2C3 /* SettingsModels.swift in Sources */,
+				8F1000022E0A100100A1B2C3 /* SettingsSectionViews.swift in Sources */,
+				8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */,
+				8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */,
+				8F1000052E0A100100A1B2C3 /* ActionRow.swift in Sources */,
+				8F1000062E0A100100A1B2C3 /* SettingsPage.swift in Sources */,
+				8F1000072E0A100100A1B2C3 /* ShortcutRow.swift in Sources */,
 				33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */,
 				335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */,
 			);
@@ -567,7 +627,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -649,7 +709,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -699,7 +759,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;

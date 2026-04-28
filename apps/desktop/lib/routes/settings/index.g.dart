@@ -22,8 +22,8 @@ RouteBase get $settingsShellRoute => ShellRouteData.$route(
           factory: $AppearanceSettingsRoute._fromState,
         ),
         GoRouteData.$route(
-          path: '/settings/keybinds',
-          factory: $KeybindsSettingsRoute._fromState,
+          path: '/settings/shortcuts',
+          factory: $ShortcutsSettingsRoute._fromState,
         ),
         GoRouteData.$route(
           path: '/settings/advanced',
@@ -83,13 +83,13 @@ mixin $AppearanceSettingsRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin $KeybindsSettingsRoute on GoRouteData {
-  static KeybindsSettingsRoute _fromState(GoRouterState state) =>
-      const KeybindsSettingsRoute();
+mixin $ShortcutsSettingsRoute on GoRouteData {
+  static ShortcutsSettingsRoute _fromState(GoRouterState state) =>
+      const ShortcutsSettingsRoute();
 
   @override
   String get location => GoRouteData.$location(
-        '/settings/keybinds',
+        '/settings/shortcuts',
       );
 
   @override

@@ -8,7 +8,7 @@ import '../../widgets/custom_app_bar/custom_app_bar.dart';
 import 'advanced.dart';
 import 'appearance.dart';
 import 'general.dart';
-import 'keybinds.dart';
+import 'shortcuts.dart';
 
 part 'index.g.dart';
 
@@ -16,7 +16,7 @@ part 'index.g.dart';
   routes: <TypedRoute<RouteData>>[
     TypedGoRoute<GeneralSettingsRoute>(path: '/settings/general'),
     TypedGoRoute<AppearanceSettingsRoute>(path: '/settings/appearance'),
-    TypedGoRoute<KeybindsSettingsRoute>(path: '/settings/keybinds'),
+    TypedGoRoute<ShortcutsSettingsRoute>(path: '/settings/shortcuts'),
     TypedGoRoute<AdvancedSettingsRoute>(path: '/settings/advanced'),
   ],
 )
@@ -51,12 +51,12 @@ class AppearanceSettingsRoute extends GoRouteData
   }
 }
 
-class KeybindsSettingsRoute extends GoRouteData with $KeybindsSettingsRoute {
-  const KeybindsSettingsRoute();
+class ShortcutsSettingsRoute extends GoRouteData with $ShortcutsSettingsRoute {
+  const ShortcutsSettingsRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const KeybindsSettingsPage();
+    return const ShortcutsSettingsPage();
   }
 }
 
@@ -72,15 +72,15 @@ class AdvancedSettingsRoute extends GoRouteData with $AdvancedSettingsRoute {
 enum _SettingsCategory {
   general,
   appearance,
-  keybinds,
+  shortcuts,
   advanced;
 
   static _SettingsCategory fromLocation(String location) {
     if (location.startsWith('/settings/appearance')) {
       return _SettingsCategory.appearance;
     }
-    if (location.startsWith('/settings/keybinds')) {
-      return _SettingsCategory.keybinds;
+    if (location.startsWith('/settings/shortcuts')) {
+      return _SettingsCategory.shortcuts;
     }
     if (location.startsWith('/settings/advanced')) {
       return _SettingsCategory.advanced;
@@ -104,8 +104,8 @@ class _SettingsShellPage extends StatelessWidget {
         const GeneralSettingsRoute().go(context);
       case _SettingsCategory.appearance:
         const AppearanceSettingsRoute().go(context);
-      case _SettingsCategory.keybinds:
-        const KeybindsSettingsRoute().go(context);
+      case _SettingsCategory.shortcuts:
+        const ShortcutsSettingsRoute().go(context);
       case _SettingsCategory.advanced:
         const AdvancedSettingsRoute().go(context);
     }
@@ -215,7 +215,7 @@ class _SettingsShellPage extends StatelessWidget {
                 ),
                 _buildSidebarItem(
                   context,
-                  category: _SettingsCategory.keybinds,
+                  category: _SettingsCategory.shortcuts,
                   icon: FluentIcons.keyboard_20_regular,
                   title: t.page_settings.pref_section_title_shortcuts,
                 ),
@@ -267,7 +267,7 @@ class _SettingsShellPage extends StatelessWidget {
           ),
           _buildCompactSidebarItem(
             context,
-            category: _SettingsCategory.keybinds,
+            category: _SettingsCategory.shortcuts,
             icon: FluentIcons.keyboard_20_regular,
             title: t.page_settings.pref_section_title_shortcuts,
           ),

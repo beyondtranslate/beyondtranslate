@@ -265,8 +265,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     if (_trayIconImage != null) {
       _trayIcon!.icon = _trayIconImage;
     }
-    _trayIcon!.title = t.app_name;
-    _trayIcon!.tooltip = t.app_name;
     _trayIcon!.contextMenuTrigger = nativeapi.ContextMenuTrigger.none;
     _trayIcon!.on<nativeapi.TrayIconClickedEvent>((event) {
       _handleTrayIconMouseDown();

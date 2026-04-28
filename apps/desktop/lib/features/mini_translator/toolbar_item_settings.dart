@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
+import '../settings/native_settings.dart';
 import '../../widgets/ui/button.dart';
 import '../../windowing/window_controllers.dart';
 
@@ -26,6 +29,12 @@ class ToolbarItemSettings extends StatelessWidget {
           color: Theme.of(context).iconTheme.color,
         ),
         onPressed: () async {
+          if (Platform.isMacOS) {
+            await NativeSettings.show();
+            onSubPageDismissed();
+            return;
+          }
+
           final mainWindow = mainWindowController.window;
           mainWindow.show();
           mainWindow.focus();
