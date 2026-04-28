@@ -265,6 +265,7 @@
     "pref_item_title_submit_with_meta_enter": "用 Ctrl + Enter 提交",
     "pref_item_title_submit_with_meta_enter_mac": "用 ⌘ + Enter 提交",
     "pref_item_title_launch_at_startup": "登录时启动",
+    "pref_item_title_runtime_debug": "Runtime 调试",
     "pref_item_title_engines": "文本翻译",
     "pref_item_title_ocr_engines": "文字识别",
     "pref_item_title_about": "关于比译",
@@ -272,6 +273,29 @@
     "exit_app_dialog": {
       "title": "您确定要退出吗？"
     }
+  },
+  "page_runtime_debug": {
+    "title": "Runtime 调试",
+    "description": "通过桌面端直接调用 Rust runtime，验证 flutter_rust_bridge 集成是否正常。",
+    "mac_only_note": "该验证页当前以 macOS 为主，其他桌面平台即使可以编译，也不在本次验证范围内。",
+    "provider_section_title": "Provider",
+    "provider_config_label": "Provider 配置 YAML",
+    "request_section_title": "请求",
+    "source_language_label": "源语言（可选）",
+    "target_language_label": "目标语言",
+    "text_label": "文本",
+    "word_label": "单词",
+    "submit": "使用 Rust runtime 翻译",
+    "lookup_submit": "使用 Rust runtime 查词",
+    "result_idle": "结果",
+    "result_idle_description": "提交一次请求后，这里会展示 Rust runtime 的响应。",
+    "result_success": "Rust runtime 响应",
+    "result_error": "Rust runtime 错误",
+    "validation_provider_config_required": "必须填写 Provider 配置 YAML",
+    "validation_source_language_required": "必须填写源语言",
+    "validation_target_language_required": "必须填写目标语言",
+    "validation_text_required": "必须填写文本",
+    "validation_word_required": "必须填写单词"
   },
   "page_translation_engine_chooser": {
     "title": "文本翻译引擎",

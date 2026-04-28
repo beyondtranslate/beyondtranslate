@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:beyondtranslate_desktop/src/rust/frb_generated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/_window.dart';
 import 'package:go_router/go_router.dart';
@@ -92,6 +93,7 @@ class _MainAppState extends State<MainApp> {
 
 Future<void> _ensureInitialized() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await RustLib.init();
 
   if (kIsMacOS || kIsWindows) {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();

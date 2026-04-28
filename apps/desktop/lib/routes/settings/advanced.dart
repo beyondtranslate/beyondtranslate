@@ -5,6 +5,7 @@ import '../../i18n/i18n.dart';
 import '../../widgets/preference_list/preference_list.dart';
 import '../../widgets/preference_list/preference_list_item.dart';
 import '../../widgets/preference_list/preference_list_section.dart';
+import 'index.dart';
 
 class AdvancedSettingsPage extends StatefulWidget {
   const AdvancedSettingsPage({super.key});
@@ -85,6 +86,11 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               title: Text(t.page_settings.pref_item_title_launch_at_startup),
               value: _launchAtStartupEnabled ?? false,
               onChanged: _loading ? (_) {} : _handleLaunchAtStartupChanged,
+            ),
+            PreferenceListItem(
+              title: Text(t.page_settings.pref_item_title_runtime_debug),
+              summary: Text(t.page_runtime_debug.description),
+              onTap: () => const RuntimeDebugRoute().push(context),
             ),
           ],
         ),

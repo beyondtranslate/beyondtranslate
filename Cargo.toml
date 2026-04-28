@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "apps/api",
+    "apps/desktop/rust",
     "crates/core",
     "crates/providers",
     "crates/runtime",

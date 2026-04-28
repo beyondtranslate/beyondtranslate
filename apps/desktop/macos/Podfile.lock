@@ -1,6 +1,8 @@
 PODS:
   - audioplayers_darwin (0.0.1):
     - FlutterMacOS
+  - beyondtranslate_desktop_rust (0.0.1):
+    - FlutterMacOS
   - clipboard_watcher (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
@@ -23,6 +25,7 @@ PODS:
 
 DEPENDENCIES:
   - audioplayers_darwin (from `Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos`)
+  - beyondtranslate_desktop_rust (from `Flutter/ephemeral/.symlinks/plugins/beyondtranslate_desktop_rust/macos`)
   - clipboard_watcher (from `Flutter/ephemeral/.symlinks/plugins/clipboard_watcher/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - hotkey_manager_macos (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos`)
@@ -40,6 +43,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   audioplayers_darwin:
     :path: Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos
+  beyondtranslate_desktop_rust:
+    :path: Flutter/ephemeral/.symlinks/plugins/beyondtranslate_desktop_rust/macos
   clipboard_watcher:
     :path: Flutter/ephemeral/.symlinks/plugins/clipboard_watcher/macos
   FlutterMacOS:
@@ -61,6 +66,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audioplayers_darwin: 761f2948df701d05b5db603220c384fb55720012
+  beyondtranslate_desktop_rust: 918b6dec77c455296c1165a8843e7b0ae6a2bdf1
   clipboard_watcher: e9c9d88b3aea4889fe80025037e690e73600b160
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
   HotKey: 400beb7caa29054ea8d864c96f5ba7e5b4852277

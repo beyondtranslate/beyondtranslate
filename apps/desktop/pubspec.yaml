@@ -53,6 +53,9 @@ dependencies:
   unified_persistence: ^0.0.2
   vclibs: ^0.1.0
   nativeapi: ^0.1.0
+  beyondtranslate_desktop_rust:
+    path: rust_builder
+  flutter_rust_bridge: 2.11.1
 
 dev_dependencies:
   build_runner: ^2.10.1

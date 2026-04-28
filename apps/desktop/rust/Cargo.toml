@@ -1,0 +1,18 @@
+[package]
+name = "beyondtranslate_desktop_rust"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+beyondtranslate-core = { path = "../../../crates/core" }
+beyondtranslate-runtime = { path = "../../../crates/runtime", features = ["deepl", "google", "iciba"] }
+flutter_rust_bridge = "=2.11.1"
+serde.workspace = true
+serde_yaml.workspace = true
+tokio.workspace = true
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

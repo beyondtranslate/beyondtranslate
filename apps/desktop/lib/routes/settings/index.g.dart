@@ -29,6 +29,10 @@ RouteBase get $settingsShellRoute => ShellRouteData.$route(
           path: '/settings/advanced',
           factory: $AdvancedSettingsRoute._fromState,
         ),
+        GoRouteData.$route(
+          path: '/settings/runtime-debug',
+          factory: $RuntimeDebugRoute._fromState,
+        ),
       ],
     );
 
@@ -113,6 +117,29 @@ mixin $AdvancedSettingsRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
         '/settings/advanced',
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $RuntimeDebugRoute on GoRouteData {
+  static RuntimeDebugRoute _fromState(GoRouterState state) =>
+      const RuntimeDebugRoute();
+
+  @override
+  String get location => GoRouteData.$location(
+        '/settings/runtime-debug',
       );
 
   @override

@@ -265,6 +265,7 @@
     "pref_item_title_submit_with_meta_enter": "Submit with Ctrl + Enter",
     "pref_item_title_submit_with_meta_enter_mac": "Submit with ⌘ + Enter",
     "pref_item_title_launch_at_startup": "Launch when you log in",
+    "pref_item_title_runtime_debug": "Runtime Debug",
     "pref_item_title_engines": "Text Translation",
     "pref_item_title_ocr_engines": "Text Detection",
     "pref_item_title_about": "About Biyi",
@@ -272,6 +273,29 @@
     "exit_app_dialog": {
       "title": "Are you sure you want to exit?"
     }
+  },
+  "page_runtime_debug": {
+    "title": "Runtime Debug",
+    "description": "Validate flutter_rust_bridge by calling the Rust runtime directly from desktop.",
+    "mac_only_note": "This validation page is planned for macOS first. Other desktop platforms may compile but are not part of this verification scope.",
+    "provider_section_title": "Provider",
+    "provider_config_label": "Provider config YAML",
+    "request_section_title": "Request",
+    "source_language_label": "Source language (optional)",
+    "target_language_label": "Target language",
+    "text_label": "Text",
+    "word_label": "Word",
+    "submit": "Translate with Rust runtime",
+    "lookup_submit": "Look up with Rust runtime",
+    "result_idle": "Result",
+    "result_idle_description": "Submit a request to inspect the Rust runtime response here.",
+    "result_success": "Rust runtime response",
+    "result_error": "Rust runtime error",
+    "validation_provider_config_required": "Provider config YAML is required",
+    "validation_source_language_required": "Source language is required",
+    "validation_target_language_required": "Target language is required",
+    "validation_text_required": "Text is required",
+    "validation_word_required": "Word is required"
   },
   "page_translation_engine_chooser": {
     "title": "Text Translation Engine",
