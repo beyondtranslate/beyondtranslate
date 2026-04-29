@@ -1,4 +1,4 @@
-import '../src/rust/api/simple.dart';
+import '../rust/api/simple.dart';
 
 class RustRuntimeDebugService {
   const RustRuntimeDebugService();

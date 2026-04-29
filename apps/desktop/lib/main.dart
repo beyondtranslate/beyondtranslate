@@ -10,18 +10,18 @@ import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 
-import './i18n/i18n.dart';
-import './routes/app_router.dart';
-import './routes/settings/index.dart';
-import './services/local_db/configuration.dart';
-import './services/local_db/local_db.dart';
-import './themes/dark_theme.dart';
-import './themes/light_theme.dart';
-import './utils/env.dart';
-import './utils/language_util.dart';
-import './utils/platform_util.dart';
-import 'features/mini_translator/mini_translator_app.dart';
-import 'windowing/window_controllers.dart';
+import 'src/features/mini_translator/mini_translator_app.dart';
+import 'src/i18n/i18n.dart';
+import 'src/routes/app_router.dart';
+import 'src/routes/settings/index.dart';
+import 'src/services/local_db/configuration.dart';
+import 'src/services/local_db/local_db.dart';
+import 'src/themes/dark_theme.dart';
+import 'src/themes/light_theme.dart';
+import 'src/utils/env.dart';
+import 'src/utils/language_util.dart';
+import 'src/utils/platform_util.dart';
+import 'src/windowing/window_controllers.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});

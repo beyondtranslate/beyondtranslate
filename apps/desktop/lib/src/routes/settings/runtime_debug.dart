@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../i18n/i18n.dart';
+import '../../rust/api/simple.dart';
 import '../../services/rust_runtime_debug_service.dart';
-import '../../src/rust/api/simple.dart';
 import '../../utils/platform_util.dart';
 import '../../widgets/ui/button.dart';
 
