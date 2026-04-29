@@ -1,9 +1,9 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DictionaryError, DictionaryService, HttpClient, LookUpRequest, LookUpResponse, Provider,
-    ProviderConfig, TextTranslation, WordDefinition, WordImage, WordPronunciation, WordTag,
-    WordTense,
+    DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider, ProviderConfig,
+    TextTranslation, WordDefinition, WordImage, WordPronunciation, WordTag, WordTense,
 };
+use crate::common::http_client::HttpClient;
 use serde::Deserialize;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
@@ -32,10 +32,16 @@ struct YoudaoDictionaryService {
 }
 
 impl YoudaoProvider {
-    pub fn new(config: YoudaoProviderConfig) -> Self {
+    pub fn new(config: YoudaoProviderConfig) -> Result<Self, String> {
+        if config.app_key.trim().is_empty() {
+            return Err("app_key must not be empty".to_owned());
+        }
+        if config.app_secret.trim().is_empty() {
+            return Err("app_secret must not be empty".to_owned());
+        }
         let client = reqwest::Client::default();
 
-        Self {
+        Ok(Self {
             config: config.clone(),
             dictionary_service: YoudaoDictionaryService {
                 app_key: config.app_key,
@@ -53,7 +59,7 @@ impl YoudaoProvider {
                     client,
                 ),
             },
-        }
+        })
     }
 }
 

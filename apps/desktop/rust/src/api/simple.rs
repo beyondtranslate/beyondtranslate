@@ -72,13 +72,10 @@ async fn translate_with_runtime_impl(
     }
 
     let provider_config = parse_provider_config(&request.provider_config_yaml)?;
-    let registry = load_runtime_registry(&provider_type, provider_config)?;
-    let provider = registry
-        .require(&provider_type)
+    let engine = load_engine(&provider_type, provider_config)?;
+    let translation_service = engine
+        .translation(&provider_type)
         .map_err(|error| error.to_string())?;
-    let translation_service = provider
-        .translation()
-        .ok_or_else(|| format!("provider `{provider_type}` does not support translation"))?;
 
     let response = translation_service
         .translate(TranslateRequest {
@@ -130,13 +127,10 @@ async fn lookup_with_runtime_impl(
     }
 
     let provider_config = parse_provider_config(&request.provider_config_yaml)?;
-    let registry = load_runtime_registry(&provider_type, provider_config)?;
-    let provider = registry
-        .require(&provider_type)
+    let engine = load_engine(&provider_type, provider_config)?;
+    let dictionary_service = engine
+        .dictionary(&provider_type)
         .map_err(|error| error.to_string())?;
-    let dictionary_service = provider
-        .dictionary()
-        .ok_or_else(|| format!("provider `{provider_type}` does not support dictionary lookup"))?;
 
     let response = dictionary_service
         .look_up(LookUpRequest {
@@ -222,10 +216,10 @@ fn parse_provider_config(input: &str) -> Result<Value, String> {
     }
 }
 
-fn load_runtime_registry(
+fn load_engine(
     provider_type: &str,
     provider_config: Value,
-) -> Result<beyondtranslate_runtime::ProviderRegistry, String> {
+) -> Result<beyondtranslate_engine::Engine, String> {
     let mut providers = Mapping::new();
     providers.insert(Value::String(provider_type.to_owned()), provider_config);
 
@@ -235,7 +229,7 @@ fn load_runtime_registry(
     let config_yaml = serde_yaml::to_string(&root)
         .map_err(|error| format!("failed to encode runtime config yaml: {error}"))?;
 
-    beyondtranslate_runtime::from_yaml_str(&config_yaml).map_err(|error| error.to_string())
+    beyondtranslate_engine::from_yaml_str(&config_yaml).map_err(|error| error.to_string())
 }
 
 async fn run_on_worker_thread<F, Fut, T>(task: F) -> Result<T, String>
@@ -247,7 +241,7 @@ where
     let (sender, receiver) = oneshot::channel();
 
     thread::Builder::new()
-        .name("beyondtranslate-runtime-bridge".to_owned())
+        .name("beyondtranslate-engine-bridge".to_owned())
         .spawn(move || {
             let result = tokio::runtime::Builder::new_current_thread()
                 .enable_all()
@@ -278,12 +272,12 @@ mod tests {
     }
 
     #[test]
-    fn load_runtime_registry_registers_provider() {
-        let registry =
-            load_runtime_registry("deepl", parse_provider_config("api_key: test-key").unwrap())
+    fn load_engine_registers_provider() {
+        let engine =
+            load_engine("deepl", parse_provider_config("api_key: test-key").unwrap())
                 .unwrap();
 
-        assert_eq!(registry.names(), vec!["deepl"]);
+        assert_eq!(engine.names(), vec!["deepl"]);
     }
 
     #[test]

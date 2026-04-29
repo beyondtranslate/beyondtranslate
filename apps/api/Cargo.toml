@@ -10,7 +10,7 @@ crate-type = ["cdylib"]
 worker = "0.8"
 console_error_panic_hook = "0.1.7"
 beyondtranslate-core = { path = "../../crates/core" }
-beyondtranslate-runtime = { path = "../../crates/runtime", features = ["iciba"] }
+beyondtranslate-engine = { path = "../../crates/engine", features = ["iciba"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
 serde_yaml.workspace = true

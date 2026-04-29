@@ -1,8 +1,9 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    HttpClient, Provider, ProviderConfig, TextTranslation, TranslateRequest, TranslateResponse,
+    Provider, ProviderConfig, TextTranslation, TranslateRequest, TranslateResponse,
     TranslationError, TranslationService,
 };
+use crate::common::http_client::HttpClient;
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]
@@ -24,8 +25,11 @@ struct DeepLTranslationService {
 }
 
 impl DeepLProvider {
-    pub fn new(config: DeepLProviderConfig) -> Self {
-        Self {
+    pub fn new(config: DeepLProviderConfig) -> Result<Self, String> {
+        if config.api_key.trim().is_empty() {
+            return Err("api_key must not be empty".to_owned());
+        }
+        Ok(Self {
             config: config.clone(),
             translation_service: DeepLTranslationService {
                 api_key: config.api_key,
@@ -36,7 +40,7 @@ impl DeepLProvider {
                     Default::default(),
                 ),
             },
-        }
+        })
     }
 }
 

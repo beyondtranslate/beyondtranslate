@@ -1,5 +1,5 @@
 [package]
-name = "beyondtranslate-providers"
+name = "beyondtranslate-engine"
 version = "0.1.0"
 edition = "2021"
 
@@ -14,7 +14,7 @@ tencent = []
 youdao = []
 
 [dependencies]
-beyondtranslate-core = { path = "../core", default-features = false }
+beyondtranslate-core = { path = "../core" }
 async-trait.workspace = true
 base64.workspace = true
 getrandom.workspace = true
@@ -24,5 +24,10 @@ rand.workspace = true
 reqwest.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+serde_yaml.workspace = true
 sha1.workspace = true
 sha2.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true

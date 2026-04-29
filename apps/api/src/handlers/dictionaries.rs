@@ -1,9 +1,9 @@
-use beyondtranslate_core::{DictionaryError, LookUpRequest};
+use beyondtranslate_core::LookUpRequest;
 use worker::{Env, Request, Response};
 
 use crate::{
     error::{json_ok, ApiError},
-    services::provider_registry,
+    services::engine,
     utils,
 };
 
@@ -14,10 +14,8 @@ pub async fn lookup(mut req: Request, env: Env, provider: &str) -> Result<Respon
         .map_err(|error| ApiError::bad_request("INVALID_JSON", error.to_string()))?;
     let request = validate_lookup_request(request)?;
 
-    let provider = provider_registry::load_provider(&env, provider)?;
-    let service = provider
-        .dictionary()
-        .ok_or_else(|| ApiError::from(DictionaryError::UnsupportedMethod("look_up")))?;
+    let engine = engine::load_engine(&env)?;
+    let service = engine.dictionary(provider).map_err(engine::to_api_error)?;
     let response = service.look_up(request).await.map_err(ApiError::from)?;
 
     json_ok(&response).map_err(ApiError::from_worker_error)

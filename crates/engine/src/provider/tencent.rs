@@ -1,10 +1,11 @@
 use async_trait::async_trait;
 use base64::{engine::general_purpose::STANDARD, Engine as _};
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, HttpClient, Provider, ProviderConfig,
+    DetectLanguageRequest, DetectLanguageResponse, Provider, ProviderConfig,
     TextDetection, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
     TranslationService,
 };
+use crate::common::http_client::HttpClient;
 use hmac::{Hmac, Mac};
 use rand::random;
 use reqwest::Url;
@@ -37,8 +38,14 @@ struct TencentTranslationService {
 }
 
 impl TencentProvider {
-    pub fn new(config: TencentProviderConfig) -> Self {
-        Self {
+    pub fn new(config: TencentProviderConfig) -> Result<Self, String> {
+        if config.secret_id.trim().is_empty() {
+            return Err("secret_id must not be empty".to_owned());
+        }
+        if config.secret_key.trim().is_empty() {
+            return Err("secret_key must not be empty".to_owned());
+        }
+        Ok(Self {
             config: config.clone(),
             translation_service: TencentTranslationService {
                 secret_id: config.secret_id,
@@ -50,7 +57,7 @@ impl TencentProvider {
                     Default::default(),
                 ),
             },
-        }
+        })
     }
 }
 

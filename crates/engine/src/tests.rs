@@ -3,7 +3,7 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
-use crate::{from_yaml_str, load_from_file, RuntimeError};
+use crate::{from_yaml_str, load_from_file, EngineError};
 
 #[test]
 fn loads_configured_provider() {
@@ -19,7 +19,7 @@ providers:
     assert_eq!(registry.names(), vec!["deepl"]);
     let provider = registry.require("deepl").expect("deepl provider");
     assert_eq!(provider.name(), "deepl");
-    assert!(registry.get("missing").is_none());
+    assert!(registry.require("missing").is_err());
 }
 
 #[cfg(feature = "iciba")]
@@ -50,7 +50,7 @@ providers:
     )
     .expect_err("unknown provider should fail");
 
-    assert!(matches!(error, RuntimeError::UnknownProvider(name) if name == "unknown"));
+    assert!(matches!(error, EngineError::UnknownProvider(name) if name == "unknown"));
 }
 
 #[test]
@@ -66,7 +66,25 @@ providers:
 
     assert!(matches!(
         error,
-        RuntimeError::InvalidProviderConfig { provider, .. } if provider == "deepl"
+        EngineError::InvalidProviderConfig { provider, .. } if provider == "deepl"
+    ));
+}
+
+#[test]
+fn rejects_empty_api_key() {
+    let error = from_yaml_str(
+        r#"
+providers:
+  deepl:
+    api_key: ""
+"#,
+    )
+    .expect_err("empty api_key should fail");
+
+    assert!(matches!(
+        error,
+        EngineError::ConfigValidationFailed { ref provider, ref reason }
+            if provider == "deepl" && reason == "api_key must not be empty"
     ));
 }
 
@@ -74,7 +92,7 @@ providers:
 fn rejects_invalid_yaml() {
     let error = from_yaml_str("providers: [").expect_err("invalid yaml should fail");
 
-    assert!(matches!(error, RuntimeError::ParseConfig(_)));
+    assert!(matches!(error, EngineError::ParseConfig(_)));
 }
 
 #[test]
@@ -83,7 +101,7 @@ fn reads_yaml_from_file() {
         .duration_since(UNIX_EPOCH)
         .expect("valid time")
         .as_nanos();
-    let path = env::temp_dir().join(format!("beyondtranslate-runtime-{suffix}.yaml"));
+    let path = env::temp_dir().join(format!("beyondtranslate-engine-{suffix}.yaml"));
     fs::write(
         &path,
         r#"
@@ -105,14 +123,15 @@ fn errors_when_feature_is_disabled() {
     let error = from_yaml_str(
         r#"
 providers:
-  google:
-    api_key: test-key
+  baidu:
+    app_id: test-id
+    app_key: test-key
 "#,
     )
     .expect_err("disabled provider should fail");
 
     assert!(matches!(
         error,
-        RuntimeError::ProviderNotEnabled(name) if name == "google"
+        EngineError::ProviderNotEnabled(name) if name == "baidu"
     ));
 }

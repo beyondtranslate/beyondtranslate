@@ -1,9 +1,10 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, HttpClient, Provider, ProviderConfig,
-    TextDetection, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
-    TranslationService,
+    DetectLanguageRequest, DetectLanguageResponse, Provider, ProviderConfig, TextDetection,
+    TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
 };
+
+use crate::common::http_client::HttpClient;
 use serde::Deserialize;
 use serde_json::{json, Value};
 
@@ -26,8 +27,11 @@ struct GoogleTranslationService {
 }
 
 impl GoogleProvider {
-    pub fn new(config: GoogleProviderConfig) -> Self {
-        Self {
+    pub fn new(config: GoogleProviderConfig) -> Result<Self, String> {
+        if config.api_key.trim().is_empty() {
+            return Err("api_key must not be empty".to_owned());
+        }
+        Ok(Self {
             config: config.clone(),
             translation_service: GoogleTranslationService {
                 api_key: config.api_key,
@@ -38,7 +42,7 @@ impl GoogleProvider {
                     Default::default(),
                 ),
             },
-        }
+        })
     }
 }
 

@@ -1,8 +1,10 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    HttpClient, LanguagePair, Provider, ProviderConfig, TextTranslation, TranslateRequest,
-    TranslateResponse, TranslationError, TranslationService,
+    LanguagePair, Provider, ProviderConfig, TextTranslation, TranslateRequest, TranslateResponse,
+    TranslationError, TranslationService,
 };
+
+use crate::common::http_client::HttpClient;
 use serde::Deserialize;
 use serde_json::{json, Value};
 
@@ -27,8 +29,14 @@ struct CaiyunTranslationService {
 }
 
 impl CaiyunProvider {
-    pub fn new(config: CaiyunProviderConfig) -> Self {
-        Self {
+    pub fn new(config: CaiyunProviderConfig) -> Result<Self, String> {
+        if config.token.trim().is_empty() {
+            return Err("token must not be empty".to_owned());
+        }
+        if config.request_id.trim().is_empty() {
+            return Err("request_id must not be empty".to_owned());
+        }
+        Ok(Self {
             config: config.clone(),
             translation_service: CaiyunTranslationService {
                 token: config.token,
@@ -40,7 +48,7 @@ impl CaiyunProvider {
                     Default::default(),
                 ),
             },
-        }
+        })
     }
 }
 

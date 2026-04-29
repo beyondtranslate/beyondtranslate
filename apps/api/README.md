@@ -25,7 +25,7 @@ apps/api
 
 `lib.rs` only handles the Worker fetch entrypoint. `router.rs` centralizes route
 registration. `handlers/` is responsible for HTTP parsing and response shaping.
-`services/` currently only keeps `provider_registry`, which loads providers from
+`services/` currently only keeps `engine`, which loads the translation engine from
 runtime config. `middleware/` applies shared CORS headers, `models/` keeps DTOs,
 and `config.rs` renders `config.yaml` from Worker environment variables.
 

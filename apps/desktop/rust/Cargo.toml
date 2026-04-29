@@ -8,7 +8,11 @@ crate-type = ["cdylib", "staticlib", "rlib"]
 
 [dependencies]
 beyondtranslate-core = { path = "../../../crates/core" }
-beyondtranslate-runtime = { path = "../../../crates/runtime", features = ["deepl", "google", "iciba"] }
+beyondtranslate-engine = { path = "../../../crates/engine", features = [
+  "deepl",
+  "google",
+  "iciba",
+] }
 flutter_rust_bridge = "=2.11.1"
 serde.workspace = true
 serde_yaml.workspace = true

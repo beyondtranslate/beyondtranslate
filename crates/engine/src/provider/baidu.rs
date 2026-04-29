@@ -1,9 +1,9 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, HttpClient, Provider, ProviderConfig,
-    TextDetection, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
-    TranslationService,
+    DetectLanguageRequest, DetectLanguageResponse, Provider, ProviderConfig, TextDetection,
+    TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
 };
+use crate::common::http_client::HttpClient;
 use rand::random;
 use serde::Deserialize;
 use serde_json::Value;
@@ -29,8 +29,14 @@ struct BaiduTranslationService {
 }
 
 impl BaiduProvider {
-    pub fn new(config: BaiduProviderConfig) -> Self {
-        Self {
+    pub fn new(config: BaiduProviderConfig) -> Result<Self, String> {
+        if config.app_id.trim().is_empty() {
+            return Err("app_id must not be empty".to_owned());
+        }
+        if config.app_key.trim().is_empty() {
+            return Err("app_key must not be empty".to_owned());
+        }
+        Ok(Self {
             config: config.clone(),
             translation_service: BaiduTranslationService {
                 app_id: config.app_id,
@@ -42,7 +48,7 @@ impl BaiduProvider {
                     Default::default(),
                 ),
             },
-        }
+        })
     }
 }
 

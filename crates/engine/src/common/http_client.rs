@@ -6,6 +6,7 @@ pub struct HttpClient {
     client: Client,
 }
 
+#[allow(dead_code)]
 impl HttpClient {
     pub fn new(base_url: impl Into<String>, client: Client) -> Self {
         Self {

@@ -1,8 +1,10 @@
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DictionaryError, DictionaryService, HttpClient, LookUpRequest, LookUpResponse, Provider,
-    ProviderConfig, TextTranslation, WordDefinition, WordPronunciation, WordTense,
+    DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider, ProviderConfig,
+    TextTranslation, WordDefinition, WordPronunciation, WordTense,
 };
+
+use crate::common::http_client::HttpClient;
 use serde::Deserialize;
 use serde_json::Value;
 
@@ -25,8 +27,11 @@ struct IcibaDictionaryService {
 }
 
 impl IcibaProvider {
-    pub fn new(config: IcibaProviderConfig) -> Self {
-        Self {
+    pub fn new(config: IcibaProviderConfig) -> Result<Self, String> {
+        if config.api_key.trim().is_empty() {
+            return Err("api_key must not be empty".to_owned());
+        }
+        Ok(Self {
             config: config.clone(),
             dictionary_service: IcibaDictionaryService {
                 api_key: config.api_key,
@@ -37,7 +42,7 @@ impl IcibaProvider {
                     Default::default(),
                 ),
             },
-        }
+        })
     }
 }
 

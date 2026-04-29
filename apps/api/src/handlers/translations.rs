@@ -1,9 +1,9 @@
-use beyondtranslate_core::{DetectLanguageRequest, TranslateRequest, TranslationError};
+use beyondtranslate_core::{DetectLanguageRequest, TranslateRequest};
 use worker::{Env, Request, Response};
 
 use crate::{
     error::{json_ok, ApiError},
-    services::provider_registry,
+    services::engine,
     utils,
 };
 
@@ -14,10 +14,8 @@ pub async fn translate(mut req: Request, env: Env, provider: &str) -> Result<Res
         .map_err(|error| ApiError::bad_request("INVALID_JSON", error.to_string()))?;
     let request = validate_translate_request(request)?;
 
-    let provider = provider_registry::load_provider(&env, provider)?;
-    let service = provider
-        .translation()
-        .ok_or_else(|| ApiError::from(TranslationError::UnsupportedMethod("translate")))?;
+    let eng = engine::load_engine(&env)?;
+    let service = eng.translation(provider).map_err(engine::to_api_error)?;
     let response = service.translate(request).await.map_err(ApiError::from)?;
 
     json_ok(&response).map_err(ApiError::from_worker_error)
@@ -34,10 +32,8 @@ pub async fn detect_language(
         .map_err(|error| ApiError::bad_request("INVALID_JSON", error.to_string()))?;
     let request = validate_detect_language_request(request)?;
 
-    let provider = provider_registry::load_provider(&env, provider)?;
-    let service = provider
-        .translation()
-        .ok_or_else(|| ApiError::from(TranslationError::UnsupportedMethod("detect_language")))?;
+    let eng = engine::load_engine(&env)?;
+    let service = eng.translation(provider).map_err(engine::to_api_error)?;
     let response = service
         .detect_language(request)
         .await
@@ -47,12 +43,8 @@ pub async fn detect_language(
 }
 
 pub async fn supported_language_pairs(env: Env, provider: &str) -> Result<Response, ApiError> {
-    let provider = provider_registry::load_provider(&env, provider)?;
-    let service = provider.translation().ok_or_else(|| {
-        ApiError::from(TranslationError::UnsupportedMethod(
-            "get_supported_language_pairs",
-        ))
-    })?;
+    let eng = engine::load_engine(&env)?;
+    let service = eng.translation(provider).map_err(engine::to_api_error)?;
     let response = service
         .get_supported_language_pairs()
         .await
