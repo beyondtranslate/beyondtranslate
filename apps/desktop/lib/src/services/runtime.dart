@@ -7,7 +7,7 @@ import '../rust/api/runtime.dart' as rust_api;
 import '../rust/domain/settings.dart';
 
 export '../rust/api/runtime.dart'
-    show RustLookupResponse, RustTranslateResponse;
+    show RustLookupResponse, RustProviderEntry, RustTranslateResponse;
 
 class RuntimeService {
   RuntimeService._();
@@ -47,12 +47,12 @@ class RuntimeService {
   RuntimeSettingsService get settings =>
       _settings ??= RuntimeSettingsService._(this);
 
-  RuntimeTranslationService translation(String providerType) {
-    return RuntimeTranslationService._(this, providerType);
+  RuntimeTranslationService translation(String providerId) {
+    return RuntimeTranslationService._(this, providerId);
   }
 
-  RuntimeDictionaryService dictionary(String providerType) {
-    return RuntimeDictionaryService._(this, providerType);
+  RuntimeDictionaryService dictionary(String providerId) {
+    return RuntimeDictionaryService._(this, providerId);
   }
 
   Future<rust_api.Runtime> _createClient() async {
@@ -84,13 +84,39 @@ class RuntimeSettingsService {
           language: language,
         );
   }
+
+  Future<List<rust_api.RustProviderEntry>> listProviders() async {
+    return (await _runtime.client).settings().listProviders();
+  }
+
+  Future<rust_api.RustProviderEntry?> getProvider(String providerId) async {
+    return (await _runtime.client).settings().getProvider(
+          providerId: providerId,
+        );
+  }
+
+  Future<rust_api.RustProviderEntry> updateProvider({
+    required String providerId,
+    required String configYaml,
+  }) async {
+    return (await _runtime.client).settings().updateProvider(
+          providerId: providerId,
+          configYaml: configYaml,
+        );
+  }
+
+  Future<rust_api.RustProviderEntry?> deleteProvider(String providerId) async {
+    return (await _runtime.client).settings().deleteProvider(
+          providerId: providerId,
+        );
+  }
 }
 
 class RuntimeTranslationService {
-  RuntimeTranslationService._(this._runtime, this._providerType);
+  RuntimeTranslationService._(this._runtime, this._providerId);
 
   final RuntimeService _runtime;
-  final String _providerType;
+  final String _providerId;
 
   Future<rust_api.RustTranslateResponse> translate({
     required String providerConfigYaml,
@@ -99,7 +125,7 @@ class RuntimeTranslationService {
     required String text,
   }) async {
     return (await _runtime.client)
-        .translation(providerType: _providerType)
+        .translation(providerId: _providerId)
         .translate(
           request: rust_api.RustTranslateRequest(
             providerConfigYaml: providerConfigYaml,
@@ -112,10 +138,10 @@ class RuntimeTranslationService {
 }
 
 class RuntimeDictionaryService {
-  RuntimeDictionaryService._(this._runtime, this._providerType);
+  RuntimeDictionaryService._(this._runtime, this._providerId);
 
   final RuntimeService _runtime;
-  final String _providerType;
+  final String _providerId;
 
   Future<rust_api.RustLookupResponse> lookup({
     required String providerConfigYaml,
@@ -124,7 +150,7 @@ class RuntimeDictionaryService {
     required String word,
   }) async {
     return (await _runtime.client)
-        .dictionary(providerType: _providerType)
+        .dictionary(providerId: _providerId)
         .lookup(
           request: rust_api.RustLookupRequest(
             providerConfigYaml: providerConfigYaml,

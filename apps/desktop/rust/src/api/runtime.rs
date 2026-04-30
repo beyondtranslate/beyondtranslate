@@ -3,6 +3,7 @@ use std::sync::Arc;
 use std::thread;
 
 use beyondtranslate_core::{LookUpRequest, TranslateRequest};
+use beyondtranslate_engine::ProviderConfig;
 use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
@@ -40,13 +41,13 @@ pub struct RuntimeSettings {
 #[frb(opaque)]
 pub struct RuntimeTranslation {
     inner: Arc<RuntimeInner>,
-    provider_type: String,
+    provider_id: String,
 }
 
 #[frb(opaque)]
 pub struct RuntimeDictionary {
     inner: Arc<RuntimeInner>,
-    provider_type: String,
+    provider_id: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -59,7 +60,7 @@ pub struct RustTranslateRequest {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RustTranslateResponse {
-    pub provider_type: String,
+    pub provider_id: String,
     pub translations: Vec<String>,
     pub detected_source_language: Option<String>,
 }
@@ -74,11 +75,18 @@ pub struct RustLookupRequest {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RustLookupResponse {
-    pub provider_type: String,
+    pub provider_id: String,
     pub word: Option<String>,
     pub definitions: Vec<String>,
     pub pronunciations: Vec<String>,
     pub tenses: Vec<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct RustProviderEntry {
+    pub id: String,
+    pub r#type: String,
+    pub config_yaml: String,
 }
 
 impl Runtime {
@@ -102,20 +110,20 @@ impl Runtime {
     }
 
     #[frb(sync)]
-    pub fn translation(&self, provider_type: String) -> Result<RuntimeTranslation, String> {
-        let provider_type = validate_provider_type(provider_type)?;
+    pub fn translation(&self, provider_id: String) -> Result<RuntimeTranslation, String> {
+        let provider_id = validate_provider_id(provider_id)?;
         Ok(RuntimeTranslation {
             inner: Arc::clone(&self.inner),
-            provider_type,
+            provider_id,
         })
     }
 
     #[frb(sync)]
-    pub fn dictionary(&self, provider_type: String) -> Result<RuntimeDictionary, String> {
-        let provider_type = validate_provider_type(provider_type)?;
+    pub fn dictionary(&self, provider_id: String) -> Result<RuntimeDictionary, String> {
+        let provider_id = validate_provider_id(provider_id)?;
         Ok(RuntimeDictionary {
             inner: Arc::clone(&self.inner),
-            provider_type,
+            provider_id,
         })
     }
 }
@@ -140,9 +148,96 @@ impl RuntimeSettings {
             .await
     }
 
+    pub async fn list_providers(&self) -> Result<Vec<RustProviderEntry>, String> {
+        let state = self.inner.state.read().await;
+        state
+            .settings
+            .engine
+            .providers
+            .iter()
+            .map(|(id, config)| provider_entry(id, config))
+            .collect()
+    }
+
+    pub async fn get_provider(
+        &self,
+        provider_id: String,
+    ) -> Result<Option<RustProviderEntry>, String> {
+        let provider_id = validate_provider_id(provider_id)?;
+        let state = self.inner.state.read().await;
+        state
+            .settings
+            .engine
+            .providers
+            .get(&provider_id)
+            .map(|config| provider_entry(&provider_id, config))
+            .transpose()
+    }
+
+    pub async fn update_provider(
+        &self,
+        provider_id: String,
+        config_yaml: String,
+    ) -> Result<RustProviderEntry, String> {
+        let provider_id = validate_provider_id(provider_id)?;
+        let config_yaml = validate_required("config_yaml", config_yaml)?;
+        let config = engine::parse_provider_config(&config_yaml)?;
+        let provider_id_for_insert = provider_id.clone();
+
+        self.update_with_result(
+            move |settings| {
+                settings
+                    .engine
+                    .providers
+                    .insert(provider_id_for_insert, config);
+            },
+            move |settings| {
+                let config = settings
+                    .engine
+                    .providers
+                    .get(&provider_id)
+                    .ok_or_else(|| format!("provider `{provider_id}` was not saved"))?;
+                provider_entry(&provider_id, config)
+            },
+        )
+        .await
+    }
+
+    pub async fn delete_provider(
+        &self,
+        provider_id: String,
+    ) -> Result<Option<RustProviderEntry>, String> {
+        let provider_id = validate_provider_id(provider_id)?;
+        let mut state = self.inner.state.write().await;
+        let mut next_settings = state.settings.clone();
+        let deleted = next_settings.engine.providers.remove(&provider_id);
+
+        let next_engine = engine::build_from_settings(&next_settings)?;
+        next_settings.save(&self.inner.storage_dir)?;
+        let deleted = deleted
+            .as_ref()
+            .map(|config| provider_entry(&provider_id, config))
+            .transpose()?;
+
+        *state = RuntimeState {
+            settings: next_settings,
+            engine: next_engine,
+        };
+
+        Ok(deleted)
+    }
+
     async fn update<F>(&self, mutator: F) -> Result<RustSettingsDto, String>
     where
         F: FnOnce(&mut Settings),
+    {
+        self.update_with_result(mutator, |settings| settings.to_dto()).await
+    }
+
+    async fn update_with_result<F, T, G>(&self, mutator: F, result: G) -> Result<T, String>
+    where
+        F: FnOnce(&mut Settings),
+        G: FnOnce(&Settings) -> Result<T, String>,
     {
         let mut state = self.inner.state.write().await;
         let mut next_settings = state.settings.clone();
@@ -150,14 +245,14 @@ impl RuntimeSettings {
 
         let next_engine = engine::build_from_settings(&next_settings)?;
         next_settings.save(&self.inner.storage_dir)?;
-        let dto = next_settings.to_dto()?;
+        let result = result(&next_settings)?;
 
         *state = RuntimeState {
             settings: next_settings,
             engine: next_engine,
         };
 
-        Ok(dto)
+        Ok(result)
     }
 }
 
@@ -166,7 +261,7 @@ impl RuntimeTranslation {
         &self,
         request: RustTranslateRequest,
     ) -> Result<RustTranslateResponse, String> {
-        let provider_type = self.provider_type.clone();
+        let provider_id = self.provider_id.clone();
         let inner = Arc::clone(&self.inner);
         run_on_worker_thread(move || async move {
             let target_language = validate_required("target_language", request.target_language)?;
@@ -176,9 +271,9 @@ impl RuntimeTranslation {
                 optional_trimmed(request.provider_config_yaml)
             {
                 let engine =
-                    engine::build_from_provider_config(&provider_type, &provider_config_yaml)?;
+                    engine::build_from_provider_config(&provider_id, &provider_config_yaml)?;
                 let translation_service = engine
-                    .translation(&provider_type)
+                    .translation(&provider_id)
                     .map_err(|error| error.to_string())?;
 
                 translation_service
@@ -193,7 +288,7 @@ impl RuntimeTranslation {
                 let state = inner.state.read().await;
                 let translation_service = state
                     .engine
-                    .translation(&provider_type)
+                    .translation(&provider_id)
                     .map_err(|error| error.to_string())?;
 
                 translation_service
@@ -207,7 +302,7 @@ impl RuntimeTranslation {
             };
 
             Ok(RustTranslateResponse {
-                provider_type,
+                provider_id,
                 detected_source_language: response
                     .translations
                     .first()
@@ -225,7 +320,7 @@ impl RuntimeTranslation {
 
 impl RuntimeDictionary {
     pub async fn lookup(&self, request: RustLookupRequest) -> Result<RustLookupResponse, String> {
-        let provider_type = self.provider_type.clone();
+        let provider_id = self.provider_id.clone();
         let inner = Arc::clone(&self.inner);
         run_on_worker_thread(move || async move {
             let source_language = validate_required("source_language", request.source_language)?;
@@ -236,9 +331,9 @@ impl RuntimeDictionary {
                 optional_trimmed(request.provider_config_yaml)
             {
                 let engine =
-                    engine::build_from_provider_config(&provider_type, &provider_config_yaml)?;
+                    engine::build_from_provider_config(&provider_id, &provider_config_yaml)?;
                 let dictionary_service = engine
-                    .dictionary(&provider_type)
+                    .dictionary(&provider_id)
                     .map_err(|error| error.to_string())?;
 
                 dictionary_service
@@ -253,7 +348,7 @@ impl RuntimeDictionary {
                 let state = inner.state.read().await;
                 let dictionary_service = state
                     .engine
-                    .dictionary(&provider_type)
+                    .dictionary(&provider_id)
                     .map_err(|error| error.to_string())?;
 
                 dictionary_service
@@ -267,7 +362,7 @@ impl RuntimeDictionary {
             };
 
             Ok(RustLookupResponse {
-                provider_type,
+                provider_id,
                 word: response.word,
                 definitions: response
                     .definitions
@@ -334,8 +429,17 @@ pub fn init_app() {
     flutter_rust_bridge::setup_default_user_utils();
 }
 
-fn validate_provider_type(provider_type: String) -> Result<String, String> {
-    validate_required("provider_type", provider_type)
+fn provider_entry(provider_id: &str, config: &ProviderConfig) -> Result<RustProviderEntry, String> {
+    Ok(RustProviderEntry {
+        id: provider_id.to_owned(),
+        r#type: config.provider_type.as_str().to_owned(),
+        config_yaml: serde_yaml::to_string(config)
+            .map_err(|error| format!("failed to encode provider config yaml: {error}"))?,
+    })
+}
+
+fn validate_provider_id(provider_id: String) -> Result<String, String> {
+    validate_required("provider_id", provider_id)
 }
 
 fn validate_required(name: &str, value: String) -> Result<String, String> {
@@ -406,7 +510,7 @@ mod tests {
                     .translation("deepl".to_owned())
                     .unwrap()
                     .translate(RustTranslateRequest {
-                        provider_config_yaml: Some("api_key: test-key".to_owned()),
+                        provider_config_yaml: Some("type: deepl\napi_key: test-key".to_owned()),
                         source_language: Some("en".to_owned()),
                         target_language: String::new(),
                         text: "hello".to_owned(),
@@ -430,7 +534,7 @@ mod tests {
                     .dictionary("iciba".to_owned())
                     .unwrap()
                     .lookup(RustLookupRequest {
-                        provider_config_yaml: Some("api_key: test-key".to_owned()),
+                        provider_config_yaml: Some("type: iciba\napi_key: test-key".to_owned()),
                         source_language: "en".to_owned(),
                         target_language: "zh".to_owned(),
                         word: String::new(),

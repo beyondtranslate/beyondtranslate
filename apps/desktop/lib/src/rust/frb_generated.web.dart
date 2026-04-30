@@ -105,6 +105,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   RustLookupRequest dco_decode_box_autoadd_rust_lookup_request(dynamic raw);
 
   @protected
+  RustProviderEntry dco_decode_box_autoadd_rust_provider_entry(dynamic raw);
+
+  @protected
   RustTranslateRequest dco_decode_box_autoadd_rust_translate_request(
       dynamic raw);
 
@@ -115,13 +118,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
+  List<RustProviderEntry> dco_decode_list_rust_provider_entry(dynamic raw);
+
+  @protected
   String? dco_decode_opt_String(dynamic raw);
+
+  @protected
+  RustProviderEntry? dco_decode_opt_box_autoadd_rust_provider_entry(
+      dynamic raw);
 
   @protected
   RustLookupRequest dco_decode_rust_lookup_request(dynamic raw);
 
   @protected
   RustLookupResponse dco_decode_rust_lookup_response(dynamic raw);
+
+  @protected
+  RustProviderEntry dco_decode_rust_provider_entry(dynamic raw);
 
   @protected
   RustSettingsDto dco_decode_rust_settings_dto(dynamic raw);
@@ -209,6 +222,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  RustProviderEntry sse_decode_box_autoadd_rust_provider_entry(
+      SseDeserializer deserializer);
+
+  @protected
   RustTranslateRequest sse_decode_box_autoadd_rust_translate_request(
       SseDeserializer deserializer);
 
@@ -219,7 +236,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
+  List<RustProviderEntry> sse_decode_list_rust_provider_entry(
+      SseDeserializer deserializer);
+
+  @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
+
+  @protected
+  RustProviderEntry? sse_decode_opt_box_autoadd_rust_provider_entry(
+      SseDeserializer deserializer);
 
   @protected
   RustLookupRequest sse_decode_rust_lookup_request(
@@ -227,6 +252,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   RustLookupResponse sse_decode_rust_lookup_response(
+      SseDeserializer deserializer);
+
+  @protected
+  RustProviderEntry sse_decode_rust_provider_entry(
       SseDeserializer deserializer);
 
   @protected
@@ -323,6 +352,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       RustLookupRequest self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_rust_provider_entry(
+      RustProviderEntry self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_rust_translate_request(
       RustTranslateRequest self, SseSerializer serializer);
 
@@ -334,7 +367,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       Uint8List self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_rust_provider_entry(
+      List<RustProviderEntry> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_rust_provider_entry(
+      RustProviderEntry? self, SseSerializer serializer);
 
   @protected
   void sse_encode_rust_lookup_request(
@@ -343,6 +384,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_rust_lookup_response(
       RustLookupResponse self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_rust_provider_entry(
+      RustProviderEntry self, SseSerializer serializer);
 
   @protected
   void sse_encode_rust_settings_dto(

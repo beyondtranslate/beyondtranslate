@@ -73,7 +73,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 303132778;
+  int get rustContentHash => 463734023;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -87,10 +87,19 @@ abstract class RustLibApi extends BaseApi {
   Future<RustLookupResponse> crateApiRuntimeRuntimeDictionaryLookup(
       {required RuntimeDictionary that, required RustLookupRequest request});
 
+  Future<RustProviderEntry?> crateApiRuntimeRuntimeSettingsDeleteProvider(
+      {required RuntimeSettings that, required String providerId});
+
   Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsGet(
       {required RuntimeSettings that});
 
   Future<String> crateApiRuntimeRuntimeSettingsGetJson(
+      {required RuntimeSettings that});
+
+  Future<RustProviderEntry?> crateApiRuntimeRuntimeSettingsGetProvider(
+      {required RuntimeSettings that, required String providerId});
+
+  Future<List<RustProviderEntry>> crateApiRuntimeRuntimeSettingsListProviders(
       {required RuntimeSettings that});
 
   Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowLanguage(
@@ -99,19 +108,24 @@ abstract class RustLibApi extends BaseApi {
   Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowTheme(
       {required RuntimeSettings that, required String theme});
 
+  Future<RustProviderEntry> crateApiRuntimeRuntimeSettingsUpdateProvider(
+      {required RuntimeSettings that,
+      required String providerId,
+      required String configYaml});
+
   Future<RustTranslateResponse> crateApiRuntimeRuntimeTranslationTranslate(
       {required RuntimeTranslation that,
       required RustTranslateRequest request});
 
   RuntimeDictionary crateApiRuntimeRuntimeDictionary(
-      {required Runtime that, required String providerType});
+      {required Runtime that, required String providerId});
 
   Runtime crateApiRuntimeRuntimeNew({required String storageDir});
 
   RuntimeSettings crateApiRuntimeRuntimeSettings({required Runtime that});
 
   RuntimeTranslation crateApiRuntimeRuntimeTranslation(
-      {required Runtime that, required String providerType});
+      {required Runtime that, required String providerId});
 
   Future<void> crateApiRuntimeInitApp();
 
@@ -186,6 +200,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<RustProviderEntry?> crateApiRuntimeRuntimeSettingsDeleteProvider(
+      {required RuntimeSettings that, required String providerId}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        sse_encode_String(providerId, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 2, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_opt_box_autoadd_rust_provider_entry,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsDeleteProviderConstMeta,
+      argValues: [that, providerId],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsDeleteProviderConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_delete_provider",
+        argNames: ["that", "providerId"],
+      );
+
+  @override
   Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsGet(
       {required RuntimeSettings that}) {
     return handler.executeNormal(NormalTask(
@@ -194,7 +236,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 2, port: port_);
+            funcId: 3, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_rust_settings_dto,
@@ -221,7 +263,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
+            funcId: 4, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -240,6 +282,61 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<RustProviderEntry?> crateApiRuntimeRuntimeSettingsGetProvider(
+      {required RuntimeSettings that, required String providerId}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        sse_encode_String(providerId, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 5, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_opt_box_autoadd_rust_provider_entry,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsGetProviderConstMeta,
+      argValues: [that, providerId],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsGetProviderConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_get_provider",
+        argNames: ["that", "providerId"],
+      );
+
+  @override
+  Future<List<RustProviderEntry>> crateApiRuntimeRuntimeSettingsListProviders(
+      {required RuntimeSettings that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 6, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_rust_provider_entry,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsListProvidersConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsListProvidersConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_list_providers",
+        argNames: ["that"],
+      );
+
+  @override
   Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowLanguage(
       {required RuntimeSettings that, required String language}) {
     return handler.executeNormal(NormalTask(
@@ -249,7 +346,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(language, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 4, port: port_);
+            funcId: 7, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_rust_settings_dto,
@@ -277,7 +374,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(theme, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 5, port: port_);
+            funcId: 8, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_rust_settings_dto,
@@ -296,6 +393,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<RustProviderEntry> crateApiRuntimeRuntimeSettingsUpdateProvider(
+      {required RuntimeSettings that,
+      required String providerId,
+      required String configYaml}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        sse_encode_String(providerId, serializer);
+        sse_encode_String(configYaml, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 9, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_rust_provider_entry,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsUpdateProviderConstMeta,
+      argValues: [that, providerId, configYaml],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsUpdateProviderConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_update_provider",
+        argNames: ["that", "providerId", "configYaml"],
+      );
+
+  @override
   Future<RustTranslateResponse> crateApiRuntimeRuntimeTranslationTranslate(
       {required RuntimeTranslation that,
       required RustTranslateRequest request}) {
@@ -306,7 +434,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_box_autoadd_rust_translate_request(request, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 6, port: port_);
+            funcId: 10, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_rust_translate_response,
@@ -326,14 +454,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   RuntimeDictionary crateApiRuntimeRuntimeDictionary(
-      {required Runtime that, required String providerType}) {
+      {required Runtime that, required String providerId}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
             that, serializer);
-        sse_encode_String(providerType, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7)!;
+        sse_encode_String(providerId, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -341,7 +469,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiRuntimeRuntimeDictionaryConstMeta,
-      argValues: [that, providerType],
+      argValues: [that, providerId],
       apiImpl: this,
     ));
   }
@@ -349,7 +477,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiRuntimeRuntimeDictionaryConstMeta =>
       const TaskConstMeta(
         debugName: "Runtime_dictionary",
-        argNames: ["that", "providerType"],
+        argNames: ["that", "providerId"],
       );
 
   @override
@@ -358,7 +486,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(storageDir, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 12)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -383,7 +511,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 13)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -404,14 +532,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   RuntimeTranslation crateApiRuntimeRuntimeTranslation(
-      {required Runtime that, required String providerType}) {
+      {required Runtime that, required String providerId}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
             that, serializer);
-        sse_encode_String(providerType, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10)!;
+        sse_encode_String(providerId, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 14)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -419,7 +547,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiRuntimeRuntimeTranslationConstMeta,
-      argValues: [that, providerType],
+      argValues: [that, providerId],
       apiImpl: this,
     ));
   }
@@ -427,7 +555,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiRuntimeRuntimeTranslationConstMeta =>
       const TaskConstMeta(
         debugName: "Runtime_translation",
-        argNames: ["that", "providerType"],
+        argNames: ["that", "providerId"],
       );
 
   @override
@@ -436,7 +564,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 11, port: port_);
+            funcId: 15, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -594,6 +722,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RustProviderEntry dco_decode_box_autoadd_rust_provider_entry(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_rust_provider_entry(raw);
+  }
+
+  @protected
   RustTranslateRequest dco_decode_box_autoadd_rust_translate_request(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -613,9 +747,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<RustProviderEntry> dco_decode_list_rust_provider_entry(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_rust_provider_entry).toList();
+  }
+
+  @protected
   String? dco_decode_opt_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_String(raw);
+  }
+
+  @protected
+  RustProviderEntry? dco_decode_opt_box_autoadd_rust_provider_entry(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_rust_provider_entry(raw);
   }
 
   @protected
@@ -639,11 +786,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 5)
       throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return RustLookupResponse(
-      providerType: dco_decode_String(arr[0]),
+      providerId: dco_decode_String(arr[0]),
       word: dco_decode_opt_String(arr[1]),
       definitions: dco_decode_list_String(arr[2]),
       pronunciations: dco_decode_list_String(arr[3]),
       tenses: dco_decode_list_String(arr[4]),
+    );
+  }
+
+  @protected
+  RustProviderEntry dco_decode_rust_provider_entry(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return RustProviderEntry(
+      id: dco_decode_String(arr[0]),
+      type: dco_decode_String(arr[1]),
+      configYaml: dco_decode_String(arr[2]),
     );
   }
 
@@ -681,7 +841,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 3)
       throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
     return RustTranslateResponse(
-      providerType: dco_decode_String(arr[0]),
+      providerId: dco_decode_String(arr[0]),
       translations: dco_decode_list_String(arr[1]),
       detectedSourceLanguage: dco_decode_opt_String(arr[2]),
     );
@@ -828,6 +988,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RustProviderEntry sse_decode_box_autoadd_rust_provider_entry(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_rust_provider_entry(deserializer));
+  }
+
+  @protected
   RustTranslateRequest sse_decode_box_autoadd_rust_translate_request(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -854,11 +1021,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<RustProviderEntry> sse_decode_list_rust_provider_entry(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <RustProviderEntry>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_rust_provider_entry(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   String? sse_decode_opt_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  RustProviderEntry? sse_decode_opt_box_autoadd_rust_provider_entry(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_rust_provider_entry(deserializer));
     } else {
       return null;
     }
@@ -883,17 +1075,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustLookupResponse sse_decode_rust_lookup_response(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_providerType = sse_decode_String(deserializer);
+    var var_providerId = sse_decode_String(deserializer);
     var var_word = sse_decode_opt_String(deserializer);
     var var_definitions = sse_decode_list_String(deserializer);
     var var_pronunciations = sse_decode_list_String(deserializer);
     var var_tenses = sse_decode_list_String(deserializer);
     return RustLookupResponse(
-        providerType: var_providerType,
+        providerId: var_providerId,
         word: var_word,
         definitions: var_definitions,
         pronunciations: var_pronunciations,
         tenses: var_tenses);
+  }
+
+  @protected
+  RustProviderEntry sse_decode_rust_provider_entry(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_id = sse_decode_String(deserializer);
+    var var_type = sse_decode_String(deserializer);
+    var var_configYaml = sse_decode_String(deserializer);
+    return RustProviderEntry(
+        id: var_id, type: var_type, configYaml: var_configYaml);
   }
 
   @protected
@@ -927,11 +1130,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustTranslateResponse sse_decode_rust_translate_response(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_providerType = sse_decode_String(deserializer);
+    var var_providerId = sse_decode_String(deserializer);
     var var_translations = sse_decode_list_String(deserializer);
     var var_detectedSourceLanguage = sse_decode_opt_String(deserializer);
     return RustTranslateResponse(
-        providerType: var_providerType,
+        providerId: var_providerId,
         translations: var_translations,
         detectedSourceLanguage: var_detectedSourceLanguage);
   }
@@ -1096,6 +1299,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_rust_provider_entry(
+      RustProviderEntry self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_rust_provider_entry(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_rust_translate_request(
       RustTranslateRequest self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1120,12 +1330,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_rust_provider_entry(
+      List<RustProviderEntry> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_rust_provider_entry(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_String(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_rust_provider_entry(
+      RustProviderEntry? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_rust_provider_entry(self, serializer);
     }
   }
 
@@ -1143,11 +1374,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_rust_lookup_response(
       RustLookupResponse self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.providerType, serializer);
+    sse_encode_String(self.providerId, serializer);
     sse_encode_opt_String(self.word, serializer);
     sse_encode_list_String(self.definitions, serializer);
     sse_encode_list_String(self.pronunciations, serializer);
     sse_encode_list_String(self.tenses, serializer);
+  }
+
+  @protected
+  void sse_encode_rust_provider_entry(
+      RustProviderEntry self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.id, serializer);
+    sse_encode_String(self.type, serializer);
+    sse_encode_String(self.configYaml, serializer);
   }
 
   @protected
@@ -1173,7 +1413,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_rust_translate_response(
       RustTranslateResponse self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.providerType, serializer);
+    sse_encode_String(self.providerId, serializer);
     sse_encode_list_String(self.translations, serializer);
     sse_encode_opt_String(self.detectedSourceLanguage, serializer);
   }
@@ -1252,18 +1492,18 @@ class RuntimeImpl extends RustOpaque implements Runtime {
         RustLib.instance.api.rust_arc_decrement_strong_count_RuntimePtr,
   );
 
-  RuntimeDictionary dictionary({required String providerType}) => RustLib
-      .instance.api
-      .crateApiRuntimeRuntimeDictionary(that: this, providerType: providerType);
+  RuntimeDictionary dictionary({required String providerId}) =>
+      RustLib.instance.api
+          .crateApiRuntimeRuntimeDictionary(that: this, providerId: providerId);
 
   RuntimeSettings settings() =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettings(
         that: this,
       );
 
-  RuntimeTranslation translation({required String providerType}) =>
-      RustLib.instance.api.crateApiRuntimeRuntimeTranslation(
-          that: this, providerType: providerType);
+  RuntimeTranslation translation({required String providerId}) => RustLib
+      .instance.api
+      .crateApiRuntimeRuntimeTranslation(that: this, providerId: providerId);
 }
 
 @sealed
@@ -1285,6 +1525,10 @@ class RuntimeSettingsImpl extends RustOpaque implements RuntimeSettings {
         RustLib.instance.api.rust_arc_decrement_strong_count_RuntimeSettingsPtr,
   );
 
+  Future<RustProviderEntry?> deleteProvider({required String providerId}) =>
+      RustLib.instance.api.crateApiRuntimeRuntimeSettingsDeleteProvider(
+          that: this, providerId: providerId);
+
   Future<RustSettingsDto> get_() =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettingsGet(
         that: this,
@@ -1295,6 +1539,15 @@ class RuntimeSettingsImpl extends RustOpaque implements RuntimeSettings {
         that: this,
       );
 
+  Future<RustProviderEntry?> getProvider({required String providerId}) =>
+      RustLib.instance.api.crateApiRuntimeRuntimeSettingsGetProvider(
+          that: this, providerId: providerId);
+
+  Future<List<RustProviderEntry>> listProviders() =>
+      RustLib.instance.api.crateApiRuntimeRuntimeSettingsListProviders(
+        that: this,
+      );
+
   Future<RustSettingsDto> setWindowLanguage({required String language}) =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettingsSetWindowLanguage(
           that: this, language: language);
@@ -1302,6 +1555,11 @@ class RuntimeSettingsImpl extends RustOpaque implements RuntimeSettings {
   Future<RustSettingsDto> setWindowTheme({required String theme}) => RustLib
       .instance.api
       .crateApiRuntimeRuntimeSettingsSetWindowTheme(that: this, theme: theme);
+
+  Future<RustProviderEntry> updateProvider(
+          {required String providerId, required String configYaml}) =>
+      RustLib.instance.api.crateApiRuntimeRuntimeSettingsUpdateProvider(
+          that: this, providerId: providerId, configYaml: configYaml);
 }
 
 @sealed

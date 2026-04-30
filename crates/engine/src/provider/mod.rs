@@ -1,29 +1,27 @@
-#[cfg(feature = "baidu")]
 pub mod baidu;
-#[cfg(feature = "caiyun")]
 pub mod caiyun;
-#[cfg(feature = "deepl")]
 pub mod deepl;
-#[cfg(feature = "google")]
 pub mod google;
-#[cfg(feature = "iciba")]
 pub mod iciba;
-#[cfg(feature = "tencent")]
 pub mod tencent;
-#[cfg(feature = "youdao")]
 pub mod youdao;
 
 #[cfg(feature = "baidu")]
-pub use baidu::{BaiduProvider, BaiduProviderConfig};
+pub use baidu::BaiduProvider;
+pub use baidu::BaiduProviderConfig;
 #[cfg(feature = "caiyun")]
-pub use caiyun::{CaiyunProvider, CaiyunProviderConfig};
-#[cfg(feature = "deepl")]
+pub use caiyun::CaiyunProvider;
+pub use caiyun::CaiyunProviderConfig;
 pub use deepl::{DeepLProvider, DeepLProviderConfig};
 #[cfg(feature = "google")]
-pub use google::{GoogleProvider, GoogleProviderConfig};
+pub use google::GoogleProvider;
+pub use google::GoogleProviderConfig;
 #[cfg(feature = "iciba")]
-pub use iciba::{IcibaProvider, IcibaProviderConfig};
+pub use iciba::IcibaProvider;
+pub use iciba::IcibaProviderConfig;
 #[cfg(feature = "tencent")]
-pub use tencent::{TencentProvider, TencentProviderConfig};
+pub use tencent::TencentProvider;
+pub use tencent::TencentProviderConfig;
 #[cfg(feature = "youdao")]
-pub use youdao::{YoudaoProvider, YoudaoProviderConfig};
+pub use youdao::YoudaoProvider;
+pub use youdao::YoudaoProviderConfig;

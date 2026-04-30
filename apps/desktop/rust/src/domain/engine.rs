@@ -1,7 +1,6 @@
 use std::collections::BTreeMap;
 
-use beyondtranslate_engine::{Engine, EngineConfig};
-use serde_yaml::{Mapping, Value};
+use beyondtranslate_engine::{Engine, EngineConfig, ProviderConfig};
 
 use crate::domain::settings::Settings;
 
@@ -16,35 +15,24 @@ pub fn build_from_engine_config(config: &EngineConfig) -> Result<Engine, String>
 }
 
 pub fn build_from_provider_config(
-    provider_type: &str,
+    provider_id: &str,
     provider_config_yaml: &str,
 ) -> Result<Engine, String> {
-    let provider_type = provider_type.trim();
-    if provider_type.is_empty() {
-        return Err("provider_type is required".to_owned());
+    let provider_id = provider_id.trim();
+    if provider_id.is_empty() {
+        return Err("provider_id is required".to_owned());
     }
 
     let provider_config = parse_provider_config(provider_config_yaml)?;
-    let mut providers = Mapping::new();
-    providers.insert(Value::String(provider_type.to_owned()), provider_config);
+    let mut providers = BTreeMap::new();
+    providers.insert(provider_id.to_owned(), provider_config);
 
-    let mut root = BTreeMap::new();
-    root.insert("providers", Value::Mapping(providers));
-
-    let config_yaml = serde_yaml::to_string(&root)
-        .map_err(|error| format!("failed to encode runtime config yaml: {error}"))?;
-
-    beyondtranslate_engine::from_yaml_str(&config_yaml).map_err(|error| error.to_string())
+    build_from_engine_config(&EngineConfig { providers })
 }
 
-fn parse_provider_config(input: &str) -> Result<Value, String> {
-    let value = serde_yaml::from_str::<Value>(input)
-        .map_err(|error| format!("invalid provider config yaml: {error}"))?;
-
-    match value {
-        Value::Mapping(_) => Ok(value),
-        _ => Err("provider config yaml must decode to a mapping/object".to_owned()),
-    }
+pub fn parse_provider_config(input: &str) -> Result<ProviderConfig, String> {
+    serde_yaml::from_str::<ProviderConfig>(input)
+        .map_err(|error| format!("invalid provider config yaml: {error}"))
 }
 
 #[cfg(test)]
@@ -52,17 +40,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn parse_provider_config_requires_mapping() {
-        let error = parse_provider_config("- just\n- a\n- list").unwrap_err();
-        assert_eq!(
-            error,
-            "provider config yaml must decode to a mapping/object"
-        );
+    fn parse_provider_config_requires_type_tag() {
+        let error = parse_provider_config("api_key: test-key").unwrap_err();
+        assert!(error.contains("type"));
     }
 
     #[test]
     fn build_from_provider_config_registers_provider() {
-        let engine = build_from_provider_config("deepl", "api_key: test-key").unwrap();
-        assert_eq!(engine.names(), vec!["deepl"]);
+        let engine =
+            build_from_provider_config("deepl-main", "type: deepl\napi_key: test-key").unwrap();
+        assert_eq!(engine.names(), vec!["deepl-main"]);
     }
 }

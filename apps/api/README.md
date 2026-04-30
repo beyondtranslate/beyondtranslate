@@ -99,6 +99,7 @@ Current config template:
 ```yaml
 providers:
   iciba:
+    type: iciba
     api_key: ${ICIBA_API_KEY}
     base_url: ${ICIBA_BASE_URL}
 ```

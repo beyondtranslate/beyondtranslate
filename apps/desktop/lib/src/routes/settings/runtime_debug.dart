@@ -6,9 +6,10 @@ import '../../utils/platform_util.dart';
 import '../../widgets/ui/button.dart';
 
 const List<String> _kProviderOptions = ['deepl', 'google', 'iciba'];
-const String _kDefaultDeepLConfig = 'api_key: YOUR_DEEPL_API_KEY';
-const String _kDefaultGoogleConfig = 'api_key: YOUR_GOOGLE_API_KEY';
-const String _kDefaultIcibaConfig = 'api_key: YOUR_ICIBA_API_KEY';
+const String _kDefaultDeepLConfig = 'type: deepl\napi_key: YOUR_DEEPL_API_KEY';
+const String _kDefaultGoogleConfig =
+    'type: google\napi_key: YOUR_GOOGLE_API_KEY';
+const String _kDefaultIcibaConfig = 'type: iciba\napi_key: YOUR_ICIBA_API_KEY';
 
 class RuntimeDebugPage extends StatefulWidget {
   const RuntimeDebugPage({super.key});
@@ -23,9 +24,9 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
   final _targetLanguageController = TextEditingController(text: 'zh');
   final _textController = TextEditingController(text: 'Hello world');
   late final TextEditingController _providerConfigController =
-      TextEditingController(text: _configTemplateFor(_providerType));
+      TextEditingController(text: _configTemplateFor(_providerId));
 
-  String _providerType = _kProviderOptions.first;
+  String _providerId = _kProviderOptions.first;
   bool _submitting = false;
   RustTranslateResponse? _response;
   RustLookupResponse? _lookupResponse;
@@ -40,8 +41,8 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     super.dispose();
   }
 
-  String _configTemplateFor(String providerType) {
-    switch (providerType) {
+  String _configTemplateFor(String providerId) {
+    switch (providerId) {
       case 'iciba':
         return _kDefaultIcibaConfig;
       case 'google':
@@ -66,8 +67,8 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     });
 
     try {
-      if (_providerType == 'iciba') {
-        final response = await runtime.dictionary(_providerType).lookup(
+      if (_providerId == 'iciba') {
+        final response = await runtime.dictionary(_providerId).lookup(
               providerConfigYaml: _providerConfigController.text,
               sourceLanguage: _sourceLanguageController.text.trim(),
               targetLanguage: _targetLanguageController.text.trim(),
@@ -81,7 +82,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
           _lookupResponse = response;
         });
       } else {
-        final response = await runtime.translation(_providerType).translate(
+        final response = await runtime.translation(_providerId).translate(
               providerConfigYaml: _providerConfigController.text,
               sourceLanguage: _sourceLanguageController.text.trim().isEmpty
                   ? null
@@ -135,12 +136,12 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
             ),
           )
           .toList(),
-      selected: {_providerType},
+      selected: {_providerId},
       onSelectionChanged: (selection) {
-        final nextProviderType = selection.first;
+        final nextProviderId = selection.first;
         setState(() {
-          _providerType = nextProviderType;
-          _providerConfigController.text = _configTemplateFor(nextProviderType);
+          _providerId = nextProviderId;
+          _providerConfigController.text = _configTemplateFor(nextProviderId);
         });
       },
     );
@@ -198,7 +199,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
 
   String _formatResponse(RustTranslateResponse response) {
     final buffer = StringBuffer()
-      ..writeln('provider: ${response.providerType}')
+      ..writeln('provider: ${response.providerId}')
       ..writeln(
         'detected_source_language: ${response.detectedSourceLanguage ?? 'null'}',
       )
@@ -213,7 +214,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
 
   String _formatLookupResponse(RustLookupResponse response) {
     final buffer = StringBuffer()
-      ..writeln('provider: ${response.providerType}')
+      ..writeln('provider: ${response.providerId}')
       ..writeln('word: ${response.word ?? 'null'}');
 
     if (response.definitions.isNotEmpty) {
@@ -240,7 +241,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     return buffer.toString().trimRight();
   }
 
-  bool get _isLookupProvider => _providerType == 'iciba';
+  bool get _isLookupProvider => _providerId == 'iciba';
 
   @override
   Widget build(BuildContext context) {

@@ -11,6 +11,7 @@ fn loads_configured_provider() {
         r#"
 providers:
   deepl:
+    type: deepl
     api_key: test-key
 "#,
     )
@@ -28,15 +29,17 @@ fn loads_multiple_providers() {
     let registry = from_yaml_str(
         r#"
 providers:
-  deepl:
+  deepl-main:
+    type: deepl
     api_key: deepl-key
-  iciba:
+  iciba-main:
+    type: iciba
     api_key: iciba-key
 "#,
     )
     .expect("valid config");
 
-    assert_eq!(registry.names(), vec!["deepl", "iciba"]);
+    assert_eq!(registry.names(), vec!["deepl-main", "iciba-main"]);
 }
 
 #[test]
@@ -45,12 +48,13 @@ fn rejects_unknown_provider() {
         r#"
 providers:
   unknown:
+    type: unknown
     api_key: test-key
 "#,
     )
     .expect_err("unknown provider should fail");
 
-    assert!(matches!(error, EngineError::UnknownProvider(name) if name == "unknown"));
+    assert!(matches!(error, EngineError::ParseConfig(_)));
 }
 
 #[test]
@@ -59,6 +63,7 @@ fn rejects_invalid_provider_config() {
         r#"
 providers:
   deepl:
+    type: deepl
     base_url: https://api.deepl.com
 "#,
     )
@@ -76,6 +81,7 @@ fn rejects_empty_api_key() {
         r#"
 providers:
   deepl:
+    type: deepl
     api_key: ""
 "#,
     )
@@ -107,6 +113,7 @@ fn reads_yaml_from_file() {
         r#"
 providers:
   deepl:
+    type: deepl
     api_key: file-key
 "#,
     )
@@ -123,7 +130,8 @@ fn errors_when_feature_is_disabled() {
     let error = from_yaml_str(
         r#"
 providers:
-  baidu:
+  baidu-main:
+    type: baidu
     app_id: test-id
     app_key: test-key
 "#,
@@ -132,6 +140,6 @@ providers:
 
     assert!(matches!(
         error,
-        EngineError::ProviderNotEnabled(name) if name == "baidu"
+        EngineError::ProviderNotEnabled(name) if name == "baidu-main"
     ));
 }

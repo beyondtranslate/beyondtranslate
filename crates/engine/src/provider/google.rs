@@ -1,22 +1,23 @@
+#![cfg_attr(not(feature = "google"), allow(dead_code))]
+
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, Provider, ProviderConfig, TextDetection,
-    TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
+    DetectLanguageRequest, DetectLanguageResponse, Provider, TextDetection, TextTranslation,
+    TranslateRequest, TranslateResponse, TranslationError, TranslationService,
 };
 
 use crate::common::http_client::HttpClient;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct GoogleProviderConfig {
     pub api_key: String,
     pub base_url: Option<String>,
 }
 
-impl ProviderConfig for GoogleProviderConfig {}
-
 pub struct GoogleProvider {
+    #[allow(dead_code)]
     config: GoogleProviderConfig,
     translation_service: GoogleTranslationService,
 }
@@ -145,10 +146,6 @@ impl TranslationService for GoogleTranslationService {
 impl Provider for GoogleProvider {
     fn name(&self) -> &'static str {
         "google"
-    }
-
-    fn config(&self) -> &dyn ProviderConfig {
-        &self.config
     }
 
     fn translation(&self) -> Option<&dyn TranslationService> {

@@ -8,20 +8,20 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import '../domain/settings.dart';
 import '../frb_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `new`, `optional_trimmed`, `run_on_worker_thread`, `update`, `validate_provider_type`, `validate_required`
+// These functions are ignored because they are not marked as `pub`: `new`, `optional_trimmed`, `provider_config_type`, `provider_entry`, `run_on_worker_thread`, `update_with_result`, `update`, `validate_provider_id`, `validate_required`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `RuntimeInner`, `RuntimeState`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Runtime>>
 abstract class Runtime implements RustOpaqueInterface {
-  RuntimeDictionary dictionary({required String providerType});
+  RuntimeDictionary dictionary({required String providerId});
 
   factory Runtime({required String storageDir}) =>
       RustLib.instance.api.crateApiRuntimeRuntimeNew(storageDir: storageDir);
 
   RuntimeSettings settings();
 
-  RuntimeTranslation translation({required String providerType});
+  RuntimeTranslation translation({required String providerId});
 }
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeDictionary>>
@@ -31,13 +31,22 @@ abstract class RuntimeDictionary implements RustOpaqueInterface {
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>>
 abstract class RuntimeSettings implements RustOpaqueInterface {
+  Future<RustProviderEntry?> deleteProvider({required String providerId});
+
   Future<RustSettingsDto> get_();
 
   Future<String> getJson();
 
+  Future<RustProviderEntry?> getProvider({required String providerId});
+
+  Future<List<RustProviderEntry>> listProviders();
+
   Future<RustSettingsDto> setWindowLanguage({required String language});
 
   Future<RustSettingsDto> setWindowTheme({required String theme});
+
+  Future<RustProviderEntry> updateProvider(
+      {required String providerId, required String configYaml});
 }
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeTranslation>>
@@ -78,14 +87,14 @@ class RustLookupRequest {
 }
 
 class RustLookupResponse {
-  final String providerType;
+  final String providerId;
   final String? word;
   final List<String> definitions;
   final List<String> pronunciations;
   final List<String> tenses;
 
   const RustLookupResponse({
-    required this.providerType,
+    required this.providerId,
     this.word,
     required this.definitions,
     required this.pronunciations,
@@ -94,7 +103,7 @@ class RustLookupResponse {
 
   @override
   int get hashCode =>
-      providerType.hashCode ^
+      providerId.hashCode ^
       word.hashCode ^
       definitions.hashCode ^
       pronunciations.hashCode ^
@@ -105,11 +114,35 @@ class RustLookupResponse {
       identical(this, other) ||
       other is RustLookupResponse &&
           runtimeType == other.runtimeType &&
-          providerType == other.providerType &&
+          providerId == other.providerId &&
           word == other.word &&
           definitions == other.definitions &&
           pronunciations == other.pronunciations &&
           tenses == other.tenses;
+}
+
+class RustProviderEntry {
+  final String id;
+  final String type;
+  final String configYaml;
+
+  const RustProviderEntry({
+    required this.id,
+    required this.type,
+    required this.configYaml,
+  });
+
+  @override
+  int get hashCode => id.hashCode ^ type.hashCode ^ configYaml.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RustProviderEntry &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          type == other.type &&
+          configYaml == other.configYaml;
 }
 
 class RustTranslateRequest {
@@ -144,19 +177,19 @@ class RustTranslateRequest {
 }
 
 class RustTranslateResponse {
-  final String providerType;
+  final String providerId;
   final List<String> translations;
   final String? detectedSourceLanguage;
 
   const RustTranslateResponse({
-    required this.providerType,
+    required this.providerId,
     required this.translations,
     this.detectedSourceLanguage,
   });
 
   @override
   int get hashCode =>
-      providerType.hashCode ^
+      providerId.hashCode ^
       translations.hashCode ^
       detectedSourceLanguage.hashCode;
 
@@ -165,7 +198,7 @@ class RustTranslateResponse {
       identical(this, other) ||
       other is RustTranslateResponse &&
           runtimeType == other.runtimeType &&
-          providerType == other.providerType &&
+          providerId == other.providerId &&
           translations == other.translations &&
           detectedSourceLanguage == other.detectedSourceLanguage;
 }

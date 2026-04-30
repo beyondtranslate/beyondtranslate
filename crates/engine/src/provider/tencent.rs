@@ -1,14 +1,16 @@
+#![cfg_attr(not(feature = "tencent"), allow(dead_code))]
+
 use crate::common::http_client::HttpClient;
 use async_trait::async_trait;
 use base64::{engine::general_purpose::STANDARD, Engine as _};
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, Provider, ProviderConfig, TextDetection,
-    TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
+    DetectLanguageRequest, DetectLanguageResponse, Provider, TextDetection, TextTranslation,
+    TranslateRequest, TranslateResponse, TranslationError, TranslationService,
 };
 use hmac::{Hmac, Mac};
 use rand::random;
 use reqwest::Url;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha1::Sha1;
 use std::collections::BTreeMap;
@@ -16,14 +18,12 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 type HmacSha1 = Hmac<Sha1>;
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct TencentProviderConfig {
     pub secret_id: String,
     pub secret_key: String,
     pub base_url: Option<String>,
 }
-
-impl ProviderConfig for TencentProviderConfig {}
 
 pub struct TencentProvider {
     config: TencentProviderConfig,
@@ -122,10 +122,6 @@ impl TranslationService for TencentTranslationService {
 impl Provider for TencentProvider {
     fn name(&self) -> &'static str {
         "tencent"
-    }
-
-    fn config(&self) -> &dyn ProviderConfig {
-        &self.config
     }
 
     fn translation(&self) -> Option<&dyn TranslationService> {

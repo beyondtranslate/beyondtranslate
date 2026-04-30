@@ -25,6 +25,28 @@ class DesktopSettingsService {
   Future<RustSettingsDto> setLanguage(String language) async {
     return runtime.settings.setLanguage(language);
   }
+
+  Future<List<RustProviderEntry>> listProviders() async {
+    return runtime.settings.listProviders();
+  }
+
+  Future<RustProviderEntry?> getProvider(String providerId) async {
+    return runtime.settings.getProvider(providerId);
+  }
+
+  Future<RustProviderEntry> updateProvider({
+    required String providerId,
+    required String configYaml,
+  }) async {
+    return runtime.settings.updateProvider(
+      providerId: providerId,
+      configYaml: configYaml,
+    );
+  }
+
+  Future<RustProviderEntry?> deleteProvider(String providerId) async {
+    return runtime.settings.deleteProvider(providerId);
+  }
 }
 
 final desktopSettingsService = DesktopSettingsService.instance;

@@ -1,20 +1,19 @@
 use crate::common::http_client::HttpClient;
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    Provider, ProviderConfig, TextTranslation, TranslateRequest, TranslateResponse,
-    TranslationError, TranslationService,
+    Provider, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
+    TranslationService,
 };
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct DeepLProviderConfig {
     pub api_key: String,
     pub base_url: Option<String>,
 }
 
-impl ProviderConfig for DeepLProviderConfig {}
-
 pub struct DeepLProvider {
+    #[allow(dead_code)]
     config: DeepLProviderConfig,
     translation_service: DeepLTranslationService,
 }
@@ -98,10 +97,6 @@ impl TranslationService for DeepLTranslationService {
 impl Provider for DeepLProvider {
     fn name(&self) -> &'static str {
         "deepl"
-    }
-
-    fn config(&self) -> &dyn ProviderConfig {
-        &self.config
     }
 
     fn translation(&self) -> Option<&dyn TranslationService> {

@@ -1,23 +1,23 @@
+#![cfg_attr(not(feature = "youdao"), allow(dead_code))]
+
 use crate::common::http_client::HttpClient;
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider, ProviderConfig,
-    TextTranslation, WordDefinition, WordImage, WordPronunciation, WordTag, WordTense,
+    DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider, TextTranslation,
+    WordDefinition, WordImage, WordPronunciation, WordTag, WordTense,
 };
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct YoudaoProviderConfig {
     pub app_key: String,
     pub app_secret: String,
     pub base_url: Option<String>,
     pub picture_base_url: Option<String>,
 }
-
-impl ProviderConfig for YoudaoProviderConfig {}
 
 pub struct YoudaoProvider {
     config: YoudaoProviderConfig,
@@ -260,10 +260,6 @@ impl DictionaryService for YoudaoDictionaryService {
 impl Provider for YoudaoProvider {
     fn name(&self) -> &'static str {
         "youdao"
-    }
-
-    fn config(&self) -> &dyn ProviderConfig {
-        &self.config
     }
 
     fn dictionary(&self) -> Option<&dyn DictionaryService> {

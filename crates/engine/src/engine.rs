@@ -7,23 +7,29 @@ use std::{
 
 use beyondtranslate_core::{DictionaryService, Provider, TranslationService};
 use serde::{Deserialize, Serialize};
-use serde_yaml::Value;
+use serde_yaml::{Mapping, Value};
 use thiserror::Error;
 
 #[cfg(feature = "baidu")]
-use crate::provider::{BaiduProvider, BaiduProviderConfig};
+use crate::provider::BaiduProvider;
+use crate::provider::BaiduProviderConfig;
 #[cfg(feature = "caiyun")]
-use crate::provider::{CaiyunProvider, CaiyunProviderConfig};
-#[cfg(feature = "deepl")]
-use crate::provider::{DeepLProvider, DeepLProviderConfig};
+use crate::provider::CaiyunProvider;
+use crate::provider::CaiyunProviderConfig;
+use crate::provider::DeepLProvider;
+use crate::provider::DeepLProviderConfig;
 #[cfg(feature = "google")]
-use crate::provider::{GoogleProvider, GoogleProviderConfig};
+use crate::provider::GoogleProvider;
+use crate::provider::GoogleProviderConfig;
 #[cfg(feature = "iciba")]
-use crate::provider::{IcibaProvider, IcibaProviderConfig};
+use crate::provider::IcibaProvider;
+use crate::provider::IcibaProviderConfig;
 #[cfg(feature = "tencent")]
-use crate::provider::{TencentProvider, TencentProviderConfig};
+use crate::provider::TencentProvider;
+use crate::provider::TencentProviderConfig;
 #[cfg(feature = "youdao")]
-use crate::provider::{YoudaoProvider, YoudaoProviderConfig};
+use crate::provider::YoudaoProvider;
+use crate::provider::YoudaoProviderConfig;
 
 // ── Error ─────────────────────────────────────────────────────────────────────
 
@@ -107,48 +113,103 @@ impl Engine {
         names
     }
 
-    pub(crate) fn insert(&mut self, name: String, provider: Arc<dyn Provider>) {
-        self.providers.insert(name, provider);
+    pub(crate) fn insert(&mut self, provider_id: String, provider: Arc<dyn Provider>) {
+        self.providers.insert(provider_id, provider);
     }
 }
 
 // ── Builder ───────────────────────────────────────────────────────────────────
 
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub enum ProviderType {
+    #[serde(rename = "baidu")]
+    Baidu,
+    #[serde(rename = "caiyun")]
+    Caiyun,
+    #[serde(rename = "deepl")]
+    DeepL,
+    #[serde(rename = "google")]
+    Google,
+    #[serde(rename = "iciba")]
+    Iciba,
+    #[serde(rename = "tencent")]
+    Tencent,
+    #[serde(rename = "youdao")]
+    Youdao,
+}
+
+impl ProviderType {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Baidu => "baidu",
+            Self::Caiyun => "caiyun",
+            Self::DeepL => "deepl",
+            Self::Google => "google",
+            Self::Iciba => "iciba",
+            Self::Tencent => "tencent",
+            Self::Youdao => "youdao",
+        }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+pub struct ProviderConfig {
+    #[serde(rename = "type")]
+    pub provider_type: ProviderType,
+    #[serde(flatten, default)]
+    pub options: BTreeMap<String, Value>,
+}
+
+impl ProviderConfig {
+    pub fn decode<T>(&self, provider_id: &str) -> Result<T, EngineError>
+    where
+        T: for<'de> Deserialize<'de>,
+    {
+        serde_yaml::from_value::<T>(self.options_value()).map_err(|source| {
+            EngineError::InvalidProviderConfig {
+                provider: provider_id.to_owned(),
+                source,
+            }
+        })
+    }
+
+    pub fn options_value(&self) -> Value {
+        let mut mapping = Mapping::new();
+        for (key, value) in &self.options {
+            mapping.insert(Value::String(key.clone()), value.clone());
+        }
+        Value::Mapping(mapping)
+    }
+}
+
 macro_rules! build_provider_fn {
     ($fn_name:ident, $feature:literal, $Provider:ty, $Config:ty) => {
         #[cfg(feature = $feature)]
-        fn $fn_name(name: &str, value: Value) -> Result<Arc<dyn Provider>, EngineError> {
-            let config = serde_yaml::from_value::<$Config>(value).map_err(|source| {
-                EngineError::InvalidProviderConfig {
-                    provider: name.to_owned(),
-                    source,
-                }
-            })?;
+        fn $fn_name(provider_id: &str, config: $Config) -> Result<Arc<dyn Provider>, EngineError> {
             let provider =
                 <$Provider>::new(config).map_err(|reason| EngineError::ConfigValidationFailed {
-                    provider: name.to_owned(),
+                    provider: provider_id.to_owned(),
                     reason,
                 })?;
             Ok(Arc::new(provider))
         }
 
         #[cfg(not(feature = $feature))]
-        fn $fn_name(name: &str, _value: Value) -> Result<Arc<dyn Provider>, EngineError> {
-            Err(EngineError::ProviderNotEnabled(name.to_owned()))
+        fn $fn_name(provider_id: &str, _config: $Config) -> Result<Arc<dyn Provider>, EngineError> {
+            Err(EngineError::ProviderNotEnabled(provider_id.to_owned()))
         }
     };
 }
 
-fn build_provider(name: &str, value: Value) -> Result<Arc<dyn Provider>, EngineError> {
-    match name {
-        "baidu" => build_baidu_provider(name, value),
-        "caiyun" => build_caiyun_provider(name, value),
-        "deepl" => build_deepl_provider(name, value),
-        "google" => build_google_provider(name, value),
-        "iciba" => build_iciba_provider(name, value),
-        "tencent" => build_tencent_provider(name, value),
-        "youdao" => build_youdao_provider(name, value),
-        _ => Err(EngineError::UnknownProvider(name.to_owned())),
+fn build_provider(provider_id: &str, config: ProviderConfig) -> Result<Arc<dyn Provider>, EngineError> {
+    match config.provider_type {
+        ProviderType::Baidu => build_baidu_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::Caiyun => build_caiyun_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::DeepL => build_deepl_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::Google => build_google_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::Iciba => build_iciba_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::Tencent => build_tencent_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::Youdao => build_youdao_provider(provider_id, config.decode(provider_id)?),
     }
 }
 
@@ -200,7 +261,7 @@ build_provider_fn!(
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EngineConfig {
     #[serde(default)]
-    pub providers: BTreeMap<String, Value>,
+    pub providers: BTreeMap<String, ProviderConfig>,
 }
 
 pub fn load_from_file(path: impl AsRef<Path>) -> Result<Engine, EngineError> {
@@ -221,9 +282,9 @@ pub fn from_yaml_str(content: &str) -> Result<Engine, EngineError> {
 fn from_config(config: EngineConfig) -> Result<Engine, EngineError> {
     let mut registry = Engine::new();
 
-    for (name, value) in config.providers {
-        let provider = build_provider(&name, value)?;
-        registry.insert(name, provider);
+    for (provider_id, config) in config.providers {
+        let provider = build_provider(&provider_id, config)?;
+        registry.insert(provider_id, provider);
     }
 
     Ok(registry)

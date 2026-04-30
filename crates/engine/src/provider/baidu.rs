@@ -1,21 +1,21 @@
+#![cfg_attr(not(feature = "baidu"), allow(dead_code))]
+
 use crate::common::http_client::HttpClient;
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, Provider, ProviderConfig, TextDetection,
-    TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
+    DetectLanguageRequest, DetectLanguageResponse, Provider, TextDetection, TextTranslation,
+    TranslateRequest, TranslateResponse, TranslationError, TranslationService,
 };
 use rand::random;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct BaiduProviderConfig {
     pub app_id: String,
     pub app_key: String,
     pub base_url: Option<String>,
 }
-
-impl ProviderConfig for BaiduProviderConfig {}
 
 pub struct BaiduProvider {
     config: BaiduProviderConfig,
@@ -160,10 +160,6 @@ impl TranslationService for BaiduTranslationService {
 impl Provider for BaiduProvider {
     fn name(&self) -> &'static str {
         "baidu"
-    }
-
-    fn config(&self) -> &dyn ProviderConfig {
-        &self.config
     }
 
     fn translation(&self) -> Option<&dyn TranslationService> {

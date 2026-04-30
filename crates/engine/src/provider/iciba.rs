@@ -1,22 +1,23 @@
+#![cfg_attr(not(feature = "iciba"), allow(dead_code))]
+
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider, ProviderConfig,
-    TextTranslation, WordDefinition, WordPronunciation, WordTense,
+    DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider, TextTranslation,
+    WordDefinition, WordPronunciation, WordTense,
 };
 
 use crate::common::http_client::HttpClient;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct IcibaProviderConfig {
     pub api_key: String,
     pub base_url: Option<String>,
 }
 
-impl ProviderConfig for IcibaProviderConfig {}
-
 pub struct IcibaProvider {
+    #[allow(dead_code)]
     config: IcibaProviderConfig,
     dictionary_service: IcibaDictionaryService,
 }
@@ -186,10 +187,6 @@ impl DictionaryService for IcibaDictionaryService {
 impl Provider for IcibaProvider {
     fn name(&self) -> &'static str {
         "iciba"
-    }
-
-    fn config(&self) -> &dyn ProviderConfig {
-        &self.config
     }
 
     fn dictionary(&self) -> Option<&dyn DictionaryService> {
