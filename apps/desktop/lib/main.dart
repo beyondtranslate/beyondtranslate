@@ -11,6 +11,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 
 import 'src/features/mini_translator/mini_translator_app.dart';
+import 'src/features/settings/native_settings.dart';
 import 'src/i18n/i18n.dart';
 import 'src/routes/app_router.dart';
 import 'src/routes/settings/index.dart';
@@ -106,6 +107,7 @@ Future<void> _ensureInitialized() async {
 
   await initEnv();
   await initLocalDb();
+  NativeSettings.registerMethodCallHandler();
 }
 
 void main() async {

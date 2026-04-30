@@ -1,9 +1,9 @@
+use crate::common::http_client::HttpClient;
 use async_trait::async_trait;
 use beyondtranslate_core::{
     DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider, ProviderConfig,
     TextTranslation, WordDefinition, WordImage, WordPronunciation, WordTag, WordTense,
 };
-use crate::common::http_client::HttpClient;
 use serde::Deserialize;
 use serde_json::Value;
 use sha2::{Digest, Sha256};

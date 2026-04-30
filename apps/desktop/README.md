@@ -1,17 +1,38 @@
-# Beyond Translate
+# Beyond Translate Desktop
 
-A new Flutter project.
+## Rust Bridge Codegen
 
-## Getting Started
+Run commands from `apps/desktop`.
 
-This project is a starting point for a Flutter application.
+`flutter_rust_bridge` config is in `flutter_rust_bridge.yaml`.
 
-A few resources to get you started if this is your first Flutter project:
+Current config:
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```yaml
+rust_input: crate::api
+rust_root: rust/
+dart_output: lib/src/rust
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Regenerate bindings after changing FRB-exposed Rust APIs:
+
+```bash
+cd apps/desktop
+flutter_rust_bridge_codegen generate --config-file flutter_rust_bridge.yaml
+```
+
+Generated files:
+
+- Rust: `rust/src/frb_generated.rs`
+- Dart: files under the configured `dart_output`
+
+Do not edit generated files by hand.
+
+Useful follow-up commands:
+
+```bash
+cargo fmt --manifest-path rust/Cargo.toml
+cargo test --manifest-path rust/Cargo.toml
+dart format lib
+flutter analyze
+```

@@ -9,7 +9,8 @@ import 'dart:ffi' as ffi;
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_io.dart';
 
-import 'api/simple.dart';
+import 'api/runtime.dart';
+import 'domain/settings.dart';
 import 'frb_generated.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
@@ -20,15 +21,89 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     required super.portManager,
   });
 
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_RuntimePtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimePtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_RuntimeDictionaryPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionaryPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_RuntimeSettingsPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettingsPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_RuntimeTranslationPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslationPtr;
+
+  @protected
+  Runtime
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          dynamic raw);
+
+  @protected
+  RuntimeDictionary
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          dynamic raw);
+
+  @protected
+  RuntimeSettings
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          dynamic raw);
+
+  @protected
+  RuntimeTranslation
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          dynamic raw);
+
+  @protected
+  Runtime
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          dynamic raw);
+
+  @protected
+  RuntimeDictionary
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          dynamic raw);
+
+  @protected
+  RuntimeSettings
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          dynamic raw);
+
+  @protected
+  RuntimeTranslation
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          dynamic raw);
+
+  @protected
+  Runtime
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          dynamic raw);
+
+  @protected
+  RuntimeDictionary
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          dynamic raw);
+
+  @protected
+  RuntimeSettings
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          dynamic raw);
+
+  @protected
+  RuntimeTranslation
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          dynamic raw);
+
   @protected
   String dco_decode_String(dynamic raw);
 
   @protected
-  RustLookupDebugRequest dco_decode_box_autoadd_rust_lookup_debug_request(
-      dynamic raw);
+  RustLookupRequest dco_decode_box_autoadd_rust_lookup_request(dynamic raw);
 
   @protected
-  RustTranslateDebugRequest dco_decode_box_autoadd_rust_translate_debug_request(
+  RustTranslateRequest dco_decode_box_autoadd_rust_translate_request(
       dynamic raw);
 
   @protected
@@ -41,18 +116,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String? dco_decode_opt_String(dynamic raw);
 
   @protected
-  RustLookupDebugRequest dco_decode_rust_lookup_debug_request(dynamic raw);
+  RustLookupRequest dco_decode_rust_lookup_request(dynamic raw);
 
   @protected
-  RustLookupDebugResponse dco_decode_rust_lookup_debug_response(dynamic raw);
+  RustLookupResponse dco_decode_rust_lookup_response(dynamic raw);
 
   @protected
-  RustTranslateDebugRequest dco_decode_rust_translate_debug_request(
-      dynamic raw);
+  RustSettingsDto dco_decode_rust_settings_dto(dynamic raw);
 
   @protected
-  RustTranslateDebugResponse dco_decode_rust_translate_debug_response(
-      dynamic raw);
+  RustTranslateRequest dco_decode_rust_translate_request(dynamic raw);
+
+  @protected
+  RustTranslateResponse dco_decode_rust_translate_response(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -61,14 +137,77 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void dco_decode_unit(dynamic raw);
 
   @protected
+  BigInt dco_decode_usize(dynamic raw);
+
+  @protected
+  Runtime
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          SseDeserializer deserializer);
+
+  @protected
+  RuntimeDictionary
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          SseDeserializer deserializer);
+
+  @protected
+  RuntimeSettings
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          SseDeserializer deserializer);
+
+  @protected
+  RuntimeTranslation
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          SseDeserializer deserializer);
+
+  @protected
+  Runtime
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          SseDeserializer deserializer);
+
+  @protected
+  RuntimeDictionary
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          SseDeserializer deserializer);
+
+  @protected
+  RuntimeSettings
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          SseDeserializer deserializer);
+
+  @protected
+  RuntimeTranslation
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          SseDeserializer deserializer);
+
+  @protected
+  Runtime
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          SseDeserializer deserializer);
+
+  @protected
+  RuntimeDictionary
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          SseDeserializer deserializer);
+
+  @protected
+  RuntimeSettings
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          SseDeserializer deserializer);
+
+  @protected
+  RuntimeTranslation
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          SseDeserializer deserializer);
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
-  RustLookupDebugRequest sse_decode_box_autoadd_rust_lookup_debug_request(
+  RustLookupRequest sse_decode_box_autoadd_rust_lookup_request(
       SseDeserializer deserializer);
 
   @protected
-  RustTranslateDebugRequest sse_decode_box_autoadd_rust_translate_debug_request(
+  RustTranslateRequest sse_decode_box_autoadd_rust_translate_request(
       SseDeserializer deserializer);
 
   @protected
@@ -81,19 +220,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
-  RustLookupDebugRequest sse_decode_rust_lookup_debug_request(
+  RustLookupRequest sse_decode_rust_lookup_request(
       SseDeserializer deserializer);
 
   @protected
-  RustLookupDebugResponse sse_decode_rust_lookup_debug_response(
+  RustLookupResponse sse_decode_rust_lookup_response(
       SseDeserializer deserializer);
 
   @protected
-  RustTranslateDebugRequest sse_decode_rust_translate_debug_request(
+  RustSettingsDto sse_decode_rust_settings_dto(SseDeserializer deserializer);
+
+  @protected
+  RustTranslateRequest sse_decode_rust_translate_request(
       SseDeserializer deserializer);
 
   @protected
-  RustTranslateDebugResponse sse_decode_rust_translate_debug_response(
+  RustTranslateResponse sse_decode_rust_translate_response(
       SseDeserializer deserializer);
 
   @protected
@@ -103,21 +245,84 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_decode_unit(SseDeserializer deserializer);
 
   @protected
+  BigInt sse_decode_usize(SseDeserializer deserializer);
+
+  @protected
   int sse_decode_i_32(SseDeserializer deserializer);
 
   @protected
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          Runtime self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          RuntimeDictionary self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          RuntimeSettings self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          RuntimeTranslation self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          Runtime self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          RuntimeDictionary self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          RuntimeSettings self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          RuntimeTranslation self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          Runtime self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          RuntimeDictionary self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          RuntimeSettings self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          RuntimeTranslation self, SseSerializer serializer);
+
+  @protected
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_rust_lookup_debug_request(
-      RustLookupDebugRequest self, SseSerializer serializer);
+  void sse_encode_box_autoadd_rust_lookup_request(
+      RustLookupRequest self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_rust_translate_debug_request(
-      RustTranslateDebugRequest self, SseSerializer serializer);
+  void sse_encode_box_autoadd_rust_translate_request(
+      RustTranslateRequest self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer);
@@ -130,26 +335,33 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_rust_lookup_debug_request(
-      RustLookupDebugRequest self, SseSerializer serializer);
+  void sse_encode_rust_lookup_request(
+      RustLookupRequest self, SseSerializer serializer);
 
   @protected
-  void sse_encode_rust_lookup_debug_response(
-      RustLookupDebugResponse self, SseSerializer serializer);
+  void sse_encode_rust_lookup_response(
+      RustLookupResponse self, SseSerializer serializer);
 
   @protected
-  void sse_encode_rust_translate_debug_request(
-      RustTranslateDebugRequest self, SseSerializer serializer);
+  void sse_encode_rust_settings_dto(
+      RustSettingsDto self, SseSerializer serializer);
 
   @protected
-  void sse_encode_rust_translate_debug_response(
-      RustTranslateDebugResponse self, SseSerializer serializer);
+  void sse_encode_rust_translate_request(
+      RustTranslateRequest self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_rust_translate_response(
+      RustTranslateResponse self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
 
   @protected
   void sse_encode_unit(void self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_usize(BigInt self, SseSerializer serializer);
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer);
@@ -171,4 +383,132 @@ class RustLibWire implements BaseWire {
   /// The symbols are looked up in [dynamicLibrary].
   RustLibWire(ffi.DynamicLibrary dynamicLibrary)
       : _lookup = dynamicLibrary.lookup;
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_beyondtranslate_desktop_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_beyondtranslate_desktop_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionaryPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_beyondtranslate_desktop_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionaryPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionaryPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_beyondtranslate_desktop_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionaryPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettingsPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_beyondtranslate_desktop_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettingsPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettingsPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_beyondtranslate_desktop_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettingsPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslationPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_beyondtranslate_desktop_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslationPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslationPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_beyondtranslate_desktop_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslationPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 }

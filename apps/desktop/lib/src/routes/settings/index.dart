@@ -8,6 +8,7 @@ import '../../widgets/custom_app_bar/custom_app_bar.dart';
 import 'advanced.dart';
 import 'appearance.dart';
 import 'general.dart';
+import 'native_settings_debug.dart';
 import 'runtime_debug.dart';
 import 'shortcuts.dart';
 
@@ -20,6 +21,7 @@ part 'index.g.dart';
     TypedGoRoute<ShortcutsSettingsRoute>(path: '/settings/shortcuts'),
     TypedGoRoute<AdvancedSettingsRoute>(path: '/settings/advanced'),
     TypedGoRoute<RuntimeDebugRoute>(path: '/settings/runtime-debug'),
+    TypedGoRoute<NativeSettingsDebugRoute>(path: '/settings/native-settings-debug'),
   ],
 )
 class SettingsShellRoute extends ShellRouteData {
@@ -80,6 +82,16 @@ class RuntimeDebugRoute extends GoRouteData with $RuntimeDebugRoute {
   }
 }
 
+class NativeSettingsDebugRoute extends GoRouteData
+    with $NativeSettingsDebugRoute {
+  const NativeSettingsDebugRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const NativeSettingsDebugPage();
+  }
+}
+
 enum _SettingsCategory {
   general,
   appearance,
@@ -88,6 +100,9 @@ enum _SettingsCategory {
 
   static _SettingsCategory fromLocation(String location) {
     if (location.startsWith('/settings/runtime-debug')) {
+      return _SettingsCategory.advanced;
+    }
+    if (location.startsWith('/settings/native-settings-debug')) {
       return _SettingsCategory.advanced;
     }
     if (location.startsWith('/settings/appearance')) {

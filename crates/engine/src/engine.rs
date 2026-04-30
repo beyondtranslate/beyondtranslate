@@ -6,7 +6,7 @@ use std::{
 };
 
 use beyondtranslate_core::{DictionaryService, Provider, TranslationService};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_yaml::Value;
 use thiserror::Error;
 
@@ -152,20 +152,55 @@ fn build_provider(name: &str, value: Value) -> Result<Arc<dyn Provider>, EngineE
     }
 }
 
-build_provider_fn!(build_baidu_provider, "baidu", BaiduProvider, BaiduProviderConfig);
-build_provider_fn!(build_caiyun_provider, "caiyun", CaiyunProvider, CaiyunProviderConfig);
-build_provider_fn!(build_deepl_provider, "deepl", DeepLProvider, DeepLProviderConfig);
-build_provider_fn!(build_google_provider, "google", GoogleProvider, GoogleProviderConfig);
-build_provider_fn!(build_iciba_provider, "iciba", IcibaProvider, IcibaProviderConfig);
-build_provider_fn!(build_tencent_provider, "tencent", TencentProvider, TencentProviderConfig);
-build_provider_fn!(build_youdao_provider, "youdao", YoudaoProvider, YoudaoProviderConfig);
+build_provider_fn!(
+    build_baidu_provider,
+    "baidu",
+    BaiduProvider,
+    BaiduProviderConfig
+);
+build_provider_fn!(
+    build_caiyun_provider,
+    "caiyun",
+    CaiyunProvider,
+    CaiyunProviderConfig
+);
+build_provider_fn!(
+    build_deepl_provider,
+    "deepl",
+    DeepLProvider,
+    DeepLProviderConfig
+);
+build_provider_fn!(
+    build_google_provider,
+    "google",
+    GoogleProvider,
+    GoogleProviderConfig
+);
+build_provider_fn!(
+    build_iciba_provider,
+    "iciba",
+    IcibaProvider,
+    IcibaProviderConfig
+);
+build_provider_fn!(
+    build_tencent_provider,
+    "tencent",
+    TencentProvider,
+    TencentProviderConfig
+);
+build_provider_fn!(
+    build_youdao_provider,
+    "youdao",
+    YoudaoProvider,
+    YoudaoProviderConfig
+);
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
-#[derive(Debug, Deserialize)]
-struct EngineConfig {
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EngineConfig {
     #[serde(default)]
-    providers: BTreeMap<String, Value>,
+    pub providers: BTreeMap<String, Value>,
 }
 
 pub fn load_from_file(path: impl AsRef<Path>) -> Result<Engine, EngineError> {

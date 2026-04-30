@@ -8,7 +8,8 @@ import 'dart:convert';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-import 'api/simple.dart';
+import 'api/runtime.dart';
+import 'domain/settings.dart';
 import 'frb_generated.dart';
 import 'frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
@@ -61,7 +62,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
   @override
   Future<void> executeRustInitializers() async {
-    await api.crateApiSimpleInitApp();
+    await api.crateApiRuntimeInitApp();
   }
 
   @override
@@ -72,7 +73,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1273871166;
+  int get rustContentHash => 303132778;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -83,13 +84,69 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<void> crateApiSimpleInitApp();
+  Future<RustLookupResponse> crateApiRuntimeRuntimeDictionaryLookup(
+      {required RuntimeDictionary that, required RustLookupRequest request});
 
-  Future<RustLookupDebugResponse> crateApiSimpleLookupWithRuntime(
-      {required RustLookupDebugRequest request});
+  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsGet(
+      {required RuntimeSettings that});
 
-  Future<RustTranslateDebugResponse> crateApiSimpleTranslateWithRuntime(
-      {required RustTranslateDebugRequest request});
+  Future<String> crateApiRuntimeRuntimeSettingsGetJson(
+      {required RuntimeSettings that});
+
+  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowLanguage(
+      {required RuntimeSettings that, required String language});
+
+  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowTheme(
+      {required RuntimeSettings that, required String theme});
+
+  Future<RustTranslateResponse> crateApiRuntimeRuntimeTranslationTranslate(
+      {required RuntimeTranslation that,
+      required RustTranslateRequest request});
+
+  RuntimeDictionary crateApiRuntimeRuntimeDictionary(
+      {required Runtime that, required String providerType});
+
+  Runtime crateApiRuntimeRuntimeNew({required String storageDir});
+
+  RuntimeSettings crateApiRuntimeRuntimeSettings({required Runtime that});
+
+  RuntimeTranslation crateApiRuntimeRuntimeTranslation(
+      {required Runtime that, required String providerType});
+
+  Future<void> crateApiRuntimeInitApp();
+
+  RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_Runtime;
+
+  RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_Runtime;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_RuntimePtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_RuntimeDictionary;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_RuntimeDictionary;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_RuntimeDictionaryPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_RuntimeSettings;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_RuntimeSettings;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_RuntimeSettingsPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_RuntimeTranslation;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_RuntimeTranslation;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_RuntimeTranslationPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -101,80 +158,428 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<void> crateApiSimpleInitApp() {
+  Future<RustLookupResponse> crateApiRuntimeRuntimeDictionaryLookup(
+      {required RuntimeDictionary that, required RustLookupRequest request}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+            that, serializer);
+        sse_encode_box_autoadd_rust_lookup_request(request, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 1, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_rust_lookup_response,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeDictionaryLookupConstMeta,
+      argValues: [that, request],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeDictionaryLookupConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeDictionary_lookup",
+        argNames: ["that", "request"],
+      );
+
+  @override
+  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsGet(
+      {required RuntimeSettings that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 2, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_rust_settings_dto,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsGetConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsGetConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_get",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<String> crateApiRuntimeRuntimeSettingsGetJson(
+      {required RuntimeSettings that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 3, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsGetJsonConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsGetJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_get_json",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowLanguage(
+      {required RuntimeSettings that, required String language}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        sse_encode_String(language, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 4, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_rust_settings_dto,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsSetWindowLanguageConstMeta,
+      argValues: [that, language],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsSetWindowLanguageConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_set_window_language",
+        argNames: ["that", "language"],
+      );
+
+  @override
+  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowTheme(
+      {required RuntimeSettings that, required String theme}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        sse_encode_String(theme, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 5, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_rust_settings_dto,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsSetWindowThemeConstMeta,
+      argValues: [that, theme],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsSetWindowThemeConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_set_window_theme",
+        argNames: ["that", "theme"],
+      );
+
+  @override
+  Future<RustTranslateResponse> crateApiRuntimeRuntimeTranslationTranslate(
+      {required RuntimeTranslation that,
+      required RustTranslateRequest request}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+            that, serializer);
+        sse_encode_box_autoadd_rust_translate_request(request, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 6, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_rust_translate_response,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeTranslationTranslateConstMeta,
+      argValues: [that, request],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeTranslationTranslateConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeTranslation_translate",
+        argNames: ["that", "request"],
+      );
+
+  @override
+  RuntimeDictionary crateApiRuntimeRuntimeDictionary(
+      {required Runtime that, required String providerType}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+            that, serializer);
+        sse_encode_String(providerType, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeDictionaryConstMeta,
+      argValues: [that, providerType],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeDictionaryConstMeta =>
+      const TaskConstMeta(
+        debugName: "Runtime_dictionary",
+        argNames: ["that", "providerType"],
+      );
+
+  @override
+  Runtime crateApiRuntimeRuntimeNew({required String storageDir}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(storageDir, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeNewConstMeta,
+      argValues: [storageDir],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeNewConstMeta => const TaskConstMeta(
+        debugName: "Runtime_new",
+        argNames: ["storageDir"],
+      );
+
+  @override
+  RuntimeSettings crateApiRuntimeRuntimeSettings({required Runtime that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+            that, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsConstMeta =>
+      const TaskConstMeta(
+        debugName: "Runtime_settings",
+        argNames: ["that"],
+      );
+
+  @override
+  RuntimeTranslation crateApiRuntimeRuntimeTranslation(
+      {required Runtime that, required String providerType}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+            that, serializer);
+        sse_encode_String(providerType, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeTranslationConstMeta,
+      argValues: [that, providerType],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeTranslationConstMeta =>
+      const TaskConstMeta(
+        debugName: "Runtime_translation",
+        argNames: ["that", "providerType"],
+      );
+
+  @override
+  Future<void> crateApiRuntimeInitApp() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 1, port: port_);
+            funcId: 11, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleInitAppConstMeta,
+      constMeta: kCrateApiRuntimeInitAppConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleInitAppConstMeta => const TaskConstMeta(
+  TaskConstMeta get kCrateApiRuntimeInitAppConstMeta => const TaskConstMeta(
         debugName: "init_app",
         argNames: [],
       );
 
-  @override
-  Future<RustLookupDebugResponse> crateApiSimpleLookupWithRuntime(
-      {required RustLookupDebugRequest request}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_rust_lookup_debug_request(request, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 2, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_rust_lookup_debug_response,
-        decodeErrorData: sse_decode_String,
-      ),
-      constMeta: kCrateApiSimpleLookupWithRuntimeConstMeta,
-      argValues: [request],
-      apiImpl: this,
-    ));
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_Runtime => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_Runtime => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_RuntimeDictionary => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_RuntimeDictionary => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_RuntimeSettings => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_RuntimeSettings => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_RuntimeTranslation => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_RuntimeTranslation => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation;
+
+  @protected
+  Runtime
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
-  TaskConstMeta get kCrateApiSimpleLookupWithRuntimeConstMeta =>
-      const TaskConstMeta(
-        debugName: "lookup_with_runtime",
-        argNames: ["request"],
-      );
-
-  @override
-  Future<RustTranslateDebugResponse> crateApiSimpleTranslateWithRuntime(
-      {required RustTranslateDebugRequest request}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_rust_translate_debug_request(
-            request, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_rust_translate_debug_response,
-        decodeErrorData: sse_decode_String,
-      ),
-      constMeta: kCrateApiSimpleTranslateWithRuntimeConstMeta,
-      argValues: [request],
-      apiImpl: this,
-    ));
+  @protected
+  RuntimeDictionary
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeDictionaryImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
-  TaskConstMeta get kCrateApiSimpleTranslateWithRuntimeConstMeta =>
-      const TaskConstMeta(
-        debugName: "translate_with_runtime",
-        argNames: ["request"],
-      );
+  @protected
+  RuntimeSettings
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeSettingsImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RuntimeTranslation
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeTranslationImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  Runtime
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RuntimeDictionary
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeDictionaryImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RuntimeSettings
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeSettingsImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RuntimeTranslation
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeTranslationImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  Runtime
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RuntimeDictionary
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeDictionaryImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RuntimeSettings
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeSettingsImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RuntimeTranslation
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RuntimeTranslationImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
 
   @protected
   String dco_decode_String(dynamic raw) {
@@ -183,17 +588,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustLookupDebugRequest dco_decode_box_autoadd_rust_lookup_debug_request(
-      dynamic raw) {
+  RustLookupRequest dco_decode_box_autoadd_rust_lookup_request(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_rust_lookup_debug_request(raw);
+    return dco_decode_rust_lookup_request(raw);
   }
 
   @protected
-  RustTranslateDebugRequest dco_decode_box_autoadd_rust_translate_debug_request(
+  RustTranslateRequest dco_decode_box_autoadd_rust_translate_request(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_rust_translate_debug_request(raw);
+    return dco_decode_rust_translate_request(raw);
   }
 
   @protected
@@ -215,27 +619,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustLookupDebugRequest dco_decode_rust_lookup_debug_request(dynamic raw) {
+  RustLookupRequest dco_decode_rust_lookup_request(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
-    return RustLookupDebugRequest(
-      providerType: dco_decode_String(arr[0]),
-      providerConfigYaml: dco_decode_String(arr[1]),
-      sourceLanguage: dco_decode_String(arr[2]),
-      targetLanguage: dco_decode_String(arr[3]),
-      word: dco_decode_String(arr[4]),
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return RustLookupRequest(
+      providerConfigYaml: dco_decode_opt_String(arr[0]),
+      sourceLanguage: dco_decode_String(arr[1]),
+      targetLanguage: dco_decode_String(arr[2]),
+      word: dco_decode_String(arr[3]),
     );
   }
 
   @protected
-  RustLookupDebugResponse dco_decode_rust_lookup_debug_response(dynamic raw) {
+  RustLookupResponse dco_decode_rust_lookup_response(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 5)
       throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
-    return RustLookupDebugResponse(
+    return RustLookupResponse(
       providerType: dco_decode_String(arr[0]),
       word: dco_decode_opt_String(arr[1]),
       definitions: dco_decode_list_String(arr[2]),
@@ -245,29 +648,39 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustTranslateDebugRequest dco_decode_rust_translate_debug_request(
-      dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
-    return RustTranslateDebugRequest(
-      providerType: dco_decode_String(arr[0]),
-      providerConfigYaml: dco_decode_String(arr[1]),
-      sourceLanguage: dco_decode_opt_String(arr[2]),
-      targetLanguage: dco_decode_String(arr[3]),
-      text: dco_decode_String(arr[4]),
-    );
-  }
-
-  @protected
-  RustTranslateDebugResponse dco_decode_rust_translate_debug_response(
-      dynamic raw) {
+  RustSettingsDto dco_decode_rust_settings_dto(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 3)
       throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-    return RustTranslateDebugResponse(
+    return RustSettingsDto(
+      windowTheme: dco_decode_String(arr[0]),
+      windowLanguage: dco_decode_String(arr[1]),
+      rawJson: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  RustTranslateRequest dco_decode_rust_translate_request(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return RustTranslateRequest(
+      providerConfigYaml: dco_decode_opt_String(arr[0]),
+      sourceLanguage: dco_decode_opt_String(arr[1]),
+      targetLanguage: dco_decode_String(arr[2]),
+      text: dco_decode_String(arr[3]),
+    );
+  }
+
+  @protected
+  RustTranslateResponse dco_decode_rust_translate_response(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return RustTranslateResponse(
       providerType: dco_decode_String(arr[0]),
       translations: dco_decode_list_String(arr[1]),
       detectedSourceLanguage: dco_decode_opt_String(arr[2]),
@@ -287,6 +700,120 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt dco_decode_usize(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeU64(raw);
+  }
+
+  @protected
+  Runtime
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RuntimeDictionary
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeDictionaryImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RuntimeSettings
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeSettingsImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RuntimeTranslation
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeTranslationImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  Runtime
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RuntimeDictionary
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeDictionaryImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RuntimeSettings
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeSettingsImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RuntimeTranslation
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeTranslationImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  Runtime
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RuntimeDictionary
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeDictionaryImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RuntimeSettings
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeSettingsImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RuntimeTranslation
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RuntimeTranslationImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
@@ -294,17 +821,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustLookupDebugRequest sse_decode_box_autoadd_rust_lookup_debug_request(
+  RustLookupRequest sse_decode_box_autoadd_rust_lookup_request(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_rust_lookup_debug_request(deserializer));
+    return (sse_decode_rust_lookup_request(deserializer));
   }
 
   @protected
-  RustTranslateDebugRequest sse_decode_box_autoadd_rust_translate_debug_request(
+  RustTranslateRequest sse_decode_box_autoadd_rust_translate_request(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_rust_translate_debug_request(deserializer));
+    return (sse_decode_rust_translate_request(deserializer));
   }
 
   @protected
@@ -338,16 +865,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustLookupDebugRequest sse_decode_rust_lookup_debug_request(
+  RustLookupRequest sse_decode_rust_lookup_request(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_providerType = sse_decode_String(deserializer);
-    var var_providerConfigYaml = sse_decode_String(deserializer);
+    var var_providerConfigYaml = sse_decode_opt_String(deserializer);
     var var_sourceLanguage = sse_decode_String(deserializer);
     var var_targetLanguage = sse_decode_String(deserializer);
     var var_word = sse_decode_String(deserializer);
-    return RustLookupDebugRequest(
-        providerType: var_providerType,
+    return RustLookupRequest(
         providerConfigYaml: var_providerConfigYaml,
         sourceLanguage: var_sourceLanguage,
         targetLanguage: var_targetLanguage,
@@ -355,7 +880,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustLookupDebugResponse sse_decode_rust_lookup_debug_response(
+  RustLookupResponse sse_decode_rust_lookup_response(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_providerType = sse_decode_String(deserializer);
@@ -363,7 +888,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_definitions = sse_decode_list_String(deserializer);
     var var_pronunciations = sse_decode_list_String(deserializer);
     var var_tenses = sse_decode_list_String(deserializer);
-    return RustLookupDebugResponse(
+    return RustLookupResponse(
         providerType: var_providerType,
         word: var_word,
         definitions: var_definitions,
@@ -372,16 +897,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustTranslateDebugRequest sse_decode_rust_translate_debug_request(
+  RustSettingsDto sse_decode_rust_settings_dto(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_windowTheme = sse_decode_String(deserializer);
+    var var_windowLanguage = sse_decode_String(deserializer);
+    var var_rawJson = sse_decode_String(deserializer);
+    return RustSettingsDto(
+        windowTheme: var_windowTheme,
+        windowLanguage: var_windowLanguage,
+        rawJson: var_rawJson);
+  }
+
+  @protected
+  RustTranslateRequest sse_decode_rust_translate_request(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_providerType = sse_decode_String(deserializer);
-    var var_providerConfigYaml = sse_decode_String(deserializer);
+    var var_providerConfigYaml = sse_decode_opt_String(deserializer);
     var var_sourceLanguage = sse_decode_opt_String(deserializer);
     var var_targetLanguage = sse_decode_String(deserializer);
     var var_text = sse_decode_String(deserializer);
-    return RustTranslateDebugRequest(
-        providerType: var_providerType,
+    return RustTranslateRequest(
         providerConfigYaml: var_providerConfigYaml,
         sourceLanguage: var_sourceLanguage,
         targetLanguage: var_targetLanguage,
@@ -389,13 +924,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustTranslateDebugResponse sse_decode_rust_translate_debug_response(
+  RustTranslateResponse sse_decode_rust_translate_response(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_providerType = sse_decode_String(deserializer);
     var var_translations = sse_decode_list_String(deserializer);
     var var_detectedSourceLanguage = sse_decode_opt_String(deserializer);
-    return RustTranslateDebugResponse(
+    return RustTranslateResponse(
         providerType: var_providerType,
         translations: var_translations,
         detectedSourceLanguage: var_detectedSourceLanguage);
@@ -413,6 +948,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt sse_decode_usize(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getBigUint64();
+  }
+
+  @protected
   int sse_decode_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getInt32();
@@ -425,23 +966,140 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          Runtime self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          RuntimeDictionary self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeDictionaryImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          RuntimeSettings self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeSettingsImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          RuntimeTranslation self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeTranslationImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          Runtime self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeImpl).frbInternalSseEncode(move: false), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          RuntimeDictionary self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeDictionaryImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          RuntimeSettings self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeSettingsImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          RuntimeTranslation self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeTranslationImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
+          Runtime self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
+          RuntimeDictionary self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeDictionaryImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+          RuntimeSettings self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeSettingsImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
+          RuntimeTranslation self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RuntimeTranslationImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
   }
 
   @protected
-  void sse_encode_box_autoadd_rust_lookup_debug_request(
-      RustLookupDebugRequest self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_rust_lookup_request(
+      RustLookupRequest self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_rust_lookup_debug_request(self, serializer);
+    sse_encode_rust_lookup_request(self, serializer);
   }
 
   @protected
-  void sse_encode_box_autoadd_rust_translate_debug_request(
-      RustTranslateDebugRequest self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_rust_translate_request(
+      RustTranslateRequest self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_rust_translate_debug_request(self, serializer);
+    sse_encode_rust_translate_request(self, serializer);
   }
 
   @protected
@@ -472,19 +1130,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_rust_lookup_debug_request(
-      RustLookupDebugRequest self, SseSerializer serializer) {
+  void sse_encode_rust_lookup_request(
+      RustLookupRequest self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.providerType, serializer);
-    sse_encode_String(self.providerConfigYaml, serializer);
+    sse_encode_opt_String(self.providerConfigYaml, serializer);
     sse_encode_String(self.sourceLanguage, serializer);
     sse_encode_String(self.targetLanguage, serializer);
     sse_encode_String(self.word, serializer);
   }
 
   @protected
-  void sse_encode_rust_lookup_debug_response(
-      RustLookupDebugResponse self, SseSerializer serializer) {
+  void sse_encode_rust_lookup_response(
+      RustLookupResponse self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.providerType, serializer);
     sse_encode_opt_String(self.word, serializer);
@@ -494,19 +1151,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_rust_translate_debug_request(
-      RustTranslateDebugRequest self, SseSerializer serializer) {
+  void sse_encode_rust_settings_dto(
+      RustSettingsDto self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.providerType, serializer);
-    sse_encode_String(self.providerConfigYaml, serializer);
+    sse_encode_String(self.windowTheme, serializer);
+    sse_encode_String(self.windowLanguage, serializer);
+    sse_encode_String(self.rawJson, serializer);
+  }
+
+  @protected
+  void sse_encode_rust_translate_request(
+      RustTranslateRequest self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_opt_String(self.providerConfigYaml, serializer);
     sse_encode_opt_String(self.sourceLanguage, serializer);
     sse_encode_String(self.targetLanguage, serializer);
     sse_encode_String(self.text, serializer);
   }
 
   @protected
-  void sse_encode_rust_translate_debug_response(
-      RustTranslateDebugResponse self, SseSerializer serializer) {
+  void sse_encode_rust_translate_response(
+      RustTranslateResponse self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.providerType, serializer);
     sse_encode_list_String(self.translations, serializer);
@@ -525,6 +1190,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_usize(BigInt self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putBigUint64(self);
+  }
+
+  @protected
   void sse_encode_i_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putInt32(self);
@@ -535,4 +1206,126 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putUint8(self ? 1 : 0);
   }
+}
+
+@sealed
+class RuntimeDictionaryImpl extends RustOpaque implements RuntimeDictionary {
+  // Not to be used by end users
+  RuntimeDictionaryImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  RuntimeDictionaryImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_RuntimeDictionary,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_RuntimeDictionary,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_RuntimeDictionaryPtr,
+  );
+
+  Future<RustLookupResponse> lookup({required RustLookupRequest request}) =>
+      RustLib.instance.api
+          .crateApiRuntimeRuntimeDictionaryLookup(that: this, request: request);
+}
+
+@sealed
+class RuntimeImpl extends RustOpaque implements Runtime {
+  // Not to be used by end users
+  RuntimeImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  RuntimeImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_Runtime,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_Runtime,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_RuntimePtr,
+  );
+
+  RuntimeDictionary dictionary({required String providerType}) => RustLib
+      .instance.api
+      .crateApiRuntimeRuntimeDictionary(that: this, providerType: providerType);
+
+  RuntimeSettings settings() =>
+      RustLib.instance.api.crateApiRuntimeRuntimeSettings(
+        that: this,
+      );
+
+  RuntimeTranslation translation({required String providerType}) =>
+      RustLib.instance.api.crateApiRuntimeRuntimeTranslation(
+          that: this, providerType: providerType);
+}
+
+@sealed
+class RuntimeSettingsImpl extends RustOpaque implements RuntimeSettings {
+  // Not to be used by end users
+  RuntimeSettingsImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  RuntimeSettingsImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_RuntimeSettings,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_RuntimeSettings,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_RuntimeSettingsPtr,
+  );
+
+  Future<RustSettingsDto> get_() =>
+      RustLib.instance.api.crateApiRuntimeRuntimeSettingsGet(
+        that: this,
+      );
+
+  Future<String> getJson() =>
+      RustLib.instance.api.crateApiRuntimeRuntimeSettingsGetJson(
+        that: this,
+      );
+
+  Future<RustSettingsDto> setWindowLanguage({required String language}) =>
+      RustLib.instance.api.crateApiRuntimeRuntimeSettingsSetWindowLanguage(
+          that: this, language: language);
+
+  Future<RustSettingsDto> setWindowTheme({required String theme}) => RustLib
+      .instance.api
+      .crateApiRuntimeRuntimeSettingsSetWindowTheme(that: this, theme: theme);
+}
+
+@sealed
+class RuntimeTranslationImpl extends RustOpaque implements RuntimeTranslation {
+  // Not to be used by end users
+  RuntimeTranslationImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  RuntimeTranslationImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_RuntimeTranslation,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_RuntimeTranslation,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_RuntimeTranslationPtr,
+  );
+
+  Future<RustTranslateResponse> translate(
+          {required RustTranslateRequest request}) =>
+      RustLib.instance.api.crateApiRuntimeRuntimeTranslationTranslate(
+          that: this, request: request);
 }

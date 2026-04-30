@@ -92,6 +92,13 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               summary: Text(t.page_runtime_debug.description),
               onTap: () => const RuntimeDebugRoute().push(context),
             ),
+            PreferenceListItem(
+              title: const Text('Native Settings Debug'),
+              summary: const Text(
+                'Validate the macOS Swift -> Dart -> Rust settings bridge.',
+              ),
+              onTap: () => const NativeSettingsDebugRoute().push(context),
+            ),
           ],
         ),
       ],

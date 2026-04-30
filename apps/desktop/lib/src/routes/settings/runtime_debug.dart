@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../i18n/i18n.dart';
-import '../../rust/api/simple.dart';
-import '../../services/rust_runtime_debug_service.dart';
+import '../../services/runtime.dart';
 import '../../utils/platform_util.dart';
 import '../../widgets/ui/button.dart';
 
@@ -28,8 +27,8 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
 
   String _providerType = _kProviderOptions.first;
   bool _submitting = false;
-  RustTranslateDebugResponse? _response;
-  RustLookupDebugResponse? _lookupResponse;
+  RustTranslateResponse? _response;
+  RustLookupResponse? _lookupResponse;
   String? _errorText;
 
   @override
@@ -68,13 +67,12 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
 
     try {
       if (_providerType == 'iciba') {
-        final response = await rustRuntimeDebugService.lookup(
-          providerType: _providerType,
-          providerConfigYaml: _providerConfigController.text,
-          sourceLanguage: _sourceLanguageController.text.trim(),
-          targetLanguage: _targetLanguageController.text.trim(),
-          word: _textController.text,
-        );
+        final response = await runtime.dictionary(_providerType).lookup(
+              providerConfigYaml: _providerConfigController.text,
+              sourceLanguage: _sourceLanguageController.text.trim(),
+              targetLanguage: _targetLanguageController.text.trim(),
+              word: _textController.text,
+            );
 
         if (!mounted) {
           return;
@@ -83,15 +81,14 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
           _lookupResponse = response;
         });
       } else {
-        final response = await rustRuntimeDebugService.translate(
-          providerType: _providerType,
-          providerConfigYaml: _providerConfigController.text,
-          sourceLanguage: _sourceLanguageController.text.trim().isEmpty
-              ? null
-              : _sourceLanguageController.text.trim(),
-          targetLanguage: _targetLanguageController.text.trim(),
-          text: _textController.text,
-        );
+        final response = await runtime.translation(_providerType).translate(
+              providerConfigYaml: _providerConfigController.text,
+              sourceLanguage: _sourceLanguageController.text.trim().isEmpty
+                  ? null
+                  : _sourceLanguageController.text.trim(),
+              targetLanguage: _targetLanguageController.text.trim(),
+              text: _textController.text,
+            );
 
         if (!mounted) {
           return;
@@ -199,7 +196,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     );
   }
 
-  String _formatResponse(RustTranslateDebugResponse response) {
+  String _formatResponse(RustTranslateResponse response) {
     final buffer = StringBuffer()
       ..writeln('provider: ${response.providerType}')
       ..writeln(
@@ -214,7 +211,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     return buffer.toString().trimRight();
   }
 
-  String _formatLookupResponse(RustLookupDebugResponse response) {
+  String _formatLookupResponse(RustLookupResponse response) {
     final buffer = StringBuffer()
       ..writeln('provider: ${response.providerType}')
       ..writeln('word: ${response.word ?? 'null'}');

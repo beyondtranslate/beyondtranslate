@@ -1,9 +1,9 @@
+use crate::common::http_client::HttpClient;
 use async_trait::async_trait;
 use beyondtranslate_core::{
     DetectLanguageRequest, DetectLanguageResponse, Provider, ProviderConfig, TextDetection,
     TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
 };
-use crate::common::http_client::HttpClient;
 use rand::random;
 use serde::Deserialize;
 use serde_json::Value;

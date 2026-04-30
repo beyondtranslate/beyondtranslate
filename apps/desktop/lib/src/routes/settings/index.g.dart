@@ -33,6 +33,10 @@ RouteBase get $settingsShellRoute => ShellRouteData.$route(
           path: '/settings/runtime-debug',
           factory: $RuntimeDebugRoute._fromState,
         ),
+        GoRouteData.$route(
+          path: '/settings/native-settings-debug',
+          factory: $NativeSettingsDebugRoute._fromState,
+        ),
       ],
     );
 
@@ -140,6 +144,29 @@ mixin $RuntimeDebugRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
         '/settings/runtime-debug',
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $NativeSettingsDebugRoute on GoRouteData {
+  static NativeSettingsDebugRoute _fromState(GoRouterState state) =>
+      const NativeSettingsDebugRoute();
+
+  @override
+  String get location => GoRouteData.$location(
+        '/settings/native-settings-debug',
       );
 
   @override

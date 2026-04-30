@@ -1,9 +1,9 @@
+use crate::common::http_client::HttpClient;
 use async_trait::async_trait;
 use beyondtranslate_core::{
     Provider, ProviderConfig, TextTranslation, TranslateRequest, TranslateResponse,
     TranslationError, TranslationService,
 };
-use crate::common::http_client::HttpClient;
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]

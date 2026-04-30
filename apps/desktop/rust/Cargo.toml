@@ -15,6 +15,7 @@ beyondtranslate-engine = { path = "../../../crates/engine", features = [
 ] }
 flutter_rust_bridge = "=2.11.1"
 serde.workspace = true
+serde_json.workspace = true
 serde_yaml.workspace = true
 tokio.workspace = true
 
