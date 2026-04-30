@@ -3,11 +3,14 @@ import 'dart:io';
 
 import 'package:path/path.dart' as path;
 
+import '../rust/api/mirrors.dart'
+    show LookUpRequest, LookUpResponse, TranslateRequest, TranslateResponse;
 import '../rust/api/runtime.dart' as rust_api;
 import '../rust/domain/settings.dart';
 
-export '../rust/api/runtime.dart'
-    show RustLookupResponse, RustProviderEntry, RustTranslateResponse;
+export '../rust/api/mirrors.dart'
+    show LookUpRequest, LookUpResponse, TranslateRequest, TranslateResponse;
+export '../rust/api/runtime.dart' show RustProviderEntry;
 
 class RuntimeService {
   RuntimeService._();
@@ -118,8 +121,7 @@ class RuntimeTranslationService {
   final RuntimeService _runtime;
   final String _providerId;
 
-  Future<rust_api.RustTranslateResponse> translate({
-    required String providerConfigYaml,
+  Future<TranslateResponse> translate({
     String? sourceLanguage,
     required String targetLanguage,
     required String text,
@@ -127,8 +129,7 @@ class RuntimeTranslationService {
     return (await _runtime.client)
         .translation(providerId: _providerId)
         .translate(
-          request: rust_api.RustTranslateRequest(
-            providerConfigYaml: providerConfigYaml,
+          request: TranslateRequest(
             sourceLanguage: sourceLanguage,
             targetLanguage: targetLanguage,
             text: text,
@@ -143,8 +144,7 @@ class RuntimeDictionaryService {
   final RuntimeService _runtime;
   final String _providerId;
 
-  Future<rust_api.RustLookupResponse> lookup({
-    required String providerConfigYaml,
+  Future<LookUpResponse> lookup({
     required String sourceLanguage,
     required String targetLanguage,
     required String word,
@@ -152,8 +152,7 @@ class RuntimeDictionaryService {
     return (await _runtime.client)
         .dictionary(providerId: _providerId)
         .lookup(
-          request: rust_api.RustLookupRequest(
-            providerConfigYaml: providerConfigYaml,
+          request: LookUpRequest(
             sourceLanguage: sourceLanguage,
             targetLanguage: targetLanguage,
             word: word,

@@ -2,7 +2,10 @@ use std::future::Future;
 use std::sync::Arc;
 use std::thread;
 
-use beyondtranslate_core::{LookUpRequest, TranslateRequest};
+pub use super::mirrors::{
+    LookUpRequest, LookUpResponse, TextTranslation, TranslateRequest, TranslateResponse,
+    WordDefinition, WordImage, WordPhrase, WordPronunciation, WordSentence, WordTag, WordTense,
+};
 use beyondtranslate_engine::ProviderConfig;
 use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
@@ -48,38 +51,6 @@ pub struct RuntimeTranslation {
 pub struct RuntimeDictionary {
     inner: Arc<RuntimeInner>,
     provider_id: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct RustTranslateRequest {
-    pub provider_config_yaml: Option<String>,
-    pub source_language: Option<String>,
-    pub target_language: String,
-    pub text: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct RustTranslateResponse {
-    pub provider_id: String,
-    pub translations: Vec<String>,
-    pub detected_source_language: Option<String>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct RustLookupRequest {
-    pub provider_config_yaml: Option<String>,
-    pub source_language: String,
-    pub target_language: String,
-    pub word: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct RustLookupResponse {
-    pub provider_id: String,
-    pub word: Option<String>,
-    pub definitions: Vec<String>,
-    pub pronunciations: Vec<String>,
-    pub tenses: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -257,168 +228,56 @@ impl RuntimeSettings {
 }
 
 impl RuntimeTranslation {
-    pub async fn translate(
-        &self,
-        request: RustTranslateRequest,
-    ) -> Result<RustTranslateResponse, String> {
+    pub async fn translate(&self, request: TranslateRequest) -> Result<TranslateResponse, String> {
         let provider_id = self.provider_id.clone();
         let inner = Arc::clone(&self.inner);
         run_on_worker_thread(move || async move {
-            let target_language = validate_required("target_language", request.target_language)?;
+            let target_language = validate_optional_required(
+                "target_language",
+                request.target_language,
+            )?;
             let text = validate_required("text", request.text)?;
+            let state = inner.state.read().await;
+            let translation_service = state
+                .engine
+                .translation(&provider_id)
+                .map_err(|error| error.to_string())?;
 
-            let response = if let Some(provider_config_yaml) =
-                optional_trimmed(request.provider_config_yaml)
-            {
-                let engine =
-                    engine::build_from_provider_config(&provider_id, &provider_config_yaml)?;
-                let translation_service = engine
-                    .translation(&provider_id)
-                    .map_err(|error| error.to_string())?;
-
-                translation_service
-                    .translate(TranslateRequest {
-                        source_language: optional_trimmed(request.source_language),
-                        target_language: Some(target_language),
-                        text,
-                    })
-                    .await
-                    .map_err(|error| error.to_string())?
-            } else {
-                let state = inner.state.read().await;
-                let translation_service = state
-                    .engine
-                    .translation(&provider_id)
-                    .map_err(|error| error.to_string())?;
-
-                translation_service
-                    .translate(TranslateRequest {
-                        source_language: optional_trimmed(request.source_language),
-                        target_language: Some(target_language),
-                        text,
-                    })
-                    .await
-                    .map_err(|error| error.to_string())?
-            };
-
-            Ok(RustTranslateResponse {
-                provider_id,
-                detected_source_language: response
-                    .translations
-                    .first()
-                    .and_then(|translation| translation.detected_source_language.clone()),
-                translations: response
-                    .translations
-                    .into_iter()
-                    .map(|translation| translation.text)
-                    .collect(),
-            })
+            translation_service
+                .translate(TranslateRequest {
+                    source_language: optional_trimmed(request.source_language),
+                    target_language: Some(target_language),
+                    text,
+                })
+                .await
+                .map_err(|error| error.to_string())
         })
         .await
     }
 }
 
 impl RuntimeDictionary {
-    pub async fn lookup(&self, request: RustLookupRequest) -> Result<RustLookupResponse, String> {
+    pub async fn lookup(&self, request: LookUpRequest) -> Result<LookUpResponse, String> {
         let provider_id = self.provider_id.clone();
         let inner = Arc::clone(&self.inner);
         run_on_worker_thread(move || async move {
             let source_language = validate_required("source_language", request.source_language)?;
             let target_language = validate_required("target_language", request.target_language)?;
             let word = validate_required("word", request.word)?;
+            let state = inner.state.read().await;
+            let dictionary_service = state
+                .engine
+                .dictionary(&provider_id)
+                .map_err(|error| error.to_string())?;
 
-            let response = if let Some(provider_config_yaml) =
-                optional_trimmed(request.provider_config_yaml)
-            {
-                let engine =
-                    engine::build_from_provider_config(&provider_id, &provider_config_yaml)?;
-                let dictionary_service = engine
-                    .dictionary(&provider_id)
-                    .map_err(|error| error.to_string())?;
-
-                dictionary_service
-                    .look_up(LookUpRequest {
-                        source_language,
-                        target_language,
-                        word,
-                    })
-                    .await
-                    .map_err(|error| error.to_string())?
-            } else {
-                let state = inner.state.read().await;
-                let dictionary_service = state
-                    .engine
-                    .dictionary(&provider_id)
-                    .map_err(|error| error.to_string())?;
-
-                dictionary_service
-                    .look_up(LookUpRequest {
-                        source_language,
-                        target_language,
-                        word,
-                    })
-                    .await
-                    .map_err(|error| error.to_string())?
-            };
-
-            Ok(RustLookupResponse {
-                provider_id,
-                word: response.word,
-                definitions: response
-                    .definitions
-                    .unwrap_or_default()
-                    .into_iter()
-                    .map(|definition| {
-                        let name = definition.name.unwrap_or_default();
-                        let values = definition.values.unwrap_or_default().join(", ");
-                        match (name.is_empty(), values.is_empty()) {
-                            (true, true) => String::new(),
-                            (false, true) => name,
-                            (true, false) => values,
-                            (false, false) => format!("{name} {values}"),
-                        }
-                    })
-                    .filter(|item| !item.is_empty())
-                    .collect(),
-                pronunciations: response
-                    .pronunciations
-                    .unwrap_or_default()
-                    .into_iter()
-                    .map(|pronunciation| {
-                        let kind = pronunciation.r#type.unwrap_or_default();
-                        let symbol = pronunciation.phonetic_symbol.unwrap_or_default();
-                        let audio_url = pronunciation.audio_url.unwrap_or_default();
-                        let mut parts = Vec::new();
-                        if !kind.is_empty() {
-                            parts.push(kind);
-                        }
-                        if !symbol.is_empty() {
-                            parts.push(symbol);
-                        }
-                        if !audio_url.is_empty() {
-                            parts.push(audio_url);
-                        }
-                        parts.join(" | ")
-                    })
-                    .filter(|item| !item.is_empty())
-                    .collect(),
-                tenses: response
-                    .tenses
-                    .unwrap_or_default()
-                    .into_iter()
-                    .map(|tense| {
-                        let name = tense.name.unwrap_or_default();
-                        let values = tense.values.unwrap_or_default().join(", ");
-                        match (name.is_empty(), values.is_empty()) {
-                            (true, true) => String::new(),
-                            (false, true) => name,
-                            (true, false) => values,
-                            (false, false) => format!("{name}: {values}"),
-                        }
-                    })
-                    .filter(|item| !item.is_empty())
-                    .collect(),
-            })
+            dictionary_service
+                .look_up(LookUpRequest {
+                    source_language,
+                    target_language,
+                    word,
+                })
+                .await
+                .map_err(|error| error.to_string())
         })
         .await
     }
@@ -440,6 +299,10 @@ fn provider_entry(provider_id: &str, config: &ProviderConfig) -> Result<RustProv
 
 fn validate_provider_id(provider_id: String) -> Result<String, String> {
     validate_required("provider_id", provider_id)
+}
+
+fn validate_optional_required(name: &str, value: Option<String>) -> Result<String, String> {
+    validate_required(name, value.unwrap_or_default())
 }
 
 fn validate_required(name: &str, value: String) -> Result<String, String> {
@@ -509,10 +372,9 @@ mod tests {
                 runtime
                     .translation("deepl".to_owned())
                     .unwrap()
-                    .translate(RustTranslateRequest {
-                        provider_config_yaml: Some("type: deepl\napi_key: test-key".to_owned()),
+                    .translate(TranslateRequest {
                         source_language: Some("en".to_owned()),
-                        target_language: String::new(),
+                        target_language: Some(String::new()),
                         text: "hello".to_owned(),
                     })
                     .await
@@ -533,8 +395,7 @@ mod tests {
                 runtime
                     .dictionary("iciba".to_owned())
                     .unwrap()
-                    .lookup(RustLookupRequest {
-                        provider_config_yaml: Some("type: iciba\napi_key: test-key".to_owned()),
+                    .lookup(LookUpRequest {
                         source_language: "en".to_owned(),
                         target_language: "zh".to_owned(),
                         word: String::new(),

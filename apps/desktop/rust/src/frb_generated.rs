@@ -71,8 +71,7 @@ fn wire__crate__api__runtime__RuntimeDictionary_lookup_impl(
             let api_that = <RustOpaqueMoi<
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeDictionary>,
             >>::sse_decode(&mut deserializer);
-            let api_request =
-                <crate::api::runtime::RustLookupRequest>::sse_decode(&mut deserializer);
+            let api_request = <crate::api::mirrors::LookUpRequest>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, String>(
@@ -605,7 +604,7 @@ fn wire__crate__api__runtime__RuntimeTranslation_translate_impl(
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeTranslation>,
             >>::sse_decode(&mut deserializer);
             let api_request =
-                <crate::api::runtime::RustTranslateRequest>::sse_decode(&mut deserializer);
+                <crate::api::mirrors::TranslateRequest>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, String>(
@@ -848,6 +847,83 @@ fn wire__crate__api__runtime__init_app_impl(
     )
 }
 
+// Section: static_checks
+
+#[allow(clippy::unnecessary_literal_unwrap)]
+const _: fn() = || {
+    {
+        let LookUpRequest = None::<crate::api::mirrors::LookUpRequest>.unwrap();
+        let _: String = LookUpRequest.source_language;
+        let _: String = LookUpRequest.target_language;
+        let _: String = LookUpRequest.word;
+    }
+    {
+        let LookUpResponse = None::<crate::api::mirrors::LookUpResponse>.unwrap();
+        let _: Vec<crate::api::mirrors::TextTranslation> = LookUpResponse.translations;
+        let _: Option<String> = LookUpResponse.word;
+        let _: Option<String> = LookUpResponse.tip;
+        let _: Option<Vec<crate::api::mirrors::WordTag>> = LookUpResponse.tags;
+        let _: Option<Vec<crate::api::mirrors::WordDefinition>> = LookUpResponse.definitions;
+        let _: Option<Vec<crate::api::mirrors::WordPronunciation>> = LookUpResponse.pronunciations;
+        let _: Option<Vec<crate::api::mirrors::WordImage>> = LookUpResponse.images;
+        let _: Option<Vec<crate::api::mirrors::WordPhrase>> = LookUpResponse.phrases;
+        let _: Option<Vec<crate::api::mirrors::WordTense>> = LookUpResponse.tenses;
+        let _: Option<Vec<crate::api::mirrors::WordSentence>> = LookUpResponse.sentences;
+    }
+    {
+        let TextTranslation = None::<crate::api::mirrors::TextTranslation>.unwrap();
+        let _: Option<String> = TextTranslation.detected_source_language;
+        let _: String = TextTranslation.text;
+        let _: Option<String> = TextTranslation.audio_url;
+    }
+    {
+        let TranslateRequest = None::<crate::api::mirrors::TranslateRequest>.unwrap();
+        let _: Option<String> = TranslateRequest.source_language;
+        let _: Option<String> = TranslateRequest.target_language;
+        let _: String = TranslateRequest.text;
+    }
+    {
+        let TranslateResponse = None::<crate::api::mirrors::TranslateResponse>.unwrap();
+        let _: Vec<crate::api::mirrors::TextTranslation> = TranslateResponse.translations;
+    }
+    {
+        let WordDefinition = None::<crate::api::mirrors::WordDefinition>.unwrap();
+        let _: Option<String> = WordDefinition.r#type;
+        let _: Option<String> = WordDefinition.name;
+        let _: Option<Vec<String>> = WordDefinition.values;
+    }
+    {
+        let WordImage = None::<crate::api::mirrors::WordImage>.unwrap();
+        let _: String = WordImage.url;
+    }
+    {
+        let WordPhrase = None::<crate::api::mirrors::WordPhrase>.unwrap();
+        let _: String = WordPhrase.text;
+        let _: Vec<String> = WordPhrase.translations;
+    }
+    {
+        let WordPronunciation = None::<crate::api::mirrors::WordPronunciation>.unwrap();
+        let _: Option<String> = WordPronunciation.r#type;
+        let _: Option<String> = WordPronunciation.phonetic_symbol;
+        let _: Option<String> = WordPronunciation.audio_url;
+    }
+    {
+        let WordSentence = None::<crate::api::mirrors::WordSentence>.unwrap();
+        let _: String = WordSentence.text;
+        let _: Vec<String> = WordSentence.translations;
+    }
+    {
+        let WordTag = None::<crate::api::mirrors::WordTag>.unwrap();
+        let _: String = WordTag.name;
+    }
+    {
+        let WordTense = None::<crate::api::mirrors::WordTense>.unwrap();
+        let _: Option<String> = WordTense.r#type;
+        let _: Option<String> = WordTense.name;
+        let _: Option<Vec<String>> = WordTense.values;
+    }
+};
+
 // Section: related_funcs
 
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
@@ -989,6 +1065,159 @@ impl SseDecode for Vec<crate::api::runtime::RustProviderEntry> {
     }
 }
 
+impl SseDecode for Vec<crate::api::mirrors::TextTranslation> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::mirrors::TextTranslation>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::mirrors::WordDefinition> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::mirrors::WordDefinition>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::mirrors::WordImage> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::mirrors::WordImage>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::mirrors::WordPhrase> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::mirrors::WordPhrase>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::mirrors::WordPronunciation> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::mirrors::WordPronunciation>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::mirrors::WordSentence> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::mirrors::WordSentence>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::mirrors::WordTag> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::mirrors::WordTag>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::mirrors::WordTense> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::mirrors::WordTense>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for crate::api::mirrors::LookUpRequest {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_sourceLanguage = <String>::sse_decode(deserializer);
+        let mut var_targetLanguage = <String>::sse_decode(deserializer);
+        let mut var_word = <String>::sse_decode(deserializer);
+        return crate::api::mirrors::LookUpRequest {
+            source_language: var_sourceLanguage,
+            target_language: var_targetLanguage,
+            word: var_word,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::LookUpResponse {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_translations =
+            <Vec<crate::api::mirrors::TextTranslation>>::sse_decode(deserializer);
+        let mut var_word = <Option<String>>::sse_decode(deserializer);
+        let mut var_tip = <Option<String>>::sse_decode(deserializer);
+        let mut var_tags = <Option<Vec<crate::api::mirrors::WordTag>>>::sse_decode(deserializer);
+        let mut var_definitions =
+            <Option<Vec<crate::api::mirrors::WordDefinition>>>::sse_decode(deserializer);
+        let mut var_pronunciations =
+            <Option<Vec<crate::api::mirrors::WordPronunciation>>>::sse_decode(deserializer);
+        let mut var_images =
+            <Option<Vec<crate::api::mirrors::WordImage>>>::sse_decode(deserializer);
+        let mut var_phrases =
+            <Option<Vec<crate::api::mirrors::WordPhrase>>>::sse_decode(deserializer);
+        let mut var_tenses =
+            <Option<Vec<crate::api::mirrors::WordTense>>>::sse_decode(deserializer);
+        let mut var_sentences =
+            <Option<Vec<crate::api::mirrors::WordSentence>>>::sse_decode(deserializer);
+        return crate::api::mirrors::LookUpResponse {
+            translations: var_translations,
+            word: var_word,
+            tip: var_tip,
+            tags: var_tags,
+            definitions: var_definitions,
+            pronunciations: var_pronunciations,
+            images: var_images,
+            phrases: var_phrases,
+            tenses: var_tenses,
+            sentences: var_sentences,
+        };
+    }
+}
+
 impl SseDecode for Option<String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1013,37 +1242,105 @@ impl SseDecode for Option<crate::api::runtime::RustProviderEntry> {
     }
 }
 
-impl SseDecode for crate::api::runtime::RustLookupRequest {
+impl SseDecode for Option<Vec<String>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_providerConfigYaml = <Option<String>>::sse_decode(deserializer);
-        let mut var_sourceLanguage = <String>::sse_decode(deserializer);
-        let mut var_targetLanguage = <String>::sse_decode(deserializer);
-        let mut var_word = <String>::sse_decode(deserializer);
-        return crate::api::runtime::RustLookupRequest {
-            provider_config_yaml: var_providerConfigYaml,
-            source_language: var_sourceLanguage,
-            target_language: var_targetLanguage,
-            word: var_word,
-        };
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<String>>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
     }
 }
 
-impl SseDecode for crate::api::runtime::RustLookupResponse {
+impl SseDecode for Option<Vec<crate::api::mirrors::WordDefinition>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_providerId = <String>::sse_decode(deserializer);
-        let mut var_word = <Option<String>>::sse_decode(deserializer);
-        let mut var_definitions = <Vec<String>>::sse_decode(deserializer);
-        let mut var_pronunciations = <Vec<String>>::sse_decode(deserializer);
-        let mut var_tenses = <Vec<String>>::sse_decode(deserializer);
-        return crate::api::runtime::RustLookupResponse {
-            provider_id: var_providerId,
-            word: var_word,
-            definitions: var_definitions,
-            pronunciations: var_pronunciations,
-            tenses: var_tenses,
-        };
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<crate::api::mirrors::WordDefinition>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<Vec<crate::api::mirrors::WordImage>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<crate::api::mirrors::WordImage>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<Vec<crate::api::mirrors::WordPhrase>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<crate::api::mirrors::WordPhrase>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<Vec<crate::api::mirrors::WordPronunciation>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<crate::api::mirrors::WordPronunciation>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<Vec<crate::api::mirrors::WordSentence>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<crate::api::mirrors::WordSentence>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<Vec<crate::api::mirrors::WordTag>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<crate::api::mirrors::WordTag>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<Vec<crate::api::mirrors::WordTense>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<crate::api::mirrors::WordTense>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
     }
 }
 
@@ -1075,15 +1372,27 @@ impl SseDecode for crate::domain::settings::RustSettingsDto {
     }
 }
 
-impl SseDecode for crate::api::runtime::RustTranslateRequest {
+impl SseDecode for crate::api::mirrors::TextTranslation {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_providerConfigYaml = <Option<String>>::sse_decode(deserializer);
-        let mut var_sourceLanguage = <Option<String>>::sse_decode(deserializer);
-        let mut var_targetLanguage = <String>::sse_decode(deserializer);
+        let mut var_detectedSourceLanguage = <Option<String>>::sse_decode(deserializer);
         let mut var_text = <String>::sse_decode(deserializer);
-        return crate::api::runtime::RustTranslateRequest {
-            provider_config_yaml: var_providerConfigYaml,
+        let mut var_audioUrl = <Option<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::TextTranslation {
+            detected_source_language: var_detectedSourceLanguage,
+            text: var_text,
+            audio_url: var_audioUrl,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::TranslateRequest {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_sourceLanguage = <Option<String>>::sse_decode(deserializer);
+        let mut var_targetLanguage = <Option<String>>::sse_decode(deserializer);
+        let mut var_text = <String>::sse_decode(deserializer);
+        return crate::api::mirrors::TranslateRequest {
             source_language: var_sourceLanguage,
             target_language: var_targetLanguage,
             text: var_text,
@@ -1091,16 +1400,13 @@ impl SseDecode for crate::api::runtime::RustTranslateRequest {
     }
 }
 
-impl SseDecode for crate::api::runtime::RustTranslateResponse {
+impl SseDecode for crate::api::mirrors::TranslateResponse {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_providerId = <String>::sse_decode(deserializer);
-        let mut var_translations = <Vec<String>>::sse_decode(deserializer);
-        let mut var_detectedSourceLanguage = <Option<String>>::sse_decode(deserializer);
-        return crate::api::runtime::RustTranslateResponse {
-            provider_id: var_providerId,
+        let mut var_translations =
+            <Vec<crate::api::mirrors::TextTranslation>>::sse_decode(deserializer);
+        return crate::api::mirrors::TranslateResponse {
             translations: var_translations,
-            detected_source_language: var_detectedSourceLanguage,
         };
     }
 }
@@ -1121,6 +1427,88 @@ impl SseDecode for usize {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_u64::<NativeEndian>().unwrap() as _
+    }
+}
+
+impl SseDecode for crate::api::mirrors::WordDefinition {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_type = <Option<String>>::sse_decode(deserializer);
+        let mut var_name = <Option<String>>::sse_decode(deserializer);
+        let mut var_values = <Option<Vec<String>>>::sse_decode(deserializer);
+        return crate::api::mirrors::WordDefinition {
+            r#type: var_type,
+            name: var_name,
+            values: var_values,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::WordImage {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_url = <String>::sse_decode(deserializer);
+        return crate::api::mirrors::WordImage { url: var_url };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::WordPhrase {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_text = <String>::sse_decode(deserializer);
+        let mut var_translations = <Vec<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::WordPhrase {
+            text: var_text,
+            translations: var_translations,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::WordPronunciation {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_type = <Option<String>>::sse_decode(deserializer);
+        let mut var_phoneticSymbol = <Option<String>>::sse_decode(deserializer);
+        let mut var_audioUrl = <Option<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::WordPronunciation {
+            r#type: var_type,
+            phonetic_symbol: var_phoneticSymbol,
+            audio_url: var_audioUrl,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::WordSentence {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_text = <String>::sse_decode(deserializer);
+        let mut var_translations = <Vec<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::WordSentence {
+            text: var_text,
+            translations: var_translations,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::WordTag {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_name = <String>::sse_decode(deserializer);
+        return crate::api::mirrors::WordTag { name: var_name };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::WordTense {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_type = <Option<String>>::sse_decode(deserializer);
+        let mut var_name = <Option<String>>::sse_decode(deserializer);
+        let mut var_values = <Option<Vec<String>>>::sse_decode(deserializer);
+        return crate::api::mirrors::WordTense {
+            r#type: var_type,
+            name: var_name,
+            values: var_values,
+        };
     }
 }
 
@@ -1289,50 +1677,54 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<RuntimeTranslation>> for Runti
 }
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::runtime::RustLookupRequest {
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::LookUpRequest> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.provider_config_yaml.into_into_dart().into_dart(),
-            self.source_language.into_into_dart().into_dart(),
-            self.target_language.into_into_dart().into_dart(),
-            self.word.into_into_dart().into_dart(),
+            self.0.source_language.into_into_dart().into_dart(),
+            self.0.target_language.into_into_dart().into_dart(),
+            self.0.word.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::runtime::RustLookupRequest
+    for FrbWrapper<crate::api::mirrors::LookUpRequest>
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::runtime::RustLookupRequest>
-    for crate::api::runtime::RustLookupRequest
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::LookUpRequest>>
+    for crate::api::mirrors::LookUpRequest
 {
-    fn into_into_dart(self) -> crate::api::runtime::RustLookupRequest {
-        self
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::LookUpRequest> {
+        self.into()
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::runtime::RustLookupResponse {
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::LookUpResponse> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.provider_id.into_into_dart().into_dart(),
-            self.word.into_into_dart().into_dart(),
-            self.definitions.into_into_dart().into_dart(),
-            self.pronunciations.into_into_dart().into_dart(),
-            self.tenses.into_into_dart().into_dart(),
+            self.0.translations.into_into_dart().into_dart(),
+            self.0.word.into_into_dart().into_dart(),
+            self.0.tip.into_into_dart().into_dart(),
+            self.0.tags.into_into_dart().into_dart(),
+            self.0.definitions.into_into_dart().into_dart(),
+            self.0.pronunciations.into_into_dart().into_dart(),
+            self.0.images.into_into_dart().into_dart(),
+            self.0.phrases.into_into_dart().into_dart(),
+            self.0.tenses.into_into_dart().into_dart(),
+            self.0.sentences.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::runtime::RustLookupResponse
+    for FrbWrapper<crate::api::mirrors::LookUpResponse>
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::runtime::RustLookupResponse>
-    for crate::api::runtime::RustLookupResponse
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::LookUpResponse>>
+    for crate::api::mirrors::LookUpResponse
 {
-    fn into_into_dart(self) -> crate::api::runtime::RustLookupResponse {
-        self
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::LookUpResponse> {
+        self.into()
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -1380,48 +1772,206 @@ impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::RustSettingsDto>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::runtime::RustTranslateRequest {
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::TextTranslation> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.provider_config_yaml.into_into_dart().into_dart(),
-            self.source_language.into_into_dart().into_dart(),
-            self.target_language.into_into_dart().into_dart(),
-            self.text.into_into_dart().into_dart(),
+            self.0.detected_source_language.into_into_dart().into_dart(),
+            self.0.text.into_into_dart().into_dart(),
+            self.0.audio_url.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::runtime::RustTranslateRequest
+    for FrbWrapper<crate::api::mirrors::TextTranslation>
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::runtime::RustTranslateRequest>
-    for crate::api::runtime::RustTranslateRequest
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::TextTranslation>>
+    for crate::api::mirrors::TextTranslation
 {
-    fn into_into_dart(self) -> crate::api::runtime::RustTranslateRequest {
-        self
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::TextTranslation> {
+        self.into()
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::runtime::RustTranslateResponse {
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::TranslateRequest> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.provider_id.into_into_dart().into_dart(),
-            self.translations.into_into_dart().into_dart(),
-            self.detected_source_language.into_into_dart().into_dart(),
+            self.0.source_language.into_into_dart().into_dart(),
+            self.0.target_language.into_into_dart().into_dart(),
+            self.0.text.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::runtime::RustTranslateResponse
+    for FrbWrapper<crate::api::mirrors::TranslateRequest>
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::runtime::RustTranslateResponse>
-    for crate::api::runtime::RustTranslateResponse
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::TranslateRequest>>
+    for crate::api::mirrors::TranslateRequest
 {
-    fn into_into_dart(self) -> crate::api::runtime::RustTranslateResponse {
-        self
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::TranslateRequest> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::TranslateResponse> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [self.0.translations.into_into_dart().into_dart()].into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::TranslateResponse>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::TranslateResponse>>
+    for crate::api::mirrors::TranslateResponse
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::TranslateResponse> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::WordDefinition> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.r#type.into_into_dart().into_dart(),
+            self.0.name.into_into_dart().into_dart(),
+            self.0.values.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::WordDefinition>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::WordDefinition>>
+    for crate::api::mirrors::WordDefinition
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::WordDefinition> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::WordImage> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [self.0.url.into_into_dart().into_dart()].into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::WordImage>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::WordImage>>
+    for crate::api::mirrors::WordImage
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::WordImage> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::WordPhrase> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.text.into_into_dart().into_dart(),
+            self.0.translations.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::WordPhrase>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::WordPhrase>>
+    for crate::api::mirrors::WordPhrase
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::WordPhrase> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::WordPronunciation> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.r#type.into_into_dart().into_dart(),
+            self.0.phonetic_symbol.into_into_dart().into_dart(),
+            self.0.audio_url.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::WordPronunciation>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::WordPronunciation>>
+    for crate::api::mirrors::WordPronunciation
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::WordPronunciation> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::WordSentence> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.text.into_into_dart().into_dart(),
+            self.0.translations.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::WordSentence>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::WordSentence>>
+    for crate::api::mirrors::WordSentence
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::WordSentence> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::WordTag> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [self.0.name.into_into_dart().into_dart()].into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::WordTag>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::WordTag>>
+    for crate::api::mirrors::WordTag
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::WordTag> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::WordTense> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.r#type.into_into_dart().into_dart(),
+            self.0.name.into_into_dart().into_dart(),
+            self.0.values.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::WordTense>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::WordTense>>
+    for crate::api::mirrors::WordTense
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::WordTense> {
+        self.into()
     }
 }
 
@@ -1532,6 +2082,117 @@ impl SseEncode for Vec<crate::api::runtime::RustProviderEntry> {
     }
 }
 
+impl SseEncode for Vec<crate::api::mirrors::TextTranslation> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::mirrors::TextTranslation>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::mirrors::WordDefinition> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::mirrors::WordDefinition>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::mirrors::WordImage> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::mirrors::WordImage>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::mirrors::WordPhrase> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::mirrors::WordPhrase>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::mirrors::WordPronunciation> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::mirrors::WordPronunciation>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::mirrors::WordSentence> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::mirrors::WordSentence>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::mirrors::WordTag> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::mirrors::WordTag>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::mirrors::WordTense> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::mirrors::WordTense>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for crate::api::mirrors::LookUpRequest {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.source_language, serializer);
+        <String>::sse_encode(self.target_language, serializer);
+        <String>::sse_encode(self.word, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::LookUpResponse {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<crate::api::mirrors::TextTranslation>>::sse_encode(self.translations, serializer);
+        <Option<String>>::sse_encode(self.word, serializer);
+        <Option<String>>::sse_encode(self.tip, serializer);
+        <Option<Vec<crate::api::mirrors::WordTag>>>::sse_encode(self.tags, serializer);
+        <Option<Vec<crate::api::mirrors::WordDefinition>>>::sse_encode(
+            self.definitions,
+            serializer,
+        );
+        <Option<Vec<crate::api::mirrors::WordPronunciation>>>::sse_encode(
+            self.pronunciations,
+            serializer,
+        );
+        <Option<Vec<crate::api::mirrors::WordImage>>>::sse_encode(self.images, serializer);
+        <Option<Vec<crate::api::mirrors::WordPhrase>>>::sse_encode(self.phrases, serializer);
+        <Option<Vec<crate::api::mirrors::WordTense>>>::sse_encode(self.tenses, serializer);
+        <Option<Vec<crate::api::mirrors::WordSentence>>>::sse_encode(self.sentences, serializer);
+    }
+}
+
 impl SseEncode for Option<String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1552,24 +2213,83 @@ impl SseEncode for Option<crate::api::runtime::RustProviderEntry> {
     }
 }
 
-impl SseEncode for crate::api::runtime::RustLookupRequest {
+impl SseEncode for Option<Vec<String>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<String>>::sse_encode(self.provider_config_yaml, serializer);
-        <String>::sse_encode(self.source_language, serializer);
-        <String>::sse_encode(self.target_language, serializer);
-        <String>::sse_encode(self.word, serializer);
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<String>>::sse_encode(value, serializer);
+        }
     }
 }
 
-impl SseEncode for crate::api::runtime::RustLookupResponse {
+impl SseEncode for Option<Vec<crate::api::mirrors::WordDefinition>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.provider_id, serializer);
-        <Option<String>>::sse_encode(self.word, serializer);
-        <Vec<String>>::sse_encode(self.definitions, serializer);
-        <Vec<String>>::sse_encode(self.pronunciations, serializer);
-        <Vec<String>>::sse_encode(self.tenses, serializer);
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::api::mirrors::WordDefinition>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Vec<crate::api::mirrors::WordImage>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::api::mirrors::WordImage>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Vec<crate::api::mirrors::WordPhrase>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::api::mirrors::WordPhrase>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Vec<crate::api::mirrors::WordPronunciation>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::api::mirrors::WordPronunciation>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Vec<crate::api::mirrors::WordSentence>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::api::mirrors::WordSentence>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Vec<crate::api::mirrors::WordTag>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::api::mirrors::WordTag>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Vec<crate::api::mirrors::WordTense>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::api::mirrors::WordTense>>::sse_encode(value, serializer);
+        }
     }
 }
 
@@ -1591,22 +2311,28 @@ impl SseEncode for crate::domain::settings::RustSettingsDto {
     }
 }
 
-impl SseEncode for crate::api::runtime::RustTranslateRequest {
+impl SseEncode for crate::api::mirrors::TextTranslation {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<String>>::sse_encode(self.provider_config_yaml, serializer);
+        <Option<String>>::sse_encode(self.detected_source_language, serializer);
+        <String>::sse_encode(self.text, serializer);
+        <Option<String>>::sse_encode(self.audio_url, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::TranslateRequest {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Option<String>>::sse_encode(self.source_language, serializer);
-        <String>::sse_encode(self.target_language, serializer);
+        <Option<String>>::sse_encode(self.target_language, serializer);
         <String>::sse_encode(self.text, serializer);
     }
 }
 
-impl SseEncode for crate::api::runtime::RustTranslateResponse {
+impl SseEncode for crate::api::mirrors::TranslateResponse {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.provider_id, serializer);
-        <Vec<String>>::sse_encode(self.translations, serializer);
-        <Option<String>>::sse_encode(self.detected_source_language, serializer);
+        <Vec<crate::api::mirrors::TextTranslation>>::sse_encode(self.translations, serializer);
     }
 }
 
@@ -1629,6 +2355,63 @@ impl SseEncode for usize {
             .cursor
             .write_u64::<NativeEndian>(self as _)
             .unwrap();
+    }
+}
+
+impl SseEncode for crate::api::mirrors::WordDefinition {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Option<String>>::sse_encode(self.r#type, serializer);
+        <Option<String>>::sse_encode(self.name, serializer);
+        <Option<Vec<String>>>::sse_encode(self.values, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::WordImage {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.url, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::WordPhrase {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.text, serializer);
+        <Vec<String>>::sse_encode(self.translations, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::WordPronunciation {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Option<String>>::sse_encode(self.r#type, serializer);
+        <Option<String>>::sse_encode(self.phonetic_symbol, serializer);
+        <Option<String>>::sse_encode(self.audio_url, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::WordSentence {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.text, serializer);
+        <Vec<String>>::sse_encode(self.translations, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::WordTag {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.name, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::WordTense {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Option<String>>::sse_encode(self.r#type, serializer);
+        <Option<String>>::sse_encode(self.name, serializer);
+        <Option<Vec<String>>>::sse_encode(self.values, serializer);
     }
 }
 

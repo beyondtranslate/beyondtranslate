@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 
 import '__root.dart';
+import 'debug/native_settings.dart' as debug_native_settings_route;
+import 'debug/runtime.dart' as debug_runtime_route;
 import 'mini_translator.dart' as mini_translator_route;
 import 'ocr_engines_manage.dart' as ocr_engines_manage_route;
 import 'settings/index.dart' as settings_route;
@@ -17,6 +19,8 @@ GoRouter createAppRouter({
   return GoRouter(
     routes: <RouteBase>[
       ...$appRoutes,
+      ...debug_native_settings_route.$appRoutes,
+      ...debug_runtime_route.$appRoutes,
       ...mini_translator_route.$appRoutes,
       ...ocr_engines_manage_route.$appRoutes,
       ...settings_route.$appRoutes,

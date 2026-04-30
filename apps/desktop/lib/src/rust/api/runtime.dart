@@ -7,10 +7,11 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 import '../domain/settings.dart';
 import '../frb_generated.dart';
+import 'mirrors.dart';
 
-// These functions are ignored because they are not marked as `pub`: `new`, `optional_trimmed`, `provider_config_type`, `provider_entry`, `run_on_worker_thread`, `update_with_result`, `update`, `validate_provider_id`, `validate_required`
+// These functions are ignored because they are not marked as `pub`: `new`, `optional_trimmed`, `provider_entry`, `run_on_worker_thread`, `update_with_result`, `update`, `validate_optional_required`, `validate_provider_id`, `validate_required`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `RuntimeInner`, `RuntimeState`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Runtime>>
 abstract class Runtime implements RustOpaqueInterface {
@@ -26,7 +27,7 @@ abstract class Runtime implements RustOpaqueInterface {
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeDictionary>>
 abstract class RuntimeDictionary implements RustOpaqueInterface {
-  Future<RustLookupResponse> lookup({required RustLookupRequest request});
+  Future<LookUpResponse> lookup({required LookUpRequest request});
 }
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>>
@@ -51,74 +52,7 @@ abstract class RuntimeSettings implements RustOpaqueInterface {
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeTranslation>>
 abstract class RuntimeTranslation implements RustOpaqueInterface {
-  Future<RustTranslateResponse> translate(
-      {required RustTranslateRequest request});
-}
-
-class RustLookupRequest {
-  final String? providerConfigYaml;
-  final String sourceLanguage;
-  final String targetLanguage;
-  final String word;
-
-  const RustLookupRequest({
-    this.providerConfigYaml,
-    required this.sourceLanguage,
-    required this.targetLanguage,
-    required this.word,
-  });
-
-  @override
-  int get hashCode =>
-      providerConfigYaml.hashCode ^
-      sourceLanguage.hashCode ^
-      targetLanguage.hashCode ^
-      word.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RustLookupRequest &&
-          runtimeType == other.runtimeType &&
-          providerConfigYaml == other.providerConfigYaml &&
-          sourceLanguage == other.sourceLanguage &&
-          targetLanguage == other.targetLanguage &&
-          word == other.word;
-}
-
-class RustLookupResponse {
-  final String providerId;
-  final String? word;
-  final List<String> definitions;
-  final List<String> pronunciations;
-  final List<String> tenses;
-
-  const RustLookupResponse({
-    required this.providerId,
-    this.word,
-    required this.definitions,
-    required this.pronunciations,
-    required this.tenses,
-  });
-
-  @override
-  int get hashCode =>
-      providerId.hashCode ^
-      word.hashCode ^
-      definitions.hashCode ^
-      pronunciations.hashCode ^
-      tenses.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RustLookupResponse &&
-          runtimeType == other.runtimeType &&
-          providerId == other.providerId &&
-          word == other.word &&
-          definitions == other.definitions &&
-          pronunciations == other.pronunciations &&
-          tenses == other.tenses;
+  Future<TranslateResponse> translate({required TranslateRequest request});
 }
 
 class RustProviderEntry {
@@ -143,62 +77,4 @@ class RustProviderEntry {
           id == other.id &&
           type == other.type &&
           configYaml == other.configYaml;
-}
-
-class RustTranslateRequest {
-  final String? providerConfigYaml;
-  final String? sourceLanguage;
-  final String targetLanguage;
-  final String text;
-
-  const RustTranslateRequest({
-    this.providerConfigYaml,
-    this.sourceLanguage,
-    required this.targetLanguage,
-    required this.text,
-  });
-
-  @override
-  int get hashCode =>
-      providerConfigYaml.hashCode ^
-      sourceLanguage.hashCode ^
-      targetLanguage.hashCode ^
-      text.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RustTranslateRequest &&
-          runtimeType == other.runtimeType &&
-          providerConfigYaml == other.providerConfigYaml &&
-          sourceLanguage == other.sourceLanguage &&
-          targetLanguage == other.targetLanguage &&
-          text == other.text;
-}
-
-class RustTranslateResponse {
-  final String providerId;
-  final List<String> translations;
-  final String? detectedSourceLanguage;
-
-  const RustTranslateResponse({
-    required this.providerId,
-    required this.translations,
-    this.detectedSourceLanguage,
-  });
-
-  @override
-  int get hashCode =>
-      providerId.hashCode ^
-      translations.hashCode ^
-      detectedSourceLanguage.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RustTranslateResponse &&
-          runtimeType == other.runtimeType &&
-          providerId == other.providerId &&
-          translations == other.translations &&
-          detectedSourceLanguage == other.detectedSourceLanguage;
 }

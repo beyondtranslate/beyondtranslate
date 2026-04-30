@@ -15,7 +15,16 @@ library route_tree;
 /// for organizing route files in a TanStack-style mental model.
 abstract final class RouteTree {
   static const String root = '/';
+  static const DebugRouteTree debug = DebugRouteTree();
   static const SettingsRouteTree settings = SettingsRouteTree();
+}
+
+class DebugRouteTree {
+  const DebugRouteTree();
+
+  final String path = '/debug';
+  final String nativeSettings = '/debug/native-settings';
+  final String runtime = '/debug/runtime';
 }
 
 class SettingsRouteTree {
@@ -26,8 +35,7 @@ class SettingsRouteTree {
   final String appearance = '/settings/appearance';
   final String shortcuts = '/settings/shortcuts';
   final String advanced = '/settings/advanced';
-  final String nativeSettingsDebug = '/settings/native-settings-debug';
-  final String runtimeDebug = '/settings/runtime-debug';
+  final String debug = '/settings/debug';
   final String ocrEnginesManage = '/settings/ocr-engines';
   final String translationEnginesManage = '/settings/translation-engines';
 }
@@ -48,6 +56,21 @@ class RouteNode {
 /// Flat list placeholder for future expansion.
 /// Keep this list sorted by `path` for readability.
 final List<RouteNode> routeNodes = <RouteNode>[
+  RouteNode(
+    id: 'debug',
+    path: RouteTree.debug.path,
+    parentId: 'root',
+  ),
+  RouteNode(
+    id: 'debug-native-settings',
+    path: RouteTree.debug.nativeSettings,
+    parentId: 'debug',
+  ),
+  RouteNode(
+    id: 'debug-runtime',
+    path: RouteTree.debug.runtime,
+    parentId: 'debug',
+  ),
   const RouteNode(id: 'root', path: RouteTree.root),
   RouteNode(
     id: 'ocr-engines-manage',
@@ -70,6 +93,11 @@ final List<RouteNode> routeNodes = <RouteNode>[
     parentId: 'settings',
   ),
   RouteNode(
+    id: 'settings-debug',
+    path: RouteTree.settings.debug,
+    parentId: 'settings',
+  ),
+  RouteNode(
     id: 'settings-general',
     path: RouteTree.settings.general,
     parentId: 'settings',
@@ -77,16 +105,6 @@ final List<RouteNode> routeNodes = <RouteNode>[
   RouteNode(
     id: 'settings-shortcuts',
     path: RouteTree.settings.shortcuts,
-    parentId: 'settings',
-  ),
-  RouteNode(
-    id: 'settings-native-settings-debug',
-    path: RouteTree.settings.nativeSettingsDebug,
-    parentId: 'settings',
-  ),
-  RouteNode(
-    id: 'settings-runtime-debug',
-    path: RouteTree.settings.runtimeDebug,
     parentId: 'settings',
   ),
   RouteNode(

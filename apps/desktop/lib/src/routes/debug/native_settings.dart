@@ -1,20 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../features/settings/desktop_settings_service.dart';
 import '../../features/settings/native_settings.dart';
 import '../../i18n/i18n.dart';
 import '../../rust/domain/settings.dart';
+import '../../widgets/custom_app_bar/custom_app_bar.dart';
 import '../../widgets/preference_list/preference_list.dart';
 import '../../widgets/preference_list/preference_list_item.dart';
 import '../../widgets/preference_list/preference_list_section.dart';
 import '../../widgets/ui/button.dart';
 
+List<RouteBase> get $appRoutes => <RouteBase>[
+  GoRoute(
+    path: '/debug/native-settings',
+    builder: (BuildContext context, GoRouterState state) {
+      return const NativeSettingsDebugRoutePage();
+    },
+  ),
+];
+
+class NativeSettingsDebugRoutePage extends StatelessWidget {
+  const NativeSettingsDebugRoutePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      appBar: CustomAppBar(
+        title: Text('Native Settings Debug'),
+      ),
+      body: NativeSettingsDebugPage(),
+    );
+  }
+}
+
 class NativeSettingsDebugPage extends StatefulWidget {
   const NativeSettingsDebugPage({super.key});
 
   @override
-  State<NativeSettingsDebugPage> createState() => _NativeSettingsDebugPageState();
+  State<NativeSettingsDebugPage> createState() =>
+      _NativeSettingsDebugPageState();
 }
 
 class _NativeSettingsDebugPageState extends State<NativeSettingsDebugPage> {
@@ -191,7 +217,9 @@ class _NativeSettingsDebugPageState extends State<NativeSettingsDebugPage> {
     if (_errorText != null) {
       return SelectableText(
         _errorText!,
-        style: textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.error),
+        style: textTheme.bodyMedium?.copyWith(
+          color: Theme.of(context).colorScheme.error,
+        ),
       );
     }
 
@@ -205,7 +233,10 @@ class _NativeSettingsDebugPageState extends State<NativeSettingsDebugPage> {
       children: [
         Text('Theme: ${settings.windowTheme}', style: textTheme.bodyMedium),
         const SizedBox(height: 8),
-        Text('Language: ${settings.windowLanguage}', style: textTheme.bodyMedium),
+        Text(
+          'Language: ${settings.windowLanguage}',
+          style: textTheme.bodyMedium,
+        ),
       ],
     );
   }

@@ -9,6 +9,7 @@ import 'dart:ffi' as ffi;
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_io.dart';
 
+import 'api/mirrors.dart';
 import 'api/runtime.dart';
 import 'domain/settings.dart';
 import 'frb_generated.dart';
@@ -100,14 +101,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
-  RustLookupRequest dco_decode_box_autoadd_rust_lookup_request(dynamic raw);
+  LookUpRequest dco_decode_box_autoadd_look_up_request(dynamic raw);
 
   @protected
   RustProviderEntry dco_decode_box_autoadd_rust_provider_entry(dynamic raw);
 
   @protected
-  RustTranslateRequest dco_decode_box_autoadd_rust_translate_request(
-      dynamic raw);
+  TranslateRequest dco_decode_box_autoadd_translate_request(dynamic raw);
 
   @protected
   List<String> dco_decode_list_String(dynamic raw);
@@ -119,6 +119,36 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<RustProviderEntry> dco_decode_list_rust_provider_entry(dynamic raw);
 
   @protected
+  List<TextTranslation> dco_decode_list_text_translation(dynamic raw);
+
+  @protected
+  List<WordDefinition> dco_decode_list_word_definition(dynamic raw);
+
+  @protected
+  List<WordImage> dco_decode_list_word_image(dynamic raw);
+
+  @protected
+  List<WordPhrase> dco_decode_list_word_phrase(dynamic raw);
+
+  @protected
+  List<WordPronunciation> dco_decode_list_word_pronunciation(dynamic raw);
+
+  @protected
+  List<WordSentence> dco_decode_list_word_sentence(dynamic raw);
+
+  @protected
+  List<WordTag> dco_decode_list_word_tag(dynamic raw);
+
+  @protected
+  List<WordTense> dco_decode_list_word_tense(dynamic raw);
+
+  @protected
+  LookUpRequest dco_decode_look_up_request(dynamic raw);
+
+  @protected
+  LookUpResponse dco_decode_look_up_response(dynamic raw);
+
+  @protected
   String? dco_decode_opt_String(dynamic raw);
 
   @protected
@@ -126,10 +156,28 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
-  RustLookupRequest dco_decode_rust_lookup_request(dynamic raw);
+  List<String>? dco_decode_opt_list_String(dynamic raw);
 
   @protected
-  RustLookupResponse dco_decode_rust_lookup_response(dynamic raw);
+  List<WordDefinition>? dco_decode_opt_list_word_definition(dynamic raw);
+
+  @protected
+  List<WordImage>? dco_decode_opt_list_word_image(dynamic raw);
+
+  @protected
+  List<WordPhrase>? dco_decode_opt_list_word_phrase(dynamic raw);
+
+  @protected
+  List<WordPronunciation>? dco_decode_opt_list_word_pronunciation(dynamic raw);
+
+  @protected
+  List<WordSentence>? dco_decode_opt_list_word_sentence(dynamic raw);
+
+  @protected
+  List<WordTag>? dco_decode_opt_list_word_tag(dynamic raw);
+
+  @protected
+  List<WordTense>? dco_decode_opt_list_word_tense(dynamic raw);
 
   @protected
   RustProviderEntry dco_decode_rust_provider_entry(dynamic raw);
@@ -138,10 +186,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   RustSettingsDto dco_decode_rust_settings_dto(dynamic raw);
 
   @protected
-  RustTranslateRequest dco_decode_rust_translate_request(dynamic raw);
+  TextTranslation dco_decode_text_translation(dynamic raw);
 
   @protected
-  RustTranslateResponse dco_decode_rust_translate_response(dynamic raw);
+  TranslateRequest dco_decode_translate_request(dynamic raw);
+
+  @protected
+  TranslateResponse dco_decode_translate_response(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -151,6 +202,27 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt dco_decode_usize(dynamic raw);
+
+  @protected
+  WordDefinition dco_decode_word_definition(dynamic raw);
+
+  @protected
+  WordImage dco_decode_word_image(dynamic raw);
+
+  @protected
+  WordPhrase dco_decode_word_phrase(dynamic raw);
+
+  @protected
+  WordPronunciation dco_decode_word_pronunciation(dynamic raw);
+
+  @protected
+  WordSentence dco_decode_word_sentence(dynamic raw);
+
+  @protected
+  WordTag dco_decode_word_tag(dynamic raw);
+
+  @protected
+  WordTense dco_decode_word_tense(dynamic raw);
 
   @protected
   Runtime
@@ -216,7 +288,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
-  RustLookupRequest sse_decode_box_autoadd_rust_lookup_request(
+  LookUpRequest sse_decode_box_autoadd_look_up_request(
       SseDeserializer deserializer);
 
   @protected
@@ -224,7 +296,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  RustTranslateRequest sse_decode_box_autoadd_rust_translate_request(
+  TranslateRequest sse_decode_box_autoadd_translate_request(
       SseDeserializer deserializer);
 
   @protected
@@ -238,6 +310,40 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  List<TextTranslation> sse_decode_list_text_translation(
+      SseDeserializer deserializer);
+
+  @protected
+  List<WordDefinition> sse_decode_list_word_definition(
+      SseDeserializer deserializer);
+
+  @protected
+  List<WordImage> sse_decode_list_word_image(SseDeserializer deserializer);
+
+  @protected
+  List<WordPhrase> sse_decode_list_word_phrase(SseDeserializer deserializer);
+
+  @protected
+  List<WordPronunciation> sse_decode_list_word_pronunciation(
+      SseDeserializer deserializer);
+
+  @protected
+  List<WordSentence> sse_decode_list_word_sentence(
+      SseDeserializer deserializer);
+
+  @protected
+  List<WordTag> sse_decode_list_word_tag(SseDeserializer deserializer);
+
+  @protected
+  List<WordTense> sse_decode_list_word_tense(SseDeserializer deserializer);
+
+  @protected
+  LookUpRequest sse_decode_look_up_request(SseDeserializer deserializer);
+
+  @protected
+  LookUpResponse sse_decode_look_up_response(SseDeserializer deserializer);
+
+  @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
@@ -245,12 +351,32 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  RustLookupRequest sse_decode_rust_lookup_request(
+  List<String>? sse_decode_opt_list_String(SseDeserializer deserializer);
+
+  @protected
+  List<WordDefinition>? sse_decode_opt_list_word_definition(
       SseDeserializer deserializer);
 
   @protected
-  RustLookupResponse sse_decode_rust_lookup_response(
+  List<WordImage>? sse_decode_opt_list_word_image(SseDeserializer deserializer);
+
+  @protected
+  List<WordPhrase>? sse_decode_opt_list_word_phrase(
       SseDeserializer deserializer);
+
+  @protected
+  List<WordPronunciation>? sse_decode_opt_list_word_pronunciation(
+      SseDeserializer deserializer);
+
+  @protected
+  List<WordSentence>? sse_decode_opt_list_word_sentence(
+      SseDeserializer deserializer);
+
+  @protected
+  List<WordTag>? sse_decode_opt_list_word_tag(SseDeserializer deserializer);
+
+  @protected
+  List<WordTense>? sse_decode_opt_list_word_tense(SseDeserializer deserializer);
 
   @protected
   RustProviderEntry sse_decode_rust_provider_entry(
@@ -260,12 +386,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   RustSettingsDto sse_decode_rust_settings_dto(SseDeserializer deserializer);
 
   @protected
-  RustTranslateRequest sse_decode_rust_translate_request(
-      SseDeserializer deserializer);
+  TextTranslation sse_decode_text_translation(SseDeserializer deserializer);
 
   @protected
-  RustTranslateResponse sse_decode_rust_translate_response(
-      SseDeserializer deserializer);
+  TranslateRequest sse_decode_translate_request(SseDeserializer deserializer);
+
+  @protected
+  TranslateResponse sse_decode_translate_response(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -275,6 +402,27 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt sse_decode_usize(SseDeserializer deserializer);
+
+  @protected
+  WordDefinition sse_decode_word_definition(SseDeserializer deserializer);
+
+  @protected
+  WordImage sse_decode_word_image(SseDeserializer deserializer);
+
+  @protected
+  WordPhrase sse_decode_word_phrase(SseDeserializer deserializer);
+
+  @protected
+  WordPronunciation sse_decode_word_pronunciation(SseDeserializer deserializer);
+
+  @protected
+  WordSentence sse_decode_word_sentence(SseDeserializer deserializer);
+
+  @protected
+  WordTag sse_decode_word_tag(SseDeserializer deserializer);
+
+  @protected
+  WordTense sse_decode_word_tense(SseDeserializer deserializer);
 
   @protected
   int sse_decode_i_32(SseDeserializer deserializer);
@@ -346,16 +494,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_rust_lookup_request(
-      RustLookupRequest self, SseSerializer serializer);
+  void sse_encode_box_autoadd_look_up_request(
+      LookUpRequest self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_rust_provider_entry(
       RustProviderEntry self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_rust_translate_request(
-      RustTranslateRequest self, SseSerializer serializer);
+  void sse_encode_box_autoadd_translate_request(
+      TranslateRequest self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer);
@@ -369,6 +517,44 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<RustProviderEntry> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_text_translation(
+      List<TextTranslation> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_word_definition(
+      List<WordDefinition> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_word_image(
+      List<WordImage> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_word_phrase(
+      List<WordPhrase> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_word_pronunciation(
+      List<WordPronunciation> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_word_sentence(
+      List<WordSentence> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_word_tag(List<WordTag> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_word_tense(
+      List<WordTense> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_look_up_request(LookUpRequest self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_look_up_response(
+      LookUpResponse self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
@@ -376,12 +562,35 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       RustProviderEntry? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_rust_lookup_request(
-      RustLookupRequest self, SseSerializer serializer);
+  void sse_encode_opt_list_String(List<String>? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_rust_lookup_response(
-      RustLookupResponse self, SseSerializer serializer);
+  void sse_encode_opt_list_word_definition(
+      List<WordDefinition>? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_list_word_image(
+      List<WordImage>? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_list_word_phrase(
+      List<WordPhrase>? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_list_word_pronunciation(
+      List<WordPronunciation>? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_list_word_sentence(
+      List<WordSentence>? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_list_word_tag(
+      List<WordTag>? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_list_word_tense(
+      List<WordTense>? self, SseSerializer serializer);
 
   @protected
   void sse_encode_rust_provider_entry(
@@ -392,12 +601,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       RustSettingsDto self, SseSerializer serializer);
 
   @protected
-  void sse_encode_rust_translate_request(
-      RustTranslateRequest self, SseSerializer serializer);
+  void sse_encode_text_translation(
+      TextTranslation self, SseSerializer serializer);
 
   @protected
-  void sse_encode_rust_translate_response(
-      RustTranslateResponse self, SseSerializer serializer);
+  void sse_encode_translate_request(
+      TranslateRequest self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_translate_response(
+      TranslateResponse self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
@@ -407,6 +620,29 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_usize(BigInt self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_word_definition(
+      WordDefinition self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_word_image(WordImage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_word_phrase(WordPhrase self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_word_pronunciation(
+      WordPronunciation self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_word_sentence(WordSentence self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_word_tag(WordTag self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_word_tense(WordTense self, SseSerializer serializer);
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer);

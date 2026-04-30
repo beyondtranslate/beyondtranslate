@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../i18n/i18n.dart';
 import '../../services/runtime.dart';
 import '../../utils/platform_util.dart';
+import '../../widgets/custom_app_bar/custom_app_bar.dart';
 import '../../widgets/ui/button.dart';
 
-const List<String> _kProviderOptions = ['deepl', 'google', 'iciba'];
-const String _kDefaultDeepLConfig = 'type: deepl\napi_key: YOUR_DEEPL_API_KEY';
-const String _kDefaultGoogleConfig =
-    'type: google\napi_key: YOUR_GOOGLE_API_KEY';
-const String _kDefaultIcibaConfig = 'type: iciba\napi_key: YOUR_ICIBA_API_KEY';
+List<RouteBase> get $appRoutes => <RouteBase>[
+  GoRoute(
+    path: '/debug/runtime',
+    builder: (BuildContext context, GoRouterState state) {
+      return const RuntimeDebugRoutePage();
+    },
+  ),
+];
+
+class RuntimeDebugRoutePage extends StatelessWidget {
+  const RuntimeDebugRoutePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: Text(t.page_runtime_debug.title),
+      ),
+      body: const RuntimeDebugPage(),
+    );
+  }
+}
 
 class RuntimeDebugPage extends StatefulWidget {
   const RuntimeDebugPage({super.key});
@@ -23,39 +42,57 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
   final _sourceLanguageController = TextEditingController(text: 'en');
   final _targetLanguageController = TextEditingController(text: 'zh');
   final _textController = TextEditingController(text: 'Hello world');
-  late final TextEditingController _providerConfigController =
-      TextEditingController(text: _configTemplateFor(_providerId));
 
-  String _providerId = _kProviderOptions.first;
+  List<RustProviderEntry> _providers = const [];
+  String? _providerId;
+  bool _loadingProviders = true;
   bool _submitting = false;
-  RustTranslateResponse? _response;
-  RustLookupResponse? _lookupResponse;
+  TranslateResponse? _response;
+  LookUpResponse? _lookupResponse;
   String? _errorText;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProviders();
+  }
 
   @override
   void dispose() {
     _sourceLanguageController.dispose();
     _targetLanguageController.dispose();
     _textController.dispose();
-    _providerConfigController.dispose();
     super.dispose();
   }
 
-  String _configTemplateFor(String providerId) {
-    switch (providerId) {
-      case 'iciba':
-        return _kDefaultIcibaConfig;
-      case 'google':
-        return _kDefaultGoogleConfig;
-      case 'deepl':
-      default:
-        return _kDefaultDeepLConfig;
+  Future<void> _loadProviders() async {
+    try {
+      final providers = await runtime.settings.listProviders();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _providers = providers;
+        _providerId = providers.isEmpty ? null : providers.first.id;
+        _loadingProviders = false;
+      });
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _providers = const [];
+        _providerId = null;
+        _loadingProviders = false;
+        _errorText = error.toString();
+      });
     }
   }
 
   Future<void> _submit() async {
     final formState = _formKey.currentState;
-    if (formState == null || !formState.validate()) {
+    final providerId = _providerId;
+    if (providerId == null || formState == null || !formState.validate()) {
       return;
     }
 
@@ -67,9 +104,8 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     });
 
     try {
-      if (_providerId == 'iciba') {
-        final response = await runtime.dictionary(_providerId).lookup(
-              providerConfigYaml: _providerConfigController.text,
+      if (_isLookupProvider) {
+        final response = await runtime.dictionary(providerId).lookup(
               sourceLanguage: _sourceLanguageController.text.trim(),
               targetLanguage: _targetLanguageController.text.trim(),
               word: _textController.text,
@@ -82,8 +118,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
           _lookupResponse = response;
         });
       } else {
-        final response = await runtime.translation(_providerId).translate(
-              providerConfigYaml: _providerConfigController.text,
+        final response = await runtime.translation(providerId).translate(
               sourceLanguage: _sourceLanguageController.text.trim().isEmpty
                   ? null
                   : _sourceLanguageController.text.trim(),
@@ -127,21 +162,29 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
   }
 
   Widget _buildProviderPicker(BuildContext context) {
+    if (_loadingProviders) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_providers.isEmpty) {
+      return Text(
+        'No configured providers found. Save a provider in settings first.',
+        style: Theme.of(context).textTheme.bodyMedium,
+      );
+    }
+
     return SegmentedButton<String>(
-      segments: _kProviderOptions
+      segments: _providers
           .map(
             (provider) => ButtonSegment<String>(
-              value: provider,
-              label: Text(provider),
+              value: provider.id,
+              label: Text('${provider.id} (${provider.type})'),
             ),
           )
           .toList(),
-      selected: {_providerId},
+      selected: _providerId == null ? const <String>{} : {_providerId!},
       onSelectionChanged: (selection) {
-        final nextProviderId = selection.first;
         setState(() {
-          _providerId = nextProviderId;
-          _providerConfigController.text = _configTemplateFor(nextProviderId);
+          _providerId = selection.first;
         });
       },
     );
@@ -197,51 +240,92 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     );
   }
 
-  String _formatResponse(RustTranslateResponse response) {
+  String _formatResponse(TranslateResponse response) {
     final buffer = StringBuffer()
-      ..writeln('provider: ${response.providerId}')
-      ..writeln(
-        'detected_source_language: ${response.detectedSourceLanguage ?? 'null'}',
-      )
+      ..writeln('provider: ${_providerId ?? 'null'}')
       ..writeln('translations:');
 
     for (final translation in response.translations) {
-      buffer.writeln('- $translation');
+      buffer.writeln('- ${translation.text}');
+      buffer.writeln(
+        '  detected_source_language: ${translation.detectedSourceLanguage ?? 'null'}',
+      );
+      buffer.writeln('  audio_url: ${translation.audioUrl ?? 'null'}');
     }
 
     return buffer.toString().trimRight();
   }
 
-  String _formatLookupResponse(RustLookupResponse response) {
+  String _formatLookupResponse(LookUpResponse response) {
     final buffer = StringBuffer()
-      ..writeln('provider: ${response.providerId}')
+      ..writeln('provider: ${_providerId ?? 'null'}')
       ..writeln('word: ${response.word ?? 'null'}');
 
-    if (response.definitions.isNotEmpty) {
+    final definitions = response.definitions ?? const [];
+    if (definitions.isNotEmpty) {
       buffer.writeln('definitions:');
-      for (final definition in response.definitions) {
-        buffer.writeln('- $definition');
+      for (final definition in definitions) {
+        final name = definition.name ?? '';
+        final values = (definition.values ?? const []).join(', ');
+        final line = <String>[
+          name,
+          values,
+        ].where((item) => item.isNotEmpty).join(' ');
+        if (line.isNotEmpty) {
+          buffer.writeln('- $line');
+        }
       }
     }
 
-    if (response.pronunciations.isNotEmpty) {
+    final pronunciations = response.pronunciations ?? const [];
+    if (pronunciations.isNotEmpty) {
       buffer.writeln('pronunciations:');
-      for (final pronunciation in response.pronunciations) {
-        buffer.writeln('- $pronunciation');
+      for (final pronunciation in pronunciations) {
+        final parts = [
+          pronunciation.type,
+          pronunciation.phoneticSymbol,
+          pronunciation.audioUrl,
+        ].whereType<String>().where((item) => item.isNotEmpty);
+        final line = parts.join(' | ');
+        if (line.isNotEmpty) {
+          buffer.writeln('- $line');
+        }
       }
     }
 
-    if (response.tenses.isNotEmpty) {
+    final tenses = response.tenses ?? const [];
+    if (tenses.isNotEmpty) {
       buffer.writeln('tenses:');
-      for (final tense in response.tenses) {
-        buffer.writeln('- $tense');
+      for (final tense in tenses) {
+        final name = tense.name ?? '';
+        final values = (tense.values ?? const []).join(', ');
+        final line = <String>[
+          name,
+          values,
+        ].where((item) => item.isNotEmpty).join(': ');
+        if (line.isNotEmpty) {
+          buffer.writeln('- $line');
+        }
       }
     }
 
     return buffer.toString().trimRight();
   }
 
-  bool get _isLookupProvider => _providerId == 'iciba';
+  String? get _selectedProviderType {
+    final providerId = _providerId;
+    if (providerId == null) {
+      return null;
+    }
+    for (final provider in _providers) {
+      if (provider.id == providerId) {
+        return provider.type;
+      }
+    }
+    return null;
+  }
+
+  bool get _isLookupProvider => _selectedProviderType == 'iciba';
 
   @override
   Widget build(BuildContext context) {
@@ -268,20 +352,6 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
           ),
           const SizedBox(height: 12),
           _buildProviderPicker(context),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _providerConfigController,
-            minLines: 6,
-            maxLines: 10,
-            decoration: _decoration(
-                context, t.page_runtime_debug.provider_config_label),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return t.page_runtime_debug.validation_provider_config_required;
-              }
-              return null;
-            },
-          ),
           const SizedBox(height: 20),
           Text(
             t.page_runtime_debug.request_section_title,
@@ -291,7 +361,9 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
           TextFormField(
             controller: _sourceLanguageController,
             decoration: _decoration(
-                context, t.page_runtime_debug.source_language_label),
+              context,
+              t.page_runtime_debug.source_language_label,
+            ),
             validator: (value) {
               if (_isLookupProvider &&
                   (value == null || value.trim().isEmpty)) {
@@ -304,7 +376,9 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
           TextFormField(
             controller: _targetLanguageController,
             decoration: _decoration(
-                context, t.page_runtime_debug.target_language_label),
+              context,
+              t.page_runtime_debug.target_language_label,
+            ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return t.page_runtime_debug.validation_target_language_required;
@@ -337,7 +411,10 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
             children: [
               Button.filled(
                 processing: _submitting,
-                onPressed: _submitting ? null : _submit,
+                onPressed:
+                    _submitting || _loadingProviders || _providerId == null
+                        ? null
+                        : _submit,
                 child: Text(
                   _isLookupProvider
                       ? t.page_runtime_debug.lookup_submit

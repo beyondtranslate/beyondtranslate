@@ -7,9 +7,8 @@ import '../../utils/utils.dart';
 import '../../widgets/custom_app_bar/custom_app_bar.dart';
 import 'advanced.dart';
 import 'appearance.dart';
+import 'debug.dart';
 import 'general.dart';
-import 'native_settings_debug.dart';
-import 'runtime_debug.dart';
 import 'shortcuts.dart';
 
 part 'index.g.dart';
@@ -20,8 +19,7 @@ part 'index.g.dart';
     TypedGoRoute<AppearanceSettingsRoute>(path: '/settings/appearance'),
     TypedGoRoute<ShortcutsSettingsRoute>(path: '/settings/shortcuts'),
     TypedGoRoute<AdvancedSettingsRoute>(path: '/settings/advanced'),
-    TypedGoRoute<RuntimeDebugRoute>(path: '/settings/runtime-debug'),
-    TypedGoRoute<NativeSettingsDebugRoute>(path: '/settings/native-settings-debug'),
+    TypedGoRoute<SettingsDebugRoute>(path: '/settings/debug'),
   ],
 )
 class SettingsShellRoute extends ShellRouteData {
@@ -73,22 +71,12 @@ class AdvancedSettingsRoute extends GoRouteData with $AdvancedSettingsRoute {
   }
 }
 
-class RuntimeDebugRoute extends GoRouteData with $RuntimeDebugRoute {
-  const RuntimeDebugRoute();
+class SettingsDebugRoute extends GoRouteData with $SettingsDebugRoute {
+  const SettingsDebugRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const RuntimeDebugPage();
-  }
-}
-
-class NativeSettingsDebugRoute extends GoRouteData
-    with $NativeSettingsDebugRoute {
-  const NativeSettingsDebugRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const NativeSettingsDebugPage();
+    return const SettingsDebugPage();
   }
 }
 
@@ -99,10 +87,7 @@ enum _SettingsCategory {
   advanced;
 
   static _SettingsCategory fromLocation(String location) {
-    if (location.startsWith('/settings/runtime-debug')) {
-      return _SettingsCategory.advanced;
-    }
-    if (location.startsWith('/settings/native-settings-debug')) {
+    if (location.startsWith('/settings/debug')) {
       return _SettingsCategory.advanced;
     }
     if (location.startsWith('/settings/appearance')) {

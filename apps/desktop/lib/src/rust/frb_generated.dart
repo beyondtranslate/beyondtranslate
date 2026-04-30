@@ -8,6 +8,7 @@ import 'dart:convert';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
+import 'api/mirrors.dart';
 import 'api/runtime.dart';
 import 'domain/settings.dart';
 import 'frb_generated.dart';
@@ -84,8 +85,8 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<RustLookupResponse> crateApiRuntimeRuntimeDictionaryLookup(
-      {required RuntimeDictionary that, required RustLookupRequest request});
+  Future<LookUpResponse> crateApiRuntimeRuntimeDictionaryLookup(
+      {required RuntimeDictionary that, required LookUpRequest request});
 
   Future<RustProviderEntry?> crateApiRuntimeRuntimeSettingsDeleteProvider(
       {required RuntimeSettings that, required String providerId});
@@ -113,9 +114,8 @@ abstract class RustLibApi extends BaseApi {
       required String providerId,
       required String configYaml});
 
-  Future<RustTranslateResponse> crateApiRuntimeRuntimeTranslationTranslate(
-      {required RuntimeTranslation that,
-      required RustTranslateRequest request});
+  Future<TranslateResponse> crateApiRuntimeRuntimeTranslationTranslate(
+      {required RuntimeTranslation that, required TranslateRequest request});
 
   RuntimeDictionary crateApiRuntimeRuntimeDictionary(
       {required Runtime that, required String providerId});
@@ -172,19 +172,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<RustLookupResponse> crateApiRuntimeRuntimeDictionaryLookup(
-      {required RuntimeDictionary that, required RustLookupRequest request}) {
+  Future<LookUpResponse> crateApiRuntimeRuntimeDictionaryLookup(
+      {required RuntimeDictionary that, required LookUpRequest request}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeDictionary(
             that, serializer);
-        sse_encode_box_autoadd_rust_lookup_request(request, serializer);
+        sse_encode_box_autoadd_look_up_request(request, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 1, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_rust_lookup_response,
+        decodeSuccessData: sse_decode_look_up_response,
         decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiRuntimeRuntimeDictionaryLookupConstMeta,
@@ -424,20 +424,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<RustTranslateResponse> crateApiRuntimeRuntimeTranslationTranslate(
-      {required RuntimeTranslation that,
-      required RustTranslateRequest request}) {
+  Future<TranslateResponse> crateApiRuntimeRuntimeTranslationTranslate(
+      {required RuntimeTranslation that, required TranslateRequest request}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeTranslation(
             that, serializer);
-        sse_encode_box_autoadd_rust_translate_request(request, serializer);
+        sse_encode_box_autoadd_translate_request(request, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 10, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_rust_translate_response,
+        decodeSuccessData: sse_decode_translate_response,
         decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiRuntimeRuntimeTranslationTranslateConstMeta,
@@ -716,9 +715,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustLookupRequest dco_decode_box_autoadd_rust_lookup_request(dynamic raw) {
+  LookUpRequest dco_decode_box_autoadd_look_up_request(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_rust_lookup_request(raw);
+    return dco_decode_look_up_request(raw);
   }
 
   @protected
@@ -728,10 +727,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustTranslateRequest dco_decode_box_autoadd_rust_translate_request(
-      dynamic raw) {
+  TranslateRequest dco_decode_box_autoadd_translate_request(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_rust_translate_request(raw);
+    return dco_decode_translate_request(raw);
   }
 
   @protected
@@ -753,6 +751,87 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<TextTranslation> dco_decode_list_text_translation(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_text_translation).toList();
+  }
+
+  @protected
+  List<WordDefinition> dco_decode_list_word_definition(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_word_definition).toList();
+  }
+
+  @protected
+  List<WordImage> dco_decode_list_word_image(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_word_image).toList();
+  }
+
+  @protected
+  List<WordPhrase> dco_decode_list_word_phrase(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_word_phrase).toList();
+  }
+
+  @protected
+  List<WordPronunciation> dco_decode_list_word_pronunciation(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_word_pronunciation).toList();
+  }
+
+  @protected
+  List<WordSentence> dco_decode_list_word_sentence(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_word_sentence).toList();
+  }
+
+  @protected
+  List<WordTag> dco_decode_list_word_tag(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_word_tag).toList();
+  }
+
+  @protected
+  List<WordTense> dco_decode_list_word_tense(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_word_tense).toList();
+  }
+
+  @protected
+  LookUpRequest dco_decode_look_up_request(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return LookUpRequest(
+      sourceLanguage: dco_decode_String(arr[0]),
+      targetLanguage: dco_decode_String(arr[1]),
+      word: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  LookUpResponse dco_decode_look_up_response(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 10)
+      throw Exception('unexpected arr length: expect 10 but see ${arr.length}');
+    return LookUpResponse(
+      translations: dco_decode_list_text_translation(arr[0]),
+      word: dco_decode_opt_String(arr[1]),
+      tip: dco_decode_opt_String(arr[2]),
+      tags: dco_decode_opt_list_word_tag(arr[3]),
+      definitions: dco_decode_opt_list_word_definition(arr[4]),
+      pronunciations: dco_decode_opt_list_word_pronunciation(arr[5]),
+      images: dco_decode_opt_list_word_image(arr[6]),
+      phrases: dco_decode_opt_list_word_phrase(arr[7]),
+      tenses: dco_decode_opt_list_word_tense(arr[8]),
+      sentences: dco_decode_opt_list_word_sentence(arr[9]),
+    );
+  }
+
+  @protected
   String? dco_decode_opt_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_String(raw);
@@ -766,32 +845,51 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustLookupRequest dco_decode_rust_lookup_request(dynamic raw) {
+  List<String>? dco_decode_opt_list_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
-    return RustLookupRequest(
-      providerConfigYaml: dco_decode_opt_String(arr[0]),
-      sourceLanguage: dco_decode_String(arr[1]),
-      targetLanguage: dco_decode_String(arr[2]),
-      word: dco_decode_String(arr[3]),
-    );
+    return raw == null ? null : dco_decode_list_String(raw);
   }
 
   @protected
-  RustLookupResponse dco_decode_rust_lookup_response(dynamic raw) {
+  List<WordDefinition>? dco_decode_opt_list_word_definition(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
-    return RustLookupResponse(
-      providerId: dco_decode_String(arr[0]),
-      word: dco_decode_opt_String(arr[1]),
-      definitions: dco_decode_list_String(arr[2]),
-      pronunciations: dco_decode_list_String(arr[3]),
-      tenses: dco_decode_list_String(arr[4]),
-    );
+    return raw == null ? null : dco_decode_list_word_definition(raw);
+  }
+
+  @protected
+  List<WordImage>? dco_decode_opt_list_word_image(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_list_word_image(raw);
+  }
+
+  @protected
+  List<WordPhrase>? dco_decode_opt_list_word_phrase(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_list_word_phrase(raw);
+  }
+
+  @protected
+  List<WordPronunciation>? dco_decode_opt_list_word_pronunciation(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_list_word_pronunciation(raw);
+  }
+
+  @protected
+  List<WordSentence>? dco_decode_opt_list_word_sentence(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_list_word_sentence(raw);
+  }
+
+  @protected
+  List<WordTag>? dco_decode_opt_list_word_tag(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_list_word_tag(raw);
+  }
+
+  @protected
+  List<WordTense>? dco_decode_opt_list_word_tense(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_list_word_tense(raw);
   }
 
   @protected
@@ -821,29 +919,39 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustTranslateRequest dco_decode_rust_translate_request(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
-    return RustTranslateRequest(
-      providerConfigYaml: dco_decode_opt_String(arr[0]),
-      sourceLanguage: dco_decode_opt_String(arr[1]),
-      targetLanguage: dco_decode_String(arr[2]),
-      text: dco_decode_String(arr[3]),
-    );
-  }
-
-  @protected
-  RustTranslateResponse dco_decode_rust_translate_response(dynamic raw) {
+  TextTranslation dco_decode_text_translation(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 3)
       throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-    return RustTranslateResponse(
-      providerId: dco_decode_String(arr[0]),
-      translations: dco_decode_list_String(arr[1]),
-      detectedSourceLanguage: dco_decode_opt_String(arr[2]),
+    return TextTranslation(
+      detectedSourceLanguage: dco_decode_opt_String(arr[0]),
+      text: dco_decode_String(arr[1]),
+      audioUrl: dco_decode_opt_String(arr[2]),
+    );
+  }
+
+  @protected
+  TranslateRequest dco_decode_translate_request(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return TranslateRequest(
+      sourceLanguage: dco_decode_opt_String(arr[0]),
+      targetLanguage: dco_decode_opt_String(arr[1]),
+      text: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  TranslateResponse dco_decode_translate_response(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return TranslateResponse(
+      translations: dco_decode_list_text_translation(arr[0]),
     );
   }
 
@@ -863,6 +971,91 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   BigInt dco_decode_usize(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dcoDecodeU64(raw);
+  }
+
+  @protected
+  WordDefinition dco_decode_word_definition(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return WordDefinition(
+      type: dco_decode_opt_String(arr[0]),
+      name: dco_decode_opt_String(arr[1]),
+      values: dco_decode_opt_list_String(arr[2]),
+    );
+  }
+
+  @protected
+  WordImage dco_decode_word_image(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return WordImage(
+      url: dco_decode_String(arr[0]),
+    );
+  }
+
+  @protected
+  WordPhrase dco_decode_word_phrase(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return WordPhrase(
+      text: dco_decode_String(arr[0]),
+      translations: dco_decode_list_String(arr[1]),
+    );
+  }
+
+  @protected
+  WordPronunciation dco_decode_word_pronunciation(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return WordPronunciation(
+      type: dco_decode_opt_String(arr[0]),
+      phoneticSymbol: dco_decode_opt_String(arr[1]),
+      audioUrl: dco_decode_opt_String(arr[2]),
+    );
+  }
+
+  @protected
+  WordSentence dco_decode_word_sentence(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return WordSentence(
+      text: dco_decode_String(arr[0]),
+      translations: dco_decode_list_String(arr[1]),
+    );
+  }
+
+  @protected
+  WordTag dco_decode_word_tag(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return WordTag(
+      name: dco_decode_String(arr[0]),
+    );
+  }
+
+  @protected
+  WordTense dco_decode_word_tense(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return WordTense(
+      type: dco_decode_opt_String(arr[0]),
+      name: dco_decode_opt_String(arr[1]),
+      values: dco_decode_opt_list_String(arr[2]),
+    );
   }
 
   @protected
@@ -981,10 +1174,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustLookupRequest sse_decode_box_autoadd_rust_lookup_request(
+  LookUpRequest sse_decode_box_autoadd_look_up_request(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_rust_lookup_request(deserializer));
+    return (sse_decode_look_up_request(deserializer));
   }
 
   @protected
@@ -995,10 +1188,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustTranslateRequest sse_decode_box_autoadd_rust_translate_request(
+  TranslateRequest sse_decode_box_autoadd_translate_request(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_rust_translate_request(deserializer));
+    return (sse_decode_translate_request(deserializer));
   }
 
   @protected
@@ -1034,6 +1227,145 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<TextTranslation> sse_decode_list_text_translation(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <TextTranslation>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_text_translation(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<WordDefinition> sse_decode_list_word_definition(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <WordDefinition>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_word_definition(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<WordImage> sse_decode_list_word_image(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <WordImage>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_word_image(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<WordPhrase> sse_decode_list_word_phrase(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <WordPhrase>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_word_phrase(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<WordPronunciation> sse_decode_list_word_pronunciation(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <WordPronunciation>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_word_pronunciation(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<WordSentence> sse_decode_list_word_sentence(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <WordSentence>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_word_sentence(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<WordTag> sse_decode_list_word_tag(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <WordTag>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_word_tag(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<WordTense> sse_decode_list_word_tense(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <WordTense>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_word_tense(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  LookUpRequest sse_decode_look_up_request(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_sourceLanguage = sse_decode_String(deserializer);
+    var var_targetLanguage = sse_decode_String(deserializer);
+    var var_word = sse_decode_String(deserializer);
+    return LookUpRequest(
+        sourceLanguage: var_sourceLanguage,
+        targetLanguage: var_targetLanguage,
+        word: var_word);
+  }
+
+  @protected
+  LookUpResponse sse_decode_look_up_response(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_translations = sse_decode_list_text_translation(deserializer);
+    var var_word = sse_decode_opt_String(deserializer);
+    var var_tip = sse_decode_opt_String(deserializer);
+    var var_tags = sse_decode_opt_list_word_tag(deserializer);
+    var var_definitions = sse_decode_opt_list_word_definition(deserializer);
+    var var_pronunciations =
+        sse_decode_opt_list_word_pronunciation(deserializer);
+    var var_images = sse_decode_opt_list_word_image(deserializer);
+    var var_phrases = sse_decode_opt_list_word_phrase(deserializer);
+    var var_tenses = sse_decode_opt_list_word_tense(deserializer);
+    var var_sentences = sse_decode_opt_list_word_sentence(deserializer);
+    return LookUpResponse(
+        translations: var_translations,
+        word: var_word,
+        tip: var_tip,
+        tags: var_tags,
+        definitions: var_definitions,
+        pronunciations: var_pronunciations,
+        images: var_images,
+        phrases: var_phrases,
+        tenses: var_tenses,
+        sentences: var_sentences);
+  }
+
+  @protected
   String? sse_decode_opt_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -1057,35 +1389,97 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustLookupRequest sse_decode_rust_lookup_request(
-      SseDeserializer deserializer) {
+  List<String>? sse_decode_opt_list_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_providerConfigYaml = sse_decode_opt_String(deserializer);
-    var var_sourceLanguage = sse_decode_String(deserializer);
-    var var_targetLanguage = sse_decode_String(deserializer);
-    var var_word = sse_decode_String(deserializer);
-    return RustLookupRequest(
-        providerConfigYaml: var_providerConfigYaml,
-        sourceLanguage: var_sourceLanguage,
-        targetLanguage: var_targetLanguage,
-        word: var_word);
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_String(deserializer));
+    } else {
+      return null;
+    }
   }
 
   @protected
-  RustLookupResponse sse_decode_rust_lookup_response(
+  List<WordDefinition>? sse_decode_opt_list_word_definition(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_providerId = sse_decode_String(deserializer);
-    var var_word = sse_decode_opt_String(deserializer);
-    var var_definitions = sse_decode_list_String(deserializer);
-    var var_pronunciations = sse_decode_list_String(deserializer);
-    var var_tenses = sse_decode_list_String(deserializer);
-    return RustLookupResponse(
-        providerId: var_providerId,
-        word: var_word,
-        definitions: var_definitions,
-        pronunciations: var_pronunciations,
-        tenses: var_tenses);
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_word_definition(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<WordImage>? sse_decode_opt_list_word_image(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_word_image(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<WordPhrase>? sse_decode_opt_list_word_phrase(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_word_phrase(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<WordPronunciation>? sse_decode_opt_list_word_pronunciation(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_word_pronunciation(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<WordSentence>? sse_decode_opt_list_word_sentence(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_word_sentence(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<WordTag>? sse_decode_opt_list_word_tag(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_word_tag(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<WordTense>? sse_decode_opt_list_word_tense(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_word_tense(deserializer));
+    } else {
+      return null;
+    }
   }
 
   @protected
@@ -1112,31 +1506,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustTranslateRequest sse_decode_rust_translate_request(
-      SseDeserializer deserializer) {
+  TextTranslation sse_decode_text_translation(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_providerConfigYaml = sse_decode_opt_String(deserializer);
-    var var_sourceLanguage = sse_decode_opt_String(deserializer);
-    var var_targetLanguage = sse_decode_String(deserializer);
+    var var_detectedSourceLanguage = sse_decode_opt_String(deserializer);
     var var_text = sse_decode_String(deserializer);
-    return RustTranslateRequest(
-        providerConfigYaml: var_providerConfigYaml,
+    var var_audioUrl = sse_decode_opt_String(deserializer);
+    return TextTranslation(
+        detectedSourceLanguage: var_detectedSourceLanguage,
+        text: var_text,
+        audioUrl: var_audioUrl);
+  }
+
+  @protected
+  TranslateRequest sse_decode_translate_request(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_sourceLanguage = sse_decode_opt_String(deserializer);
+    var var_targetLanguage = sse_decode_opt_String(deserializer);
+    var var_text = sse_decode_String(deserializer);
+    return TranslateRequest(
         sourceLanguage: var_sourceLanguage,
         targetLanguage: var_targetLanguage,
         text: var_text);
   }
 
   @protected
-  RustTranslateResponse sse_decode_rust_translate_response(
+  TranslateResponse sse_decode_translate_response(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_providerId = sse_decode_String(deserializer);
-    var var_translations = sse_decode_list_String(deserializer);
-    var var_detectedSourceLanguage = sse_decode_opt_String(deserializer);
-    return RustTranslateResponse(
-        providerId: var_providerId,
-        translations: var_translations,
-        detectedSourceLanguage: var_detectedSourceLanguage);
+    var var_translations = sse_decode_list_text_translation(deserializer);
+    return TranslateResponse(translations: var_translations);
   }
 
   @protected
@@ -1154,6 +1552,67 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   BigInt sse_decode_usize(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getBigUint64();
+  }
+
+  @protected
+  WordDefinition sse_decode_word_definition(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_type = sse_decode_opt_String(deserializer);
+    var var_name = sse_decode_opt_String(deserializer);
+    var var_values = sse_decode_opt_list_String(deserializer);
+    return WordDefinition(type: var_type, name: var_name, values: var_values);
+  }
+
+  @protected
+  WordImage sse_decode_word_image(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_url = sse_decode_String(deserializer);
+    return WordImage(url: var_url);
+  }
+
+  @protected
+  WordPhrase sse_decode_word_phrase(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_text = sse_decode_String(deserializer);
+    var var_translations = sse_decode_list_String(deserializer);
+    return WordPhrase(text: var_text, translations: var_translations);
+  }
+
+  @protected
+  WordPronunciation sse_decode_word_pronunciation(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_type = sse_decode_opt_String(deserializer);
+    var var_phoneticSymbol = sse_decode_opt_String(deserializer);
+    var var_audioUrl = sse_decode_opt_String(deserializer);
+    return WordPronunciation(
+        type: var_type,
+        phoneticSymbol: var_phoneticSymbol,
+        audioUrl: var_audioUrl);
+  }
+
+  @protected
+  WordSentence sse_decode_word_sentence(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_text = sse_decode_String(deserializer);
+    var var_translations = sse_decode_list_String(deserializer);
+    return WordSentence(text: var_text, translations: var_translations);
+  }
+
+  @protected
+  WordTag sse_decode_word_tag(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_name = sse_decode_String(deserializer);
+    return WordTag(name: var_name);
+  }
+
+  @protected
+  WordTense sse_decode_word_tense(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_type = sse_decode_opt_String(deserializer);
+    var var_name = sse_decode_opt_String(deserializer);
+    var var_values = sse_decode_opt_list_String(deserializer);
+    return WordTense(type: var_type, name: var_name, values: var_values);
   }
 
   @protected
@@ -1292,10 +1751,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_box_autoadd_rust_lookup_request(
-      RustLookupRequest self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_look_up_request(
+      LookUpRequest self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_rust_lookup_request(self, serializer);
+    sse_encode_look_up_request(self, serializer);
   }
 
   @protected
@@ -1306,10 +1765,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_box_autoadd_rust_translate_request(
-      RustTranslateRequest self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_translate_request(
+      TranslateRequest self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_rust_translate_request(self, serializer);
+    sse_encode_translate_request(self, serializer);
   }
 
   @protected
@@ -1340,6 +1799,110 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_text_translation(
+      List<TextTranslation> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_text_translation(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_word_definition(
+      List<WordDefinition> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_word_definition(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_word_image(
+      List<WordImage> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_word_image(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_word_phrase(
+      List<WordPhrase> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_word_phrase(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_word_pronunciation(
+      List<WordPronunciation> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_word_pronunciation(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_word_sentence(
+      List<WordSentence> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_word_sentence(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_word_tag(List<WordTag> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_word_tag(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_word_tense(
+      List<WordTense> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_word_tense(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_look_up_request(
+      LookUpRequest self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.sourceLanguage, serializer);
+    sse_encode_String(self.targetLanguage, serializer);
+    sse_encode_String(self.word, serializer);
+  }
+
+  @protected
+  void sse_encode_look_up_response(
+      LookUpResponse self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_text_translation(self.translations, serializer);
+    sse_encode_opt_String(self.word, serializer);
+    sse_encode_opt_String(self.tip, serializer);
+    sse_encode_opt_list_word_tag(self.tags, serializer);
+    sse_encode_opt_list_word_definition(self.definitions, serializer);
+    sse_encode_opt_list_word_pronunciation(self.pronunciations, serializer);
+    sse_encode_opt_list_word_image(self.images, serializer);
+    sse_encode_opt_list_word_phrase(self.phrases, serializer);
+    sse_encode_opt_list_word_tense(self.tenses, serializer);
+    sse_encode_opt_list_word_sentence(self.sentences, serializer);
+  }
+
+  @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -1361,24 +1924,91 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_rust_lookup_request(
-      RustLookupRequest self, SseSerializer serializer) {
+  void sse_encode_opt_list_String(
+      List<String>? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_String(self.providerConfigYaml, serializer);
-    sse_encode_String(self.sourceLanguage, serializer);
-    sse_encode_String(self.targetLanguage, serializer);
-    sse_encode_String(self.word, serializer);
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_String(self, serializer);
+    }
   }
 
   @protected
-  void sse_encode_rust_lookup_response(
-      RustLookupResponse self, SseSerializer serializer) {
+  void sse_encode_opt_list_word_definition(
+      List<WordDefinition>? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.providerId, serializer);
-    sse_encode_opt_String(self.word, serializer);
-    sse_encode_list_String(self.definitions, serializer);
-    sse_encode_list_String(self.pronunciations, serializer);
-    sse_encode_list_String(self.tenses, serializer);
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_word_definition(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_word_image(
+      List<WordImage>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_word_image(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_word_phrase(
+      List<WordPhrase>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_word_phrase(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_word_pronunciation(
+      List<WordPronunciation>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_word_pronunciation(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_word_sentence(
+      List<WordSentence>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_word_sentence(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_word_tag(
+      List<WordTag>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_word_tag(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_word_tense(
+      List<WordTense>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_word_tense(self, serializer);
+    }
   }
 
   @protected
@@ -1400,22 +2030,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_rust_translate_request(
-      RustTranslateRequest self, SseSerializer serializer) {
+  void sse_encode_text_translation(
+      TextTranslation self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_String(self.providerConfigYaml, serializer);
+    sse_encode_opt_String(self.detectedSourceLanguage, serializer);
+    sse_encode_String(self.text, serializer);
+    sse_encode_opt_String(self.audioUrl, serializer);
+  }
+
+  @protected
+  void sse_encode_translate_request(
+      TranslateRequest self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_opt_String(self.sourceLanguage, serializer);
-    sse_encode_String(self.targetLanguage, serializer);
+    sse_encode_opt_String(self.targetLanguage, serializer);
     sse_encode_String(self.text, serializer);
   }
 
   @protected
-  void sse_encode_rust_translate_response(
-      RustTranslateResponse self, SseSerializer serializer) {
+  void sse_encode_translate_response(
+      TranslateResponse self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.providerId, serializer);
-    sse_encode_list_String(self.translations, serializer);
-    sse_encode_opt_String(self.detectedSourceLanguage, serializer);
+    sse_encode_list_text_translation(self.translations, serializer);
   }
 
   @protected
@@ -1433,6 +2069,58 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_usize(BigInt self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putBigUint64(self);
+  }
+
+  @protected
+  void sse_encode_word_definition(
+      WordDefinition self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_opt_String(self.type, serializer);
+    sse_encode_opt_String(self.name, serializer);
+    sse_encode_opt_list_String(self.values, serializer);
+  }
+
+  @protected
+  void sse_encode_word_image(WordImage self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.url, serializer);
+  }
+
+  @protected
+  void sse_encode_word_phrase(WordPhrase self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.text, serializer);
+    sse_encode_list_String(self.translations, serializer);
+  }
+
+  @protected
+  void sse_encode_word_pronunciation(
+      WordPronunciation self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_opt_String(self.type, serializer);
+    sse_encode_opt_String(self.phoneticSymbol, serializer);
+    sse_encode_opt_String(self.audioUrl, serializer);
+  }
+
+  @protected
+  void sse_encode_word_sentence(WordSentence self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.text, serializer);
+    sse_encode_list_String(self.translations, serializer);
+  }
+
+  @protected
+  void sse_encode_word_tag(WordTag self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.name, serializer);
+  }
+
+  @protected
+  void sse_encode_word_tense(WordTense self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_opt_String(self.type, serializer);
+    sse_encode_opt_String(self.name, serializer);
+    sse_encode_opt_list_String(self.values, serializer);
   }
 
   @protected
@@ -1468,7 +2156,7 @@ class RuntimeDictionaryImpl extends RustOpaque implements RuntimeDictionary {
         .instance.api.rust_arc_decrement_strong_count_RuntimeDictionaryPtr,
   );
 
-  Future<RustLookupResponse> lookup({required RustLookupRequest request}) =>
+  Future<LookUpResponse> lookup({required LookUpRequest request}) =>
       RustLib.instance.api
           .crateApiRuntimeRuntimeDictionaryLookup(that: this, request: request);
 }
@@ -1582,8 +2270,7 @@ class RuntimeTranslationImpl extends RustOpaque implements RuntimeTranslation {
         .instance.api.rust_arc_decrement_strong_count_RuntimeTranslationPtr,
   );
 
-  Future<RustTranslateResponse> translate(
-          {required RustTranslateRequest request}) =>
+  Future<TranslateResponse> translate({required TranslateRequest request}) =>
       RustLib.instance.api.crateApiRuntimeRuntimeTranslationTranslate(
           that: this, request: request);
 }
