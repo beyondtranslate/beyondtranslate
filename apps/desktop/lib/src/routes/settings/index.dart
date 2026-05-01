@@ -95,8 +95,8 @@ enum _SettingsCategory {
   general,
   appearance,
   shortcuts,
-  advanced,
   providers,
+  advanced,
   debug;
 
   static _SettingsCategory fromLocation(String location) {
@@ -136,10 +136,10 @@ class _SettingsShellPage extends StatelessWidget {
         const AppearanceSettingsRoute().go(context);
       case _SettingsCategory.shortcuts:
         const ShortcutsSettingsRoute().go(context);
-      case _SettingsCategory.advanced:
-        const AdvancedSettingsRoute().go(context);
       case _SettingsCategory.providers:
         const ProvidersSettingsRoute().go(context);
+      case _SettingsCategory.advanced:
+        const AdvancedSettingsRoute().go(context);
       case _SettingsCategory.debug:
         const SettingsDebugRoute().go(context);
     }
@@ -255,15 +255,15 @@ class _SettingsShellPage extends StatelessWidget {
                 ),
                 _buildSidebarItem(
                   context,
-                  category: _SettingsCategory.advanced,
-                  icon: FluentIcons.code_block_20_regular,
-                  title: t.page_settings.pref_section_title_advanced,
+                  category: _SettingsCategory.providers,
+                  icon: FluentIcons.connector_20_regular,
+                  title: 'Providers',
                 ),
                 _buildSidebarItem(
                   context,
-                  category: _SettingsCategory.providers,
-                  icon: Icons.storage_rounded,
-                  title: 'Providers',
+                  category: _SettingsCategory.advanced,
+                  icon: FluentIcons.code_block_20_regular,
+                  title: t.page_settings.pref_section_title_advanced,
                 ),
                 _buildSidebarItem(
                   context,
@@ -319,15 +319,15 @@ class _SettingsShellPage extends StatelessWidget {
           ),
           _buildCompactSidebarItem(
             context,
-            category: _SettingsCategory.advanced,
-            icon: FluentIcons.code_block_20_regular,
-            title: t.page_settings.pref_section_title_advanced,
+            category: _SettingsCategory.providers,
+            icon: FluentIcons.connector_20_regular,
+            title: 'Providers',
           ),
           _buildCompactSidebarItem(
             context,
-            category: _SettingsCategory.providers,
-            icon: Icons.storage_rounded,
-            title: 'Providers',
+            category: _SettingsCategory.advanced,
+            icon: FluentIcons.code_block_20_regular,
+            title: t.page_settings.pref_section_title_advanced,
           ),
           _buildCompactSidebarItem(
             context,

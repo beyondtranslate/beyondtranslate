@@ -31,12 +31,12 @@ private struct SettingsSectionDetailView: View {
     switch section {
     case .general:
       GeneralSettingsView(viewModel: viewModel)
-    case .providers:
-      ProvidersSettingsView(viewModel: viewModel)
     case .appearance:
       AppearanceSettingsView(viewModel: viewModel)
     case .shortcuts:
       ShortcutSettingsView(viewModel: viewModel)
+    case .providers:
+      ProvidersSettingsView(viewModel: viewModel)
     case .advanced:
       AdvancedSettingsView(viewModel: viewModel)
     }

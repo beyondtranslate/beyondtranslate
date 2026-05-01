@@ -41,7 +41,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
   final _formKey = GlobalKey<FormState>();
   final _sourceLanguageController = TextEditingController(text: 'en');
   final _targetLanguageController = TextEditingController(text: 'zh');
-  final _textController = TextEditingController(text: 'Hello world');
+  final _textController = TextEditingController(text: 'Hello');
 
   List<ProviderConfigEntry> _providers = const [];
   String? _providerId;

@@ -2,9 +2,9 @@ import Foundation
 
 enum SettingsSection: String, CaseIterable, Identifiable {
   case general
-  case providers
   case appearance
   case shortcuts
+  case providers
   case advanced
 
   var id: String { rawValue }
@@ -12,9 +12,9 @@ enum SettingsSection: String, CaseIterable, Identifiable {
   var title: String {
     switch self {
     case .general: return "General"
-    case .providers: return "Providers"
     case .appearance: return "Appearance"
     case .shortcuts: return "Shortcuts"
+    case .providers: return "Providers"
     case .advanced: return "Advanced"
     }
   }
@@ -22,9 +22,9 @@ enum SettingsSection: String, CaseIterable, Identifiable {
   var icon: String {
     switch self {
     case .general: return "gearshape"
-    case .providers: return "server.rack"
     case .appearance: return "paintbrush"
     case .shortcuts: return "keyboard"
+    case .providers: return "server.rack"
     case .advanced: return "slider.horizontal.3"
     }
   }
