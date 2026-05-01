@@ -1,4 +1,5 @@
 use std::future::Future;
+use std::path::PathBuf;
 use std::sync::Arc;
 use std::thread;
 
@@ -12,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::domain::engine;
-use crate::domain::settings::{RustSettingsDto, Settings};
+use crate::domain::settings::Settings;
 
 struct RuntimeState {
     settings: Settings,
@@ -26,35 +27,32 @@ impl RuntimeState {
     }
 }
 
-struct RuntimeInner {
-    storage_dir: String,
-    state: RwLock<RuntimeState>,
-}
-
 #[frb(opaque)]
+#[derive(Clone)]
 pub struct Runtime {
-    inner: Arc<RuntimeInner>,
+    settings_file_path: Arc<str>,
+    state: Arc<RwLock<RuntimeState>>,
 }
 
 #[frb(opaque)]
 pub struct RuntimeSettings {
-    inner: Arc<RuntimeInner>,
+    runtime: Runtime,
 }
 
 #[frb(opaque)]
 pub struct RuntimeTranslation {
-    inner: Arc<RuntimeInner>,
+    runtime: Runtime,
     provider_id: String,
 }
 
 #[frb(opaque)]
 pub struct RuntimeDictionary {
-    inner: Arc<RuntimeInner>,
+    runtime: Runtime,
     provider_id: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct RustProviderEntry {
+pub struct ProviderConfigEntry {
     pub id: String,
     pub r#type: String,
     pub config_yaml: String,
@@ -62,21 +60,20 @@ pub struct RustProviderEntry {
 
 impl Runtime {
     #[frb(sync)]
-    pub fn new(storage_dir: String) -> Result<Self, String> {
-        let settings = Settings::load(&storage_dir)?;
+    pub fn new(data_dir: String) -> Result<Self, String> {
+        let settings_file_path = runtime_settings_file_path(&data_dir);
+        let settings = Settings::load(&settings_file_path)?;
         let state = RuntimeState::new(settings)?;
         Ok(Self {
-            inner: Arc::new(RuntimeInner {
-                storage_dir,
-                state: RwLock::new(state),
-            }),
+            settings_file_path: Arc::from(settings_file_path.to_string_lossy().into_owned()),
+            state: Arc::new(RwLock::new(state)),
         })
     }
 
     #[frb(sync)]
     pub fn settings(&self) -> RuntimeSettings {
         RuntimeSettings {
-            inner: Arc::clone(&self.inner),
+            runtime: self.clone(),
         }
     }
 
@@ -84,7 +81,7 @@ impl Runtime {
     pub fn translation(&self, provider_id: String) -> Result<RuntimeTranslation, String> {
         let provider_id = validate_provider_id(provider_id)?;
         Ok(RuntimeTranslation {
-            inner: Arc::clone(&self.inner),
+            runtime: self.clone(),
             provider_id,
         })
     }
@@ -93,34 +90,20 @@ impl Runtime {
     pub fn dictionary(&self, provider_id: String) -> Result<RuntimeDictionary, String> {
         let provider_id = validate_provider_id(provider_id)?;
         Ok(RuntimeDictionary {
-            inner: Arc::clone(&self.inner),
+            runtime: self.clone(),
             provider_id,
         })
     }
 }
 
 impl RuntimeSettings {
-    pub async fn get(&self) -> Result<RustSettingsDto, String> {
-        let state = self.inner.state.read().await;
-        state.settings.to_dto()
-    }
-
     pub async fn get_json(&self) -> Result<String, String> {
-        Ok(self.get().await?.raw_json)
+        let state = self.runtime.state.read().await;
+        state.settings.to_pretty_json()
     }
 
-    pub async fn set_window_theme(&self, theme: String) -> Result<RustSettingsDto, String> {
-        self.update(move |settings| settings.set_window_theme(&theme))
-            .await
-    }
-
-    pub async fn set_window_language(&self, language: String) -> Result<RustSettingsDto, String> {
-        self.update(move |settings| settings.set_window_language(&language))
-            .await
-    }
-
-    pub async fn list_providers(&self) -> Result<Vec<RustProviderEntry>, String> {
-        let state = self.inner.state.read().await;
+    pub async fn list_providers(&self) -> Result<Vec<ProviderConfigEntry>, String> {
+        let state = self.runtime.state.read().await;
         state
             .settings
             .engine
@@ -133,9 +116,9 @@ impl RuntimeSettings {
     pub async fn get_provider(
         &self,
         provider_id: String,
-    ) -> Result<Option<RustProviderEntry>, String> {
+    ) -> Result<Option<ProviderConfigEntry>, String> {
         let provider_id = validate_provider_id(provider_id)?;
-        let state = self.inner.state.read().await;
+        let state = self.runtime.state.read().await;
         state
             .settings
             .engine
@@ -149,74 +132,46 @@ impl RuntimeSettings {
         &self,
         provider_id: String,
         config_yaml: String,
-    ) -> Result<RustProviderEntry, String> {
+    ) -> Result<ProviderConfigEntry, String> {
         let provider_id = validate_provider_id(provider_id)?;
         let config_yaml = validate_required("config_yaml", config_yaml)?;
         let config = engine::parse_provider_config(&config_yaml)?;
-        let provider_id_for_insert = provider_id.clone();
 
-        self.update_with_result(
-            move |settings| {
-                settings
-                    .engine
-                    .providers
-                    .insert(provider_id_for_insert, config);
-            },
-            move |settings| {
-                let config = settings
-                    .engine
-                    .providers
-                    .get(&provider_id)
-                    .ok_or_else(|| format!("provider `{provider_id}` was not saved"))?;
-                provider_entry(&provider_id, config)
-            },
-        )
+        self.commit_settings(move |settings| {
+            let entry = provider_entry(&provider_id, &config)?;
+            settings.engine.providers.insert(provider_id, config);
+            Ok(entry)
+        })
         .await
     }
 
     pub async fn delete_provider(
         &self,
         provider_id: String,
-    ) -> Result<Option<RustProviderEntry>, String> {
+    ) -> Result<Option<ProviderConfigEntry>, String> {
         let provider_id = validate_provider_id(provider_id)?;
-        let mut state = self.inner.state.write().await;
-        let mut next_settings = state.settings.clone();
-        let deleted = next_settings.engine.providers.remove(&provider_id);
-
-        let next_engine = engine::build_from_settings(&next_settings)?;
-        next_settings.save(&self.inner.storage_dir)?;
-        let deleted = deleted
-            .as_ref()
-            .map(|config| provider_entry(&provider_id, config))
-            .transpose()?;
-
-        *state = RuntimeState {
-            settings: next_settings,
-            engine: next_engine,
-        };
-
-        Ok(deleted)
+        self.commit_settings(move |settings| {
+            settings
+                .engine
+                .providers
+                .remove(&provider_id)
+                .as_ref()
+                .map(|config| provider_entry(&provider_id, config))
+                .transpose()
+        })
+        .await
     }
 
-    async fn update<F>(&self, mutator: F) -> Result<RustSettingsDto, String>
+    async fn commit_settings<F, T>(&self, update: F) -> Result<T, String>
     where
-        F: FnOnce(&mut Settings),
+        F: FnOnce(&mut Settings) -> Result<T, String>,
     {
-        self.update_with_result(mutator, |settings| settings.to_dto()).await
-    }
-
-    async fn update_with_result<F, T, G>(&self, mutator: F, result: G) -> Result<T, String>
-    where
-        F: FnOnce(&mut Settings),
-        G: FnOnce(&Settings) -> Result<T, String>,
-    {
-        let mut state = self.inner.state.write().await;
+        let mut state = self.runtime.state.write().await;
         let mut next_settings = state.settings.clone();
-        mutator(&mut next_settings);
+        let result = update(&mut next_settings)?;
 
         let next_engine = engine::build_from_settings(&next_settings)?;
-        next_settings.save(&self.inner.storage_dir)?;
-        let result = result(&next_settings)?;
+        next_settings.save(self.runtime.settings_file_path.as_ref())?;
 
         *state = RuntimeState {
             settings: next_settings,
@@ -230,14 +185,12 @@ impl RuntimeSettings {
 impl RuntimeTranslation {
     pub async fn translate(&self, request: TranslateRequest) -> Result<TranslateResponse, String> {
         let provider_id = self.provider_id.clone();
-        let inner = Arc::clone(&self.inner);
+        let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
-            let target_language = validate_optional_required(
-                "target_language",
-                request.target_language,
-            )?;
+            let target_language =
+                validate_optional_required("target_language", request.target_language)?;
             let text = validate_required("text", request.text)?;
-            let state = inner.state.read().await;
+            let state = runtime.state.read().await;
             let translation_service = state
                 .engine
                 .translation(&provider_id)
@@ -259,12 +212,12 @@ impl RuntimeTranslation {
 impl RuntimeDictionary {
     pub async fn lookup(&self, request: LookUpRequest) -> Result<LookUpResponse, String> {
         let provider_id = self.provider_id.clone();
-        let inner = Arc::clone(&self.inner);
+        let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
             let source_language = validate_required("source_language", request.source_language)?;
             let target_language = validate_required("target_language", request.target_language)?;
             let word = validate_required("word", request.word)?;
-            let state = inner.state.read().await;
+            let state = runtime.state.read().await;
             let dictionary_service = state
                 .engine
                 .dictionary(&provider_id)
@@ -288,13 +241,20 @@ pub fn init_app() {
     flutter_rust_bridge::setup_default_user_utils();
 }
 
-fn provider_entry(provider_id: &str, config: &ProviderConfig) -> Result<RustProviderEntry, String> {
-    Ok(RustProviderEntry {
+fn provider_entry(
+    provider_id: &str,
+    config: &ProviderConfig,
+) -> Result<ProviderConfigEntry, String> {
+    Ok(ProviderConfigEntry {
         id: provider_id.to_owned(),
         r#type: config.provider_type.as_str().to_owned(),
         config_yaml: serde_yaml::to_string(config)
             .map_err(|error| format!("failed to encode provider config yaml: {error}"))?,
     })
+}
+
+fn runtime_settings_file_path(data_dir: &str) -> PathBuf {
+    PathBuf::from(data_dir).join("settings.json")
 }
 
 fn validate_provider_id(provider_id: String) -> Result<String, String> {
@@ -350,7 +310,7 @@ mod tests {
     use super::*;
 
     fn create_runtime() -> Runtime {
-        let storage_dir = std::env::temp_dir().join(format!(
+        let data_dir = std::env::temp_dir().join(format!(
             "beyondtranslate-runtime-{}",
             std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
@@ -358,7 +318,7 @@ mod tests {
                 .as_nanos()
         ));
 
-        Runtime::new(storage_dir.display().to_string()).expect("failed to create runtime")
+        Runtime::new(data_dir.display().to_string()).expect("failed to create runtime")
     }
 
     #[test]

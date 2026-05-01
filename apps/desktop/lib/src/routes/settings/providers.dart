@@ -17,7 +17,7 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
   final _providerIdController = TextEditingController();
   final _configYamlController = TextEditingController();
 
-  List<RustProviderEntry> _providers = const [];
+  List<ProviderConfigEntry> _providers = const [];
   String? _selectedProviderId;
   bool _loading = true;
   bool _saving = false;
@@ -43,7 +43,7 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
     });
 
     try {
-      final providers = await runtime.settings.listProviders();
+      final providers = await runtime.settings().listProviders();
       if (!mounted) {
         return;
       }
@@ -84,7 +84,8 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
 
   Future<void> _loadProviderIntoEditor(String providerId) async {
     try {
-      final provider = await runtime.settings.getProvider(providerId);
+      final provider =
+          await runtime.settings().getProvider(providerId: providerId);
       if (!mounted) {
         return;
       }
@@ -116,10 +117,10 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
     });
 
     try {
-      await runtime.settings.updateProvider(
-        providerId: _providerIdController.text.trim(),
-        configYaml: _configYamlController.text,
-      );
+      await runtime.settings().updateProvider(
+            providerId: _providerIdController.text.trim(),
+            configYaml: _configYamlController.text,
+          );
       _selectedProviderId = _providerIdController.text.trim();
       await _reload();
     } catch (error) {
@@ -150,7 +151,7 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
     });
 
     try {
-      await runtime.settings.deleteProvider(providerId);
+      await runtime.settings().deleteProvider(providerId: providerId);
       if (!mounted) {
         return;
       }
@@ -301,7 +302,8 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
                         const SizedBox(width: 12),
                         Button.outlined(
                           processing: _saving,
-                          onPressed: _saving || _loading ? null : _deleteProvider,
+                          onPressed:
+                              _saving || _loading ? null : _deleteProvider,
                           child: const Text('Delete'),
                         ),
                         const SizedBox(width: 12),

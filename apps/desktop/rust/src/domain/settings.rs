@@ -1,34 +1,41 @@
 use std::collections::BTreeMap;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use beyondtranslate_engine::EngineConfig;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
-const WINDOW_THEME_KEY: &str = "window.theme";
-const WINDOW_LANGUAGE_KEY: &str = "window.language";
-const DEFAULT_WINDOW_THEME: &str = "system";
-const DEFAULT_WINDOW_LANGUAGE: &str = "zh";
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct RustSettingsDto {
-    pub window_theme: String,
-    pub window_language: String,
-    pub raw_json: String,
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ShortcutSettings {
+    #[serde(default, rename = "toggleApp")]
+    pub toggle_app: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AdvancedSettings {
+    #[serde(default, rename = "launchAtLogin")]
+    pub launch_at_login: bool,
+    #[serde(default)]
+    pub proxy: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Settings {
     #[serde(default, skip_serializing_if = "engine_config_is_empty")]
+    #[serde(flatten)]
     pub engine: EngineConfig,
+    #[serde(default)]
+    pub shortcuts: ShortcutSettings,
+    #[serde(default)]
+    pub advanced: AdvancedSettings,
     #[serde(flatten)]
     pub values: BTreeMap<String, Value>,
 }
 
 impl Settings {
-    pub fn load(storage_dir: impl AsRef<Path>) -> Result<Self, String> {
-        let path = settings_file_path(storage_dir);
+    pub fn load(file_path: impl AsRef<Path>) -> Result<Self, String> {
+        let path = file_path.as_ref();
         if !path.exists() {
             return Ok(Self::default());
         }
@@ -45,8 +52,8 @@ impl Settings {
         })
     }
 
-    pub fn save(&self, storage_dir: impl AsRef<Path>) -> Result<(), String> {
-        let path = settings_file_path(storage_dir);
+    pub fn save(&self, file_path: impl AsRef<Path>) -> Result<(), String> {
+        let path = file_path.as_ref();
         if let Some(parent) = path.parent() {
             fs::create_dir_all(parent).map_err(|error| {
                 format!(
@@ -65,90 +72,21 @@ impl Settings {
         })
     }
 
-    pub fn window_theme(&self) -> String {
-        match self.values.get(WINDOW_THEME_KEY).and_then(Value::as_str) {
-            Some("light") => "light".to_owned(),
-            Some("dark") => "dark".to_owned(),
-            Some("system") => "system".to_owned(),
-            _ => DEFAULT_WINDOW_THEME.to_owned(),
-        }
-    }
-
-    pub fn set_window_theme(&mut self, theme: &str) {
-        self.values.insert(
-            WINDOW_THEME_KEY.to_owned(),
-            Value::String(normalize_theme(theme)),
-        );
-    }
-
-    pub fn window_language(&self) -> String {
-        match self.values.get(WINDOW_LANGUAGE_KEY).and_then(Value::as_str) {
-            Some("en") => "en".to_owned(),
-            Some("zh") => "zh".to_owned(),
-            _ => DEFAULT_WINDOW_LANGUAGE.to_owned(),
-        }
-    }
-
-    pub fn set_window_language(&mut self, language: &str) {
-        self.values.insert(
-            WINDOW_LANGUAGE_KEY.to_owned(),
-            Value::String(normalize_language(language)),
-        );
-    }
-
-    pub fn to_dto(&self) -> Result<RustSettingsDto, String> {
-        Ok(RustSettingsDto {
-            window_theme: self.window_theme(),
-            window_language: self.window_language(),
-            raw_json: self.to_pretty_json()?,
-        })
-    }
-
-    fn to_pretty_json(&self) -> Result<String, String> {
-        let mut root = serde_json::to_value(self)
+    pub fn to_pretty_json(&self) -> Result<String, String> {
+        let root = serde_json::to_value(self)
             .map_err(|error| format!("failed to encode settings: {error}"))?;
 
-        let Value::Object(ref mut object) = root else {
+        if !root.is_object() {
             return Err("settings root must encode to a JSON object".to_owned());
-        };
-
-        object.insert(
-            WINDOW_THEME_KEY.to_owned(),
-            Value::String(self.window_theme()),
-        );
-        object.insert(
-            WINDOW_LANGUAGE_KEY.to_owned(),
-            Value::String(self.window_language()),
-        );
+        }
 
         serde_json::to_string_pretty(&root)
             .map_err(|error| format!("failed to render settings json: {error}"))
     }
 }
 
-pub fn settings_file_path(storage_dir: impl AsRef<Path>) -> PathBuf {
-    storage_dir.as_ref().join("settings.json")
-}
-
 fn engine_config_is_empty(config: &EngineConfig) -> bool {
     config.providers.is_empty()
-}
-
-fn normalize_theme(theme: &str) -> String {
-    match theme.trim() {
-        "light" => "light".to_owned(),
-        "dark" => "dark".to_owned(),
-        "system" => "system".to_owned(),
-        _ => DEFAULT_WINDOW_THEME.to_owned(),
-    }
-}
-
-fn normalize_language(language: &str) -> String {
-    match language.trim() {
-        "en" => "en".to_owned(),
-        "zh" => "zh".to_owned(),
-        _ => DEFAULT_WINDOW_LANGUAGE.to_owned(),
-    }
 }
 
 pub fn merge_raw_json_preserving_unknown_keys(
@@ -163,63 +101,79 @@ pub fn merge_raw_json_preserving_unknown_keys(
 }
 
 #[cfg(test)]
+fn get_json_pointer(object: &Map<String, Value>, pointer: &str) -> Option<Value> {
+    Value::Object(object.clone()).pointer(pointer).cloned()
+}
+
+#[cfg(test)]
 mod tests {
     use super::*;
+    use std::path::PathBuf;
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    fn temp_dir() -> PathBuf {
+    fn temp_settings_file() -> PathBuf {
         let unique = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .expect("time went backwards")
             .as_nanos();
-        let path = std::env::temp_dir().join(format!("beyondtranslate-settings-{unique}"));
-        fs::create_dir_all(&path).expect("failed to create temp dir");
-        path
+        std::env::temp_dir()
+            .join(format!("beyondtranslate-settings-{unique}"))
+            .join("settings.json")
     }
 
     #[test]
     fn load_missing_file_returns_defaults() {
-        let dir = temp_dir();
-        let settings = Settings::load(&dir).expect("failed to load settings");
+        let file_path = temp_settings_file();
+        let settings = Settings::load(&file_path).expect("failed to load settings");
 
-        assert_eq!(settings.window_theme(), DEFAULT_WINDOW_THEME);
-        assert_eq!(settings.window_language(), DEFAULT_WINDOW_LANGUAGE);
+        assert!(settings.engine.providers.is_empty());
+        assert_eq!(settings.shortcuts, ShortcutSettings::default());
+        assert_eq!(settings.advanced, AdvancedSettings::default());
     }
 
     #[test]
-    fn invalid_values_fall_back_to_defaults() {
-        let dir = temp_dir();
-        let path = settings_file_path(&dir);
+    fn load_settings_schema() {
+        let path = temp_settings_file();
+        fs::create_dir_all(path.parent().unwrap()).expect("failed to create temp dir");
         fs::write(
             &path,
             r#"{
-  "window.theme": "sepia",
-  "window.language": "jp"
+  "shortcuts": {
+    "toggleApp": "Command+Shift+Space"
+  },
+  "advanced": {
+    "launchAtLogin": true,
+    "proxy": "http://127.0.0.1:7890"
+  }
 }"#,
         )
         .expect("failed to write settings");
 
-        let settings = Settings::load(&dir).expect("failed to load settings");
-        assert_eq!(settings.window_theme(), DEFAULT_WINDOW_THEME);
-        assert_eq!(settings.window_language(), DEFAULT_WINDOW_LANGUAGE);
+        let settings = Settings::load(&path).expect("failed to load settings");
+        assert_eq!(settings.shortcuts.toggle_app, "Command+Shift+Space");
+        assert!(settings.advanced.launch_at_login);
+        assert_eq!(settings.advanced.proxy, "http://127.0.0.1:7890");
     }
 
     #[test]
-    fn save_preserves_unknown_keys() {
-        let dir = temp_dir();
-        let path = settings_file_path(&dir);
+    fn save_preserves_unknown_keys_and_writes_settings_schema() {
+        let path = temp_settings_file();
+        fs::create_dir_all(path.parent().unwrap()).expect("failed to create temp dir");
         fs::write(
             &path,
             r#"{
   "workbench.sideBar.location": "right",
-  "window.theme": "light"
+  "shortcuts": {
+    "toggleApp": "Command+Shift+Space"
+  }
 }"#,
         )
         .expect("failed to write settings");
 
-        let mut settings = Settings::load(&dir).expect("failed to load settings");
-        settings.set_window_language("en");
-        settings.save(&dir).expect("failed to save settings");
+        let mut settings = Settings::load(&path).expect("failed to load settings");
+        settings.advanced.launch_at_login = true;
+        settings.advanced.proxy = "http://127.0.0.1:7890".to_owned();
+        settings.save(&path).expect("failed to save settings");
 
         let saved = fs::read_to_string(path).expect("failed to read saved settings");
         let json = merge_raw_json_preserving_unknown_keys(&saved).expect("invalid saved json");
@@ -230,12 +184,27 @@ mod tests {
             Some("right")
         );
         assert_eq!(
-            json.get(WINDOW_THEME_KEY).and_then(Value::as_str),
-            Some("light")
+            get_json_pointer(&json, "/shortcuts/toggleApp"),
+            Some(Value::String("Command+Shift+Space".to_owned()))
         );
         assert_eq!(
-            json.get(WINDOW_LANGUAGE_KEY).and_then(Value::as_str),
-            Some("en")
+            get_json_pointer(&json, "/advanced/launchAtLogin"),
+            Some(Value::Bool(true))
         );
+        assert_eq!(
+            get_json_pointer(&json, "/advanced/proxy"),
+            Some(Value::String("http://127.0.0.1:7890".to_owned()))
+        );
+    }
+
+    #[test]
+    fn engine_config_is_flattened() {
+        let settings = Settings::default();
+        let json = merge_raw_json_preserving_unknown_keys(&settings.to_pretty_json().unwrap())
+            .expect("invalid settings json");
+
+        assert!(!json.contains_key("engine"));
+        assert!(json.contains_key("shortcuts"));
+        assert!(json.contains_key("advanced"));
     }
 }

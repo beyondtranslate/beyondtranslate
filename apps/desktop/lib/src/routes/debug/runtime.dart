@@ -8,13 +8,13 @@ import '../../widgets/custom_app_bar/custom_app_bar.dart';
 import '../../widgets/ui/button.dart';
 
 List<RouteBase> get $appRoutes => <RouteBase>[
-  GoRoute(
-    path: '/debug/runtime',
-    builder: (BuildContext context, GoRouterState state) {
-      return const RuntimeDebugRoutePage();
-    },
-  ),
-];
+      GoRoute(
+        path: '/debug/runtime',
+        builder: (BuildContext context, GoRouterState state) {
+          return const RuntimeDebugRoutePage();
+        },
+      ),
+    ];
 
 class RuntimeDebugRoutePage extends StatelessWidget {
   const RuntimeDebugRoutePage({super.key});
@@ -43,7 +43,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
   final _targetLanguageController = TextEditingController(text: 'zh');
   final _textController = TextEditingController(text: 'Hello world');
 
-  List<RustProviderEntry> _providers = const [];
+  List<ProviderConfigEntry> _providers = const [];
   String? _providerId;
   bool _loadingProviders = true;
   bool _submitting = false;
@@ -67,7 +67,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
 
   Future<void> _loadProviders() async {
     try {
-      final providers = await runtime.settings.listProviders();
+      final providers = await runtime.settings().listProviders();
       if (!mounted) {
         return;
       }
@@ -105,11 +105,14 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
 
     try {
       if (_isLookupProvider) {
-        final response = await runtime.dictionary(providerId).lookup(
-              sourceLanguage: _sourceLanguageController.text.trim(),
-              targetLanguage: _targetLanguageController.text.trim(),
-              word: _textController.text,
-            );
+        final response =
+            await runtime.dictionary(providerId: providerId).lookup(
+                  request: LookUpRequest(
+                    sourceLanguage: _sourceLanguageController.text.trim(),
+                    targetLanguage: _targetLanguageController.text.trim(),
+                    word: _textController.text,
+                  ),
+                );
 
         if (!mounted) {
           return;
@@ -118,13 +121,17 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
           _lookupResponse = response;
         });
       } else {
-        final response = await runtime.translation(providerId).translate(
-              sourceLanguage: _sourceLanguageController.text.trim().isEmpty
-                  ? null
-                  : _sourceLanguageController.text.trim(),
-              targetLanguage: _targetLanguageController.text.trim(),
-              text: _textController.text,
-            );
+        final response =
+            await runtime.translation(providerId: providerId).translate(
+                  request: TranslateRequest(
+                    sourceLanguage:
+                        _sourceLanguageController.text.trim().isEmpty
+                            ? null
+                            : _sourceLanguageController.text.trim(),
+                    targetLanguage: _targetLanguageController.text.trim(),
+                    text: _textController.text,
+                  ),
+                );
 
         if (!mounted) {
           return;

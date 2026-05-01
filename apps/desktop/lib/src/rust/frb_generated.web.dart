@@ -13,7 +13,6 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_web.dart';
 
 import 'api/mirrors.dart';
 import 'api/runtime.dart';
-import 'domain/settings.dart';
 import 'frb_generated.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
@@ -106,7 +105,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LookUpRequest dco_decode_box_autoadd_look_up_request(dynamic raw);
 
   @protected
-  RustProviderEntry dco_decode_box_autoadd_rust_provider_entry(dynamic raw);
+  ProviderConfigEntry dco_decode_box_autoadd_provider_config_entry(dynamic raw);
 
   @protected
   TranslateRequest dco_decode_box_autoadd_translate_request(dynamic raw);
@@ -118,7 +117,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
-  List<RustProviderEntry> dco_decode_list_rust_provider_entry(dynamic raw);
+  List<ProviderConfigEntry> dco_decode_list_provider_config_entry(dynamic raw);
 
   @protected
   List<TextTranslation> dco_decode_list_text_translation(dynamic raw);
@@ -154,7 +153,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String? dco_decode_opt_String(dynamic raw);
 
   @protected
-  RustProviderEntry? dco_decode_opt_box_autoadd_rust_provider_entry(
+  ProviderConfigEntry? dco_decode_opt_box_autoadd_provider_config_entry(
       dynamic raw);
 
   @protected
@@ -182,10 +181,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<WordTense>? dco_decode_opt_list_word_tense(dynamic raw);
 
   @protected
-  RustProviderEntry dco_decode_rust_provider_entry(dynamic raw);
-
-  @protected
-  RustSettingsDto dco_decode_rust_settings_dto(dynamic raw);
+  ProviderConfigEntry dco_decode_provider_config_entry(dynamic raw);
 
   @protected
   TextTranslation dco_decode_text_translation(dynamic raw);
@@ -294,7 +290,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  RustProviderEntry sse_decode_box_autoadd_rust_provider_entry(
+  ProviderConfigEntry sse_decode_box_autoadd_provider_config_entry(
       SseDeserializer deserializer);
 
   @protected
@@ -308,7 +304,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
-  List<RustProviderEntry> sse_decode_list_rust_provider_entry(
+  List<ProviderConfigEntry> sse_decode_list_provider_config_entry(
       SseDeserializer deserializer);
 
   @protected
@@ -349,7 +345,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
-  RustProviderEntry? sse_decode_opt_box_autoadd_rust_provider_entry(
+  ProviderConfigEntry? sse_decode_opt_box_autoadd_provider_config_entry(
       SseDeserializer deserializer);
 
   @protected
@@ -381,11 +377,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<WordTense>? sse_decode_opt_list_word_tense(SseDeserializer deserializer);
 
   @protected
-  RustProviderEntry sse_decode_rust_provider_entry(
+  ProviderConfigEntry sse_decode_provider_config_entry(
       SseDeserializer deserializer);
-
-  @protected
-  RustSettingsDto sse_decode_rust_settings_dto(SseDeserializer deserializer);
 
   @protected
   TextTranslation sse_decode_text_translation(SseDeserializer deserializer);
@@ -500,8 +493,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LookUpRequest self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_rust_provider_entry(
-      RustProviderEntry self, SseSerializer serializer);
+  void sse_encode_box_autoadd_provider_config_entry(
+      ProviderConfigEntry self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_translate_request(
@@ -515,8 +508,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       Uint8List self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_rust_provider_entry(
-      List<RustProviderEntry> self, SseSerializer serializer);
+  void sse_encode_list_provider_config_entry(
+      List<ProviderConfigEntry> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_text_translation(
@@ -560,8 +553,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_box_autoadd_rust_provider_entry(
-      RustProviderEntry? self, SseSerializer serializer);
+  void sse_encode_opt_box_autoadd_provider_config_entry(
+      ProviderConfigEntry? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_list_String(List<String>? self, SseSerializer serializer);
@@ -595,12 +588,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<WordTense>? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_rust_provider_entry(
-      RustProviderEntry self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_rust_settings_dto(
-      RustSettingsDto self, SseSerializer serializer);
+  void sse_encode_provider_config_entry(
+      ProviderConfigEntry self, SseSerializer serializer);
 
   @protected
   void sse_encode_text_translation(

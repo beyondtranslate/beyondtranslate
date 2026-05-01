@@ -10,7 +10,6 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 import 'api/mirrors.dart';
 import 'api/runtime.dart';
-import 'domain/settings.dart';
 import 'frb_generated.dart';
 import 'frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
@@ -74,7 +73,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 463734023;
+  int get rustContentHash => 1162094517;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -88,28 +87,19 @@ abstract class RustLibApi extends BaseApi {
   Future<LookUpResponse> crateApiRuntimeRuntimeDictionaryLookup(
       {required RuntimeDictionary that, required LookUpRequest request});
 
-  Future<RustProviderEntry?> crateApiRuntimeRuntimeSettingsDeleteProvider(
+  Future<ProviderConfigEntry?> crateApiRuntimeRuntimeSettingsDeleteProvider(
       {required RuntimeSettings that, required String providerId});
-
-  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsGet(
-      {required RuntimeSettings that});
 
   Future<String> crateApiRuntimeRuntimeSettingsGetJson(
       {required RuntimeSettings that});
 
-  Future<RustProviderEntry?> crateApiRuntimeRuntimeSettingsGetProvider(
+  Future<ProviderConfigEntry?> crateApiRuntimeRuntimeSettingsGetProvider(
       {required RuntimeSettings that, required String providerId});
 
-  Future<List<RustProviderEntry>> crateApiRuntimeRuntimeSettingsListProviders(
+  Future<List<ProviderConfigEntry>> crateApiRuntimeRuntimeSettingsListProviders(
       {required RuntimeSettings that});
 
-  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowLanguage(
-      {required RuntimeSettings that, required String language});
-
-  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowTheme(
-      {required RuntimeSettings that, required String theme});
-
-  Future<RustProviderEntry> crateApiRuntimeRuntimeSettingsUpdateProvider(
+  Future<ProviderConfigEntry> crateApiRuntimeRuntimeSettingsUpdateProvider(
       {required RuntimeSettings that,
       required String providerId,
       required String configYaml});
@@ -120,7 +110,7 @@ abstract class RustLibApi extends BaseApi {
   RuntimeDictionary crateApiRuntimeRuntimeDictionary(
       {required Runtime that, required String providerId});
 
-  Runtime crateApiRuntimeRuntimeNew({required String storageDir});
+  Runtime crateApiRuntimeRuntimeNew({required String dataDir});
 
   RuntimeSettings crateApiRuntimeRuntimeSettings({required Runtime that});
 
@@ -200,7 +190,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<RustProviderEntry?> crateApiRuntimeRuntimeSettingsDeleteProvider(
+  Future<ProviderConfigEntry?> crateApiRuntimeRuntimeSettingsDeleteProvider(
       {required RuntimeSettings that, required String providerId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -212,7 +202,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 2, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_opt_box_autoadd_rust_provider_entry,
+        decodeSuccessData: sse_decode_opt_box_autoadd_provider_config_entry,
         decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiRuntimeRuntimeSettingsDeleteProviderConstMeta,
@@ -228,33 +218,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsGet(
-      {required RuntimeSettings that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_rust_settings_dto,
-        decodeErrorData: sse_decode_String,
-      ),
-      constMeta: kCrateApiRuntimeRuntimeSettingsGetConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsGetConstMeta =>
-      const TaskConstMeta(
-        debugName: "RuntimeSettings_get",
-        argNames: ["that"],
-      );
-
-  @override
   Future<String> crateApiRuntimeRuntimeSettingsGetJson(
       {required RuntimeSettings that}) {
     return handler.executeNormal(NormalTask(
@@ -263,7 +226,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 4, port: port_);
+            funcId: 3, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -282,7 +245,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<RustProviderEntry?> crateApiRuntimeRuntimeSettingsGetProvider(
+  Future<ProviderConfigEntry?> crateApiRuntimeRuntimeSettingsGetProvider(
       {required RuntimeSettings that, required String providerId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -291,10 +254,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(providerId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 5, port: port_);
+            funcId: 4, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_opt_box_autoadd_rust_provider_entry,
+        decodeSuccessData: sse_decode_opt_box_autoadd_provider_config_entry,
         decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiRuntimeRuntimeSettingsGetProviderConstMeta,
@@ -310,7 +273,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<RustProviderEntry>> crateApiRuntimeRuntimeSettingsListProviders(
+  Future<List<ProviderConfigEntry>> crateApiRuntimeRuntimeSettingsListProviders(
       {required RuntimeSettings that}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -318,10 +281,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 6, port: port_);
+            funcId: 5, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_rust_provider_entry,
+        decodeSuccessData: sse_decode_list_provider_config_entry,
         decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiRuntimeRuntimeSettingsListProvidersConstMeta,
@@ -337,63 +300,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowLanguage(
-      {required RuntimeSettings that, required String language}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
-            that, serializer);
-        sse_encode_String(language, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 7, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_rust_settings_dto,
-        decodeErrorData: sse_decode_String,
-      ),
-      constMeta: kCrateApiRuntimeRuntimeSettingsSetWindowLanguageConstMeta,
-      argValues: [that, language],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsSetWindowLanguageConstMeta =>
-      const TaskConstMeta(
-        debugName: "RuntimeSettings_set_window_language",
-        argNames: ["that", "language"],
-      );
-
-  @override
-  Future<RustSettingsDto> crateApiRuntimeRuntimeSettingsSetWindowTheme(
-      {required RuntimeSettings that, required String theme}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
-            that, serializer);
-        sse_encode_String(theme, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 8, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_rust_settings_dto,
-        decodeErrorData: sse_decode_String,
-      ),
-      constMeta: kCrateApiRuntimeRuntimeSettingsSetWindowThemeConstMeta,
-      argValues: [that, theme],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsSetWindowThemeConstMeta =>
-      const TaskConstMeta(
-        debugName: "RuntimeSettings_set_window_theme",
-        argNames: ["that", "theme"],
-      );
-
-  @override
-  Future<RustProviderEntry> crateApiRuntimeRuntimeSettingsUpdateProvider(
+  Future<ProviderConfigEntry> crateApiRuntimeRuntimeSettingsUpdateProvider(
       {required RuntimeSettings that,
       required String providerId,
       required String configYaml}) {
@@ -405,10 +312,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(providerId, serializer);
         sse_encode_String(configYaml, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 9, port: port_);
+            funcId: 6, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_rust_provider_entry,
+        decodeSuccessData: sse_decode_provider_config_entry,
         decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiRuntimeRuntimeSettingsUpdateProviderConstMeta,
@@ -433,7 +340,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_box_autoadd_translate_request(request, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 10, port: port_);
+            funcId: 7, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_translate_response,
@@ -460,7 +367,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
             that, serializer);
         sse_encode_String(providerId, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -480,12 +387,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Runtime crateApiRuntimeRuntimeNew({required String storageDir}) {
+  Runtime crateApiRuntimeRuntimeNew({required String dataDir}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(storageDir, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 12)!;
+        sse_encode_String(dataDir, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -493,14 +400,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiRuntimeRuntimeNewConstMeta,
-      argValues: [storageDir],
+      argValues: [dataDir],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiRuntimeRuntimeNewConstMeta => const TaskConstMeta(
         debugName: "Runtime_new",
-        argNames: ["storageDir"],
+        argNames: ["dataDir"],
       );
 
   @override
@@ -510,7 +417,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 13)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -538,7 +445,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
             that, serializer);
         sse_encode_String(providerId, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 14)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -563,7 +470,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 15, port: port_);
+            funcId: 12, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -721,9 +628,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustProviderEntry dco_decode_box_autoadd_rust_provider_entry(dynamic raw) {
+  ProviderConfigEntry dco_decode_box_autoadd_provider_config_entry(
+      dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_rust_provider_entry(raw);
+    return dco_decode_provider_config_entry(raw);
   }
 
   @protected
@@ -745,9 +653,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<RustProviderEntry> dco_decode_list_rust_provider_entry(dynamic raw) {
+  List<ProviderConfigEntry> dco_decode_list_provider_config_entry(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return (raw as List<dynamic>).map(dco_decode_rust_provider_entry).toList();
+    return (raw as List<dynamic>)
+        .map(dco_decode_provider_config_entry)
+        .toList();
   }
 
   @protected
@@ -838,10 +748,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustProviderEntry? dco_decode_opt_box_autoadd_rust_provider_entry(
+  ProviderConfigEntry? dco_decode_opt_box_autoadd_provider_config_entry(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null ? null : dco_decode_box_autoadd_rust_provider_entry(raw);
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_provider_config_entry(raw);
   }
 
   @protected
@@ -893,28 +805,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustProviderEntry dco_decode_rust_provider_entry(dynamic raw) {
+  ProviderConfigEntry dco_decode_provider_config_entry(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 3)
       throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-    return RustProviderEntry(
+    return ProviderConfigEntry(
       id: dco_decode_String(arr[0]),
       type: dco_decode_String(arr[1]),
       configYaml: dco_decode_String(arr[2]),
-    );
-  }
-
-  @protected
-  RustSettingsDto dco_decode_rust_settings_dto(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-    return RustSettingsDto(
-      windowTheme: dco_decode_String(arr[0]),
-      windowLanguage: dco_decode_String(arr[1]),
-      rawJson: dco_decode_String(arr[2]),
     );
   }
 
@@ -1181,10 +1080,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustProviderEntry sse_decode_box_autoadd_rust_provider_entry(
+  ProviderConfigEntry sse_decode_box_autoadd_provider_config_entry(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_rust_provider_entry(deserializer));
+    return (sse_decode_provider_config_entry(deserializer));
   }
 
   @protected
@@ -1214,14 +1113,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<RustProviderEntry> sse_decode_list_rust_provider_entry(
+  List<ProviderConfigEntry> sse_decode_list_provider_config_entry(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <RustProviderEntry>[];
+    var ans_ = <ProviderConfigEntry>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
-      ans_.add(sse_decode_rust_provider_entry(deserializer));
+      ans_.add(sse_decode_provider_config_entry(deserializer));
     }
     return ans_;
   }
@@ -1377,12 +1276,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustProviderEntry? sse_decode_opt_box_autoadd_rust_provider_entry(
+  ProviderConfigEntry? sse_decode_opt_box_autoadd_provider_config_entry(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_rust_provider_entry(deserializer));
+      return (sse_decode_box_autoadd_provider_config_entry(deserializer));
     } else {
       return null;
     }
@@ -1483,26 +1382,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RustProviderEntry sse_decode_rust_provider_entry(
+  ProviderConfigEntry sse_decode_provider_config_entry(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_id = sse_decode_String(deserializer);
     var var_type = sse_decode_String(deserializer);
     var var_configYaml = sse_decode_String(deserializer);
-    return RustProviderEntry(
+    return ProviderConfigEntry(
         id: var_id, type: var_type, configYaml: var_configYaml);
-  }
-
-  @protected
-  RustSettingsDto sse_decode_rust_settings_dto(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_windowTheme = sse_decode_String(deserializer);
-    var var_windowLanguage = sse_decode_String(deserializer);
-    var var_rawJson = sse_decode_String(deserializer);
-    return RustSettingsDto(
-        windowTheme: var_windowTheme,
-        windowLanguage: var_windowLanguage,
-        rawJson: var_rawJson);
   }
 
   @protected
@@ -1758,10 +1645,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_box_autoadd_rust_provider_entry(
-      RustProviderEntry self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_provider_config_entry(
+      ProviderConfigEntry self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_rust_provider_entry(self, serializer);
+    sse_encode_provider_config_entry(self, serializer);
   }
 
   @protected
@@ -1789,12 +1676,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_list_rust_provider_entry(
-      List<RustProviderEntry> self, SseSerializer serializer) {
+  void sse_encode_list_provider_config_entry(
+      List<ProviderConfigEntry> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
-      sse_encode_rust_provider_entry(item, serializer);
+      sse_encode_provider_config_entry(item, serializer);
     }
   }
 
@@ -1913,13 +1800,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_opt_box_autoadd_rust_provider_entry(
-      RustProviderEntry? self, SseSerializer serializer) {
+  void sse_encode_opt_box_autoadd_provider_config_entry(
+      ProviderConfigEntry? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     sse_encode_bool(self != null, serializer);
     if (self != null) {
-      sse_encode_box_autoadd_rust_provider_entry(self, serializer);
+      sse_encode_box_autoadd_provider_config_entry(self, serializer);
     }
   }
 
@@ -2012,21 +1899,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_rust_provider_entry(
-      RustProviderEntry self, SseSerializer serializer) {
+  void sse_encode_provider_config_entry(
+      ProviderConfigEntry self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.id, serializer);
     sse_encode_String(self.type, serializer);
     sse_encode_String(self.configYaml, serializer);
-  }
-
-  @protected
-  void sse_encode_rust_settings_dto(
-      RustSettingsDto self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.windowTheme, serializer);
-    sse_encode_String(self.windowLanguage, serializer);
-    sse_encode_String(self.rawJson, serializer);
   }
 
   @protected
@@ -2213,38 +2091,25 @@ class RuntimeSettingsImpl extends RustOpaque implements RuntimeSettings {
         RustLib.instance.api.rust_arc_decrement_strong_count_RuntimeSettingsPtr,
   );
 
-  Future<RustProviderEntry?> deleteProvider({required String providerId}) =>
+  Future<ProviderConfigEntry?> deleteProvider({required String providerId}) =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettingsDeleteProvider(
           that: this, providerId: providerId);
-
-  Future<RustSettingsDto> get_() =>
-      RustLib.instance.api.crateApiRuntimeRuntimeSettingsGet(
-        that: this,
-      );
 
   Future<String> getJson() =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettingsGetJson(
         that: this,
       );
 
-  Future<RustProviderEntry?> getProvider({required String providerId}) =>
+  Future<ProviderConfigEntry?> getProvider({required String providerId}) =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettingsGetProvider(
           that: this, providerId: providerId);
 
-  Future<List<RustProviderEntry>> listProviders() =>
+  Future<List<ProviderConfigEntry>> listProviders() =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettingsListProviders(
         that: this,
       );
 
-  Future<RustSettingsDto> setWindowLanguage({required String language}) =>
-      RustLib.instance.api.crateApiRuntimeRuntimeSettingsSetWindowLanguage(
-          that: this, language: language);
-
-  Future<RustSettingsDto> setWindowTheme({required String theme}) => RustLib
-      .instance.api
-      .crateApiRuntimeRuntimeSettingsSetWindowTheme(that: this, theme: theme);
-
-  Future<RustProviderEntry> updateProvider(
+  Future<ProviderConfigEntry> updateProvider(
           {required String providerId, required String configYaml}) =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettingsUpdateProvider(
           that: this, providerId: providerId, configYaml: configYaml);

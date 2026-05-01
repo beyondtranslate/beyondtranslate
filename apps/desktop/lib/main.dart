@@ -11,12 +11,12 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 
 import 'src/features/mini_translator/mini_translator_app.dart';
-import 'src/features/settings/native_settings.dart';
 import 'src/i18n/i18n.dart';
 import 'src/routes/app_router.dart';
 import 'src/routes/settings/index.dart';
 import 'src/services/local_db/configuration.dart';
 import 'src/services/local_db/local_db.dart';
+import 'src/services/native_settings.dart';
 import 'src/themes/dark_theme.dart';
 import 'src/themes/light_theme.dart';
 import 'src/utils/env.dart';

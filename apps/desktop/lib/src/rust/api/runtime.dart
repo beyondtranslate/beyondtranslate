@@ -5,20 +5,19 @@
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-import '../domain/settings.dart';
 import '../frb_generated.dart';
 import 'mirrors.dart';
 
-// These functions are ignored because they are not marked as `pub`: `new`, `optional_trimmed`, `provider_entry`, `run_on_worker_thread`, `update_with_result`, `update`, `validate_optional_required`, `validate_provider_id`, `validate_required`
-// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `RuntimeInner`, `RuntimeState`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
+// These functions are ignored because they are not marked as `pub`: `commit_settings`, `new`, `optional_trimmed`, `provider_entry`, `run_on_worker_thread`, `runtime_settings_file_path`, `validate_optional_required`, `validate_provider_id`, `validate_required`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `RuntimeState`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `fmt`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Runtime>>
 abstract class Runtime implements RustOpaqueInterface {
   RuntimeDictionary dictionary({required String providerId});
 
-  factory Runtime({required String storageDir}) =>
-      RustLib.instance.api.crateApiRuntimeRuntimeNew(storageDir: storageDir);
+  factory Runtime({required String dataDir}) =>
+      RustLib.instance.api.crateApiRuntimeRuntimeNew(dataDir: dataDir);
 
   RuntimeSettings settings();
 
@@ -32,21 +31,15 @@ abstract class RuntimeDictionary implements RustOpaqueInterface {
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>>
 abstract class RuntimeSettings implements RustOpaqueInterface {
-  Future<RustProviderEntry?> deleteProvider({required String providerId});
-
-  Future<RustSettingsDto> get_();
+  Future<ProviderConfigEntry?> deleteProvider({required String providerId});
 
   Future<String> getJson();
 
-  Future<RustProviderEntry?> getProvider({required String providerId});
+  Future<ProviderConfigEntry?> getProvider({required String providerId});
 
-  Future<List<RustProviderEntry>> listProviders();
+  Future<List<ProviderConfigEntry>> listProviders();
 
-  Future<RustSettingsDto> setWindowLanguage({required String language});
-
-  Future<RustSettingsDto> setWindowTheme({required String theme});
-
-  Future<RustProviderEntry> updateProvider(
+  Future<ProviderConfigEntry> updateProvider(
       {required String providerId, required String configYaml});
 }
 
@@ -55,12 +48,12 @@ abstract class RuntimeTranslation implements RustOpaqueInterface {
   Future<TranslateResponse> translate({required TranslateRequest request});
 }
 
-class RustProviderEntry {
+class ProviderConfigEntry {
   final String id;
   final String type;
   final String configYaml;
 
-  const RustProviderEntry({
+  const ProviderConfigEntry({
     required this.id,
     required this.type,
     required this.configYaml,
@@ -72,7 +65,7 @@ class RustProviderEntry {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RustProviderEntry &&
+      other is ProviderConfigEntry &&
           runtimeType == other.runtimeType &&
           id == other.id &&
           type == other.type &&
