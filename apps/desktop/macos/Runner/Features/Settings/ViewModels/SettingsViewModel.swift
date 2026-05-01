@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 final class SettingsViewModel: ObservableObject {
   let general: GeneralViewModel
   let appearance: AppearanceViewModel
@@ -8,20 +9,26 @@ final class SettingsViewModel: ObservableObject {
   let advanced: AdvancedViewModel
 
   private let repository: SettingsRepository
-  private let settingsService: SettingsService?
+  private let settingsPlugin: NativeSettingsPlugin?
 
   init(
     repository: SettingsRepository = UserDefaultsSettingsRepository(),
-    settingsService: SettingsService? = nil
+    settingsPlugin: NativeSettingsPlugin? = nil
   ) {
     self.repository = repository
-    self.settingsService = settingsService
+    self.settingsPlugin = settingsPlugin
 
     let settings = repository.loadSettings()
     general = GeneralViewModel(settings: settings.general)
-    appearance = AppearanceViewModel(settings: settings.appearance)
-    shortcuts = ShortcutsViewModel(settings: settings.shortcuts)
+    appearance = AppearanceViewModel(settings: settings.appearance, settingsPlugin: settingsPlugin)
+    shortcuts = ShortcutsViewModel(settings: settings.shortcuts, settingsPlugin: settingsPlugin)
     providers = ProvidersViewModel(settings: settings.providers)
-    advanced = AdvancedViewModel(settings: settings.advanced)
+    advanced = AdvancedViewModel(settings: settings.advanced, settingsPlugin: settingsPlugin)
+
+    Task {
+      await appearance.load()
+      await shortcuts.load()
+      await advanced.load()
+    }
   }
 }

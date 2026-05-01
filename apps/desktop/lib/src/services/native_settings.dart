@@ -2,9 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-import 'runtime.dart' as runtime_service;
 import '../rust/api/runtime.dart';
-import '../rust/domain/settings.dart';
+import 'runtime.dart' as runtime_service;
 
 class NativeSettings {
   static const MethodChannel _channel =

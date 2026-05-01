@@ -20,7 +20,10 @@ struct AppearanceView: View {
       }
 
       Section("Display Language") {
-        SettingPicker("", selection: $viewModel.appLanguage) {
+        SettingPicker("", selection: Binding(
+          get: { viewModel.appLanguage },
+          set: { viewModel.setAppLanguage($0) }
+        )) {
           ForEach(["English", "Chinese"], id: \.self) { language in
             Text(language).tag(language)
           }
@@ -30,7 +33,10 @@ struct AppearanceView: View {
       }
 
       Section("Theme Mode") {
-        SettingPicker("", selection: $viewModel.themeMode) {
+        SettingPicker("", selection: Binding(
+          get: { viewModel.themeMode },
+          set: { viewModel.setThemeMode($0) }
+        )) {
           ForEach(AppThemeMode.allCases) { mode in
             Text(mode.title).tag(mode)
           }

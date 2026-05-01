@@ -5,10 +5,10 @@ import SwiftUI
 final class NativeSettingsPlugin: NSObject, FlutterPlugin {
     static let channelName = "beyondtranslate/native_settings"
 
-    private let binaryMessenger: FlutterBinaryMessenger
+    private let channel: FlutterMethodChannel
 
-    private init(messenger: FlutterBinaryMessenger) {
-        self.binaryMessenger = messenger
+    private init(channel: FlutterMethodChannel) {
+        self.channel = channel
         super.init()
     }
 
@@ -17,7 +17,7 @@ final class NativeSettingsPlugin: NSObject, FlutterPlugin {
             name: channelName,
             binaryMessenger: registrar.messenger
         )
-        let instance = NativeSettingsPlugin(messenger: registrar.messenger)
+        let instance = NativeSettingsPlugin(channel: channel)
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
@@ -25,12 +25,102 @@ final class NativeSettingsPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "showSettings":
             Task { @MainActor in
-                let service = ChannelSettingsService(messenger: binaryMessenger)
-                SettingsWindowController.shared.showWindow(settingsService: service)
+                SettingsWindowController.shared.showWindow(settingsPlugin: self)
                 result(nil)
             }
         default:
             result(FlutterMethodNotImplemented)
+        }
+    }
+
+    @MainActor
+    func getAppearance() async throws -> AppearanceSettings {
+        try decode(from: try await invoke("settings.getAppearance"))
+    }
+
+    @MainActor
+    func updateAppearance(_ patch: AppearanceSettingsPatch) async throws -> AppearanceSettings {
+        try decode(
+            from: try await invoke(
+                "settings.updateAppearance",
+                arguments: encodePatch(patch)
+            ))
+    }
+
+    @MainActor
+    func getShortcuts() async throws -> ShortcutSettings {
+        try decode(from: try await invoke("settings.getShortcuts"))
+    }
+
+    @MainActor
+    func updateShortcuts(_ patch: ShortcutSettingsPatch) async throws -> ShortcutSettings {
+        try decode(
+            from: try await invoke(
+                "settings.updateShortcuts",
+                arguments: encodePatch(patch)
+            ))
+    }
+
+    @MainActor
+    func getAdvanced() async throws -> AdvancedSettings {
+        try decode(from: try await invoke("settings.getAdvanced"))
+    }
+
+    @MainActor
+    func updateAdvanced(_ patch: AdvancedSettingsPatch) async throws -> AdvancedSettings {
+        try decode(
+            from: try await invoke(
+                "settings.updateAdvanced",
+                arguments: encodePatch(patch)
+            ))
+    }
+
+    @MainActor
+    private func invoke(_ method: String, arguments: Any? = nil) async throws -> Any? {
+        try await withCheckedThrowingContinuation { continuation in
+            channel.invokeMethod(method, arguments: arguments) { result in
+                if let error = result as? FlutterError {
+                    continuation.resume(
+                        throwing: NativeSettingsError.remote(
+                            code: error.code,
+                            message: error.message
+                        ))
+                } else if FlutterMethodNotImplemented.isEqual(result) {
+                    continuation.resume(throwing: NativeSettingsError.notImplemented(method))
+                } else {
+                    continuation.resume(returning: result)
+                }
+            }
+        }
+    }
+
+    @MainActor
+    private func decode<T: Decodable>(from value: Any?) throws -> T {
+        let data = try JSONSerialization.data(withJSONObject: value as Any)
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+
+    /// Nil fields are omitted so Rust patch types treat them as "no change".
+    @MainActor
+    private func encodePatch<T: Encodable>(_ patch: T) throws -> [String: Any] {
+        let data = try JSONEncoder().encode(patch)
+        guard let object = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return [:]
+        }
+        return object
+    }
+}
+
+enum NativeSettingsError: LocalizedError {
+    case notImplemented(String)
+    case remote(code: String, message: String?)
+
+    var errorDescription: String? {
+        switch self {
+        case .notImplemented(let method):
+            return "Method not implemented: \(method)"
+        case .remote(let code, let message):
+            return "[\(code)] \(message ?? "unknown error")"
         }
     }
 }
@@ -66,11 +156,11 @@ private final class SettingsWindowController: NSWindowController, NSWindowDelega
     /// Creates a fresh SettingsView (and SettingsViewModel) each time the
     /// window is shown, so settings are always loaded from the current
     /// Rust state rather than a stale snapshot.
-    func showWindow(settingsService: SettingsService) {
+    func showWindow(settingsPlugin: NativeSettingsPlugin) {
         guard let window else { return }
 
         window.contentViewController = NSHostingController(
-            rootView: SettingsView(settingsService: settingsService)
+            rootView: SettingsView(settingsPlugin: settingsPlugin)
         )
         window.center()
         NSApp.activate(ignoringOtherApps: true)

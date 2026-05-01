@@ -28,6 +28,20 @@ Generated files:
 
 Do not edit generated files by hand.
 
+## Native Settings Swift Model Codegen
+
+Swift settings models are generated from the Rust settings schema without adding
+any Rust-side code:
+
+```bash
+cd apps/desktop
+python3 scripts/generate_settings.py
+```
+
+Generated file:
+
+- macOS Swift: `macos/Runner/Features/Settings/Models/Settings.swift`
+
 Useful follow-up commands:
 
 ```bash

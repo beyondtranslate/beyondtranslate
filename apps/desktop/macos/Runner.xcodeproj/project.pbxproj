@@ -42,7 +42,7 @@
 		A1000000000000000000000A /* ProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000A /* ProvidersViewModel.swift */; };
 		A1000000000000000000000B /* AdvancedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000B /* AdvancedViewModel.swift */; };
 		A1000000000000000000000C /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000C /* SettingsRepository.swift */; };
-		A1000000000000000000000D /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000D /* SettingsService.swift */; };
+		A1000000000000000000000E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000E /* Settings.swift */; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
 		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
@@ -103,7 +103,7 @@
 		A1100000000000000000000A /* ProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersViewModel.swift; sourceTree = "<group>"; };
 		A1100000000000000000000B /* AdvancedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedViewModel.swift; sourceTree = "<group>"; };
 		A1100000000000000000000C /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
-		A1100000000000000000000D /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
+		A1100000000000000000000E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
@@ -269,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				8F1000112E0A100100A1B2C3 /* AppSettings.swift */,
+				A1100000000000000000000E /* Settings.swift */,
 				8F1000122E0A100100A1B2C3 /* SettingOption.swift */,
 			);
 			path = Models;
@@ -278,7 +279,6 @@
 			isa = PBXGroup;
 			children = (
 				A1100000000000000000000C /* SettingsRepository.swift */,
-				A1100000000000000000000D /* SettingsService.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -647,7 +647,7 @@
 				A1000000000000000000000A /* ProvidersViewModel.swift in Sources */,
 				A1000000000000000000000B /* AdvancedViewModel.swift in Sources */,
 				A1000000000000000000000C /* SettingsRepository.swift in Sources */,
-				A1000000000000000000000D /* SettingsService.swift in Sources */,
+				A1000000000000000000000E /* Settings.swift in Sources */,
 				33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */,
 				335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */,
 			);

@@ -2,10 +2,10 @@ import Foundation
 
 struct AppSettings {
   var general = GeneralSettings()
-  var appearance = AppearanceSettings()
-  var shortcuts = ShortcutSettings()
+  var appearance = AppearanceSettingsState()
+  var shortcuts = ShortcutSettingsState()
   var providers = ProviderSettings()
-  var advanced = AdvancedSettings()
+  var advanced = AdvancedSettingsState()
 }
 
 struct GeneralSettings {
@@ -22,14 +22,14 @@ struct GeneralSettings {
   var doubleClickCopyResult = true
 }
 
-struct AppearanceSettings {
+struct AppearanceSettingsState {
   var showTrayIcon = true
   var maxWindowHeight: Double = 800
   var appLanguage = "English"
   var themeMode: AppThemeMode = .system
 }
 
-struct ShortcutSettings {
+struct ShortcutSettingsState {
   var showOrHide = ShortcutDisplay(parts: ["Control", "Option", "Space"])
   var hide = ShortcutDisplay(parts: ["Escape"])
   var extractSelection = ShortcutDisplay(parts: ["Control", "Shift", "1"])
@@ -112,6 +112,6 @@ struct ProviderSettings {
   ]
 }
 
-struct AdvancedSettings {
+struct AdvancedSettingsState {
   var launchAtStartup = false
 }
