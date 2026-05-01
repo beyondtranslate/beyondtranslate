@@ -9,6 +9,7 @@ import 'advanced.dart';
 import 'appearance.dart';
 import 'debug.dart';
 import 'general.dart';
+import 'providers.dart';
 import 'shortcuts.dart';
 
 part 'index.g.dart';
@@ -16,6 +17,7 @@ part 'index.g.dart';
 @TypedShellRoute<SettingsShellRoute>(
   routes: <TypedRoute<RouteData>>[
     TypedGoRoute<GeneralSettingsRoute>(path: '/settings/general'),
+    TypedGoRoute<ProvidersSettingsRoute>(path: '/settings/providers'),
     TypedGoRoute<AppearanceSettingsRoute>(path: '/settings/appearance'),
     TypedGoRoute<ShortcutsSettingsRoute>(path: '/settings/shortcuts'),
     TypedGoRoute<AdvancedSettingsRoute>(path: '/settings/advanced'),
@@ -71,6 +73,15 @@ class AdvancedSettingsRoute extends GoRouteData with $AdvancedSettingsRoute {
   }
 }
 
+class ProvidersSettingsRoute extends GoRouteData with $ProvidersSettingsRoute {
+  const ProvidersSettingsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ProvidersSettingsPage();
+  }
+}
+
 class SettingsDebugRoute extends GoRouteData with $SettingsDebugRoute {
   const SettingsDebugRoute();
 
@@ -84,11 +95,13 @@ enum _SettingsCategory {
   general,
   appearance,
   shortcuts,
-  advanced;
+  advanced,
+  providers,
+  debug;
 
   static _SettingsCategory fromLocation(String location) {
-    if (location.startsWith('/settings/debug')) {
-      return _SettingsCategory.advanced;
+    if (location.startsWith('/settings/providers')) {
+      return _SettingsCategory.providers;
     }
     if (location.startsWith('/settings/appearance')) {
       return _SettingsCategory.appearance;
@@ -98,6 +111,9 @@ enum _SettingsCategory {
     }
     if (location.startsWith('/settings/advanced')) {
       return _SettingsCategory.advanced;
+    }
+    if (location.startsWith('/settings/debug')) {
+      return _SettingsCategory.debug;
     }
     return _SettingsCategory.general;
   }
@@ -122,6 +138,10 @@ class _SettingsShellPage extends StatelessWidget {
         const ShortcutsSettingsRoute().go(context);
       case _SettingsCategory.advanced:
         const AdvancedSettingsRoute().go(context);
+      case _SettingsCategory.providers:
+        const ProvidersSettingsRoute().go(context);
+      case _SettingsCategory.debug:
+        const SettingsDebugRoute().go(context);
     }
   }
 
@@ -239,6 +259,18 @@ class _SettingsShellPage extends StatelessWidget {
                   icon: FluentIcons.code_block_20_regular,
                   title: t.page_settings.pref_section_title_advanced,
                 ),
+                _buildSidebarItem(
+                  context,
+                  category: _SettingsCategory.providers,
+                  icon: Icons.storage_rounded,
+                  title: 'Providers',
+                ),
+                _buildSidebarItem(
+                  context,
+                  category: _SettingsCategory.debug,
+                  icon: FluentIcons.bug_20_regular,
+                  title: 'Debug',
+                ),
               ],
             ),
           ),
@@ -290,6 +322,18 @@ class _SettingsShellPage extends StatelessWidget {
             category: _SettingsCategory.advanced,
             icon: FluentIcons.code_block_20_regular,
             title: t.page_settings.pref_section_title_advanced,
+          ),
+          _buildCompactSidebarItem(
+            context,
+            category: _SettingsCategory.providers,
+            icon: Icons.storage_rounded,
+            title: 'Providers',
+          ),
+          _buildCompactSidebarItem(
+            context,
+            category: _SettingsCategory.debug,
+            icon: FluentIcons.bug_20_regular,
+            title: 'Debug',
           ),
         ],
       ),

@@ -26,6 +26,7 @@ import '../ocr_engines_manage.dart';
 import '../translation_engine_chooser.dart';
 import '../translation_engines_manage.dart';
 import '../translation_target_new.dart';
+import 'index.dart';
 
 class GeneralSettingsPage extends StatefulWidget {
   const GeneralSettingsPage({super.key});
@@ -375,6 +376,13 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               ),
               onTap: () {
                 const OcrEnginesManageRoute().push(context);
+              },
+            ),
+            PreferenceListItem(
+              title: const Text('Providers'),
+              summary: const Text('Manage runtime provider configurations.'),
+              onTap: () {
+                const ProvidersSettingsRoute().push(context);
               },
             ),
           ],

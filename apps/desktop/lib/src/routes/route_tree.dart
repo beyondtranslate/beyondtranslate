@@ -35,6 +35,7 @@ class SettingsRouteTree {
   final String appearance = '/settings/appearance';
   final String shortcuts = '/settings/shortcuts';
   final String advanced = '/settings/advanced';
+  final String providers = '/settings/providers';
   final String debug = '/settings/debug';
   final String ocrEnginesManage = '/settings/ocr-engines';
   final String translationEnginesManage = '/settings/translation-engines';
@@ -95,6 +96,11 @@ final List<RouteNode> routeNodes = <RouteNode>[
   RouteNode(
     id: 'settings-debug',
     path: RouteTree.settings.debug,
+    parentId: 'settings',
+  ),
+  RouteNode(
+    id: 'settings-providers',
+    path: RouteTree.settings.providers,
     parentId: 'settings',
   ),
   RouteNode(

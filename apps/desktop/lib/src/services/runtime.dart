@@ -24,7 +24,7 @@ class RuntimeService {
         Platform.environment['USERPROFILE'] ??
         Directory.current.path;
     final directory = Directory(
-      path.join(homeDirectoryPath, '.beyondtranslate'),
+      path.join(homeDirectoryPath),
     );
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
@@ -149,9 +149,7 @@ class RuntimeDictionaryService {
     required String targetLanguage,
     required String word,
   }) async {
-    return (await _runtime.client)
-        .dictionary(providerId: _providerId)
-        .lookup(
+    return (await _runtime.client).dictionary(providerId: _providerId).lookup(
           request: LookUpRequest(
             sourceLanguage: sourceLanguage,
             targetLanguage: targetLanguage,
