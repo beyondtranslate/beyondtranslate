@@ -23,13 +23,26 @@
 /* Begin PBXBuildFile section */
 		0135BD1CECDB3B64D190C611 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 921317546F1323EEECD70938 /* Pods_RunnerTests.framework */; };
 		2A0D6A402E0A100100A1B2C3 /* NativeSettingsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */; };
-		8F1000012E0A100100A1B2C3 /* SettingsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000112E0A100100A1B2C3 /* SettingsModels.swift */; };
-		8F1000022E0A100100A1B2C3 /* SettingsSectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000122E0A100100A1B2C3 /* SettingsSectionViews.swift */; };
+		8F1000012E0A100100A1B2C3 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000112E0A100100A1B2C3 /* AppSettings.swift */; };
+		8F1000022E0A100100A1B2C3 /* SettingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000122E0A100100A1B2C3 /* SettingOption.swift */; };
 		8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000132E0A100100A1B2C3 /* SettingsView.swift */; };
 		8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */; };
-		8F1000052E0A100100A1B2C3 /* ActionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000152E0A100100A1B2C3 /* ActionRow.swift */; };
-		8F1000062E0A100100A1B2C3 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000162E0A100100A1B2C3 /* SettingsPage.swift */; };
-		8F1000072E0A100100A1B2C3 /* ShortcutRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000172E0A100100A1B2C3 /* ShortcutRow.swift */; };
+		8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000152E0A100100A1B2C3 /* SettingRow.swift */; };
+		8F1000062E0A100100A1B2C3 /* SettingSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */; };
+		8F1000072E0A100100A1B2C3 /* SettingToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000172E0A100100A1B2C3 /* SettingToggle.swift */; };
+		A10000000000000000000001 /* SettingPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000001 /* SettingPicker.swift */; };
+		A10000000000000000000002 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000002 /* GeneralView.swift */; };
+		A10000000000000000000003 /* AppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000003 /* AppearanceView.swift */; };
+		A10000000000000000000004 /* ShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000004 /* ShortcutsView.swift */; };
+		A10000000000000000000005 /* ProvidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000005 /* ProvidersView.swift */; };
+		A10000000000000000000006 /* AdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000006 /* AdvancedView.swift */; };
+		A10000000000000000000007 /* GeneralViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000007 /* GeneralViewModel.swift */; };
+		A10000000000000000000008 /* AppearanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000008 /* AppearanceViewModel.swift */; };
+		A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000009 /* ShortcutsViewModel.swift */; };
+		A1000000000000000000000A /* ProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000A /* ProvidersViewModel.swift */; };
+		A1000000000000000000000B /* AdvancedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000B /* AdvancedViewModel.swift */; };
+		A1000000000000000000000C /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000C /* SettingsRepository.swift */; };
+		A1000000000000000000000D /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000D /* SettingsService.swift */; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
 		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
@@ -71,13 +84,26 @@
 
 /* Begin PBXFileReference section */
 		2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeSettingsPlugin.swift; sourceTree = "<group>"; };
-		8F1000112E0A100100A1B2C3 /* SettingsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; };
-		8F1000122E0A100100A1B2C3 /* SettingsSectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSectionViews.swift; sourceTree = "<group>"; };
+		8F1000112E0A100100A1B2C3 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		8F1000122E0A100100A1B2C3 /* SettingOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOption.swift; sourceTree = "<group>"; };
 		8F1000132E0A100100A1B2C3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
-		8F1000152E0A100100A1B2C3 /* ActionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionRow.swift; sourceTree = "<group>"; };
-		8F1000162E0A100100A1B2C3 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
-		8F1000172E0A100100A1B2C3 /* ShortcutRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRow.swift; sourceTree = "<group>"; };
+		8F1000152E0A100100A1B2C3 /* SettingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingRow.swift; sourceTree = "<group>"; };
+		8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSectionHeader.swift; sourceTree = "<group>"; };
+		8F1000172E0A100100A1B2C3 /* SettingToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingToggle.swift; sourceTree = "<group>"; };
+		A11000000000000000000001 /* SettingPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPicker.swift; sourceTree = "<group>"; };
+		A11000000000000000000002 /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
+		A11000000000000000000003 /* AppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceView.swift; sourceTree = "<group>"; };
+		A11000000000000000000004 /* ShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsView.swift; sourceTree = "<group>"; };
+		A11000000000000000000005 /* ProvidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersView.swift; sourceTree = "<group>"; };
+		A11000000000000000000006 /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
+		A11000000000000000000007 /* GeneralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralViewModel.swift; sourceTree = "<group>"; };
+		A11000000000000000000008 /* AppearanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewModel.swift; sourceTree = "<group>"; };
+		A11000000000000000000009 /* ShortcutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsViewModel.swift; sourceTree = "<group>"; };
+		A1100000000000000000000A /* ProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersViewModel.swift; sourceTree = "<group>"; };
+		A1100000000000000000000B /* AdvancedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedViewModel.swift; sourceTree = "<group>"; };
+		A1100000000000000000000C /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
+		A1100000000000000000000D /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
@@ -138,12 +164,123 @@
 		2A0D6A3C2E0A100100A1B2C3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				8F1000112E0A100100A1B2C3 /* SettingsModels.swift */,
-				8F1000122E0A100100A1B2C3 /* SettingsSectionViews.swift */,
-				8F1000132E0A100100A1B2C3 /* SettingsView.swift */,
-				8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */,
+				A20000000000000000000001 /* Views */,
+				A20000000000000000000008 /* ViewModels */,
+				A20000000000000000000009 /* Models */,
+				A2000000000000000000000A /* Repository */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000001 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8F1000132E0A100100A1B2C3 /* SettingsView.swift */,
+				A20000000000000000000002 /* General */,
+				A20000000000000000000003 /* Appearance */,
+				A20000000000000000000004 /* Shortcuts */,
+				A20000000000000000000005 /* Providers */,
+				A20000000000000000000006 /* Advanced */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000002 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				A11000000000000000000002 /* GeneralView.swift */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000003 /* Appearance */ = {
+			isa = PBXGroup;
+			children = (
+				A11000000000000000000003 /* AppearanceView.swift */,
+			);
+			path = Appearance;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000004 /* Shortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				A11000000000000000000004 /* ShortcutsView.swift */,
+			);
+			path = Shortcuts;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000005 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				A11000000000000000000005 /* ProvidersView.swift */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000006 /* Advanced */ = {
+			isa = PBXGroup;
+			children = (
+				A11000000000000000000006 /* AdvancedView.swift */,
+			);
+			path = Advanced;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000007 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8F1000152E0A100100A1B2C3 /* SettingRow.swift */,
+				8F1000172E0A100100A1B2C3 /* SettingToggle.swift */,
+				A11000000000000000000001 /* SettingPicker.swift */,
+				8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A2000000000000000000000B /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000C /* Components */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		A2000000000000000000000C /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000007 /* Settings */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000008 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */,
+				A11000000000000000000007 /* GeneralViewModel.swift */,
+				A11000000000000000000008 /* AppearanceViewModel.swift */,
+				A11000000000000000000009 /* ShortcutsViewModel.swift */,
+				A1100000000000000000000A /* ProvidersViewModel.swift */,
+				A1100000000000000000000B /* AdvancedViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000009 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8F1000112E0A100100A1B2C3 /* AppSettings.swift */,
+				8F1000122E0A100100A1B2C3 /* SettingOption.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A2000000000000000000000A /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				A1100000000000000000000C /* SettingsRepository.swift */,
+				A1100000000000000000000D /* SettingsService.swift */,
+			);
+			path = Repository;
 			sourceTree = "<group>";
 		};
 		2A0D6A3F2E0A100100A1B2C3 /* Plugins */ = {
@@ -152,16 +289,6 @@
 				2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */,
 			);
 			path = Plugins;
-			sourceTree = "<group>";
-		};
-		8F1000102E0A100100A1B2C3 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				8F1000152E0A100100A1B2C3 /* ActionRow.swift */,
-				8F1000162E0A100100A1B2C3 /* SettingsPage.swift */,
-				8F1000172E0A100100A1B2C3 /* ShortcutRow.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		331C80D6294CF71000263BE5 /* RunnerTests */ = {
@@ -233,7 +360,7 @@
 				33CC10F02044A3C60003C045 /* AppDelegate.swift */,
 				2A0D6A3F2E0A100100A1B2C3 /* Plugins */,
 				2A0D6A3B2E0A100100A1B2C3 /* Features */,
-				8F1000102E0A100100A1B2C3 /* Views */,
+				A2000000000000000000000B /* Shared */,
 				33E51913231747F40026EE4D /* DebugProfile.entitlements */,
 				33E51914231749380026EE4D /* Release.entitlements */,
 				33CC11242044D66E0003C045 /* Resources */,
@@ -501,13 +628,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A0D6A402E0A100100A1B2C3 /* NativeSettingsPlugin.swift in Sources */,
-				8F1000012E0A100100A1B2C3 /* SettingsModels.swift in Sources */,
-				8F1000022E0A100100A1B2C3 /* SettingsSectionViews.swift in Sources */,
+				8F1000012E0A100100A1B2C3 /* AppSettings.swift in Sources */,
+				8F1000022E0A100100A1B2C3 /* SettingOption.swift in Sources */,
 				8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */,
 				8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */,
-				8F1000052E0A100100A1B2C3 /* ActionRow.swift in Sources */,
-				8F1000062E0A100100A1B2C3 /* SettingsPage.swift in Sources */,
-				8F1000072E0A100100A1B2C3 /* ShortcutRow.swift in Sources */,
+				8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */,
+				8F1000062E0A100100A1B2C3 /* SettingSectionHeader.swift in Sources */,
+				8F1000072E0A100100A1B2C3 /* SettingToggle.swift in Sources */,
+				A10000000000000000000001 /* SettingPicker.swift in Sources */,
+				A10000000000000000000002 /* GeneralView.swift in Sources */,
+				A10000000000000000000003 /* AppearanceView.swift in Sources */,
+				A10000000000000000000004 /* ShortcutsView.swift in Sources */,
+				A10000000000000000000005 /* ProvidersView.swift in Sources */,
+				A10000000000000000000006 /* AdvancedView.swift in Sources */,
+				A10000000000000000000007 /* GeneralViewModel.swift in Sources */,
+				A10000000000000000000008 /* AppearanceViewModel.swift in Sources */,
+				A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */,
+				A1000000000000000000000A /* ProvidersViewModel.swift in Sources */,
+				A1000000000000000000000B /* AdvancedViewModel.swift in Sources */,
+				A1000000000000000000000C /* SettingsRepository.swift in Sources */,
+				A1000000000000000000000D /* SettingsService.swift in Sources */,
 				33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */,
 				335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */,
 			);

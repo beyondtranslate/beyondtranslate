@@ -13,6 +13,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_web.dart';
 
 import 'api/mirrors.dart';
 import 'api/runtime.dart';
+import 'domain/settings.dart';
 import 'frb_generated.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
@@ -102,10 +103,40 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
+  AdvancedSettings dco_decode_advanced_settings(dynamic raw);
+
+  @protected
+  AdvancedSettingsPatch dco_decode_advanced_settings_patch(dynamic raw);
+
+  @protected
+  AppearanceSettings dco_decode_appearance_settings(dynamic raw);
+
+  @protected
+  AppearanceSettingsPatch dco_decode_appearance_settings_patch(dynamic raw);
+
+  @protected
+  bool dco_decode_bool(dynamic raw);
+
+  @protected
+  AdvancedSettingsPatch dco_decode_box_autoadd_advanced_settings_patch(
+      dynamic raw);
+
+  @protected
+  AppearanceSettingsPatch dco_decode_box_autoadd_appearance_settings_patch(
+      dynamic raw);
+
+  @protected
+  bool dco_decode_box_autoadd_bool(dynamic raw);
+
+  @protected
   LookUpRequest dco_decode_box_autoadd_look_up_request(dynamic raw);
 
   @protected
   ProviderConfigEntry dco_decode_box_autoadd_provider_config_entry(dynamic raw);
+
+  @protected
+  ShortcutSettingsPatch dco_decode_box_autoadd_shortcut_settings_patch(
+      dynamic raw);
 
   @protected
   TranslateRequest dco_decode_box_autoadd_translate_request(dynamic raw);
@@ -153,6 +184,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String? dco_decode_opt_String(dynamic raw);
 
   @protected
+  bool? dco_decode_opt_box_autoadd_bool(dynamic raw);
+
+  @protected
   ProviderConfigEntry? dco_decode_opt_box_autoadd_provider_config_entry(
       dynamic raw);
 
@@ -182,6 +216,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ProviderConfigEntry dco_decode_provider_config_entry(dynamic raw);
+
+  @protected
+  ShortcutSettings dco_decode_shortcut_settings(dynamic raw);
+
+  @protected
+  ShortcutSettingsPatch dco_decode_shortcut_settings_patch(dynamic raw);
 
   @protected
   TextTranslation dco_decode_text_translation(dynamic raw);
@@ -286,11 +326,44 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
+  AdvancedSettings sse_decode_advanced_settings(SseDeserializer deserializer);
+
+  @protected
+  AdvancedSettingsPatch sse_decode_advanced_settings_patch(
+      SseDeserializer deserializer);
+
+  @protected
+  AppearanceSettings sse_decode_appearance_settings(
+      SseDeserializer deserializer);
+
+  @protected
+  AppearanceSettingsPatch sse_decode_appearance_settings_patch(
+      SseDeserializer deserializer);
+
+  @protected
+  bool sse_decode_bool(SseDeserializer deserializer);
+
+  @protected
+  AdvancedSettingsPatch sse_decode_box_autoadd_advanced_settings_patch(
+      SseDeserializer deserializer);
+
+  @protected
+  AppearanceSettingsPatch sse_decode_box_autoadd_appearance_settings_patch(
+      SseDeserializer deserializer);
+
+  @protected
+  bool sse_decode_box_autoadd_bool(SseDeserializer deserializer);
+
+  @protected
   LookUpRequest sse_decode_box_autoadd_look_up_request(
       SseDeserializer deserializer);
 
   @protected
   ProviderConfigEntry sse_decode_box_autoadd_provider_config_entry(
+      SseDeserializer deserializer);
+
+  @protected
+  ShortcutSettingsPatch sse_decode_box_autoadd_shortcut_settings_patch(
       SseDeserializer deserializer);
 
   @protected
@@ -345,6 +418,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
+  bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer);
+
+  @protected
   ProviderConfigEntry? sse_decode_opt_box_autoadd_provider_config_entry(
       SseDeserializer deserializer);
 
@@ -378,6 +454,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ProviderConfigEntry sse_decode_provider_config_entry(
+      SseDeserializer deserializer);
+
+  @protected
+  ShortcutSettings sse_decode_shortcut_settings(SseDeserializer deserializer);
+
+  @protected
+  ShortcutSettingsPatch sse_decode_shortcut_settings_patch(
       SseDeserializer deserializer);
 
   @protected
@@ -421,9 +504,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int sse_decode_i_32(SseDeserializer deserializer);
-
-  @protected
-  bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
   void
@@ -489,12 +569,46 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_advanced_settings(
+      AdvancedSettings self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_advanced_settings_patch(
+      AdvancedSettingsPatch self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_appearance_settings(
+      AppearanceSettings self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_appearance_settings_patch(
+      AppearanceSettingsPatch self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_bool(bool self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_advanced_settings_patch(
+      AdvancedSettingsPatch self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_appearance_settings_patch(
+      AppearanceSettingsPatch self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_look_up_request(
       LookUpRequest self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_provider_config_entry(
       ProviderConfigEntry self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_shortcut_settings_patch(
+      ShortcutSettingsPatch self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_translate_request(
@@ -553,6 +667,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_provider_config_entry(
       ProviderConfigEntry? self, SseSerializer serializer);
 
@@ -590,6 +707,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_provider_config_entry(
       ProviderConfigEntry self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_shortcut_settings(
+      ShortcutSettings self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_shortcut_settings_patch(
+      ShortcutSettingsPatch self, SseSerializer serializer);
 
   @protected
   void sse_encode_text_translation(
@@ -637,9 +762,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_bool(bool self, SseSerializer serializer);
 }
 
 // Section: wire_class

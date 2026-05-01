@@ -7,9 +7,14 @@ pub use super::mirrors::{
     LookUpRequest, LookUpResponse, TextTranslation, TranslateRequest, TranslateResponse,
     WordDefinition, WordImage, WordPhrase, WordPronunciation, WordSentence, WordTag, WordTense,
 };
+pub use crate::domain::settings::{
+    AdvancedSettings, AdvancedSettingsPatch, AppearanceSettings, AppearanceSettingsPatch,
+    ShortcutSettings, ShortcutSettingsPatch,
+};
 use beyondtranslate_engine::ProviderConfig;
 use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
+use struct_patch::Patch as ApplyPatch;
 use tokio::sync::RwLock;
 
 use crate::domain::engine;
@@ -102,6 +107,39 @@ impl RuntimeSettings {
         state.settings.to_pretty_json()
     }
 
+    pub async fn get_appearance(&self) -> Result<AppearanceSettings, String> {
+        Ok(self.get_section(|s| &s.appearance).await)
+    }
+
+    pub async fn update_appearance(
+        &self,
+        patch: AppearanceSettingsPatch,
+    ) -> Result<AppearanceSettings, String> {
+        self.update_section(patch, |s| &mut s.appearance).await
+    }
+
+    pub async fn get_shortcuts(&self) -> Result<ShortcutSettings, String> {
+        Ok(self.get_section(|s| &s.shortcuts).await)
+    }
+
+    pub async fn update_shortcuts(
+        &self,
+        patch: ShortcutSettingsPatch,
+    ) -> Result<ShortcutSettings, String> {
+        self.update_section(patch, |s| &mut s.shortcuts).await
+    }
+
+    pub async fn get_advanced(&self) -> Result<AdvancedSettings, String> {
+        Ok(self.get_section(|s| &s.advanced).await)
+    }
+
+    pub async fn update_advanced(
+        &self,
+        patch: AdvancedSettingsPatch,
+    ) -> Result<AdvancedSettings, String> {
+        self.update_section(patch, |s| &mut s.advanced).await
+    }
+
     pub async fn list_providers(&self) -> Result<Vec<ProviderConfigEntry>, String> {
         let state = self.runtime.state.read().await;
         state
@@ -162,6 +200,27 @@ impl RuntimeSettings {
         .await
     }
 
+    async fn get_section<T: Clone>(&self, select: impl FnOnce(&Settings) -> &T) -> T {
+        select(&self.runtime.state.read().await.settings).clone()
+    }
+
+    async fn update_section<T, P>(
+        &self,
+        patch: P,
+        select: impl FnOnce(&mut Settings) -> &mut T + Send + 'static,
+    ) -> Result<T, String>
+    where
+        T: Clone + ApplyPatch<P>,
+        P: Send + 'static,
+    {
+        self.commit_settings(move |settings| {
+            let section = select(settings);
+            section.apply(patch);
+            Ok(section.clone())
+        })
+        .await
+    }
+
     async fn commit_settings<F, T>(&self, update: F) -> Result<T, String>
     where
         F: FnOnce(&mut Settings) -> Result<T, String>,
@@ -170,13 +229,19 @@ impl RuntimeSettings {
         let mut next_settings = state.settings.clone();
         let result = update(&mut next_settings)?;
 
-        let next_engine = engine::build_from_settings(&next_settings)?;
-        next_settings.save(self.runtime.settings_file_path.as_ref())?;
+        let engine_changed = next_settings.engine != state.settings.engine;
 
-        *state = RuntimeState {
-            settings: next_settings,
-            engine: next_engine,
-        };
+        if engine_changed {
+            let next_engine = engine::build_from_settings(&next_settings)?;
+            next_settings.save(self.runtime.settings_file_path.as_ref())?;
+            *state = RuntimeState {
+                settings: next_settings,
+                engine: next_engine,
+            };
+        } else {
+            next_settings.save(self.runtime.settings_file_path.as_ref())?;
+            state.settings = next_settings;
+        }
 
         Ok(result)
     }

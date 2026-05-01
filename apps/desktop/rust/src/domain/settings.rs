@@ -5,14 +5,35 @@ use std::path::Path;
 use beyondtranslate_engine::EngineConfig;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
+use struct_patch::Patch;
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, Patch)]
+#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
 pub struct ShortcutSettings {
     #[serde(default, rename = "toggleApp")]
     pub toggle_app: String,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch)]
+#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
+pub struct AppearanceSettings {
+    #[serde(default = "default_language")]
+    pub language: String,
+    #[serde(default = "default_theme_mode", rename = "themeMode")]
+    pub theme_mode: String,
+}
+
+impl Default for AppearanceSettings {
+    fn default() -> Self {
+        Self {
+            language: default_language(),
+            theme_mode: default_theme_mode(),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, Patch)]
+#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
 pub struct AdvancedSettings {
     #[serde(default, rename = "launchAtLogin")]
     pub launch_at_login: bool,
@@ -27,6 +48,8 @@ pub struct Settings {
     pub engine: EngineConfig,
     #[serde(default)]
     pub shortcuts: ShortcutSettings,
+    #[serde(default)]
+    pub appearance: AppearanceSettings,
     #[serde(default)]
     pub advanced: AdvancedSettings,
     #[serde(flatten)]
@@ -89,6 +112,14 @@ fn engine_config_is_empty(config: &EngineConfig) -> bool {
     config.providers.is_empty()
 }
 
+fn default_language() -> String {
+    "zh".to_owned()
+}
+
+fn default_theme_mode() -> String {
+    "light".to_owned()
+}
+
 pub fn merge_raw_json_preserving_unknown_keys(
     raw_json: &str,
 ) -> Result<Map<String, Value>, String> {
@@ -128,6 +159,7 @@ mod tests {
 
         assert!(settings.engine.providers.is_empty());
         assert_eq!(settings.shortcuts, ShortcutSettings::default());
+        assert_eq!(settings.appearance, AppearanceSettings::default());
         assert_eq!(settings.advanced, AdvancedSettings::default());
     }
 
@@ -141,6 +173,10 @@ mod tests {
   "shortcuts": {
     "toggleApp": "Command+Shift+Space"
   },
+  "appearance": {
+    "language": "en",
+    "themeMode": "dark"
+  },
   "advanced": {
     "launchAtLogin": true,
     "proxy": "http://127.0.0.1:7890"
@@ -151,6 +187,8 @@ mod tests {
 
         let settings = Settings::load(&path).expect("failed to load settings");
         assert_eq!(settings.shortcuts.toggle_app, "Command+Shift+Space");
+        assert_eq!(settings.appearance.language, "en");
+        assert_eq!(settings.appearance.theme_mode, "dark");
         assert!(settings.advanced.launch_at_login);
         assert_eq!(settings.advanced.proxy, "http://127.0.0.1:7890");
     }
@@ -171,6 +209,8 @@ mod tests {
         .expect("failed to write settings");
 
         let mut settings = Settings::load(&path).expect("failed to load settings");
+        settings.appearance.language = "en".to_owned();
+        settings.appearance.theme_mode = "system".to_owned();
         settings.advanced.launch_at_login = true;
         settings.advanced.proxy = "http://127.0.0.1:7890".to_owned();
         settings.save(&path).expect("failed to save settings");
@@ -186,6 +226,14 @@ mod tests {
         assert_eq!(
             get_json_pointer(&json, "/shortcuts/toggleApp"),
             Some(Value::String("Command+Shift+Space".to_owned()))
+        );
+        assert_eq!(
+            get_json_pointer(&json, "/appearance/language"),
+            Some(Value::String("en".to_owned()))
+        );
+        assert_eq!(
+            get_json_pointer(&json, "/appearance/themeMode"),
+            Some(Value::String("system".to_owned()))
         );
         assert_eq!(
             get_json_pointer(&json, "/advanced/launchAtLogin"),
@@ -205,6 +253,7 @@ mod tests {
 
         assert!(!json.contains_key("engine"));
         assert!(json.contains_key("shortcuts"));
+        assert!(json.contains_key("appearance"));
         assert!(json.contains_key("advanced"));
     }
 }

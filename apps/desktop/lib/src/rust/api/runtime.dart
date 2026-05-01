@@ -5,12 +5,13 @@
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
+import '../domain/settings.dart';
 import '../frb_generated.dart';
 import 'mirrors.dart';
 
 // These functions are ignored because they are not marked as `pub`: `commit_settings`, `new`, `optional_trimmed`, `provider_entry`, `run_on_worker_thread`, `runtime_settings_file_path`, `validate_optional_required`, `validate_provider_id`, `validate_required`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `RuntimeState`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `fmt`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Runtime>>
 abstract class Runtime implements RustOpaqueInterface {
@@ -33,19 +34,82 @@ abstract class RuntimeDictionary implements RustOpaqueInterface {
 abstract class RuntimeSettings implements RustOpaqueInterface {
   Future<ProviderConfigEntry?> deleteProvider({required String providerId});
 
+  Future<AdvancedSettings> getAdvanced();
+
+  Future<AppearanceSettings> getAppearance();
+
   Future<String> getJson();
 
   Future<ProviderConfigEntry?> getProvider({required String providerId});
 
+  Future<ShortcutSettings> getShortcuts();
+
   Future<List<ProviderConfigEntry>> listProviders();
+
+  Future<AdvancedSettings> updateAdvanced(
+      {required AdvancedSettingsPatch patch});
+
+  Future<AppearanceSettings> updateAppearance(
+      {required AppearanceSettingsPatch patch});
 
   Future<ProviderConfigEntry> updateProvider(
       {required String providerId, required String configYaml});
+
+  Future<ShortcutSettings> updateShortcuts(
+      {required ShortcutSettingsPatch patch});
 }
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeTranslation>>
 abstract class RuntimeTranslation implements RustOpaqueInterface {
   Future<TranslateResponse> translate({required TranslateRequest request});
+}
+
+class AdvancedSettingsPatch {
+  final bool? launchAtLogin;
+  final String? proxy;
+
+  const AdvancedSettingsPatch({
+    this.launchAtLogin,
+    this.proxy,
+  });
+
+  static Future<AdvancedSettingsPatch> default_() =>
+      RustLib.instance.api.crateApiRuntimeAdvancedSettingsPatchDefault();
+
+  @override
+  int get hashCode => launchAtLogin.hashCode ^ proxy.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AdvancedSettingsPatch &&
+          runtimeType == other.runtimeType &&
+          launchAtLogin == other.launchAtLogin &&
+          proxy == other.proxy;
+}
+
+class AppearanceSettingsPatch {
+  final String? language;
+  final String? themeMode;
+
+  const AppearanceSettingsPatch({
+    this.language,
+    this.themeMode,
+  });
+
+  static Future<AppearanceSettingsPatch> default_() =>
+      RustLib.instance.api.crateApiRuntimeAppearanceSettingsPatchDefault();
+
+  @override
+  int get hashCode => language.hashCode ^ themeMode.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppearanceSettingsPatch &&
+          runtimeType == other.runtimeType &&
+          language == other.language &&
+          themeMode == other.themeMode;
 }
 
 class ProviderConfigEntry {
@@ -70,4 +134,25 @@ class ProviderConfigEntry {
           id == other.id &&
           type == other.type &&
           configYaml == other.configYaml;
+}
+
+class ShortcutSettingsPatch {
+  final String? toggleApp;
+
+  const ShortcutSettingsPatch({
+    this.toggleApp,
+  });
+
+  static Future<ShortcutSettingsPatch> default_() =>
+      RustLib.instance.api.crateApiRuntimeShortcutSettingsPatchDefault();
+
+  @override
+  int get hashCode => toggleApp.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ShortcutSettingsPatch &&
+          runtimeType == other.runtimeType &&
+          toggleApp == other.toggleApp;
 }

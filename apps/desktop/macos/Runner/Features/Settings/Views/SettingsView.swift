@@ -2,7 +2,11 @@ import SwiftUI
 
 struct SettingsView: View {
   @State private var selectedSection: SettingsSection? = .general
-  @StateObject private var viewModel = SettingsViewModel()
+  @StateObject private var viewModel: SettingsViewModel
+
+  init(settingsService: SettingsService? = nil) {
+    _viewModel = StateObject(wrappedValue: SettingsViewModel(settingsService: settingsService))
+  }
 
   var body: some View {
     NavigationSplitView {
@@ -30,15 +34,15 @@ private struct SettingsSectionDetailView: View {
   var body: some View {
     switch section {
     case .general:
-      GeneralSettingsView(viewModel: viewModel)
+      GeneralView(viewModel: viewModel.general)
     case .appearance:
-      AppearanceSettingsView(viewModel: viewModel)
+      AppearanceView(viewModel: viewModel.appearance)
     case .shortcuts:
-      ShortcutSettingsView(viewModel: viewModel)
+      ShortcutsView(viewModel: viewModel.shortcuts)
     case .providers:
-      ProvidersSettingsView(viewModel: viewModel)
+      ProvidersView(viewModel: viewModel.providers)
     case .advanced:
-      AdvancedSettingsView(viewModel: viewModel)
+      AdvancedView(viewModel: viewModel.advanced)
     }
   }
 }
