@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../i18n/i18n.dart';
 import '../../utils/utils.dart';
-import '../../widgets/custom_app_bar/custom_app_bar.dart';
 import 'advanced.dart';
 import 'appearance.dart';
 import 'debug.dart';
@@ -43,6 +42,14 @@ class GeneralSettingsRoute extends GoRouteData with $GeneralSettingsRoute {
   Widget build(BuildContext context, GoRouterState state) {
     return const GeneralSettingsPage();
   }
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return _buildFadeInPage(
+      state: state,
+      child: const GeneralSettingsPage(),
+    );
+  }
 }
 
 class AppearanceSettingsRoute extends GoRouteData
@@ -53,6 +60,14 @@ class AppearanceSettingsRoute extends GoRouteData
   Widget build(BuildContext context, GoRouterState state) {
     return const AppearanceSettingsPage();
   }
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return _buildFadeInPage(
+      state: state,
+      child: const AppearanceSettingsPage(),
+    );
+  }
 }
 
 class ShortcutsSettingsRoute extends GoRouteData with $ShortcutsSettingsRoute {
@@ -61,6 +76,14 @@ class ShortcutsSettingsRoute extends GoRouteData with $ShortcutsSettingsRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const ShortcutsSettingsPage();
+  }
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return _buildFadeInPage(
+      state: state,
+      child: const ShortcutsSettingsPage(),
+    );
   }
 }
 
@@ -71,6 +94,14 @@ class AdvancedSettingsRoute extends GoRouteData with $AdvancedSettingsRoute {
   Widget build(BuildContext context, GoRouterState state) {
     return const AdvancedSettingsPage();
   }
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return _buildFadeInPage(
+      state: state,
+      child: const AdvancedSettingsPage(),
+    );
+  }
 }
 
 class ProvidersSettingsRoute extends GoRouteData with $ProvidersSettingsRoute {
@@ -79,6 +110,14 @@ class ProvidersSettingsRoute extends GoRouteData with $ProvidersSettingsRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const ProvidersSettingsPage();
+  }
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return _buildFadeInPage(
+      state: state,
+      child: const ProvidersSettingsPage(),
+    );
   }
 }
 
@@ -89,6 +128,35 @@ class SettingsDebugRoute extends GoRouteData with $SettingsDebugRoute {
   Widget build(BuildContext context, GoRouterState state) {
     return const SettingsDebugPage();
   }
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return _buildFadeInPage(
+      state: state,
+      child: const SettingsDebugPage(),
+    );
+  }
+}
+
+Page<void> _buildFadeInPage({
+  required GoRouterState state,
+  required Widget child,
+}) {
+  return CustomTransitionPage<void>(
+    key: state.pageKey,
+    child: child,
+    transitionDuration: const Duration(milliseconds: 180),
+    reverseTransitionDuration: const Duration(milliseconds: 120),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOut,
+        ),
+        child: child,
+      );
+    },
+  );
 }
 
 enum _SettingsCategory {
@@ -343,7 +411,7 @@ class _SettingsShellPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isCompact = constraints.maxWidth < 860;
+        final isCompact = constraints.maxWidth < 820;
         if (isCompact) {
           return Column(
             children: [
@@ -373,9 +441,6 @@ class _SettingsShellPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: Text(t.page_settings.title),
-      ),
       body: _buildBody(context),
     );
   }

@@ -7,14 +7,11 @@ import 'package:uni_translate_client/uni_translate_client.dart';
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
-import '../../routes/image_viewer.dart';
 import '../../services/local_db/configuration.dart';
 import '../../services/local_db/local_db.dart';
-import '../../utils/fade_page_route.dart';
 import '../generating_cursor/generating_cursor.dart';
 import '../ui/loading_indicator.dart';
 import 'translation_engine_tag.dart';
-import 'word_image_view.dart';
 import 'word_pronunciation_view.dart';
 import 'word_tag_view.dart';
 import 'word_translation_view.dart';
@@ -270,33 +267,6 @@ class TranslationResultRecordView extends StatelessWidget {
                 style: textTheme.bodyMedium!.copyWith(
                   height: 1.5,
                 ),
-              ),
-            ),
-          // 图片
-          if ((images ?? []).isNotEmpty)
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              width: double.infinity,
-              height: kWordImageSize,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (var i = 0; i < images!.length; i++)
-                    WordImageView(
-                      images[i],
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          buildFadePageRoute(
-                            ImageViewerPage(
-                              images!.map((e) => e.url).toList(),
-                              initialIndex: i,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                ],
               ),
             ),
           // // 常用短词/短句

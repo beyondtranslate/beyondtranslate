@@ -37,7 +37,7 @@ void setupGlobalWindowHooks() {
 }
 
 final mainWindowController = RegularWindowController(
-  preferredSize: const Size(960, 720),
+  preferredSize: const Size(820, 560),
   title: kMainWindowTitle,
 )..setWillShowHook((window) {
     if (window.isFirstShow) {

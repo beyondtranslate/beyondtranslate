@@ -30,7 +30,6 @@ dependencies:
   package_info_plus: ^9.0.0
   path: ^1.8.3
   path_provider: ^2.1.1
-  photo_view: ^0.14.0
   protocol_handler: ^0.1.6
   reorderables: ^0.6.0
   screen_capturer: ^0.2.2
