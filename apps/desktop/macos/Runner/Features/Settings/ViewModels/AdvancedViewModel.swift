@@ -2,51 +2,31 @@ import SwiftUI
 
 @MainActor
 final class AdvancedViewModel: ObservableObject {
-  @Published var launchAtStartup: Bool
-  @Published var proxy: String
+  @Published var launchAtLogin: Bool
 
-  private let settingsPlugin: NativeSettingsPlugin?
+  private let repository: SettingsRepository
 
   init(
-    settings: AdvancedSettingsState = AdvancedSettingsState(),
-    settingsPlugin: NativeSettingsPlugin? = nil
+    repository: SettingsRepository
   ) {
-    self.settingsPlugin = settingsPlugin
-    launchAtStartup = settings.launchAtStartup
-    proxy = ""
+    self.repository = repository
+    launchAtLogin = false
   }
 
   func load() async {
-    guard let settingsPlugin else { return }
     do {
-      apply(try await settingsPlugin.getAdvanced())
+      apply(try await repository.getAdvanced())
     } catch {
       // Keep the local preview/default state when the Rust-backed settings cannot be loaded.
     }
   }
 
-  func setLaunchAtStartup(_ value: Bool) {
-    launchAtStartup = value
-    guard let settingsPlugin else { return }
+  func setlaunchAtLogin(_ value: Bool) {
+    launchAtLogin = value
     Task {
       do {
-        let updated = try await settingsPlugin.updateAdvanced(
-          AdvancedSettingsPatch(launchAtLogin: value, proxy: nil)
-        )
-        apply(updated)
-      } catch {
-        await load()
-      }
-    }
-  }
-
-  func setProxy(_ value: String) {
-    proxy = value
-    guard let settingsPlugin else { return }
-    Task {
-      do {
-        let updated = try await settingsPlugin.updateAdvanced(
-          AdvancedSettingsPatch(launchAtLogin: nil, proxy: value)
+        let updated = try await repository.updateAdvanced(
+          AdvancedSettingsPatch(launchAtLogin: value)
         )
         apply(updated)
       } catch {
@@ -56,7 +36,6 @@ final class AdvancedViewModel: ObservableObject {
   }
 
   private func apply(_ settings: AdvancedSettings) {
-    launchAtStartup = settings.launchAtLogin
-    proxy = settings.proxy
+    launchAtLogin = settings.launchAtLogin
   }
 }

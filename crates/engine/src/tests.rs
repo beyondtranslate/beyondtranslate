@@ -23,6 +23,21 @@ providers:
     assert!(registry.require("missing").is_err());
 }
 
+#[test]
+fn loads_camel_case_provider_config() {
+    let registry = from_yaml_str(
+        r#"
+providers:
+  deepl:
+    type: deepl
+    appKey: test-key
+"#,
+    )
+    .expect("valid config");
+
+    assert_eq!(registry.names(), vec!["deepl"]);
+}
+
 #[cfg(feature = "iciba")]
 #[test]
 fn loads_multiple_providers() {

@@ -10,8 +10,10 @@ class AppDelegate: FlutterAppDelegate {
   var engine: FlutterEngine?
 
   override func applicationDidFinishLaunching(_ notification: Notification) {
+    ThemeAppearanceController.applySavedPreference()
+
     engine = FlutterEngine(name: "project", project: nil)
-    engine?.run(withEntrypoint:nil)
+    engine?.run(withEntrypoint: nil)
     if let engine {
       RegisterGeneratedPlugins(registry: engine)
       NativeSettingsPlugin.register(

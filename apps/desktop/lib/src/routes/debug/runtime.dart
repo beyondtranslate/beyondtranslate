@@ -105,14 +105,13 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
 
     try {
       if (_isLookupProvider) {
-        final response =
-            await runtime.dictionary(providerId: providerId).lookup(
-                  request: LookUpRequest(
-                    sourceLanguage: _sourceLanguageController.text.trim(),
-                    targetLanguage: _targetLanguageController.text.trim(),
-                    word: _textController.text,
-                  ),
-                );
+        final response = await runtime.dictionary(providerId).lookup(
+              LookUpRequest(
+                sourceLanguage: _sourceLanguageController.text.trim(),
+                targetLanguage: _targetLanguageController.text.trim(),
+                word: _textController.text,
+              ),
+            );
 
         if (!mounted) {
           return;
@@ -121,17 +120,15 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
           _lookupResponse = response;
         });
       } else {
-        final response =
-            await runtime.translation(providerId: providerId).translate(
-                  request: TranslateRequest(
-                    sourceLanguage:
-                        _sourceLanguageController.text.trim().isEmpty
-                            ? null
-                            : _sourceLanguageController.text.trim(),
-                    targetLanguage: _targetLanguageController.text.trim(),
-                    text: _textController.text,
-                  ),
-                );
+        final response = await runtime.translation(providerId).translate(
+              TranslateRequest(
+                sourceLanguage: _sourceLanguageController.text.trim().isEmpty
+                    ? null
+                    : _sourceLanguageController.text.trim(),
+                targetLanguage: _targetLanguageController.text.trim(),
+                text: _textController.text,
+              ),
+            );
 
         if (!mounted) {
           return;

@@ -7,5 +7,5 @@ pub use model::{
     TextDetection, TextTranslation, TranslateRequest, TranslateResponse, WordDefinition, WordImage,
     WordPhrase, WordPronunciation, WordSentence, WordTag, WordTense,
 };
-pub use provider::Provider;
+pub use provider::{Provider, ProviderCapability};
 pub use service::{DictionaryError, DictionaryService, TranslationError, TranslationService};

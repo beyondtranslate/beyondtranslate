@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../../services/runtime.dart';
@@ -15,7 +17,8 @@ class ProvidersSettingsPage extends StatefulWidget {
 class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
   final _formKey = GlobalKey<FormState>();
   final _providerIdController = TextEditingController();
-  final _configYamlController = TextEditingController();
+  final _providerTypeController = TextEditingController();
+  final _fieldsController = TextEditingController();
 
   List<ProviderConfigEntry> _providers = const [];
   String? _selectedProviderId;
@@ -32,7 +35,8 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
   @override
   void dispose() {
     _providerIdController.dispose();
-    _configYamlController.dispose();
+    _providerTypeController.dispose();
+    _fieldsController.dispose();
     super.dispose();
   }
 
@@ -66,7 +70,8 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
         await _loadProviderIntoEditor(currentProviderId);
       } else {
         _providerIdController.clear();
-        _configYamlController.clear();
+        _providerTypeController.clear();
+        _fieldsController.clear();
       }
     } catch (error) {
       if (!mounted) {
@@ -92,7 +97,10 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
 
       setState(() {
         _providerIdController.text = provider?.id ?? providerId;
-        _configYamlController.text = provider?.configYaml ?? '';
+        _providerTypeController.text = provider?.type ?? '';
+        _fieldsController.text = provider == null
+            ? '{}'
+            : const JsonEncoder.withIndent('  ').convert(provider.fields);
       });
     } catch (error) {
       if (!mounted) {
@@ -117,9 +125,11 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
     });
 
     try {
+      final fields = _parseFields();
       await runtime.settings().updateProvider(
             providerId: _providerIdController.text.trim(),
-            configYaml: _configYamlController.text,
+            providerType: _providerTypeController.text.trim(),
+            fields: fields,
           );
       _selectedProviderId = _providerIdController.text.trim();
       await _reload();
@@ -156,7 +166,8 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
         return;
       }
       _providerIdController.clear();
-      _configYamlController.clear();
+      _providerTypeController.clear();
+      _fieldsController.clear();
       _selectedProviderId = null;
       await _reload();
     } catch (error) {
@@ -180,8 +191,23 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
       _selectedProviderId = null;
       _errorText = null;
       _providerIdController.clear();
-      _configYamlController.clear();
+      _providerTypeController.clear();
+      _fieldsController.text = '{\n  "appKey": ""\n}';
     });
+  }
+
+  Map<String, String> _parseFields() {
+    final raw = _fieldsController.text.trim();
+    if (raw.isEmpty) {
+      return const {};
+    }
+    final decoded = jsonDecode(raw);
+    if (decoded is! Map) {
+      throw const FormatException('Provider fields must be a JSON object');
+    }
+    return decoded.map(
+      (key, value) => MapEntry(key.toString(), value?.toString() ?? ''),
+    );
   }
 
   Widget _buildProviderPicker(BuildContext context) {
@@ -275,18 +301,35 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
-                      controller: _configYamlController,
+                      controller: _providerTypeController,
+                      decoration: const InputDecoration(
+                        labelText: 'Provider Type',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Provider type is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: _fieldsController,
                       minLines: 10,
                       maxLines: 20,
                       decoration: const InputDecoration(
-                        labelText: 'Provider Config YAML',
+                        labelText: 'Provider Fields JSON',
                         border: OutlineInputBorder(),
                         filled: true,
                         alignLabelWithHint: true,
                       ),
                       validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Provider config YAML is required';
+                        try {
+                          _parseFields();
+                        } catch (error) {
+                          return error.toString();
                         }
                         return null;
                       },

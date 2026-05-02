@@ -3,27 +3,25 @@ import SwiftUI
 @MainActor
 final class AppearanceViewModel: ObservableObject {
   @Published var showTrayIcon: Bool
-  @Published var maxWindowHeight: Double
   @Published var appLanguage: String
   @Published var themeMode: AppThemeMode
 
-  private let settingsPlugin: NativeSettingsPlugin?
+  private let repository: SettingsRepository
 
   init(
     settings: AppearanceSettingsState = AppearanceSettingsState(),
-    settingsPlugin: NativeSettingsPlugin? = nil
+    repository: SettingsRepository
   ) {
-    self.settingsPlugin = settingsPlugin
+    self.repository = repository
     showTrayIcon = settings.showTrayIcon
-    maxWindowHeight = settings.maxWindowHeight
     appLanguage = settings.appLanguage
     themeMode = settings.themeMode
+    ThemeAppearanceController.apply(settings.themeMode)
   }
 
   func load() async {
-    guard let settingsPlugin else { return }
     do {
-      apply(try await settingsPlugin.getAppearance())
+      apply(try await repository.getAppearance())
     } catch {
       // Keep the local preview/default state when the Rust-backed settings cannot be loaded.
     }
@@ -31,10 +29,9 @@ final class AppearanceViewModel: ObservableObject {
 
   func setAppLanguage(_ value: String) {
     appLanguage = value
-    guard let settingsPlugin else { return }
     Task {
       do {
-        let updated = try await settingsPlugin.updateAppearance(
+        let updated = try await repository.updateAppearance(
           AppearanceSettingsPatch(language: rustLanguage(from: value), themeMode: nil)
         )
         apply(updated)
@@ -46,10 +43,10 @@ final class AppearanceViewModel: ObservableObject {
 
   func setThemeMode(_ value: AppThemeMode) {
     themeMode = value
-    guard let settingsPlugin else { return }
+    ThemeAppearanceController.apply(value)
     Task {
       do {
-        let updated = try await settingsPlugin.updateAppearance(
+        let updated = try await repository.updateAppearance(
           AppearanceSettingsPatch(language: nil, themeMode: value.rawValue)
         )
         apply(updated)
@@ -61,7 +58,9 @@ final class AppearanceViewModel: ObservableObject {
 
   private func apply(_ settings: AppearanceSettings) {
     appLanguage = displayLanguage(from: settings.language)
-    themeMode = AppThemeMode(rawValue: settings.themeMode) ?? .system
+    let mode = AppThemeMode(rawValue: settings.themeMode) ?? .system
+    themeMode = mode
+    ThemeAppearanceController.apply(mode)
   }
 
   private func rustLanguage(from displayLanguage: String) -> String {

@@ -23,6 +23,12 @@
 /* Begin PBXBuildFile section */
 		0135BD1CECDB3B64D190C611 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 921317546F1323EEECD70938 /* Pods_RunnerTests.framework */; };
 		2A0D6A402E0A100100A1B2C3 /* NativeSettingsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */; };
+		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
+		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
+		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
+		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
+		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
+		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
 		8F1000012E0A100100A1B2C3 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000112E0A100100A1B2C3 /* AppSettings.swift */; };
 		8F1000022E0A100100A1B2C3 /* SettingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000122E0A100100A1B2C3 /* SettingOption.swift */; };
 		8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000132E0A100100A1B2C3 /* SettingsView.swift */; };
@@ -30,6 +36,31 @@
 		8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000152E0A100100A1B2C3 /* SettingRow.swift */; };
 		8F1000062E0A100100A1B2C3 /* SettingSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */; };
 		8F1000072E0A100100A1B2C3 /* SettingToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000172E0A100100A1B2C3 /* SettingToggle.swift */; };
+		8F10001C2E0A100100A1B2C3 /* ProviderConfigEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10001D2E0A100100A1B2C3 /* ProviderConfigEntry.swift */; };
+		8F10001E2E0A100100A1B2C3 /* ShortcutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10001F2E0A100100A1B2C3 /* ShortcutSettings.swift */; };
+		8F1000202E0A100100A1B2C3 /* ShortcutSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000212E0A100100A1B2C3 /* ShortcutSettingsPatch.swift */; };
+		8F1000222E0A100100A1B2C3 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000232E0A100100A1B2C3 /* AppearanceSettings.swift */; };
+		8F1000242E0A100100A1B2C3 /* AppearanceSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000252E0A100100A1B2C3 /* AppearanceSettingsPatch.swift */; };
+		8F1000262E0A100100A1B2C3 /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000272E0A100100A1B2C3 /* AdvancedSettings.swift */; };
+		8F1000282E0A100100A1B2C3 /* AdvancedSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000292E0A100100A1B2C3 /* AdvancedSettingsPatch.swift */; };
+		8F10002A2E0A100100A1B2C3 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002B2E0A100100A1B2C3 /* ProviderType.swift */; };
+		8F10002C2E0A100100A1B2C3 /* BaiduProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002D2E0A100100A1B2C3 /* BaiduProviderConfig.swift */; };
+		8F10002E2E0A100100A1B2C3 /* CaiyunProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002F2E0A100100A1B2C3 /* CaiyunProviderConfig.swift */; };
+		8F1000302E0A100100A1B2C3 /* DeepLProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000312E0A100100A1B2C3 /* DeepLProviderConfig.swift */; };
+		8F1000322E0A100100A1B2C3 /* GoogleProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000332E0A100100A1B2C3 /* GoogleProviderConfig.swift */; };
+		8F1000342E0A100100A1B2C3 /* IcibaProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000352E0A100100A1B2C3 /* IcibaProviderConfig.swift */; };
+		8F1000362E0A100100A1B2C3 /* TencentProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000372E0A100100A1B2C3 /* TencentProviderConfig.swift */; };
+		8F1000382E0A100100A1B2C3 /* YoudaoProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000392E0A100100A1B2C3 /* YoudaoProviderConfig.swift */; };
+		8F10003A2E0A100100A1B2C3 /* ProviderCapability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10003B2E0A100100A1B2C3 /* ProviderCapability.swift */; };
+		8F10003C2E0A100100A1B2C3 /* ProviderConfigField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */; };
+		8F10003E2E0A100100A1B2C3 /* ProviderType+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10003F2E0A100100A1B2C3 /* ProviderType+Fields.swift */; };
+		8F1000402E0A100100A1B2C3 /* BaiduProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000412E0A100100A1B2C3 /* BaiduProviderConfig+Fields.swift */; };
+		8F1000422E0A100100A1B2C3 /* CaiyunProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000432E0A100100A1B2C3 /* CaiyunProviderConfig+Fields.swift */; };
+		8F1000442E0A100100A1B2C3 /* DeepLProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000452E0A100100A1B2C3 /* DeepLProviderConfig+Fields.swift */; };
+		8F1000462E0A100100A1B2C3 /* GoogleProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000472E0A100100A1B2C3 /* GoogleProviderConfig+Fields.swift */; };
+		8F1000482E0A100100A1B2C3 /* IcibaProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000492E0A100100A1B2C3 /* IcibaProviderConfig+Fields.swift */; };
+		8F10004A2E0A100100A1B2C3 /* TencentProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10004B2E0A100100A1B2C3 /* TencentProviderConfig+Fields.swift */; };
+		8F10004C2E0A100100A1B2C3 /* YoudaoProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10004D2E0A100100A1B2C3 /* YoudaoProviderConfig+Fields.swift */; };
 		A10000000000000000000001 /* SettingPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000001 /* SettingPicker.swift */; };
 		A10000000000000000000002 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000002 /* GeneralView.swift */; };
 		A10000000000000000000003 /* AppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000003 /* AppearanceView.swift */; };
@@ -43,12 +74,6 @@
 		A1000000000000000000000B /* AdvancedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000B /* AdvancedViewModel.swift */; };
 		A1000000000000000000000C /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000C /* SettingsRepository.swift */; };
 		A1000000000000000000000E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000E /* Settings.swift */; };
-		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
-		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
-		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
-		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
-		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
-		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
 		B6867768A75CBFFF8FFDC94A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -84,31 +109,11 @@
 
 /* Begin PBXFileReference section */
 		2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeSettingsPlugin.swift; sourceTree = "<group>"; };
-		8F1000112E0A100100A1B2C3 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
-		8F1000122E0A100100A1B2C3 /* SettingOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOption.swift; sourceTree = "<group>"; };
-		8F1000132E0A100100A1B2C3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
-		8F1000152E0A100100A1B2C3 /* SettingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingRow.swift; sourceTree = "<group>"; };
-		8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSectionHeader.swift; sourceTree = "<group>"; };
-		8F1000172E0A100100A1B2C3 /* SettingToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingToggle.swift; sourceTree = "<group>"; };
-		A11000000000000000000001 /* SettingPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPicker.swift; sourceTree = "<group>"; };
-		A11000000000000000000002 /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
-		A11000000000000000000003 /* AppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceView.swift; sourceTree = "<group>"; };
-		A11000000000000000000004 /* ShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsView.swift; sourceTree = "<group>"; };
-		A11000000000000000000005 /* ProvidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersView.swift; sourceTree = "<group>"; };
-		A11000000000000000000006 /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
-		A11000000000000000000007 /* GeneralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralViewModel.swift; sourceTree = "<group>"; };
-		A11000000000000000000008 /* AppearanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewModel.swift; sourceTree = "<group>"; };
-		A11000000000000000000009 /* ShortcutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsViewModel.swift; sourceTree = "<group>"; };
-		A1100000000000000000000A /* ProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersViewModel.swift; sourceTree = "<group>"; };
-		A1100000000000000000000B /* AdvancedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedViewModel.swift; sourceTree = "<group>"; };
-		A1100000000000000000000C /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
-		A1100000000000000000000E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
 		335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedPluginRegistrant.swift; sourceTree = "<group>"; };
-		33CC10ED2044A3C60003C045 /* biyi_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = biyi_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		33CC10ED2044A3C60003C045 /* biyi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = biyi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33CC10F02044A3C60003C045 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33CC10F22044A3C60003C045 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Runner/Assets.xcassets; sourceTree = "<group>"; };
 		33CC10F52044A3C60003C045 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -126,9 +131,54 @@
 		74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FlutterGeneratedPluginSwiftPackage; path = ephemeral/Packages/FlutterGeneratedPluginSwiftPackage; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		8F1000112E0A100100A1B2C3 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		8F1000122E0A100100A1B2C3 /* SettingOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOption.swift; sourceTree = "<group>"; };
+		8F1000132E0A100100A1B2C3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		8F1000152E0A100100A1B2C3 /* SettingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingRow.swift; sourceTree = "<group>"; };
+		8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSectionHeader.swift; sourceTree = "<group>"; };
+		8F1000172E0A100100A1B2C3 /* SettingToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingToggle.swift; sourceTree = "<group>"; };
+		8F10001D2E0A100100A1B2C3 /* ProviderConfigEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderConfigEntry.swift; sourceTree = "<group>"; };
+		8F10001F2E0A100100A1B2C3 /* ShortcutSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutSettings.swift; sourceTree = "<group>"; };
+		8F1000212E0A100100A1B2C3 /* ShortcutSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutSettingsPatch.swift; sourceTree = "<group>"; };
+		8F1000232E0A100100A1B2C3 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
+		8F1000252E0A100100A1B2C3 /* AppearanceSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsPatch.swift; sourceTree = "<group>"; };
+		8F1000272E0A100100A1B2C3 /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
+		8F1000292E0A100100A1B2C3 /* AdvancedSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsPatch.swift; sourceTree = "<group>"; };
+		8F10002B2E0A100100A1B2C3 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
+		8F10002D2E0A100100A1B2C3 /* BaiduProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduProviderConfig.swift; sourceTree = "<group>"; };
+		8F10002F2E0A100100A1B2C3 /* CaiyunProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaiyunProviderConfig.swift; sourceTree = "<group>"; };
+		8F1000312E0A100100A1B2C3 /* DeepLProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLProviderConfig.swift; sourceTree = "<group>"; };
+		8F1000332E0A100100A1B2C3 /* GoogleProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleProviderConfig.swift; sourceTree = "<group>"; };
+		8F1000352E0A100100A1B2C3 /* IcibaProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IcibaProviderConfig.swift; sourceTree = "<group>"; };
+		8F1000372E0A100100A1B2C3 /* TencentProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TencentProviderConfig.swift; sourceTree = "<group>"; };
+		8F1000392E0A100100A1B2C3 /* YoudaoProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoudaoProviderConfig.swift; sourceTree = "<group>"; };
+		8F10003B2E0A100100A1B2C3 /* ProviderCapability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderCapability.swift; sourceTree = "<group>"; };
+		8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderConfigField.swift; sourceTree = "<group>"; };
+		8F10003F2E0A100100A1B2C3 /* ProviderType+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProviderType+Fields.swift"; sourceTree = "<group>"; };
+		8F1000412E0A100100A1B2C3 /* BaiduProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaiduProviderConfig+Fields.swift"; sourceTree = "<group>"; };
+		8F1000432E0A100100A1B2C3 /* CaiyunProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaiyunProviderConfig+Fields.swift"; sourceTree = "<group>"; };
+		8F1000452E0A100100A1B2C3 /* DeepLProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeepLProviderConfig+Fields.swift"; sourceTree = "<group>"; };
+		8F1000472E0A100100A1B2C3 /* GoogleProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GoogleProviderConfig+Fields.swift"; sourceTree = "<group>"; };
+		8F1000492E0A100100A1B2C3 /* IcibaProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IcibaProviderConfig+Fields.swift"; sourceTree = "<group>"; };
+		8F10004B2E0A100100A1B2C3 /* TencentProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TencentProviderConfig+Fields.swift"; sourceTree = "<group>"; };
+		8F10004D2E0A100100A1B2C3 /* YoudaoProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YoudaoProviderConfig+Fields.swift"; sourceTree = "<group>"; };
 		921317546F1323EEECD70938 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		9D02942CF4EF133C90DEB98D /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
+		A11000000000000000000001 /* SettingPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPicker.swift; sourceTree = "<group>"; };
+		A11000000000000000000002 /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
+		A11000000000000000000003 /* AppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceView.swift; sourceTree = "<group>"; };
+		A11000000000000000000004 /* ShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsView.swift; sourceTree = "<group>"; };
+		A11000000000000000000005 /* ProvidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersView.swift; sourceTree = "<group>"; };
+		A11000000000000000000006 /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
+		A11000000000000000000007 /* GeneralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralViewModel.swift; sourceTree = "<group>"; };
+		A11000000000000000000008 /* AppearanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewModel.swift; sourceTree = "<group>"; };
+		A11000000000000000000009 /* ShortcutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsViewModel.swift; sourceTree = "<group>"; };
+		A1100000000000000000000A /* ProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersViewModel.swift; sourceTree = "<group>"; };
+		A1100000000000000000000B /* AdvancedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedViewModel.swift; sourceTree = "<group>"; };
+		A1100000000000000000000C /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
+		A1100000000000000000000E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		AB98A8540C162D94896470E6 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -164,23 +214,109 @@
 		2A0D6A3C2E0A100100A1B2C3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				A20000000000000000000001 /* Views */,
-				A20000000000000000000008 /* ViewModels */,
 				A20000000000000000000009 /* Models */,
 				A2000000000000000000000A /* Repository */,
+				A20000000000000000000008 /* ViewModels */,
+				A20000000000000000000001 /* Views */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		2A0D6A3F2E0A100100A1B2C3 /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */,
+			);
+			path = Plugins;
+			sourceTree = "<group>";
+		};
+		331C80D6294CF71000263BE5 /* RunnerTests */ = {
+			isa = PBXGroup;
+			children = (
+				331C80D7294CF71000263BE5 /* RunnerTests.swift */,
+			);
+			path = RunnerTests;
+			sourceTree = "<group>";
+		};
+		33BA886A226E78AF003329D5 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				33E5194F232828860026EE4D /* AppInfo.xcconfig */,
+				9740EEB21CF90195004384FC /* Debug.xcconfig */,
+				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
+				333000ED22D3DE5D00554162 /* Warnings.xcconfig */,
+			);
+			path = Configs;
+			sourceTree = "<group>";
+		};
+		33CC10E42044A3C60003C045 = {
+			isa = PBXGroup;
+			children = (
+				33FAB671232836740065AC1E /* Runner */,
+				33CEB47122A05771004F2AC0 /* Flutter */,
+				331C80D6294CF71000263BE5 /* RunnerTests */,
+				33CC10EE2044A3C60003C045 /* Products */,
+				D73912EC22F37F3D000D13A0 /* Frameworks */,
+				DA8F1EAD036A679C3E89AEE9 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		33CC10EE2044A3C60003C045 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				33CC10ED2044A3C60003C045 /* biyi.app */,
+				331C80D5294CF71000263BE5 /* RunnerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		33CC11242044D66E0003C045 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				33CC10F22044A3C60003C045 /* Assets.xcassets */,
+				33CC10F42044A3C60003C045 /* MainMenu.xib */,
+				33CC10F72044A3C60003C045 /* Info.plist */,
+			);
+			name = Resources;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		33CEB47122A05771004F2AC0 /* Flutter */ = {
+			isa = PBXGroup;
+			children = (
+				78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */,
+				335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */,
+				33CEB47222A05771004F2AC0 /* Flutter-Debug.xcconfig */,
+				33CEB47422A05771004F2AC0 /* Flutter-Release.xcconfig */,
+				33CEB47722A0578A004F2AC0 /* Flutter-Generated.xcconfig */,
+			);
+			path = Flutter;
+			sourceTree = "<group>";
+		};
+		33FAB671232836740065AC1E /* Runner */ = {
+			isa = PBXGroup;
+			children = (
+				33CC10F02044A3C60003C045 /* AppDelegate.swift */,
+				33BA886A226E78AF003329D5 /* Configs */,
+				33E51913231747F40026EE4D /* DebugProfile.entitlements */,
+				2A0D6A3B2E0A100100A1B2C3 /* Features */,
+				2A0D6A3F2E0A100100A1B2C3 /* Plugins */,
+				33E51914231749380026EE4D /* Release.entitlements */,
+				33CC11242044D66E0003C045 /* Resources */,
+				A2000000000000000000000B /* Shared */,
+			);
+			path = Runner;
 			sourceTree = "<group>";
 		};
 		A20000000000000000000001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				8F1000132E0A100100A1B2C3 /* SettingsView.swift */,
-				A20000000000000000000002 /* General */,
-				A20000000000000000000003 /* Appearance */,
-				A20000000000000000000004 /* Shortcuts */,
-				A20000000000000000000005 /* Providers */,
 				A20000000000000000000006 /* Advanced */,
+				A20000000000000000000003 /* Appearance */,
+				A20000000000000000000002 /* General */,
+				A20000000000000000000005 /* Providers */,
+				A20000000000000000000004 /* Shortcuts */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -236,6 +372,62 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		A20000000000000000000008 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A1100000000000000000000B /* AdvancedViewModel.swift */,
+				A11000000000000000000008 /* AppearanceViewModel.swift */,
+				A11000000000000000000007 /* GeneralViewModel.swift */,
+				A1100000000000000000000A /* ProvidersViewModel.swift */,
+				8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */,
+				A11000000000000000000009 /* ShortcutsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000009 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8F1000272E0A100100A1B2C3 /* AdvancedSettings.swift */,
+				8F1000292E0A100100A1B2C3 /* AdvancedSettingsPatch.swift */,
+				8F1000232E0A100100A1B2C3 /* AppearanceSettings.swift */,
+				8F1000252E0A100100A1B2C3 /* AppearanceSettingsPatch.swift */,
+				8F1000112E0A100100A1B2C3 /* AppSettings.swift */,
+				8F10002D2E0A100100A1B2C3 /* BaiduProviderConfig.swift */,
+				8F1000412E0A100100A1B2C3 /* BaiduProviderConfig+Fields.swift */,
+				8F10002F2E0A100100A1B2C3 /* CaiyunProviderConfig.swift */,
+				8F1000432E0A100100A1B2C3 /* CaiyunProviderConfig+Fields.swift */,
+				8F1000312E0A100100A1B2C3 /* DeepLProviderConfig.swift */,
+				8F1000452E0A100100A1B2C3 /* DeepLProviderConfig+Fields.swift */,
+				8F1000332E0A100100A1B2C3 /* GoogleProviderConfig.swift */,
+				8F1000472E0A100100A1B2C3 /* GoogleProviderConfig+Fields.swift */,
+				8F1000352E0A100100A1B2C3 /* IcibaProviderConfig.swift */,
+				8F1000492E0A100100A1B2C3 /* IcibaProviderConfig+Fields.swift */,
+				8F10003B2E0A100100A1B2C3 /* ProviderCapability.swift */,
+				8F10001D2E0A100100A1B2C3 /* ProviderConfigEntry.swift */,
+				8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */,
+				8F10002B2E0A100100A1B2C3 /* ProviderType.swift */,
+				8F10003F2E0A100100A1B2C3 /* ProviderType+Fields.swift */,
+				8F1000122E0A100100A1B2C3 /* SettingOption.swift */,
+				A1100000000000000000000E /* Settings.swift */,
+				8F10001F2E0A100100A1B2C3 /* ShortcutSettings.swift */,
+				8F1000212E0A100100A1B2C3 /* ShortcutSettingsPatch.swift */,
+				8F1000372E0A100100A1B2C3 /* TencentProviderConfig.swift */,
+				8F10004B2E0A100100A1B2C3 /* TencentProviderConfig+Fields.swift */,
+				8F1000392E0A100100A1B2C3 /* YoudaoProviderConfig.swift */,
+				8F10004D2E0A100100A1B2C3 /* YoudaoProviderConfig+Fields.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A2000000000000000000000A /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				A1100000000000000000000C /* SettingsRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
 		A2000000000000000000000B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -250,123 +442,6 @@
 				A20000000000000000000007 /* Settings */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		A20000000000000000000008 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */,
-				A11000000000000000000007 /* GeneralViewModel.swift */,
-				A11000000000000000000008 /* AppearanceViewModel.swift */,
-				A11000000000000000000009 /* ShortcutsViewModel.swift */,
-				A1100000000000000000000A /* ProvidersViewModel.swift */,
-				A1100000000000000000000B /* AdvancedViewModel.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		A20000000000000000000009 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				8F1000112E0A100100A1B2C3 /* AppSettings.swift */,
-				A1100000000000000000000E /* Settings.swift */,
-				8F1000122E0A100100A1B2C3 /* SettingOption.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		A2000000000000000000000A /* Repository */ = {
-			isa = PBXGroup;
-			children = (
-				A1100000000000000000000C /* SettingsRepository.swift */,
-			);
-			path = Repository;
-			sourceTree = "<group>";
-		};
-		2A0D6A3F2E0A100100A1B2C3 /* Plugins */ = {
-			isa = PBXGroup;
-			children = (
-				2A0D6A3D2E0A100100A1B2C3 /* NativeSettingsPlugin.swift */,
-			);
-			path = Plugins;
-			sourceTree = "<group>";
-		};
-		331C80D6294CF71000263BE5 /* RunnerTests */ = {
-			isa = PBXGroup;
-			children = (
-				331C80D7294CF71000263BE5 /* RunnerTests.swift */,
-			);
-			path = RunnerTests;
-			sourceTree = "<group>";
-		};
-		33BA886A226E78AF003329D5 /* Configs */ = {
-			isa = PBXGroup;
-			children = (
-				33E5194F232828860026EE4D /* AppInfo.xcconfig */,
-				9740EEB21CF90195004384FC /* Debug.xcconfig */,
-				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
-				333000ED22D3DE5D00554162 /* Warnings.xcconfig */,
-			);
-			path = Configs;
-			sourceTree = "<group>";
-		};
-		33CC10E42044A3C60003C045 = {
-			isa = PBXGroup;
-			children = (
-				33FAB671232836740065AC1E /* Runner */,
-				33CEB47122A05771004F2AC0 /* Flutter */,
-				331C80D6294CF71000263BE5 /* RunnerTests */,
-				33CC10EE2044A3C60003C045 /* Products */,
-				D73912EC22F37F3D000D13A0 /* Frameworks */,
-				DA8F1EAD036A679C3E89AEE9 /* Pods */,
-			);
-			sourceTree = "<group>";
-		};
-		33CC10EE2044A3C60003C045 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				33CC10ED2044A3C60003C045 /* biyi_app.app */,
-				331C80D5294CF71000263BE5 /* RunnerTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		33CC11242044D66E0003C045 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				33CC10F22044A3C60003C045 /* Assets.xcassets */,
-				33CC10F42044A3C60003C045 /* MainMenu.xib */,
-				33CC10F72044A3C60003C045 /* Info.plist */,
-			);
-			name = Resources;
-			path = ..;
-			sourceTree = "<group>";
-		};
-		33CEB47122A05771004F2AC0 /* Flutter */ = {
-			isa = PBXGroup;
-			children = (
-				78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */,
-				335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */,
-				33CEB47222A05771004F2AC0 /* Flutter-Debug.xcconfig */,
-				33CEB47422A05771004F2AC0 /* Flutter-Release.xcconfig */,
-				33CEB47722A0578A004F2AC0 /* Flutter-Generated.xcconfig */,
-			);
-			path = Flutter;
-			sourceTree = "<group>";
-		};
-		33FAB671232836740065AC1E /* Runner */ = {
-			isa = PBXGroup;
-			children = (
-				33CC10F02044A3C60003C045 /* AppDelegate.swift */,
-				2A0D6A3F2E0A100100A1B2C3 /* Plugins */,
-				2A0D6A3B2E0A100100A1B2C3 /* Features */,
-				A2000000000000000000000B /* Shared */,
-				33E51913231747F40026EE4D /* DebugProfile.entitlements */,
-				33E51914231749380026EE4D /* Release.entitlements */,
-				33CC11242044D66E0003C045 /* Resources */,
-				33BA886A226E78AF003329D5 /* Configs */,
-			);
-			path = Runner;
 			sourceTree = "<group>";
 		};
 		D73912EC22F37F3D000D13A0 /* Frameworks */ = {
@@ -388,7 +463,6 @@
 				64AC08D845A98305AC2C19B4 /* Pods-RunnerTests.release.xcconfig */,
 				9D02942CF4EF133C90DEB98D /* Pods-RunnerTests.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -436,7 +510,7 @@
 				78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */,
 			);
 			productName = Runner;
-			productReference = 33CC10ED2044A3C60003C045 /* biyi_app.app */;
+			productReference = 33CC10ED2044A3C60003C045 /* biyi.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -629,6 +703,31 @@
 			files = (
 				2A0D6A402E0A100100A1B2C3 /* NativeSettingsPlugin.swift in Sources */,
 				8F1000012E0A100100A1B2C3 /* AppSettings.swift in Sources */,
+				8F10001C2E0A100100A1B2C3 /* ProviderConfigEntry.swift in Sources */,
+				8F10001E2E0A100100A1B2C3 /* ShortcutSettings.swift in Sources */,
+				8F1000202E0A100100A1B2C3 /* ShortcutSettingsPatch.swift in Sources */,
+				8F1000222E0A100100A1B2C3 /* AppearanceSettings.swift in Sources */,
+				8F1000242E0A100100A1B2C3 /* AppearanceSettingsPatch.swift in Sources */,
+				8F1000262E0A100100A1B2C3 /* AdvancedSettings.swift in Sources */,
+				8F1000282E0A100100A1B2C3 /* AdvancedSettingsPatch.swift in Sources */,
+				8F10002A2E0A100100A1B2C3 /* ProviderType.swift in Sources */,
+				8F10002C2E0A100100A1B2C3 /* BaiduProviderConfig.swift in Sources */,
+				8F10002E2E0A100100A1B2C3 /* CaiyunProviderConfig.swift in Sources */,
+				8F1000302E0A100100A1B2C3 /* DeepLProviderConfig.swift in Sources */,
+				8F1000322E0A100100A1B2C3 /* GoogleProviderConfig.swift in Sources */,
+				8F1000342E0A100100A1B2C3 /* IcibaProviderConfig.swift in Sources */,
+				8F1000362E0A100100A1B2C3 /* TencentProviderConfig.swift in Sources */,
+				8F1000382E0A100100A1B2C3 /* YoudaoProviderConfig.swift in Sources */,
+				8F10003A2E0A100100A1B2C3 /* ProviderCapability.swift in Sources */,
+				8F10003C2E0A100100A1B2C3 /* ProviderConfigField.swift in Sources */,
+				8F10003E2E0A100100A1B2C3 /* ProviderType+Fields.swift in Sources */,
+				8F1000402E0A100100A1B2C3 /* BaiduProviderConfig+Fields.swift in Sources */,
+				8F1000422E0A100100A1B2C3 /* CaiyunProviderConfig+Fields.swift in Sources */,
+				8F1000442E0A100100A1B2C3 /* DeepLProviderConfig+Fields.swift in Sources */,
+				8F1000462E0A100100A1B2C3 /* GoogleProviderConfig+Fields.swift in Sources */,
+				8F1000482E0A100100A1B2C3 /* IcibaProviderConfig+Fields.swift in Sources */,
+				8F10004A2E0A100100A1B2C3 /* TencentProviderConfig+Fields.swift in Sources */,
+				8F10004C2E0A100100A1B2C3 /* YoudaoProviderConfig+Fields.swift in Sources */,
 				8F1000022E0A100100A1B2C3 /* SettingOption.swift in Sources */,
 				8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */,
 				8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */,

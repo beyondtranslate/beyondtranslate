@@ -1,56 +1,89 @@
 import SwiftUI
 
+@MainActor
 final class ProvidersViewModel: ObservableObject {
-  @Published var traditionalProviders: [ProviderItem]
-  @Published var llmProviders: [ProviderItem]
+  @Published var providers: [ProviderItem] = []
+  @Published var isLoading = false
+  @Published var errorMessage: String?
 
-  init(settings: ProviderSettings = ProviderSettings()) {
-    traditionalProviders = settings.traditionalProviders
-    llmProviders = settings.llmProviders
+  private let repository: SettingsRepository
+
+  /// Maps backendID → stable local UUID so SwiftUI identity is preserved across reloads.
+  private var stableIDs: [String: UUID] = [:]
+
+  init(repository: SettingsRepository) {
+    self.repository = repository
   }
 
-  func toggleProvider(_ providerID: UUID, in listKind: ProviderListKind, isEnabled: Bool) {
-    switch listKind {
-    case .traditional:
-      guard let index = traditionalProviders.firstIndex(where: { $0.id == providerID }) else { return }
-      traditionalProviders[index].isEnabled = isEnabled
-    case .llm:
-      guard let index = llmProviders.firstIndex(where: { $0.id == providerID }) else { return }
-      llmProviders[index].isEnabled = isEnabled
+  // MARK: - Load
+
+  func load() async {
+    isLoading = true
+    defer { isLoading = false }
+    do {
+      let entries = try await repository.listProviders()
+      let disabled = repository.disabledProviderIDs()
+      providers = entries.map { entry in
+        ProviderItem(
+          id: stableID(for: entry.id),
+          from: entry,
+          isEnabled: !disabled.contains(entry.id)
+        )
+      }
+    } catch {
+      // Keep whatever state we have; errors are non-fatal for the list view.
+      errorMessage = error.localizedDescription
     }
   }
+
+  // MARK: - Toggle
+
+  func toggleProvider(_ id: UUID, isEnabled: Bool) {
+    guard let idx = providers.firstIndex(where: { $0.id == id }) else { return }
+    let backendID = providers[idx].backendID
+    providers[idx].isEnabled = isEnabled
+    repository.setProviderEnabled(backendID, isEnabled: isEnabled)
+  }
+
+  // MARK: - Save (add or edit)
 
   func saveProvider(_ draft: ProviderDraft) {
-    let capabilities: [ProviderCapability] =
-      draft.listKind == .traditional
-      ? [.translation, .dictionary]
-      : [.chatCompletion]
-
-    let item = ProviderItem(
-      id: draft.providerID ?? UUID(),
-      name: draft.name,
-      endpoint: draft.endpoint,
-      apiKeyHeader: draft.apiKeyHeader,
-      description: draft.description,
-      listKind: draft.listKind,
-      hosting: draft.hosting,
-      capabilities: capabilities,
-      isEnabled: true
-    )
-
-    switch draft.listKind {
-    case .traditional:
-      upsert(item, into: &traditionalProviders)
-    case .llm:
-      upsert(item, into: &llmProviders)
+    Task {
+      do {
+        _ = try await repository.updateProvider(
+          id: draft.backendID,
+          providerType: draft.providerType.rawValue,
+          fields: draft.fields
+        )
+        await load()
+      } catch {
+        errorMessage = error.localizedDescription
+      }
     }
   }
 
-  private func upsert(_ item: ProviderItem, into items: inout [ProviderItem]) {
-    if let index = items.firstIndex(where: { $0.id == item.id }) {
-      items[index] = item
-    } else {
-      items.append(item)
+  // MARK: - Delete
+
+  func deleteProvider(_ id: UUID) {
+    guard let item = providers.first(where: { $0.id == id }) else { return }
+    Task {
+      do {
+        _ = try await repository.deleteProvider(id: item.backendID)
+        providers.removeAll { $0.id == id }
+        // Clean up disabled state so re-adding the same ID starts fresh.
+        repository.setProviderEnabled(item.backendID, isEnabled: true)
+      } catch {
+        errorMessage = error.localizedDescription
+      }
     }
+  }
+
+  // MARK: - Private helpers
+
+  private func stableID(for backendID: String) -> UUID {
+    if let existing = stableIDs[backendID] { return existing }
+    let new = UUID()
+    stableIDs[backendID] = new
+    return new
   }
 }

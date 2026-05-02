@@ -7,6 +7,117 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 import '../frb_generated.dart';
 
+class BaiduProviderConfig {
+  final String appId;
+  final String appKey;
+  final String? baseUrl;
+
+  const BaiduProviderConfig({
+    required this.appId,
+    required this.appKey,
+    this.baseUrl,
+  });
+
+  @override
+  int get hashCode => appId.hashCode ^ appKey.hashCode ^ baseUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BaiduProviderConfig &&
+          runtimeType == other.runtimeType &&
+          appId == other.appId &&
+          appKey == other.appKey &&
+          baseUrl == other.baseUrl;
+}
+
+class CaiyunProviderConfig {
+  final String token;
+  final String requestId;
+  final String? baseUrl;
+
+  const CaiyunProviderConfig({
+    required this.token,
+    required this.requestId,
+    this.baseUrl,
+  });
+
+  @override
+  int get hashCode => token.hashCode ^ requestId.hashCode ^ baseUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CaiyunProviderConfig &&
+          runtimeType == other.runtimeType &&
+          token == other.token &&
+          requestId == other.requestId &&
+          baseUrl == other.baseUrl;
+}
+
+class DeepLProviderConfig {
+  final String apiKey;
+  final String? baseUrl;
+
+  const DeepLProviderConfig({
+    required this.apiKey,
+    this.baseUrl,
+  });
+
+  @override
+  int get hashCode => apiKey.hashCode ^ baseUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DeepLProviderConfig &&
+          runtimeType == other.runtimeType &&
+          apiKey == other.apiKey &&
+          baseUrl == other.baseUrl;
+}
+
+class GoogleProviderConfig {
+  final String apiKey;
+  final String? baseUrl;
+
+  const GoogleProviderConfig({
+    required this.apiKey,
+    this.baseUrl,
+  });
+
+  @override
+  int get hashCode => apiKey.hashCode ^ baseUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GoogleProviderConfig &&
+          runtimeType == other.runtimeType &&
+          apiKey == other.apiKey &&
+          baseUrl == other.baseUrl;
+}
+
+class IcibaProviderConfig {
+  final String apiKey;
+  final String? baseUrl;
+
+  const IcibaProviderConfig({
+    required this.apiKey,
+    this.baseUrl,
+  });
+
+  @override
+  int get hashCode => apiKey.hashCode ^ baseUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IcibaProviderConfig &&
+          runtimeType == other.runtimeType &&
+          apiKey == other.apiKey &&
+          baseUrl == other.baseUrl;
+}
+
 class LookUpRequest {
   final String sourceLanguage;
   final String targetLanguage;
@@ -85,6 +196,41 @@ class LookUpResponse {
           phrases == other.phrases &&
           tenses == other.tenses &&
           sentences == other.sentences;
+}
+
+enum ProviderType {
+  baidu,
+  caiyun,
+  deepL,
+  google,
+  iciba,
+  tencent,
+  youdao,
+  ;
+}
+
+class TencentProviderConfig {
+  final String secretId;
+  final String secretKey;
+  final String? baseUrl;
+
+  const TencentProviderConfig({
+    required this.secretId,
+    required this.secretKey,
+    this.baseUrl,
+  });
+
+  @override
+  int get hashCode => secretId.hashCode ^ secretKey.hashCode ^ baseUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TencentProviderConfig &&
+          runtimeType == other.runtimeType &&
+          secretId == other.secretId &&
+          secretKey == other.secretKey &&
+          baseUrl == other.baseUrl;
 }
 
 class TextTranslation {
@@ -304,4 +450,35 @@ class WordTense {
           type == other.type &&
           name == other.name &&
           values == other.values;
+}
+
+class YoudaoProviderConfig {
+  final String appKey;
+  final String appSecret;
+  final String? baseUrl;
+  final String? pictureBaseUrl;
+
+  const YoudaoProviderConfig({
+    required this.appKey,
+    required this.appSecret,
+    this.baseUrl,
+    this.pictureBaseUrl,
+  });
+
+  @override
+  int get hashCode =>
+      appKey.hashCode ^
+      appSecret.hashCode ^
+      baseUrl.hashCode ^
+      pictureBaseUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is YoudaoProviderConfig &&
+          runtimeType == other.runtimeType &&
+          appKey == other.appKey &&
+          appSecret == other.appSecret &&
+          baseUrl == other.baseUrl &&
+          pictureBaseUrl == other.pictureBaseUrl;
 }

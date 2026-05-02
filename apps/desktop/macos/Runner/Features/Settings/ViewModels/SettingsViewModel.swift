@@ -9,25 +9,26 @@ final class SettingsViewModel: ObservableObject {
   let advanced: AdvancedViewModel
 
   private let repository: SettingsRepository
-  private let settingsPlugin: NativeSettingsPlugin?
 
   init(
-    repository: SettingsRepository = UserDefaultsSettingsRepository(),
+    repository: SettingsRepository? = nil,
     settingsPlugin: NativeSettingsPlugin? = nil
   ) {
+    let repository =
+      repository ?? DefaultSettingsRepository(settingsPlugin)
     self.repository = repository
-    self.settingsPlugin = settingsPlugin
 
     let settings = repository.loadSettings()
     general = GeneralViewModel(settings: settings.general)
-    appearance = AppearanceViewModel(settings: settings.appearance, settingsPlugin: settingsPlugin)
-    shortcuts = ShortcutsViewModel(settings: settings.shortcuts, settingsPlugin: settingsPlugin)
-    providers = ProvidersViewModel(settings: settings.providers)
-    advanced = AdvancedViewModel(settings: settings.advanced, settingsPlugin: settingsPlugin)
+    appearance = AppearanceViewModel(settings: settings.appearance, repository: repository)
+    shortcuts = ShortcutsViewModel(repository: repository)
+    providers = ProvidersViewModel(repository: repository)
+    advanced = AdvancedViewModel(repository: repository)
 
     Task {
       await appearance.load()
       await shortcuts.load()
+      await providers.load()
       await advanced.load()
     }
   }

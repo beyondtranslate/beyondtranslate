@@ -1,33 +1,57 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap};
 use std::fs;
 use std::path::Path;
+use std::time::{SystemTime, UNIX_EPOCH};
 
-use beyondtranslate_engine::EngineConfig;
-use serde::{Deserialize, Serialize};
-use serde_json::{Map, Value};
+use beyondtranslate_engine::{ProviderConfig, ProviderType};
+use flutter_rust_bridge::frb;
+use serde::de::Error as DeError;
+use serde::ser::SerializeMap;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use serde_json::Value;
 use struct_patch::Patch;
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, Patch)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch)]
 #[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
 pub struct ShortcutSettings {
     #[serde(default, rename = "toggleApp")]
     pub toggle_app: String,
+    #[serde(default, rename = "hideApp")]
+    pub hide_app: String,
+    #[serde(default, rename = "extractFromScreenSelection")]
+    pub extract_from_screen_selection: String,
+    #[serde(default, rename = "extractFromScreenCapture")]
+    pub extract_from_screen_capture: String,
+    #[serde(default, rename = "extractFromClipboard")]
+    pub extract_from_clipboard: String,
+}
+
+impl Default for ShortcutSettings {
+    fn default() -> Self {
+        Self {
+            toggle_app: "Control+Option+Space".to_owned(),
+            hide_app: "Escape".to_owned(),
+            extract_from_screen_selection: "Control+Shift+1".to_owned(),
+            extract_from_screen_capture: "Control+Shift+2".to_owned(),
+            extract_from_clipboard: "Control+Shift+3".to_owned(),
+        }
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch)]
 #[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
+#[serde(default)]
 pub struct AppearanceSettings {
-    #[serde(default = "default_language")]
     pub language: String,
-    #[serde(default = "default_theme_mode", rename = "themeMode")]
+    #[serde(rename = "themeMode")]
     pub theme_mode: String,
 }
 
 impl Default for AppearanceSettings {
     fn default() -> Self {
         Self {
-            language: default_language(),
-            theme_mode: default_theme_mode(),
+            language: "zh".to_owned(),
+            theme_mode: "light".to_owned(),
         }
     }
 }
@@ -37,23 +61,40 @@ impl Default for AppearanceSettings {
 pub struct AdvancedSettings {
     #[serde(default, rename = "launchAtLogin")]
     pub launch_at_login: bool,
-    #[serde(default)]
-    pub proxy: String,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ProviderConfigEntry {
+    #[serde(default)]
+    pub id: String,
+    #[serde(default, rename = "type")]
+    pub r#type: String,
+    #[serde(default)]
+    pub fields: HashMap<String, String>,
+    /// Provider capabilities, populated at runtime from the engine instance.
+    /// Not written to the settings file.
+    #[serde(default, skip_serializing)]
+    pub capabilities: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[frb(non_opaque)]
 pub struct Settings {
-    #[serde(default, skip_serializing_if = "engine_config_is_empty")]
-    #[serde(flatten)]
-    pub engine: EngineConfig,
+    #[serde(default, rename = "lastUpdated")]
+    pub last_updated: u64,
+    #[serde(
+        default,
+        skip_serializing_if = "HashMap::is_empty",
+        serialize_with = "serialize_providers",
+        deserialize_with = "deserialize_providers"
+    )]
+    pub providers: HashMap<String, ProviderConfigEntry>,
     #[serde(default)]
     pub shortcuts: ShortcutSettings,
     #[serde(default)]
     pub appearance: AppearanceSettings,
     #[serde(default)]
     pub advanced: AdvancedSettings,
-    #[serde(flatten)]
-    pub values: BTreeMap<String, Value>,
 }
 
 impl Settings {
@@ -106,34 +147,144 @@ impl Settings {
         serde_json::to_string_pretty(&root)
             .map_err(|error| format!("failed to render settings json: {error}"))
     }
-}
 
-fn engine_config_is_empty(config: &EngineConfig) -> bool {
-    config.providers.is_empty()
-}
-
-fn default_language() -> String {
-    "zh".to_owned()
-}
-
-fn default_theme_mode() -> String {
-    "light".to_owned()
-}
-
-pub fn merge_raw_json_preserving_unknown_keys(
-    raw_json: &str,
-) -> Result<Map<String, Value>, String> {
-    let value = serde_json::from_str::<Value>(raw_json)
-        .map_err(|error| format!("failed to parse settings json: {error}"))?;
-    match value {
-        Value::Object(object) => Ok(object),
-        _ => Err("settings json root must be an object".to_owned()),
+    pub fn touch_last_updated(&mut self) -> Result<(), String> {
+        self.last_updated = current_timestamp_millis()?;
+        Ok(())
     }
 }
 
-#[cfg(test)]
-fn get_json_pointer(object: &Map<String, Value>, pointer: &str) -> Option<Value> {
-    Value::Object(object.clone()).pointer(pointer).cloned()
+fn current_timestamp_millis() -> Result<u64, String> {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|error| format!("system clock is before unix epoch: {error}"))?
+        .as_millis()
+        .try_into()
+        .map_err(|_| "current timestamp does not fit in u64".to_owned())
+}
+
+pub fn provider_config_from_settings(
+    provider: &ProviderConfigEntry,
+) -> Result<ProviderConfig, String> {
+    let provider_type = parse_provider_type(&provider.r#type)?;
+    let mut options = BTreeMap::new();
+    for (key, value) in &provider.fields {
+        options.insert(key.clone(), serde_yaml::Value::String(value.clone()));
+    }
+    Ok(ProviderConfig {
+        provider_type,
+        options,
+    })
+}
+
+fn serialize_providers<S>(
+    providers: &HashMap<String, ProviderConfigEntry>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let mut map = serializer.serialize_map(Some(providers.len()))?;
+    for (provider_id, provider) in providers {
+        let config = provider_config_from_settings(provider).map_err(serde::ser::Error::custom)?;
+        let value = provider_config_json_value(&config).map_err(serde::ser::Error::custom)?;
+        map.serialize_entry(provider_id, &value)?;
+    }
+    map.end()
+}
+
+fn deserialize_providers<'de, D>(
+    deserializer: D,
+) -> Result<HashMap<String, ProviderConfigEntry>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let providers = HashMap::<String, Value>::deserialize(deserializer)?;
+    providers
+        .into_iter()
+        .map(|(provider_id, value)| {
+            provider_entry_from_value(&provider_id, value)
+                .map(|entry| (provider_id, entry))
+                .map_err(D::Error::custom)
+        })
+        .collect()
+}
+
+fn provider_entry_from_value(
+    provider_id: &str,
+    value: Value,
+) -> Result<ProviderConfigEntry, String> {
+    let config = serde_json::from_value::<ProviderConfig>(value)
+        .map_err(|error| format!("invalid provider config `{provider_id}`: {error}"))?;
+    provider_entry_from_config(provider_id, &config)
+}
+
+pub fn provider_entry_from_config(
+    provider_id: &str,
+    config: &ProviderConfig,
+) -> Result<ProviderConfigEntry, String> {
+    let value = provider_config_json_value(config)?;
+    let Value::Object(mut object) = value else {
+        return Err("provider config must encode to an object".to_owned());
+    };
+    object.remove("type");
+
+    let fields = object
+        .into_iter()
+        .filter_map(|(key, value)| provider_config_field_value(value).map(|value| (key, value)))
+        .collect();
+
+    Ok(ProviderConfigEntry {
+        id: provider_id.to_owned(),
+        r#type: config.provider_type.as_str().to_owned(),
+        fields,
+        capabilities: Vec::new(),
+    })
+}
+
+fn parse_provider_type(value: &str) -> Result<ProviderType, String> {
+    serde_yaml::from_value::<ProviderType>(serde_yaml::Value::String(value.to_owned()))
+        .map_err(|error| format!("invalid provider type `{value}`: {error}"))
+}
+
+fn provider_config_field_value(value: Value) -> Option<String> {
+    match value {
+        Value::String(value) => Some(value),
+        Value::Number(value) => Some(value.to_string()),
+        Value::Bool(value) => Some(value.to_string()),
+        Value::Null => None,
+        Value::Array(_) | Value::Object(_) => Some(value.to_string()),
+    }
+}
+
+fn provider_config_json_value(config: &ProviderConfig) -> Result<Value, String> {
+    let mut value = serde_json::to_value(config)
+        .map_err(|error| format!("failed to encode provider: {error}"))?;
+    normalize_provider_config_keys(&mut value);
+    Ok(value)
+}
+
+fn normalize_provider_config_keys(value: &mut Value) {
+    let Value::Object(object) = value else {
+        return;
+    };
+
+    for (from, to) in [
+        ("api_key", "appKey"),
+        ("apiKey", "appKey"),
+        ("app_key", "appKey"),
+        ("app_id", "appId"),
+        ("base_url", "baseUrl"),
+        ("request_id", "requestId"),
+        ("secret_id", "secretId"),
+        ("secret_key", "secretKey"),
+        ("app_secret", "appSecret"),
+        ("picture_base_url", "pictureBaseUrl"),
+    ] {
+        if let Some(value) = object.remove(from) {
+            object.insert(to.to_owned(), value);
+        }
+    }
 }
 
 #[cfg(test)]
@@ -157,7 +308,7 @@ mod tests {
         let file_path = temp_settings_file();
         let settings = Settings::load(&file_path).expect("failed to load settings");
 
-        assert!(settings.engine.providers.is_empty());
+        assert!(settings.providers.is_empty());
         assert_eq!(settings.shortcuts, ShortcutSettings::default());
         assert_eq!(settings.appearance, AppearanceSettings::default());
         assert_eq!(settings.advanced, AdvancedSettings::default());
@@ -171,89 +322,141 @@ mod tests {
             &path,
             r#"{
   "shortcuts": {
-    "toggleApp": "Command+Shift+Space"
+    "toggleApp": "Command+Shift+Space",
+    "hideApp": "Escape",
+    "extractFromScreenSelection": "Command+Shift+1",
+    "extractFromScreenCapture": "Command+Shift+2",
+    "extractFromClipboard": "Command+Shift+3"
   },
   "appearance": {
     "language": "en",
     "themeMode": "dark"
   },
   "advanced": {
-    "launchAtLogin": true,
-    "proxy": "http://127.0.0.1:7890"
-  }
+    "launchAtLogin": true
+  },
+  "providers": {
+    "deepl-main": {
+      "type": "deepl",
+      "appKey": "test-key"
+    }
+  },
+  "lastUpdated": 1710000000000
 }"#,
         )
         .expect("failed to write settings");
 
         let settings = Settings::load(&path).expect("failed to load settings");
+        assert_eq!(settings.last_updated, 1710000000000);
         assert_eq!(settings.shortcuts.toggle_app, "Command+Shift+Space");
+        assert_eq!(settings.shortcuts.hide_app, "Escape");
+        assert_eq!(
+            settings.shortcuts.extract_from_screen_selection,
+            "Command+Shift+1"
+        );
+        assert_eq!(
+            settings.shortcuts.extract_from_screen_capture,
+            "Command+Shift+2"
+        );
+        assert_eq!(settings.shortcuts.extract_from_clipboard, "Command+Shift+3");
         assert_eq!(settings.appearance.language, "en");
         assert_eq!(settings.appearance.theme_mode, "dark");
         assert!(settings.advanced.launch_at_login);
-        assert_eq!(settings.advanced.proxy, "http://127.0.0.1:7890");
+        assert_eq!(settings.providers.len(), 1);
+        let provider = settings.providers.get("deepl-main").unwrap();
+        assert_eq!(provider.id, "deepl-main");
+        assert_eq!(provider.r#type, "deepl");
+        let parsed = provider_config_from_settings(provider).unwrap();
+        assert_eq!(parsed.provider_type.as_str(), "deepl");
+        assert_eq!(
+            parsed.options.get("appKey"),
+            Some(&serde_yaml::Value::String("test-key".to_owned()))
+        );
     }
 
     #[test]
-    fn save_preserves_unknown_keys_and_writes_settings_schema() {
+    fn save_writes_settings_schema() {
         let path = temp_settings_file();
         fs::create_dir_all(path.parent().unwrap()).expect("failed to create temp dir");
-        fs::write(
-            &path,
-            r#"{
-  "workbench.sideBar.location": "right",
-  "shortcuts": {
-    "toggleApp": "Command+Shift+Space"
-  }
-}"#,
-        )
-        .expect("failed to write settings");
 
-        let mut settings = Settings::load(&path).expect("failed to load settings");
+        let mut settings = Settings::default();
+        settings.shortcuts.toggle_app = "Command+Shift+Space".to_owned();
+        settings.shortcuts.hide_app = "Escape".to_owned();
+        settings.shortcuts.extract_from_screen_selection = "Command+Shift+1".to_owned();
+        settings.shortcuts.extract_from_screen_capture = "Command+Shift+2".to_owned();
+        settings.shortcuts.extract_from_clipboard = "Command+Shift+3".to_owned();
         settings.appearance.language = "en".to_owned();
         settings.appearance.theme_mode = "system".to_owned();
         settings.advanced.launch_at_login = true;
-        settings.advanced.proxy = "http://127.0.0.1:7890".to_owned();
+        settings.providers.insert(
+            "deepl-main".to_owned(),
+            ProviderConfigEntry {
+                id: "deepl-main".to_owned(),
+                r#type: "deepl".to_owned(),
+                fields: HashMap::from([("appKey".to_owned(), "test-key".to_owned())]),
+                capabilities: Vec::new(),
+            },
+        );
         settings.save(&path).expect("failed to save settings");
 
         let saved = fs::read_to_string(path).expect("failed to read saved settings");
-        let json = merge_raw_json_preserving_unknown_keys(&saved).expect("invalid saved json");
-
+        let json = serde_json::from_str::<Value>(&saved).expect("invalid saved json");
         assert_eq!(
-            json.get("workbench.sideBar.location")
-                .and_then(Value::as_str),
-            Some("right")
-        );
-        assert_eq!(
-            get_json_pointer(&json, "/shortcuts/toggleApp"),
+            json.pointer("/shortcuts/toggleApp").cloned(),
             Some(Value::String("Command+Shift+Space".to_owned()))
         );
         assert_eq!(
-            get_json_pointer(&json, "/appearance/language"),
+            json.pointer("/shortcuts/hideApp").cloned(),
+            Some(Value::String("Escape".to_owned()))
+        );
+        assert_eq!(
+            json.pointer("/shortcuts/extractFromScreenSelection")
+                .cloned(),
+            Some(Value::String("Command+Shift+1".to_owned()))
+        );
+        assert_eq!(
+            json.pointer("/shortcuts/extractFromScreenCapture").cloned(),
+            Some(Value::String("Command+Shift+2".to_owned()))
+        );
+        assert_eq!(
+            json.pointer("/shortcuts/extractFromClipboard").cloned(),
+            Some(Value::String("Command+Shift+3".to_owned()))
+        );
+        assert_eq!(
+            json.pointer("/appearance/language").cloned(),
             Some(Value::String("en".to_owned()))
         );
         assert_eq!(
-            get_json_pointer(&json, "/appearance/themeMode"),
+            json.pointer("/appearance/themeMode").cloned(),
             Some(Value::String("system".to_owned()))
         );
         assert_eq!(
-            get_json_pointer(&json, "/advanced/launchAtLogin"),
+            json.pointer("/advanced/launchAtLogin").cloned(),
             Some(Value::Bool(true))
         );
         assert_eq!(
-            get_json_pointer(&json, "/advanced/proxy"),
-            Some(Value::String("http://127.0.0.1:7890".to_owned()))
+            json.pointer("/providers/deepl-main/type").cloned(),
+            Some(Value::String("deepl".to_owned()))
         );
+        assert_eq!(
+            json.pointer("/providers/deepl-main/appKey").cloned(),
+            Some(Value::String("test-key".to_owned()))
+        );
+        assert!(json.pointer("/providers/deepl-main/id").is_none());
+        assert_eq!(json.get("lastUpdated").and_then(Value::as_u64), Some(0));
     }
 
     #[test]
     fn engine_config_is_flattened() {
         let settings = Settings::default();
-        let json = merge_raw_json_preserving_unknown_keys(&settings.to_pretty_json().unwrap())
+        let json = serde_json::from_str::<Value>(&settings.to_pretty_json().unwrap())
             .expect("invalid settings json");
 
-        assert!(!json.contains_key("engine"));
-        assert!(json.contains_key("shortcuts"));
-        assert!(json.contains_key("appearance"));
-        assert!(json.contains_key("advanced"));
+        assert!(json.get("engine").is_none());
+        assert!(json.get("shortcuts").is_some());
+        assert!(json.get("providers").is_none());
+        assert!(json.get("appearance").is_some());
+        assert!(json.get("advanced").is_some());
+        assert!(json.get("lastUpdated").is_some());
     }
 }

@@ -78,6 +78,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  Map<String, String> dco_decode_Map_String_String_None(dynamic raw);
+
+  @protected
+  Map<String, ProviderConfigEntry>
+      dco_decode_Map_String_provider_config_entry_None(dynamic raw);
+
+  @protected
   Runtime
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
           dynamic raw);
@@ -113,6 +120,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AppearanceSettingsPatch dco_decode_appearance_settings_patch(dynamic raw);
 
   @protected
+  BaiduProviderConfig dco_decode_baidu_provider_config(dynamic raw);
+
+  @protected
   bool dco_decode_bool(dynamic raw);
 
   @protected
@@ -140,6 +150,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   TranslateRequest dco_decode_box_autoadd_translate_request(dynamic raw);
 
   @protected
+  CaiyunProviderConfig dco_decode_caiyun_provider_config(dynamic raw);
+
+  @protected
+  DeepLProviderConfig dco_decode_deep_l_provider_config(dynamic raw);
+
+  @protected
+  GoogleProviderConfig dco_decode_google_provider_config(dynamic raw);
+
+  @protected
+  int dco_decode_i_32(dynamic raw);
+
+  @protected
+  IcibaProviderConfig dco_decode_iciba_provider_config(dynamic raw);
+
+  @protected
   List<String> dco_decode_list_String(dynamic raw);
 
   @protected
@@ -147,6 +172,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<ProviderConfigEntry> dco_decode_list_provider_config_entry(dynamic raw);
+
+  @protected
+  List<(String, ProviderConfigEntry)>
+      dco_decode_list_record_string_provider_config_entry(dynamic raw);
+
+  @protected
+  List<(String, String)> dco_decode_list_record_string_string(dynamic raw);
 
   @protected
   List<TextTranslation> dco_decode_list_text_translation(dynamic raw);
@@ -216,10 +248,26 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   ProviderConfigEntry dco_decode_provider_config_entry(dynamic raw);
 
   @protected
+  ProviderType dco_decode_provider_type(dynamic raw);
+
+  @protected
+  (String, ProviderConfigEntry) dco_decode_record_string_provider_config_entry(
+      dynamic raw);
+
+  @protected
+  (String, String) dco_decode_record_string_string(dynamic raw);
+
+  @protected
+  Settings dco_decode_settings(dynamic raw);
+
+  @protected
   ShortcutSettings dco_decode_shortcut_settings(dynamic raw);
 
   @protected
   ShortcutSettingsPatch dco_decode_shortcut_settings_patch(dynamic raw);
+
+  @protected
+  TencentProviderConfig dco_decode_tencent_provider_config(dynamic raw);
 
   @protected
   TextTranslation dco_decode_text_translation(dynamic raw);
@@ -229,6 +277,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TranslateResponse dco_decode_translate_response(dynamic raw);
+
+  @protected
+  BigInt dco_decode_u_64(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -259,6 +310,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   WordTense dco_decode_word_tense(dynamic raw);
+
+  @protected
+  YoudaoProviderConfig dco_decode_youdao_provider_config(dynamic raw);
 
   @protected
   Runtime
@@ -301,6 +355,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  Map<String, String> sse_decode_Map_String_String_None(
+      SseDeserializer deserializer);
+
+  @protected
+  Map<String, ProviderConfigEntry>
+      sse_decode_Map_String_provider_config_entry_None(
+          SseDeserializer deserializer);
+
+  @protected
   Runtime
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
           SseDeserializer deserializer);
@@ -339,6 +402,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  BaiduProviderConfig sse_decode_baidu_provider_config(
+      SseDeserializer deserializer);
+
+  @protected
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
@@ -369,6 +436,25 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  CaiyunProviderConfig sse_decode_caiyun_provider_config(
+      SseDeserializer deserializer);
+
+  @protected
+  DeepLProviderConfig sse_decode_deep_l_provider_config(
+      SseDeserializer deserializer);
+
+  @protected
+  GoogleProviderConfig sse_decode_google_provider_config(
+      SseDeserializer deserializer);
+
+  @protected
+  int sse_decode_i_32(SseDeserializer deserializer);
+
+  @protected
+  IcibaProviderConfig sse_decode_iciba_provider_config(
+      SseDeserializer deserializer);
+
+  @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer);
 
   @protected
@@ -376,6 +462,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<ProviderConfigEntry> sse_decode_list_provider_config_entry(
+      SseDeserializer deserializer);
+
+  @protected
+  List<(String, ProviderConfigEntry)>
+      sse_decode_list_record_string_provider_config_entry(
+          SseDeserializer deserializer);
+
+  @protected
+  List<(String, String)> sse_decode_list_record_string_string(
       SseDeserializer deserializer);
 
   @protected
@@ -455,10 +550,28 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  ProviderType sse_decode_provider_type(SseDeserializer deserializer);
+
+  @protected
+  (String, ProviderConfigEntry) sse_decode_record_string_provider_config_entry(
+      SseDeserializer deserializer);
+
+  @protected
+  (String, String) sse_decode_record_string_string(
+      SseDeserializer deserializer);
+
+  @protected
+  Settings sse_decode_settings(SseDeserializer deserializer);
+
+  @protected
   ShortcutSettings sse_decode_shortcut_settings(SseDeserializer deserializer);
 
   @protected
   ShortcutSettingsPatch sse_decode_shortcut_settings_patch(
+      SseDeserializer deserializer);
+
+  @protected
+  TencentProviderConfig sse_decode_tencent_provider_config(
       SseDeserializer deserializer);
 
   @protected
@@ -469,6 +582,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TranslateResponse sse_decode_translate_response(SseDeserializer deserializer);
+
+  @protected
+  BigInt sse_decode_u_64(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -501,7 +617,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   WordTense sse_decode_word_tense(SseDeserializer deserializer);
 
   @protected
-  int sse_decode_i_32(SseDeserializer deserializer);
+  YoudaoProviderConfig sse_decode_youdao_provider_config(
+      SseDeserializer deserializer);
 
   @protected
   void
@@ -544,6 +661,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           RuntimeTranslation self, SseSerializer serializer);
 
   @protected
+  void sse_encode_Map_String_String_None(
+      Map<String, String> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_Map_String_provider_config_entry_None(
+      Map<String, ProviderConfigEntry> self, SseSerializer serializer);
+
+  @protected
   void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
           Runtime self, SseSerializer serializer);
@@ -583,6 +708,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       AppearanceSettingsPatch self, SseSerializer serializer);
 
   @protected
+  void sse_encode_baidu_provider_config(
+      BaiduProviderConfig self, SseSerializer serializer);
+
+  @protected
   void sse_encode_bool(bool self, SseSerializer serializer);
 
   @protected
@@ -613,6 +742,25 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       TranslateRequest self, SseSerializer serializer);
 
   @protected
+  void sse_encode_caiyun_provider_config(
+      CaiyunProviderConfig self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_deep_l_provider_config(
+      DeepLProviderConfig self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_google_provider_config(
+      GoogleProviderConfig self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_i_32(int self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_iciba_provider_config(
+      IcibaProviderConfig self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer);
 
   @protected
@@ -622,6 +770,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_provider_config_entry(
       List<ProviderConfigEntry> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_record_string_provider_config_entry(
+      List<(String, ProviderConfigEntry)> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_record_string_string(
+      List<(String, String)> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_text_translation(
@@ -707,12 +863,30 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       ProviderConfigEntry self, SseSerializer serializer);
 
   @protected
+  void sse_encode_provider_type(ProviderType self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_provider_config_entry(
+      (String, ProviderConfigEntry) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_string(
+      (String, String) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_settings(Settings self, SseSerializer serializer);
+
+  @protected
   void sse_encode_shortcut_settings(
       ShortcutSettings self, SseSerializer serializer);
 
   @protected
   void sse_encode_shortcut_settings_patch(
       ShortcutSettingsPatch self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_tencent_provider_config(
+      TencentProviderConfig self, SseSerializer serializer);
 
   @protected
   void sse_encode_text_translation(
@@ -725,6 +899,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_translate_response(
       TranslateResponse self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_u_64(BigInt self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
@@ -759,7 +936,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_word_tense(WordTense self, SseSerializer serializer);
 
   @protected
-  void sse_encode_i_32(int self, SseSerializer serializer);
+  void sse_encode_youdao_provider_config(
+      YoudaoProviderConfig self, SseSerializer serializer);
 }
 
 // Section: wire_class

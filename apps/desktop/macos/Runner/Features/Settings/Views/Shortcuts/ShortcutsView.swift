@@ -11,9 +11,11 @@ struct ShortcutsView: View {
       }
 
       Section("Extract Text") {
-        ShortcutSettingRow(title: "Extract text from selection", shortcut: viewModel.extractSelection)
+        ShortcutSettingRow(
+          title: "Extract text from selection", shortcut: viewModel.extractSelection)
         ShortcutSettingRow(title: "Extract text from capture", shortcut: viewModel.extractCapture)
-        ShortcutSettingRow(title: "Extract text from clipboard", shortcut: viewModel.extractClipboard)
+        ShortcutSettingRow(
+          title: "Extract text from clipboard", shortcut: viewModel.extractClipboard)
       }
 
       Section("Input Assist Function") {

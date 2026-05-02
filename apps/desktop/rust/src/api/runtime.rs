@@ -8,17 +8,15 @@ pub use super::mirrors::{
     WordDefinition, WordImage, WordPhrase, WordPronunciation, WordSentence, WordTag, WordTense,
 };
 pub use crate::domain::settings::{
-    AdvancedSettings, AdvancedSettingsPatch, AppearanceSettings, AppearanceSettingsPatch,
-    ShortcutSettings, ShortcutSettingsPatch,
+    provider_entry_from_config, AdvancedSettings, AdvancedSettingsPatch, AppearanceSettings,
+    AppearanceSettingsPatch, ProviderConfigEntry, Settings, ShortcutSettings,
+    ShortcutSettingsPatch,
 };
-use beyondtranslate_engine::ProviderConfig;
 use flutter_rust_bridge::frb;
-use serde::{Deserialize, Serialize};
 use struct_patch::Patch as ApplyPatch;
 use tokio::sync::RwLock;
 
 use crate::domain::engine;
-use crate::domain::settings::Settings;
 
 struct RuntimeState {
     settings: Settings,
@@ -56,13 +54,6 @@ pub struct RuntimeDictionary {
     provider_id: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ProviderConfigEntry {
-    pub id: String,
-    pub r#type: String,
-    pub config_yaml: String,
-}
-
 impl Runtime {
     #[frb(sync)]
     pub fn new(data_dir: String) -> Result<Self, String> {
@@ -82,7 +73,7 @@ impl Runtime {
         }
     }
 
-    #[frb(sync)]
+    #[frb(sync, positional)]
     pub fn translation(&self, provider_id: String) -> Result<RuntimeTranslation, String> {
         let provider_id = validate_provider_id(provider_id)?;
         Ok(RuntimeTranslation {
@@ -91,7 +82,7 @@ impl Runtime {
         })
     }
 
-    #[frb(sync)]
+    #[frb(sync, positional)]
     pub fn dictionary(&self, provider_id: String) -> Result<RuntimeDictionary, String> {
         let provider_id = validate_provider_id(provider_id)?;
         Ok(RuntimeDictionary {
@@ -107,10 +98,16 @@ impl RuntimeSettings {
         state.settings.to_pretty_json()
     }
 
+    pub async fn get(&self) -> Result<Settings, String> {
+        let state = self.runtime.state.read().await;
+        Ok(state.settings.clone())
+    }
+
     pub async fn get_appearance(&self) -> Result<AppearanceSettings, String> {
         Ok(self.get_section(|s| &s.appearance).await)
     }
 
+    #[frb(positional)]
     pub async fn update_appearance(
         &self,
         patch: AppearanceSettingsPatch,
@@ -122,6 +119,7 @@ impl RuntimeSettings {
         Ok(self.get_section(|s| &s.shortcuts).await)
     }
 
+    #[frb(positional)]
     pub async fn update_shortcuts(
         &self,
         patch: ShortcutSettingsPatch,
@@ -133,6 +131,7 @@ impl RuntimeSettings {
         Ok(self.get_section(|s| &s.advanced).await)
     }
 
+    #[frb(positional)]
     pub async fn update_advanced(
         &self,
         patch: AdvancedSettingsPatch,
@@ -142,13 +141,31 @@ impl RuntimeSettings {
 
     pub async fn list_providers(&self) -> Result<Vec<ProviderConfigEntry>, String> {
         let state = self.runtime.state.read().await;
-        state
+        Ok(state
             .settings
-            .engine
             .providers
             .iter()
-            .map(|(id, config)| provider_entry(id, config))
-            .collect()
+            .map(|(provider_id, provider)| {
+                let capabilities = state
+                    .engine
+                    .require(provider_id)
+                    .map(|p| {
+                        p.capabilities()
+                            .into_iter()
+                            .map(|c| {
+                                serde_json::to_value(&c)
+                                    .ok()
+                                    .and_then(|v| v.as_str().map(ToOwned::to_owned))
+                                    .unwrap_or_default()
+                            })
+                            .collect::<Vec<_>>()
+                    })
+                    .unwrap_or_default();
+                let mut entry = normalized_provider_entry(provider_id, provider);
+                entry.capabilities = capabilities;
+                entry
+            })
+            .collect())
     }
 
     pub async fn get_provider(
@@ -157,27 +174,38 @@ impl RuntimeSettings {
     ) -> Result<Option<ProviderConfigEntry>, String> {
         let provider_id = validate_provider_id(provider_id)?;
         let state = self.runtime.state.read().await;
-        state
+        Ok(state
             .settings
-            .engine
             .providers
             .get(&provider_id)
-            .map(|config| provider_entry(&provider_id, config))
-            .transpose()
+            .map(|provider| normalized_provider_entry(&provider_id, provider)))
     }
 
     pub async fn update_provider(
         &self,
         provider_id: String,
-        config_yaml: String,
+        provider_type: String,
+        fields: std::collections::HashMap<String, String>,
     ) -> Result<ProviderConfigEntry, String> {
         let provider_id = validate_provider_id(provider_id)?;
-        let config_yaml = validate_required("config_yaml", config_yaml)?;
-        let config = engine::parse_provider_config(&config_yaml)?;
+        let provider_type = validate_required("provider_type", provider_type)?;
+        let entry = ProviderConfigEntry {
+            id: provider_id.clone(),
+            r#type: provider_type,
+            fields,
+            capabilities: Vec::new(),
+        };
+        let config = crate::domain::settings::provider_config_from_settings(&entry)?;
 
         self.commit_settings(move |settings| {
-            let entry = provider_entry(&provider_id, &config)?;
-            settings.engine.providers.insert(provider_id, config);
+            let entry = provider_entry_from_config(&provider_id, &config)?;
+            if let Some(existing) = settings.providers.get_mut(&provider_id) {
+                existing.id = provider_id;
+                existing.r#type = entry.r#type.clone();
+                existing.fields = entry.fields.clone();
+            } else {
+                settings.providers.insert(provider_id, entry.clone());
+            }
             Ok(entry)
         })
         .await
@@ -189,13 +217,10 @@ impl RuntimeSettings {
     ) -> Result<Option<ProviderConfigEntry>, String> {
         let provider_id = validate_provider_id(provider_id)?;
         self.commit_settings(move |settings| {
-            settings
-                .engine
+            Ok(settings
                 .providers
                 .remove(&provider_id)
-                .as_ref()
-                .map(|config| provider_entry(&provider_id, config))
-                .transpose()
+                .map(|provider| normalized_provider_entry(&provider_id, &provider)))
         })
         .await
     }
@@ -228,8 +253,9 @@ impl RuntimeSettings {
         let mut state = self.runtime.state.write().await;
         let mut next_settings = state.settings.clone();
         let result = update(&mut next_settings)?;
+        next_settings.touch_last_updated()?;
 
-        let engine_changed = next_settings.engine != state.settings.engine;
+        let engine_changed = next_settings.providers != state.settings.providers;
 
         if engine_changed {
             let next_engine = engine::build_from_settings(&next_settings)?;
@@ -248,6 +274,7 @@ impl RuntimeSettings {
 }
 
 impl RuntimeTranslation {
+    #[frb(positional)]
     pub async fn translate(&self, request: TranslateRequest) -> Result<TranslateResponse, String> {
         let provider_id = self.provider_id.clone();
         let runtime = self.runtime.clone();
@@ -275,6 +302,7 @@ impl RuntimeTranslation {
 }
 
 impl RuntimeDictionary {
+    #[frb(positional)]
     pub async fn lookup(&self, request: LookUpRequest) -> Result<LookUpResponse, String> {
         let provider_id = self.provider_id.clone();
         let runtime = self.runtime.clone();
@@ -306,16 +334,15 @@ pub fn init_app() {
     flutter_rust_bridge::setup_default_user_utils();
 }
 
-fn provider_entry(
+fn normalized_provider_entry(
     provider_id: &str,
-    config: &ProviderConfig,
-) -> Result<ProviderConfigEntry, String> {
-    Ok(ProviderConfigEntry {
-        id: provider_id.to_owned(),
-        r#type: config.provider_type.as_str().to_owned(),
-        config_yaml: serde_yaml::to_string(config)
-            .map_err(|error| format!("failed to encode provider config yaml: {error}"))?,
-    })
+    provider: &ProviderConfigEntry,
+) -> ProviderConfigEntry {
+    let mut provider = provider.clone();
+    if provider.id.trim().is_empty() {
+        provider.id = provider_id.to_owned();
+    }
+    provider
 }
 
 fn runtime_settings_file_path(data_dir: &str) -> PathBuf {
@@ -384,6 +411,52 @@ mod tests {
         ));
 
         Runtime::new(data_dir.display().to_string()).expect("failed to create runtime")
+    }
+
+    fn current_timestamp_millis() -> u64 {
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .expect("time went backwards")
+            .as_millis()
+            .try_into()
+            .expect("timestamp does not fit in u64")
+    }
+
+    #[test]
+    fn commit_settings_updates_last_updated() {
+        let runtime = create_runtime();
+
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(async {
+                let before = current_timestamp_millis();
+                runtime
+                    .settings()
+                    .update_appearance(AppearanceSettingsPatch {
+                        language: Some("en".to_owned()),
+                        theme_mode: None,
+                    })
+                    .await
+                    .expect("failed to update appearance");
+                let after = current_timestamp_millis();
+
+                let json = runtime
+                    .settings()
+                    .get_json()
+                    .await
+                    .expect("failed to get settings json");
+                let value = serde_json::from_str::<serde_json::Value>(&json)
+                    .expect("settings json should parse");
+                let last_updated = value
+                    .get("lastUpdated")
+                    .and_then(serde_json::Value::as_u64)
+                    .expect("lastUpdated should be a number");
+
+                assert!(last_updated >= before);
+                assert!(last_updated <= after);
+            });
     }
 
     #[test]

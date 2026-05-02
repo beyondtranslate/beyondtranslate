@@ -12,8 +12,11 @@ use serde_json::Value;
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct BaiduProviderConfig {
+    #[serde(rename = "appId", alias = "app_id")]
     pub app_id: String,
+    #[serde(rename = "appKey", alias = "app_key")]
     pub app_key: String,
+    #[serde(rename = "baseUrl", alias = "base_url")]
     pub base_url: Option<String>,
 }
 

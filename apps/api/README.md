@@ -100,8 +100,8 @@ Current config template:
 providers:
   iciba:
     type: iciba
-    api_key: ${ICIBA_API_KEY}
-    base_url: ${ICIBA_BASE_URL}
+    appKey: ${ICIBA_API_KEY}
+    baseUrl: ${ICIBA_BASE_URL}
 ```
 
 ## Environment variables

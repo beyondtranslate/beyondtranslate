@@ -20,8 +20,11 @@ type HmacSha1 = Hmac<Sha1>;
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct TencentProviderConfig {
+    #[serde(rename = "secretId", alias = "secret_id")]
     pub secret_id: String,
+    #[serde(rename = "secretKey", alias = "secret_key")]
     pub secret_key: String,
+    #[serde(rename = "baseUrl", alias = "base_url")]
     pub base_url: Option<String>,
 }
 

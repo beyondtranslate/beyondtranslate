@@ -7,20 +7,14 @@ struct ProvidersView: View {
   var body: some View {
     SettingsPage(title: "Providers") {
       Section {
-        Text("Providers are configuration wrappers. Traditional providers can later generate translation and dictionary services, while LLM providers are reserved for model-based workflows.")
-          .font(.system(size: 12))
-          .foregroundStyle(.secondary)
+        Text(
+          "Providers are configuration wrappers that can generate translation and dictionary services."
+        )
+        .font(.system(size: 12))
+        .foregroundStyle(.secondary)
       }
 
-      providerSection(
-        listKind: .traditional,
-        providers: viewModel.traditionalProviders
-      )
-
-      providerSection(
-        listKind: .llm,
-        providers: viewModel.llmProviders
-      )
+      providerSection(providers: viewModel.providers)
     }
     .sheet(item: $draft) { item in
       ProviderEditorSheet(draft: item) { updatedDraft in
@@ -30,16 +24,33 @@ struct ProvidersView: View {
         draft = nil
       }
     }
+    .alert(
+      "Error",
+      isPresented: Binding(
+        get: { viewModel.errorMessage != nil },
+        set: { if !$0 { viewModel.errorMessage = nil } }
+      )
+    ) {
+      Button("OK") { viewModel.errorMessage = nil }
+    } message: {
+      if let msg = viewModel.errorMessage {
+        Text(msg)
+      }
+    }
   }
 
   @ViewBuilder
-  private func providerSection(
-    listKind: ProviderListKind,
-    providers: [ProviderItem]
-  ) -> some View {
+  private func providerSection(providers: [ProviderItem]) -> some View {
     Section {
-      if providers.isEmpty {
-        Text(listKind.emptyDescription)
+      if viewModel.isLoading {
+        HStack {
+          Spacer()
+          ProgressView()
+          Spacer()
+        }
+        .padding(.vertical, 8)
+      } else if providers.isEmpty {
+        Text("No providers configured. Add one to enable translation services.")
           .foregroundStyle(.secondary)
       } else {
         ForEach(providers) { provider in
@@ -48,18 +59,21 @@ struct ProvidersView: View {
             onEdit: {
               draft = .edit(item: provider)
             },
+            onDelete: {
+              viewModel.deleteProvider(provider.id)
+            },
             onToggle: { isEnabled in
-              viewModel.toggleProvider(provider.id, in: listKind, isEnabled: isEnabled)
+              viewModel.toggleProvider(provider.id, isEnabled: isEnabled)
             }
           )
         }
       }
     } header: {
       SettingSectionHeader(
-        title: listKind.title,
-        buttonTitle: listKind.addTitle
+        title: "Providers",
+        buttonTitle: "Add Provider"
       ) {
-        draft = .new(listKind: listKind)
+        draft = .new()
       }
     }
   }
@@ -68,12 +82,15 @@ struct ProvidersView: View {
 private struct ProviderRow: View {
   let provider: ProviderItem
   let onEdit: () -> Void
+  let onDelete: () -> Void
   let onToggle: (Bool) -> Void
+
+  @State private var showDeleteConfirm = false
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       HStack(alignment: .firstTextBaseline, spacing: 12) {
-        Image(systemName: provider.listKind == .llm ? "brain.head.profile" : "globe")
+        Image(systemName: "server.rack")
           .font(.system(size: 18))
           .foregroundStyle(Color.accentColor)
 
@@ -81,52 +98,64 @@ private struct ProviderRow: View {
           HStack(spacing: 8) {
             Text(provider.name)
               .font(.headline)
-            Text(provider.hosting.title)
+            Text(provider.description)
               .font(.system(size: 11, weight: .medium))
               .foregroundStyle(.secondary)
           }
-
-          Text(provider.description)
-            .font(.system(size: 12))
-            .foregroundStyle(.secondary)
         }
 
         Spacer()
 
-        Toggle("", isOn: Binding(
-          get: { provider.isEnabled },
-          set: onToggle
-        ))
+        Toggle(
+          "",
+          isOn: Binding(
+            get: { provider.isEnabled },
+            set: onToggle
+          )
+        )
         .labelsHidden()
 
         Button("Edit", action: onEdit)
+
+        Button(role: .destructive) {
+          showDeleteConfirm = true
+        } label: {
+          Image(systemName: "trash")
+        }
+        .buttonStyle(.borderless)
+        .foregroundStyle(.secondary)
+        .confirmationDialog(
+          "Delete \"\(provider.name)\"?",
+          isPresented: $showDeleteConfirm,
+          titleVisibility: .visible
+        ) {
+          Button("Delete", role: .destructive, action: onDelete)
+          Button("Cancel", role: .cancel) {}
+        } message: {
+          Text("This action cannot be undone.")
+        }
       }
 
-      HStack(spacing: 8) {
-        Label(provider.endpoint, systemImage: "link")
-          .font(.system(size: 12))
-          .foregroundStyle(.secondary)
-
-        Text(provider.apiKeyHeader)
-          .font(.system(size: 11, weight: .medium, design: .monospaced))
-          .padding(.horizontal, 8)
-          .padding(.vertical, 4)
-          .background(
-            Capsule(style: .continuous)
-              .fill(Color(nsColor: .underPageBackgroundColor))
-          )
+      if !provider.endpoint.isEmpty {
+        HStack(spacing: 8) {
+          Label(provider.endpoint, systemImage: "link")
+            .font(.system(size: 12))
+            .foregroundStyle(.secondary)
+        }
       }
 
-      HStack(spacing: 8) {
-        ForEach(provider.capabilities) { capability in
-          Text(capability.title)
-            .font(.system(size: 11, weight: .medium))
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(
-              Capsule(style: .continuous)
-                .fill(Color.accentColor.opacity(0.12))
-            )
+      if !provider.capabilities.isEmpty {
+        HStack(spacing: 8) {
+          ForEach(provider.capabilities) { capability in
+            Text(capability.rawValue.capitalized)
+              .font(.system(size: 11, weight: .medium))
+              .padding(.horizontal, 8)
+              .padding(.vertical, 4)
+              .background(
+                Capsule(style: .continuous)
+                  .fill(Color.accentColor.opacity(0.12))
+              )
+          }
         }
       }
     }
@@ -141,47 +170,102 @@ private struct ProviderEditorSheet: View {
   let onSave: (ProviderDraft) -> Void
   let onCancel: () -> Void
 
+  private var canSave: Bool {
+    guard !draft.backendID.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+      return false
+    }
+    return draft.providerType.configFields
+      .filter { !$0.isOptional }
+      .allSatisfy {
+        !(draft.fields[$0.key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+          .isEmpty
+      }
+  }
+
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
+      // Header
       VStack(alignment: .leading, spacing: 4) {
         Text(draft.title)
           .font(.title2.weight(.semibold))
-        Text("Enter the information for the provider.")
+        Text("Configure a translation or dictionary provider.")
           .foregroundStyle(.secondary)
       }
 
-      SettingPicker("", selection: $draft.hosting) {
-        ForEach(ProviderHostingOption.allCases) { option in
-          Text(option.title).tag(option)
+      Form {
+        // Provider ID (read-only when editing)
+        LabeledContent {
+          TextField("e.g. deepl-main", text: $draft.backendID)
+            .disabled(draft.localID != nil)
+        } label: {
+          Text("Provider ID")
+        }
+
+        // Provider type picker
+        Picker("Provider Type", selection: $draft.providerType) {
+          ForEach(ProviderType.allCases) { type in
+            Text(type.rawValue).tag(type)
+          }
+        }
+        .disabled(draft.localID != nil)
+        .onChange(of: draft.providerType) { _ in
+          // Clear fields when type changes to avoid stale keys
+          draft.fields = [:]
+        }
+
+        // Dynamic fields based on selected provider type
+        ForEach(draft.providerType.configFields) { fieldDef in
+          LabeledContent {
+            if fieldDef.isSecret {
+              SecureField(
+                fieldDef.isOptional ? "Optional" : "Required",
+                text: fieldBinding(fieldDef.key)
+              )
+            } else {
+              TextField(
+                fieldDef.placeholder.isEmpty
+                  ? (fieldDef.isOptional ? "Optional" : "Required")
+                  : fieldDef.placeholder,
+                text: fieldBinding(fieldDef.key)
+              )
+            }
+          } label: {
+            HStack(spacing: 4) {
+              Text(fieldDef.label)
+              if fieldDef.isOptional {
+                Text("(Optional)")
+                  .font(.system(size: 11))
+                  .foregroundStyle(.secondary)
+              }
+            }
+          }
         }
       }
-      .labelsHidden()
-      .pickerStyle(.segmented)
-
-      Form {
-        TextField("Provider Name", text: $draft.name)
-        TextField("URL", text: $draft.endpoint)
-        SecureField("API Key (Optional)", text: $draft.apiKey)
-        TextField("API Key Header", text: $draft.apiKeyHeader)
-        TextField("Description", text: $draft.description)
-      }
       .formStyle(.grouped)
-      .frame(maxHeight: 260)
 
+      // Actions
       HStack {
         Spacer()
         Button("Cancel") {
           onCancel()
           dismiss()
         }
-        Button(draft.providerID == nil ? "Add" : "Save") {
+        Button(draft.localID == nil ? "Add" : "Save") {
           onSave(draft)
           dismiss()
         }
         .keyboardShortcut(.defaultAction)
+        .disabled(!canSave)
       }
     }
     .padding(24)
-    .frame(width: 560)
+    .frame(width: 480)
+  }
+
+  private func fieldBinding(_ key: String) -> Binding<String> {
+    Binding(
+      get: { draft.fields[key] ?? "" },
+      set: { draft.fields[key] = $0 }
+    )
   }
 }

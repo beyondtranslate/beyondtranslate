@@ -2,8 +2,8 @@
 
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    LanguagePair, Provider, TextTranslation, TranslateRequest, TranslateResponse,
-    TranslationError, TranslationService,
+    LanguagePair, Provider, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
+    TranslationService,
 };
 
 use crate::common::http_client::HttpClient;
@@ -13,7 +13,9 @@ use serde_json::{json, Value};
 #[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct CaiyunProviderConfig {
     pub token: String,
+    #[serde(rename = "requestId", alias = "request_id")]
     pub request_id: String,
+    #[serde(rename = "baseUrl", alias = "base_url")]
     pub base_url: Option<String>,
 }
 

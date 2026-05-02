@@ -5,7 +5,7 @@ import 'package:path/path.dart' as path;
 import '../rust/api/runtime.dart' as rust_api;
 export '../rust/api/mirrors.dart'
     show LookUpRequest, LookUpResponse, TranslateRequest, TranslateResponse;
-export '../rust/api/runtime.dart' show ProviderConfigEntry;
+export '../rust/domain/settings.dart' show ProviderConfigEntry;
 
 String? _dataDir;
 

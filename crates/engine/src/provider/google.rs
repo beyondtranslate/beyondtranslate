@@ -12,7 +12,9 @@ use serde_json::{json, Value};
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct GoogleProviderConfig {
+    #[serde(rename = "appKey", alias = "apiKey", alias = "api_key")]
     pub api_key: String,
+    #[serde(rename = "baseUrl", alias = "base_url")]
     pub base_url: Option<String>,
 }
 

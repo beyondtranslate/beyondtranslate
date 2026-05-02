@@ -201,7 +201,10 @@ macro_rules! build_provider_fn {
     };
 }
 
-fn build_provider(provider_id: &str, config: ProviderConfig) -> Result<Arc<dyn Provider>, EngineError> {
+fn build_provider(
+    provider_id: &str,
+    config: ProviderConfig,
+) -> Result<Arc<dyn Provider>, EngineError> {
     match config.provider_type {
         ProviderType::Baidu => build_baidu_provider(provider_id, config.decode(provider_id)?),
         ProviderType::Caiyun => build_caiyun_provider(provider_id, config.decode(provider_id)?),

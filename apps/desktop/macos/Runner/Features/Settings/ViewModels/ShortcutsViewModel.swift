@@ -9,25 +9,23 @@ final class ShortcutsViewModel: ObservableObject {
   @Published var extractClipboard: ShortcutDisplay
   @Published var translateInput: ShortcutDisplay
 
-  private let settingsPlugin: NativeSettingsPlugin?
+  private let repository: SettingsRepository
 
   init(
-    settings: ShortcutSettingsState = ShortcutSettingsState(),
-    settingsPlugin: NativeSettingsPlugin? = nil
+    repository: SettingsRepository
   ) {
-    self.settingsPlugin = settingsPlugin
-    showOrHide = settings.showOrHide
-    hide = settings.hide
-    extractSelection = settings.extractSelection
-    extractCapture = settings.extractCapture
-    extractClipboard = settings.extractClipboard
-    translateInput = settings.translateInput
+    self.repository = repository
+    showOrHide = ShortcutDisplay(parts: [])
+    hide = ShortcutDisplay(parts: [])
+    extractSelection = ShortcutDisplay(parts: [])
+    extractCapture = ShortcutDisplay(parts: [])
+    extractClipboard = ShortcutDisplay(parts: [])
+    translateInput = ShortcutDisplay(parts: ["Control", "Shift", "Return"])
   }
 
   func load() async {
-    guard let settingsPlugin else { return }
     do {
-      apply(try await settingsPlugin.getShortcuts())
+      apply(try await repository.getShortcuts())
     } catch {
       // Keep the local preview/default state when the Rust-backed settings cannot be loaded.
     }
@@ -35,11 +33,16 @@ final class ShortcutsViewModel: ObservableObject {
 
   func setShowOrHide(_ shortcut: ShortcutDisplay) {
     showOrHide = shortcut
-    guard let settingsPlugin else { return }
     Task {
       do {
-        let updated = try await settingsPlugin.updateShortcuts(
-          ShortcutSettingsPatch(toggleApp: shortcut.rawValue)
+        let updated = try await repository.updateShortcuts(
+          ShortcutSettingsPatch(
+            toggleApp: shortcut.rawValue,
+            hideApp: nil,
+            extractFromScreenSelection: nil,
+            extractFromScreenCapture: nil,
+            extractFromClipboard: nil
+          )
         )
         apply(updated)
       } catch {
@@ -50,5 +53,9 @@ final class ShortcutsViewModel: ObservableObject {
 
   private func apply(_ settings: ShortcutSettings) {
     showOrHide = ShortcutDisplay(rawValue: settings.toggleApp)
+    hide = ShortcutDisplay(rawValue: settings.hideApp)
+    extractSelection = ShortcutDisplay(rawValue: settings.extractFromScreenSelection)
+    extractCapture = ShortcutDisplay(rawValue: settings.extractFromScreenCapture)
+    extractClipboard = ShortcutDisplay(rawValue: settings.extractFromClipboard)
   }
 }

@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1144536993;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1779129941;
 
 // Section: executor
 
@@ -158,6 +158,62 @@ fn wire__crate__api__runtime__RuntimeSettings_delete_provider_impl(
                             api_provider_id,
                         )
                         .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__runtime__RuntimeSettings_get_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "RuntimeSettings_get",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, String>(
+                    (move || async move {
+                        let mut api_that_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_that, 0, false,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_that_guard =
+                                        Some(api_that.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_that_guard = api_that_guard.unwrap();
+                        let output_ok =
+                            crate::api::runtime::RuntimeSettings::get(&*api_that_guard).await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -537,7 +593,7 @@ fn wire__crate__api__runtime__RuntimeSettings_update_advanced_impl(
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>,
             >>::sse_decode(&mut deserializer);
             let api_patch =
-                <crate::api::runtime::AdvancedSettingsPatch>::sse_decode(&mut deserializer);
+                <crate::domain::settings::AdvancedSettingsPatch>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, String>(
@@ -598,7 +654,7 @@ fn wire__crate__api__runtime__RuntimeSettings_update_appearance_impl(
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>,
             >>::sse_decode(&mut deserializer);
             let api_patch =
-                <crate::api::runtime::AppearanceSettingsPatch>::sse_decode(&mut deserializer);
+                <crate::domain::settings::AppearanceSettingsPatch>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, String>(
@@ -659,7 +715,9 @@ fn wire__crate__api__runtime__RuntimeSettings_update_provider_impl(
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>,
             >>::sse_decode(&mut deserializer);
             let api_provider_id = <String>::sse_decode(&mut deserializer);
-            let api_config_yaml = <String>::sse_decode(&mut deserializer);
+            let api_provider_type = <String>::sse_decode(&mut deserializer);
+            let api_fields =
+                <std::collections::HashMap<String, String>>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, String>(
@@ -684,7 +742,8 @@ fn wire__crate__api__runtime__RuntimeSettings_update_provider_impl(
                         let output_ok = crate::api::runtime::RuntimeSettings::update_provider(
                             &*api_that_guard,
                             api_provider_id,
-                            api_config_yaml,
+                            api_provider_type,
+                            api_fields,
                         )
                         .await?;
                         Ok(output_ok)
@@ -721,7 +780,7 @@ fn wire__crate__api__runtime__RuntimeSettings_update_shortcuts_impl(
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>,
             >>::sse_decode(&mut deserializer);
             let api_patch =
-                <crate::api::runtime::ShortcutSettingsPatch>::sse_decode(&mut deserializer);
+                <crate::domain::settings::ShortcutSettingsPatch>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, String>(
@@ -990,73 +1049,6 @@ fn wire__crate__api__runtime__Runtime_translation_impl(
         },
     )
 }
-fn wire__crate__api__runtime__advanced_settings_patch_default_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "advanced_settings_patch_default",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            deserializer.end();
-            move |context| {
-                transform_result_sse::<_, ()>((move || {
-                    let output_ok =
-                        Result::<_, ()>::Ok(crate::api::runtime::AdvancedSettingsPatch::default())?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
-fn wire__crate__api__runtime__appearance_settings_patch_default_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "appearance_settings_patch_default",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            deserializer.end();
-            move |context| {
-                transform_result_sse::<_, ()>((move || {
-                    let output_ok = Result::<_, ()>::Ok(
-                        crate::api::runtime::AppearanceSettingsPatch::default(),
-                    )?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
 fn wire__crate__api__runtime__init_app_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -1091,44 +1083,38 @@ fn wire__crate__api__runtime__init_app_impl(
         },
     )
 }
-fn wire__crate__api__runtime__shortcut_settings_patch_default_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "shortcut_settings_patch_default",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            deserializer.end();
-            move |context| {
-                transform_result_sse::<_, ()>((move || {
-                    let output_ok =
-                        Result::<_, ()>::Ok(crate::api::runtime::ShortcutSettingsPatch::default())?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
 
 // Section: static_checks
 
 #[allow(clippy::unnecessary_literal_unwrap)]
 const _: fn() = || {
+    {
+        let BaiduProviderConfig = None::<crate::api::mirrors::BaiduProviderConfig>.unwrap();
+        let _: String = BaiduProviderConfig.app_id;
+        let _: String = BaiduProviderConfig.app_key;
+        let _: Option<String> = BaiduProviderConfig.base_url;
+    }
+    {
+        let CaiyunProviderConfig = None::<crate::api::mirrors::CaiyunProviderConfig>.unwrap();
+        let _: String = CaiyunProviderConfig.token;
+        let _: String = CaiyunProviderConfig.request_id;
+        let _: Option<String> = CaiyunProviderConfig.base_url;
+    }
+    {
+        let DeepLProviderConfig = None::<crate::api::mirrors::DeepLProviderConfig>.unwrap();
+        let _: String = DeepLProviderConfig.api_key;
+        let _: Option<String> = DeepLProviderConfig.base_url;
+    }
+    {
+        let GoogleProviderConfig = None::<crate::api::mirrors::GoogleProviderConfig>.unwrap();
+        let _: String = GoogleProviderConfig.api_key;
+        let _: Option<String> = GoogleProviderConfig.base_url;
+    }
+    {
+        let IcibaProviderConfig = None::<crate::api::mirrors::IcibaProviderConfig>.unwrap();
+        let _: String = IcibaProviderConfig.api_key;
+        let _: Option<String> = IcibaProviderConfig.base_url;
+    }
     {
         let LookUpRequest = None::<crate::api::mirrors::LookUpRequest>.unwrap();
         let _: String = LookUpRequest.source_language;
@@ -1147,6 +1133,12 @@ const _: fn() = || {
         let _: Option<Vec<crate::api::mirrors::WordPhrase>> = LookUpResponse.phrases;
         let _: Option<Vec<crate::api::mirrors::WordTense>> = LookUpResponse.tenses;
         let _: Option<Vec<crate::api::mirrors::WordSentence>> = LookUpResponse.sentences;
+    }
+    {
+        let TencentProviderConfig = None::<crate::api::mirrors::TencentProviderConfig>.unwrap();
+        let _: String = TencentProviderConfig.secret_id;
+        let _: String = TencentProviderConfig.secret_key;
+        let _: Option<String> = TencentProviderConfig.base_url;
     }
     {
         let TextTranslation = None::<crate::api::mirrors::TextTranslation>.unwrap();
@@ -1199,6 +1191,13 @@ const _: fn() = || {
         let _: Option<String> = WordTense.r#type;
         let _: Option<String> = WordTense.name;
         let _: Option<Vec<String>> = WordTense.values;
+    }
+    {
+        let YoudaoProviderConfig = None::<crate::api::mirrors::YoudaoProviderConfig>.unwrap();
+        let _: String = YoudaoProviderConfig.app_key;
+        let _: String = YoudaoProviderConfig.app_secret;
+        let _: Option<String> = YoudaoProviderConfig.base_url;
+        let _: Option<String> = YoudaoProviderConfig.picture_base_url;
     }
 };
 
@@ -1259,6 +1258,23 @@ impl SseDecode for RuntimeTranslation {
     }
 }
 
+impl SseDecode for std::collections::HashMap<String, String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <Vec<(String, String)>>::sse_decode(deserializer);
+        return inner.into_iter().collect();
+    }
+}
+
+impl SseDecode for std::collections::HashMap<String, crate::domain::settings::ProviderConfigEntry> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner =
+            <Vec<(String, crate::domain::settings::ProviderConfigEntry)>>::sse_decode(deserializer);
+        return inner.into_iter().collect();
+    }
+}
+
 impl SseDecode for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Runtime>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1309,22 +1325,18 @@ impl SseDecode for crate::domain::settings::AdvancedSettings {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_launchAtLogin = <bool>::sse_decode(deserializer);
-        let mut var_proxy = <String>::sse_decode(deserializer);
         return crate::domain::settings::AdvancedSettings {
             launch_at_login: var_launchAtLogin,
-            proxy: var_proxy,
         };
     }
 }
 
-impl SseDecode for crate::api::runtime::AdvancedSettingsPatch {
+impl SseDecode for crate::domain::settings::AdvancedSettingsPatch {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_launchAtLogin = <Option<bool>>::sse_decode(deserializer);
-        let mut var_proxy = <Option<String>>::sse_decode(deserializer);
-        return crate::api::runtime::AdvancedSettingsPatch {
+        return crate::domain::settings::AdvancedSettingsPatch {
             launch_at_login: var_launchAtLogin,
-            proxy: var_proxy,
         };
     }
 }
@@ -1341,14 +1353,28 @@ impl SseDecode for crate::domain::settings::AppearanceSettings {
     }
 }
 
-impl SseDecode for crate::api::runtime::AppearanceSettingsPatch {
+impl SseDecode for crate::domain::settings::AppearanceSettingsPatch {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_language = <Option<String>>::sse_decode(deserializer);
         let mut var_themeMode = <Option<String>>::sse_decode(deserializer);
-        return crate::api::runtime::AppearanceSettingsPatch {
+        return crate::domain::settings::AppearanceSettingsPatch {
             language: var_language,
             theme_mode: var_themeMode,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::BaiduProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_appId = <String>::sse_decode(deserializer);
+        let mut var_appKey = <String>::sse_decode(deserializer);
+        let mut var_baseUrl = <Option<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::BaiduProviderConfig {
+            app_id: var_appId,
+            app_key: var_appKey,
+            base_url: var_baseUrl,
         };
     }
 }
@@ -1357,6 +1383,63 @@ impl SseDecode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_u8().unwrap() != 0
+    }
+}
+
+impl SseDecode for crate::api::mirrors::CaiyunProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_token = <String>::sse_decode(deserializer);
+        let mut var_requestId = <String>::sse_decode(deserializer);
+        let mut var_baseUrl = <Option<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::CaiyunProviderConfig {
+            token: var_token,
+            request_id: var_requestId,
+            base_url: var_baseUrl,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::DeepLProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_apiKey = <String>::sse_decode(deserializer);
+        let mut var_baseUrl = <Option<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::DeepLProviderConfig {
+            api_key: var_apiKey,
+            base_url: var_baseUrl,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::GoogleProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_apiKey = <String>::sse_decode(deserializer);
+        let mut var_baseUrl = <Option<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::GoogleProviderConfig {
+            api_key: var_apiKey,
+            base_url: var_baseUrl,
+        };
+    }
+}
+
+impl SseDecode for i32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_i32::<NativeEndian>().unwrap()
+    }
+}
+
+impl SseDecode for crate::api::mirrors::IcibaProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_apiKey = <String>::sse_decode(deserializer);
+        let mut var_baseUrl = <Option<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::IcibaProviderConfig {
+            api_key: var_apiKey,
+            base_url: var_baseUrl,
+        };
     }
 }
 
@@ -1384,15 +1467,41 @@ impl SseDecode for Vec<u8> {
     }
 }
 
-impl SseDecode for Vec<crate::api::runtime::ProviderConfigEntry> {
+impl SseDecode for Vec<crate::domain::settings::ProviderConfigEntry> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut len_ = <i32>::sse_decode(deserializer);
         let mut ans_ = vec![];
         for idx_ in 0..len_ {
-            ans_.push(<crate::api::runtime::ProviderConfigEntry>::sse_decode(
+            ans_.push(<crate::domain::settings::ProviderConfigEntry>::sse_decode(
                 deserializer,
             ));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<(String, crate::domain::settings::ProviderConfigEntry)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(
+                <(String, crate::domain::settings::ProviderConfigEntry)>::sse_decode(deserializer),
+            );
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<(String, String)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<(String, String)>::sse_decode(deserializer));
         }
         return ans_;
     }
@@ -1573,11 +1682,11 @@ impl SseDecode for Option<bool> {
     }
 }
 
-impl SseDecode for Option<crate::api::runtime::ProviderConfigEntry> {
+impl SseDecode for Option<crate::domain::settings::ProviderConfigEntry> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
-            return Some(<crate::api::runtime::ProviderConfigEntry>::sse_decode(
+            return Some(<crate::domain::settings::ProviderConfigEntry>::sse_decode(
                 deserializer,
             ));
         } else {
@@ -1688,16 +1797,78 @@ impl SseDecode for Option<Vec<crate::api::mirrors::WordTense>> {
     }
 }
 
-impl SseDecode for crate::api::runtime::ProviderConfigEntry {
+impl SseDecode for crate::domain::settings::ProviderConfigEntry {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_id = <String>::sse_decode(deserializer);
         let mut var_type = <String>::sse_decode(deserializer);
-        let mut var_configYaml = <String>::sse_decode(deserializer);
-        return crate::api::runtime::ProviderConfigEntry {
+        let mut var_fields = <std::collections::HashMap<String, String>>::sse_decode(deserializer);
+        let mut var_capabilities = <Vec<String>>::sse_decode(deserializer);
+        return crate::domain::settings::ProviderConfigEntry {
             id: var_id,
             r#type: var_type,
-            config_yaml: var_configYaml,
+            fields: var_fields,
+            capabilities: var_capabilities,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::ProviderType {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::mirrors::ProviderType::Baidu,
+            1 => crate::api::mirrors::ProviderType::Caiyun,
+            2 => crate::api::mirrors::ProviderType::DeepL,
+            3 => crate::api::mirrors::ProviderType::Google,
+            4 => crate::api::mirrors::ProviderType::Iciba,
+            5 => crate::api::mirrors::ProviderType::Tencent,
+            6 => crate::api::mirrors::ProviderType::Youdao,
+            _ => unreachable!("Invalid variant for ProviderType: {}", inner),
+        };
+    }
+}
+
+impl SseDecode for (String, crate::domain::settings::ProviderConfigEntry) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <String>::sse_decode(deserializer);
+        let mut var_field1 =
+            <crate::domain::settings::ProviderConfigEntry>::sse_decode(deserializer);
+        return (var_field0, var_field1);
+    }
+}
+
+impl SseDecode for (String, String) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <String>::sse_decode(deserializer);
+        let mut var_field1 = <String>::sse_decode(deserializer);
+        return (var_field0, var_field1);
+    }
+}
+
+impl SseDecode for crate::domain::settings::Settings {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_lastUpdated = <u64>::sse_decode(deserializer);
+        let mut var_providers = <std::collections::HashMap<
+            String,
+            crate::domain::settings::ProviderConfigEntry,
+        >>::sse_decode(deserializer);
+        let mut var_shortcuts =
+            <crate::domain::settings::ShortcutSettings>::sse_decode(deserializer);
+        let mut var_appearance =
+            <crate::domain::settings::AppearanceSettings>::sse_decode(deserializer);
+        let mut var_advanced =
+            <crate::domain::settings::AdvancedSettings>::sse_decode(deserializer);
+        return crate::domain::settings::Settings {
+            last_updated: var_lastUpdated,
+            providers: var_providers,
+            shortcuts: var_shortcuts,
+            appearance: var_appearance,
+            advanced: var_advanced,
         };
     }
 }
@@ -1706,18 +1877,48 @@ impl SseDecode for crate::domain::settings::ShortcutSettings {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_toggleApp = <String>::sse_decode(deserializer);
+        let mut var_hideApp = <String>::sse_decode(deserializer);
+        let mut var_extractFromScreenSelection = <String>::sse_decode(deserializer);
+        let mut var_extractFromScreenCapture = <String>::sse_decode(deserializer);
+        let mut var_extractFromClipboard = <String>::sse_decode(deserializer);
         return crate::domain::settings::ShortcutSettings {
             toggle_app: var_toggleApp,
+            hide_app: var_hideApp,
+            extract_from_screen_selection: var_extractFromScreenSelection,
+            extract_from_screen_capture: var_extractFromScreenCapture,
+            extract_from_clipboard: var_extractFromClipboard,
         };
     }
 }
 
-impl SseDecode for crate::api::runtime::ShortcutSettingsPatch {
+impl SseDecode for crate::domain::settings::ShortcutSettingsPatch {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_toggleApp = <Option<String>>::sse_decode(deserializer);
-        return crate::api::runtime::ShortcutSettingsPatch {
+        let mut var_hideApp = <Option<String>>::sse_decode(deserializer);
+        let mut var_extractFromScreenSelection = <Option<String>>::sse_decode(deserializer);
+        let mut var_extractFromScreenCapture = <Option<String>>::sse_decode(deserializer);
+        let mut var_extractFromClipboard = <Option<String>>::sse_decode(deserializer);
+        return crate::domain::settings::ShortcutSettingsPatch {
             toggle_app: var_toggleApp,
+            hide_app: var_hideApp,
+            extract_from_screen_selection: var_extractFromScreenSelection,
+            extract_from_screen_capture: var_extractFromScreenCapture,
+            extract_from_clipboard: var_extractFromClipboard,
+        };
+    }
+}
+
+impl SseDecode for crate::api::mirrors::TencentProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_secretId = <String>::sse_decode(deserializer);
+        let mut var_secretKey = <String>::sse_decode(deserializer);
+        let mut var_baseUrl = <Option<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::TencentProviderConfig {
+            secret_id: var_secretId,
+            secret_key: var_secretKey,
+            base_url: var_baseUrl,
         };
     }
 }
@@ -1758,6 +1959,13 @@ impl SseDecode for crate::api::mirrors::TranslateResponse {
         return crate::api::mirrors::TranslateResponse {
             translations: var_translations,
         };
+    }
+}
+
+impl SseDecode for u64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_u64::<NativeEndian>().unwrap()
     }
 }
 
@@ -1862,10 +2070,19 @@ impl SseDecode for crate::api::mirrors::WordTense {
     }
 }
 
-impl SseDecode for i32 {
+impl SseDecode for crate::api::mirrors::YoudaoProviderConfig {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        deserializer.cursor.read_i32::<NativeEndian>().unwrap()
+        let mut var_appKey = <String>::sse_decode(deserializer);
+        let mut var_appSecret = <String>::sse_decode(deserializer);
+        let mut var_baseUrl = <Option<String>>::sse_decode(deserializer);
+        let mut var_pictureBaseUrl = <Option<String>>::sse_decode(deserializer);
+        return crate::api::mirrors::YoudaoProviderConfig {
+            app_key: var_appKey,
+            app_secret: var_appSecret,
+            base_url: var_baseUrl,
+            picture_base_url: var_pictureBaseUrl,
+        };
     }
 }
 
@@ -1890,91 +2107,74 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        3 => wire__crate__api__runtime__RuntimeSettings_get_advanced_impl(
+        3 => wire__crate__api__runtime__RuntimeSettings_get_impl(port, ptr, rust_vec_len, data_len),
+        4 => wire__crate__api__runtime__RuntimeSettings_get_advanced_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        4 => wire__crate__api__runtime__RuntimeSettings_get_appearance_impl(
+        5 => wire__crate__api__runtime__RuntimeSettings_get_appearance_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        5 => wire__crate__api__runtime__RuntimeSettings_get_json_impl(
+        6 => wire__crate__api__runtime__RuntimeSettings_get_json_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        6 => wire__crate__api__runtime__RuntimeSettings_get_provider_impl(
+        7 => wire__crate__api__runtime__RuntimeSettings_get_provider_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        7 => wire__crate__api__runtime__RuntimeSettings_get_shortcuts_impl(
+        8 => wire__crate__api__runtime__RuntimeSettings_get_shortcuts_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        8 => wire__crate__api__runtime__RuntimeSettings_list_providers_impl(
+        9 => wire__crate__api__runtime__RuntimeSettings_list_providers_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        9 => wire__crate__api__runtime__RuntimeSettings_update_advanced_impl(
+        10 => wire__crate__api__runtime__RuntimeSettings_update_advanced_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__runtime__RuntimeSettings_update_appearance_impl(
+        11 => wire__crate__api__runtime__RuntimeSettings_update_appearance_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__runtime__RuntimeSettings_update_provider_impl(
+        12 => wire__crate__api__runtime__RuntimeSettings_update_provider_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        12 => wire__crate__api__runtime__RuntimeSettings_update_shortcuts_impl(
+        13 => wire__crate__api__runtime__RuntimeSettings_update_shortcuts_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        13 => wire__crate__api__runtime__RuntimeTranslation_translate_impl(
+        14 => wire__crate__api__runtime__RuntimeTranslation_translate_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        18 => wire__crate__api__runtime__advanced_settings_patch_default_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        19 => wire__crate__api__runtime__appearance_settings_patch_default_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        20 => wire__crate__api__runtime__init_app_impl(port, ptr, rust_vec_len, data_len),
-        21 => wire__crate__api__runtime__shortcut_settings_patch_default_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
+        19 => wire__crate__api__runtime__init_app_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -1987,10 +2187,10 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        14 => wire__crate__api__runtime__Runtime_dictionary_impl(ptr, rust_vec_len, data_len),
-        15 => wire__crate__api__runtime__Runtime_new_impl(ptr, rust_vec_len, data_len),
-        16 => wire__crate__api__runtime__Runtime_settings_impl(ptr, rust_vec_len, data_len),
-        17 => wire__crate__api__runtime__Runtime_translation_impl(ptr, rust_vec_len, data_len),
+        15 => wire__crate__api__runtime__Runtime_dictionary_impl(ptr, rust_vec_len, data_len),
+        16 => wire__crate__api__runtime__Runtime_new_impl(ptr, rust_vec_len, data_len),
+        17 => wire__crate__api__runtime__Runtime_settings_impl(ptr, rust_vec_len, data_len),
+        18 => wire__crate__api__runtime__Runtime_translation_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -2063,11 +2263,7 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<RuntimeTranslation>> for Runti
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::domain::settings::AdvancedSettings {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.launch_at_login.into_into_dart().into_dart(),
-            self.proxy.into_into_dart().into_dart(),
-        ]
-        .into_dart()
+        [self.launch_at_login.into_into_dart().into_dart()].into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -2082,23 +2278,19 @@ impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::AdvancedSettings
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::runtime::AdvancedSettingsPatch {
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::AdvancedSettingsPatch {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.launch_at_login.into_into_dart().into_dart(),
-            self.proxy.into_into_dart().into_dart(),
-        ]
-        .into_dart()
+        [self.launch_at_login.into_into_dart().into_dart()].into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::runtime::AdvancedSettingsPatch
+    for crate::domain::settings::AdvancedSettingsPatch
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::runtime::AdvancedSettingsPatch>
-    for crate::api::runtime::AdvancedSettingsPatch
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::AdvancedSettingsPatch>
+    for crate::domain::settings::AdvancedSettingsPatch
 {
-    fn into_into_dart(self) -> crate::api::runtime::AdvancedSettingsPatch {
+    fn into_into_dart(self) -> crate::domain::settings::AdvancedSettingsPatch {
         self
     }
 }
@@ -2124,7 +2316,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::AppearanceSettin
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::runtime::AppearanceSettingsPatch {
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::AppearanceSettingsPatch {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.language.into_into_dart().into_dart(),
@@ -2134,14 +2326,121 @@ impl flutter_rust_bridge::IntoDart for crate::api::runtime::AppearanceSettingsPa
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::runtime::AppearanceSettingsPatch
+    for crate::domain::settings::AppearanceSettingsPatch
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::runtime::AppearanceSettingsPatch>
-    for crate::api::runtime::AppearanceSettingsPatch
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::AppearanceSettingsPatch>
+    for crate::domain::settings::AppearanceSettingsPatch
 {
-    fn into_into_dart(self) -> crate::api::runtime::AppearanceSettingsPatch {
+    fn into_into_dart(self) -> crate::domain::settings::AppearanceSettingsPatch {
         self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::BaiduProviderConfig> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.app_id.into_into_dart().into_dart(),
+            self.0.app_key.into_into_dart().into_dart(),
+            self.0.base_url.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::BaiduProviderConfig>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::BaiduProviderConfig>>
+    for crate::api::mirrors::BaiduProviderConfig
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::BaiduProviderConfig> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::CaiyunProviderConfig> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.token.into_into_dart().into_dart(),
+            self.0.request_id.into_into_dart().into_dart(),
+            self.0.base_url.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::CaiyunProviderConfig>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::CaiyunProviderConfig>>
+    for crate::api::mirrors::CaiyunProviderConfig
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::CaiyunProviderConfig> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::DeepLProviderConfig> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.api_key.into_into_dart().into_dart(),
+            self.0.base_url.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::DeepLProviderConfig>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::DeepLProviderConfig>>
+    for crate::api::mirrors::DeepLProviderConfig
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::DeepLProviderConfig> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::GoogleProviderConfig> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.api_key.into_into_dart().into_dart(),
+            self.0.base_url.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::GoogleProviderConfig>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::GoogleProviderConfig>>
+    for crate::api::mirrors::GoogleProviderConfig
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::GoogleProviderConfig> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::IcibaProviderConfig> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.api_key.into_into_dart().into_dart(),
+            self.0.base_url.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::IcibaProviderConfig>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::IcibaProviderConfig>>
+    for crate::api::mirrors::IcibaProviderConfig
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::IcibaProviderConfig> {
+        self.into()
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -2196,31 +2495,93 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::LookUpRes
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::runtime::ProviderConfigEntry {
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::ProviderConfigEntry {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.id.into_into_dart().into_dart(),
             self.r#type.into_into_dart().into_dart(),
-            self.config_yaml.into_into_dart().into_dart(),
+            self.fields.into_into_dart().into_dart(),
+            self.capabilities.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::runtime::ProviderConfigEntry
+    for crate::domain::settings::ProviderConfigEntry
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::runtime::ProviderConfigEntry>
-    for crate::api::runtime::ProviderConfigEntry
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::ProviderConfigEntry>
+    for crate::domain::settings::ProviderConfigEntry
 {
-    fn into_into_dart(self) -> crate::api::runtime::ProviderConfigEntry {
+    fn into_into_dart(self) -> crate::domain::settings::ProviderConfigEntry {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::ProviderType> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self.0 {
+            crate::api::mirrors::ProviderType::Baidu => 0.into_dart(),
+            crate::api::mirrors::ProviderType::Caiyun => 1.into_dart(),
+            crate::api::mirrors::ProviderType::DeepL => 2.into_dart(),
+            crate::api::mirrors::ProviderType::Google => 3.into_dart(),
+            crate::api::mirrors::ProviderType::Iciba => 4.into_dart(),
+            crate::api::mirrors::ProviderType::Tencent => 5.into_dart(),
+            crate::api::mirrors::ProviderType::Youdao => 6.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::ProviderType>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::ProviderType>>
+    for crate::api::mirrors::ProviderType
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::ProviderType> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::Settings {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.last_updated.into_into_dart().into_dart(),
+            self.providers.into_into_dart().into_dart(),
+            self.shortcuts.into_into_dart().into_dart(),
+            self.appearance.into_into_dart().into_dart(),
+            self.advanced.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::domain::settings::Settings
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::Settings>
+    for crate::domain::settings::Settings
+{
+    fn into_into_dart(self) -> crate::domain::settings::Settings {
         self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::domain::settings::ShortcutSettings {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.toggle_app.into_into_dart().into_dart()].into_dart()
+        [
+            self.toggle_app.into_into_dart().into_dart(),
+            self.hide_app.into_into_dart().into_dart(),
+            self.extract_from_screen_selection
+                .into_into_dart()
+                .into_dart(),
+            self.extract_from_screen_capture
+                .into_into_dart()
+                .into_dart(),
+            self.extract_from_clipboard.into_into_dart().into_dart(),
+        ]
+        .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -2235,20 +2596,53 @@ impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::ShortcutSettings
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::runtime::ShortcutSettingsPatch {
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::ShortcutSettingsPatch {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.toggle_app.into_into_dart().into_dart()].into_dart()
+        [
+            self.toggle_app.into_into_dart().into_dart(),
+            self.hide_app.into_into_dart().into_dart(),
+            self.extract_from_screen_selection
+                .into_into_dart()
+                .into_dart(),
+            self.extract_from_screen_capture
+                .into_into_dart()
+                .into_dart(),
+            self.extract_from_clipboard.into_into_dart().into_dart(),
+        ]
+        .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::runtime::ShortcutSettingsPatch
+    for crate::domain::settings::ShortcutSettingsPatch
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::runtime::ShortcutSettingsPatch>
-    for crate::api::runtime::ShortcutSettingsPatch
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::ShortcutSettingsPatch>
+    for crate::domain::settings::ShortcutSettingsPatch
 {
-    fn into_into_dart(self) -> crate::api::runtime::ShortcutSettingsPatch {
+    fn into_into_dart(self) -> crate::domain::settings::ShortcutSettingsPatch {
         self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::TencentProviderConfig> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.secret_id.into_into_dart().into_dart(),
+            self.0.secret_key.into_into_dart().into_dart(),
+            self.0.base_url.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::TencentProviderConfig>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::TencentProviderConfig>>
+    for crate::api::mirrors::TencentProviderConfig
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::TencentProviderConfig> {
+        self.into()
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -2454,6 +2848,29 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::WordTense
         self.into()
     }
 }
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::YoudaoProviderConfig> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.app_key.into_into_dart().into_dart(),
+            self.0.app_secret.into_into_dart().into_dart(),
+            self.0.base_url.into_into_dart().into_dart(),
+            self.0.picture_base_url.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::YoudaoProviderConfig>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::YoudaoProviderConfig>>
+    for crate::api::mirrors::YoudaoProviderConfig
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::YoudaoProviderConfig> {
+        self.into()
+    }
+}
 
 impl SseEncode for Runtime {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2480,6 +2897,23 @@ impl SseEncode for RuntimeTranslation {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeTranslation>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
+    }
+}
+
+impl SseEncode for std::collections::HashMap<String, String> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<(String, String)>>::sse_encode(self.into_iter().collect(), serializer);
+    }
+}
+
+impl SseEncode for std::collections::HashMap<String, crate::domain::settings::ProviderConfigEntry> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<(String, crate::domain::settings::ProviderConfigEntry)>>::sse_encode(
+            self.into_iter().collect(),
+            serializer,
+        );
     }
 }
 
@@ -2536,15 +2970,13 @@ impl SseEncode for crate::domain::settings::AdvancedSettings {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.launch_at_login, serializer);
-        <String>::sse_encode(self.proxy, serializer);
     }
 }
 
-impl SseEncode for crate::api::runtime::AdvancedSettingsPatch {
+impl SseEncode for crate::domain::settings::AdvancedSettingsPatch {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Option<bool>>::sse_encode(self.launch_at_login, serializer);
-        <Option<String>>::sse_encode(self.proxy, serializer);
     }
 }
 
@@ -2556,7 +2988,7 @@ impl SseEncode for crate::domain::settings::AppearanceSettings {
     }
 }
 
-impl SseEncode for crate::api::runtime::AppearanceSettingsPatch {
+impl SseEncode for crate::domain::settings::AppearanceSettingsPatch {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Option<String>>::sse_encode(self.language, serializer);
@@ -2564,10 +2996,59 @@ impl SseEncode for crate::api::runtime::AppearanceSettingsPatch {
     }
 }
 
+impl SseEncode for crate::api::mirrors::BaiduProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.app_id, serializer);
+        <String>::sse_encode(self.app_key, serializer);
+        <Option<String>>::sse_encode(self.base_url, serializer);
+    }
+}
+
 impl SseEncode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_u8(self as _).unwrap();
+    }
+}
+
+impl SseEncode for crate::api::mirrors::CaiyunProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.token, serializer);
+        <String>::sse_encode(self.request_id, serializer);
+        <Option<String>>::sse_encode(self.base_url, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::DeepLProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.api_key, serializer);
+        <Option<String>>::sse_encode(self.base_url, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::GoogleProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.api_key, serializer);
+        <Option<String>>::sse_encode(self.base_url, serializer);
+    }
+}
+
+impl SseEncode for i32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for crate::api::mirrors::IcibaProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.api_key, serializer);
+        <Option<String>>::sse_encode(self.base_url, serializer);
     }
 }
 
@@ -2591,12 +3072,32 @@ impl SseEncode for Vec<u8> {
     }
 }
 
-impl SseEncode for Vec<crate::api::runtime::ProviderConfigEntry> {
+impl SseEncode for Vec<crate::domain::settings::ProviderConfigEntry> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
-            <crate::api::runtime::ProviderConfigEntry>::sse_encode(item, serializer);
+            <crate::domain::settings::ProviderConfigEntry>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<(String, crate::domain::settings::ProviderConfigEntry)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <(String, crate::domain::settings::ProviderConfigEntry)>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<(String, String)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <(String, String)>::sse_encode(item, serializer);
         }
     }
 }
@@ -2732,12 +3233,12 @@ impl SseEncode for Option<bool> {
     }
 }
 
-impl SseEncode for Option<crate::api::runtime::ProviderConfigEntry> {
+impl SseEncode for Option<crate::domain::settings::ProviderConfigEntry> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
-            <crate::api::runtime::ProviderConfigEntry>::sse_encode(value, serializer);
+            <crate::domain::settings::ProviderConfigEntry>::sse_encode(value, serializer);
         }
     }
 }
@@ -2822,12 +3323,61 @@ impl SseEncode for Option<Vec<crate::api::mirrors::WordTense>> {
     }
 }
 
-impl SseEncode for crate::api::runtime::ProviderConfigEntry {
+impl SseEncode for crate::domain::settings::ProviderConfigEntry {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.id, serializer);
         <String>::sse_encode(self.r#type, serializer);
-        <String>::sse_encode(self.config_yaml, serializer);
+        <std::collections::HashMap<String, String>>::sse_encode(self.fields, serializer);
+        <Vec<String>>::sse_encode(self.capabilities, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::ProviderType {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::mirrors::ProviderType::Baidu => 0,
+                crate::api::mirrors::ProviderType::Caiyun => 1,
+                crate::api::mirrors::ProviderType::DeepL => 2,
+                crate::api::mirrors::ProviderType::Google => 3,
+                crate::api::mirrors::ProviderType::Iciba => 4,
+                crate::api::mirrors::ProviderType::Tencent => 5,
+                crate::api::mirrors::ProviderType::Youdao => 6,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for (String, crate::domain::settings::ProviderConfigEntry) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.0, serializer);
+        <crate::domain::settings::ProviderConfigEntry>::sse_encode(self.1, serializer);
+    }
+}
+
+impl SseEncode for (String, String) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.0, serializer);
+        <String>::sse_encode(self.1, serializer);
+    }
+}
+
+impl SseEncode for crate::domain::settings::Settings {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <u64>::sse_encode(self.last_updated, serializer);
+        <std::collections::HashMap<String, crate::domain::settings::ProviderConfigEntry>>::sse_encode(self.providers, serializer);
+        <crate::domain::settings::ShortcutSettings>::sse_encode(self.shortcuts, serializer);
+        <crate::domain::settings::AppearanceSettings>::sse_encode(self.appearance, serializer);
+        <crate::domain::settings::AdvancedSettings>::sse_encode(self.advanced, serializer);
     }
 }
 
@@ -2835,13 +3385,30 @@ impl SseEncode for crate::domain::settings::ShortcutSettings {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.toggle_app, serializer);
+        <String>::sse_encode(self.hide_app, serializer);
+        <String>::sse_encode(self.extract_from_screen_selection, serializer);
+        <String>::sse_encode(self.extract_from_screen_capture, serializer);
+        <String>::sse_encode(self.extract_from_clipboard, serializer);
     }
 }
 
-impl SseEncode for crate::api::runtime::ShortcutSettingsPatch {
+impl SseEncode for crate::domain::settings::ShortcutSettingsPatch {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Option<String>>::sse_encode(self.toggle_app, serializer);
+        <Option<String>>::sse_encode(self.hide_app, serializer);
+        <Option<String>>::sse_encode(self.extract_from_screen_selection, serializer);
+        <Option<String>>::sse_encode(self.extract_from_screen_capture, serializer);
+        <Option<String>>::sse_encode(self.extract_from_clipboard, serializer);
+    }
+}
+
+impl SseEncode for crate::api::mirrors::TencentProviderConfig {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.secret_id, serializer);
+        <String>::sse_encode(self.secret_key, serializer);
+        <Option<String>>::sse_encode(self.base_url, serializer);
     }
 }
 
@@ -2867,6 +3434,13 @@ impl SseEncode for crate::api::mirrors::TranslateResponse {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<crate::api::mirrors::TextTranslation>>::sse_encode(self.translations, serializer);
+    }
+}
+
+impl SseEncode for u64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_u64::<NativeEndian>(self).unwrap();
     }
 }
 
@@ -2949,10 +3523,13 @@ impl SseEncode for crate::api::mirrors::WordTense {
     }
 }
 
-impl SseEncode for i32 {
+impl SseEncode for crate::api::mirrors::YoudaoProviderConfig {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
+        <String>::sse_encode(self.app_key, serializer);
+        <String>::sse_encode(self.app_secret, serializer);
+        <Option<String>>::sse_encode(self.base_url, serializer);
+        <Option<String>>::sse_encode(self.picture_base_url, serializer);
     }
 }
 

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-import '../rust/api/runtime.dart';
+import '../rust/domain/settings.dart';
 import 'runtime.dart' as runtime_service;
 
 class NativeSettings {
@@ -26,7 +26,7 @@ class NativeSettings {
         case 'settings.updateAppearance':
           final args = (call.arguments as Map).cast<String, dynamic>();
           final result = await settings.updateAppearance(
-            patch: AppearanceSettingsPatch(
+            AppearanceSettingsPatch(
               language: args['language'] as String?,
               themeMode: args['themeMode'] as String?,
             ),
@@ -35,48 +35,71 @@ class NativeSettings {
 
         case 'settings.getShortcuts':
           final result = await settings.getShortcuts();
-          return {'toggleApp': result.toggleApp};
+          return {
+            'toggleApp': result.toggleApp,
+            'hideApp': result.hideApp,
+            'extractFromScreenSelection': result.extractFromScreenSelection,
+            'extractFromScreenCapture': result.extractFromScreenCapture,
+            'extractFromClipboard': result.extractFromClipboard,
+          };
 
         case 'settings.updateShortcuts':
           final args = (call.arguments as Map).cast<String, dynamic>();
           final result = await settings.updateShortcuts(
-            patch: ShortcutSettingsPatch(
+            ShortcutSettingsPatch(
               toggleApp: args['toggleApp'] as String?,
+              hideApp: args['hideApp'] as String?,
+              extractFromScreenSelection:
+                  args['extractFromScreenSelection'] as String?,
+              extractFromScreenCapture:
+                  args['extractFromScreenCapture'] as String?,
+              extractFromClipboard: args['extractFromClipboard'] as String?,
             ),
           );
-          return {'toggleApp': result.toggleApp};
+          return {
+            'toggleApp': result.toggleApp,
+            'hideApp': result.hideApp,
+            'extractFromScreenSelection': result.extractFromScreenSelection,
+            'extractFromScreenCapture': result.extractFromScreenCapture,
+            'extractFromClipboard': result.extractFromClipboard,
+          };
 
         case 'settings.getAdvanced':
           final result = await settings.getAdvanced();
-          return {'launchAtLogin': result.launchAtLogin, 'proxy': result.proxy};
+          return {'launchAtLogin': result.launchAtLogin};
 
         case 'settings.updateAdvanced':
           final args = (call.arguments as Map).cast<String, dynamic>();
           final result = await settings.updateAdvanced(
-            patch: AdvancedSettingsPatch(
+            AdvancedSettingsPatch(
               launchAtLogin: args['launchAtLogin'] as bool?,
-              proxy: args['proxy'] as String?,
             ),
           );
-          return {'launchAtLogin': result.launchAtLogin, 'proxy': result.proxy};
+          return {'launchAtLogin': result.launchAtLogin};
 
         case 'settings.listProviders':
           final providers = await settings.listProviders();
           return providers
-              .map((p) =>
-                  {'id': p.id, 'type': p.type, 'configYaml': p.configYaml})
+              .map((p) => {
+                    'id': p.id,
+                    'type': p.type,
+                    'fields': p.fields,
+                    'capabilities': p.capabilities
+                  })
               .toList();
 
         case 'settings.updateProvider':
           final args = (call.arguments as Map).cast<String, dynamic>();
           final result = await settings.updateProvider(
             providerId: args['id'] as String,
-            configYaml: args['configYaml'] as String,
+            providerType: args['providerType'] as String,
+            fields: (args['fields'] as Map).cast<String, String>(),
           );
           return {
             'id': result.id,
             'type': result.type,
-            'configYaml': result.configYaml
+            'fields': result.fields,
+            'capabilities': <String>[]
           };
 
         case 'settings.deleteProvider':
@@ -88,7 +111,8 @@ class NativeSettings {
           return {
             'id': result.id,
             'type': result.type,
-            'configYaml': result.configYaml
+            'fields': result.fields,
+            'capabilities': <String>[]
           };
 
         default:

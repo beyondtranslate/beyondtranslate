@@ -13,9 +13,13 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Serialize)]
 pub struct YoudaoProviderConfig {
+    #[serde(rename = "appKey", alias = "app_key")]
     pub app_key: String,
+    #[serde(rename = "appSecret", alias = "app_secret")]
     pub app_secret: String,
+    #[serde(rename = "baseUrl", alias = "base_url")]
     pub base_url: Option<String>,
+    #[serde(rename = "pictureBaseUrl", alias = "picture_base_url")]
     pub picture_base_url: Option<String>,
 }
 

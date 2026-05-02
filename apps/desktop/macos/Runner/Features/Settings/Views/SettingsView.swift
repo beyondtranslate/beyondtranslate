@@ -63,17 +63,17 @@ private struct SettingsEmptyStateView: View {
 }
 
 #if DEBUG
-struct SettingsView_Previews: PreviewProvider {
-  static var previews: some View {
-    Group {
-      SettingsView()
-        .previewDisplayName("Settings - Light")
+  struct SettingsView_Previews: PreviewProvider {
+    static var previews: some View {
+      Group {
+        SettingsView()
+          .previewDisplayName("Settings - Light")
 
-      SettingsView()
-        .preferredColorScheme(.dark)
-        .previewDisplayName("Settings - Dark")
+        SettingsView()
+          .preferredColorScheme(.dark)
+          .previewDisplayName("Settings - Dark")
+      }
+      .frame(width: 980, height: 720)
     }
-    .frame(width: 980, height: 720)
   }
-}
 #endif

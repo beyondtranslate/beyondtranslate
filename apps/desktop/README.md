@@ -1,8 +1,8 @@
 # Beyond Translate Desktop
 
-## Rust Bridge Codegen
+## Desktop Codegen
 
-Run commands from `apps/desktop`.
+Run commands from the repository root.
 
 `flutter_rust_bridge` config is in `flutter_rust_bridge.yaml`.
 
@@ -14,33 +14,20 @@ rust_root: rust/
 dart_output: lib/src/rust
 ```
 
-Regenerate bindings after changing FRB-exposed Rust APIs:
+Regenerate generated desktop code after changing FRB-exposed Rust APIs or the
+Rust settings schema:
 
 ```bash
-cd apps/desktop
-flutter_rust_bridge_codegen generate --config-file flutter_rust_bridge.yaml
+python3 scripts/codegen.py
 ```
 
 Generated files:
 
 - Rust: `rust/src/frb_generated.rs`
 - Dart: files under the configured `dart_output`
+- macOS Swift: `macos/Runner/Features/Settings/Models/Settings.swift`
 
 Do not edit generated files by hand.
-
-## Native Settings Swift Model Codegen
-
-Swift settings models are generated from the Rust settings schema without adding
-any Rust-side code:
-
-```bash
-cd apps/desktop
-python3 scripts/generate_settings.py
-```
-
-Generated file:
-
-- macOS Swift: `macos/Runner/Features/Settings/Models/Settings.swift`
 
 Useful follow-up commands:
 

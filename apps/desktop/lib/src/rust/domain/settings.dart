@@ -9,23 +9,38 @@ import '../frb_generated.dart';
 
 class AdvancedSettings {
   final bool launchAtLogin;
-  final String proxy;
 
   const AdvancedSettings({
     required this.launchAtLogin,
-    required this.proxy,
   });
 
   @override
-  int get hashCode => launchAtLogin.hashCode ^ proxy.hashCode;
+  int get hashCode => launchAtLogin.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AdvancedSettings &&
           runtimeType == other.runtimeType &&
-          launchAtLogin == other.launchAtLogin &&
-          proxy == other.proxy;
+          launchAtLogin == other.launchAtLogin;
+}
+
+class AdvancedSettingsPatch {
+  final bool? launchAtLogin;
+
+  const AdvancedSettingsPatch({
+    this.launchAtLogin,
+  });
+
+  @override
+  int get hashCode => launchAtLogin.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AdvancedSettingsPatch &&
+          runtimeType == other.runtimeType &&
+          launchAtLogin == other.launchAtLogin;
 }
 
 class AppearanceSettings {
@@ -49,20 +64,159 @@ class AppearanceSettings {
           themeMode == other.themeMode;
 }
 
-class ShortcutSettings {
-  final String toggleApp;
+class AppearanceSettingsPatch {
+  final String? language;
+  final String? themeMode;
 
-  const ShortcutSettings({
-    required this.toggleApp,
+  const AppearanceSettingsPatch({
+    this.language,
+    this.themeMode,
   });
 
   @override
-  int get hashCode => toggleApp.hashCode;
+  int get hashCode => language.hashCode ^ themeMode.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppearanceSettingsPatch &&
+          runtimeType == other.runtimeType &&
+          language == other.language &&
+          themeMode == other.themeMode;
+}
+
+class ProviderConfigEntry {
+  final String id;
+  final String type;
+  final Map<String, String> fields;
+
+  /// Provider capabilities, populated at runtime from the engine instance.
+  /// Not written to the settings file.
+  final List<String> capabilities;
+
+  const ProviderConfigEntry({
+    required this.id,
+    required this.type,
+    required this.fields,
+    required this.capabilities,
+  });
+
+  @override
+  int get hashCode =>
+      id.hashCode ^ type.hashCode ^ fields.hashCode ^ capabilities.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProviderConfigEntry &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          type == other.type &&
+          fields == other.fields &&
+          capabilities == other.capabilities;
+}
+
+class Settings {
+  final BigInt lastUpdated;
+  final Map<String, ProviderConfigEntry> providers;
+  final ShortcutSettings shortcuts;
+  final AppearanceSettings appearance;
+  final AdvancedSettings advanced;
+
+  const Settings({
+    required this.lastUpdated,
+    required this.providers,
+    required this.shortcuts,
+    required this.appearance,
+    required this.advanced,
+  });
+
+  @override
+  int get hashCode =>
+      lastUpdated.hashCode ^
+      providers.hashCode ^
+      shortcuts.hashCode ^
+      appearance.hashCode ^
+      advanced.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Settings &&
+          runtimeType == other.runtimeType &&
+          lastUpdated == other.lastUpdated &&
+          providers == other.providers &&
+          shortcuts == other.shortcuts &&
+          appearance == other.appearance &&
+          advanced == other.advanced;
+}
+
+class ShortcutSettings {
+  final String toggleApp;
+  final String hideApp;
+  final String extractFromScreenSelection;
+  final String extractFromScreenCapture;
+  final String extractFromClipboard;
+
+  const ShortcutSettings({
+    required this.toggleApp,
+    required this.hideApp,
+    required this.extractFromScreenSelection,
+    required this.extractFromScreenCapture,
+    required this.extractFromClipboard,
+  });
+
+  @override
+  int get hashCode =>
+      toggleApp.hashCode ^
+      hideApp.hashCode ^
+      extractFromScreenSelection.hashCode ^
+      extractFromScreenCapture.hashCode ^
+      extractFromClipboard.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ShortcutSettings &&
           runtimeType == other.runtimeType &&
-          toggleApp == other.toggleApp;
+          toggleApp == other.toggleApp &&
+          hideApp == other.hideApp &&
+          extractFromScreenSelection == other.extractFromScreenSelection &&
+          extractFromScreenCapture == other.extractFromScreenCapture &&
+          extractFromClipboard == other.extractFromClipboard;
+}
+
+class ShortcutSettingsPatch {
+  final String? toggleApp;
+  final String? hideApp;
+  final String? extractFromScreenSelection;
+  final String? extractFromScreenCapture;
+  final String? extractFromClipboard;
+
+  const ShortcutSettingsPatch({
+    this.toggleApp,
+    this.hideApp,
+    this.extractFromScreenSelection,
+    this.extractFromScreenCapture,
+    this.extractFromClipboard,
+  });
+
+  @override
+  int get hashCode =>
+      toggleApp.hashCode ^
+      hideApp.hashCode ^
+      extractFromScreenSelection.hashCode ^
+      extractFromScreenCapture.hashCode ^
+      extractFromClipboard.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ShortcutSettingsPatch &&
+          runtimeType == other.runtimeType &&
+          toggleApp == other.toggleApp &&
+          hideApp == other.hideApp &&
+          extractFromScreenSelection == other.extractFromScreenSelection &&
+          extractFromScreenCapture == other.extractFromScreenCapture &&
+          extractFromClipboard == other.extractFromClipboard;
 }

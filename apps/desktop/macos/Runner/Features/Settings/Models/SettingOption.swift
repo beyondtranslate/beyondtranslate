@@ -1,4 +1,5 @@
-import Foundation
+import AppKit
+import SwiftUI
 
 enum SettingsSection: String, CaseIterable, Identifiable {
   case general
@@ -72,6 +73,42 @@ enum AppThemeMode: String, CaseIterable, Identifiable {
     case .system: return "System"
     }
   }
+
+  var colorScheme: ColorScheme? {
+    switch self {
+    case .light: return .light
+    case .dark: return .dark
+    case .system: return nil
+    }
+  }
+
+  var nsAppearance: NSAppearance? {
+    switch self {
+    case .light:
+      return NSAppearance(named: .aqua)
+    case .dark:
+      return NSAppearance(named: .darkAqua)
+    case .system:
+      return nil
+    }
+  }
+}
+
+@MainActor
+enum ThemeAppearanceController {
+  static let userDefaultsKey = "nativeSettings.appearance.themeMode"
+
+  static func applySavedPreference(userDefaults: UserDefaults = .standard) {
+    apply(rawValue: userDefaults.string(forKey: userDefaultsKey))
+  }
+
+  static func apply(rawValue: String?) {
+    apply(AppThemeMode(rawValue: rawValue ?? "") ?? .system)
+  }
+
+  static func apply(_ mode: AppThemeMode) {
+    NSApp.appearance = mode.nsAppearance
+  }
 }
 
 struct TranslationTargetItem: Identifiable {
@@ -88,7 +125,8 @@ struct ShortcutDisplay {
   }
 
   init(rawValue: String) {
-    let parsed = rawValue
+    let parsed =
+      rawValue
       .split(separator: "+")
       .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
       .filter { !$0.isEmpty }
@@ -97,36 +135,6 @@ struct ShortcutDisplay {
 
   var rawValue: String {
     parts.joined(separator: "+")
-  }
-}
-
-enum ProviderListKind: String, Identifiable, CaseIterable {
-  case traditional
-  case llm
-
-  var id: String { rawValue }
-
-  var title: String {
-    switch self {
-    case .traditional: return "Translation Providers"
-    case .llm: return "LLM Providers"
-    }
-  }
-
-  var addTitle: String {
-    switch self {
-    case .traditional: return "Add Translation Provider"
-    case .llm: return "Add Model Provider"
-    }
-  }
-
-  var emptyDescription: String {
-    switch self {
-    case .traditional:
-      return "Wrap translation and dictionary services into reusable providers."
-    case .llm:
-      return "Configure hosted or local model endpoints for future AI features."
-    }
   }
 }
 
@@ -144,74 +152,62 @@ enum ProviderHostingOption: String, CaseIterable, Identifiable {
   }
 }
 
-enum ProviderCapability: String, CaseIterable, Identifiable {
-  case translation
-  case dictionary
-  case chatCompletion
-  case embeddings
-
-  var id: String { rawValue }
-
-  var title: String {
-    switch self {
-    case .translation: return "Translation"
-    case .dictionary: return "Dictionary"
-    case .chatCompletion: return "Chat"
-    case .embeddings: return "Embeddings"
-    }
-  }
-}
-
 struct ProviderItem: Identifiable {
   let id: UUID
+  var backendID: String
+  var providerType: ProviderType
   var name: String
   var endpoint: String
   var apiKeyHeader: String
   var description: String
-  var listKind: ProviderListKind
   var hosting: ProviderHostingOption
   var capabilities: [ProviderCapability]
   var isEnabled: Bool
+  var fields: [String: String]
+}
+
+extension ProviderItem {
+  /// Creates a `ProviderItem` from a backend `ProviderConfigEntry`.
+  init(id: UUID = UUID(), from entry: ProviderConfigEntry, isEnabled: Bool = true) {
+    self.id = id
+    self.backendID = entry.id
+    self.providerType = ProviderType(rawValue: entry.type) ?? .deepL
+    self.name = entry.id
+    self.description = entry.type
+    self.endpoint = entry.fields["baseUrl"] ?? ""
+    self.apiKeyHeader = ""
+    self.hosting = .internetHosted
+    self.capabilities = entry.capabilities.compactMap { ProviderCapability(rawValue: $0) }
+    self.isEnabled = isEnabled
+    self.fields = entry.fields
+  }
 }
 
 struct ProviderDraft: Identifiable {
   let id = UUID()
-  let providerID: UUID?
-  let listKind: ProviderListKind
-  var name: String
-  var endpoint: String
-  var apiKey: String
-  var apiKeyHeader: String
-  var description: String
-  var hosting: ProviderHostingOption
+  /// `nil` for a new provider; the local UUID of the item being edited otherwise.
+  let localID: UUID?
+  /// The backend string identifier (e.g., "deepl-main").  Editable only when adding.
+  var backendID: String
+  /// The provider type, selected via a Picker.
+  var providerType: ProviderType
+  /// Type-specific config values keyed by provider field name (wire names, camelCase).
+  var fields: [String: String]
 
   var title: String {
-    providerID == nil ? listKind.addTitle : "Edit Provider"
+    localID == nil ? "Add Provider" : "Edit Provider"
   }
 
-  static func new(listKind: ProviderListKind) -> ProviderDraft {
-    ProviderDraft(
-      providerID: nil,
-      listKind: listKind,
-      name: listKind == .traditional ? "My Provider" : "My Model Provider",
-      endpoint: "https://api.host.com",
-      apiKey: "",
-      apiKeyHeader: "x-api-key",
-      description: "My Account",
-      hosting: .internetHosted
-    )
+  static func new() -> ProviderDraft {
+    ProviderDraft(localID: nil, backendID: "my-provider", providerType: .deepL, fields: [:])
   }
 
   static func edit(item: ProviderItem) -> ProviderDraft {
     ProviderDraft(
-      providerID: item.id,
-      listKind: item.listKind,
-      name: item.name,
-      endpoint: item.endpoint,
-      apiKey: "",
-      apiKeyHeader: item.apiKeyHeader,
-      description: item.description,
-      hosting: item.hosting
+      localID: item.id,
+      backendID: item.backendID,
+      providerType: item.providerType,
+      fields: item.fields
     )
   }
 }
