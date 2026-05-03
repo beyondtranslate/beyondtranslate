@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-default = ["deepl"]
+default = ["baidu", "caiyun", "deepl", "google", "iciba", "tencent", "youdao"]
 baidu = []
 caiyun = []
 deepl = []

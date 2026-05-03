@@ -1797,6 +1797,18 @@ impl SseDecode for Option<Vec<crate::api::mirrors::WordTense>> {
     }
 }
 
+impl SseDecode for crate::api::mirrors::ProviderCapability {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::mirrors::ProviderCapability::Dictionary,
+            1 => crate::api::mirrors::ProviderCapability::Translation,
+            _ => unreachable!("Invalid variant for ProviderCapability: {}", inner),
+        };
+    }
+}
+
 impl SseDecode for crate::domain::settings::ProviderConfigEntry {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2491,6 +2503,27 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::LookUpRes
     for crate::api::mirrors::LookUpResponse
 {
     fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::LookUpResponse> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::mirrors::ProviderCapability> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self.0 {
+            crate::api::mirrors::ProviderCapability::Dictionary => 0.into_dart(),
+            crate::api::mirrors::ProviderCapability::Translation => 1.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::mirrors::ProviderCapability>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::ProviderCapability>>
+    for crate::api::mirrors::ProviderCapability
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::ProviderCapability> {
         self.into()
     }
 }
@@ -3320,6 +3353,22 @@ impl SseEncode for Option<Vec<crate::api::mirrors::WordTense>> {
         if let Some(value) = self {
             <Vec<crate::api::mirrors::WordTense>>::sse_encode(value, serializer);
         }
+    }
+}
+
+impl SseEncode for crate::api::mirrors::ProviderCapability {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::mirrors::ProviderCapability::Dictionary => 0,
+                crate::api::mirrors::ProviderCapability::Translation => 1,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
     }
 }
 

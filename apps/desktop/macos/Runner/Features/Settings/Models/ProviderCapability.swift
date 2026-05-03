@@ -4,8 +4,8 @@
 import Foundation
 
 enum ProviderCapability: String, Codable, CaseIterable, Identifiable {
-  case translation
   case dictionary
+  case translation
 
   var id: String { rawValue }
 }

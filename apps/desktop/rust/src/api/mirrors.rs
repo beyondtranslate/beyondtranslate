@@ -1,12 +1,20 @@
 pub use beyondtranslate_core::{
-    LookUpRequest, LookUpResponse, TextTranslation, TranslateRequest, TranslateResponse,
-    WordDefinition, WordImage, WordPhrase, WordPronunciation, WordSentence, WordTag, WordTense,
+    LookUpRequest, LookUpResponse, ProviderCapability, TextTranslation, TranslateRequest,
+    TranslateResponse, WordDefinition, WordImage, WordPhrase, WordPronunciation, WordSentence,
+    WordTag, WordTense,
 };
 pub use beyondtranslate_engine::{
     BaiduProviderConfig, CaiyunProviderConfig, DeepLProviderConfig, GoogleProviderConfig,
     IcibaProviderConfig, ProviderType, TencentProviderConfig, YoudaoProviderConfig,
 };
 use flutter_rust_bridge::frb;
+
+#[frb(mirror(ProviderCapability))]
+#[frb(unignore)]
+pub enum _ProviderCapability {
+    Dictionary,
+    Translation,
+}
 
 #[frb(mirror(ProviderType))]
 #[frb(unignore)]

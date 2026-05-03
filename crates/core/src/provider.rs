@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum ProviderCapability {
-    Translation,
     Dictionary,
+    Translation,
 }
 
 pub trait Provider: Send + Sync {

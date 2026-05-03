@@ -198,6 +198,12 @@ class LookUpResponse {
           sentences == other.sentences;
 }
 
+enum ProviderCapability {
+  dictionary,
+  translation,
+  ;
+}
+
 enum ProviderType {
   baidu,
   caiyun,

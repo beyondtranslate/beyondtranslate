@@ -245,6 +245,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<WordTense>? dco_decode_opt_list_word_tense(dynamic raw);
 
   @protected
+  ProviderCapability dco_decode_provider_capability(dynamic raw);
+
+  @protected
   ProviderConfigEntry dco_decode_provider_config_entry(dynamic raw);
 
   @protected
@@ -544,6 +547,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<WordTense>? sse_decode_opt_list_word_tense(SseDeserializer deserializer);
+
+  @protected
+  ProviderCapability sse_decode_provider_capability(
+      SseDeserializer deserializer);
 
   @protected
   ProviderConfigEntry sse_decode_provider_config_entry(
@@ -857,6 +864,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_opt_list_word_tense(
       List<WordTense>? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_provider_capability(
+      ProviderCapability self, SseSerializer serializer);
 
   @protected
   void sse_encode_provider_config_entry(

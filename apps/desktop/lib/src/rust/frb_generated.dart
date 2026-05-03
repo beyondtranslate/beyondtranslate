@@ -1206,6 +1206,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ProviderCapability dco_decode_provider_capability(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ProviderCapability.values[raw as int];
+  }
+
+  @protected
   ProviderConfigEntry dco_decode_provider_config_entry(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -2073,6 +2079,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ProviderCapability sse_decode_provider_capability(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return ProviderCapability.values[inner];
+  }
+
+  @protected
   ProviderConfigEntry sse_decode_provider_config_entry(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2843,6 +2857,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (self != null) {
       sse_encode_list_word_tense(self, serializer);
     }
+  }
+
+  @protected
+  void sse_encode_provider_capability(
+      ProviderCapability self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
   }
 
   @protected

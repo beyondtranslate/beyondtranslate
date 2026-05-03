@@ -7,18 +7,42 @@ struct ProvidersView: View {
   var body: some View {
     SettingsPage(title: "Providers") {
       Section {
-        Text(
-          "Providers are configuration wrappers that can generate translation and dictionary services."
-        )
-        .font(.system(size: 12))
-        .foregroundStyle(.secondary)
+        ProviderIntroRow()
       }
 
-      providerSection(providers: viewModel.providers)
+      Section {
+        if viewModel.isLoading {
+          LoadingProviderRow()
+        } else if viewModel.providers.isEmpty {
+          EmptyProviderRow()
+        } else {
+          ForEach(viewModel.providers) { provider in
+            ProviderRow(
+              provider: provider,
+              onEdit: {
+                draft = .edit(item: provider)
+              },
+              onDelete: {
+                viewModel.deleteProvider(provider.id)
+              }
+            )
+          }
+        }
+      } footer: {
+        HStack {
+          Spacer()
+          Button("Add a Provider...") {
+            draft = .new()
+          }
+        }
+      }
     }
     .sheet(item: $draft) { item in
       ProviderEditorSheet(draft: item) { updatedDraft in
         viewModel.saveProvider(updatedDraft)
+        draft = nil
+      } onDelete: { providerID in
+        viewModel.deleteProvider(providerID)
         draft = nil
       } onCancel: {
         draft = nil
@@ -38,44 +62,22 @@ struct ProvidersView: View {
       }
     }
   }
+}
 
-  @ViewBuilder
-  private func providerSection(providers: [ProviderItem]) -> some View {
-    Section {
-      if viewModel.isLoading {
-        HStack {
-          Spacer()
-          ProgressView()
-          Spacer()
-        }
-        .padding(.vertical, 8)
-      } else if providers.isEmpty {
-        Text("No providers configured. Add one to enable translation services.")
-          .foregroundStyle(.secondary)
-      } else {
-        ForEach(providers) { provider in
-          ProviderRow(
-            provider: provider,
-            onEdit: {
-              draft = .edit(item: provider)
-            },
-            onDelete: {
-              viewModel.deleteProvider(provider.id)
-            },
-            onToggle: { isEnabled in
-              viewModel.toggleProvider(provider.id, isEnabled: isEnabled)
-            }
-          )
-        }
-      }
-    } header: {
-      SettingSectionHeader(
-        title: "Providers",
-        buttonTitle: "Add Provider"
-      ) {
-        draft = .new()
-      }
+private struct ProviderIntroRow: View {
+  var body: some View {
+    VStack(alignment: .leading, spacing: 4) {
+      Text("Choose the translation and dictionary providers used by the app.")
+        .fixedSize(horizontal: false, vertical: true)
+
+      Text(
+        "Providers you add may process the text you send, so only connect services you trust."
+      )
+      .foregroundStyle(.secondary)
+      .fixedSize(horizontal: false, vertical: true)
     }
+    .padding(.top, -6)
+    .padding(.bottom, 2)
   }
 }
 
@@ -83,83 +85,154 @@ private struct ProviderRow: View {
   let provider: ProviderItem
   let onEdit: () -> Void
   let onDelete: () -> Void
-  let onToggle: (Bool) -> Void
 
   @State private var showDeleteConfirm = false
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 10) {
-      HStack(alignment: .firstTextBaseline, spacing: 12) {
-        Image(systemName: "server.rack")
-          .font(.system(size: 18))
-          .foregroundStyle(Color.accentColor)
+    Button(action: onEdit) {
+      HStack(spacing: 14) {
+        ProviderTypeIcon(providerType: provider.providerType)
 
         VStack(alignment: .leading, spacing: 3) {
-          HStack(spacing: 8) {
-            Text(provider.name)
-              .font(.headline)
-            Text(provider.description)
-              .font(.system(size: 11, weight: .medium))
+          Text(provider.name)
+            .font(.system(size: 13))
+            .foregroundStyle(.primary)
+
+          if !provider.endpoint.isEmpty {
+            Text(provider.endpoint)
+              .font(.system(size: 11))
               .foregroundStyle(.secondary)
+              .lineLimit(1)
           }
         }
 
         Spacer()
 
-        Toggle(
-          "",
-          isOn: Binding(
-            get: { provider.isEnabled },
-            set: onToggle
-          )
-        )
-        .labelsHidden()
-
-        Button("Edit", action: onEdit)
-
-        Button(role: .destructive) {
-          showDeleteConfirm = true
-        } label: {
-          Image(systemName: "trash")
-        }
-        .buttonStyle(.borderless)
-        .foregroundStyle(.secondary)
-        .confirmationDialog(
-          "Delete \"\(provider.name)\"?",
-          isPresented: $showDeleteConfirm,
-          titleVisibility: .visible
-        ) {
-          Button("Delete", role: .destructive, action: onDelete)
-          Button("Cancel", role: .cancel) {}
-        } message: {
-          Text("This action cannot be undone.")
-        }
-      }
-
-      if !provider.endpoint.isEmpty {
-        HStack(spacing: 8) {
-          Label(provider.endpoint, systemImage: "link")
-            .font(.system(size: 12))
-            .foregroundStyle(.secondary)
-        }
-      }
-
-      if !provider.capabilities.isEmpty {
-        HStack(spacing: 8) {
-          ForEach(provider.capabilities) { capability in
-            Text(capability.rawValue.capitalized)
-              .font(.system(size: 11, weight: .medium))
-              .padding(.horizontal, 8)
-              .padding(.vertical, 4)
-              .background(
-                Capsule(style: .continuous)
-                  .fill(Color.accentColor.opacity(0.12))
-              )
+        // Capability tags
+        HStack(spacing: 4) {
+          ForEach(provider.capabilities, id: \.self) { cap in
+            ProviderCapabilityTag(capability: cap)
           }
         }
+
+        Image(systemName: "chevron.right")
+          .font(.system(size: 10, weight: .semibold))
+          .foregroundStyle(.tertiary)
+      }
+      .contentShape(Rectangle())
+      .padding(.vertical, 2)
+    }
+    .buttonStyle(.plain)
+    .contextMenu {
+      Button("Edit", action: onEdit)
+
+      Divider()
+
+      Button("Delete", role: .destructive) {
+        showDeleteConfirm = true
       }
     }
-    .padding(.vertical, 6)
+    .confirmationDialog(
+      "Delete \"\(provider.name)\"?",
+      isPresented: $showDeleteConfirm,
+      titleVisibility: .visible
+    ) {
+      Button("Delete", role: .destructive, action: onDelete)
+      Button("Cancel", role: .cancel) {}
+    } message: {
+      Text("This action cannot be undone.")
+    }
+  }
+}
+
+private struct LoadingProviderRow: View {
+  var body: some View {
+    HStack(spacing: 14) {
+      ProgressView()
+      Text("Loading providers...")
+        .font(.system(size: 13))
+        .foregroundStyle(.secondary)
+      Spacer()
+    }
+  }
+}
+
+private struct ProviderCapabilityTag: View {
+  let capability: ProviderCapability
+
+  var body: some View {
+    Text(label)
+      .font(.system(size: 10, weight: .medium))
+      .foregroundStyle(color)
+      .padding(.horizontal, 6)
+      .padding(.vertical, 2)
+      .background(
+        Capsule()
+          .fill(color.opacity(0.12))
+      )
+  }
+
+  private var label: String {
+    switch capability {
+    case .dictionary: return "Dictionary"
+    case .translation: return "Translation"
+    }
+  }
+
+  private var color: Color {
+    switch capability {
+    case .dictionary: return .orange
+    case .translation: return .blue
+    }
+  }
+}
+
+private struct EmptyProviderRow: View {
+  var body: some View {
+    HStack(spacing: 14) {
+      Image(systemName: "square.stack.3d.up.slash")
+        .font(.system(size: 20))
+        .foregroundStyle(.tertiary)
+        .frame(width: 28, height: 28)
+      Text("No providers configured. Add one to enable translation services.")
+        .font(.system(size: 13))
+        .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+      Spacer()
+    }
+  }
+}
+
+private struct ProviderTypeIcon: View {
+  let providerType: ProviderType
+
+  private var flutterAssetImage: NSImage? {
+    let iconFileName = "\(providerType.rawValue).png"
+    let flutterAssetsURL = Bundle.main.bundleURL
+      .appendingPathComponent("Contents/Frameworks/App.framework/Resources/flutter_assets")
+      .appendingPathComponent("resources/images/translation_engine_icons")
+      .appendingPathComponent(iconFileName)
+    return NSImage(contentsOf: flutterAssetsURL)
+  }
+
+  var body: some View {
+    if let image = flutterAssetImage {
+      Image(nsImage: image)
+        .resizable()
+        .interpolation(.high)
+        .antialiased(true)
+        .frame(width: 28, height: 28)
+        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+    } else {
+      ZStack {
+        RoundedRectangle(cornerRadius: 10, style: .continuous)
+          .fill(Color.accentColor.opacity(0.15))
+        Image(systemName: "server.rack")
+          .font(.system(size: 12, weight: .medium))
+          .foregroundStyle(Color.accentColor)
+      }
+      .frame(width: 28, height: 28)
+    }
   }
 }
 
@@ -168,6 +241,7 @@ private struct ProviderEditorSheet: View {
   @State var draft: ProviderDraft
 
   let onSave: (ProviderDraft) -> Void
+  let onDelete: (UUID) -> Void
   let onCancel: () -> Void
 
   private var canSave: Bool {
@@ -183,73 +257,86 @@ private struct ProviderEditorSheet: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 20) {
-      // Header
-      VStack(alignment: .leading, spacing: 4) {
-        Text(draft.title)
-          .font(.title2.weight(.semibold))
-        Text("Configure a translation or dictionary provider.")
-          .foregroundStyle(.secondary)
-      }
-
+    VStack(spacing: 0) {
       Form {
-        // Provider ID (read-only when editing)
-        LabeledContent {
-          TextField("e.g. deepl-main", text: $draft.backendID)
-            .disabled(draft.localID != nil)
-        } label: {
-          Text("Provider ID")
+        // Header — provider icon, name, hosting type
+        Section {
+          ProviderEditorHeader(draft: draft)
         }
 
-        // Provider type picker
-        Picker("Provider Type", selection: $draft.providerType) {
-          ForEach(ProviderType.allCases) { type in
-            Text(type.rawValue).tag(type)
+        // Show Provider ID and Type picker only when creating a new provider
+        if draft.localID == nil {
+          Section {
+            TextField(text: $draft.backendID, prompt: Text("e.g. deepl-main")) {
+              Text("Provider ID")
+            }
+
+            Picker("Provider Type", selection: $draft.providerType) {
+              ForEach(ProviderType.allCases) { type in
+                Text(type.displayName).tag(type)
+              }
+            }
+            .onChange(of: draft.providerType) { _ in
+              draft.fields = [:]
+            }
           }
         }
-        .disabled(draft.localID != nil)
-        .onChange(of: draft.providerType) { _ in
-          // Clear fields when type changes to avoid stale keys
-          draft.fields = [:]
+
+        // Required fields
+        let requiredFields = draft.providerType.configFields.filter { !$0.isOptional }
+        if !requiredFields.isEmpty {
+          Section {
+            ForEach(requiredFields) { fieldDef in
+              ProviderFieldRow(fieldDef: fieldDef, text: fieldBinding(fieldDef.key))
+            }
+          }
         }
 
-        // Dynamic fields based on selected provider type
-        ForEach(draft.providerType.configFields) { fieldDef in
-          LabeledContent {
-            if fieldDef.isSecret {
-              SecureField(
-                fieldDef.isOptional ? "Optional" : "Required",
-                text: fieldBinding(fieldDef.key)
-              )
-            } else {
-              TextField(
-                fieldDef.placeholder.isEmpty
-                  ? (fieldDef.isOptional ? "Optional" : "Required")
-                  : fieldDef.placeholder,
-                text: fieldBinding(fieldDef.key)
-              )
-            }
-          } label: {
-            HStack(spacing: 4) {
-              Text(fieldDef.label)
-              if fieldDef.isOptional {
-                Text("(Optional)")
-                  .font(.system(size: 11))
-                  .foregroundStyle(.secondary)
-              }
+        // Optional fields
+        let optionalFields = draft.providerType.configFields.filter { $0.isOptional }
+        if !optionalFields.isEmpty {
+          Section {
+            ForEach(optionalFields) { fieldDef in
+              ProviderFieldRow(fieldDef: fieldDef, text: fieldBinding(fieldDef.key))
             }
           }
         }
       }
       .formStyle(.grouped)
 
-      // Actions
-      HStack {
+      Divider()
+
+      HStack(spacing: 8) {
+        // Help button — far left circle
+        Button {
+        } label: {
+          Image(systemName: "questionmark.circle")
+            .font(.system(size: 16))
+            .foregroundStyle(.secondary)
+        }
+        .buttonStyle(.plain)
+        .help("Help")
+
+        // Destructive delete — bordered pill with red tint
+        if let localID = draft.localID {
+          Button(role: .destructive) {
+            onDelete(localID)
+            dismiss()
+          } label: {
+            Text("Delete Provider")
+          }
+          .buttonStyle(.bordered)
+          .tint(.red)
+        }
+
         Spacer()
+
         Button("Cancel") {
           onCancel()
           dismiss()
         }
+        .keyboardShortcut(.cancelAction)
+
         Button(draft.localID == nil ? "Add" : "Save") {
           onSave(draft)
           dismiss()
@@ -257,9 +344,10 @@ private struct ProviderEditorSheet: View {
         .keyboardShortcut(.defaultAction)
         .disabled(!canSave)
       }
+      .padding(.horizontal, 20)
+      .padding(.vertical, 16)
     }
-    .padding(24)
-    .frame(width: 480)
+    .frame(width: 500)
   }
 
   private func fieldBinding(_ key: String) -> Binding<String> {
@@ -267,5 +355,118 @@ private struct ProviderEditorSheet: View {
       get: { draft.fields[key] ?? "" },
       set: { draft.fields[key] = $0 }
     )
+  }
+}
+
+private struct ProviderEditorHeader: View {
+  let draft: ProviderDraft
+
+  var body: some View {
+    HStack(spacing: 10) {
+      ProviderTypeIcon(providerType: draft.providerType)
+        .frame(width: 36, height: 36)
+
+      VStack(alignment: .leading, spacing: 3) {
+        Text(draft.displayName)
+          .font(.system(size: 14, weight: .semibold))
+          .foregroundStyle(.primary)
+
+        Text(draft.providerType.hostingDescription)
+          .font(.system(size: 13))
+          .foregroundStyle(.secondary)
+      }
+
+      Spacer()
+    }
+    .padding(.vertical, 4)
+  }
+}
+
+private struct ProviderFieldRow: View {
+  let fieldDef: ProviderConfigField
+  let text: Binding<String>
+
+  var body: some View {
+    if fieldDef.isSecret {
+      SecureField(text: text, prompt: promptText) {
+        rowLabel
+      }
+    } else {
+      TextField(text: text, prompt: promptText) {
+        rowLabel
+      }
+    }
+  }
+
+  // Label with a red asterisk prefix for required fields
+  private var rowLabel: some View {
+    HStack(spacing: 0) {
+      if !fieldDef.isOptional {
+        Text("*")
+          .foregroundStyle(.red)
+          .padding(.trailing, 2)
+      }
+      Text(fieldDef.label)
+    }
+  }
+
+  // Only show a prompt when the field has a non-empty placeholder
+  private var promptText: Text? {
+    fieldDef.placeholder.isEmpty ? nil : Text(fieldDef.placeholder)
+  }
+}
+
+extension ProviderDraft {
+  fileprivate var displayName: String {
+    let trimmedID = backendID.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !trimmedID.isEmpty else { return providerType.displayName }
+    return
+      trimmedID
+      .split(whereSeparator: { $0 == "-" || $0 == "_" || $0 == "." })
+      .map { part in
+        let lowercased = part.lowercased()
+        guard let first = lowercased.first else { return "" }
+        return first.uppercased() + lowercased.dropFirst()
+      }
+      .joined(separator: " ")
+  }
+}
+
+extension ProviderType {
+  // Known default capabilities for each provider type
+  fileprivate var defaultCapabilities: [ProviderCapability] {
+    switch self {
+    case .baidu: return [.dictionary, .translation]
+    case .caiyun: return [.translation]
+    case .deepL: return [.translation]
+    case .google: return [.dictionary, .translation]
+    case .iciba: return [.dictionary]
+    case .tencent: return [.translation]
+    case .youdao: return [.dictionary, .translation]
+    }
+  }
+
+  fileprivate var displayName: String {
+    switch self {
+    case .baidu: return "Baidu"
+    case .caiyun: return "Caiyun"
+    case .deepL: return "DeepL"
+    case .google: return "Google"
+    case .iciba: return "iCiba"
+    case .tencent: return "Tencent"
+    case .youdao: return "Youdao"
+    }
+  }
+
+  fileprivate var hostingDescription: String {
+    let caps = defaultCapabilities
+    let hasTranslation = caps.contains(.translation)
+    let hasDictionary = caps.contains(.dictionary)
+    switch (hasTranslation, hasDictionary) {
+    case (true, true): return "Provides dictionary lookup and text translation"
+    case (true, false): return "Provides text translation between languages"
+    case (false, true): return "Provides dictionary lookup and word definitions"
+    default: return "Provides translation services"
+    }
   }
 }
