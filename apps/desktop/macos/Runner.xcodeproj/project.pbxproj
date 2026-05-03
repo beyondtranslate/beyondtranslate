@@ -43,6 +43,8 @@
 		8F1000242E0A100100A1B2C3 /* AppearanceSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000252E0A100100A1B2C3 /* AppearanceSettingsPatch.swift */; };
 		8F1000262E0A100100A1B2C3 /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000272E0A100100A1B2C3 /* AdvancedSettings.swift */; };
 		8F1000282E0A100100A1B2C3 /* AdvancedSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000292E0A100100A1B2C3 /* AdvancedSettingsPatch.swift */; };
+		8F10004E2E0A100100A1B2C3 /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10004F2E0A100100A1B2C3 /* GeneralSettings.swift */; };
+		8F1000502E0A100100A1B2C3 /* GeneralSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000512E0A100100A1B2C3 /* GeneralSettingsPatch.swift */; };
 		8F10002A2E0A100100A1B2C3 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002B2E0A100100A1B2C3 /* ProviderType.swift */; };
 		8F10002C2E0A100100A1B2C3 /* BaiduProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002D2E0A100100A1B2C3 /* BaiduProviderConfig.swift */; };
 		8F10002E2E0A100100A1B2C3 /* CaiyunProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002F2E0A100100A1B2C3 /* CaiyunProviderConfig.swift */; };
@@ -145,6 +147,8 @@
 		8F1000252E0A100100A1B2C3 /* AppearanceSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsPatch.swift; sourceTree = "<group>"; };
 		8F1000272E0A100100A1B2C3 /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
 		8F1000292E0A100100A1B2C3 /* AdvancedSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsPatch.swift; sourceTree = "<group>"; };
+		8F10004F2E0A100100A1B2C3 /* GeneralSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
+		8F1000512E0A100100A1B2C3 /* GeneralSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsPatch.swift; sourceTree = "<group>"; };
 		8F10002B2E0A100100A1B2C3 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
 		8F10002D2E0A100100A1B2C3 /* BaiduProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduProviderConfig.swift; sourceTree = "<group>"; };
 		8F10002F2E0A100100A1B2C3 /* CaiyunProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaiyunProviderConfig.swift; sourceTree = "<group>"; };
@@ -393,6 +397,8 @@
 				8F1000232E0A100100A1B2C3 /* AppearanceSettings.swift */,
 				8F1000252E0A100100A1B2C3 /* AppearanceSettingsPatch.swift */,
 				8F1000112E0A100100A1B2C3 /* AppSettings.swift */,
+				8F10004F2E0A100100A1B2C3 /* GeneralSettings.swift */,
+				8F1000512E0A100100A1B2C3 /* GeneralSettingsPatch.swift */,
 				8F10002D2E0A100100A1B2C3 /* BaiduProviderConfig.swift */,
 				8F1000412E0A100100A1B2C3 /* BaiduProviderConfig+Fields.swift */,
 				8F10002F2E0A100100A1B2C3 /* CaiyunProviderConfig.swift */,
@@ -710,6 +716,8 @@
 				8F1000242E0A100100A1B2C3 /* AppearanceSettingsPatch.swift in Sources */,
 				8F1000262E0A100100A1B2C3 /* AdvancedSettings.swift in Sources */,
 				8F1000282E0A100100A1B2C3 /* AdvancedSettingsPatch.swift in Sources */,
+				8F10004E2E0A100100A1B2C3 /* GeneralSettings.swift in Sources */,
+				8F1000502E0A100100A1B2C3 /* GeneralSettingsPatch.swift in Sources */,
 				8F10002A2E0A100100A1B2C3 /* ProviderType.swift in Sources */,
 				8F10002C2E0A100100A1B2C3 /* BaiduProviderConfig.swift in Sources */,
 				8F10002E2E0A100100A1B2C3 /* CaiyunProviderConfig.swift in Sources */,

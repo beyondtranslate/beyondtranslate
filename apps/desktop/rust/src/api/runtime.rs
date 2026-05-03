@@ -9,8 +9,8 @@ pub use super::mirrors::{
 };
 pub use crate::domain::settings::{
     provider_entry_from_config, AdvancedSettings, AdvancedSettingsPatch, AppearanceSettings,
-    AppearanceSettingsPatch, ProviderConfigEntry, Settings, ShortcutSettings,
-    ShortcutSettingsPatch,
+    AppearanceSettingsPatch, GeneralSettings, GeneralSettingsPatch, ProviderConfigEntry, Settings,
+    ShortcutSettings, ShortcutSettingsPatch,
 };
 use flutter_rust_bridge::frb;
 use struct_patch::Patch as ApplyPatch;
@@ -101,6 +101,18 @@ impl RuntimeSettings {
     pub async fn get(&self) -> Result<Settings, String> {
         let state = self.runtime.state.read().await;
         Ok(state.settings.clone())
+    }
+
+    pub async fn get_general(&self) -> Result<GeneralSettings, String> {
+        Ok(self.get_section(|s| &s.general).await)
+    }
+
+    #[frb(positional)]
+    pub async fn update_general(
+        &self,
+        patch: GeneralSettingsPatch,
+    ) -> Result<GeneralSettings, String> {
+        self.update_section(patch, |s| &mut s.general).await
     }
 
     pub async fn get_appearance(&self) -> Result<AppearanceSettings, String> {

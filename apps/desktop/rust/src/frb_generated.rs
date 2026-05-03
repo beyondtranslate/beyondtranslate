@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1779129941;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -473759425;
 
 // Section: executor
 
@@ -327,6 +327,63 @@ fn wire__crate__api__runtime__RuntimeSettings_get_appearance_impl(
                         let api_that_guard = api_that_guard.unwrap();
                         let output_ok =
                             crate::api::runtime::RuntimeSettings::get_appearance(&*api_that_guard)
+                                .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__runtime__RuntimeSettings_get_general_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "RuntimeSettings_get_general",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, String>(
+                    (move || async move {
+                        let mut api_that_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_that, 0, false,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_that_guard =
+                                        Some(api_that.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_that_guard = api_that_guard.unwrap();
+                        let output_ok =
+                            crate::api::runtime::RuntimeSettings::get_general(&*api_that_guard)
                                 .await?;
                         Ok(output_ok)
                     })()
@@ -677,6 +734,67 @@ fn wire__crate__api__runtime__RuntimeSettings_update_appearance_impl(
                         }
                         let api_that_guard = api_that_guard.unwrap();
                         let output_ok = crate::api::runtime::RuntimeSettings::update_appearance(
+                            &*api_that_guard,
+                            api_patch,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__runtime__RuntimeSettings_update_general_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "RuntimeSettings_update_general",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RuntimeSettings>,
+            >>::sse_decode(&mut deserializer);
+            let api_patch =
+                <crate::domain::settings::GeneralSettingsPatch>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, String>(
+                    (move || async move {
+                        let mut api_that_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_that, 0, false,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_that_guard =
+                                        Some(api_that.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_that_guard = api_that_guard.unwrap();
+                        let output_ok = crate::api::runtime::RuntimeSettings::update_general(
                             &*api_that_guard,
                             api_patch,
                         )
@@ -1324,20 +1442,14 @@ impl SseDecode for String {
 impl SseDecode for crate::domain::settings::AdvancedSettings {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_launchAtLogin = <bool>::sse_decode(deserializer);
-        return crate::domain::settings::AdvancedSettings {
-            launch_at_login: var_launchAtLogin,
-        };
+        return crate::domain::settings::AdvancedSettings {};
     }
 }
 
 impl SseDecode for crate::domain::settings::AdvancedSettingsPatch {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_launchAtLogin = <Option<bool>>::sse_decode(deserializer);
-        return crate::domain::settings::AdvancedSettingsPatch {
-            launch_at_login: var_launchAtLogin,
-        };
+        return crate::domain::settings::AdvancedSettingsPatch {};
     }
 }
 
@@ -1408,6 +1520,30 @@ impl SseDecode for crate::api::mirrors::DeepLProviderConfig {
         return crate::api::mirrors::DeepLProviderConfig {
             api_key: var_apiKey,
             base_url: var_baseUrl,
+        };
+    }
+}
+
+impl SseDecode for crate::domain::settings::GeneralSettings {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_launchAtLogin = <bool>::sse_decode(deserializer);
+        let mut var_showMenuBar = <bool>::sse_decode(deserializer);
+        return crate::domain::settings::GeneralSettings {
+            launch_at_login: var_launchAtLogin,
+            show_menu_bar: var_showMenuBar,
+        };
+    }
+}
+
+impl SseDecode for crate::domain::settings::GeneralSettingsPatch {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_launchAtLogin = <Option<bool>>::sse_decode(deserializer);
+        let mut var_showMenuBar = <Option<bool>>::sse_decode(deserializer);
+        return crate::domain::settings::GeneralSettingsPatch {
+            launch_at_login: var_launchAtLogin,
+            show_menu_bar: var_showMenuBar,
         };
     }
 }
@@ -1869,6 +2005,7 @@ impl SseDecode for crate::domain::settings::Settings {
             String,
             crate::domain::settings::ProviderConfigEntry,
         >>::sse_decode(deserializer);
+        let mut var_general = <crate::domain::settings::GeneralSettings>::sse_decode(deserializer);
         let mut var_shortcuts =
             <crate::domain::settings::ShortcutSettings>::sse_decode(deserializer);
         let mut var_appearance =
@@ -1878,6 +2015,7 @@ impl SseDecode for crate::domain::settings::Settings {
         return crate::domain::settings::Settings {
             last_updated: var_lastUpdated,
             providers: var_providers,
+            general: var_general,
             shortcuts: var_shortcuts,
             appearance: var_appearance,
             advanced: var_advanced,
@@ -2132,61 +2270,73 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        6 => wire__crate__api__runtime__RuntimeSettings_get_json_impl(
+        6 => wire__crate__api__runtime__RuntimeSettings_get_general_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        7 => wire__crate__api__runtime__RuntimeSettings_get_provider_impl(
+        7 => wire__crate__api__runtime__RuntimeSettings_get_json_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        8 => wire__crate__api__runtime__RuntimeSettings_get_shortcuts_impl(
+        8 => wire__crate__api__runtime__RuntimeSettings_get_provider_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        9 => wire__crate__api__runtime__RuntimeSettings_list_providers_impl(
+        9 => wire__crate__api__runtime__RuntimeSettings_get_shortcuts_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__runtime__RuntimeSettings_update_advanced_impl(
+        10 => wire__crate__api__runtime__RuntimeSettings_list_providers_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__runtime__RuntimeSettings_update_appearance_impl(
+        11 => wire__crate__api__runtime__RuntimeSettings_update_advanced_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        12 => wire__crate__api__runtime__RuntimeSettings_update_provider_impl(
+        12 => wire__crate__api__runtime__RuntimeSettings_update_appearance_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        13 => wire__crate__api__runtime__RuntimeSettings_update_shortcuts_impl(
+        13 => wire__crate__api__runtime__RuntimeSettings_update_general_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        14 => wire__crate__api__runtime__RuntimeTranslation_translate_impl(
+        14 => wire__crate__api__runtime__RuntimeSettings_update_provider_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        19 => wire__crate__api__runtime__init_app_impl(port, ptr, rust_vec_len, data_len),
+        15 => wire__crate__api__runtime__RuntimeSettings_update_shortcuts_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        16 => wire__crate__api__runtime__RuntimeTranslation_translate_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        21 => wire__crate__api__runtime__init_app_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -2199,10 +2349,10 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        15 => wire__crate__api__runtime__Runtime_dictionary_impl(ptr, rust_vec_len, data_len),
-        16 => wire__crate__api__runtime__Runtime_new_impl(ptr, rust_vec_len, data_len),
-        17 => wire__crate__api__runtime__Runtime_settings_impl(ptr, rust_vec_len, data_len),
-        18 => wire__crate__api__runtime__Runtime_translation_impl(ptr, rust_vec_len, data_len),
+        17 => wire__crate__api__runtime__Runtime_dictionary_impl(ptr, rust_vec_len, data_len),
+        18 => wire__crate__api__runtime__Runtime_new_impl(ptr, rust_vec_len, data_len),
+        19 => wire__crate__api__runtime__Runtime_settings_impl(ptr, rust_vec_len, data_len),
+        20 => wire__crate__api__runtime__Runtime_translation_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -2275,7 +2425,7 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<RuntimeTranslation>> for Runti
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::domain::settings::AdvancedSettings {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.launch_at_login.into_into_dart().into_dart()].into_dart()
+        Vec::<u8>::new().into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -2292,7 +2442,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::AdvancedSettings
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::domain::settings::AdvancedSettingsPatch {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.launch_at_login.into_into_dart().into_dart()].into_dart()
+        Vec::<u8>::new().into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
@@ -2411,6 +2561,48 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::DeepLProv
 {
     fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::DeepLProviderConfig> {
         self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::GeneralSettings {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.launch_at_login.into_into_dart().into_dart(),
+            self.show_menu_bar.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::domain::settings::GeneralSettings
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::GeneralSettings>
+    for crate::domain::settings::GeneralSettings
+{
+    fn into_into_dart(self) -> crate::domain::settings::GeneralSettings {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::GeneralSettingsPatch {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.launch_at_login.into_into_dart().into_dart(),
+            self.show_menu_bar.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::domain::settings::GeneralSettingsPatch
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::GeneralSettingsPatch>
+    for crate::domain::settings::GeneralSettingsPatch
+{
+    fn into_into_dart(self) -> crate::domain::settings::GeneralSettingsPatch {
+        self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -2582,6 +2774,7 @@ impl flutter_rust_bridge::IntoDart for crate::domain::settings::Settings {
         [
             self.last_updated.into_into_dart().into_dart(),
             self.providers.into_into_dart().into_dart(),
+            self.general.into_into_dart().into_dart(),
             self.shortcuts.into_into_dart().into_dart(),
             self.appearance.into_into_dart().into_dart(),
             self.advanced.into_into_dart().into_dart(),
@@ -3001,16 +3194,12 @@ impl SseEncode for String {
 
 impl SseEncode for crate::domain::settings::AdvancedSettings {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.launch_at_login, serializer);
-    }
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
 }
 
 impl SseEncode for crate::domain::settings::AdvancedSettingsPatch {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <Option<bool>>::sse_encode(self.launch_at_login, serializer);
-    }
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
 }
 
 impl SseEncode for crate::domain::settings::AppearanceSettings {
@@ -3059,6 +3248,22 @@ impl SseEncode for crate::api::mirrors::DeepLProviderConfig {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.api_key, serializer);
         <Option<String>>::sse_encode(self.base_url, serializer);
+    }
+}
+
+impl SseEncode for crate::domain::settings::GeneralSettings {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.launch_at_login, serializer);
+        <bool>::sse_encode(self.show_menu_bar, serializer);
+    }
+}
+
+impl SseEncode for crate::domain::settings::GeneralSettingsPatch {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Option<bool>>::sse_encode(self.launch_at_login, serializer);
+        <Option<bool>>::sse_encode(self.show_menu_bar, serializer);
     }
 }
 
@@ -3424,6 +3629,7 @@ impl SseEncode for crate::domain::settings::Settings {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.last_updated, serializer);
         <std::collections::HashMap<String, crate::domain::settings::ProviderConfigEntry>>::sse_encode(self.providers, serializer);
+        <crate::domain::settings::GeneralSettings>::sse_encode(self.general, serializer);
         <crate::domain::settings::ShortcutSettings>::sse_encode(self.shortcuts, serializer);
         <crate::domain::settings::AppearanceSettings>::sse_encode(self.appearance, serializer);
         <crate::domain::settings::AdvancedSettings>::sse_encode(self.advanced, serializer);

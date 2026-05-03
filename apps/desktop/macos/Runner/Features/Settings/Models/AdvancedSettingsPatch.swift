@@ -3,6 +3,4 @@
 
 import Foundation
 
-struct AdvancedSettingsPatch: Codable {
-  var launchAtLogin: Bool?
-}
+struct AdvancedSettingsPatch: Codable {}

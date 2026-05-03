@@ -74,7 +74,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1779129941;
+  int get rustContentHash => -473759425;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -100,6 +100,9 @@ abstract class RustLibApi extends BaseApi {
   Future<AppearanceSettings> crateApiRuntimeRuntimeSettingsGetAppearance(
       {required RuntimeSettings that});
 
+  Future<GeneralSettings> crateApiRuntimeRuntimeSettingsGetGeneral(
+      {required RuntimeSettings that});
+
   Future<String> crateApiRuntimeRuntimeSettingsGetJson(
       {required RuntimeSettings that});
 
@@ -117,6 +120,9 @@ abstract class RustLibApi extends BaseApi {
 
   Future<AppearanceSettings> crateApiRuntimeRuntimeSettingsUpdateAppearance(
       {required RuntimeSettings that, required AppearanceSettingsPatch patch});
+
+  Future<GeneralSettings> crateApiRuntimeRuntimeSettingsUpdateGeneral(
+      {required RuntimeSettings that, required GeneralSettingsPatch patch});
 
   Future<ProviderConfigEntry> crateApiRuntimeRuntimeSettingsUpdateProvider(
       {required RuntimeSettings that,
@@ -322,7 +328,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiRuntimeRuntimeSettingsGetJson(
+  Future<GeneralSettings> crateApiRuntimeRuntimeSettingsGetGeneral(
       {required RuntimeSettings that}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -331,6 +337,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 6, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_general_settings,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsGetGeneralConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsGetGeneralConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_get_general",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<String> crateApiRuntimeRuntimeSettingsGetJson(
+      {required RuntimeSettings that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 7, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -358,7 +391,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(providerId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 7, port: port_);
+            funcId: 8, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_opt_box_autoadd_provider_config_entry,
@@ -385,7 +418,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 8, port: port_);
+            funcId: 9, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_shortcut_settings,
@@ -412,7 +445,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 9, port: port_);
+            funcId: 10, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_provider_config_entry,
@@ -440,7 +473,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_box_autoadd_advanced_settings_patch(patch, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 10, port: port_);
+            funcId: 11, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_advanced_settings,
@@ -468,7 +501,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_box_autoadd_appearance_settings_patch(patch, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 11, port: port_);
+            funcId: 12, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_appearance_settings,
@@ -487,6 +520,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<GeneralSettings> crateApiRuntimeRuntimeSettingsUpdateGeneral(
+      {required RuntimeSettings that, required GeneralSettingsPatch patch}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntimeSettings(
+            that, serializer);
+        sse_encode_box_autoadd_general_settings_patch(patch, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 13, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_general_settings,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRuntimeRuntimeSettingsUpdateGeneralConstMeta,
+      argValues: [that, patch],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRuntimeRuntimeSettingsUpdateGeneralConstMeta =>
+      const TaskConstMeta(
+        debugName: "RuntimeSettings_update_general",
+        argNames: ["that", "patch"],
+      );
+
+  @override
   Future<ProviderConfigEntry> crateApiRuntimeRuntimeSettingsUpdateProvider(
       {required RuntimeSettings that,
       required String providerId,
@@ -501,7 +562,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(providerType, serializer);
         sse_encode_Map_String_String_None(fields, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 12, port: port_);
+            funcId: 14, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_provider_config_entry,
@@ -529,7 +590,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_box_autoadd_shortcut_settings_patch(patch, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 13, port: port_);
+            funcId: 15, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_shortcut_settings,
@@ -557,7 +618,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_box_autoadd_translate_request(request, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 14, port: port_);
+            funcId: 16, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_translate_response,
@@ -584,7 +645,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
             that, serializer);
         sse_encode_String(providerId, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 15)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 17)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -609,7 +670,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(dataDir, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 16)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -634,7 +695,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 17)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -662,7 +723,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRuntime(
             that, serializer);
         sse_encode_String(providerId, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 20)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -687,7 +748,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 19, port: port_);
+            funcId: 21, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -858,22 +919,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   AdvancedSettings dco_decode_advanced_settings(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return AdvancedSettings(
-      launchAtLogin: dco_decode_bool(arr[0]),
-    );
+    if (arr.isNotEmpty)
+      throw Exception('unexpected arr length: expect 0 but see ${arr.length}');
+    return const AdvancedSettings();
   }
 
   @protected
   AdvancedSettingsPatch dco_decode_advanced_settings_patch(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return AdvancedSettingsPatch(
-      launchAtLogin: dco_decode_opt_box_autoadd_bool(arr[0]),
-    );
+    if (arr.isNotEmpty)
+      throw Exception('unexpected arr length: expect 0 but see ${arr.length}');
+    return const AdvancedSettingsPatch();
   }
 
   @protected
@@ -940,6 +997,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  GeneralSettingsPatch dco_decode_box_autoadd_general_settings_patch(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_general_settings_patch(raw);
+  }
+
+  @protected
   LookUpRequest dco_decode_box_autoadd_look_up_request(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_look_up_request(raw);
@@ -987,6 +1051,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return DeepLProviderConfig(
       apiKey: dco_decode_String(arr[0]),
       baseUrl: dco_decode_opt_String(arr[1]),
+    );
+  }
+
+  @protected
+  GeneralSettings dco_decode_general_settings(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return GeneralSettings(
+      launchAtLogin: dco_decode_bool(arr[0]),
+      showMenuBar: dco_decode_bool(arr[1]),
+    );
+  }
+
+  @protected
+  GeneralSettingsPatch dco_decode_general_settings_patch(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return GeneralSettingsPatch(
+      launchAtLogin: dco_decode_opt_box_autoadd_bool(arr[0]),
+      showMenuBar: dco_decode_opt_box_autoadd_bool(arr[1]),
     );
   }
 
@@ -1262,14 +1350,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Settings dco_decode_settings(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    if (arr.length != 6)
+      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
     return Settings(
       lastUpdated: dco_decode_u_64(arr[0]),
       providers: dco_decode_Map_String_provider_config_entry_None(arr[1]),
-      shortcuts: dco_decode_shortcut_settings(arr[2]),
-      appearance: dco_decode_appearance_settings(arr[3]),
-      advanced: dco_decode_advanced_settings(arr[4]),
+      general: dco_decode_general_settings(arr[2]),
+      shortcuts: dco_decode_shortcut_settings(arr[3]),
+      appearance: dco_decode_appearance_settings(arr[4]),
+      advanced: dco_decode_advanced_settings(arr[5]),
     );
   }
 
@@ -1612,16 +1701,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   AdvancedSettings sse_decode_advanced_settings(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_launchAtLogin = sse_decode_bool(deserializer);
-    return AdvancedSettings(launchAtLogin: var_launchAtLogin);
+    return const AdvancedSettings();
   }
 
   @protected
   AdvancedSettingsPatch sse_decode_advanced_settings_patch(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_launchAtLogin = sse_decode_opt_box_autoadd_bool(deserializer);
-    return AdvancedSettingsPatch(launchAtLogin: var_launchAtLogin);
+    return const AdvancedSettingsPatch();
   }
 
   @protected
@@ -1681,6 +1768,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  GeneralSettingsPatch sse_decode_box_autoadd_general_settings_patch(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_general_settings_patch(deserializer));
+  }
+
+  @protected
   LookUpRequest sse_decode_box_autoadd_look_up_request(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1726,6 +1820,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_apiKey = sse_decode_String(deserializer);
     var var_baseUrl = sse_decode_opt_String(deserializer);
     return DeepLProviderConfig(apiKey: var_apiKey, baseUrl: var_baseUrl);
+  }
+
+  @protected
+  GeneralSettings sse_decode_general_settings(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_launchAtLogin = sse_decode_bool(deserializer);
+    var var_showMenuBar = sse_decode_bool(deserializer);
+    return GeneralSettings(
+        launchAtLogin: var_launchAtLogin, showMenuBar: var_showMenuBar);
+  }
+
+  @protected
+  GeneralSettingsPatch sse_decode_general_settings_patch(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_launchAtLogin = sse_decode_opt_box_autoadd_bool(deserializer);
+    var var_showMenuBar = sse_decode_opt_box_autoadd_bool(deserializer);
+    return GeneralSettingsPatch(
+        launchAtLogin: var_launchAtLogin, showMenuBar: var_showMenuBar);
   }
 
   @protected
@@ -2132,12 +2245,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_lastUpdated = sse_decode_u_64(deserializer);
     var var_providers =
         sse_decode_Map_String_provider_config_entry_None(deserializer);
+    var var_general = sse_decode_general_settings(deserializer);
     var var_shortcuts = sse_decode_shortcut_settings(deserializer);
     var var_appearance = sse_decode_appearance_settings(deserializer);
     var var_advanced = sse_decode_advanced_settings(deserializer);
     return Settings(
         lastUpdated: var_lastUpdated,
         providers: var_providers,
+        general: var_general,
         shortcuts: var_shortcuts,
         appearance: var_appearance,
         advanced: var_advanced);
@@ -2461,14 +2576,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_advanced_settings(
       AdvancedSettings self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_bool(self.launchAtLogin, serializer);
   }
 
   @protected
   void sse_encode_advanced_settings_patch(
       AdvancedSettingsPatch self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_opt_box_autoadd_bool(self.launchAtLogin, serializer);
   }
 
   @protected
@@ -2523,6 +2636,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_general_settings_patch(
+      GeneralSettingsPatch self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_general_settings_patch(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_look_up_request(
       LookUpRequest self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2565,6 +2685,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.apiKey, serializer);
     sse_encode_opt_String(self.baseUrl, serializer);
+  }
+
+  @protected
+  void sse_encode_general_settings(
+      GeneralSettings self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_bool(self.launchAtLogin, serializer);
+    sse_encode_bool(self.showMenuBar, serializer);
+  }
+
+  @protected
+  void sse_encode_general_settings_patch(
+      GeneralSettingsPatch self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_opt_box_autoadd_bool(self.launchAtLogin, serializer);
+    sse_encode_opt_box_autoadd_bool(self.showMenuBar, serializer);
   }
 
   @protected
@@ -2904,6 +3040,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_u_64(self.lastUpdated, serializer);
     sse_encode_Map_String_provider_config_entry_None(
         self.providers, serializer);
+    sse_encode_general_settings(self.general, serializer);
     sse_encode_shortcut_settings(self.shortcuts, serializer);
     sse_encode_appearance_settings(self.appearance, serializer);
     sse_encode_advanced_settings(self.advanced, serializer);
@@ -3144,6 +3281,11 @@ class RuntimeSettingsImpl extends RustOpaque implements RuntimeSettings {
         that: this,
       );
 
+  Future<GeneralSettings> getGeneral() =>
+      RustLib.instance.api.crateApiRuntimeRuntimeSettingsGetGeneral(
+        that: this,
+      );
+
   Future<String> getJson() =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettingsGetJson(
         that: this,
@@ -3170,6 +3312,10 @@ class RuntimeSettingsImpl extends RustOpaque implements RuntimeSettings {
   Future<AppearanceSettings> updateAppearance(AppearanceSettingsPatch patch) =>
       RustLib.instance.api.crateApiRuntimeRuntimeSettingsUpdateAppearance(
           that: this, patch: patch);
+
+  Future<GeneralSettings> updateGeneral(GeneralSettingsPatch patch) => RustLib
+      .instance.api
+      .crateApiRuntimeRuntimeSettingsUpdateGeneral(that: this, patch: patch);
 
   Future<ProviderConfigEntry> updateProvider(
           {required String providerId,

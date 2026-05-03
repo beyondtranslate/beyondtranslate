@@ -1,11 +1,11 @@
 import Foundation
 
 struct AppSettings {
-  var general = GeneralSettings()
+  var general = GeneralLocalSettings()
   var appearance = AppearanceSettingsState()
 }
 
-struct GeneralSettings {
+struct GeneralLocalSettings {
   var defaultOcrEngine = "Built-in OCR"
   var autoCopyDetectedText = true
   var defaultTranslateEngine = "OpenAI"
@@ -20,7 +20,6 @@ struct GeneralSettings {
 }
 
 struct AppearanceSettingsState {
-  var showTrayIcon = true
   var appLanguage = "English"
   var themeMode: AppThemeMode = .system
 }

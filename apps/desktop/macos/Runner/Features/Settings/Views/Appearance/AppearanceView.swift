@@ -5,10 +5,6 @@ struct AppearanceView: View {
 
   var body: some View {
     SettingsPage(title: "Appearance") {
-      Section("Interface") {
-        SettingToggle("Show tray icon", isOn: $viewModel.showTrayIcon)
-      }
-
       Section("Display Language") {
         SettingPicker(
           "",

@@ -8,39 +8,27 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import '../frb_generated.dart';
 
 class AdvancedSettings {
-  final bool launchAtLogin;
-
-  const AdvancedSettings({
-    required this.launchAtLogin,
-  });
+  const AdvancedSettings();
 
   @override
-  int get hashCode => launchAtLogin.hashCode;
+  int get hashCode => 0;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AdvancedSettings &&
-          runtimeType == other.runtimeType &&
-          launchAtLogin == other.launchAtLogin;
+      other is AdvancedSettings && runtimeType == other.runtimeType;
 }
 
 class AdvancedSettingsPatch {
-  final bool? launchAtLogin;
-
-  const AdvancedSettingsPatch({
-    this.launchAtLogin,
-  });
+  const AdvancedSettingsPatch();
 
   @override
-  int get hashCode => launchAtLogin.hashCode;
+  int get hashCode => 0;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AdvancedSettingsPatch &&
-          runtimeType == other.runtimeType &&
-          launchAtLogin == other.launchAtLogin;
+      other is AdvancedSettingsPatch && runtimeType == other.runtimeType;
 }
 
 class AppearanceSettings {
@@ -85,6 +73,48 @@ class AppearanceSettingsPatch {
           themeMode == other.themeMode;
 }
 
+class GeneralSettings {
+  final bool launchAtLogin;
+  final bool showMenuBar;
+
+  const GeneralSettings({
+    required this.launchAtLogin,
+    required this.showMenuBar,
+  });
+
+  @override
+  int get hashCode => launchAtLogin.hashCode ^ showMenuBar.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GeneralSettings &&
+          runtimeType == other.runtimeType &&
+          launchAtLogin == other.launchAtLogin &&
+          showMenuBar == other.showMenuBar;
+}
+
+class GeneralSettingsPatch {
+  final bool? launchAtLogin;
+  final bool? showMenuBar;
+
+  const GeneralSettingsPatch({
+    this.launchAtLogin,
+    this.showMenuBar,
+  });
+
+  @override
+  int get hashCode => launchAtLogin.hashCode ^ showMenuBar.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GeneralSettingsPatch &&
+          runtimeType == other.runtimeType &&
+          launchAtLogin == other.launchAtLogin &&
+          showMenuBar == other.showMenuBar;
+}
+
 class ProviderConfigEntry {
   final String id;
   final String type;
@@ -119,6 +149,7 @@ class ProviderConfigEntry {
 class Settings {
   final BigInt lastUpdated;
   final Map<String, ProviderConfigEntry> providers;
+  final GeneralSettings general;
   final ShortcutSettings shortcuts;
   final AppearanceSettings appearance;
   final AdvancedSettings advanced;
@@ -126,6 +157,7 @@ class Settings {
   const Settings({
     required this.lastUpdated,
     required this.providers,
+    required this.general,
     required this.shortcuts,
     required this.appearance,
     required this.advanced,
@@ -135,6 +167,7 @@ class Settings {
   int get hashCode =>
       lastUpdated.hashCode ^
       providers.hashCode ^
+      general.hashCode ^
       shortcuts.hashCode ^
       appearance.hashCode ^
       advanced.hashCode;
@@ -146,6 +179,7 @@ class Settings {
           runtimeType == other.runtimeType &&
           lastUpdated == other.lastUpdated &&
           providers == other.providers &&
+          general == other.general &&
           shortcuts == other.shortcuts &&
           appearance == other.appearance &&
           advanced == other.advanced;

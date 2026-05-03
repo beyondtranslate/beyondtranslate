@@ -64,18 +64,33 @@ class NativeSettings {
             'extractFromClipboard': result.extractFromClipboard,
           };
 
-        case 'settings.getAdvanced':
-          final result = await settings.getAdvanced();
-          return {'launchAtLogin': result.launchAtLogin};
+        case 'settings.getGeneral':
+          final result = await settings.getGeneral();
+          return {
+            'launchAtLogin': result.launchAtLogin,
+            'showMenuBar': result.showMenuBar,
+          };
 
-        case 'settings.updateAdvanced':
+        case 'settings.updateGeneral':
           final args = (call.arguments as Map).cast<String, dynamic>();
-          final result = await settings.updateAdvanced(
-            AdvancedSettingsPatch(
+          final result = await settings.updateGeneral(
+            GeneralSettingsPatch(
               launchAtLogin: args['launchAtLogin'] as bool?,
+              showMenuBar: args['showMenuBar'] as bool?,
             ),
           );
-          return {'launchAtLogin': result.launchAtLogin};
+          return {
+            'launchAtLogin': result.launchAtLogin,
+            'showMenuBar': result.showMenuBar,
+          };
+
+        case 'settings.getAdvanced':
+          await settings.getAdvanced();
+          return {};
+
+        case 'settings.updateAdvanced':
+          await settings.updateAdvanced(const AdvancedSettingsPatch());
+          return {};
 
         case 'settings.listProviders':
           final providers = await settings.listProviders();

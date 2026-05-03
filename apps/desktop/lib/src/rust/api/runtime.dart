@@ -40,6 +40,8 @@ abstract class RuntimeSettings implements RustOpaqueInterface {
 
   Future<AppearanceSettings> getAppearance();
 
+  Future<GeneralSettings> getGeneral();
+
   Future<String> getJson();
 
   Future<ProviderConfigEntry?> getProvider({required String providerId});
@@ -51,6 +53,8 @@ abstract class RuntimeSettings implements RustOpaqueInterface {
   Future<AdvancedSettings> updateAdvanced(AdvancedSettingsPatch patch);
 
   Future<AppearanceSettings> updateAppearance(AppearanceSettingsPatch patch);
+
+  Future<GeneralSettings> updateGeneral(GeneralSettingsPatch patch);
 
   Future<ProviderConfigEntry> updateProvider(
       {required String providerId,

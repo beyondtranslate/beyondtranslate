@@ -34,6 +34,20 @@ final class NativeSettingsPlugin: NSObject, FlutterPlugin {
   }
 
   @MainActor
+  func getGeneral() async throws -> GeneralSettings {
+    try decode(from: try await invoke("settings.getGeneral"))
+  }
+
+  @MainActor
+  func updateGeneral(_ patch: GeneralSettingsPatch) async throws -> GeneralSettings {
+    try decode(
+      from: try await invoke(
+        "settings.updateGeneral",
+        arguments: encodePatch(patch)
+      ))
+  }
+
+  @MainActor
   func getAppearance() async throws -> AppearanceSettings {
     try decode(from: try await invoke("settings.getAppearance"))
   }

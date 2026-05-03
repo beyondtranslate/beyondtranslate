@@ -137,6 +137,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool dco_decode_box_autoadd_bool(dynamic raw);
 
   @protected
+  GeneralSettingsPatch dco_decode_box_autoadd_general_settings_patch(
+      dynamic raw);
+
+  @protected
   LookUpRequest dco_decode_box_autoadd_look_up_request(dynamic raw);
 
   @protected
@@ -154,6 +158,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   DeepLProviderConfig dco_decode_deep_l_provider_config(dynamic raw);
+
+  @protected
+  GeneralSettings dco_decode_general_settings(dynamic raw);
+
+  @protected
+  GeneralSettingsPatch dco_decode_general_settings_patch(dynamic raw);
 
   @protected
   GoogleProviderConfig dco_decode_google_provider_config(dynamic raw);
@@ -423,6 +433,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool sse_decode_box_autoadd_bool(SseDeserializer deserializer);
 
   @protected
+  GeneralSettingsPatch sse_decode_box_autoadd_general_settings_patch(
+      SseDeserializer deserializer);
+
+  @protected
   LookUpRequest sse_decode_box_autoadd_look_up_request(
       SseDeserializer deserializer);
 
@@ -444,6 +458,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   DeepLProviderConfig sse_decode_deep_l_provider_config(
+      SseDeserializer deserializer);
+
+  @protected
+  GeneralSettings sse_decode_general_settings(SseDeserializer deserializer);
+
+  @protected
+  GeneralSettingsPatch sse_decode_general_settings_patch(
       SseDeserializer deserializer);
 
   @protected
@@ -733,6 +754,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_general_settings_patch(
+      GeneralSettingsPatch self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_look_up_request(
       LookUpRequest self, SseSerializer serializer);
 
@@ -755,6 +780,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_deep_l_provider_config(
       DeepLProviderConfig self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_general_settings(
+      GeneralSettings self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_general_settings_patch(
+      GeneralSettingsPatch self, SseSerializer serializer);
 
   @protected
   void sse_encode_google_provider_config(

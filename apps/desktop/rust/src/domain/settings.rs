@@ -56,12 +56,28 @@ impl Default for AppearanceSettings {
     }
 }
 
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch)]
+#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
+#[serde(default)]
+pub struct GeneralSettings {
+    #[serde(rename = "launchAtLogin")]
+    pub launch_at_login: bool,
+    #[serde(rename = "showMenuBar")]
+    pub show_menu_bar: bool,
+}
+
+impl Default for GeneralSettings {
+    fn default() -> Self {
+        Self {
+            launch_at_login: false,
+            show_menu_bar: true,
+        }
+    }
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, Patch)]
 #[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
-pub struct AdvancedSettings {
-    #[serde(default, rename = "launchAtLogin")]
-    pub launch_at_login: bool,
-}
+pub struct AdvancedSettings {}
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProviderConfigEntry {
@@ -89,6 +105,8 @@ pub struct Settings {
         deserialize_with = "deserialize_providers"
     )]
     pub providers: HashMap<String, ProviderConfigEntry>,
+    #[serde(default)]
+    pub general: GeneralSettings,
     #[serde(default)]
     pub shortcuts: ShortcutSettings,
     #[serde(default)]
@@ -309,6 +327,7 @@ mod tests {
         let settings = Settings::load(&file_path).expect("failed to load settings");
 
         assert!(settings.providers.is_empty());
+        assert_eq!(settings.general, GeneralSettings::default());
         assert_eq!(settings.shortcuts, ShortcutSettings::default());
         assert_eq!(settings.appearance, AppearanceSettings::default());
         assert_eq!(settings.advanced, AdvancedSettings::default());
@@ -332,9 +351,11 @@ mod tests {
     "language": "en",
     "themeMode": "dark"
   },
-  "advanced": {
-    "launchAtLogin": true
+  "general": {
+    "launchAtLogin": true,
+    "showMenuBar": false
   },
+  "advanced": {},
   "providers": {
     "deepl-main": {
       "type": "deepl",
@@ -361,7 +382,8 @@ mod tests {
         assert_eq!(settings.shortcuts.extract_from_clipboard, "Command+Shift+3");
         assert_eq!(settings.appearance.language, "en");
         assert_eq!(settings.appearance.theme_mode, "dark");
-        assert!(settings.advanced.launch_at_login);
+        assert!(settings.general.launch_at_login);
+        assert!(!settings.general.show_menu_bar);
         assert_eq!(settings.providers.len(), 1);
         let provider = settings.providers.get("deepl-main").unwrap();
         assert_eq!(provider.id, "deepl-main");
@@ -387,7 +409,8 @@ mod tests {
         settings.shortcuts.extract_from_clipboard = "Command+Shift+3".to_owned();
         settings.appearance.language = "en".to_owned();
         settings.appearance.theme_mode = "system".to_owned();
-        settings.advanced.launch_at_login = true;
+        settings.general.launch_at_login = true;
+        settings.general.show_menu_bar = false;
         settings.providers.insert(
             "deepl-main".to_owned(),
             ProviderConfigEntry {
@@ -431,8 +454,12 @@ mod tests {
             Some(Value::String("system".to_owned()))
         );
         assert_eq!(
-            json.pointer("/advanced/launchAtLogin").cloned(),
+            json.pointer("/general/launchAtLogin").cloned(),
             Some(Value::Bool(true))
+        );
+        assert_eq!(
+            json.pointer("/general/showMenuBar").cloned(),
+            Some(Value::Bool(false))
         );
         assert_eq!(
             json.pointer("/providers/deepl-main/type").cloned(),
@@ -453,6 +480,7 @@ mod tests {
             .expect("invalid settings json");
 
         assert!(json.get("engine").is_none());
+        assert!(json.get("general").is_some());
         assert!(json.get("shortcuts").is_some());
         assert!(json.get("providers").is_none());
         assert!(json.get("appearance").is_some());

@@ -2,7 +2,6 @@ import SwiftUI
 
 @MainActor
 final class AppearanceViewModel: ObservableObject {
-  @Published var showTrayIcon: Bool
   @Published var appLanguage: String
   @Published var themeMode: AppThemeMode
 
@@ -13,7 +12,6 @@ final class AppearanceViewModel: ObservableObject {
     repository: SettingsRepository
   ) {
     self.repository = repository
-    showTrayIcon = settings.showTrayIcon
     appLanguage = settings.appLanguage
     themeMode = settings.themeMode
     ThemeAppearanceController.apply(settings.themeMode)

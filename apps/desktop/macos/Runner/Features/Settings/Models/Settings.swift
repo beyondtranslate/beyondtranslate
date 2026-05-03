@@ -6,6 +6,7 @@ import Foundation
 struct Settings: Codable {
   var lastUpdated: UInt64
   var providers: [String: ProviderConfigEntry]
+  var general: GeneralSettings
   var shortcuts: ShortcutSettings
   var appearance: AppearanceSettings
   var advanced: AdvancedSettings

@@ -3,4 +3,7 @@
 
 import Foundation
 
-struct AdvancedSettings: Codable {}
+struct GeneralSettingsPatch: Codable {
+    var launchAtLogin: Bool?
+    var showMenuBar: Bool?
+}

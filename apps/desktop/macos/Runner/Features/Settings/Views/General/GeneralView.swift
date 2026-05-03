@@ -5,6 +5,21 @@ struct GeneralView: View {
 
   var body: some View {
     SettingsPage(title: "General") {
+      Section("App") {
+        SettingToggle(
+          "Launch at login",
+          isOn: Binding(
+            get: { viewModel.launchAtLogin },
+            set: { viewModel.setLaunchAtLogin($0) }
+          ))
+        SettingToggle(
+          "Show menu bar",
+          isOn: Binding(
+            get: { viewModel.showMenuBar },
+            set: { viewModel.setShowMenuBar($0) }
+          ))
+      }
+
       Section("Extract Text") {
         SettingPicker("Default detect text engine", selection: $viewModel.defaultOcrEngine) {
           ForEach(["Built-in OCR", "Tesseract", "Youdao OCR"], id: \.self) { item in
@@ -17,7 +32,9 @@ struct GeneralView: View {
       }
 
       Section("Translate") {
-        SettingPicker("Default translate engine", selection: $viewModel.defaultTranslateEngine) {
+        SettingPicker(
+          "Default translate engine", selection: $viewModel.defaultTranslateEngine
+        ) {
           ForEach(["OpenAI", "Google Translate", "DeepL", "Youdao"], id: \.self) { item in
             Text(item).tag(item)
           }

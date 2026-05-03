@@ -3,6 +3,8 @@ import Foundation
 @MainActor
 protocol SettingsRepository {
   func loadSettings() -> AppSettings
+  func getGeneral() async throws -> GeneralSettings
+  func updateGeneral(_ patch: GeneralSettingsPatch) async throws -> GeneralSettings
   func getAppearance() async throws -> AppearanceSettings
   func updateAppearance(_ patch: AppearanceSettingsPatch) async throws -> AppearanceSettings
   func getShortcuts() async throws -> ShortcutSettings
@@ -33,6 +35,14 @@ final class DefaultSettingsRepository: SettingsRepository {
 
   func loadSettings() -> AppSettings {
     AppSettings()
+  }
+
+  func getGeneral() async throws -> GeneralSettings {
+    try await plugin().getGeneral()
+  }
+
+  func updateGeneral(_ patch: GeneralSettingsPatch) async throws -> GeneralSettings {
+    try await plugin().updateGeneral(patch)
   }
 
   func getAppearance() async throws -> AppearanceSettings {
