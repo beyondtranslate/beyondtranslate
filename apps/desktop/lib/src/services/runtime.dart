@@ -4,8 +4,35 @@ import 'package:path/path.dart' as path;
 
 import '../rust/api/runtime.dart' as rust_api;
 export '../rust/api/mirrors.dart'
-    show LookUpRequest, LookUpResponse, TranslateRequest, TranslateResponse;
+    show
+        ProviderCapability,
+        LookUpRequest,
+        LookUpResponse,
+        TextTranslation,
+        TranslateRequest,
+        TranslateResponse,
+        WordDefinition,
+        WordImage,
+        WordPhrase,
+        WordPronunciation,
+        WordSentence,
+        WordTag,
+        WordTense;
 export '../rust/domain/settings.dart' show ProviderConfigEntry;
+
+/// A simple error class to replace [UniTranslateClientError] from the
+/// `uni_translate_client` package. Used to record translation / dictionary
+/// lookup failures in [TranslationResultRecord].
+class TranslationError {
+  final String message;
+
+  const TranslationError({required this.message});
+
+  factory TranslationError.fromJson(Map<String, dynamic> json) =>
+      TranslationError(message: json['message'] ?? '');
+
+  Map<String, dynamic> toJson() => {'message': message};
+}
 
 String? _dataDir;
 

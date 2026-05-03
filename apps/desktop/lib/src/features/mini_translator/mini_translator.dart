@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:collection/collection.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,23 +15,20 @@ import 'package:protocol_handler/protocol_handler.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:screen_text_extractor/screen_text_extractor.dart';
-import 'package:shortid/shortid.dart';
 import 'package:uni_ocr_client/uni_ocr_client.dart';
-import 'package:uni_translate_client/uni_translate_client.dart';
 
 import '../../i18n/i18n.dart';
 import '../../models/preference_item.dart';
-import '../../models/translation_engine_config.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
 import '../../models/translation_target.dart';
 import '../../models/version.dart';
 import '../../networking/api_client/api_client.dart';
 import '../../networking/ocr_client/ocr_client.dart';
-import '../../networking/translate_client/translate_client.dart';
 import '../../services/local_db/configuration.dart';
 import '../../services/local_db/local_db.dart';
 import '../../services/native_settings.dart';
+import '../../services/runtime.dart';
 import '../../services/shortcut_service/shortcut_service.dart';
 import '../../utils/language_util.dart';
 import '../../utils/platform_util.dart';
@@ -198,24 +194,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   nativeapi.Image? _trayIconImage;
   final List<nativeapi.Menu> _trayMenus = <nativeapi.Menu>[];
   final List<nativeapi.MenuItem> _trayMenuItems = <nativeapi.MenuItem>[];
-
-  List<TranslationEngineConfig> get _translationEngineList {
-    return localDb.engines.list(
-      where: (e) => !e.disabled,
-    );
-  }
-
-  List<TranslationTarget> get _translationTargetList {
-    if (_configuration.translationMode == kTranslationModeManual) {
-      return [
-        TranslationTarget(
-          sourceLanguage: _sourceLanguage,
-          targetLanguage: _targetLanguage,
-        ),
-      ];
-    }
-    return localDb.translationTargets.list();
-  }
 
   nativeapi.Window get _window => miniTranslatorWindowController.window;
 
@@ -586,178 +564,110 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _futureList = [];
     });
 
-    if (_configuration.translationMode == kTranslationModeManual) {
-      TranslationResult translationResult = TranslationResult(
-        translationTarget: _translationTargetList.first,
-        translationResultRecordList: [],
-      );
-      _translationResultList = [translationResult];
+    // Load providers and translation targets from runtime settings.
+    final settings = runtime.settings();
+    final providers = await settings.listProviders();
+    final generalSettings = await settings.getGeneral();
+
+    final translationMode = generalSettings.translationMode.name;
+
+    List<TranslationTarget> activeTargets;
+    if (translationMode == kTranslationModeManual) {
+      activeTargets = [
+        TranslationTarget(
+          sourceLanguage: _sourceLanguage,
+          targetLanguage: _targetLanguage,
+        ),
+      ];
     } else {
-      var filteredTranslationTargetList = _translationTargetList;
-      try {
-        DetectLanguageRequest detectLanguageRequest = DetectLanguageRequest(
-          texts: [_text],
-        );
-        DetectLanguageResponse detectLanguageResponse = await translateClient
-            .use(_configuration.defaultEngineId ?? '')
-            .detectLanguage(detectLanguageRequest);
-
-        _textDetectedLanguage = detectLanguageResponse
-            .detections!.first.detectedLanguage
-            .split('-')[0];
-
-        filteredTranslationTargetList = _translationTargetList
-            .where((e) => e.sourceLanguage == _textDetectedLanguage)
-            .toList();
-      } catch (error) {
-        // ignore
-      }
-
-      for (var translationTarget in filteredTranslationTargetList) {
-        TranslationResult translationResult = TranslationResult(
-          translationTarget: translationTarget,
-          translationResultRecordList: [],
-          unsupportedEngineIdList: [],
-        );
-        _translationResultList.add(translationResult);
-      }
-
-      setState(() {});
+      // Map domain TranslationTarget to app model TranslationTarget.
+      activeTargets = generalSettings.translationTargets
+          .map((t) => TranslationTarget(
+                sourceLanguage: t.source,
+                targetLanguage: t.target,
+              ))
+          .toList();
     }
 
+    for (var translationTarget in activeTargets) {
+      TranslationResult translationResult = TranslationResult(
+        translationTarget: translationTarget,
+        translationResultRecordList: [],
+        unsupportedEngineIdList: [],
+      );
+      _translationResultList.add(translationResult);
+    }
+    setState(() {});
+
     for (int i = 0; i < _translationResultList.length; i++) {
-      TranslationTarget? translationTarget =
-          _translationResultList[i].translationTarget;
-
-      List<String> engineIdList = [];
-      List<String> unsupportedEngineIdList = [];
-
-      for (int j = 0; j < _translationEngineList.length; j++) {
-        String identifier = _translationEngineList[j].identifier;
-
-        if (_translationEngineList[j].disabled) continue;
-
-        try {
-          List<LanguagePair> supportedLanguagePairList = [];
-          supportedLanguagePairList =
-              await translateClient.use(identifier).getSupportedLanguagePairs();
-
-          LanguagePair? languagePair =
-              supportedLanguagePairList.firstWhereOrNull(
-            (e) {
-              return e.sourceLanguage == translationTarget?.sourceLanguage &&
-                  e.targetLanguage == translationTarget?.targetLanguage;
-            },
-          );
-          if (languagePair == null) {
-            unsupportedEngineIdList.add(identifier);
-          } else {
-            engineIdList.add(identifier);
-          }
-        } catch (error) {
-          engineIdList.add(identifier);
-        }
+      final translationTarget = _translationResultList[i].translationTarget;
+      final translationResultRecordList =
+          _translationResultList[i].translationResultRecordList;
+      if (translationResultRecordList == null) {
+        continue;
       }
 
-      _translationResultList[i].unsupportedEngineIdList =
-          unsupportedEngineIdList;
-
-      for (int j = 0; j < engineIdList.length; j++) {
-        String identifier = engineIdList[j];
+      for (final provider in providers) {
+        String identifier = provider.id;
+        List<String> capabilities = provider.capabilities;
 
         TranslationResultRecord translationResultRecord =
             TranslationResultRecord(
-          id: shortid.generate(),
           translationEngineId: identifier,
           translationTargetId: translationTarget?.id,
         );
-        _translationResultList[i]
-            .translationResultRecordList!
-            .add(translationResultRecord);
+        translationResultRecordList.add(translationResultRecord);
 
         Future<bool> future = Future<bool>.sync(() async {
-          LookUpRequest? lookUpRequest;
-          LookUpResponse? lookUpResponse;
-          UniTranslateClientError? lookUpError;
-          if ((translateClient.use(identifier).supportedScopes)
-              .contains(TranslationEngineScope.lookUp)) {
+          final sourceLanguage = translationTarget?.sourceLanguage;
+          final targetLanguage = translationTarget?.targetLanguage;
+
+          // Dictionary lookup
+          if (capabilities.contains(ProviderCapability.dictionary.name)) {
             try {
-              lookUpRequest = LookUpRequest(
-                sourceLanguage: translationTarget!.sourceLanguage!,
-                targetLanguage: translationTarget.targetLanguage!,
+              if (sourceLanguage == null || targetLanguage == null) {
+                throw Exception('Translation target language is missing');
+              }
+
+              final lookUpRequest = LookUpRequest(
+                sourceLanguage: sourceLanguage,
+                targetLanguage: targetLanguage,
                 word: _text,
               );
-              lookUpResponse = await translateClient //
-                  .use(identifier)
-                  .lookUp(lookUpRequest);
-            } on UniTranslateClientError catch (error) {
-              lookUpError = error;
+              final lookUpResponse =
+                  await runtime.dictionary(identifier).lookup(lookUpRequest);
+              translationResultRecord.lookUpRequest = lookUpRequest;
+              translationResultRecord.lookUpResponse = lookUpResponse;
             } catch (error) {
-              lookUpError = UniTranslateClientError(message: error.toString());
+              translationResultRecord.lookUpError = TranslationError(
+                message: error.toString(),
+              );
             }
           }
 
-          TranslateRequest? translateRequest;
-          TranslateResponse? translateResponse;
-          UniTranslateClientError? translateError;
-
-          if ((translateClient.use(identifier).supportedScopes)
-              .contains(TranslationEngineScope.translate)) {
+          // Translation
+          if (capabilities.contains(ProviderCapability.translation.name)) {
             try {
-              translateRequest = TranslateRequest(
-                sourceLanguage: translationTarget!.sourceLanguage,
-                targetLanguage: translationTarget.targetLanguage,
+              final translateRequest = TranslateRequest(
+                sourceLanguage: sourceLanguage,
+                targetLanguage: targetLanguage,
                 text: _text,
               );
-              translateResponse = await translateClient //
-                  .use(identifier)
+              final translateResponse = await runtime
+                  .translation(identifier)
                   .translate(translateRequest);
-              if (translateResponse is StreamTranslateResponse) {
-                translateResponse.stream.listen(
-                  (event) {
-                    setState(() {});
-                  },
-                  onDone: () {},
-                );
-              }
-            } on UniTranslateClientError catch (error) {
-              translateError = error;
+              translationResultRecord.translateRequest = translateRequest;
+              translationResultRecord.translateResponse = translateResponse;
             } catch (error) {
-              translateError =
-                  UniTranslateClientError(message: error.toString());
+              translationResultRecord.translateError = TranslationError(
+                message: error.toString(),
+              );
             }
           }
 
-          if (lookUpResponse != null) {
-            _translationResultList[i]
-                .translationResultRecordList![j]
-                .lookUpRequest = lookUpRequest;
-            _translationResultList[i]
-                .translationResultRecordList![j]
-                .lookUpResponse = lookUpResponse;
+          if (mounted) {
+            setState(() {});
           }
-          if (lookUpError != null) {
-            _translationResultList[i]
-                .translationResultRecordList![j]
-                .lookUpError = lookUpError;
-          }
-
-          if (translateResponse != null) {
-            _translationResultList[i]
-                .translationResultRecordList![j]
-                .translateRequest = translateRequest;
-            _translationResultList[i]
-                .translationResultRecordList![j]
-                .translateResponse = translateResponse;
-          }
-          if (translateError != null) {
-            _translationResultList[i]
-                .translationResultRecordList![j]
-                .translateError = translateError;
-          }
-
-          setState(() {});
-
           return true;
         });
         _futureList.add(future);
@@ -1153,15 +1063,18 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         throw Exception('Extracted text is empty');
       }
 
-      TranslateResponse translateResponse = await translateClient
-          .use(_configuration.defaultTranslateEngineId!)
-          .translate(
-            TranslateRequest(
-              text: extractedData?.text ?? '',
-              sourceLanguage: kLanguageZH,
-              targetLanguage: kLanguageEN,
-            ),
-          );
+      final settings = runtime.settings();
+      final generalSettings = await settings.getGeneral();
+      final providerId = generalSettings.defaultTranslationService;
+
+      TranslateResponse translateResponse =
+          await runtime.translation(providerId).translate(
+                TranslateRequest(
+                  text: extractedData?.text ?? '',
+                  sourceLanguage: kLanguageZH,
+                  targetLanguage: kLanguageEN,
+                ),
+              );
 
       TextTranslation? textTranslation =
           translateResponse.translations.firstOrNull;

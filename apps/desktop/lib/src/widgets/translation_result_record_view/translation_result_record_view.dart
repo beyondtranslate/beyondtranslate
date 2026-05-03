@@ -2,14 +2,13 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:uni_translate_client/uni_translate_client.dart';
 
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
 import '../../services/local_db/configuration.dart';
 import '../../services/local_db/local_db.dart';
-import '../generating_cursor/generating_cursor.dart';
+import '../../services/runtime.dart';
 import '../ui/loading_indicator.dart';
 import 'translation_engine_tag.dart';
 import 'word_pronunciation_view.dart';
@@ -34,14 +33,6 @@ class TranslationResultRecordView extends StatelessWidget {
     if (_isErrorOccurred) return false;
     return translationResultRecord.lookUpResponse == null &&
         translationResultRecord.translateResponse == null;
-  }
-
-  bool get _isGenerating {
-    if (_isErrorOccurred) return false;
-    final record = translationResultRecord;
-    return (record.lookUpResponse is StreamTranslateResponse) ||
-        (record.translateResponse is StreamTranslateResponse &&
-            (record.translateResponse as StreamTranslateResponse).generating);
   }
 
   bool get _isErrorOccurred {
@@ -72,9 +63,9 @@ class TranslationResultRecordView extends StatelessWidget {
   }
 
   Widget _buildRequestError(BuildContext context) {
-    UniTranslateClientError error = translationResultRecord.lookUpError ??
+    final error = translationResultRecord.lookUpError ??
         translationResultRecord.translateError ??
-        UniTranslateClientError(
+        const TranslationError(
           message: 'Unknown Error',
         );
 
@@ -158,11 +149,6 @@ class TranslationResultRecordView extends StatelessWidget {
             TextSpan(
               children: [
                 TextSpan(text: textTranslation.text),
-                if (_isGenerating)
-                  const WidgetSpan(
-                    child: GeneratingCursor(),
-                    alignment: PlaceholderAlignment.middle,
-                  ),
               ],
             ),
             style: textTheme.bodyMedium!.copyWith(

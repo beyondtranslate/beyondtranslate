@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:uni_translate_client/uni_translate_client.dart';
+import '../../services/runtime.dart';
 
 class WordPhraseView extends StatelessWidget {
   const WordPhraseView(
