@@ -5,35 +5,38 @@ struct ProvidersView: View {
   @State private var draft: ProviderDraft?
 
   var body: some View {
-    SettingsPage(title: "Providers") {
-      Section {
-        ProviderIntroRow()
-      }
+    NavigationStack {
+      SettingsPage(title: "Providers") {
+        Section {
+          ProviderIntroRow()
+        }
 
-      Section {
-        if viewModel.isLoading {
-          LoadingProviderRow()
-        } else if viewModel.providers.isEmpty {
-          EmptyProviderRow()
-        } else {
-          ForEach(viewModel.providers) { provider in
-            ProviderRow(
-              provider: provider,
-              onEdit: {
-                draft = .edit(item: provider)
-              },
-              onDelete: {
-                viewModel.deleteProvider(provider.id)
-              }
-            )
+        Section {
+          if viewModel.isLoading {
+            LoadingProviderRow()
+          } else if viewModel.providers.isEmpty {
+            EmptyProviderRow()
+          } else {
+            ForEach(viewModel.providers) { provider in
+              ProviderRow(
+                provider: provider,
+                onEdit: { draft = .edit(item: provider) },
+                onDelete: { viewModel.deleteProvider(provider.id) }
+              )
+            }
+          }
+        } footer: {
+          HStack {
+            Spacer()
+            Button("Add a Provider...") {
+              draft = .new()
+            }
           }
         }
-      } footer: {
-        HStack {
-          Spacer()
-          Button("Add a Provider...") {
-            draft = .new()
-          }
+      }
+      .navigationDestination(for: UUID.self) { providerID in
+        if let provider = viewModel.providers.first(where: { $0.id == providerID }) {
+          ProviderDetailView(provider: provider, viewModel: viewModel)
         }
       }
     }
@@ -64,6 +67,8 @@ struct ProvidersView: View {
   }
 }
 
+// MARK: - Intro Row
+
 private struct ProviderIntroRow: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
@@ -81,6 +86,8 @@ private struct ProviderIntroRow: View {
   }
 }
 
+// MARK: - Provider Row  (NavigationLink → ProviderDetailView)
+
 private struct ProviderRow: View {
   let provider: ProviderItem
   let onEdit: () -> Void
@@ -89,7 +96,7 @@ private struct ProviderRow: View {
   @State private var showDeleteConfirm = false
 
   var body: some View {
-    Button(action: onEdit) {
+    NavigationLink(value: provider.id) {
       HStack(spacing: 14) {
         ProviderTypeIcon(providerType: provider.providerType)
 
@@ -114,15 +121,10 @@ private struct ProviderRow: View {
             ProviderCapabilityTag(capability: cap)
           }
         }
-
-        Image(systemName: "chevron.right")
-          .font(.system(size: 10, weight: .semibold))
-          .foregroundStyle(.tertiary)
       }
       .contentShape(Rectangle())
       .padding(.vertical, 2)
     }
-    .buttonStyle(.plain)
     .contextMenu {
       Button("Edit", action: onEdit)
 
@@ -145,6 +147,8 @@ private struct ProviderRow: View {
   }
 }
 
+// MARK: - Loading / Empty states
+
 private struct LoadingProviderRow: View {
   var body: some View {
     HStack(spacing: 14) {
@@ -153,36 +157,6 @@ private struct LoadingProviderRow: View {
         .font(.system(size: 13))
         .foregroundStyle(.secondary)
       Spacer()
-    }
-  }
-}
-
-private struct ProviderCapabilityTag: View {
-  let capability: ProviderCapability
-
-  var body: some View {
-    Text(label)
-      .font(.system(size: 10, weight: .medium))
-      .foregroundStyle(color)
-      .padding(.horizontal, 6)
-      .padding(.vertical, 2)
-      .background(
-        Capsule()
-          .fill(color.opacity(0.12))
-      )
-  }
-
-  private var label: String {
-    switch capability {
-    case .dictionary: return "Dictionary"
-    case .translation: return "Translation"
-    }
-  }
-
-  private var color: Color {
-    switch capability {
-    case .dictionary: return .orange
-    case .translation: return .blue
     }
   }
 }
@@ -203,7 +177,35 @@ private struct EmptyProviderRow: View {
   }
 }
 
-private struct ProviderTypeIcon: View {
+// MARK: - Capability Tag
+
+struct ProviderCapabilityTag: View {
+  let capability: ProviderCapability
+
+  var body: some View {
+    Text(label)
+      .font(.system(size: 10, weight: .medium))
+      .foregroundStyle(color)
+      .padding(.horizontal, 6)
+      .padding(.vertical, 2)
+      .background(
+        Capsule()
+          .fill(color.opacity(0.12))
+      )
+  }
+
+  private var label: String {
+    capability.displayName
+  }
+
+  private var color: Color {
+    capability.color
+  }
+}
+
+// MARK: - Provider Type Icon
+
+struct ProviderTypeIcon: View {
   let providerType: ProviderType
 
   private var flutterAssetImage: NSImage? {
@@ -236,7 +238,9 @@ private struct ProviderTypeIcon: View {
   }
 }
 
-private struct ProviderEditorSheet: View {
+// MARK: - Provider Editor Sheet
+
+struct ProviderEditorSheet: View {
   @Environment(\.dismiss) private var dismiss
   @State var draft: ProviderDraft
 
@@ -358,7 +362,9 @@ private struct ProviderEditorSheet: View {
   }
 }
 
-private struct ProviderEditorHeader: View {
+// MARK: - Editor sub-views
+
+struct ProviderEditorHeader: View {
   let draft: ProviderDraft
 
   var body: some View {
@@ -382,7 +388,7 @@ private struct ProviderEditorHeader: View {
   }
 }
 
-private struct ProviderFieldRow: View {
+struct ProviderFieldRow: View {
   let fieldDef: ProviderConfigField
   let text: Binding<String>
 
@@ -398,7 +404,6 @@ private struct ProviderFieldRow: View {
     }
   }
 
-  // Label with a red asterisk prefix for required fields
   private var rowLabel: some View {
     HStack(spacing: 0) {
       if !fieldDef.isOptional {
@@ -410,11 +415,12 @@ private struct ProviderFieldRow: View {
     }
   }
 
-  // Only show a prompt when the field has a non-empty placeholder
   private var promptText: Text? {
     fieldDef.placeholder.isEmpty ? nil : Text(fieldDef.placeholder)
   }
 }
+
+// MARK: - ProviderDraft helpers
 
 extension ProviderDraft {
   fileprivate var displayName: String {
@@ -433,7 +439,6 @@ extension ProviderDraft {
 }
 
 extension ProviderType {
-  // Known default capabilities for each provider type
   fileprivate var defaultCapabilities: [ProviderCapability] {
     switch self {
     case .baidu: return [.dictionary, .translation]
@@ -446,7 +451,7 @@ extension ProviderType {
     }
   }
 
-  fileprivate var displayName: String {
+  var displayName: String {
     switch self {
     case .baidu: return "Baidu"
     case .caiyun: return "Caiyun"

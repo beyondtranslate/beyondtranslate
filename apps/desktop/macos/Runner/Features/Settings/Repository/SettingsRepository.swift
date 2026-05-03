@@ -2,7 +2,6 @@ import Foundation
 
 @MainActor
 protocol SettingsRepository {
-  func loadSettings() -> AppSettings
   func getGeneral() async throws -> GeneralSettings
   func updateGeneral(_ patch: GeneralSettingsPatch) async throws -> GeneralSettings
   func getAppearance() async throws -> AppearanceSettings
@@ -31,10 +30,6 @@ final class DefaultSettingsRepository: SettingsRepository {
 
   init(_ settingsPlugin: NativeSettingsPlugin? = nil) {
     self.settingsPlugin = settingsPlugin
-  }
-
-  func loadSettings() -> AppSettings {
-    AppSettings()
   }
 
   func getGeneral() async throws -> GeneralSettings {

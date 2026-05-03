@@ -3,5 +3,9 @@
 
 import Foundation
 
-struct AdvancedSettingsPatch: Codable {
+enum TranslationMode: String, Codable, CaseIterable, Identifiable {
+  case auto
+  case manual
+
+  var id: String { rawValue }
 }

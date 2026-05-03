@@ -18,9 +18,8 @@ final class SettingsViewModel: ObservableObject {
       repository ?? DefaultSettingsRepository(settingsPlugin)
     self.repository = repository
 
-    let settings = repository.loadSettings()
-    general = GeneralViewModel(settings: settings.general, repository: repository)
-    appearance = AppearanceViewModel(settings: settings.appearance, repository: repository)
+    general = GeneralViewModel(repository: repository)
+    appearance = AppearanceViewModel(repository: repository)
     shortcuts = ShortcutsViewModel(repository: repository)
     providers = ProvidersViewModel(repository: repository)
     advanced = AdvancedViewModel(repository: repository)

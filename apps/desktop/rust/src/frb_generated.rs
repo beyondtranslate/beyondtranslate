@@ -1529,9 +1529,28 @@ impl SseDecode for crate::domain::settings::GeneralSettings {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_launchAtLogin = <bool>::sse_decode(deserializer);
         let mut var_showMenuBar = <bool>::sse_decode(deserializer);
+        let mut var_defaultOcrService = <String>::sse_decode(deserializer);
+        let mut var_autoCopyDetectedText = <bool>::sse_decode(deserializer);
+        let mut var_defaultDirectoryService = <String>::sse_decode(deserializer);
+        let mut var_defaultTranslationService = <String>::sse_decode(deserializer);
+        let mut var_translationMode =
+            <crate::domain::settings::TranslationMode>::sse_decode(deserializer);
+        let mut var_translationTargets =
+            <Vec<crate::domain::settings::TranslationTarget>>::sse_decode(deserializer);
+        let mut var_inputSubmitMode =
+            <crate::domain::settings::InputSubmitMode>::sse_decode(deserializer);
+        let mut var_doubleClickCopyResult = <bool>::sse_decode(deserializer);
         return crate::domain::settings::GeneralSettings {
             launch_at_login: var_launchAtLogin,
             show_menu_bar: var_showMenuBar,
+            default_ocr_service: var_defaultOcrService,
+            auto_copy_detected_text: var_autoCopyDetectedText,
+            default_directory_service: var_defaultDirectoryService,
+            default_translation_service: var_defaultTranslationService,
+            translation_mode: var_translationMode,
+            translation_targets: var_translationTargets,
+            input_submit_mode: var_inputSubmitMode,
+            double_click_copy_result: var_doubleClickCopyResult,
         };
     }
 }
@@ -1541,9 +1560,28 @@ impl SseDecode for crate::domain::settings::GeneralSettingsPatch {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_launchAtLogin = <Option<bool>>::sse_decode(deserializer);
         let mut var_showMenuBar = <Option<bool>>::sse_decode(deserializer);
+        let mut var_defaultOcrService = <Option<String>>::sse_decode(deserializer);
+        let mut var_autoCopyDetectedText = <Option<bool>>::sse_decode(deserializer);
+        let mut var_defaultDirectoryService = <Option<String>>::sse_decode(deserializer);
+        let mut var_defaultTranslationService = <Option<String>>::sse_decode(deserializer);
+        let mut var_translationMode =
+            <Option<crate::domain::settings::TranslationMode>>::sse_decode(deserializer);
+        let mut var_translationTargets =
+            <Option<Vec<crate::domain::settings::TranslationTarget>>>::sse_decode(deserializer);
+        let mut var_inputSubmitMode =
+            <Option<crate::domain::settings::InputSubmitMode>>::sse_decode(deserializer);
+        let mut var_doubleClickCopyResult = <Option<bool>>::sse_decode(deserializer);
         return crate::domain::settings::GeneralSettingsPatch {
             launch_at_login: var_launchAtLogin,
             show_menu_bar: var_showMenuBar,
+            default_ocr_service: var_defaultOcrService,
+            auto_copy_detected_text: var_autoCopyDetectedText,
+            default_directory_service: var_defaultDirectoryService,
+            default_translation_service: var_defaultTranslationService,
+            translation_mode: var_translationMode,
+            translation_targets: var_translationTargets,
+            input_submit_mode: var_inputSubmitMode,
+            double_click_copy_result: var_doubleClickCopyResult,
         };
     }
 }
@@ -1575,6 +1613,18 @@ impl SseDecode for crate::api::mirrors::IcibaProviderConfig {
         return crate::api::mirrors::IcibaProviderConfig {
             api_key: var_apiKey,
             base_url: var_baseUrl,
+        };
+    }
+}
+
+impl SseDecode for crate::domain::settings::InputSubmitMode {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::domain::settings::InputSubmitMode::Enter,
+            1 => crate::domain::settings::InputSubmitMode::CommandEnter,
+            _ => unreachable!("Invalid variant for InputSubmitMode: {}", inner),
         };
     }
 }
@@ -1650,6 +1700,20 @@ impl SseDecode for Vec<crate::api::mirrors::TextTranslation> {
         let mut ans_ = vec![];
         for idx_ in 0..len_ {
             ans_.push(<crate::api::mirrors::TextTranslation>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::domain::settings::TranslationTarget> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::domain::settings::TranslationTarget>::sse_decode(
                 deserializer,
             ));
         }
@@ -1818,6 +1882,19 @@ impl SseDecode for Option<bool> {
     }
 }
 
+impl SseDecode for Option<crate::domain::settings::InputSubmitMode> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::domain::settings::InputSubmitMode>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<crate::domain::settings::ProviderConfigEntry> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1831,11 +1908,37 @@ impl SseDecode for Option<crate::domain::settings::ProviderConfigEntry> {
     }
 }
 
+impl SseDecode for Option<crate::domain::settings::TranslationMode> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::domain::settings::TranslationMode>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<Vec<String>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<Vec<String>>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<Vec<crate::domain::settings::TranslationTarget>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(
+                <Vec<crate::domain::settings::TranslationTarget>>::sse_decode(deserializer),
+            );
         } else {
             return None;
         }
@@ -2108,6 +2211,30 @@ impl SseDecode for crate::api::mirrors::TranslateResponse {
             <Vec<crate::api::mirrors::TextTranslation>>::sse_decode(deserializer);
         return crate::api::mirrors::TranslateResponse {
             translations: var_translations,
+        };
+    }
+}
+
+impl SseDecode for crate::domain::settings::TranslationMode {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::domain::settings::TranslationMode::Auto,
+            1 => crate::domain::settings::TranslationMode::Manual,
+            _ => unreachable!("Invalid variant for TranslationMode: {}", inner),
+        };
+    }
+}
+
+impl SseDecode for crate::domain::settings::TranslationTarget {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_source = <String>::sse_decode(deserializer);
+        let mut var_target = <String>::sse_decode(deserializer);
+        return crate::domain::settings::TranslationTarget {
+            source: var_source,
+            target: var_target,
         };
     }
 }
@@ -2569,6 +2696,16 @@ impl flutter_rust_bridge::IntoDart for crate::domain::settings::GeneralSettings 
         [
             self.launch_at_login.into_into_dart().into_dart(),
             self.show_menu_bar.into_into_dart().into_dart(),
+            self.default_ocr_service.into_into_dart().into_dart(),
+            self.auto_copy_detected_text.into_into_dart().into_dart(),
+            self.default_directory_service.into_into_dart().into_dart(),
+            self.default_translation_service
+                .into_into_dart()
+                .into_dart(),
+            self.translation_mode.into_into_dart().into_dart(),
+            self.translation_targets.into_into_dart().into_dart(),
+            self.input_submit_mode.into_into_dart().into_dart(),
+            self.double_click_copy_result.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2590,6 +2727,16 @@ impl flutter_rust_bridge::IntoDart for crate::domain::settings::GeneralSettingsP
         [
             self.launch_at_login.into_into_dart().into_dart(),
             self.show_menu_bar.into_into_dart().into_dart(),
+            self.default_ocr_service.into_into_dart().into_dart(),
+            self.auto_copy_detected_text.into_into_dart().into_dart(),
+            self.default_directory_service.into_into_dart().into_dart(),
+            self.default_translation_service
+                .into_into_dart()
+                .into_dart(),
+            self.translation_mode.into_into_dart().into_dart(),
+            self.translation_targets.into_into_dart().into_dart(),
+            self.input_submit_mode.into_into_dart().into_dart(),
+            self.double_click_copy_result.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2645,6 +2792,27 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::IcibaProv
 {
     fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::IcibaProviderConfig> {
         self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::InputSubmitMode {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::Enter => 0.into_dart(),
+            Self::CommandEnter => 1.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::domain::settings::InputSubmitMode
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::InputSubmitMode>
+    for crate::domain::settings::InputSubmitMode
+{
+    fn into_into_dart(self) -> crate::domain::settings::InputSubmitMode {
+        self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -2930,6 +3098,48 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::mirrors::Translate
 {
     fn into_into_dart(self) -> FrbWrapper<crate::api::mirrors::TranslateResponse> {
         self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::TranslationMode {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::Auto => 0.into_dart(),
+            Self::Manual => 1.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::domain::settings::TranslationMode
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::TranslationMode>
+    for crate::domain::settings::TranslationMode
+{
+    fn into_into_dart(self) -> crate::domain::settings::TranslationMode {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::domain::settings::TranslationTarget {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.source.into_into_dart().into_dart(),
+            self.target.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::domain::settings::TranslationTarget
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::domain::settings::TranslationTarget>
+    for crate::domain::settings::TranslationTarget
+{
+    fn into_into_dart(self) -> crate::domain::settings::TranslationTarget {
+        self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -3256,6 +3466,17 @@ impl SseEncode for crate::domain::settings::GeneralSettings {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.launch_at_login, serializer);
         <bool>::sse_encode(self.show_menu_bar, serializer);
+        <String>::sse_encode(self.default_ocr_service, serializer);
+        <bool>::sse_encode(self.auto_copy_detected_text, serializer);
+        <String>::sse_encode(self.default_directory_service, serializer);
+        <String>::sse_encode(self.default_translation_service, serializer);
+        <crate::domain::settings::TranslationMode>::sse_encode(self.translation_mode, serializer);
+        <Vec<crate::domain::settings::TranslationTarget>>::sse_encode(
+            self.translation_targets,
+            serializer,
+        );
+        <crate::domain::settings::InputSubmitMode>::sse_encode(self.input_submit_mode, serializer);
+        <bool>::sse_encode(self.double_click_copy_result, serializer);
     }
 }
 
@@ -3264,6 +3485,23 @@ impl SseEncode for crate::domain::settings::GeneralSettingsPatch {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Option<bool>>::sse_encode(self.launch_at_login, serializer);
         <Option<bool>>::sse_encode(self.show_menu_bar, serializer);
+        <Option<String>>::sse_encode(self.default_ocr_service, serializer);
+        <Option<bool>>::sse_encode(self.auto_copy_detected_text, serializer);
+        <Option<String>>::sse_encode(self.default_directory_service, serializer);
+        <Option<String>>::sse_encode(self.default_translation_service, serializer);
+        <Option<crate::domain::settings::TranslationMode>>::sse_encode(
+            self.translation_mode,
+            serializer,
+        );
+        <Option<Vec<crate::domain::settings::TranslationTarget>>>::sse_encode(
+            self.translation_targets,
+            serializer,
+        );
+        <Option<crate::domain::settings::InputSubmitMode>>::sse_encode(
+            self.input_submit_mode,
+            serializer,
+        );
+        <Option<bool>>::sse_encode(self.double_click_copy_result, serializer);
     }
 }
 
@@ -3287,6 +3525,22 @@ impl SseEncode for crate::api::mirrors::IcibaProviderConfig {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.api_key, serializer);
         <Option<String>>::sse_encode(self.base_url, serializer);
+    }
+}
+
+impl SseEncode for crate::domain::settings::InputSubmitMode {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::domain::settings::InputSubmitMode::Enter => 0,
+                crate::domain::settings::InputSubmitMode::CommandEnter => 1,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
     }
 }
 
@@ -3346,6 +3600,16 @@ impl SseEncode for Vec<crate::api::mirrors::TextTranslation> {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <crate::api::mirrors::TextTranslation>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::domain::settings::TranslationTarget> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::domain::settings::TranslationTarget>::sse_encode(item, serializer);
         }
     }
 }
@@ -3471,6 +3735,16 @@ impl SseEncode for Option<bool> {
     }
 }
 
+impl SseEncode for Option<crate::domain::settings::InputSubmitMode> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::domain::settings::InputSubmitMode>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<crate::domain::settings::ProviderConfigEntry> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3481,12 +3755,32 @@ impl SseEncode for Option<crate::domain::settings::ProviderConfigEntry> {
     }
 }
 
+impl SseEncode for Option<crate::domain::settings::TranslationMode> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::domain::settings::TranslationMode>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<Vec<String>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <Vec<String>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Vec<crate::domain::settings::TranslationTarget>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::domain::settings::TranslationTarget>>::sse_encode(value, serializer);
         }
     }
 }
@@ -3689,6 +3983,30 @@ impl SseEncode for crate::api::mirrors::TranslateResponse {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<crate::api::mirrors::TextTranslation>>::sse_encode(self.translations, serializer);
+    }
+}
+
+impl SseEncode for crate::domain::settings::TranslationMode {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::domain::settings::TranslationMode::Auto => 0,
+                crate::domain::settings::TranslationMode::Manual => 1,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for crate::domain::settings::TranslationTarget {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.source, serializer);
+        <String>::sse_encode(self.target, serializer);
     }
 }
 

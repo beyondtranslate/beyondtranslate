@@ -7,14 +7,11 @@ final class AppearanceViewModel: ObservableObject {
 
   private let repository: SettingsRepository
 
-  init(
-    settings: AppearanceSettingsState = AppearanceSettingsState(),
-    repository: SettingsRepository
-  ) {
+  init(repository: SettingsRepository) {
     self.repository = repository
-    appLanguage = settings.appLanguage
-    themeMode = settings.themeMode
-    ThemeAppearanceController.apply(settings.themeMode)
+    appLanguage = "English"
+    themeMode = .system
+    ThemeAppearanceController.apply(.system)
   }
 
   func load() async {

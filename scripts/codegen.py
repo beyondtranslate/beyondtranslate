@@ -82,10 +82,18 @@ def generate_frb_bindings() -> int:
 SETTINGS_INPUT_PATH = DESKTOP_ROOT / "rust/src/domain/settings.rs"
 SETTINGS_OUTPUT_DIR = DESKTOP_ROOT / "macos/Runner/Features/Settings/Models"
 SETTINGS_SECTION_MODELS = [
+    "GeneralSettings",
     "ProviderConfigEntry",
     "ShortcutSettings",
     "AppearanceSettings",
     "AdvancedSettings",
+]
+SETTINGS_VALUE_MODELS = [
+    "TranslationTarget",
+]
+SETTINGS_ENUM_MODELS = [
+    "TranslationMode",
+    "InputSubmitMode",
 ]
 CORE_INPUT_PATH = REPO_ROOT / "crates/core/src/provider.rs"
 ENGINE_INPUT_PATH = REPO_ROOT / "crates/engine/src/engine.rs"
@@ -160,8 +168,9 @@ def generate_native_settings_swift() -> None:
     source = SETTINGS_INPUT_PATH.read_text()
     parsed = parse_settings_swift_structs(source)
     settings_fields = parse_settings_fields(source)
-    structs = [parsed[name] for name in SETTINGS_SECTION_MODELS if name in parsed]
-    missing = sorted(set(SETTINGS_SECTION_MODELS) - set(parsed.keys()))
+    settings_models = SETTINGS_SECTION_MODELS + SETTINGS_VALUE_MODELS
+    structs = [parsed[name] for name in settings_models if name in parsed]
+    missing = sorted(set(settings_models) - set(parsed.keys()))
     if missing:
         raise ValueError(
             f"Missing expected Rust settings structs: {', '.join(missing)}"
@@ -176,6 +185,9 @@ def generate_native_settings_swift() -> None:
                 f"{struct.name}Patch",
                 render_struct(struct, patch=True),
             )
+    for enum_name in SETTINGS_ENUM_MODELS:
+        cases = parse_settings_enum_cases(source, enum_name)
+        write_generated_swift_file(enum_name, render_enum(enum_name, cases))
 
 
 def generate_native_provider_swift() -> None:
@@ -230,13 +242,13 @@ def write_generated_swift_file(name: str, body: list[str]) -> None:
 def parse_settings_swift_structs(source: str) -> dict[str, SettingsSwiftStruct]:
     structs: dict[str, SettingsSwiftStruct] = {}
     pattern = re.compile(
-        r"#\[derive\(([^)]*)\)\](.*?)pub struct (\w+) \{(.*?)\n\}", re.S
+        r"#\[derive\(([^)]*)\)\](.*?)pub struct (\w+) \{([^{}]*)\}", re.S
     )
 
     for match in pattern.finditer(source):
         derives = [part.strip() for part in match.group(1).split(",")]
         name = match.group(3)
-        if name not in SETTINGS_SECTION_MODELS:
+        if name not in SETTINGS_SECTION_MODELS + SETTINGS_VALUE_MODELS:
             continue
 
         structs[name] = SettingsSwiftStruct(
@@ -317,6 +329,30 @@ def parse_settings_swift_fields(body: str) -> list[SettingsSwiftField]:
         attrs.clear()
 
     return fields
+
+
+def parse_settings_enum_cases(source: str, enum_name: str) -> list[SwiftEnumCase]:
+    match = re.search(rf"pub enum {enum_name} \{{(.*?)\n\}}", source, re.S)
+    if not match:
+        raise ValueError(f"Missing Rust settings enum: {enum_name}")
+
+    cases: list[SwiftEnumCase] = []
+    for raw_line in match.group(1).splitlines():
+        line = raw_line.strip().rstrip(",")
+        if not line or line.startswith("#[") or line.startswith("//"):
+            continue
+        if not re.fullmatch(r"\w+", line):
+            continue
+        # #[serde(rename_all = "camelCase")] on the enum -> PascalCase -> camelCase
+        swift_name = lower_camel_case(line)
+        cases.append(
+            SwiftEnumCase(
+                rust_name=line,
+                wire_name=swift_name,
+                swift_name=swift_name,
+            )
+        )
+    return cases
 
 
 def parse_provider_capability_cases(source: str) -> list[SwiftEnumCase]:
@@ -419,6 +455,8 @@ def swift_type_name(rust_type: str) -> str:
         return "Bool"
     if rust_type == "u64":
         return "UInt64"
+    if rust_type in SETTINGS_ENUM_MODELS + SETTINGS_VALUE_MODELS:
+        return rust_type
     optional_inner_type = option_inner_type(rust_type)
     if optional_inner_type is not None:
         return f"{swift_type_name(optional_inner_type)}?"
@@ -599,11 +637,20 @@ def render_provider_type_fields(
 
 def render_struct(struct: SettingsSwiftStruct, *, patch: bool) -> list[str]:
     name = f"{struct.name}Patch" if patch else struct.name
-    lines = [f"struct {name}: Codable {{"]
+    protocols = "Codable"
+    if not patch and struct.name == "TranslationTarget":
+        protocols = "Codable, Identifiable"
+    lines = [f"struct {name}: {protocols} {{"]
 
     for field in struct.fields:
-        optional = "?" if patch else ""
-        lines.append(f"  var {field.swift_name}: {field.swift_type}{optional}")
+        if patch:
+            lines.append(f"  var {field.swift_name}: {field.swift_type}? = nil")
+        else:
+            lines.append(f"  var {field.swift_name}: {field.swift_type}")
+
+    if not patch and struct.name == "TranslationTarget":
+        lines.append("")
+        lines.append('  var id: String { "\\(source)->\\(target)" }')
 
     renamed = [field for field in struct.fields if field.swift_name != field.wire_name]
     if renamed:

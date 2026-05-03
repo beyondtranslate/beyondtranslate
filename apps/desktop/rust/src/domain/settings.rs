@@ -56,6 +56,29 @@ impl Default for AppearanceSettings {
     }
 }
 
+#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum TranslationMode {
+    #[default]
+    Auto,
+    Manual,
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum InputSubmitMode {
+    #[default]
+    Enter,
+    CommandEnter,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[serde(default)]
+pub struct TranslationTarget {
+    pub source: String,
+    pub target: String,
+}
+
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch)]
 #[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
 #[serde(default)]
@@ -64,6 +87,25 @@ pub struct GeneralSettings {
     pub launch_at_login: bool,
     #[serde(rename = "showMenuBar")]
     pub show_menu_bar: bool,
+    // OCR
+    #[serde(rename = "defaultOcrService")]
+    pub default_ocr_service: String,
+    #[serde(rename = "autoCopyDetectedText")]
+    pub auto_copy_detected_text: bool,
+    // Directory
+    #[serde(rename = "defaultDirectoryService")]
+    pub default_directory_service: String,
+    // Translation
+    #[serde(rename = "defaultTranslationService")]
+    pub default_translation_service: String,
+    #[serde(rename = "translationMode")]
+    pub translation_mode: TranslationMode,
+    #[serde(rename = "translationTargets")]
+    pub translation_targets: Vec<TranslationTarget>,
+    #[serde(rename = "inputSubmitMode")]
+    pub input_submit_mode: InputSubmitMode,
+    #[serde(rename = "doubleClickCopyResult")]
+    pub double_click_copy_result: bool,
 }
 
 impl Default for GeneralSettings {
@@ -71,6 +113,14 @@ impl Default for GeneralSettings {
         Self {
             launch_at_login: false,
             show_menu_bar: true,
+            default_ocr_service: String::new(),
+            auto_copy_detected_text: true,
+            default_directory_service: String::new(),
+            default_translation_service: String::new(),
+            translation_mode: TranslationMode::default(),
+            translation_targets: Vec::new(),
+            input_submit_mode: InputSubmitMode::default(),
+            double_click_copy_result: true,
         }
     }
 }

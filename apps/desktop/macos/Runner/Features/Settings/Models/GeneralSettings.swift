@@ -4,6 +4,14 @@
 import Foundation
 
 struct GeneralSettings: Codable {
-    var launchAtLogin: Bool
-    var showMenuBar: Bool
+  var launchAtLogin: Bool
+  var showMenuBar: Bool
+  var defaultOcrService: String
+  var autoCopyDetectedText: Bool
+  var defaultDirectoryService: String
+  var defaultTranslationService: String
+  var translationMode: TranslationMode
+  var translationTargets: [TranslationTarget]
+  var inputSubmitMode: InputSubmitMode
+  var doubleClickCopyResult: Bool
 }

@@ -31,26 +31,16 @@ enum SettingsSection: String, CaseIterable, Identifiable {
   }
 }
 
-enum TranslationMode: String, CaseIterable, Identifiable {
-  case manual
-  case auto
-
-  var id: String { rawValue }
-
+extension TranslationMode {
   var title: String {
     switch self {
-    case .manual: return "Manual"
     case .auto: return "Auto"
+    case .manual: return "Manual"
     }
   }
 }
 
-enum InputSubmitMode: String, CaseIterable, Identifiable {
-  case enter
-  case commandEnter
-
-  var id: String { rawValue }
-
+extension InputSubmitMode {
   var title: String {
     switch self {
     case .enter: return "Submit with Enter"
@@ -111,12 +101,6 @@ enum ThemeAppearanceController {
   }
 }
 
-struct TranslationTargetItem: Identifiable {
-  let id = UUID()
-  let source: String
-  let target: String
-}
-
 struct ShortcutDisplay {
   let parts: [String]
 
@@ -138,20 +122,6 @@ struct ShortcutDisplay {
   }
 }
 
-enum ProviderHostingOption: String, CaseIterable, Identifiable {
-  case internetHosted
-  case locallyHosted
-
-  var id: String { rawValue }
-
-  var title: String {
-    switch self {
-    case .internetHosted: return "Internet Hosted"
-    case .locallyHosted: return "Locally Hosted"
-    }
-  }
-}
-
 struct ProviderItem: Identifiable {
   let id: UUID
   var backendID: String
@@ -160,7 +130,6 @@ struct ProviderItem: Identifiable {
   var endpoint: String
   var apiKeyHeader: String
   var description: String
-  var hosting: ProviderHostingOption
   var capabilities: [ProviderCapability]
   var isEnabled: Bool
   var fields: [String: String]
@@ -176,7 +145,6 @@ extension ProviderItem {
     self.description = entry.type
     self.endpoint = entry.fields["baseUrl"] ?? ""
     self.apiKeyHeader = ""
-    self.hosting = .internetHosted
     self.capabilities = entry.capabilities.compactMap { ProviderCapability(rawValue: $0) }
     self.isEnabled = isEnabled
     self.fields = entry.fields

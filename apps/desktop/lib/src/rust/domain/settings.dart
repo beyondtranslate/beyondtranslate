@@ -76,14 +76,40 @@ class AppearanceSettingsPatch {
 class GeneralSettings {
   final bool launchAtLogin;
   final bool showMenuBar;
+  final String defaultOcrService;
+  final bool autoCopyDetectedText;
+  final String defaultDirectoryService;
+  final String defaultTranslationService;
+  final TranslationMode translationMode;
+  final List<TranslationTarget> translationTargets;
+  final InputSubmitMode inputSubmitMode;
+  final bool doubleClickCopyResult;
 
   const GeneralSettings({
     required this.launchAtLogin,
     required this.showMenuBar,
+    required this.defaultOcrService,
+    required this.autoCopyDetectedText,
+    required this.defaultDirectoryService,
+    required this.defaultTranslationService,
+    required this.translationMode,
+    required this.translationTargets,
+    required this.inputSubmitMode,
+    required this.doubleClickCopyResult,
   });
 
   @override
-  int get hashCode => launchAtLogin.hashCode ^ showMenuBar.hashCode;
+  int get hashCode =>
+      launchAtLogin.hashCode ^
+      showMenuBar.hashCode ^
+      defaultOcrService.hashCode ^
+      autoCopyDetectedText.hashCode ^
+      defaultDirectoryService.hashCode ^
+      defaultTranslationService.hashCode ^
+      translationMode.hashCode ^
+      translationTargets.hashCode ^
+      inputSubmitMode.hashCode ^
+      doubleClickCopyResult.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -91,20 +117,54 @@ class GeneralSettings {
       other is GeneralSettings &&
           runtimeType == other.runtimeType &&
           launchAtLogin == other.launchAtLogin &&
-          showMenuBar == other.showMenuBar;
+          showMenuBar == other.showMenuBar &&
+          defaultOcrService == other.defaultOcrService &&
+          autoCopyDetectedText == other.autoCopyDetectedText &&
+          defaultDirectoryService == other.defaultDirectoryService &&
+          defaultTranslationService == other.defaultTranslationService &&
+          translationMode == other.translationMode &&
+          translationTargets == other.translationTargets &&
+          inputSubmitMode == other.inputSubmitMode &&
+          doubleClickCopyResult == other.doubleClickCopyResult;
 }
 
 class GeneralSettingsPatch {
   final bool? launchAtLogin;
   final bool? showMenuBar;
+  final String? defaultOcrService;
+  final bool? autoCopyDetectedText;
+  final String? defaultDirectoryService;
+  final String? defaultTranslationService;
+  final TranslationMode? translationMode;
+  final List<TranslationTarget>? translationTargets;
+  final InputSubmitMode? inputSubmitMode;
+  final bool? doubleClickCopyResult;
 
   const GeneralSettingsPatch({
     this.launchAtLogin,
     this.showMenuBar,
+    this.defaultOcrService,
+    this.autoCopyDetectedText,
+    this.defaultDirectoryService,
+    this.defaultTranslationService,
+    this.translationMode,
+    this.translationTargets,
+    this.inputSubmitMode,
+    this.doubleClickCopyResult,
   });
 
   @override
-  int get hashCode => launchAtLogin.hashCode ^ showMenuBar.hashCode;
+  int get hashCode =>
+      launchAtLogin.hashCode ^
+      showMenuBar.hashCode ^
+      defaultOcrService.hashCode ^
+      autoCopyDetectedText.hashCode ^
+      defaultDirectoryService.hashCode ^
+      defaultTranslationService.hashCode ^
+      translationMode.hashCode ^
+      translationTargets.hashCode ^
+      inputSubmitMode.hashCode ^
+      doubleClickCopyResult.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -112,7 +172,21 @@ class GeneralSettingsPatch {
       other is GeneralSettingsPatch &&
           runtimeType == other.runtimeType &&
           launchAtLogin == other.launchAtLogin &&
-          showMenuBar == other.showMenuBar;
+          showMenuBar == other.showMenuBar &&
+          defaultOcrService == other.defaultOcrService &&
+          autoCopyDetectedText == other.autoCopyDetectedText &&
+          defaultDirectoryService == other.defaultDirectoryService &&
+          defaultTranslationService == other.defaultTranslationService &&
+          translationMode == other.translationMode &&
+          translationTargets == other.translationTargets &&
+          inputSubmitMode == other.inputSubmitMode &&
+          doubleClickCopyResult == other.doubleClickCopyResult;
+}
+
+enum InputSubmitMode {
+  enter,
+  commandEnter,
+  ;
 }
 
 class ProviderConfigEntry {
@@ -253,4 +327,31 @@ class ShortcutSettingsPatch {
           extractFromScreenSelection == other.extractFromScreenSelection &&
           extractFromScreenCapture == other.extractFromScreenCapture &&
           extractFromClipboard == other.extractFromClipboard;
+}
+
+enum TranslationMode {
+  auto,
+  manual,
+  ;
+}
+
+class TranslationTarget {
+  final String source;
+  final String target;
+
+  const TranslationTarget({
+    required this.source,
+    required this.target,
+  });
+
+  @override
+  int get hashCode => source.hashCode ^ target.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TranslationTarget &&
+          runtimeType == other.runtimeType &&
+          source == other.source &&
+          target == other.target;
 }

@@ -5,7 +5,7 @@ struct AdvancedView: View {
 
   var body: some View {
     SettingsPage(title: "Advanced") {
-      Section("Advanced") {
+      Section {
         Text("No advanced settings available.")
           .foregroundStyle(.secondary)
       }

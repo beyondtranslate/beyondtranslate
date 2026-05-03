@@ -4,6 +4,6 @@
 import Foundation
 
 struct AppearanceSettingsPatch: Codable {
-  var language: String?
-  var themeMode: String?
+  var language: String? = nil
+  var themeMode: String? = nil
 }

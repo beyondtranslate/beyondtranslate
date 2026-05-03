@@ -4,6 +4,14 @@
 import Foundation
 
 struct GeneralSettingsPatch: Codable {
-    var launchAtLogin: Bool?
-    var showMenuBar: Bool?
+  var launchAtLogin: Bool? = nil
+  var showMenuBar: Bool? = nil
+  var defaultOcrService: String? = nil
+  var autoCopyDetectedText: Bool? = nil
+  var defaultDirectoryService: String? = nil
+  var defaultTranslationService: String? = nil
+  var translationMode: TranslationMode? = nil
+  var translationTargets: [TranslationTarget]? = nil
+  var inputSubmitMode: InputSubmitMode? = nil
+  var doubleClickCopyResult: Bool? = nil
 }

@@ -29,7 +29,6 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
-		8F1000012E0A100100A1B2C3 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000112E0A100100A1B2C3 /* AppSettings.swift */; };
 		8F1000022E0A100100A1B2C3 /* SettingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000122E0A100100A1B2C3 /* SettingOption.swift */; };
 		8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000132E0A100100A1B2C3 /* SettingsView.swift */; };
 		8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */; };
@@ -43,8 +42,6 @@
 		8F1000242E0A100100A1B2C3 /* AppearanceSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000252E0A100100A1B2C3 /* AppearanceSettingsPatch.swift */; };
 		8F1000262E0A100100A1B2C3 /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000272E0A100100A1B2C3 /* AdvancedSettings.swift */; };
 		8F1000282E0A100100A1B2C3 /* AdvancedSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000292E0A100100A1B2C3 /* AdvancedSettingsPatch.swift */; };
-		8F10004E2E0A100100A1B2C3 /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10004F2E0A100100A1B2C3 /* GeneralSettings.swift */; };
-		8F1000502E0A100100A1B2C3 /* GeneralSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000512E0A100100A1B2C3 /* GeneralSettingsPatch.swift */; };
 		8F10002A2E0A100100A1B2C3 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002B2E0A100100A1B2C3 /* ProviderType.swift */; };
 		8F10002C2E0A100100A1B2C3 /* BaiduProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002D2E0A100100A1B2C3 /* BaiduProviderConfig.swift */; };
 		8F10002E2E0A100100A1B2C3 /* CaiyunProviderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002F2E0A100100A1B2C3 /* CaiyunProviderConfig.swift */; };
@@ -63,6 +60,8 @@
 		8F1000482E0A100100A1B2C3 /* IcibaProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000492E0A100100A1B2C3 /* IcibaProviderConfig+Fields.swift */; };
 		8F10004A2E0A100100A1B2C3 /* TencentProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10004B2E0A100100A1B2C3 /* TencentProviderConfig+Fields.swift */; };
 		8F10004C2E0A100100A1B2C3 /* YoudaoProviderConfig+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10004D2E0A100100A1B2C3 /* YoudaoProviderConfig+Fields.swift */; };
+		8F10004E2E0A100100A1B2C3 /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10004F2E0A100100A1B2C3 /* GeneralSettings.swift */; };
+		8F1000502E0A100100A1B2C3 /* GeneralSettingsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000512E0A100100A1B2C3 /* GeneralSettingsPatch.swift */; };
 		A10000000000000000000001 /* SettingPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000001 /* SettingPicker.swift */; };
 		A10000000000000000000002 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000002 /* GeneralView.swift */; };
 		A10000000000000000000003 /* AppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000003 /* AppearanceView.swift */; };
@@ -76,7 +75,11 @@
 		A1000000000000000000000B /* AdvancedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000B /* AdvancedViewModel.swift */; };
 		A1000000000000000000000C /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000C /* SettingsRepository.swift */; };
 		A1000000000000000000000E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000E /* Settings.swift */; };
+		A100000000000000000000F /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110000000000000000000F /* ProviderDetailView.swift */; };
 		B6867768A75CBFFF8FFDC94A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */; };
+		F5B4FE382FA7367900D78055 /* TranslationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B4FE372FA7367900D78055 /* TranslationMode.swift */; };
+		F5B4FE3A2FA7391100D78055 /* InputSubmitMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B4FE392FA7391100D78055 /* InputSubmitMode.swift */; };
+		F5B4FE3C2FA73C0E00D78055 /* TranslationTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B4FE3B2FA73C0E00D78055 /* TranslationTarget.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,7 +136,6 @@
 		74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FlutterGeneratedPluginSwiftPackage; path = ephemeral/Packages/FlutterGeneratedPluginSwiftPackage; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		8F1000112E0A100100A1B2C3 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		8F1000122E0A100100A1B2C3 /* SettingOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOption.swift; sourceTree = "<group>"; };
 		8F1000132E0A100100A1B2C3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -147,8 +149,6 @@
 		8F1000252E0A100100A1B2C3 /* AppearanceSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsPatch.swift; sourceTree = "<group>"; };
 		8F1000272E0A100100A1B2C3 /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
 		8F1000292E0A100100A1B2C3 /* AdvancedSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsPatch.swift; sourceTree = "<group>"; };
-		8F10004F2E0A100100A1B2C3 /* GeneralSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
-		8F1000512E0A100100A1B2C3 /* GeneralSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsPatch.swift; sourceTree = "<group>"; };
 		8F10002B2E0A100100A1B2C3 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
 		8F10002D2E0A100100A1B2C3 /* BaiduProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaiduProviderConfig.swift; sourceTree = "<group>"; };
 		8F10002F2E0A100100A1B2C3 /* CaiyunProviderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaiyunProviderConfig.swift; sourceTree = "<group>"; };
@@ -167,6 +167,8 @@
 		8F1000492E0A100100A1B2C3 /* IcibaProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IcibaProviderConfig+Fields.swift"; sourceTree = "<group>"; };
 		8F10004B2E0A100100A1B2C3 /* TencentProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TencentProviderConfig+Fields.swift"; sourceTree = "<group>"; };
 		8F10004D2E0A100100A1B2C3 /* YoudaoProviderConfig+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YoudaoProviderConfig+Fields.swift"; sourceTree = "<group>"; };
+		8F10004F2E0A100100A1B2C3 /* GeneralSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
+		8F1000512E0A100100A1B2C3 /* GeneralSettingsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsPatch.swift; sourceTree = "<group>"; };
 		921317546F1323EEECD70938 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		9D02942CF4EF133C90DEB98D /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
@@ -183,7 +185,11 @@
 		A1100000000000000000000B /* AdvancedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedViewModel.swift; sourceTree = "<group>"; };
 		A1100000000000000000000C /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
 		A1100000000000000000000E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		A110000000000000000000F /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
 		AB98A8540C162D94896470E6 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		F5B4FE372FA7367900D78055 /* TranslationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationMode.swift; sourceTree = "<group>"; };
+		F5B4FE392FA7391100D78055 /* InputSubmitMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputSubmitMode.swift; sourceTree = "<group>"; };
+		F5B4FE3B2FA73C0E00D78055 /* TranslationTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTarget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -353,6 +359,7 @@
 			isa = PBXGroup;
 			children = (
 				A11000000000000000000005 /* ProvidersView.swift */,
+				A110000000000000000000F /* ProviderDetailView.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -396,19 +403,19 @@
 				8F1000292E0A100100A1B2C3 /* AdvancedSettingsPatch.swift */,
 				8F1000232E0A100100A1B2C3 /* AppearanceSettings.swift */,
 				8F1000252E0A100100A1B2C3 /* AppearanceSettingsPatch.swift */,
-				8F1000112E0A100100A1B2C3 /* AppSettings.swift */,
-				8F10004F2E0A100100A1B2C3 /* GeneralSettings.swift */,
-				8F1000512E0A100100A1B2C3 /* GeneralSettingsPatch.swift */,
 				8F10002D2E0A100100A1B2C3 /* BaiduProviderConfig.swift */,
 				8F1000412E0A100100A1B2C3 /* BaiduProviderConfig+Fields.swift */,
 				8F10002F2E0A100100A1B2C3 /* CaiyunProviderConfig.swift */,
 				8F1000432E0A100100A1B2C3 /* CaiyunProviderConfig+Fields.swift */,
 				8F1000312E0A100100A1B2C3 /* DeepLProviderConfig.swift */,
 				8F1000452E0A100100A1B2C3 /* DeepLProviderConfig+Fields.swift */,
+				8F10004F2E0A100100A1B2C3 /* GeneralSettings.swift */,
+				8F1000512E0A100100A1B2C3 /* GeneralSettingsPatch.swift */,
 				8F1000332E0A100100A1B2C3 /* GoogleProviderConfig.swift */,
 				8F1000472E0A100100A1B2C3 /* GoogleProviderConfig+Fields.swift */,
 				8F1000352E0A100100A1B2C3 /* IcibaProviderConfig.swift */,
 				8F1000492E0A100100A1B2C3 /* IcibaProviderConfig+Fields.swift */,
+				F5B4FE392FA7391100D78055 /* InputSubmitMode.swift */,
 				8F10003B2E0A100100A1B2C3 /* ProviderCapability.swift */,
 				8F10001D2E0A100100A1B2C3 /* ProviderConfigEntry.swift */,
 				8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */,
@@ -420,6 +427,8 @@
 				8F1000212E0A100100A1B2C3 /* ShortcutSettingsPatch.swift */,
 				8F1000372E0A100100A1B2C3 /* TencentProviderConfig.swift */,
 				8F10004B2E0A100100A1B2C3 /* TencentProviderConfig+Fields.swift */,
+				F5B4FE372FA7367900D78055 /* TranslationMode.swift */,
+				F5B4FE3B2FA73C0E00D78055 /* TranslationTarget.swift */,
 				8F1000392E0A100100A1B2C3 /* YoudaoProviderConfig.swift */,
 				8F10004D2E0A100100A1B2C3 /* YoudaoProviderConfig+Fields.swift */,
 			);
@@ -707,14 +716,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5B4FE382FA7367900D78055 /* TranslationMode.swift in Sources */,
 				2A0D6A402E0A100100A1B2C3 /* NativeSettingsPlugin.swift in Sources */,
-				8F1000012E0A100100A1B2C3 /* AppSettings.swift in Sources */,
 				8F10001C2E0A100100A1B2C3 /* ProviderConfigEntry.swift in Sources */,
 				8F10001E2E0A100100A1B2C3 /* ShortcutSettings.swift in Sources */,
 				8F1000202E0A100100A1B2C3 /* ShortcutSettingsPatch.swift in Sources */,
 				8F1000222E0A100100A1B2C3 /* AppearanceSettings.swift in Sources */,
 				8F1000242E0A100100A1B2C3 /* AppearanceSettingsPatch.swift in Sources */,
 				8F1000262E0A100100A1B2C3 /* AdvancedSettings.swift in Sources */,
+				F5B4FE3C2FA73C0E00D78055 /* TranslationTarget.swift in Sources */,
 				8F1000282E0A100100A1B2C3 /* AdvancedSettingsPatch.swift in Sources */,
 				8F10004E2E0A100100A1B2C3 /* GeneralSettings.swift in Sources */,
 				8F1000502E0A100100A1B2C3 /* GeneralSettingsPatch.swift in Sources */,
@@ -740,6 +750,7 @@
 				8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */,
 				8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */,
 				8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */,
+				F5B4FE3A2FA7391100D78055 /* InputSubmitMode.swift in Sources */,
 				8F1000062E0A100100A1B2C3 /* SettingSectionHeader.swift in Sources */,
 				8F1000072E0A100100A1B2C3 /* SettingToggle.swift in Sources */,
 				A10000000000000000000001 /* SettingPicker.swift in Sources */,
@@ -747,6 +758,7 @@
 				A10000000000000000000003 /* AppearanceView.swift in Sources */,
 				A10000000000000000000004 /* ShortcutsView.swift in Sources */,
 				A10000000000000000000005 /* ProvidersView.swift in Sources */,
+				A100000000000000000000F /* ProviderDetailView.swift in Sources */,
 				A10000000000000000000006 /* AdvancedView.swift in Sources */,
 				A10000000000000000000007 /* GeneralViewModel.swift in Sources */,
 				A10000000000000000000008 /* AppearanceViewModel.swift in Sources */,

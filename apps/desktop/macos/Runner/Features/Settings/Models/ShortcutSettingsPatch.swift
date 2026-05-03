@@ -4,9 +4,9 @@
 import Foundation
 
 struct ShortcutSettingsPatch: Codable {
-  var toggleApp: String?
-  var hideApp: String?
-  var extractFromScreenSelection: String?
-  var extractFromScreenCapture: String?
-  var extractFromClipboard: String?
+  var toggleApp: String? = nil
+  var hideApp: String? = nil
+  var extractFromScreenSelection: String? = nil
+  var extractFromScreenCapture: String? = nil
+  var extractFromClipboard: String? = nil
 }

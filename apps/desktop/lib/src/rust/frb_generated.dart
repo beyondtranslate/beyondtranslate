@@ -1004,6 +1004,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  InputSubmitMode dco_decode_box_autoadd_input_submit_mode(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_input_submit_mode(raw);
+  }
+
+  @protected
   LookUpRequest dco_decode_box_autoadd_look_up_request(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_look_up_request(raw);
@@ -1027,6 +1033,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TranslateRequest dco_decode_box_autoadd_translate_request(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_translate_request(raw);
+  }
+
+  @protected
+  TranslationMode dco_decode_box_autoadd_translation_mode(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_translation_mode(raw);
   }
 
   @protected
@@ -1058,11 +1070,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   GeneralSettings dco_decode_general_settings(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 10)
+      throw Exception('unexpected arr length: expect 10 but see ${arr.length}');
     return GeneralSettings(
       launchAtLogin: dco_decode_bool(arr[0]),
       showMenuBar: dco_decode_bool(arr[1]),
+      defaultOcrService: dco_decode_String(arr[2]),
+      autoCopyDetectedText: dco_decode_bool(arr[3]),
+      defaultDirectoryService: dco_decode_String(arr[4]),
+      defaultTranslationService: dco_decode_String(arr[5]),
+      translationMode: dco_decode_translation_mode(arr[6]),
+      translationTargets: dco_decode_list_translation_target(arr[7]),
+      inputSubmitMode: dco_decode_input_submit_mode(arr[8]),
+      doubleClickCopyResult: dco_decode_bool(arr[9]),
     );
   }
 
@@ -1070,11 +1090,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   GeneralSettingsPatch dco_decode_general_settings_patch(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 10)
+      throw Exception('unexpected arr length: expect 10 but see ${arr.length}');
     return GeneralSettingsPatch(
       launchAtLogin: dco_decode_opt_box_autoadd_bool(arr[0]),
       showMenuBar: dco_decode_opt_box_autoadd_bool(arr[1]),
+      defaultOcrService: dco_decode_opt_String(arr[2]),
+      autoCopyDetectedText: dco_decode_opt_box_autoadd_bool(arr[3]),
+      defaultDirectoryService: dco_decode_opt_String(arr[4]),
+      defaultTranslationService: dco_decode_opt_String(arr[5]),
+      translationMode: dco_decode_opt_box_autoadd_translation_mode(arr[6]),
+      translationTargets: dco_decode_opt_list_translation_target(arr[7]),
+      inputSubmitMode: dco_decode_opt_box_autoadd_input_submit_mode(arr[8]),
+      doubleClickCopyResult: dco_decode_opt_box_autoadd_bool(arr[9]),
     );
   }
 
@@ -1106,6 +1134,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       apiKey: dco_decode_String(arr[0]),
       baseUrl: dco_decode_opt_String(arr[1]),
     );
+  }
+
+  @protected
+  InputSubmitMode dco_decode_input_submit_mode(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return InputSubmitMode.values[raw as int];
   }
 
   @protected
@@ -1147,6 +1181,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<TextTranslation> dco_decode_list_text_translation(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_text_translation).toList();
+  }
+
+  @protected
+  List<TranslationTarget> dco_decode_list_translation_target(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_translation_target).toList();
   }
 
   @protected
@@ -1237,6 +1277,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  InputSubmitMode? dco_decode_opt_box_autoadd_input_submit_mode(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_input_submit_mode(raw);
+  }
+
+  @protected
   ProviderConfigEntry? dco_decode_opt_box_autoadd_provider_config_entry(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -1246,9 +1292,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TranslationMode? dco_decode_opt_box_autoadd_translation_mode(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_translation_mode(raw);
+  }
+
+  @protected
   List<String>? dco_decode_opt_list_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_list_String(raw);
+  }
+
+  @protected
+  List<TranslationTarget>? dco_decode_opt_list_translation_target(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_list_translation_target(raw);
   }
 
   @protected
@@ -1439,6 +1497,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
     return TranslateResponse(
       translations: dco_decode_list_text_translation(arr[0]),
+    );
+  }
+
+  @protected
+  TranslationMode dco_decode_translation_mode(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TranslationMode.values[raw as int];
+  }
+
+  @protected
+  TranslationTarget dco_decode_translation_target(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return TranslationTarget(
+      source: dco_decode_String(arr[0]),
+      target: dco_decode_String(arr[1]),
     );
   }
 
@@ -1775,6 +1851,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  InputSubmitMode sse_decode_box_autoadd_input_submit_mode(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_input_submit_mode(deserializer));
+  }
+
+  @protected
   LookUpRequest sse_decode_box_autoadd_look_up_request(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1803,6 +1886,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TranslationMode sse_decode_box_autoadd_translation_mode(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_translation_mode(deserializer));
+  }
+
+  @protected
   CaiyunProviderConfig sse_decode_caiyun_provider_config(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1827,8 +1917,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_launchAtLogin = sse_decode_bool(deserializer);
     var var_showMenuBar = sse_decode_bool(deserializer);
+    var var_defaultOcrService = sse_decode_String(deserializer);
+    var var_autoCopyDetectedText = sse_decode_bool(deserializer);
+    var var_defaultDirectoryService = sse_decode_String(deserializer);
+    var var_defaultTranslationService = sse_decode_String(deserializer);
+    var var_translationMode = sse_decode_translation_mode(deserializer);
+    var var_translationTargets =
+        sse_decode_list_translation_target(deserializer);
+    var var_inputSubmitMode = sse_decode_input_submit_mode(deserializer);
+    var var_doubleClickCopyResult = sse_decode_bool(deserializer);
     return GeneralSettings(
-        launchAtLogin: var_launchAtLogin, showMenuBar: var_showMenuBar);
+        launchAtLogin: var_launchAtLogin,
+        showMenuBar: var_showMenuBar,
+        defaultOcrService: var_defaultOcrService,
+        autoCopyDetectedText: var_autoCopyDetectedText,
+        defaultDirectoryService: var_defaultDirectoryService,
+        defaultTranslationService: var_defaultTranslationService,
+        translationMode: var_translationMode,
+        translationTargets: var_translationTargets,
+        inputSubmitMode: var_inputSubmitMode,
+        doubleClickCopyResult: var_doubleClickCopyResult);
   }
 
   @protected
@@ -1837,8 +1945,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_launchAtLogin = sse_decode_opt_box_autoadd_bool(deserializer);
     var var_showMenuBar = sse_decode_opt_box_autoadd_bool(deserializer);
+    var var_defaultOcrService = sse_decode_opt_String(deserializer);
+    var var_autoCopyDetectedText =
+        sse_decode_opt_box_autoadd_bool(deserializer);
+    var var_defaultDirectoryService = sse_decode_opt_String(deserializer);
+    var var_defaultTranslationService = sse_decode_opt_String(deserializer);
+    var var_translationMode =
+        sse_decode_opt_box_autoadd_translation_mode(deserializer);
+    var var_translationTargets =
+        sse_decode_opt_list_translation_target(deserializer);
+    var var_inputSubmitMode =
+        sse_decode_opt_box_autoadd_input_submit_mode(deserializer);
+    var var_doubleClickCopyResult =
+        sse_decode_opt_box_autoadd_bool(deserializer);
     return GeneralSettingsPatch(
-        launchAtLogin: var_launchAtLogin, showMenuBar: var_showMenuBar);
+        launchAtLogin: var_launchAtLogin,
+        showMenuBar: var_showMenuBar,
+        defaultOcrService: var_defaultOcrService,
+        autoCopyDetectedText: var_autoCopyDetectedText,
+        defaultDirectoryService: var_defaultDirectoryService,
+        defaultTranslationService: var_defaultTranslationService,
+        translationMode: var_translationMode,
+        translationTargets: var_translationTargets,
+        inputSubmitMode: var_inputSubmitMode,
+        doubleClickCopyResult: var_doubleClickCopyResult);
   }
 
   @protected
@@ -1863,6 +1993,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_apiKey = sse_decode_String(deserializer);
     var var_baseUrl = sse_decode_opt_String(deserializer);
     return IcibaProviderConfig(apiKey: var_apiKey, baseUrl: var_baseUrl);
+  }
+
+  @protected
+  InputSubmitMode sse_decode_input_submit_mode(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return InputSubmitMode.values[inner];
   }
 
   @protected
@@ -1933,6 +2070,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var ans_ = <TextTranslation>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_text_translation(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<TranslationTarget> sse_decode_list_translation_target(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <TranslationTarget>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_translation_target(deserializer));
     }
     return ans_;
   }
@@ -2086,6 +2236,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  InputSubmitMode? sse_decode_opt_box_autoadd_input_submit_mode(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_input_submit_mode(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   ProviderConfigEntry? sse_decode_opt_box_autoadd_provider_config_entry(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2098,11 +2260,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  TranslationMode? sse_decode_opt_box_autoadd_translation_mode(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_translation_mode(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   List<String>? sse_decode_opt_list_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_list_String(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<TranslationTarget>? sse_decode_opt_list_translation_target(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_translation_target(deserializer));
     } else {
       return null;
     }
@@ -2332,6 +2518,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_translations = sse_decode_list_text_translation(deserializer);
     return TranslateResponse(translations: var_translations);
+  }
+
+  @protected
+  TranslationMode sse_decode_translation_mode(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return TranslationMode.values[inner];
+  }
+
+  @protected
+  TranslationTarget sse_decode_translation_target(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_source = sse_decode_String(deserializer);
+    var var_target = sse_decode_String(deserializer);
+    return TranslationTarget(source: var_source, target: var_target);
   }
 
   @protected
@@ -2643,6 +2845,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_input_submit_mode(
+      InputSubmitMode self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_input_submit_mode(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_look_up_request(
       LookUpRequest self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2671,6 +2880,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_translation_mode(
+      TranslationMode self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_translation_mode(self, serializer);
+  }
+
+  @protected
   void sse_encode_caiyun_provider_config(
       CaiyunProviderConfig self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2693,6 +2909,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_bool(self.launchAtLogin, serializer);
     sse_encode_bool(self.showMenuBar, serializer);
+    sse_encode_String(self.defaultOcrService, serializer);
+    sse_encode_bool(self.autoCopyDetectedText, serializer);
+    sse_encode_String(self.defaultDirectoryService, serializer);
+    sse_encode_String(self.defaultTranslationService, serializer);
+    sse_encode_translation_mode(self.translationMode, serializer);
+    sse_encode_list_translation_target(self.translationTargets, serializer);
+    sse_encode_input_submit_mode(self.inputSubmitMode, serializer);
+    sse_encode_bool(self.doubleClickCopyResult, serializer);
   }
 
   @protected
@@ -2701,6 +2925,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_opt_box_autoadd_bool(self.launchAtLogin, serializer);
     sse_encode_opt_box_autoadd_bool(self.showMenuBar, serializer);
+    sse_encode_opt_String(self.defaultOcrService, serializer);
+    sse_encode_opt_box_autoadd_bool(self.autoCopyDetectedText, serializer);
+    sse_encode_opt_String(self.defaultDirectoryService, serializer);
+    sse_encode_opt_String(self.defaultTranslationService, serializer);
+    sse_encode_opt_box_autoadd_translation_mode(
+        self.translationMode, serializer);
+    sse_encode_opt_list_translation_target(self.translationTargets, serializer);
+    sse_encode_opt_box_autoadd_input_submit_mode(
+        self.inputSubmitMode, serializer);
+    sse_encode_opt_box_autoadd_bool(self.doubleClickCopyResult, serializer);
   }
 
   @protected
@@ -2723,6 +2957,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.apiKey, serializer);
     sse_encode_opt_String(self.baseUrl, serializer);
+  }
+
+  @protected
+  void sse_encode_input_submit_mode(
+      InputSubmitMode self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
   }
 
   @protected
@@ -2779,6 +3020,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
       sse_encode_text_translation(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_translation_target(
+      List<TranslationTarget> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_translation_target(item, serializer);
     }
   }
 
@@ -2897,6 +3148,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_input_submit_mode(
+      InputSubmitMode? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_input_submit_mode(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_provider_config_entry(
       ProviderConfigEntry? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2908,6 +3170,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_translation_mode(
+      TranslationMode? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_translation_mode(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_list_String(
       List<String>? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2915,6 +3188,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_list_String(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_translation_target(
+      List<TranslationTarget>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_translation_target(self, serializer);
     }
   }
 
@@ -3100,6 +3384,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       TranslateResponse self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_text_translation(self.translations, serializer);
+  }
+
+  @protected
+  void sse_encode_translation_mode(
+      TranslationMode self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_translation_target(
+      TranslationTarget self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.source, serializer);
+    sse_encode_String(self.target, serializer);
   }
 
   @protected

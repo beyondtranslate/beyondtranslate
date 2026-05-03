@@ -143,6 +143,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  InputSubmitMode dco_decode_box_autoadd_input_submit_mode(dynamic raw);
+
+  @protected
   LookUpRequest dco_decode_box_autoadd_look_up_request(dynamic raw);
 
   @protected
@@ -154,6 +157,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TranslateRequest dco_decode_box_autoadd_translate_request(dynamic raw);
+
+  @protected
+  TranslationMode dco_decode_box_autoadd_translation_mode(dynamic raw);
 
   @protected
   CaiyunProviderConfig dco_decode_caiyun_provider_config(dynamic raw);
@@ -177,6 +183,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   IcibaProviderConfig dco_decode_iciba_provider_config(dynamic raw);
 
   @protected
+  InputSubmitMode dco_decode_input_submit_mode(dynamic raw);
+
+  @protected
   List<String> dco_decode_list_String(dynamic raw);
 
   @protected
@@ -194,6 +203,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<TextTranslation> dco_decode_list_text_translation(dynamic raw);
+
+  @protected
+  List<TranslationTarget> dco_decode_list_translation_target(dynamic raw);
 
   @protected
   List<WordDefinition> dco_decode_list_word_definition(dynamic raw);
@@ -229,11 +241,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool? dco_decode_opt_box_autoadd_bool(dynamic raw);
 
   @protected
+  InputSubmitMode? dco_decode_opt_box_autoadd_input_submit_mode(dynamic raw);
+
+  @protected
   ProviderConfigEntry? dco_decode_opt_box_autoadd_provider_config_entry(
       dynamic raw);
 
   @protected
+  TranslationMode? dco_decode_opt_box_autoadd_translation_mode(dynamic raw);
+
+  @protected
   List<String>? dco_decode_opt_list_String(dynamic raw);
+
+  @protected
+  List<TranslationTarget>? dco_decode_opt_list_translation_target(dynamic raw);
 
   @protected
   List<WordDefinition>? dco_decode_opt_list_word_definition(dynamic raw);
@@ -292,6 +313,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TranslateResponse dco_decode_translate_response(dynamic raw);
+
+  @protected
+  TranslationMode dco_decode_translation_mode(dynamic raw);
+
+  @protected
+  TranslationTarget dco_decode_translation_target(dynamic raw);
 
   @protected
   BigInt dco_decode_u_64(dynamic raw);
@@ -439,6 +466,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  InputSubmitMode sse_decode_box_autoadd_input_submit_mode(
+      SseDeserializer deserializer);
+
+  @protected
   LookUpRequest sse_decode_box_autoadd_look_up_request(
       SseDeserializer deserializer);
 
@@ -452,6 +483,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TranslateRequest sse_decode_box_autoadd_translate_request(
+      SseDeserializer deserializer);
+
+  @protected
+  TranslationMode sse_decode_box_autoadd_translation_mode(
       SseDeserializer deserializer);
 
   @protected
@@ -481,6 +516,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  InputSubmitMode sse_decode_input_submit_mode(SseDeserializer deserializer);
+
+  @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer);
 
   @protected
@@ -501,6 +539,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<TextTranslation> sse_decode_list_text_translation(
+      SseDeserializer deserializer);
+
+  @protected
+  List<TranslationTarget> sse_decode_list_translation_target(
       SseDeserializer deserializer);
 
   @protected
@@ -540,11 +582,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer);
 
   @protected
+  InputSubmitMode? sse_decode_opt_box_autoadd_input_submit_mode(
+      SseDeserializer deserializer);
+
+  @protected
   ProviderConfigEntry? sse_decode_opt_box_autoadd_provider_config_entry(
       SseDeserializer deserializer);
 
   @protected
+  TranslationMode? sse_decode_opt_box_autoadd_translation_mode(
+      SseDeserializer deserializer);
+
+  @protected
   List<String>? sse_decode_opt_list_String(SseDeserializer deserializer);
+
+  @protected
+  List<TranslationTarget>? sse_decode_opt_list_translation_target(
+      SseDeserializer deserializer);
 
   @protected
   List<WordDefinition>? sse_decode_opt_list_word_definition(
@@ -612,6 +666,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   TranslateResponse sse_decode_translate_response(SseDeserializer deserializer);
+
+  @protected
+  TranslationMode sse_decode_translation_mode(SseDeserializer deserializer);
+
+  @protected
+  TranslationTarget sse_decode_translation_target(SseDeserializer deserializer);
 
   @protected
   BigInt sse_decode_u_64(SseDeserializer deserializer);
@@ -760,6 +820,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       GeneralSettingsPatch self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_input_submit_mode(
+      InputSubmitMode self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_look_up_request(
       LookUpRequest self, SseSerializer serializer);
 
@@ -774,6 +838,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_translate_request(
       TranslateRequest self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_translation_mode(
+      TranslationMode self, SseSerializer serializer);
 
   @protected
   void sse_encode_caiyun_provider_config(
@@ -803,6 +871,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       IcibaProviderConfig self, SseSerializer serializer);
 
   @protected
+  void sse_encode_input_submit_mode(
+      InputSubmitMode self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer);
 
   @protected
@@ -824,6 +896,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_text_translation(
       List<TextTranslation> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_translation_target(
+      List<TranslationTarget> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_word_definition(
@@ -866,11 +942,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_input_submit_mode(
+      InputSubmitMode? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_provider_config_entry(
       ProviderConfigEntry? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_translation_mode(
+      TranslationMode? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_list_String(List<String>? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_list_translation_target(
+      List<TranslationTarget>? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_list_word_definition(
@@ -945,6 +1033,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_translate_response(
       TranslateResponse self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_translation_mode(
+      TranslationMode self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_translation_target(
+      TranslationTarget self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_64(BigInt self, SseSerializer serializer);

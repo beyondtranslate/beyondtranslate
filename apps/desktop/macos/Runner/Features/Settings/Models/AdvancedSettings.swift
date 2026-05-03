@@ -3,4 +3,5 @@
 
 import Foundation
 
-struct AdvancedSettings: Codable {}
+struct AdvancedSettings: Codable {
+}
