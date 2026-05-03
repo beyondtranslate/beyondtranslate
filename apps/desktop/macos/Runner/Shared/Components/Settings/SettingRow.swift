@@ -31,44 +31,35 @@ struct ShortcutSettingRow: View {
     HStack {
       Text(title)
       Spacer()
-      ShortcutCaps(shortcut: shortcut)
-      Button("Record", action: action)
-    }
-  }
-}
 
-private struct ShortcutCaps: View {
-  let shortcut: ShortcutDisplay
+      HStack(spacing: 4) {
+        Button(action: action) {
+          Text(shortcut.displayText)
+            .font(.system(size: 14, design: .monospaced))
+            .foregroundStyle(.primary)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .frame(minWidth: 80)
+            .background(
+              RoundedRectangle(cornerRadius: 4)
+                .fill(Color(nsColor: .controlBackgroundColor))
+            )
+            .overlay(
+              RoundedRectangle(cornerRadius: 4)
+                .stroke(Color(nsColor: .separatorColor), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
 
-  var body: some View {
-    HStack(spacing: 6) {
-      ForEach(shortcut.parts.indices, id: \.self) { index in
-        KeyCap(label: shortcut.parts[index])
-
-        if index < shortcut.parts.count - 1 {
-          Text("+")
+        Button(action: {
+          // 这里只是 UI 展示，暂不清除数据
+        }) {
+          Image(systemName: "xmark.circle.fill")
+            .font(.system(size: 16))
             .foregroundStyle(.secondary)
         }
+        .buttonStyle(.plain)
       }
     }
-  }
-}
-
-private struct KeyCap: View {
-  let label: String
-
-  var body: some View {
-    Text(label)
-      .font(.system(size: 10, weight: .medium, design: .monospaced))
-      .padding(.horizontal, 6)
-      .padding(.vertical, 4)
-      .background(
-        RoundedRectangle(cornerRadius: 5, style: .continuous)
-          .fill(Color(nsColor: .underPageBackgroundColor))
-      )
-      .overlay(
-        RoundedRectangle(cornerRadius: 5, style: .continuous)
-          .stroke(Color(nsColor: .separatorColor).opacity(0.55), lineWidth: 1)
-      )
   }
 }

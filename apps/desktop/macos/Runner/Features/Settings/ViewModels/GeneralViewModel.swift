@@ -1,5 +1,10 @@
 import SwiftUI
 
+struct ServiceOption: Identifiable, Hashable {
+  let id: String
+  let name: String
+}
+
 @MainActor
 final class GeneralViewModel: ObservableObject {
   // Rust-backed settings
@@ -13,6 +18,9 @@ final class GeneralViewModel: ObservableObject {
   @Published var translationTargets: [TranslationTarget]
   @Published var inputSubmitMode: InputSubmitMode
   @Published var doubleClickCopyResult: Bool
+
+  // Runtime providers
+  @Published var providers: [ProviderConfigEntry] = []
 
   private let repository: SettingsRepository
 
@@ -36,6 +44,26 @@ final class GeneralViewModel: ObservableObject {
     } catch {
       // Keep defaults when Rust-backed settings cannot be loaded.
     }
+
+    do {
+      providers = try await repository.listProviders()
+    } catch {
+      // Keep existing providers on error.
+    }
+  }
+
+  // Directory service options: {provider-id}+dictionary
+  var dictionaryServiceOptions: [ServiceOption] {
+    providers
+      .filter { $0.capabilities.contains("dictionary") }
+      .map { ServiceOption(id: "\($0.id)+dictionary", name: $0.id) }
+  }
+
+  // Translation service options: {provider-id}+translation
+  var translationServiceOptions: [ServiceOption] {
+    providers
+      .filter { $0.capabilities.contains("translation") }
+      .map { ServiceOption(id: "\($0.id)+translation", name: $0.id) }
   }
 
   func setLaunchAtLogin(_ value: Bool) {

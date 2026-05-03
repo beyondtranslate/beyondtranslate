@@ -120,6 +120,10 @@ struct ShortcutDisplay {
   var rawValue: String {
     parts.joined(separator: "+")
   }
+
+  var displayText: String {
+    parts.joined(separator: "")
+  }
 }
 
 struct ProviderItem: Identifiable {

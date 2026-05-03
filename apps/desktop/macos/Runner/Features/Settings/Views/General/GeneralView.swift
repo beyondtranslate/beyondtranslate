@@ -45,11 +45,17 @@ struct GeneralView: View {
             set: { viewModel.setDefaultDirectoryService($0) }
           )
         ) {
-          ForEach(["Youdao Dictionary", "Apple Dictionary"], id: \.self) { item in
-            Text(item).tag(item)
+          if viewModel.dictionaryServiceOptions.isEmpty {
+            Text("No services available").tag("")
+          } else {
+            Text("None").tag("")
+            ForEach(viewModel.dictionaryServiceOptions) { option in
+              Text(option.name).tag(option.id)
+            }
           }
         }
         .pickerStyle(.menu)
+        .disabled(viewModel.dictionaryServiceOptions.isEmpty)
       }
 
       Section("Translation") {
@@ -60,11 +66,17 @@ struct GeneralView: View {
             set: { viewModel.setDefaultTranslationService($0) }
           )
         ) {
-          ForEach(["OpenAI", "Google Translate", "DeepL", "Youdao"], id: \.self) { item in
-            Text(item).tag(item)
+          if viewModel.translationServiceOptions.isEmpty {
+            Text("No services available").tag("")
+          } else {
+            Text("None").tag("")
+            ForEach(viewModel.translationServiceOptions) { option in
+              Text(option.name).tag(option.id)
+            }
           }
         }
         .pickerStyle(.menu)
+        .disabled(viewModel.translationServiceOptions.isEmpty)
 
         SettingPicker(
           "Translation mode",
@@ -113,6 +125,9 @@ struct GeneralView: View {
         .labelsHidden()
         .pickerStyle(.radioGroup)
       }
+    }
+    .task {
+      await viewModel.load()
     }
   }
 }

@@ -69,6 +69,16 @@ class NativeSettings {
           return {
             'launchAtLogin': result.launchAtLogin,
             'showMenuBar': result.showMenuBar,
+            'defaultOcrService': result.defaultOcrService,
+            'autoCopyDetectedText': result.autoCopyDetectedText,
+            'defaultDirectoryService': result.defaultDirectoryService,
+            'defaultTranslationService': result.defaultTranslationService,
+            'translationMode': result.translationMode.name,
+            'translationTargets': result.translationTargets
+                .map((t) => {'source': t.source, 'target': t.target})
+                .toList(),
+            'inputSubmitMode': result.inputSubmitMode.name,
+            'doubleClickCopyResult': result.doubleClickCopyResult,
           };
 
         case 'settings.updateGeneral':
@@ -77,11 +87,36 @@ class NativeSettings {
             GeneralSettingsPatch(
               launchAtLogin: args['launchAtLogin'] as bool?,
               showMenuBar: args['showMenuBar'] as bool?,
+              defaultOcrService: args['defaultOcrService'] as String?,
+              autoCopyDetectedText: args['autoCopyDetectedText'] as bool?,
+              defaultDirectoryService:
+                  args['defaultDirectoryService'] as String?,
+              defaultTranslationService:
+                  args['defaultTranslationService'] as String?,
+              translationMode: args['translationMode'] == null
+                  ? null
+                  : TranslationMode.values
+                      .byName(args['translationMode'] as String),
+              inputSubmitMode: args['inputSubmitMode'] == null
+                  ? null
+                  : InputSubmitMode.values
+                      .byName(args['inputSubmitMode'] as String),
+              doubleClickCopyResult: args['doubleClickCopyResult'] as bool?,
             ),
           );
           return {
             'launchAtLogin': result.launchAtLogin,
             'showMenuBar': result.showMenuBar,
+            'defaultOcrService': result.defaultOcrService,
+            'autoCopyDetectedText': result.autoCopyDetectedText,
+            'defaultDirectoryService': result.defaultDirectoryService,
+            'defaultTranslationService': result.defaultTranslationService,
+            'translationMode': result.translationMode.name,
+            'translationTargets': result.translationTargets
+                .map((t) => {'source': t.source, 'target': t.target})
+                .toList(),
+            'inputSubmitMode': result.inputSubmitMode.name,
+            'doubleClickCopyResult': result.doubleClickCopyResult,
           };
 
         case 'settings.getAdvanced':
