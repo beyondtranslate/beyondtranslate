@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:collection/collection.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,15 +32,15 @@ import '../../networking/ocr_client/ocr_client.dart';
 import '../../networking/translate_client/translate_client.dart';
 import '../../services/local_db/configuration.dart';
 import '../../services/local_db/local_db.dart';
+import '../../services/native_settings.dart';
 import '../../services/shortcut_service/shortcut_service.dart';
 import '../../utils/language_util.dart';
 import '../../utils/platform_util.dart';
 import '../../utils/utils.dart';
+import '../../widgets/ui/button.dart';
 import '../../windowing/window_controllers.dart';
 import 'limited_functionality_banner.dart';
 import 'new_version_found_banner.dart';
-import 'toolbar_item_always_on_top.dart';
-import 'toolbar_item_settings.dart';
 import 'translation_input_view.dart';
 import 'translation_results_view.dart';
 import 'translation_target_select_view.dart';
@@ -50,6 +51,101 @@ const kMenuItemKeyQuitApp = 'quit-app';
 
 const kMenuSubItemKeyJoinDiscord = 'subitem-join-discord';
 const kMenuSubItemKeyJoinQQGroup = 'subitem-join-qq';
+
+class ToolbarItemAlwaysOnTop extends StatefulWidget {
+  const ToolbarItemAlwaysOnTop({Key? key}) : super(key: key);
+
+  @override
+  State<ToolbarItemAlwaysOnTop> createState() => _ToolbarItemAlwaysOnTopState();
+}
+
+class _ToolbarItemAlwaysOnTopState extends State<ToolbarItemAlwaysOnTop> {
+  bool _isAlwaysOnTop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  void _init() async {
+    _isAlwaysOnTop = miniTranslatorWindowController.window.isAlwaysOnTop;
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 24,
+      height: 24,
+      child: Button(
+        padding: EdgeInsets.zero,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.fastOutSlowIn,
+          transformAlignment: Alignment.center,
+          transform: Matrix4.rotationZ(
+            _isAlwaysOnTop ? 0 : -0.8,
+          ),
+          child: Icon(
+            _isAlwaysOnTop
+                ? FluentIcons.pin_20_filled
+                : FluentIcons.pin_20_regular,
+            size: 20,
+            color: _isAlwaysOnTop
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).iconTheme.color,
+          ),
+        ),
+        onPressed: () {
+          setState(() {
+            _isAlwaysOnTop = !_isAlwaysOnTop;
+          });
+          miniTranslatorWindowController.window.isAlwaysOnTop = _isAlwaysOnTop;
+        },
+      ),
+    );
+  }
+}
+
+class ToolbarItemSettings extends StatelessWidget {
+  const ToolbarItemSettings({
+    Key? key,
+    required this.onSubPageDismissed,
+  }) : super(key: key);
+
+  final VoidCallback onSubPageDismissed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 24,
+      height: 24,
+      child: Button(
+        padding: EdgeInsets.zero,
+        borderRadius: BorderRadius.zero,
+        child: Icon(
+          FluentIcons.settings_20_regular,
+          size: 20,
+          color: Theme.of(context).iconTheme.color,
+        ),
+        onPressed: () async {
+          if (Platform.isMacOS) {
+            await NativeSettings.show();
+            onSubPageDismissed();
+            // return;
+          }
+
+          final mainWindow = mainWindowController.window;
+          mainWindow.show();
+          mainWindow.focus();
+          await Future.delayed(const Duration(milliseconds: 200));
+          onSubPageDismissed();
+        },
+      ),
+    );
+  }
+}
 
 class MiniTranslatorPage extends StatefulWidget {
   const MiniTranslatorPage({Key? key}) : super(key: key);
