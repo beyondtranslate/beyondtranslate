@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/ext_translation_engine_config.dart';
-import '../../models/translation_engine_config.dart';
 import '../../models/translation_result_record.dart';
-import '../../services/local_db/local_db.dart';
 import '../../services/runtime.dart';
 import '../translation_engine_icon/translation_engine_icon.dart';
 
@@ -40,32 +38,15 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
     return widget.translationResultRecord.translationEngineId;
   }
 
-  TranslationEngineConfig? get _translationEngineConfig {
-    final translationEngineId = _translationEngineId;
-    if (translationEngineId == null) {
-      return null;
-    }
-    return localDb.engine(translationEngineId).get();
-  }
-
   String get _translationEngineType {
-    return _translationEngineConfig?.type ??
-        _providerConfigEntry?.type ??
-        _translationEngineId ??
-        '';
+    return _providerConfigEntry?.type ?? _translationEngineId ?? '';
   }
 
   String get _translationEngineName {
-    final translationEngineConfig = _translationEngineConfig;
-    if (translationEngineConfig != null) {
-      return translationEngineConfig.typeName;
-    }
-
     final providerType = _providerConfigEntry?.type;
     if (providerType != null) {
       return getTranslationEngineTypeName(providerType);
     }
-
     return _translationEngineId ?? '';
   }
 
@@ -87,7 +68,7 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
 
   void _loadProviderConfigEntry() async {
     final translationEngineId = _translationEngineId;
-    if (translationEngineId == null || _translationEngineConfig != null) {
+    if (translationEngineId == null) {
       return;
     }
 

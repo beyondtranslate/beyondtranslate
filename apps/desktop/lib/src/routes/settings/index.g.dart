@@ -33,10 +33,6 @@ RouteBase get $settingsShellRoute => ShellRouteData.$route(
           path: '/settings/providers',
           factory: $ProvidersSettingsRoute._fromState,
         ),
-        GoRouteData.$route(
-          path: '/settings/debug',
-          factory: $SettingsDebugRoute._fromState,
-        ),
       ],
     );
 
@@ -144,29 +140,6 @@ mixin $ProvidersSettingsRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
         '/settings/providers',
-      );
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-mixin $SettingsDebugRoute on GoRouteData {
-  static SettingsDebugRoute _fromState(GoRouterState state) =>
-      const SettingsDebugRoute();
-
-  @override
-  String get location => GoRouteData.$location(
-        '/settings/debug',
       );
 
   @override

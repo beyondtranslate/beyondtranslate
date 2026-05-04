@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/_window.dart';
 
 import '../../i18n/i18n.dart';
-import '../../services/local_db/configuration.dart';
-import '../../services/local_db/local_db.dart';
+import '../../services/settings_store.dart';
 import '../../themes/dark_theme.dart';
 import '../../themes/light_theme.dart';
 import '../../utils/language_util.dart';
@@ -22,23 +21,21 @@ class MiniTranslatorApp extends StatefulWidget {
 }
 
 class _MiniTranslatorAppState extends State<MiniTranslatorApp> {
-  Configuration get _configuration => localDb.configuration;
-
   @override
   void initState() {
-    localDb.preferences.addListener(_handleChanged);
+    settingsStore.addListener(_handleChanged);
     super.initState();
   }
 
   @override
   void dispose() {
-    localDb.preferences.removeListener(_handleChanged);
+    settingsStore.removeListener(_handleChanged);
     super.dispose();
   }
 
   Future<void> _handleChanged() async {
     final oldLocale = context.locale;
-    final newLocale = languageToLocale(_configuration.appLanguage);
+    final newLocale = languageToLocale(settingsStore.appLanguage);
     if (newLocale != oldLocale) {
       await context.setLocale(newLocale);
     }
@@ -58,7 +55,7 @@ class _MiniTranslatorAppState extends State<MiniTranslatorApp> {
         debugShowCheckedModeBanner: false,
         theme: lightThemeData,
         darkTheme: darkThemeData,
-        themeMode: _configuration.themeMode,
+        themeMode: settingsStore.themeMode,
         builder: (context, child) {
           if (kIsLinux || kIsWindows) {
             child = ClipRRect(

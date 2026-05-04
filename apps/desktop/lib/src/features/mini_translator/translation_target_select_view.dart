@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/preference_item.dart';
+import '../../rust/domain/settings.dart';
 import '../../utils/language_util.dart';
 import '../../widgets/language_label/language_label.dart';
 import '../../widgets/ui/button.dart';
@@ -78,7 +78,7 @@ class TranslationTargetSelectView extends StatefulWidget {
     required this.onChanged,
   }) : super(key: key);
 
-  final String translationMode;
+  final TranslationMode translationMode;
   final bool isShowSourceLanguageSelector;
   final bool isShowTargetLanguageSelector;
   final ValueChanged<bool> onToggleShowSourceLanguageSelector;
@@ -106,7 +106,7 @@ class _TranslationTargetSelectViewState
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    if (widget.translationMode == kTranslationModeAuto) {
+    if (widget.translationMode == TranslationMode.auto) {
       return Container();
     }
     return Container(

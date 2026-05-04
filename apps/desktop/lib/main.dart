@@ -14,8 +14,7 @@ import 'src/features/mini_translator/mini_translator_app.dart';
 import 'src/i18n/i18n.dart';
 import 'src/routes/app_router.dart';
 import 'src/routes/settings/index.dart';
-import 'src/services/local_db/configuration.dart';
-import 'src/services/local_db/local_db.dart';
+import 'src/services/settings_store.dart';
 import 'src/services/native_settings.dart';
 import 'src/themes/dark_theme.dart';
 import 'src/themes/light_theme.dart';
@@ -36,23 +35,21 @@ class _MainAppState extends State<MainApp> {
     initialLocation: const GeneralSettingsRoute().location,
   );
 
-  Configuration get _configuration => localDb.configuration;
-
   @override
   void initState() {
-    localDb.preferences.addListener(_handleChanged);
+    settingsStore.addListener(_handleChanged);
     super.initState();
   }
 
   @override
   void dispose() {
-    localDb.preferences.removeListener(_handleChanged);
+    settingsStore.removeListener(_handleChanged);
     super.dispose();
   }
 
   Future<void> _handleChanged() async {
     final oldLocale = context.locale;
-    final newLocale = languageToLocale(_configuration.appLanguage);
+    final newLocale = languageToLocale(settingsStore.appLanguage);
     if (newLocale != oldLocale) {
       await context.setLocale(newLocale);
     }
@@ -70,7 +67,7 @@ class _MainAppState extends State<MainApp> {
         debugShowCheckedModeBanner: false,
         theme: lightThemeData,
         darkTheme: darkThemeData,
-        themeMode: _configuration.themeMode,
+        themeMode: settingsStore.themeMode,
         builder: (context, child) {
           if (kIsLinux || kIsWindows) {
             child = ClipRRect(
@@ -106,14 +103,14 @@ Future<void> _ensureInitialized() async {
   }
 
   await initEnv();
-  await initLocalDb();
+  await settingsStore.init();
   NativeSettings.registerMethodCallHandler();
 }
 
 void main() async {
   await _ensureInitialized();
   await LocaleSettings.setLocaleRaw(
-    languageToLocale(localDb.configuration.appLanguage).languageCode,
+    languageToLocale(settingsStore.appLanguage).languageCode,
   );
 
   setupGlobalWindowHooks();

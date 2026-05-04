@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 
 import '../../i18n/i18n.dart';
-import '../../models/preference_item.dart';
-import '../../services/local_db/local_db.dart';
+import '../../rust/domain/settings.dart';
+import '../../services/settings_store.dart';
 import '../../widgets/ui/button.dart';
 import '../../widgets/ui/loading_indicator.dart';
 
@@ -21,7 +21,7 @@ class TranslationInputView extends StatelessWidget {
     required this.isTextDetecting,
     required this.translationMode,
     required this.onTranslationModeChanged,
-    required this.inputSetting,
+    required this.inputSubmitMode,
     required this.onClickExtractTextFromScreenCapture,
     required this.onClickExtractTextFromClipboard,
     required this.onButtonTappedClear,
@@ -35,9 +35,9 @@ class TranslationInputView extends StatelessWidget {
   final CapturedData? capturedData;
   final bool isTextDetecting;
 
-  final String translationMode;
-  final ValueChanged<String> onTranslationModeChanged;
-  final String inputSetting;
+  final TranslationMode translationMode;
+  final ValueChanged<TranslationMode> onTranslationModeChanged;
+  final InputSubmitMode inputSubmitMode;
 
   final VoidCallback onClickExtractTextFromScreenCapture;
   final VoidCallback onClickExtractTextFromClipboard;
@@ -69,11 +69,11 @@ class TranslationInputView extends StatelessWidget {
                     Icon(
                       FluentIcons.target_20_regular,
                       size: 22,
-                      color: translationMode == kTranslationModeAuto
+                      color: translationMode == TranslationMode.auto
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).iconTheme.color,
                     ),
-                    if (translationMode == kTranslationModeAuto)
+                    if (translationMode == TranslationMode.auto)
                       Positioned(
                         bottom: 3,
                         child: Container(
@@ -102,24 +102,14 @@ class TranslationInputView extends StatelessWidget {
                   ],
                 ),
               ),
-              onPressed: () {
-                String newTranslationMode =
-                    translationMode == kTranslationModeAuto
-                        ? kTranslationModeManual
-                        : kTranslationModeAuto;
-
-                PreferenceItem? userPreference =
-                    localDb.preference(kPrefTranslationMode).get();
-                if (userPreference != null) {
-                  localDb.preference(kPrefTranslationMode).update(
-                        value: newTranslationMode,
-                      );
-                } else {
-                  localDb.preferences.create(
-                    key: kPrefTranslationMode,
-                    value: newTranslationMode,
-                  );
-                }
+              onPressed: () async {
+                final newTranslationMode =
+                    translationMode == TranslationMode.auto
+                        ? TranslationMode.manual
+                        : TranslationMode.auto;
+                await settingsStore.updateGeneral(
+                  GeneralSettingsPatch(translationMode: newTranslationMode),
+                );
                 onTranslationModeChanged(newTranslationMode);
               },
             ),
@@ -261,8 +251,7 @@ class TranslationInputView extends StatelessWidget {
                           textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                       height: 1.2,
                     ),
-                    maxLines:
-                        inputSetting == kInputSettingSubmitWithEnter ? 1 : 6,
+                    maxLines: inputSubmitMode == InputSubmitMode.enter ? 1 : 6,
                     minLines: 1,
                     onChanged: onChanged,
                     onSubmitted: (newValue) {
@@ -333,12 +322,10 @@ class TranslationInputView extends StatelessWidget {
 
   String _translationModeText() {
     switch (translationMode) {
-      case kTranslationModeAuto:
+      case TranslationMode.auto:
         return t.translation_mode.auto;
-      case kTranslationModeManual:
+      case TranslationMode.manual:
         return t.translation_mode.manual;
-      default:
-        return translationMode;
     }
   }
 }

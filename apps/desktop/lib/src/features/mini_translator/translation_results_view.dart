@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
-import '../../models/preference_item.dart';
 import '../../models/translation_result.dart';
+import '../../rust/domain/settings.dart';
 import '../../utils/language_util.dart';
 import '../../widgets/translation_result_record_view/translation_result_record_view.dart';
 import '../../widgets/translation_result_view/translation_result_view.dart';
@@ -22,7 +22,7 @@ class TranslationResultsView extends StatelessWidget {
 
   final Key viewKey;
   final ScrollController controller;
-  final String translationMode;
+  final TranslationMode translationMode;
   final bool querySubmitted;
   final String text;
   final String? textDetectedLanguage;
@@ -90,7 +90,7 @@ class TranslationResultsView extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               if (querySubmitted &&
-                  translationMode == kTranslationModeAuto &&
+                  translationMode == TranslationMode.auto &&
                   translationResultList.isEmpty &&
                   textDetectedLanguage != null)
                 _buildNoMatchingTranslationTarget(context),
@@ -98,7 +98,7 @@ class TranslationResultsView extends StatelessWidget {
                 SizedBox(
                   width: viewWidth,
                   child: StickyHeader(
-                    header: translationMode == kTranslationModeAuto
+                    header: translationMode == TranslationMode.auto
                         ? TranslationResultView(result)
                         : Container(),
                     content: Column(

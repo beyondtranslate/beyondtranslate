@@ -15,18 +15,13 @@ import 'package:protocol_handler/protocol_handler.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:screen_text_extractor/screen_text_extractor.dart';
-import 'package:uni_ocr_client/uni_ocr_client.dart';
 
 import '../../i18n/i18n.dart';
-import '../../models/preference_item.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
 import '../../models/translation_target.dart';
-import '../../models/version.dart';
-import '../../networking/api_client/api_client.dart';
-import '../../networking/ocr_client/ocr_client.dart';
-import '../../services/local_db/configuration.dart';
-import '../../services/local_db/local_db.dart';
+import '../../rust/domain/settings.dart' as rust_settings;
+import '../../services/settings_store.dart';
 import '../../services/native_settings.dart';
 import '../../services/runtime.dart';
 import '../../services/shortcut_service/shortcut_service.dart';
@@ -36,7 +31,6 @@ import '../../utils/utils.dart';
 import '../../widgets/ui/button.dart';
 import '../../windowing/window_controllers.dart';
 import 'limited_functionality_banner.dart';
-import 'new_version_found_banner.dart';
 import 'translation_input_view.dart';
 import 'translation_results_view.dart';
 import 'translation_target_select_view.dart';
@@ -160,15 +154,16 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   final GlobalKey _inputViewKey = GlobalKey();
   final GlobalKey _resultsViewKey = GlobalKey();
 
-  Configuration get _configuration => localDb.configuration;
-
   Brightness _brightness = Brightness.light;
 
-  bool? _lastShowTrayIcon;
   String? _lastAppLanguage;
   Offset _lastShownPosition = Offset.zero;
 
-  Version? _latestVersion;
+  // The mini-translator window has a fixed maximum height. The previous
+  // implementation made this user-configurable but the runtime no longer
+  // models such a preference, mirroring the macOS Swift implementation.
+  static const double _maxWindowHeight = 800;
+
   bool _isAllowedScreenCaptureAccess = true;
   bool _isAllowedScreenSelectionAccess = true;
 
@@ -199,7 +194,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   @override
   void initState() {
-    localDb.preferences.addListener(_handleChanged);
+    settingsStore.addListener(_handleChanged);
     WidgetsBinding.instance.addObserver(this);
     if (kIsLinux || kIsMacOS || kIsWindows) {
       protocolHandler.addListener(this);
@@ -213,7 +208,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   @override
   void dispose() {
-    localDb.preferences.removeListener(_handleChanged);
+    settingsStore.removeListener(_handleChanged);
     WidgetsBinding.instance.removeObserver(this);
     if (kIsLinux || kIsMacOS || kIsWindows) {
       protocolHandler.removeListener(this);
@@ -231,7 +226,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     if (newBrightness != _brightness) {
       _brightness = newBrightness;
-      if (kIsWindows && _configuration.showTrayIcon) {
+      if (kIsWindows && settingsStore.general.showMenuBar) {
         _initTrayIcon();
       }
       setState(() {});
@@ -239,13 +234,11 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   void _handleChanged() {
-    bool trayIconUpdated = _lastShowTrayIcon != _configuration.showTrayIcon ||
-        _lastAppLanguage != _configuration.appLanguage;
+    final bool languageChanged = _lastAppLanguage != null &&
+        _lastAppLanguage != settingsStore.appLanguage;
+    _lastAppLanguage = settingsStore.appLanguage;
 
-    _lastShowTrayIcon = _configuration.showTrayIcon;
-    _lastAppLanguage = _configuration.appLanguage;
-
-    if (trayIconUpdated) {
+    if (languageChanged) {
       _initTrayIcon();
     }
 
@@ -328,7 +321,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     }
 
     _destroyTrayIcon();
-    if (!_configuration.showTrayIcon ||
+    if (!settingsStore.general.showMenuBar ||
         !nativeapi.TrayManager.instance.isSupported) {
       return;
     }
@@ -521,9 +514,9 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         final oldSize = _window.size;
         Size newSize = Size(
           oldSize.width,
-          newWindowHeight < _configuration.maxWindowHeight
+          newWindowHeight < _maxWindowHeight
               ? newWindowHeight
-              : _configuration.maxWindowHeight,
+              : _maxWindowHeight,
         );
         if (oldSize.width != newSize.width ||
             oldSize.height != newSize.height) {
@@ -541,17 +534,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   void _loadData() async {
-    try {
-      _latestVersion = await apiClient.version('latest').get();
-      setState(() {});
-    } catch (error) {
-      // skip
-    }
-    try {
-      await localDb.loadFromCloudServer();
-    } catch (error) {
-      // skip
-    }
+    // The previous implementation populated `_latestVersion` from a cloud API
+    // and refreshed local engine config. Both pieces of state moved into the
+    // Rust runtime / external installers, so the mini translator no longer
+    // performs network bootstrapping here.
   }
 
   Future<void> _queryData() async {
@@ -569,10 +555,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     final providers = await settings.listProviders();
     final generalSettings = await settings.getGeneral();
 
-    final translationMode = generalSettings.translationMode.name;
+    final translationMode = generalSettings.translationMode;
 
     List<TranslationTarget> activeTargets;
-    if (translationMode == kTranslationModeManual) {
+    if (translationMode == rust_settings.TranslationMode.manual) {
       activeTargets = [
         TranslationTarget(
           sourceLanguage: _sourceLanguage,
@@ -683,7 +669,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }) {
     setState(() {
       _text = (newValue ?? '').trim();
-      if (_configuration.inputSetting == kInputSettingSubmitWithEnter) {
+      if (settingsStore.inputSubmitMode ==
+          rust_settings.InputSubmitMode.enter) {
         _text = _text.replaceAll('\n', ' ');
       }
     });
@@ -743,35 +730,16 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       setState(() {});
       return;
     } else {
-      try {
-        _isTextDetecting = true;
-        setState(() {});
-        await Future.delayed(const Duration(milliseconds: 10));
-        RecognizeTextResponse recognizeTextResponse = await sharedOcrClient
-            .use(_configuration.defaultOcrEngineId ?? '')
-            .recognizeText(
-              RecognizeTextRequest(
-                imagePath: _capturedData?.imagePath,
-              ),
-            );
-        _isTextDetecting = false;
-        setState(() {});
-        if (_configuration.autoCopyDetectedText) {
-          Clipboard.setData(ClipboardData(text: recognizeTextResponse.text));
-        }
-        _handleTextChanged(recognizeTextResponse.text, isRequery: true);
-      } catch (error) {
-        String errorMessage = error.toString();
-        if (error is UniOcrClientError) {
-          errorMessage = error.message;
-        }
-        _isTextDetecting = false;
-        setState(() {});
-        BotToast.showText(
-          text: errorMessage,
-          align: Alignment.center,
-        );
-      }
+      // OCR was previously performed by the in-app `uni_ocr_client`. The
+      // Rust runtime has not yet exposed a generic OCR endpoint, so for now we
+      // surface a toast to indicate the action is unsupported. The captured
+      // image is still stored on disk for future processing.
+      _isTextDetecting = false;
+      setState(() {});
+      BotToast.showText(
+        text: 'Text extraction service is not configured.',
+        align: Alignment.center,
+      );
     }
   }
 
@@ -814,9 +782,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   Widget _buildBannersView(BuildContext context) {
-    bool isFoundNewVersion = _latestVersion != null &&
-        _latestVersion!.buildNumber > sharedEnv.appBuildNumber;
-
     bool isNoAllowedAllAccess =
         !(_isAllowedScreenCaptureAccess && _isAllowedScreenSelectionAccess);
 
@@ -824,15 +789,11 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       key: _bannersViewKey,
       width: double.infinity,
       margin: EdgeInsets.only(
-        bottom: (isFoundNewVersion || isNoAllowedAllAccess) ? 12 : 0,
+        bottom: isNoAllowedAllAccess ? 12 : 0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (isFoundNewVersion)
-            NewVersionFoundBanner(
-              latestVersion: _latestVersion!,
-            ),
           if (isNoAllowedAllAccess)
             LimitedFunctionalityBanner(
               isAllowedScreenCaptureAccess: _isAllowedScreenCaptureAccess,
@@ -879,11 +840,11 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             onChanged: (newValue) => _handleTextChanged(newValue),
             capturedData: _capturedData,
             isTextDetecting: _isTextDetecting,
-            translationMode: _configuration.translationMode,
-            onTranslationModeChanged: (newTranslationMode) {
-              _configuration.translationMode = newTranslationMode;
+            translationMode: settingsStore.translationMode,
+            onTranslationModeChanged: (_) {
+              // Persisted by SettingsStore; rebuild on notify.
             },
-            inputSetting: _configuration.inputSetting,
+            inputSubmitMode: settingsStore.inputSubmitMode,
             onClickExtractTextFromScreenCapture:
                 _handleExtractTextFromScreenCapture,
             onClickExtractTextFromClipboard: _handleExtractTextFromClipboard,
@@ -891,7 +852,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             onButtonTappedTrans: _handleButtonTappedTrans,
           ),
           TranslationTargetSelectView(
-            translationMode: _configuration.translationMode,
+            translationMode: settingsStore.translationMode,
             isShowSourceLanguageSelector: _isShowSourceLanguageSelector,
             isShowTargetLanguageSelector: _isShowTargetLanguageSelector,
             onToggleShowSourceLanguageSelector: (newValue) {
@@ -929,7 +890,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     return TranslationResultsView(
       viewKey: _resultsViewKey,
       controller: _scrollController,
-      translationMode: _configuration.translationMode,
+      translationMode: settingsStore.translationMode,
       querySubmitted: _querySubmitted,
       text: _text,
       textDetectedLanguage: _textDetectedLanguage,
@@ -1031,7 +992,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   @override
   void onShortcutKeyDownSubmitWithMateEnter() {
-    if (_configuration.inputSetting != kInputSettingSubmitWithMetaEnter) {
+    if (settingsStore.inputSubmitMode !=
+        rust_settings.InputSubmitMode.commandEnter) {
       return;
     }
     _handleButtonTappedTrans();

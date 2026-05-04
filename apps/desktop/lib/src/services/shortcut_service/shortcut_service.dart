@@ -1,9 +1,5 @@
 import 'package:hotkey_manager/hotkey_manager.dart';
 
-import '../../utils/platform_util.dart';
-import '../local_db/configuration.dart';
-import '../local_db/local_db.dart';
-
 abstract mixin class ShortcutListener {
   void onShortcutKeyDownShowOrHide();
   void onShortcutKeyDownHide();
@@ -14,6 +10,13 @@ abstract mixin class ShortcutListener {
   void onShortcutKeyDownSubmitWithMateEnter();
 }
 
+/// Manages global hotkeys for the mini translator.
+///
+/// Shortcut bindings now live in the Rust runtime (see
+/// `RuntimeSettings.getShortcuts`), but they are persisted as opaque strings
+/// (e.g. `"Alt+Q"`) and not yet parsed into [HotKey] instances. Until that
+/// pipeline is wired up, this service acts as a thin no-op that still exposes
+/// the listener contract used by the rest of the app.
 class ShortcutService {
   ShortcutService._();
 
@@ -22,51 +25,32 @@ class ShortcutService {
 
   ShortcutListener? _listener;
 
-  Configuration get _configuration => localDb.configuration;
-
   void setListener(ShortcutListener? listener) {
     _listener = listener;
   }
 
+  // Kept for API compatibility with call sites; the Rust runtime is the
+  // source of truth for shortcut bindings, but no platform registration is
+  // performed here yet.
   void start() async {
     await hotKeyManager.unregisterAll();
-    await hotKeyManager.register(
-      _configuration.shortcutShowOrHide,
-      keyDownHandler: (_) {
-        _listener?.onShortcutKeyDownShowOrHide();
-      },
-    );
-    await hotKeyManager.register(
-      _configuration.shortcutExtractFromScreenSelection,
-      keyDownHandler: (_) {
-        _listener?.onShortcutKeyDownExtractFromScreenSelection();
-      },
-    );
-    if (!kIsLinux) {
-      await hotKeyManager.register(
-        _configuration.shortcutExtractFromScreenCapture,
-        keyDownHandler: (_) {
-          _listener?.onShortcutKeyDownExtractFromScreenCapture();
-        },
-      );
-    }
-    await hotKeyManager.register(
-      _configuration.shortcutExtractFromClipboard,
-      keyDownHandler: (_) {
-        _listener?.onShortcutKeyDownExtractFromClipboard();
-      },
-    );
-    if (!kIsLinux) {
-      await hotKeyManager.register(
-        _configuration.shortcutTranslateInputContent,
-        keyDownHandler: (_) {
-          _listener?.onShortcutKeyDownTranslateInputContent();
-        },
-      );
-    }
   }
 
   void stop() {
     hotKeyManager.unregisterAll();
   }
+
+  // Hooks for tests / future direct invocation.
+  void notifyShowOrHide() => _listener?.onShortcutKeyDownShowOrHide();
+  void notifyHide() => _listener?.onShortcutKeyDownHide();
+  void notifyExtractSelection() =>
+      _listener?.onShortcutKeyDownExtractFromScreenSelection();
+  void notifyExtractCapture() =>
+      _listener?.onShortcutKeyDownExtractFromScreenCapture();
+  void notifyExtractClipboard() =>
+      _listener?.onShortcutKeyDownExtractFromClipboard();
+  void notifyTranslateInputContent() =>
+      _listener?.onShortcutKeyDownTranslateInputContent();
+  void notifySubmitWithMetaEnter() =>
+      _listener?.onShortcutKeyDownSubmitWithMateEnter();
 }

@@ -1,12 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
+import '../../rust/domain/settings.dart';
+import '../../services/settings_store.dart';
 import '../../services/runtime.dart';
 import '../../widgets/preference_list/preference_list.dart';
+import '../../widgets/preference_list/preference_list_item.dart';
 import '../../widgets/preference_list/preference_list_section.dart';
 import '../../widgets/ui/button.dart';
 
+/// Mirrors macOS `ProvidersView.swift`.
 class ProvidersSettingsPage extends StatefulWidget {
   const ProvidersSettingsPage({super.key});
 
@@ -15,359 +17,467 @@ class ProvidersSettingsPage extends StatefulWidget {
 }
 
 class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _providerIdController = TextEditingController();
-  final _providerTypeController = TextEditingController();
-  final _fieldsController = TextEditingController();
-
-  List<ProviderConfigEntry> _providers = const [];
-  String? _selectedProviderId;
-  bool _loading = true;
-  bool _saving = false;
-  String? _errorText;
+  String? _errorMessage;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    settingsStore.addListener(_handleChanged);
     _reload();
   }
 
   @override
   void dispose() {
-    _providerIdController.dispose();
-    _providerTypeController.dispose();
-    _fieldsController.dispose();
+    settingsStore.removeListener(_handleChanged);
     super.dispose();
+  }
+
+  void _handleChanged() {
+    if (mounted) setState(() {});
   }
 
   Future<void> _reload() async {
     setState(() {
-      _loading = true;
-      _errorText = null;
+      _isLoading = true;
+      _errorMessage = null;
     });
-
     try {
-      final providers = await runtime.settings().listProviders();
-      if (!mounted) {
-        return;
-      }
-
-      final selectedProviderId = _selectedProviderId;
-      final selectedProviderExists = selectedProviderId != null &&
-          providers.any((item) => item.id == selectedProviderId);
-      final nextSelectedProviderId = selectedProviderExists
-          ? selectedProviderId
-          : (providers.isEmpty ? null : providers.first.id);
-
-      setState(() {
-        _providers = providers;
-        _selectedProviderId = nextSelectedProviderId;
-        _loading = false;
-      });
-
-      final currentProviderId = _selectedProviderId;
-      if (currentProviderId != null) {
-        await _loadProviderIntoEditor(currentProviderId);
-      } else {
-        _providerIdController.clear();
-        _providerTypeController.clear();
-        _fieldsController.clear();
-      }
+      await settingsStore.reloadProviders();
     } catch (error) {
-      if (!mounted) {
-        return;
+      _errorMessage = error.toString();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
       }
-
-      setState(() {
-        _providers = const [];
-        _selectedProviderId = null;
-        _loading = false;
-        _errorText = error.toString();
-      });
     }
   }
 
-  Future<void> _loadProviderIntoEditor(String providerId) async {
-    try {
-      final provider =
-          await runtime.settings().getProvider(providerId: providerId);
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        _providerIdController.text = provider?.id ?? providerId;
-        _providerTypeController.text = provider?.type ?? '';
-        _fieldsController.text = provider == null
-            ? '{}'
-            : const JsonEncoder.withIndent('  ').convert(provider.fields);
-      });
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        _errorText = error.toString();
-      });
-    }
-  }
-
-  Future<void> _saveProvider() async {
-    final formState = _formKey.currentState;
-    if (formState == null || !formState.validate()) {
-      return;
-    }
-
-    setState(() {
-      _saving = true;
-      _errorText = null;
-    });
+  Future<void> _openEditor({ProviderConfigEntry? existing}) async {
+    final draft = await showDialog<_ProviderDraft>(
+      context: context,
+      builder: (_) => _ProviderEditorDialog(existing: existing),
+    );
+    if (draft == null) return;
 
     try {
-      final fields = _parseFields();
       await runtime.settings().updateProvider(
-            providerId: _providerIdController.text.trim(),
-            providerType: _providerTypeController.text.trim(),
-            fields: fields,
+            providerId: draft.id,
+            providerType: draft.type,
+            fields: draft.fields,
           );
-      _selectedProviderId = _providerIdController.text.trim();
-      await _reload();
+      await settingsStore.reloadProviders();
     } catch (error) {
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
       setState(() {
-        _errorText = error.toString();
+        _errorMessage = error.toString();
       });
-    } finally {
-      if (mounted) {
-        setState(() {
-          _saving = false;
-        });
-      }
     }
   }
 
-  Future<void> _deleteProvider() async {
-    final providerId = _providerIdController.text.trim();
-    if (providerId.isEmpty) {
-      return;
-    }
-
-    setState(() {
-      _saving = true;
-      _errorText = null;
-    });
-
-    try {
-      await runtime.settings().deleteProvider(providerId: providerId);
-      if (!mounted) {
-        return;
-      }
-      _providerIdController.clear();
-      _providerTypeController.clear();
-      _fieldsController.clear();
-      _selectedProviderId = null;
-      await _reload();
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _errorText = error.toString();
-      });
-    } finally {
-      if (mounted) {
-        setState(() {
-          _saving = false;
-        });
-      }
-    }
-  }
-
-  void _newProvider() {
-    setState(() {
-      _selectedProviderId = null;
-      _errorText = null;
-      _providerIdController.clear();
-      _providerTypeController.clear();
-      _fieldsController.text = '{\n  "appKey": ""\n}';
-    });
-  }
-
-  Map<String, String> _parseFields() {
-    final raw = _fieldsController.text.trim();
-    if (raw.isEmpty) {
-      return const {};
-    }
-    final decoded = jsonDecode(raw);
-    if (decoded is! Map) {
-      throw const FormatException('Provider fields must be a JSON object');
-    }
-    return decoded.map(
-      (key, value) => MapEntry(key.toString(), value?.toString() ?? ''),
-    );
-  }
-
-  Widget _buildProviderPicker(BuildContext context) {
-    if (_loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (_providers.isEmpty) {
-      return Text(
-        'No providers yet. Create one below.',
-        style: Theme.of(context).textTheme.bodyMedium,
-      );
-    }
-
-    return SegmentedButton<String>(
-      segments: _providers
-          .map(
-            (provider) => ButtonSegment<String>(
-              value: provider.id,
-              label: Text('${provider.id} (${provider.type})'),
-            ),
-          )
-          .toList(),
-      selected: _selectedProviderId == null
-          ? const <String>{}
-          : {_selectedProviderId!},
-      onSelectionChanged: (selection) async {
-        final providerId = selection.first;
-        setState(() {
-          _selectedProviderId = providerId;
-          _errorText = null;
-        });
-        await _loadProviderIntoEditor(providerId);
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: PreferenceList(
-        padding: const EdgeInsets.only(top: 16, bottom: 16),
-        children: [
-          PreferenceListSection(
-            title: const Text('Providers'),
-            description: const Text(
-              'Create, update, and delete runtime providers stored by the Rust runtime.',
-            ),
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildProviderPicker(context),
-                    if (_errorText != null) ...[
-                      const SizedBox(height: 12),
-                      SelectableText(
-                        _errorText!,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.error,
-                            ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
+  Future<void> _deleteProvider(ProviderConfigEntry entry) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Delete "${entry.id}"?'),
+        content: const Text('This action cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
           ),
-          PreferenceListSection(
-            title: const Text('Edit Provider'),
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                      controller: _providerIdController,
-                      decoration: const InputDecoration(
-                        labelText: 'Provider ID',
-                        border: OutlineInputBorder(),
-                        filled: true,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Provider ID is required';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: _providerTypeController,
-                      decoration: const InputDecoration(
-                        labelText: 'Provider Type',
-                        border: OutlineInputBorder(),
-                        filled: true,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Provider type is required';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: _fieldsController,
-                      minLines: 10,
-                      maxLines: 20,
-                      decoration: const InputDecoration(
-                        labelText: 'Provider Fields JSON',
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        alignLabelWithHint: true,
-                      ),
-                      validator: (value) {
-                        try {
-                          _parseFields();
-                        } catch (error) {
-                          return error.toString();
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Button.filled(
-                          processing: _saving,
-                          onPressed: _saving || _loading ? null : _saveProvider,
-                          child: const Text('Save / Update'),
-                        ),
-                        const SizedBox(width: 12),
-                        Button.outlined(
-                          processing: _saving,
-                          onPressed:
-                              _saving || _loading ? null : _deleteProvider,
-                          child: const Text('Delete'),
-                        ),
-                        const SizedBox(width: 12),
-                        Button.outlined(
-                          onPressed: _saving ? null : _newProvider,
-                          child: const Text('New'),
-                        ),
-                        const SizedBox(width: 12),
-                        Button.outlined(
-                          onPressed: _saving || _loading ? null : _reload,
-                          child: const Text('Refresh'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          FilledButton.tonal(
+            style: FilledButton.styleFrom(
+              foregroundColor: Theme.of(ctx).colorScheme.error,
+            ),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Delete'),
           ),
         ],
       ),
     );
+    if (confirmed != true) return;
+
+    try {
+      await runtime.settings().deleteProvider(providerId: entry.id);
+      await settingsStore.reloadProviders();
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = error.toString();
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final providers = settingsStore.providers;
+
+    return PreferenceList(
+      padding: const EdgeInsets.only(top: 16, bottom: 16),
+      children: [
+        PreferenceListSection(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Choose the translation and dictionary providers used '
+                    'by the app.',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Providers you add may process the text you send, so '
+                    'only connect services you trust.',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        PreferenceListSection(
+          children: [
+            if (_isLoading)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else if (providers.isEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                child: Text(
+                  'No providers configured. Add one to enable translation '
+                  'services.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+              )
+            else
+              for (final provider in providers)
+                _ProviderRow(
+                  provider: provider,
+                  onEdit: () => _openEditor(existing: provider),
+                  onDelete: () => _deleteProvider(provider),
+                ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: Row(
+                children: [
+                  const Spacer(),
+                  Button.outlined(
+                    onPressed: () => _openEditor(),
+                    child: const Text('Add a Provider...'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        if (_errorMessage != null)
+          PreferenceListSection(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: SelectableText(
+                  _errorMessage!,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+}
+
+class _ProviderRow extends StatelessWidget {
+  const _ProviderRow({
+    required this.provider,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  final ProviderConfigEntry provider;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return PreferenceListItem(
+      title: Text(provider.id),
+      summary: Text(provider.type),
+      detailText: Wrap(
+        spacing: 4,
+        children: [
+          for (final cap in provider.capabilities) _CapabilityTag(label: cap),
+        ],
+      ),
+      onTap: onEdit,
+      accessoryView: PopupMenuButton<String>(
+        onSelected: (value) {
+          switch (value) {
+            case 'edit':
+              onEdit();
+              break;
+            case 'delete':
+              onDelete();
+              break;
+          }
+        },
+        itemBuilder: (_) => const [
+          PopupMenuItem<String>(value: 'edit', child: Text('Edit')),
+          PopupMenuDivider(),
+          PopupMenuItem<String>(value: 'delete', child: Text('Delete')),
+        ],
+      ),
+    );
+  }
+}
+
+class _CapabilityTag extends StatelessWidget {
+  const _CapabilityTag({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _capabilityColor(label, Theme.of(context).colorScheme);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  Color _capabilityColor(String capability, ColorScheme scheme) {
+    switch (capability) {
+      case 'translation':
+        return scheme.primary;
+      case 'dictionary':
+        return scheme.secondary;
+      default:
+        return scheme.tertiary;
+    }
+  }
+}
+
+class _ProviderDraft {
+  _ProviderDraft({
+    required this.id,
+    required this.type,
+    required this.fields,
+  });
+  final String id;
+  final String type;
+  final Map<String, String> fields;
+}
+
+class _ProviderEditorDialog extends StatefulWidget {
+  const _ProviderEditorDialog({this.existing});
+
+  final ProviderConfigEntry? existing;
+
+  @override
+  State<_ProviderEditorDialog> createState() => _ProviderEditorDialogState();
+}
+
+class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
+  late final TextEditingController _idController;
+  late String _selectedType;
+  late Map<String, TextEditingController> _fieldControllers;
+
+  static const _knownProviderTypes = <String>[
+    'baidu',
+    'caiyun',
+    'deepl',
+    'google',
+    'iciba',
+    'tencent',
+    'youdao',
+  ];
+
+  // Known field keys for each provider type. This intentionally mirrors the
+  // `*ProviderConfig+Fields.swift` files (lowest common denominator).
+  static const Map<String, List<String>> _providerFields = {
+    'baidu': ['appId', 'appKey'],
+    'caiyun': ['token'],
+    'deepl': ['authKey'],
+    'google': ['apiKey'],
+    'iciba': [],
+    'tencent': ['secretId', 'secretKey'],
+    'youdao': ['appKey', 'appSecret'],
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    final existing = widget.existing;
+    _idController = TextEditingController(text: existing?.id ?? '');
+    _selectedType = existing?.type ?? _knownProviderTypes.first;
+    _fieldControllers = _buildControllers(_selectedType, existing?.fields);
+  }
+
+  Map<String, TextEditingController> _buildControllers(
+    String type,
+    Map<String, String>? initial,
+  ) {
+    final keys = _providerFields[type] ?? const <String>[];
+    final controllers = <String, TextEditingController>{};
+    for (final key in keys) {
+      controllers[key] = TextEditingController(text: initial?[key] ?? '');
+    }
+    return controllers;
+  }
+
+  @override
+  void dispose() {
+    _idController.dispose();
+    for (final c in _fieldControllers.values) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  void _changeType(String type) {
+    final preserved = {
+      for (final entry in _fieldControllers.entries)
+        entry.key: entry.value.text,
+    };
+    for (final c in _fieldControllers.values) {
+      c.dispose();
+    }
+    setState(() {
+      _selectedType = type;
+      _fieldControllers = _buildControllers(type, preserved);
+    });
+  }
+
+  bool get _canSave {
+    if (_idController.text.trim().isEmpty) return false;
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isEditing = widget.existing != null;
+
+    return AlertDialog(
+      title: Text(isEditing ? 'Edit Provider' : 'Add Provider'),
+      content: SizedBox(
+        width: 420,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!isEditing) ...[
+                TextField(
+                  controller: _idController,
+                  decoration: const InputDecoration(
+                    labelText: 'Provider ID',
+                    hintText: 'e.g. deepl-main',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (_) => setState(() {}),
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  initialValue: _selectedType,
+                  items: [
+                    for (final type in _knownProviderTypes)
+                      DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(type),
+                      ),
+                  ],
+                  decoration: const InputDecoration(
+                    labelText: 'Provider Type',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (v) {
+                    if (v != null) _changeType(v);
+                  },
+                ),
+                const SizedBox(height: 16),
+              ] else ...[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    '${widget.existing!.id} · ${widget.existing!.type}',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ],
+              for (final entry in _fieldControllers.entries) ...[
+                TextField(
+                  controller: entry.value,
+                  decoration: InputDecoration(
+                    labelText: entry.key,
+                    border: const OutlineInputBorder(),
+                  ),
+                  obscureText: _isSecretField(entry.key),
+                ),
+                const SizedBox(height: 12),
+              ],
+              if (_fieldControllers.isEmpty)
+                Text(
+                  'No configuration fields required.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(
+          onPressed: _canSave
+              ? () {
+                  final draft = _ProviderDraft(
+                    id: _idController.text.trim(),
+                    type: _selectedType,
+                    fields: {
+                      for (final entry in _fieldControllers.entries)
+                        entry.key: entry.value.text,
+                    },
+                  );
+                  Navigator.of(context).pop(draft);
+                }
+              : null,
+          child: Text(isEditing ? 'Save' : 'Add'),
+        ),
+      ],
+    );
+  }
+
+  bool _isSecretField(String key) {
+    final lower = key.toLowerCase();
+    return lower.contains('key') ||
+        lower.contains('secret') ||
+        lower.contains('token') ||
+        lower.contains('password');
   }
 }

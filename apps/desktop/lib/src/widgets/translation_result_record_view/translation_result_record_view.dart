@@ -6,8 +6,7 @@ import 'package:flutter/services.dart';
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
-import '../../services/local_db/configuration.dart';
-import '../../services/local_db/local_db.dart';
+import '../../services/settings_store.dart';
 import '../../services/runtime.dart';
 import '../ui/loading_indicator.dart';
 import 'translation_engine_tag.dart';
@@ -26,8 +25,6 @@ class TranslationResultRecordView extends StatelessWidget {
   final TranslationResult translationResult;
   final TranslationResultRecord translationResultRecord;
   final ValueChanged<String> onTextTapped;
-
-  Configuration get _configuration => localDb.configuration;
 
   bool get _isLoading {
     if (_isErrorOccurred) return false;
@@ -126,7 +123,7 @@ class TranslationResultRecordView extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         onDoubleTap: () {
-          if (_configuration.doubleClickCopyResult) {
+          if (settingsStore.doubleClickCopyResult) {
             Clipboard.setData(ClipboardData(text: textTranslation.text));
             BotToast.showText(
               text: t.copied,

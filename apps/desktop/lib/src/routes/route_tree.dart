@@ -36,9 +36,6 @@ class SettingsRouteTree {
   final String shortcuts = '/settings/shortcuts';
   final String advanced = '/settings/advanced';
   final String providers = '/settings/providers';
-  final String debug = '/settings/debug';
-  final String ocrEnginesManage = '/settings/ocr-engines';
-  final String translationEnginesManage = '/settings/translation-engines';
 }
 
 /// Optional metadata carrier for future route registration/indexing.
@@ -74,11 +71,6 @@ final List<RouteNode> routeNodes = <RouteNode>[
   ),
   const RouteNode(id: 'root', path: RouteTree.root),
   RouteNode(
-    id: 'ocr-engines-manage',
-    path: RouteTree.settings.ocrEnginesManage,
-    parentId: 'settings',
-  ),
-  RouteNode(
     id: 'settings',
     path: RouteTree.settings.path,
     parentId: 'root',
@@ -94,11 +86,6 @@ final List<RouteNode> routeNodes = <RouteNode>[
     parentId: 'settings',
   ),
   RouteNode(
-    id: 'settings-debug',
-    path: RouteTree.settings.debug,
-    parentId: 'settings',
-  ),
-  RouteNode(
     id: 'settings-providers',
     path: RouteTree.settings.providers,
     parentId: 'settings',
@@ -111,11 +98,6 @@ final List<RouteNode> routeNodes = <RouteNode>[
   RouteNode(
     id: 'settings-shortcuts',
     path: RouteTree.settings.shortcuts,
-    parentId: 'settings',
-  ),
-  RouteNode(
-    id: 'translation-engines-manage',
-    path: RouteTree.settings.translationEnginesManage,
     parentId: 'settings',
   ),
 ];
