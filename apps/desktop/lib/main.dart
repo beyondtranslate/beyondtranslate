@@ -3,25 +3,39 @@
 import 'dart:io';
 
 import 'package:beyondtranslate_desktop/src/rust/frb_generated.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/src/widgets/_window.dart';
 import 'package:go_router/go_router.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
+import 'package:nativeapi/nativeapi.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 
+import 'src/extensions/window_controller.dart';
 import 'src/features/mini_translator/mini_translator_app.dart';
 import 'src/i18n/i18n.dart';
 import 'src/routes/app_router.dart';
 import 'src/routes/settings/index.dart';
-import 'src/services/settings_store.dart';
 import 'src/services/native_settings.dart';
-import 'src/widgets/ui/themes/dark_theme.dart';
-import 'src/widgets/ui/themes/light_theme.dart';
+import 'src/services/settings_store.dart';
 import 'src/utils/env.dart';
 import 'src/utils/language_util.dart';
 import 'src/utils/platform_util.dart';
-import 'src/windowing/window_controllers.dart';
+import 'src/widgets/ui/themes/dark_theme.dart';
+import 'src/widgets/ui/themes/light_theme.dart';
+
+const _kMainAppTitle = 'Beyond Translate';
+
+final mainWindowController = RegularWindowController(
+  preferredSize: const Size(900, 600),
+  title: _kMainAppTitle,
+)..setWillShowHook((window) {
+    if (window.isFirstShow) {
+      window.titleBarStyle = TitleBarStyle.hidden;
+      window.center();
+    }
+    return true;
+  });
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -31,6 +45,12 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+  late final TrayIcon _trayIcon;
+
+  Window get _mainWindow => mainWindowController.window;
+
+  Window get _miniTranslatorWindow => miniTranslatorWindowController.window;
+
   late final GoRouter _router = createAppRouter(
     initialLocation: const GeneralSettingsRoute().location,
   );
@@ -38,6 +58,7 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     settingsStore.addListener(_handleChanged);
+    _setupTrayIcon();
     super.initState();
   }
 
@@ -45,6 +66,38 @@ class _MainAppState extends State<MainApp> {
   void dispose() {
     settingsStore.removeListener(_handleChanged);
     super.dispose();
+  }
+
+  void _setupTrayIcon() {
+    _trayIcon = TrayIcon();
+    final icon = Image.fromAsset('resources/images/tray_icon.png');
+    if (icon != null) _trayIcon.icon = icon;
+    _trayIcon.isVisible = true;
+    _trayIcon.contextMenu = Menu()
+      ..addItem(
+        MenuItem('Open Settings')
+          ..on<MenuItemClickedEvent>((_) {
+            _mainWindow.center();
+            _mainWindow.show();
+          }),
+      )
+      ..addItem(
+        MenuItem('Exit')
+          ..on<MenuItemClickedEvent>((_) {
+            print('Clicked Exit');
+          }),
+      );
+    _trayIcon.contextMenuTrigger = ContextMenuTrigger.rightClicked;
+    _trayIcon.on<TrayIconClickedEvent>((event) {
+      final bounds = _trayIcon.bounds;
+      if (bounds != null) {
+        _miniTranslatorWindow.setPosition(
+          bounds.left - (_miniTranslatorWindow.bounds.width - bounds.width) / 2,
+          bounds.bottom + 10,
+        );
+      }
+      _miniTranslatorWindow.show();
+    });
   }
 
   Future<void> _handleChanged() async {
@@ -112,8 +165,6 @@ void main() async {
   await LocaleSettings.setLocaleRaw(
     languageToLocale(settingsStore.appLanguage).languageCode,
   );
-
-  setupGlobalWindowHooks();
 
   runWidget(
     TranslationProvider(

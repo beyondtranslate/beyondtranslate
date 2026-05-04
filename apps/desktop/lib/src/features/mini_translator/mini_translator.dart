@@ -15,6 +15,9 @@ import 'package:protocol_handler/protocol_handler.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screen_text_extractor/screen_text_extractor.dart';
 
+import '../../../main.dart' show mainWindowController;
+import '../../extensions/window_controller.dart';
+
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
@@ -28,113 +31,11 @@ import '../../utils/language_util.dart';
 import '../../utils/platform_util.dart';
 import '../../utils/utils.dart';
 import '../../widgets/ui/button.dart';
-import '../../windowing/window_controllers.dart';
 import 'limited_functionality_banner.dart';
+import 'mini_translator_app.dart' show miniTranslatorWindowController;
 import 'translation_input_view.dart';
 import 'translation_results_view.dart';
 import 'translation_target_select_view.dart';
-
-const kMenuItemKeyShow = 'show';
-const kMenuItemKeyQuickStartGuide = 'quick-start-guide';
-const kMenuItemKeyQuitApp = 'quit-app';
-
-const kMenuSubItemKeyJoinDiscord = 'subitem-join-discord';
-const kMenuSubItemKeyJoinQQGroup = 'subitem-join-qq';
-
-class ToolbarItemAlwaysOnTop extends StatefulWidget {
-  const ToolbarItemAlwaysOnTop({Key? key}) : super(key: key);
-
-  @override
-  State<ToolbarItemAlwaysOnTop> createState() => _ToolbarItemAlwaysOnTopState();
-}
-
-class _ToolbarItemAlwaysOnTopState extends State<ToolbarItemAlwaysOnTop> {
-  bool _isAlwaysOnTop = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  void _init() async {
-    _isAlwaysOnTop = miniTranslatorWindowController.window.isAlwaysOnTop;
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 24,
-      height: 24,
-      child: Button(
-        padding: EdgeInsets.zero,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.fastOutSlowIn,
-          transformAlignment: Alignment.center,
-          transform: Matrix4.rotationZ(
-            _isAlwaysOnTop ? 0 : -0.8,
-          ),
-          child: Icon(
-            _isAlwaysOnTop
-                ? FluentIcons.pin_20_filled
-                : FluentIcons.pin_20_regular,
-            size: 20,
-            color: _isAlwaysOnTop
-                ? Theme.of(context).primaryColor
-                : Theme.of(context).iconTheme.color,
-          ),
-        ),
-        onPressed: () {
-          setState(() {
-            _isAlwaysOnTop = !_isAlwaysOnTop;
-          });
-          miniTranslatorWindowController.window.isAlwaysOnTop = _isAlwaysOnTop;
-        },
-      ),
-    );
-  }
-}
-
-class ToolbarItemSettings extends StatelessWidget {
-  const ToolbarItemSettings({
-    Key? key,
-    required this.onSubPageDismissed,
-  }) : super(key: key);
-
-  final VoidCallback onSubPageDismissed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 24,
-      height: 24,
-      child: Button(
-        padding: EdgeInsets.zero,
-        borderRadius: BorderRadius.zero,
-        child: Icon(
-          FluentIcons.settings_20_regular,
-          size: 20,
-          color: Theme.of(context).iconTheme.color,
-        ),
-        onPressed: () async {
-          if (Platform.isMacOS) {
-            await NativeSettings.show();
-            onSubPageDismissed();
-            // return;
-          }
-
-          final mainWindow = mainWindowController.window;
-          mainWindow.show();
-          mainWindow.focus();
-          await Future.delayed(const Duration(milliseconds: 200));
-          onSubPageDismissed();
-        },
-      ),
-    );
-  }
-}
 
 class MiniTranslatorPage extends StatefulWidget {
   const MiniTranslatorPage({Key? key}) : super(key: key);
@@ -163,6 +64,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   // models such a preference, mirroring the macOS Swift implementation.
   static const double _maxWindowHeight = 800;
 
+  bool _isAlwaysOnTop = false;
+
   bool _isAllowedScreenCaptureAccess = true;
   bool _isAllowedScreenSelectionAccess = true;
 
@@ -184,10 +87,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   int? _windowFocusedListenerId;
   int? _windowBlurredListenerId;
   int? _windowMovedListenerId;
-  nativeapi.TrayIcon? _trayIcon;
-  nativeapi.Image? _trayIconImage;
-  final List<nativeapi.Menu> _trayMenus = <nativeapi.Menu>[];
-  final List<nativeapi.MenuItem> _trayMenuItems = <nativeapi.MenuItem>[];
 
   nativeapi.Window get _window => miniTranslatorWindowController.window;
 
@@ -225,21 +124,12 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     if (newBrightness != _brightness) {
       _brightness = newBrightness;
-      if (kIsWindows && settingsStore.general.showMenuBar) {
-        _initTrayIcon();
-      }
       setState(() {});
     }
   }
 
   void _handleChanged() {
-    final bool languageChanged = _lastAppLanguage != null &&
-        _lastAppLanguage != settingsStore.appLanguage;
     _lastAppLanguage = settingsStore.appLanguage;
-
-    if (languageChanged) {
-      _initTrayIcon();
-    }
 
     if (mounted) setState(() {});
   }
@@ -254,7 +144,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     ShortcutService.instance.start();
 
-    await _initTrayIcon();
     await Future.delayed(const Duration(milliseconds: 100));
     if (kIsLinux || kIsWindows) {
       final primaryDisplay = nativeapi.DisplayManager.instance.getPrimary();
@@ -313,128 +202,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     }
   }
 
-  Future<void> _initTrayIcon() async {
-    if (kIsWeb) return;
-
-    String trayIconName = 'tray_icon_black.png';
-    if (_brightness == Brightness.dark) {
-      trayIconName = 'tray_icon.png';
-    }
-
-    _destroyTrayIcon();
-    if (!settingsStore.general.showMenuBar ||
-        !nativeapi.TrayManager.instance.isSupported) {
-      return;
-    }
-
-    _trayIcon = nativeapi.TrayIcon();
-    _trayIconImage =
-        nativeapi.Image.fromAsset('resources/images/$trayIconName');
-    if (_trayIconImage != null) {
-      _trayIcon!.icon = _trayIconImage;
-    }
-    _trayIcon!.contextMenuTrigger = nativeapi.ContextMenuTrigger.none;
-    _trayIcon!.on<nativeapi.TrayIconClickedEvent>((event) {
-      _handleTrayIconMouseDown();
-    });
-    _trayIcon!.on<nativeapi.TrayIconRightClickedEvent>((event) {
-      _handleTrayIconRightMouseDown();
-    });
-    _trayIcon!.contextMenu = _buildTrayMenu();
-    _trayIcon!.isVisible = true;
-  }
-
-  nativeapi.Menu _buildTrayMenu() {
-    final menu = nativeapi.Menu();
-    _trayMenus.add(menu);
-
-    final versionItem = nativeapi.MenuItem(
-      '${t.app_name} v${sharedEnv.appVersion} (BUILD ${sharedEnv.appBuildNumber})',
-    );
-    versionItem.enabled = false;
-    _trayMenuItems.add(versionItem);
-    menu.addItem(versionItem);
-    menu.addSeparator();
-
-    if (kIsLinux) {
-      final showItem = nativeapi.MenuItem(t.tray_context_menu.item_show);
-      showItem.on<nativeapi.MenuItemClickedEvent>((event) {
-        _handleTrayMenuItemClick(kMenuItemKeyShow);
-      });
-      _trayMenuItems.add(showItem);
-      menu.addItem(showItem);
-    }
-
-    final quickStartGuideItem =
-        nativeapi.MenuItem(t.tray_context_menu.item_quick_start_guide);
-    quickStartGuideItem.on<nativeapi.MenuItemClickedEvent>((event) {
-      _handleTrayMenuItemClick(kMenuItemKeyQuickStartGuide);
-    });
-    _trayMenuItems.add(quickStartGuideItem);
-    menu.addItem(quickStartGuideItem);
-
-    final discussionMenu = nativeapi.Menu();
-    _trayMenus.add(discussionMenu);
-
-    final joinDiscordItem = nativeapi.MenuItem(
-      t.tray_context_menu.item_discussion_subitem_discord_server,
-    );
-    joinDiscordItem.on<nativeapi.MenuItemClickedEvent>((event) {
-      _handleTrayMenuItemClick(kMenuSubItemKeyJoinDiscord);
-    });
-    _trayMenuItems.add(joinDiscordItem);
-    discussionMenu.addItem(joinDiscordItem);
-
-    final joinQQGroupItem = nativeapi.MenuItem(
-      t.tray_context_menu.item_discussion_subitem_qq_group,
-    );
-    joinQQGroupItem.on<nativeapi.MenuItemClickedEvent>((event) {
-      _handleTrayMenuItemClick(kMenuSubItemKeyJoinQQGroup);
-    });
-    _trayMenuItems.add(joinQQGroupItem);
-    discussionMenu.addItem(joinQQGroupItem);
-
-    final discussionItem = nativeapi.MenuItem(
-      t.tray_context_menu.item_discussion,
-      nativeapi.MenuItemType.submenu,
-    );
-    discussionItem.submenu = discussionMenu;
-    _trayMenuItems.add(discussionItem);
-    menu.addItem(discussionItem);
-
-    menu.addSeparator();
-
-    final quitItem = nativeapi.MenuItem(t.tray_context_menu.item_quit_app);
-    quitItem.on<nativeapi.MenuItemClickedEvent>((event) {
-      _handleTrayMenuItemClick(kMenuItemKeyQuitApp);
-    });
-    _trayMenuItems.add(quitItem);
-    menu.addItem(quitItem);
-
-    return menu;
-  }
-
-  void _destroyTrayIcon() {
-    _trayIcon?.dispose();
-    _trayIcon = null;
-
-    for (final item in _trayMenuItems) {
-      item.dispose();
-    }
-    _trayMenuItems.clear();
-
-    for (final menu in _trayMenus) {
-      menu.dispose();
-    }
-    _trayMenus.clear();
-
-    _trayIconImage?.dispose();
-    _trayIconImage = null;
-  }
-
   void _uninit() {
     ShortcutService.instance.stop();
-    _destroyTrayIcon();
   }
 
   Future<void> _windowShow({
@@ -447,22 +216,22 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _window.setPosition(_lastShownPosition.dx, _lastShownPosition.dy);
     }
 
-    if (kIsMacOS && isShowBelowTray) {
-      final trayIconBounds = _trayIcon?.bounds;
-      if (trayIconBounds != null) {
-        final trayIconSize = trayIconBounds.size;
-        final trayIconPosition = trayIconBounds.topLeft;
+    // if (kIsMacOS && isShowBelowTray) {
+    //   final trayIconBounds = _trayIcon?.bounds;
+    //   if (trayIconBounds != null) {
+    //     final trayIconSize = trayIconBounds.size;
+    //     final trayIconPosition = trayIconBounds.topLeft;
 
-        Offset newPosition = Offset(
-          trayIconPosition.dx - ((windowSize.width - trayIconSize.width) / 2),
-          trayIconPosition.dy,
-        );
+    //     Offset newPosition = Offset(
+    //       trayIconPosition.dx - ((windowSize.width - trayIconSize.width) / 2),
+    //       trayIconPosition.dy,
+    //     );
 
-        if (!isAlwaysOnTop) {
-          _window.setPosition(newPosition.dx, newPosition.dy);
-        }
-      }
-    }
+    //     if (!isAlwaysOnTop) {
+    //       _window.setPosition(newPosition.dx, newPosition.dy);
+    //     }
+    //   }
+    // }
 
     final isVisible = _window.isVisible;
     if (!isVisible) {
@@ -916,20 +685,48 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    handleDismissed() => setState(() {});
-
+  PreferredSizeWidget _buildToolBar(BuildContext context) {
+    final theme = Theme.of(context);
     return PreferredSize(
-      preferredSize: const Size.fromHeight(34),
+      preferredSize: const Size.fromHeight(40),
       child: Container(
-        padding: const EdgeInsets.only(left: 8, right: 8, top: 0),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const ToolbarItemAlwaysOnTop(),
+            Button(
+              onPressed: () {
+                setState(() {
+                  _isAlwaysOnTop = !_isAlwaysOnTop;
+                });
+                mainWindowController.window.isAlwaysOnTop = _isAlwaysOnTop;
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.fastOutSlowIn,
+                transformAlignment: Alignment.center,
+                transform: Matrix4.rotationZ(
+                  _isAlwaysOnTop ? 0 : -0.8,
+                ),
+                child: Icon(
+                  _isAlwaysOnTop
+                      ? FluentIcons.pin_20_filled
+                      : FluentIcons.pin_20_regular,
+                  color: _isAlwaysOnTop ? theme.colorScheme.primary : null,
+                ),
+              ),
+            ),
             Expanded(child: Container()),
-            ToolbarItemSettings(
-              onSubPageDismissed: handleDismissed,
+            Button(
+              onPressed: () {
+                if (Platform.isMacOS) {
+                  NativeSettings.show();
+                  return;
+                }
+
+                mainWindowController.window.show();
+              },
+              child: const Icon(FluentIcons.settings_20_regular),
             ),
           ],
         ),
@@ -940,7 +737,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context),
+      appBar: _buildToolBar(context),
       body: _buildBody(context),
     );
   }
@@ -1064,36 +861,5 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       PhysicalKeyboardKey.keyV,
       _commandModifiers,
     );
-  }
-
-  void _handleTrayIconMouseDown() async {
-    _windowShow(isShowBelowTray: true);
-  }
-
-  void _handleTrayIconRightMouseDown() {
-    _trayIcon?.openContextMenu();
-  }
-
-  void _handleTrayMenuItemClick(String key) async {
-    switch (key) {
-      case kMenuItemKeyShow:
-        await Future.delayed(const Duration(milliseconds: 300));
-        await _windowShow();
-        break;
-      case kMenuItemKeyQuickStartGuide:
-        nativeapi.UrlOpener.instance.open('${sharedEnv.webUrl}/docs');
-        break;
-      case kMenuSubItemKeyJoinDiscord:
-        nativeapi.UrlOpener.instance.open('https://discord.gg/yRF62CKza8');
-        break;
-      case kMenuSubItemKeyJoinQQGroup:
-        nativeapi.UrlOpener.instance.open(
-          'https://jq.qq.com/?_wv=1027&k=vYQ5jW7y',
-        );
-        break;
-      case kMenuItemKeyQuitApp:
-        _destroyTrayIcon();
-        exit(0);
-    }
   }
 }

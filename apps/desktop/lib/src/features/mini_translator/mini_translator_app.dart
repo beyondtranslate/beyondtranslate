@@ -3,15 +3,30 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/_window.dart';
+import 'package:nativeapi/nativeapi.dart';
 
+import '../../extensions/window_controller.dart';
 import '../../i18n/i18n.dart';
 import '../../services/settings_store.dart';
-import '../../widgets/ui/themes/dark_theme.dart';
-import '../../widgets/ui/themes/light_theme.dart';
 import '../../utils/language_util.dart';
 import '../../utils/platform_util.dart';
-import '../../windowing/window_controllers.dart';
+import '../../widgets/ui/themes/dark_theme.dart';
+import '../../widgets/ui/themes/light_theme.dart';
 import 'mini_translator.dart';
+
+const _kMiniTranslatorTitle = 'Mini Translator';
+
+final miniTranslatorWindowController = RegularWindowController(
+  preferredSize: const Size(380, 420),
+  title: _kMiniTranslatorTitle,
+)..setWillShowHook((window) {
+    if (window.isFirstShow) {
+      window.titleBarStyle = TitleBarStyle.hidden;
+      window.windowControlButtonsVisible = false;
+      return false;
+    }
+    return true;
+  });
 
 class MiniTranslatorApp extends StatefulWidget {
   const MiniTranslatorApp({super.key});
