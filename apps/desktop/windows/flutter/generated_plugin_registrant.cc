@@ -12,7 +12,6 @@
 #include <keypress_simulator_windows/keypress_simulator_windows_plugin_c_api.h>
 #include <protocol_handler/protocol_handler_plugin.h>
 #include <screen_capturer_windows/screen_capturer_windows_plugin_c_api.h>
-#include <screen_retriever/screen_retriever_plugin.h>
 #include <screen_text_extractor/screen_text_extractor_plugin.h>
 #include <vclibs/vclibs_plugin.h>
 
@@ -29,8 +28,6 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("ProtocolHandlerPlugin"));
   ScreenCapturerWindowsPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("ScreenCapturerWindowsPluginCApi"));
-  ScreenRetrieverPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("ScreenRetrieverPlugin"));
   ScreenTextExtractorPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("ScreenTextExtractorPlugin"));
   VclibsPluginRegisterWithRegistrar(

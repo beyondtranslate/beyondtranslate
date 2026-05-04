@@ -7,7 +7,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   clipboard_watcher
   hotkey_manager_linux
   screen_capturer_linux
-  screen_retriever
   screen_text_extractor
 )
 

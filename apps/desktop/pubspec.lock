@@ -37,58 +37,58 @@ packages:
     dependency: "direct main"
     description:
       name: audioplayers
-      sha256: c05c6147124cd63e725e861335a8b4d57300b80e6e92cea7c145c739223bbaef
+      sha256: a72dd459d1a48f61a6fb9c0134dba26597c9236af40639ff0eb70eb4e0baab70
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.1"
+    version: "6.6.0"
   audioplayers_android:
     dependency: transitive
     description:
       name: audioplayers_android
-      sha256: b00e1a0e11365d88576320ec2d8c192bc21f1afb6c0e5995d1c57ae63156acb5
+      sha256: "60a6728277228413a85755bd3ffd6fab98f6555608923813ce383b190a360605"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.3"
+    version: "5.2.1"
   audioplayers_darwin:
     dependency: transitive
     description:
       name: audioplayers_darwin
-      sha256: "3034e99a6df8d101da0f5082dcca0a2a99db62ab1d4ddb3277bed3f6f81afe08"
+      sha256: c994b3bb3a921e4904ac40e013fbc94488e824fd7c1de6326f549943b0b44a91
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.2"
+    version: "6.4.0"
   audioplayers_linux:
     dependency: transitive
     description:
       name: audioplayers_linux
-      sha256: "60787e73fefc4d2e0b9c02c69885402177e818e4e27ef087074cf27c02246c9e"
+      sha256: f75bce1ce864170ef5e6a2c6a61cd3339e1a17ce11e99a25bae4474ea491d001
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "4.2.1"
   audioplayers_platform_interface:
     dependency: transitive
     description:
       name: audioplayers_platform_interface
-      sha256: "365c547f1bb9e77d94dd1687903a668d8f7ac3409e48e6e6a3668a1ac2982adb"
+      sha256: "0e2f6a919ab56d0fec272e801abc07b26ae7f31980f912f24af4748763e5a656"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "7.1.1"
   audioplayers_web:
     dependency: transitive
     description:
       name: audioplayers_web
-      sha256: "22cd0173e54d92bd9b2c80b1204eb1eb159ece87475ab58c9788a70ec43c2a62"
+      sha256: faa8fa6587f996a6f604433b53af44c57a1407d4fe8dff5766cf63d6875e8de9
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "5.2.0"
   audioplayers_windows:
     dependency: transitive
     description:
       name: audioplayers_windows
-      sha256: "9536812c9103563644ada2ef45ae523806b0745f7a78e89d1b5fb1951de90e1a"
+      sha256: bafff2b38b6f6d331887558ba6e0a01c9c208d9dbb3ad0005234db065122a734
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "4.3.0"
   beyondtranslate_desktop_rust:
     dependency: "direct main"
     description:
@@ -239,14 +239,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  dart_openai:
-    dependency: transitive
-    description:
-      name: dart_openai
-      sha256: "853bb57fed6a71c3ba0324af5cb40c16d196cf3aa55b91d244964ae4a241ccf1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.0"
   dart_style:
     dependency: transitive
     description:
@@ -267,10 +259,18 @@ packages:
     dependency: "direct main"
     description:
       name: dio
-      sha256: "347d56c26d63519552ef9a569f2a593dda99a81fdbdff13c584b7197cfe05059"
+      sha256: aff32c08f92787a557dd5c0145ac91536481831a01b4648136373cddb0e64f8c
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.2"
+    version: "5.9.2"
+  dio_web_adapter:
+    dependency: transitive
+    description:
+      name: dio_web_adapter
+      sha256: "2f9e64323a7c3c7ef69567d5c800424a11f8337b8b228bad02524c9fb3c1f340"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
   fake_async:
     dependency: transitive
     description:
@@ -279,22 +279,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.3"
-  fetch_api:
-    dependency: transitive
-    description:
-      name: fetch_api
-      sha256: "24cbd5616f3d4008c335c197bb90bfa0eb43b9e55c6de5c60d1f805092636034"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.1"
-  fetch_client:
-    dependency: transitive
-    description:
-      name: fetch_client
-      sha256: "2125ffb6325e0045cc3cbfca1a87e6defe9afa27d85dc14857c1cf3835a9a636"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.1"
   ffi:
     dependency: transitive
     description:
@@ -395,22 +379,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
-  hive:
-    dependency: "direct main"
-    description:
-      name: hive
-      sha256: "8dcf6db979d7933da8217edcec84e9df1bdb4e4edc7fc77dbd5aa74356d6d941"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.3"
-  hive_flutter:
-    dependency: "direct main"
-    description:
-      name: hive_flutter
-      sha256: dca1da446b1d808a51689fb5d0c6c9510c0a2ba01e22805d492c73b68e33eecc
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   hotkey_manager:
     dependency: "direct main"
     description:
@@ -507,14 +475,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
-  js:
-    dependency: transitive
-    description:
-      name: js
-      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.7"
   json_annotation:
     dependency: transitive
     description:
@@ -794,14 +754,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
-  reorderables:
-    dependency: "direct main"
-    description:
-      name: reorderables
-      sha256: "004a886e4878df1ee27321831c838bc1c976311f4ca6a74ce7d561e506540a77"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
   screen_capturer:
     dependency: "direct main"
     description:
@@ -842,14 +794,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
-  screen_retriever:
-    dependency: "direct main"
-    description:
-      name: screen_retriever
-      sha256: "4931f226ca158123ccd765325e9fbf360bfed0af9b460a10f960f9bb13d58323"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
   screen_text_extractor:
     dependency: "direct main"
     description:
@@ -1015,70 +959,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.11"
-  translation_engine_baidu:
-    dependency: "direct main"
-    description:
-      name: translation_engine_baidu
-      sha256: "9fa8402764c231d2e063d8ae9d35fc41657ffeb9ff809745a11691b8f20d2420"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
-  translation_engine_caiyun:
-    dependency: "direct main"
-    description:
-      name: translation_engine_caiyun
-      sha256: "8f1d99c7444c3ae09a00459b88750282708505550d46f095fdb3c99d92485980"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
-  translation_engine_deepl:
-    dependency: "direct main"
-    description:
-      name: translation_engine_deepl
-      sha256: aa4cb187b4349999bf2319fe329ebd31e4f75ab2016cc69d57711b09522c4ee4
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
-  translation_engine_google:
-    dependency: "direct main"
-    description:
-      name: translation_engine_google
-      sha256: "5127c69d086a9738160d50ee00ddd95f1790d733b1156cfd0aaa155b209bc0c9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
-  translation_engine_iciba:
-    dependency: "direct main"
-    description:
-      name: translation_engine_iciba
-      sha256: bd5229e36ca062e917df253e1be1802dccb256a1e0d895fc1aa962d8dceec3fc
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
-  translation_engine_openai:
-    dependency: "direct main"
-    description:
-      name: translation_engine_openai
-      sha256: "7db2d196562099f0d494475cc298a02ca905a6940442aca2963c19ed266391dd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
-  translation_engine_tencent:
-    dependency: "direct main"
-    description:
-      name: translation_engine_tencent
-      sha256: d2aa85fc3209e485ec88672dd4c3864a0e2ed63c2030b2bccb4a8c6d474356df
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
-  translation_engine_youdao:
-    dependency: "direct main"
-    description:
-      name: translation_engine_youdao
-      sha256: "849fc66134232b1c803366f773cce39c5b0ffc8e47b0ecef842ceb5c95afef2b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
   typed_data:
     dependency: transitive
     description:
@@ -1103,22 +983,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.3"
-  uni_translate_client:
-    dependency: "direct main"
-    description:
-      name: uni_translate_client
-      sha256: ce963a7ca07715c6d0dca40cfcccc066bfa89c980ecb0e0a5d643d8db517b5e5
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.7"
-  unified_persistence:
-    dependency: "direct main"
-    description:
-      name: unified_persistence
-      sha256: a3d8f152c5ae6a2f0b11572742409a024d593e9eb607273594f83bb1639fd230
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
   uuid:
     dependency: transitive
     description:

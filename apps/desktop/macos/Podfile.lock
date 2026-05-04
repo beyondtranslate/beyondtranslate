@@ -1,6 +1,4 @@
 PODS:
-  - audioplayers_darwin (0.0.1):
-    - FlutterMacOS
   - beyondtranslate_desktop_rust (0.0.1):
     - FlutterMacOS
   - clipboard_watcher (0.0.1):
@@ -18,13 +16,10 @@ PODS:
     - FlutterMacOS
   - screen_capturer_macos (0.0.1):
     - FlutterMacOS
-  - screen_retriever (0.0.1):
-    - FlutterMacOS
   - screen_text_extractor (0.1.0):
     - FlutterMacOS
 
 DEPENDENCIES:
-  - audioplayers_darwin (from `Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos`)
   - beyondtranslate_desktop_rust (from `Flutter/ephemeral/.symlinks/plugins/beyondtranslate_desktop_rust/macos`)
   - clipboard_watcher (from `Flutter/ephemeral/.symlinks/plugins/clipboard_watcher/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
@@ -33,7 +28,6 @@ DEPENDENCIES:
   - ocr_engine_builtin (from `Flutter/ephemeral/.symlinks/plugins/ocr_engine_builtin/macos`)
   - protocol_handler (from `Flutter/ephemeral/.symlinks/plugins/protocol_handler/macos`)
   - screen_capturer_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos`)
-  - screen_retriever (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos`)
   - screen_text_extractor (from `Flutter/ephemeral/.symlinks/plugins/screen_text_extractor/macos`)
 
 SPEC REPOS:
@@ -41,8 +35,6 @@ SPEC REPOS:
     - HotKey
 
 EXTERNAL SOURCES:
-  audioplayers_darwin:
-    :path: Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos
   beyondtranslate_desktop_rust:
     :path: Flutter/ephemeral/.symlinks/plugins/beyondtranslate_desktop_rust/macos
   clipboard_watcher:
@@ -59,13 +51,10 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/protocol_handler/macos
   screen_capturer_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos
-  screen_retriever:
-    :path: Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos
   screen_text_extractor:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_text_extractor/macos
 
 SPEC CHECKSUMS:
-  audioplayers_darwin: 761f2948df701d05b5db603220c384fb55720012
   beyondtranslate_desktop_rust: 918b6dec77c455296c1165a8843e7b0ae6a2bdf1
   clipboard_watcher: e9c9d88b3aea4889fe80025037e690e73600b160
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
@@ -75,7 +64,6 @@ SPEC CHECKSUMS:
   ocr_engine_builtin: 825f9e1a6f6a79a6a647d78ee1218bcce19b45e8
   protocol_handler: f4d1317b2b828d6370e140077be5155feb3f06c7
   screen_capturer_macos: 229306903c56767a7c7d3a48167ba303e95c6d29
-  screen_retriever: 4f97c103641aab8ce183fa5af3b87029df167936
   screen_text_extractor: a23062e637bc69e2737476011ef192e2a77cb2f5
 
 PODFILE CHECKSUM: 89c84cf5c2351c1e554c6dea18d31a879fc3a19e

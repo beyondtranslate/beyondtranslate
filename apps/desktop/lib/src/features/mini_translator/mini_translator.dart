@@ -13,7 +13,6 @@ import 'package:keypress_simulator/keypress_simulator.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
 import 'package:protocol_handler/protocol_handler.dart';
 import 'package:screen_capturer/screen_capturer.dart';
-import 'package:screen_retriever/screen_retriever.dart';
 import 'package:screen_text_extractor/screen_text_extractor.dart';
 
 import '../../i18n/i18n.dart';
@@ -21,9 +20,9 @@ import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
 import '../../models/translation_target.dart';
 import '../../rust/domain/settings.dart' as rust_settings;
-import '../../services/settings_store.dart';
 import '../../services/native_settings.dart';
 import '../../services/runtime.dart';
+import '../../services/settings_store.dart';
 import '../../services/shortcut_service/shortcut_service.dart';
 import '../../utils/language_util.dart';
 import '../../utils/platform_util.dart';
@@ -258,12 +257,14 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     await _initTrayIcon();
     await Future.delayed(const Duration(milliseconds: 100));
     if (kIsLinux || kIsWindows) {
-      final primaryDisplay = await screenRetriever.getPrimaryDisplay();
-      final windowSize = _window.size;
-      _lastShownPosition = Offset(
-        primaryDisplay.size.width - windowSize.width - 50,
-        50,
-      );
+      final primaryDisplay = nativeapi.DisplayManager.instance.getPrimary();
+      if (primaryDisplay != null) {
+        final windowSize = _window.size;
+        _lastShownPosition = Offset(
+          primaryDisplay.size.width - windowSize.width - 50,
+          50,
+        );
+      }
       _window.setPosition(_lastShownPosition.dx, _lastShownPosition.dy);
     }
     await Future.delayed(const Duration(milliseconds: 100));

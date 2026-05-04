@@ -9,7 +9,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   keypress_simulator_windows
   protocol_handler
   screen_capturer_windows
-  screen_retriever
   screen_text_extractor
   vclibs
 )
