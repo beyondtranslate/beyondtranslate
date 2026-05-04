@@ -6,8 +6,8 @@ import 'package:flutter/src/widgets/_window.dart';
 
 import '../../i18n/i18n.dart';
 import '../../services/settings_store.dart';
-import '../../themes/dark_theme.dart';
-import '../../themes/light_theme.dart';
+import '../../widgets/ui/themes/dark_theme.dart';
+import '../../widgets/ui/themes/light_theme.dart';
 import '../../utils/language_util.dart';
 import '../../utils/platform_util.dart';
 import '../../windowing/window_controllers.dart';

@@ -1,7 +1,8 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../ui/button.dart';
 
 class CustomAppBarCloseButton extends StatelessWidget {
   const CustomAppBarCloseButton({
@@ -13,13 +14,9 @@ class CustomAppBarCloseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
+    return Button(
+      minSize: 0,
       padding: const EdgeInsets.only(right: 12),
-      child: Icon(
-        FluentIcons.dismiss_20_regular,
-        color: Theme.of(context).appBarTheme.iconTheme!.color,
-        size: 22,
-      ),
       onPressed: () {
         if (onPressed != null) {
           onPressed!();
@@ -29,6 +26,11 @@ class CustomAppBarCloseButton extends StatelessWidget {
           context.pop();
         }
       },
+      child: Icon(
+        FluentIcons.dismiss_20_regular,
+        color: Theme.of(context).appBarTheme.iconTheme!.color,
+        size: 22,
+      ),
     );
   }
 }

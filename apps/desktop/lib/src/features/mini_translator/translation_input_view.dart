@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 
@@ -229,26 +228,29 @@ class TranslationInputView extends StatelessWidget {
               margin: EdgeInsets.zero,
               child: Stack(
                 children: [
-                  CupertinoTextField(
+                  TextField(
                     focusNode: focusNode,
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                    ),
                     selectionHeightStyle: BoxHeightStyle.max,
                     controller: controller,
-                    padding: const EdgeInsets.only(
-                      left: 12,
-                      right: 12,
-                      top: 14,
-                      bottom: 12,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      contentPadding: const EdgeInsets.only(
+                        left: 12,
+                        right: 12,
+                        top: 14,
+                        bottom: 12,
+                      ),
+                      hintText: t.mini_translator.input_hint,
+                      hintStyle: textTheme.bodyMedium?.copyWith(
+                        color:
+                            textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
+                        height: 1.2,
+                      ),
                     ),
                     style: textTheme.bodyMedium?.copyWith(
-                      height: 1.2,
-                    ),
-                    placeholder: t.mini_translator.input_hint,
-                    placeholderStyle: textTheme.bodyMedium?.copyWith(
-                      color:
-                          textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                       height: 1.2,
                     ),
                     maxLines: inputSubmitMode == InputSubmitMode.enter ? 1 : 6,

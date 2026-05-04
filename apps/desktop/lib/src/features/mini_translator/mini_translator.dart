@@ -938,7 +938,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _windowResize());
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),

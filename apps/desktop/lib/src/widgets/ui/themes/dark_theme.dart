@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -71,13 +70,6 @@ final darkThemeData = ThemeData(
     ),
     titleTextStyle: _kDefaultTextStyle.copyWith(
       fontSize: 15,
-    ),
-  ),
-  cupertinoOverrideTheme: CupertinoThemeData(
-    primaryColor: _kPrimaryColor,
-    barBackgroundColor: _kCanvasColor,
-    textTheme: CupertinoTextThemeData(
-      textStyle: _kDefaultTextStyle.copyWith(),
     ),
   ),
 );

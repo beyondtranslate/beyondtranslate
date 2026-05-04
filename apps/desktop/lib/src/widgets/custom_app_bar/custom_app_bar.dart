@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/platform_util.dart';
 import './custom_app_bar_back_button.dart';
 import './custom_app_bar_close_button.dart';
+
+const double _kMinInteractiveDimension = 44.0;
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
@@ -64,7 +65,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize {
     return Size.fromHeight(
-      kIsAndroid ? kToolbarHeight : kMinInteractiveDimensionCupertino,
+      kIsAndroid ? kToolbarHeight : _kMinInteractiveDimension,
     );
   }
 }

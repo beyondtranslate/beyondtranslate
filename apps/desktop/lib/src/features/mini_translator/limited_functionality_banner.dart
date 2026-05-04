@@ -1,6 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
@@ -10,6 +9,7 @@ import 'package:screen_text_extractor/screen_text_extractor.dart';
 import '../../i18n/i18n.dart';
 import '../../utils/platform_util.dart';
 import '../../utils/utils.dart';
+import '../../widgets/ui/button.dart';
 
 class _AllowAccessListItem extends StatelessWidget {
   const _AllowAccessListItem({
@@ -168,13 +168,9 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                   height: 18,
                   child: Tooltip(
                     message: t.mini_translator.limited_banner_tip_help,
-                    child: CupertinoButton(
+                    child: Button(
+                      minSize: 0,
                       padding: EdgeInsets.zero,
-                      child: const Icon(
-                        FluentIcons.question_circle_20_regular,
-                        color: Colors.white,
-                        size: 18,
-                      ),
                       onPressed: () async {
                         final url = '${sharedEnv.webUrl}/docs';
                         final result = nativeapi.UrlOpener.instance.open(url);
@@ -182,6 +178,11 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                           throw 'Could not launch $url: ${result.errorMessage}';
                         }
                       },
+                      child: const Icon(
+                        FluentIcons.question_circle_20_regular,
+                        color: Colors.white,
+                        size: 18,
+                      ),
                     ),
                   ),
                 ),

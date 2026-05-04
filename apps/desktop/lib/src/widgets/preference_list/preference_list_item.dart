@@ -1,5 +1,4 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PreferenceListItem extends StatelessWidget {
@@ -209,7 +208,7 @@ class PreferenceListSwitchItem extends PreferenceListItem {
       width: 34,
       child: Transform.scale(
         scale: 0.68,
-        child: CupertinoSwitch(
+        child: Switch(
           value: value,
           onChanged: onChanged,
           activeTrackColor: Theme.of(context).primaryColor,
@@ -253,16 +252,19 @@ class PreferenceListTextFieldItem extends PreferenceListItem {
   Widget buildDetailText(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Expanded(
-      child: CupertinoTextField(
+      child: TextField(
         controller: controller,
-        padding: EdgeInsets.zero,
-        decoration: const BoxDecoration(),
-        style: textTheme.bodyMedium?.copyWith(
-          height: 1.2,
+        decoration: InputDecoration(
+          isDense: true,
+          contentPadding: EdgeInsets.zero,
+          border: InputBorder.none,
+          hintText: placeholder,
+          hintStyle: textTheme.bodyMedium?.copyWith(
+            color: textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
+            height: 1.2,
+          ),
         ),
-        placeholder: placeholder,
-        placeholderStyle: textTheme.bodyMedium?.copyWith(
-          color: textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
+        style: textTheme.bodyMedium?.copyWith(
           height: 1.2,
         ),
         onChanged: onChanged,

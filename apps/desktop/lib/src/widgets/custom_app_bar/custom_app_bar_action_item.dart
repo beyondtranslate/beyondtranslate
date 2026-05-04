@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../ui/button.dart';
 
 class CustomAppBarActionItem extends StatelessWidget {
   const CustomAppBarActionItem({
@@ -20,8 +21,18 @@ class CustomAppBarActionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
+    return Button(
+      minSize: 0,
       padding: padding ?? const EdgeInsets.only(right: 12),
+      onPressed: () {
+        if (onPressed != null) {
+          onPressed!();
+          return;
+        }
+        if (context.canPop()) {
+          context.pop();
+        }
+      },
       child: child ??
           Row(
             children: [
@@ -45,15 +56,6 @@ class CustomAppBarActionItem extends StatelessWidget {
                 ),
             ],
           ),
-      onPressed: () {
-        if (onPressed != null) {
-          onPressed!();
-          return;
-        }
-        if (context.canPop()) {
-          context.pop();
-        }
-      },
     );
   }
 }

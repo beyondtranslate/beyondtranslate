@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/ext_translation_engine_config.dart';
 import '../../models/translation_result_record.dart';
 import '../../services/runtime.dart';
 import '../translation_engine_icon/translation_engine_icon.dart';
+import '../ui/button.dart';
 
 class TranslationEngineTag extends StatefulWidget {
   const TranslationEngineTag({
@@ -153,8 +153,8 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
             left: 4,
             right: 2,
           ),
-          child: CupertinoButton(
-            minimumSize: const Size(0, 0),
+          child: Button(
+            minSize: 0,
             padding: EdgeInsets.zero,
             onPressed: () {},
             child: AnimatedCrossFade(
