@@ -201,12 +201,13 @@ packages:
     source: hosted
     version: "1.1.2"
   cnativeapi:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../../../libnativeapi/nativeapi-flutter/packages/cnativeapi"
-      relative: true
-    source: path
-    version: "0.1.0"
+      name: cnativeapi
+      sha256: "2d7f04868e9b9d66407b29633fabec6390709a23a4fcb45ba192959d3d8d7815"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   code_builder:
     dependency: transitive
     description:
@@ -598,10 +599,11 @@ packages:
   nativeapi:
     dependency: "direct main"
     description:
-      path: "../../../../libnativeapi/nativeapi-flutter/packages/nativeapi"
-      relative: true
-    source: path
-    version: "0.1.0"
+      name: nativeapi
+      sha256: "609b9ab8ee166654dea59bc281bff46042c58f32fbe2c0d9ca5cc47be4f13d54"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   ocr_engine_builtin:
     dependency: "direct main"
     description:
