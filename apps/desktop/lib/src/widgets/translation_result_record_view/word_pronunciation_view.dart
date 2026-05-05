@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../services/runtime.dart';
 
 import '../../models/ext_word_pronunciation.dart';
+import '../../services/runtime.dart';
 import '../sound_play_button/sound_play_button.dart';
 
 class WordPronunciationView extends StatelessWidget {

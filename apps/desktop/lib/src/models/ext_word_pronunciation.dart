@@ -1,5 +1,5 @@
-import '../services/runtime.dart';
 import '../i18n/i18n.dart';
+import '../services/runtime.dart';
 
 extension ExtWordPronunciation on WordPronunciation {
   String get localType {

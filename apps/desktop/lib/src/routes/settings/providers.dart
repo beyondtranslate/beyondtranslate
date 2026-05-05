@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../rust/domain/settings.dart';
-import '../../services/settings_store.dart';
 import '../../services/runtime.dart';
+import '../../services/settings_store.dart';
 import '../../widgets/preference_list/preference_list.dart';
 import '../../widgets/preference_list/preference_list_item.dart';
 import '../../widgets/preference_list/preference_list_section.dart';

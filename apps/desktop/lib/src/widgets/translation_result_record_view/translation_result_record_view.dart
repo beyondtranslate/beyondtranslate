@@ -6,8 +6,8 @@ import 'package:flutter/services.dart';
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
-import '../../services/settings_store.dart';
 import '../../services/runtime.dart';
+import '../../services/settings_store.dart';
 import '../ui/loading_indicator.dart';
 import 'translation_engine_tag.dart';
 import 'word_pronunciation_view.dart';
@@ -15,6 +15,10 @@ import 'word_tag_view.dart';
 import 'word_translation_view.dart';
 
 class TranslationResultRecordView extends StatelessWidget {
+  final TranslationResult translationResult;
+
+  final TranslationResultRecord translationResultRecord;
+  final ValueChanged<String> onTextTapped;
   const TranslationResultRecordView({
     Key? key,
     required this.translationResult,
@@ -22,9 +26,10 @@ class TranslationResultRecordView extends StatelessWidget {
     required this.onTextTapped,
   }) : super(key: key);
 
-  final TranslationResult translationResult;
-  final TranslationResultRecord translationResultRecord;
-  final ValueChanged<String> onTextTapped;
+  bool get _isErrorOccurred {
+    return translationResultRecord.lookUpError != null ||
+        translationResultRecord.translateError != null;
+  }
 
   bool get _isLoading {
     if (_isErrorOccurred) return false;
@@ -32,54 +37,46 @@ class TranslationResultRecordView extends StatelessWidget {
         translationResultRecord.translateResponse == null;
   }
 
-  bool get _isErrorOccurred {
-    return translationResultRecord.lookUpError != null ||
-        translationResultRecord.translateError != null;
-  }
-
-  Widget _buildRequestLoading(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(
-        minHeight: 40,
-      ),
-      padding: const EdgeInsets.only(
+      width: double.infinity,
+      margin: const EdgeInsets.only(
         left: 12,
         right: 12,
+        top: 0,
+        bottom: 12,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          LoadingIndicator.threeBounce(
-            color: Theme.of(context).textTheme.bodySmall!.color,
-            size: 12.0,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRequestError(BuildContext context) {
-    final error = translationResultRecord.lookUpError ??
-        translationResultRecord.translateError ??
-        const TranslationError(
-          message: 'Unknown Error',
-        );
-
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: 40,
-      ),
-      padding: const EdgeInsets.only(
-        left: 12,
-        right: 12,
-        top: 7,
-        bottom: 7,
-      ),
-      alignment: Alignment.centerLeft,
-      child: SelectableText(
-        error.message,
-        style: const TextStyle(color: Colors.red),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          borderRadius: BorderRadius.circular(2),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              offset: const Offset(0.0, 1.0),
+              blurRadius: 3.0,
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            if (_isLoading)
+              _buildRequestLoading(context)
+            else if (_isErrorOccurred)
+              _buildRequestError(context)
+            else
+              _buildBody(context),
+            Positioned(
+              right: 0,
+              top: 0,
+              child: TranslationEngineTag(
+                translationResultRecord: translationResultRecord,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -338,46 +335,49 @@ class TranslationResultRecordView extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildRequestError(BuildContext context) {
+    final error = translationResultRecord.lookUpError ??
+        translationResultRecord.translateError ??
+        const TranslationError(
+          message: 'Unknown Error',
+        );
+
     return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(
+      constraints: const BoxConstraints(
+        minHeight: 40,
+      ),
+      padding: const EdgeInsets.only(
         left: 12,
         right: 12,
-        top: 0,
-        bottom: 12,
+        top: 7,
+        bottom: 7,
       ),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.circular(2),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              offset: const Offset(0.0, 1.0),
-              blurRadius: 3.0,
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            if (_isLoading)
-              _buildRequestLoading(context)
-            else if (_isErrorOccurred)
-              _buildRequestError(context)
-            else
-              _buildBody(context),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: TranslationEngineTag(
-                translationResultRecord: translationResultRecord,
-              ),
-            ),
-          ],
-        ),
+      alignment: Alignment.centerLeft,
+      child: SelectableText(
+        error.message,
+        style: const TextStyle(color: Colors.red),
+      ),
+    );
+  }
+
+  Widget _buildRequestLoading(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(
+        minHeight: 40,
+      ),
+      padding: const EdgeInsets.only(
+        left: 12,
+        right: 12,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          LoadingIndicator.threeBounce(
+            color: Theme.of(context).textTheme.bodySmall!.color,
+            size: 12.0,
+          ),
+        ],
       ),
     );
   }

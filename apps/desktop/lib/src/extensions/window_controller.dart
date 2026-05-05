@@ -21,6 +21,7 @@ void setupGlobalWillShowHook() {
           (e) => e.id == windowId,
         );
     if (window != null) {
+      if (window.title == 'Settings') return true;
       window._incrementShowCount();
       final hook = _windowWillShowHooks[window.title];
       if (hook != null) {
@@ -39,6 +40,7 @@ void setupGlobalWillHideHook() {
           (e) => e.id == windowId,
         );
     if (window != null) {
+      if (window.title == 'Settings') return true;
       final hook = _windowWillHideHooks[window.title];
       if (hook != null) {
         return hook(window);

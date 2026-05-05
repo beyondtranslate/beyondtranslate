@@ -8,16 +8,14 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 import 'package:keypress_simulator/keypress_simulator.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
 import 'package:protocol_handler/protocol_handler.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screen_text_extractor/screen_text_extractor.dart';
 
-import '../../../main.dart' show mainWindowController;
 import '../../extensions/window_controller.dart';
-
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
@@ -31,8 +29,9 @@ import '../../utils/language_util.dart';
 import '../../utils/platform_util.dart';
 import '../../utils/utils.dart';
 import '../../widgets/ui/button.dart';
+import '../app_router.dart'
+    show mainWindowController, miniTranslatorWindowController;
 import 'limited_functionality_banner.dart';
-import 'mini_translator_app.dart' show miniTranslatorWindowController;
 import 'translation_input_view.dart';
 import 'translation_results_view.dart';
 import 'translation_target_select_view.dart';
@@ -56,13 +55,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   Brightness _brightness = Brightness.light;
 
-  String? _lastAppLanguage;
   Offset _lastShownPosition = Offset.zero;
-
-  // The mini-translator window has a fixed maximum height. The previous
-  // implementation made this user-configurable but the runtime no longer
-  // models such a preference, mirroring the macOS Swift implementation.
-  static const double _maxWindowHeight = 800;
 
   bool _isAlwaysOnTop = false;
 
@@ -83,7 +76,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   List<Future> _futureList = [];
 
-  Timer? _resizeTimer;
+  // Timer? _resizeTimer;
   int? _windowFocusedListenerId;
   int? _windowBlurredListenerId;
   int? _windowMovedListenerId;
@@ -129,8 +122,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   void _handleChanged() {
-    _lastAppLanguage = settingsStore.appLanguage;
-
     if (mounted) setState(() {});
   }
 
@@ -210,7 +201,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     bool isShowBelowTray = false,
   }) async {
     final isAlwaysOnTop = _window.isAlwaysOnTop;
-    final windowSize = _window.size;
+    // final windowSize = _window.size;
 
     if (kIsLinux) {
       _window.setPosition(_lastShownPosition.dx, _lastShownPosition.dy);
@@ -253,55 +244,55 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     _window.hide();
   }
 
-  void _windowResize() {
-    if (context.canPop()) return;
+  // void _windowResize() {
+  //   if (context.canPop()) return;
 
-    if (_resizeTimer != null && _resizeTimer!.isActive) {
-      _resizeTimer?.cancel();
-    }
-    _resizeTimer = Timer.periodic(const Duration(milliseconds: 10), (_) async {
-      if (!kIsMacOS) {
-        await Future.delayed(const Duration(milliseconds: 100));
-      }
-      RenderBox? rb1 =
-          _bannersViewKey.currentContext?.findRenderObject() as RenderBox?;
-      RenderBox? rb2 =
-          _inputViewKey.currentContext?.findRenderObject() as RenderBox?;
-      RenderBox? rb3 =
-          _resultsViewKey.currentContext?.findRenderObject() as RenderBox?;
+  //   if (_resizeTimer != null && _resizeTimer!.isActive) {
+  //     _resizeTimer?.cancel();
+  //   }
+  //   _resizeTimer = Timer.periodic(const Duration(milliseconds: 10), (_) async {
+  //     if (!kIsMacOS) {
+  //       await Future.delayed(const Duration(milliseconds: 100));
+  //     }
+  //     RenderBox? rb1 =
+  //         _bannersViewKey.currentContext?.findRenderObject() as RenderBox?;
+  //     RenderBox? rb2 =
+  //         _inputViewKey.currentContext?.findRenderObject() as RenderBox?;
+  //     RenderBox? rb3 =
+  //         _resultsViewKey.currentContext?.findRenderObject() as RenderBox?;
 
-      double toolbarViewHeight = 36.0;
-      double bannersViewHeight = rb1?.size.height ?? 0;
-      double inputViewHeight = rb2?.size.height ?? 0;
-      double resultsViewHeight = rb3?.size.height ?? 0;
+  //     double toolbarViewHeight = 36.0;
+  //     double bannersViewHeight = rb1?.size.height ?? 0;
+  //     double inputViewHeight = rb2?.size.height ?? 0;
+  //     double resultsViewHeight = rb3?.size.height ?? 0;
 
-      try {
-        double newWindowHeight = toolbarViewHeight +
-            bannersViewHeight +
-            inputViewHeight +
-            resultsViewHeight +
-            (kIsWindows ? 5 : 0);
-        final oldSize = _window.size;
-        Size newSize = Size(
-          oldSize.width,
-          newWindowHeight < _maxWindowHeight
-              ? newWindowHeight
-              : _maxWindowHeight,
-        );
-        if (oldSize.width != newSize.width ||
-            oldSize.height != newSize.height) {
-          _window.setSize(newSize.width, newSize.height, animate: true);
-        }
-      } catch (error) {
-        // ignore
-      }
+  //     try {
+  //       double newWindowHeight = toolbarViewHeight +
+  //           bannersViewHeight +
+  //           inputViewHeight +
+  //           resultsViewHeight +
+  //           (kIsWindows ? 5 : 0);
+  //       final oldSize = _window.size;
+  //       Size newSize = Size(
+  //         oldSize.width,
+  //         newWindowHeight < _maxWindowHeight
+  //             ? newWindowHeight
+  //             : _maxWindowHeight,
+  //       );
+  //       if (oldSize.width != newSize.width ||
+  //           oldSize.height != newSize.height) {
+  //         _window.setSize(newSize.width, newSize.height, animate: true);
+  //       }
+  //     } catch (error) {
+  //       // ignore
+  //     }
 
-      if (_resizeTimer != null) {
-        _resizeTimer?.cancel();
-        _resizeTimer = null;
-      }
-    });
-  }
+  //     if (_resizeTimer != null) {
+  //       _resizeTimer?.cancel();
+  //       _resizeTimer = null;
+  //     }
+  //   });
+  // }
 
   void _loadData() async {
     // The previous implementation populated `_latestVersion` from a cloud API
