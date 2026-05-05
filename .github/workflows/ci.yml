@@ -13,8 +13,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.41.0"
-          channel: "stable"
+          channel: "main"
+          cache: true
       - uses: bluefireteam/melos-action@v2
       - run: melos run analyze
 
@@ -24,8 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.41.0"
-          channel: "stable"
+          channel: "main"
           cache: true
       - uses: bluefireteam/melos-action@v2
       - run: melos run format-check
@@ -36,8 +35,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.41.0"
-          channel: "stable"
+          channel: "main"
           cache: true
       - uses: bluefireteam/melos-action@v2
       - run: melos run dependency_validator

@@ -13,7 +13,6 @@ dependencies:
     path: rust_builder
   bot_toast: ^4.1.3
   collection: ^1.18.0
-  crypto: ^3.0.3
   dio: ^5.9.2
   fluentui_system_icons: ^1.1.255
   flutter:

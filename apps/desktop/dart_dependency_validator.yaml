@@ -1,3 +1,13 @@
+allow_pins: true
+exclude:
+  - "build/**"
+  - "rust_builder/**"
 ignore:
+  - beyondtranslate_desktop_rust
+  - dio
   - flutter_test
+  - ocr_engine_builtin
+  - ocr_engine_youdao
+  - shortid
+  - uni_ocr_client
   - vclibs
