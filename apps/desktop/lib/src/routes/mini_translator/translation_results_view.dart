@@ -80,43 +80,45 @@ class TranslationResultsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewWidth = MediaQuery.of(context).size.width;
+    final content = SizedBox(
+      key: viewKey,
+      width: viewWidth,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (querySubmitted &&
+              translationMode == TranslationMode.auto &&
+              translationResultList.isEmpty &&
+              textDetectedLanguage != null)
+            _buildNoMatchingTranslationTarget(context),
+          for (var result in translationResultList)
+            SizedBox(
+              width: viewWidth,
+              child: StickyHeader(
+                header: translationMode == TranslationMode.auto
+                    ? TranslationResultView(result)
+                    : Container(),
+                content: Column(
+                  children: [
+                    for (var resultRecord
+                        in result.translationResultRecordList ?? [])
+                      TranslationResultRecordView(
+                        translationResult: result,
+                        translationResultRecord: resultRecord,
+                        onTextTapped: onTextTapped,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+
     return Expanded(
       child: SingleChildScrollView(
         controller: controller,
-        child: SizedBox(
-          key: viewKey,
-          width: viewWidth,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              if (querySubmitted &&
-                  translationMode == TranslationMode.auto &&
-                  translationResultList.isEmpty &&
-                  textDetectedLanguage != null)
-                _buildNoMatchingTranslationTarget(context),
-              for (var result in translationResultList)
-                SizedBox(
-                  width: viewWidth,
-                  child: StickyHeader(
-                    header: translationMode == TranslationMode.auto
-                        ? TranslationResultView(result)
-                        : Container(),
-                    content: Column(
-                      children: [
-                        for (var resultRecord
-                            in result.translationResultRecordList ?? [])
-                          TranslationResultRecordView(
-                            translationResult: result,
-                            translationResultRecord: resultRecord,
-                            onTextTapped: onTextTapped,
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
+        child: content,
       ),
     );
   }

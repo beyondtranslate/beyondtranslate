@@ -1,5 +1,5 @@
+import '../rust/domain/settings.dart';
 import 'translation_result_record.dart';
-import 'translation_target.dart';
 
 class TranslationResult {
   TranslationResult({
@@ -21,7 +21,12 @@ class TranslationResult {
 
     return TranslationResult(
       id: json['id'],
-      translationTarget: TranslationTarget.fromJson(json['translationTarget']),
+      translationTarget: TranslationTarget(
+        source: json['translationTarget']['source'] ??
+            json['translationTarget']['sourceLanguage'],
+        target: json['translationTarget']['target'] ??
+            json['translationTarget']['targetLanguage'],
+      ),
       translationResultRecordList: translationResultRecordList,
       unsupportedEngineIdList: List<String>.from(
         json['unsupportedEngineIdList'],
@@ -37,7 +42,12 @@ class TranslationResult {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'translationTarget': translationTarget,
+      'translationTarget': translationTarget == null
+          ? null
+          : {
+              'source': translationTarget!.source,
+              'target': translationTarget!.target,
+            },
       'translationResultRecordList':
           translationResultRecordList?.map((e) => e.toJson()).toList(),
       'unsupportedEngineIdList': unsupportedEngineIdList,

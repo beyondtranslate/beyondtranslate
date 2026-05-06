@@ -13,10 +13,8 @@ class TranslationResultView extends StatelessWidget {
 
   final TranslationResult translationResult;
 
-  String get sourceLanguage =>
-      translationResult.translationTarget!.sourceLanguage!;
-  String get targetLanguage =>
-      translationResult.translationTarget!.targetLanguage!;
+  String get sourceLanguage => translationResult.translationTarget!.source;
+  String get targetLanguage => translationResult.translationTarget!.target;
 
   @override
   Widget build(BuildContext context) {

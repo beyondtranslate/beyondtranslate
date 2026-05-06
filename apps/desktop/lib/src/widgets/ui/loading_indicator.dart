@@ -105,7 +105,7 @@ class _ThreeBounceIndicator extends StatelessWidget {
     final spacing = dotSize * 0.5;
 
     return SizedBox(
-      width: dotSize * 3 + spacing * 2,
+      width: dotSize * 3 + spacing * 3,
       height: size,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

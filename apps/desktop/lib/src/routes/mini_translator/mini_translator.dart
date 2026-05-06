@@ -8,7 +8,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:keypress_simulator/keypress_simulator.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
 import 'package:protocol_handler/protocol_handler.dart';
@@ -19,8 +19,7 @@ import '../../extensions/window_controller.dart';
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
-import '../../models/translation_target.dart';
-import '../../rust/domain/settings.dart' as rust_settings;
+import '../../rust/domain/settings.dart';
 import '../../services/native_settings.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
@@ -57,6 +56,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   Offset _lastShownPosition = Offset.zero;
 
+  // The mini-translator grows with its content but caps at this height, after
+  // which the results area scrolls.
+  static const double _maxWindowHeight = 800;
+
   bool _isAlwaysOnTop = false;
 
   bool _isAllowedScreenCaptureAccess = true;
@@ -74,9 +77,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   bool _isTextDetecting = false;
   List<TranslationResult> _translationResultList = [];
 
-  List<Future> _futureList = [];
-
-  // Timer? _resizeTimer;
+  Timer? _resizeSettledTimer;
+  bool _isWindowResizeScheduled = false;
+  bool _pendingWindowResizeAnimate = true;
+  bool _pendingWindowResizeSettle = false;
   int? _windowFocusedListenerId;
   int? _windowBlurredListenerId;
   int? _windowMovedListenerId;
@@ -95,6 +99,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     }
     _loadData();
     super.initState();
+    _scheduleWindowResize(
+      animate: false,
+      settle: true,
+    );
   }
 
   @override
@@ -107,6 +115,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _unregisterWindowEvents();
       _uninit();
     }
+    _resizeSettledTimer?.cancel();
     super.dispose();
   }
 
@@ -116,13 +125,23 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         WidgetsBinding.instance.window.platformBrightness;
 
     if (newBrightness != _brightness) {
-      _brightness = newBrightness;
-      setState(() {});
+      _setStateAndScheduleWindowResize(() {
+        _brightness = newBrightness;
+      });
     }
   }
 
   void _handleChanged() {
-    if (mounted) setState(() {});
+    _setStateAndScheduleWindowResize(() {});
+  }
+
+  void _setStateAndScheduleWindowResize(
+    VoidCallback fn, {
+    bool animate = true,
+  }) {
+    if (!mounted) return;
+    setState(fn);
+    _scheduleWindowResize(animate: animate);
   }
 
   void _init() async {
@@ -151,7 +170,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     await _windowShow(
       isShowBelowTray: kIsMacOS,
     );
-    setState(() {});
+    _setStateAndScheduleWindowResize(() {});
   }
 
   void _registerWindowEvents() {
@@ -230,6 +249,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     } else {
       _window.focus();
     }
+    _scheduleWindowResize(
+      animate: false,
+      settle: true,
+    );
 
     if (kIsLinux && !isAlwaysOnTop) {
       _window.isAlwaysOnTop = true;
@@ -244,55 +267,86 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     _window.hide();
   }
 
-  // void _windowResize() {
-  //   if (context.canPop()) return;
+  void _scheduleWindowResize({
+    bool animate = true,
+    bool settle = false,
+  }) {
+    if (!(kIsLinux || kIsMacOS || kIsWindows)) return;
 
-  //   if (_resizeTimer != null && _resizeTimer!.isActive) {
-  //     _resizeTimer?.cancel();
-  //   }
-  //   _resizeTimer = Timer.periodic(const Duration(milliseconds: 10), (_) async {
-  //     if (!kIsMacOS) {
-  //       await Future.delayed(const Duration(milliseconds: 100));
-  //     }
-  //     RenderBox? rb1 =
-  //         _bannersViewKey.currentContext?.findRenderObject() as RenderBox?;
-  //     RenderBox? rb2 =
-  //         _inputViewKey.currentContext?.findRenderObject() as RenderBox?;
-  //     RenderBox? rb3 =
-  //         _resultsViewKey.currentContext?.findRenderObject() as RenderBox?;
+    _pendingWindowResizeAnimate = _isWindowResizeScheduled
+        ? _pendingWindowResizeAnimate && animate
+        : animate;
+    _pendingWindowResizeSettle = _pendingWindowResizeSettle || settle;
+    if (_isWindowResizeScheduled) return;
 
-  //     double toolbarViewHeight = 36.0;
-  //     double bannersViewHeight = rb1?.size.height ?? 0;
-  //     double inputViewHeight = rb2?.size.height ?? 0;
-  //     double resultsViewHeight = rb3?.size.height ?? 0;
+    _isWindowResizeScheduled = true;
+    WidgetsBinding.instance.endOfFrame.then((_) {
+      _isWindowResizeScheduled = false;
+      final pendingAnimate = _pendingWindowResizeAnimate;
+      final pendingSettle = _pendingWindowResizeSettle;
+      _pendingWindowResizeAnimate = true;
+      _pendingWindowResizeSettle = false;
 
-  //     try {
-  //       double newWindowHeight = toolbarViewHeight +
-  //           bannersViewHeight +
-  //           inputViewHeight +
-  //           resultsViewHeight +
-  //           (kIsWindows ? 5 : 0);
-  //       final oldSize = _window.size;
-  //       Size newSize = Size(
-  //         oldSize.width,
-  //         newWindowHeight < _maxWindowHeight
-  //             ? newWindowHeight
-  //             : _maxWindowHeight,
-  //       );
-  //       if (oldSize.width != newSize.width ||
-  //           oldSize.height != newSize.height) {
-  //         _window.setSize(newSize.width, newSize.height, animate: true);
-  //       }
-  //     } catch (error) {
-  //       // ignore
-  //     }
+      if (!mounted) return;
+      _windowResize(animate: pendingAnimate);
+      if (pendingSettle) {
+        _scheduleSettledWindowResize(animate: pendingAnimate);
+      }
+    });
+  }
 
-  //     if (_resizeTimer != null) {
-  //       _resizeTimer?.cancel();
-  //       _resizeTimer = null;
-  //     }
-  //   });
-  // }
+  void _windowResize({
+    bool animate = true,
+  }) {
+    if (context.canPop()) return;
+
+    try {
+      final oldSize = _window.size;
+      final newHeight = _measureWindowHeight();
+      final newSize = Size(
+        oldSize.width,
+        newHeight.clamp(0, _maxWindowHeight),
+      );
+      if (oldSize.width == newSize.width && oldSize.height == newSize.height) {
+        return;
+      }
+      _window.setSize(
+        newSize.width,
+        newSize.height,
+        animate: animate,
+      );
+    } catch (error) {
+      // ignore
+    }
+  }
+
+  double _measureWindowHeight() {
+    final bannersViewHeight = _renderBoxHeight(_bannersViewKey);
+    final inputViewHeight = _renderBoxHeight(_inputViewKey);
+    final resultsViewHeight = _renderBoxHeight(_resultsViewKey);
+
+    return 40.0 +
+        bannersViewHeight +
+        inputViewHeight +
+        resultsViewHeight +
+        (kIsWindows ? 5 : 0);
+  }
+
+  double _renderBoxHeight(GlobalKey key) {
+    final renderBox = key.currentContext?.findRenderObject() as RenderBox?;
+    return renderBox?.size.height ?? 0;
+  }
+
+  void _scheduleSettledWindowResize({
+    bool animate = true,
+  }) {
+    _resizeSettledTimer?.cancel();
+    _resizeSettledTimer = Timer(const Duration(milliseconds: 120), () {
+      if (!mounted) return;
+      _windowResize(animate: animate);
+      _resizeSettledTimer = null;
+    });
+  }
 
   void _loadData() async {
     // The previous implementation populated `_latestVersion` from a cloud API
@@ -308,44 +362,23 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _querySubmitted = true;
       _textDetectedLanguage = null;
       _translationResultList = [];
-      _futureList = [];
     });
 
-    // Load providers and translation targets from runtime settings.
     final settings = runtime.settings();
     final providers = await settings.listProviders();
     final generalSettings = await settings.getGeneral();
+    final activeTargets = _activeTranslationTargets(generalSettings);
+    final nextTranslationResultList =
+        _createPendingTranslationResults(activeTargets, providers);
 
-    final translationMode = generalSettings.translationMode;
+    _setStateAndScheduleWindowResize(
+      () {
+        _translationResultList = nextTranslationResultList;
+      },
+      animate: false,
+    );
 
-    List<TranslationTarget> activeTargets;
-    if (translationMode == rust_settings.TranslationMode.manual) {
-      activeTargets = [
-        TranslationTarget(
-          sourceLanguage: _sourceLanguage,
-          targetLanguage: _targetLanguage,
-        ),
-      ];
-    } else {
-      // Map domain TranslationTarget to app model TranslationTarget.
-      activeTargets = generalSettings.translationTargets
-          .map((t) => TranslationTarget(
-                sourceLanguage: t.source,
-                targetLanguage: t.target,
-              ))
-          .toList();
-    }
-
-    for (var translationTarget in activeTargets) {
-      TranslationResult translationResult = TranslationResult(
-        translationTarget: translationTarget,
-        translationResultRecordList: [],
-        unsupportedEngineIdList: [],
-      );
-      _translationResultList.add(translationResult);
-    }
-    setState(() {});
-
+    final futures = <Future<bool>>[];
     for (int i = 0; i < _translationResultList.length; i++) {
       final translationTarget = _translationResultList[i].translationTarget;
       final translationResultRecordList =
@@ -354,84 +387,114 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         continue;
       }
 
-      for (final provider in providers) {
-        String identifier = provider.id;
-        List<String> capabilities = provider.capabilities;
-
-        TranslationResultRecord translationResultRecord =
-            TranslationResultRecord(
-          translationEngineId: identifier,
-          translationTargetId: translationTarget?.id,
-        );
-        translationResultRecordList.add(translationResultRecord);
-
-        Future<bool> future = Future<bool>.sync(() async {
-          final sourceLanguage = translationTarget?.sourceLanguage;
-          final targetLanguage = translationTarget?.targetLanguage;
-
-          // Dictionary lookup
-          if (capabilities.contains(ProviderCapability.dictionary.name)) {
-            try {
-              if (sourceLanguage == null || targetLanguage == null) {
-                throw Exception('Translation target language is missing');
-              }
-
-              final lookUpRequest = LookUpRequest(
-                sourceLanguage: sourceLanguage,
-                targetLanguage: targetLanguage,
-                word: _text,
-              );
-              final lookUpResponse =
-                  await runtime.dictionary(identifier).lookup(lookUpRequest);
-              translationResultRecord.lookUpRequest = lookUpRequest;
-              translationResultRecord.lookUpResponse = lookUpResponse;
-            } catch (error) {
-              translationResultRecord.lookUpError = TranslationError(
-                message: error.toString(),
-              );
-            }
-          }
-
-          // Translation
-          if (capabilities.contains(ProviderCapability.translation.name)) {
-            try {
-              final translateRequest = TranslateRequest(
-                sourceLanguage: sourceLanguage,
-                targetLanguage: targetLanguage,
-                text: _text,
-              );
-              final translateResponse = await runtime
-                  .translation(identifier)
-                  .translate(translateRequest);
-              translationResultRecord.translateRequest = translateRequest;
-              translationResultRecord.translateResponse = translateResponse;
-            } catch (error) {
-              translationResultRecord.translateError = TranslationError(
-                message: error.toString(),
-              );
-            }
-          }
-
-          if (mounted) {
-            setState(() {});
-          }
-          return true;
-        });
-        _futureList.add(future);
+      for (int j = 0; j < translationResultRecordList.length; j++) {
+        futures.add(_queryProvider(
+          provider: providers[j],
+          translationTarget: translationTarget,
+          translationResultRecord: translationResultRecordList[j],
+        ));
       }
     }
 
-    await Future.wait(_futureList);
+    await Future.wait(futures);
+    _scheduleWindowResize(animate: true);
+  }
+
+  List<TranslationResult> _createPendingTranslationResults(
+    List<TranslationTarget> activeTargets,
+    List<ProviderConfigEntry> providers,
+  ) {
+    return [
+      for (final translationTarget in activeTargets)
+        TranslationResult(
+          translationTarget: translationTarget,
+          translationResultRecordList: [
+            for (final provider in providers)
+              TranslationResultRecord(
+                translationEngineId: provider.id,
+              ),
+          ],
+          unsupportedEngineIdList: [],
+        ),
+    ];
+  }
+
+  Future<bool> _queryProvider({
+    required ProviderConfigEntry provider,
+    required TranslationTarget? translationTarget,
+    required TranslationResultRecord translationResultRecord,
+  }) async {
+    final sourceLanguage = translationTarget?.source;
+    final targetLanguage = translationTarget?.target;
+
+    if (provider.capabilities.contains(ProviderCapability.dictionary.name)) {
+      try {
+        if (sourceLanguage == null || targetLanguage == null) {
+          throw Exception('Translation target language is missing');
+        }
+
+        final lookUpRequest = LookUpRequest(
+          sourceLanguage: sourceLanguage,
+          targetLanguage: targetLanguage,
+          word: _text,
+        );
+        final lookUpResponse =
+            await runtime.dictionary(provider.id).lookup(lookUpRequest);
+        translationResultRecord.lookUpRequest = lookUpRequest;
+        translationResultRecord.lookUpResponse = lookUpResponse;
+      } catch (error) {
+        translationResultRecord.lookUpError = TranslationError(
+          message: error.toString(),
+        );
+      }
+    }
+
+    if (provider.capabilities.contains(ProviderCapability.translation.name)) {
+      try {
+        final translateRequest = TranslateRequest(
+          sourceLanguage: sourceLanguage,
+          targetLanguage: targetLanguage,
+          text: _text,
+        );
+        final translateResponse =
+            await runtime.translation(provider.id).translate(translateRequest);
+        translationResultRecord.translateRequest = translateRequest;
+        translationResultRecord.translateResponse = translateResponse;
+      } catch (error) {
+        translationResultRecord.translateError = TranslationError(
+          message: error.toString(),
+        );
+      }
+    }
+
+    if (mounted) {
+      setState(() {});
+    }
+    return true;
+  }
+
+  List<TranslationTarget> _activeTranslationTargets(
+    GeneralSettings generalSettings,
+  ) {
+    if (generalSettings.translationMode == TranslationMode.manual) {
+      return [
+        TranslationTarget(
+          source: _sourceLanguage,
+          target: _targetLanguage,
+        ),
+      ];
+    }
+
+    return generalSettings.translationTargets.toList();
   }
 
   void _handleTextChanged(
     String? newValue, {
     bool isRequery = false,
   }) {
-    setState(() {
+    _setStateAndScheduleWindowResize(() {
       _text = (newValue ?? '').trim();
-      if (settingsStore.inputSubmitMode ==
-          rust_settings.InputSubmitMode.enter) {
+      if (settingsStore.inputSubmitMode == InputSubmitMode.enter) {
         _text = _text.replaceAll('\n', ' ');
       }
     });
@@ -457,7 +520,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   void _handleExtractTextFromScreenCapture() async {
-    setState(() {
+    _setStateAndScheduleWindowResize(() {
       _querySubmitted = false;
       _text = '';
       _textDetectedLanguage = null;
@@ -488,7 +551,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         text: t.mini_translator.msg_capture_screen_area_canceled,
         align: Alignment.center,
       );
-      setState(() {});
+      _setStateAndScheduleWindowResize(() {});
       return;
     } else {
       // OCR was previously performed by the in-app `uni_ocr_client`. The
@@ -496,7 +559,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       // surface a toast to indicate the action is unsupported. The captured
       // image is still stored on disk for future processing.
       _isTextDetecting = false;
-      setState(() {});
+      _setStateAndScheduleWindowResize(() {});
       BotToast.showText(
         text: 'Text extraction service is not configured.',
         align: Alignment.center,
@@ -518,7 +581,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   void _handleButtonTappedClear() {
-    setState(() {
+    _setStateAndScheduleWindowResize(() {
       _querySubmitted = false;
       _text = '';
       _textDetectedLanguage = null;
@@ -565,7 +628,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
                 _isAllowedScreenSelectionAccess =
                     await screenTextExtractor.isAccessAllowed();
 
-                setState(() {});
+                _setStateAndScheduleWindowResize(() {});
 
                 if (_isAllowedScreenCaptureAccess &&
                     _isAllowedScreenSelectionAccess) {
@@ -617,13 +680,13 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             isShowSourceLanguageSelector: _isShowSourceLanguageSelector,
             isShowTargetLanguageSelector: _isShowTargetLanguageSelector,
             onToggleShowSourceLanguageSelector: (newValue) {
-              setState(() {
+              _setStateAndScheduleWindowResize(() {
                 _isShowSourceLanguageSelector = newValue;
                 _isShowTargetLanguageSelector = false;
               });
             },
             onToggleShowTargetLanguageSelector: (newValue) {
-              setState(() {
+              _setStateAndScheduleWindowResize(() {
                 _isShowSourceLanguageSelector = false;
                 _isShowTargetLanguageSelector = newValue;
               });
@@ -631,7 +694,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             sourceLanguage: _sourceLanguage,
             targetLanguage: _targetLanguage,
             onChanged: (newSourceLanguage, newTargetLanguage) {
-              setState(() {
+              _setStateAndScheduleWindowResize(() {
                 _isShowSourceLanguageSelector = false;
                 _isShowTargetLanguageSelector = false;
                 _sourceLanguage = newSourceLanguage;
@@ -663,16 +726,34 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   Widget _buildBody(BuildContext context) {
-    return SizedBox(
-      height: double.infinity,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          _buildBannersView(context),
-          _buildInputView(context),
-          _buildResultsView(context),
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SizedBox(
+          height: constraints.maxHeight,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: constraints.maxHeight,
+                ),
+                child: SingleChildScrollView(
+                  primary: false,
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildBannersView(context),
+                      _buildInputView(context),
+                    ],
+                  ),
+                ),
+              ),
+              _buildResultsView(context),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -780,8 +861,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   @override
   void onShortcutKeyDownSubmitWithMateEnter() {
-    if (settingsStore.inputSubmitMode !=
-        rust_settings.InputSubmitMode.commandEnter) {
+    if (settingsStore.inputSubmitMode != InputSubmitMode.commandEnter) {
       return;
     }
     _handleButtonTappedTrans();
