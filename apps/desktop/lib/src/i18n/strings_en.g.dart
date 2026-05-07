@@ -116,8 +116,6 @@ class Translations with BaseTranslations<AppLocale, Translations> {
       TranslationsPageSettingTranslateEn.internal(_root);
   late final TranslationsPageSettingsEn page_settings =
       TranslationsPageSettingsEn.internal(_root);
-  late final TranslationsPageRuntimeDebugEn page_runtime_debug =
-      TranslationsPageRuntimeDebugEn.internal(_root);
   late final TranslationsPageTranslationEngineChooserEn
       page_translation_engine_chooser =
       TranslationsPageTranslationEngineChooserEn.internal(_root);
@@ -1003,9 +1001,6 @@ class TranslationsPageSettingsEn {
   /// en: 'Launch when you log in'
   String get pref_item_title_launch_at_startup => 'Launch when you log in';
 
-  /// en: 'Runtime Debug'
-  String get pref_item_title_runtime_debug => 'Runtime Debug';
-
   /// en: 'Text Translation'
   String get pref_item_title_engines => 'Text Translation';
 
@@ -1020,84 +1015,6 @@ class TranslationsPageSettingsEn {
 
   late final TranslationsPageSettingsExitAppDialogEn exit_app_dialog =
       TranslationsPageSettingsExitAppDialogEn.internal(_root);
-}
-
-// Path: page_runtime_debug
-class TranslationsPageRuntimeDebugEn {
-  TranslationsPageRuntimeDebugEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Runtime Debug'
-  String get title => 'Runtime Debug';
-
-  /// en: 'Validate flutter_rust_bridge by calling the Rust runtime directly from desktop.'
-  String get description =>
-      'Validate flutter_rust_bridge by calling the Rust runtime directly from desktop.';
-
-  /// en: 'This validation page is planned for macOS first. Other desktop platforms may compile but are not part of this verification scope.'
-  String get mac_only_note =>
-      'This validation page is planned for macOS first. Other desktop platforms may compile but are not part of this verification scope.';
-
-  /// en: 'Provider'
-  String get provider_section_title => 'Provider';
-
-  /// en: 'Provider fields JSON'
-  String get provider_config_label => 'Provider fields JSON';
-
-  /// en: 'Request'
-  String get request_section_title => 'Request';
-
-  /// en: 'Source language (optional)'
-  String get source_language_label => 'Source language (optional)';
-
-  /// en: 'Target language'
-  String get target_language_label => 'Target language';
-
-  /// en: 'Text'
-  String get text_label => 'Text';
-
-  /// en: 'Word'
-  String get word_label => 'Word';
-
-  /// en: 'Translate with Rust runtime'
-  String get submit => 'Translate with Rust runtime';
-
-  /// en: 'Look up with Rust runtime'
-  String get lookup_submit => 'Look up with Rust runtime';
-
-  /// en: 'Result'
-  String get result_idle => 'Result';
-
-  /// en: 'Submit a request to inspect the Rust runtime response here.'
-  String get result_idle_description =>
-      'Submit a request to inspect the Rust runtime response here.';
-
-  /// en: 'Rust runtime response'
-  String get result_success => 'Rust runtime response';
-
-  /// en: 'Rust runtime error'
-  String get result_error => 'Rust runtime error';
-
-  /// en: 'Provider fields JSON is required'
-  String get validation_provider_config_required =>
-      'Provider fields JSON is required';
-
-  /// en: 'Source language is required'
-  String get validation_source_language_required =>
-      'Source language is required';
-
-  /// en: 'Target language is required'
-  String get validation_target_language_required =>
-      'Target language is required';
-
-  /// en: 'Text is required'
-  String get validation_text_required => 'Text is required';
-
-  /// en: 'Word is required'
-  String get validation_word_required => 'Word is required';
 }
 
 // Path: page_translation_engine_chooser
@@ -1527,40 +1444,11 @@ extension on Translations {
         'Submit with ⌘ + Enter',
       'page_settings.pref_item_title_launch_at_startup' =>
         'Launch when you log in',
-      'page_settings.pref_item_title_runtime_debug' => 'Runtime Debug',
       'page_settings.pref_item_title_engines' => 'Text Translation',
       'page_settings.pref_item_title_ocr_engines' => 'Text Detection',
       'page_settings.pref_item_title_about' => 'About Biyi',
       'page_settings.pref_item_title_exit_app' => 'Exit App',
       'page_settings.exit_app_dialog.title' => 'Are you sure you want to exit?',
-      'page_runtime_debug.title' => 'Runtime Debug',
-      'page_runtime_debug.description' =>
-        'Validate flutter_rust_bridge by calling the Rust runtime directly from desktop.',
-      'page_runtime_debug.mac_only_note' =>
-        'This validation page is planned for macOS first. Other desktop platforms may compile but are not part of this verification scope.',
-      'page_runtime_debug.provider_section_title' => 'Provider',
-      'page_runtime_debug.provider_config_label' => 'Provider fields JSON',
-      'page_runtime_debug.request_section_title' => 'Request',
-      'page_runtime_debug.source_language_label' =>
-        'Source language (optional)',
-      'page_runtime_debug.target_language_label' => 'Target language',
-      'page_runtime_debug.text_label' => 'Text',
-      'page_runtime_debug.word_label' => 'Word',
-      'page_runtime_debug.submit' => 'Translate with Rust runtime',
-      'page_runtime_debug.lookup_submit' => 'Look up with Rust runtime',
-      'page_runtime_debug.result_idle' => 'Result',
-      'page_runtime_debug.result_idle_description' =>
-        'Submit a request to inspect the Rust runtime response here.',
-      'page_runtime_debug.result_success' => 'Rust runtime response',
-      'page_runtime_debug.result_error' => 'Rust runtime error',
-      'page_runtime_debug.validation_provider_config_required' =>
-        'Provider fields JSON is required',
-      'page_runtime_debug.validation_source_language_required' =>
-        'Source language is required',
-      'page_runtime_debug.validation_target_language_required' =>
-        'Target language is required',
-      'page_runtime_debug.validation_text_required' => 'Text is required',
-      'page_runtime_debug.validation_word_required' => 'Word is required',
       'page_translation_engine_chooser.title' => 'Text Translation Engine',
       'page_translation_engine_chooser.pref_section_title_private' => 'Private',
       'page_translation_engine_chooser.pref_item_title_no_available_engines' =>

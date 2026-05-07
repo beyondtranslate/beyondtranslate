@@ -133,9 +133,6 @@ class TranslationsZh extends Translations
   late final _TranslationsPageSettingsZh page_settings =
       _TranslationsPageSettingsZh._(_root);
   @override
-  late final _TranslationsPageRuntimeDebugZh page_runtime_debug =
-      _TranslationsPageRuntimeDebugZh._(_root);
-  @override
   late final _TranslationsPageTranslationEngineChooserZh
       page_translation_engine_chooser =
       _TranslationsPageTranslationEngineChooserZh._(_root);
@@ -843,8 +840,6 @@ class _TranslationsPageSettingsZh extends TranslationsPageSettingsEn {
   @override
   String get pref_item_title_launch_at_startup => '登录时启动';
   @override
-  String get pref_item_title_runtime_debug => 'Runtime 调试';
-  @override
   String get pref_item_title_engines => '文本翻译';
   @override
   String get pref_item_title_ocr_engines => '文字识别';
@@ -855,60 +850,6 @@ class _TranslationsPageSettingsZh extends TranslationsPageSettingsEn {
   @override
   late final _TranslationsPageSettingsExitAppDialogZh exit_app_dialog =
       _TranslationsPageSettingsExitAppDialogZh._(_root);
-}
-
-// Path: page_runtime_debug
-class _TranslationsPageRuntimeDebugZh extends TranslationsPageRuntimeDebugEn {
-  _TranslationsPageRuntimeDebugZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => 'Runtime 调试';
-  @override
-  String get description =>
-      '通过桌面端直接调用 Rust runtime，验证 flutter_rust_bridge 集成是否正常。';
-  @override
-  String get mac_only_note => '该验证页当前以 macOS 为主，其他桌面平台即使可以编译，也不在本次验证范围内。';
-  @override
-  String get provider_section_title => 'Provider';
-  @override
-  String get provider_config_label => 'Provider 字段 JSON';
-  @override
-  String get request_section_title => '请求';
-  @override
-  String get source_language_label => '源语言（可选）';
-  @override
-  String get target_language_label => '目标语言';
-  @override
-  String get text_label => '文本';
-  @override
-  String get word_label => '单词';
-  @override
-  String get submit => '使用 Rust runtime 翻译';
-  @override
-  String get lookup_submit => '使用 Rust runtime 查词';
-  @override
-  String get result_idle => '结果';
-  @override
-  String get result_idle_description => '提交一次请求后，这里会展示 Rust runtime 的响应。';
-  @override
-  String get result_success => 'Rust runtime 响应';
-  @override
-  String get result_error => 'Rust runtime 错误';
-  @override
-  String get validation_provider_config_required => '必须填写 Provider 字段 JSON';
-  @override
-  String get validation_source_language_required => '必须填写源语言';
-  @override
-  String get validation_target_language_required => '必须填写目标语言';
-  @override
-  String get validation_text_required => '必须填写文本';
-  @override
-  String get validation_word_required => '必须填写单词';
 }
 
 // Path: page_translation_engine_chooser
@@ -1313,37 +1254,11 @@ extension on TranslationsZh {
       'page_settings.pref_item_title_submit_with_meta_enter_mac' =>
         '用 ⌘ + Enter 提交',
       'page_settings.pref_item_title_launch_at_startup' => '登录时启动',
-      'page_settings.pref_item_title_runtime_debug' => 'Runtime 调试',
       'page_settings.pref_item_title_engines' => '文本翻译',
       'page_settings.pref_item_title_ocr_engines' => '文字识别',
       'page_settings.pref_item_title_about' => '关于比译',
       'page_settings.pref_item_title_exit_app' => '退出应用',
       'page_settings.exit_app_dialog.title' => '您确定要退出吗？',
-      'page_runtime_debug.title' => 'Runtime 调试',
-      'page_runtime_debug.description' =>
-        '通过桌面端直接调用 Rust runtime，验证 flutter_rust_bridge 集成是否正常。',
-      'page_runtime_debug.mac_only_note' =>
-        '该验证页当前以 macOS 为主，其他桌面平台即使可以编译，也不在本次验证范围内。',
-      'page_runtime_debug.provider_section_title' => 'Provider',
-      'page_runtime_debug.provider_config_label' => 'Provider 字段 JSON',
-      'page_runtime_debug.request_section_title' => '请求',
-      'page_runtime_debug.source_language_label' => '源语言（可选）',
-      'page_runtime_debug.target_language_label' => '目标语言',
-      'page_runtime_debug.text_label' => '文本',
-      'page_runtime_debug.word_label' => '单词',
-      'page_runtime_debug.submit' => '使用 Rust runtime 翻译',
-      'page_runtime_debug.lookup_submit' => '使用 Rust runtime 查词',
-      'page_runtime_debug.result_idle' => '结果',
-      'page_runtime_debug.result_idle_description' =>
-        '提交一次请求后，这里会展示 Rust runtime 的响应。',
-      'page_runtime_debug.result_success' => 'Rust runtime 响应',
-      'page_runtime_debug.result_error' => 'Rust runtime 错误',
-      'page_runtime_debug.validation_provider_config_required' =>
-        '必须填写 Provider 字段 JSON',
-      'page_runtime_debug.validation_source_language_required' => '必须填写源语言',
-      'page_runtime_debug.validation_target_language_required' => '必须填写目标语言',
-      'page_runtime_debug.validation_text_required' => '必须填写文本',
-      'page_runtime_debug.validation_word_required' => '必须填写单词',
       'page_translation_engine_chooser.title' => '文本翻译引擎',
       'page_translation_engine_chooser.pref_section_title_private' => '私有',
       'page_translation_engine_chooser.pref_item_title_no_available_engines' =>
