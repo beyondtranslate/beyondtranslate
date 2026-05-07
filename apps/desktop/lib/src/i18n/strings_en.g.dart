@@ -51,9 +51,213 @@ class Translations with BaseTranslations<AppLocale, Translations> {
       Translations(meta: meta ?? this.$meta);
 
   // Translations
+  late final TranslationsCommonEn common = TranslationsCommonEn.internal(_root);
+  late final TranslationsProviderEn provider =
+      TranslationsProviderEn.internal(_root);
+  late final TranslationsTranslationEn translation =
+      TranslationsTranslationEn.internal(_root);
+  late final TranslationsOcrEn ocr = TranslationsOcrEn.internal(_root);
+  late final TranslationsThemeEn theme = TranslationsThemeEn.internal(_root);
+  late final TranslationsTrayEn tray = TranslationsTrayEn.internal(_root);
+  late final TranslationsMiniTranslatorEn mini_translator =
+      TranslationsMiniTranslatorEn.internal(_root);
+  late final TranslationsSettingsEn settings =
+      TranslationsSettingsEn.internal(_root);
+  late final TranslationsShortcutsEn shortcuts =
+      TranslationsShortcutsEn.internal(_root);
+}
+
+// Path: common
+class TranslationsCommonEn {
+  TranslationsCommonEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsCommonAppEn app =
+      TranslationsCommonAppEn.internal(_root);
+  late final TranslationsCommonButtonEn button =
+      TranslationsCommonButtonEn.internal(_root);
+  late final TranslationsCommonFeedbackEn feedback =
+      TranslationsCommonFeedbackEn.internal(_root);
+  late final TranslationsCommonPlaceholderEn placeholder =
+      TranslationsCommonPlaceholderEn.internal(_root);
+  late final TranslationsCommonLanguageEn language =
+      TranslationsCommonLanguageEn.internal(_root);
+}
+
+// Path: provider
+class TranslationsProviderEn {
+  TranslationsProviderEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Baidu'
+  String get baidu => 'Baidu';
+
+  /// en: 'Caiyun'
+  String get caiyun => 'Caiyun';
+
+  /// en: 'DeepL'
+  String get deepl => 'DeepL';
+
+  /// en: 'Google'
+  String get google => 'Google';
+
+  /// en: 'IBMWatson'
+  String get ibmwatson => 'IBMWatson';
+
+  /// en: 'Iciba'
+  String get iciba => 'Iciba';
+
+  /// en: 'OpenAI'
+  String get openai => 'OpenAI';
+
+  /// en: 'Sogou'
+  String get sogou => 'Sogou';
+
+  /// en: 'Tencent'
+  String get tencent => 'Tencent';
+
+  /// en: 'Youda'
+  String get youdao => 'Youda';
+}
+
+// Path: translation
+class TranslationsTranslationEn {
+  TranslationsTranslationEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsTranslationEngineScopeEn engine_scope =
+      TranslationsTranslationEngineScopeEn.internal(_root);
+  late final TranslationsTranslationModeEn mode =
+      TranslationsTranslationModeEn.internal(_root);
+  late final TranslationsTranslationWordPronunciationEn word_pronunciation =
+      TranslationsTranslationWordPronunciationEn.internal(_root);
+}
+
+// Path: ocr
+class TranslationsOcrEn {
+  TranslationsOcrEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsOcrEngineEn engine =
+      TranslationsOcrEngineEn.internal(_root);
+}
+
+// Path: theme
+class TranslationsThemeEn {
+  TranslationsThemeEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsThemeModeEn mode =
+      TranslationsThemeModeEn.internal(_root);
+}
+
+// Path: tray
+class TranslationsTrayEn {
+  TranslationsTrayEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsTrayContextMenuEn context_menu =
+      TranslationsTrayContextMenuEn.internal(_root);
+}
+
+// Path: mini_translator
+class TranslationsMiniTranslatorEn {
+  TranslationsMiniTranslatorEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsMiniTranslatorUpdateBannerEn update_banner =
+      TranslationsMiniTranslatorUpdateBannerEn.internal(_root);
+  late final TranslationsMiniTranslatorLimitedBannerEn limited_banner =
+      TranslationsMiniTranslatorLimitedBannerEn.internal(_root);
+  late final TranslationsMiniTranslatorInputEn input =
+      TranslationsMiniTranslatorInputEn.internal(_root);
+  late final TranslationsMiniTranslatorToolbarEn toolbar =
+      TranslationsMiniTranslatorToolbarEn.internal(_root);
+  late final TranslationsMiniTranslatorButtonEn button =
+      TranslationsMiniTranslatorButtonEn.internal(_root);
+  late final TranslationsMiniTranslatorMessageEn message =
+      TranslationsMiniTranslatorMessageEn.internal(_root);
+}
+
+// Path: settings
+class TranslationsSettingsEn {
+  TranslationsSettingsEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Settings'
+  String get title => 'Settings';
+
+  /// en: 'Version {} BUILD {}'
+  String get version => 'Version {} BUILD {}';
+
+  late final TranslationsSettingsGeneralEn general =
+      TranslationsSettingsGeneralEn.internal(_root);
+  late final TranslationsSettingsAppearanceEn appearance =
+      TranslationsSettingsAppearanceEn.internal(_root);
+  late final TranslationsSettingsShortcutsEn shortcuts =
+      TranslationsSettingsShortcutsEn.internal(_root);
+  late final TranslationsSettingsInputEn input =
+      TranslationsSettingsInputEn.internal(_root);
+  late final TranslationsSettingsAdvancedEn advanced =
+      TranslationsSettingsAdvancedEn.internal(_root);
+  late final TranslationsSettingsServiceIntegrationEn service_integration =
+      TranslationsSettingsServiceIntegrationEn.internal(_root);
+  late final TranslationsSettingsOthersEn others =
+      TranslationsSettingsOthersEn.internal(_root);
+  late final TranslationsSettingsExitAppDialogEn exit_app_dialog =
+      TranslationsSettingsExitAppDialogEn.internal(_root);
+  late final TranslationsSettingsPreferenceEn preference =
+      TranslationsSettingsPreferenceEn.internal(_root);
+}
+
+// Path: shortcuts
+class TranslationsShortcutsEn {
+  TranslationsShortcutsEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsShortcutsRecordDialogEn record_dialog =
+      TranslationsShortcutsRecordDialogEn.internal(_root);
+}
+
+// Path: common.app
+class TranslationsCommonAppEn {
+  TranslationsCommonAppEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'Beyond Translate'
-  String get app_name => 'Beyond Translate';
+  String get name => 'Beyond Translate';
+}
+
+// Path: common.button
+class TranslationsCommonButtonEn {
+  TranslationsCommonButtonEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'OK'
   String get ok => 'OK';
@@ -66,81 +270,35 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
   /// en: 'Delete'
   String get delete => 'Delete';
+}
+
+// Path: common.feedback
+class TranslationsCommonFeedbackEn {
+  TranslationsCommonFeedbackEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'Copied'
   String get copied => 'Copied';
-
-  /// en: 'Please Choose'
-  String get please_choose => 'Please Choose';
-
-  late final TranslationsLanguageEn language =
-      TranslationsLanguageEn.internal(_root);
-  late final TranslationsEngineEn engine = TranslationsEngineEn.internal(_root);
-  late final TranslationsEngineScopeEn engine_scope =
-      TranslationsEngineScopeEn.internal(_root);
-  late final TranslationsOcrEngineEn ocr_engine =
-      TranslationsOcrEngineEn.internal(_root);
-  late final TranslationsTranslationModeEn translation_mode =
-      TranslationsTranslationModeEn.internal(_root);
-  late final TranslationsThemeModeEn theme_mode =
-      TranslationsThemeModeEn.internal(_root);
-  late final TranslationsWordPronunciationEn word_pronunciation =
-      TranslationsWordPronunciationEn.internal(_root);
-  late final TranslationsTrayContextMenuEn tray_context_menu =
-      TranslationsTrayContextMenuEn.internal(_root);
-  late final TranslationsMiniTranslatorEn mini_translator =
-      TranslationsMiniTranslatorEn.internal(_root);
-  late final TranslationsPageLanguageChooserEn page_language_chooser =
-      TranslationsPageLanguageChooserEn.internal(_root);
-  late final TranslationsPageOcrEngineChooserEn page_ocr_engine_chooser =
-      TranslationsPageOcrEngineChooserEn.internal(_root);
-  late final TranslationsPageOcrEngineCreateOrEditEn
-      page_ocr_engine_create_or_edit =
-      TranslationsPageOcrEngineCreateOrEditEn.internal(_root);
-  late final TranslationsPageOcrEngineTypeChooserEn
-      page_ocr_engine_type_chooser =
-      TranslationsPageOcrEngineTypeChooserEn.internal(_root);
-  late final TranslationsPageOcrEnginesManageEn page_ocr_engines_manage =
-      TranslationsPageOcrEnginesManageEn.internal(_root);
-  late final TranslationsPageSettingAppLanguageEn page_setting_app_language =
-      TranslationsPageSettingAppLanguageEn.internal(_root);
-  late final TranslationsPageSettingExtractTextEn page_setting_extract_text =
-      TranslationsPageSettingExtractTextEn.internal(_root);
-  late final TranslationsPageSettingInterfaceEn page_setting_interface =
-      TranslationsPageSettingInterfaceEn.internal(_root);
-  late final TranslationsPageSettingShortcutsEn page_setting_shortcuts =
-      TranslationsPageSettingShortcutsEn.internal(_root);
-  late final TranslationsPageSettingThemeModeEn page_setting_theme_mode =
-      TranslationsPageSettingThemeModeEn.internal(_root);
-  late final TranslationsPageSettingTranslateEn page_setting_translate =
-      TranslationsPageSettingTranslateEn.internal(_root);
-  late final TranslationsPageSettingsEn page_settings =
-      TranslationsPageSettingsEn.internal(_root);
-  late final TranslationsPageTranslationEngineChooserEn
-      page_translation_engine_chooser =
-      TranslationsPageTranslationEngineChooserEn.internal(_root);
-  late final TranslationsPageTranslationEngineCreateOrEditEn
-      page_translation_engine_create_or_edit =
-      TranslationsPageTranslationEngineCreateOrEditEn.internal(_root);
-  late final TranslationsPageTranslationEngineTypeChooserEn
-      page_translation_engine_type_chooser =
-      TranslationsPageTranslationEngineTypeChooserEn.internal(_root);
-  late final TranslationsPageTranslationEnginesManageEn
-      page_translation_engines_manage =
-      TranslationsPageTranslationEnginesManageEn.internal(_root);
-  late final TranslationsPageTranslationTargetNewEn
-      page_translation_target_new =
-      TranslationsPageTranslationTargetNewEn.internal(_root);
-  late final TranslationsPageYourPlanSelectorEn page_your_plan_selector =
-      TranslationsPageYourPlanSelectorEn.internal(_root);
-  late final TranslationsWidgetRecordShortcutDialogEn
-      widget_record_shortcut_dialog =
-      TranslationsWidgetRecordShortcutDialogEn.internal(_root);
 }
 
-// Path: language
-class TranslationsLanguageEn {
-  TranslationsLanguageEn.internal(this._root);
+// Path: common.placeholder
+class TranslationsCommonPlaceholderEn {
+  TranslationsCommonPlaceholderEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Please Choose'
+  String get choose => 'Please Choose';
+}
+
+// Path: common.language
+class TranslationsCommonLanguageEn {
+  TranslationsCommonLanguageEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
@@ -480,55 +638,16 @@ class TranslationsLanguageEn {
   String get zu => 'Zulu';
 }
 
-// Path: engine
-class TranslationsEngineEn {
-  TranslationsEngineEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Baidu'
-  String get baidu => 'Baidu';
-
-  /// en: 'Caiyun'
-  String get caiyun => 'Caiyun';
-
-  /// en: 'DeepL'
-  String get deepl => 'DeepL';
-
-  /// en: 'Google'
-  String get google => 'Google';
-
-  /// en: 'IBMWatson'
-  String get ibmwatson => 'IBMWatson';
-
-  /// en: 'Iciba'
-  String get iciba => 'Iciba';
-
-  /// en: 'OpenAI'
-  String get openai => 'OpenAI';
-
-  /// en: 'Sogou'
-  String get sogou => 'Sogou';
-
-  /// en: 'Tencent'
-  String get tencent => 'Tencent';
-
-  /// en: 'Youda'
-  String get youdao => 'Youda';
-}
-
-// Path: engine_scope
-class TranslationsEngineScopeEn {
-  TranslationsEngineScopeEn.internal(this._root);
+// Path: translation.engine_scope
+class TranslationsTranslationEngineScopeEn {
+  TranslationsTranslationEngineScopeEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
   /// en: 'detectLanguage'
-  String get detectlanguage => 'detectLanguage';
+  String get detect_language => 'detectLanguage';
 
   /// en: 'LookUp'
   String get lookup => 'LookUp';
@@ -537,7 +656,37 @@ class TranslationsEngineScopeEn {
   String get translate => 'Translate';
 }
 
-// Path: ocr_engine
+// Path: translation.mode
+class TranslationsTranslationModeEn {
+  TranslationsTranslationModeEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Auto'
+  String get auto => 'Auto';
+
+  /// en: 'Manual'
+  String get manual => 'Manual';
+}
+
+// Path: translation.word_pronunciation
+class TranslationsTranslationWordPronunciationEn {
+  TranslationsTranslationWordPronunciationEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'US'
+  String get us => 'US';
+
+  /// en: 'UK'
+  String get uk => 'UK';
+}
+
+// Path: ocr.engine
 class TranslationsOcrEngineEn {
   TranslationsOcrEngineEn.internal(this._root);
 
@@ -555,22 +704,7 @@ class TranslationsOcrEngineEn {
   String get youdao => 'Youdao';
 }
 
-// Path: translation_mode
-class TranslationsTranslationModeEn {
-  TranslationsTranslationModeEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Auto'
-  String get auto => 'Auto';
-
-  /// en: 'Manual'
-  String get manual => 'Manual';
-}
-
-// Path: theme_mode
+// Path: theme.mode
 class TranslationsThemeModeEn {
   TranslationsThemeModeEn.internal(this._root);
 
@@ -588,22 +722,7 @@ class TranslationsThemeModeEn {
   String get system => 'System';
 }
 
-// Path: word_pronunciation
-class TranslationsWordPronunciationEn {
-  TranslationsWordPronunciationEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'US'
-  String get us => 'US';
-
-  /// en: 'UK'
-  String get uk => 'UK';
-}
-
-// Path: tray_context_menu
+// Path: tray.context_menu
 class TranslationsTrayContextMenuEn {
   TranslationsTrayContextMenuEn.internal(this._root);
 
@@ -612,247 +731,140 @@ class TranslationsTrayContextMenuEn {
   // Translations
 
   /// en: 'Show'
-  String get item_show => 'Show';
+  String get show => 'Show';
 
   /// en: 'Quick Start'
-  String get item_quick_start_guide => 'Quick Start';
+  String get quick_start_guide => 'Quick Start';
 
-  /// en: 'Join Discussion'
-  String get item_discussion => 'Join Discussion';
+  late final TranslationsTrayContextMenuDiscussionEn discussion =
+      TranslationsTrayContextMenuDiscussionEn.internal(_root);
 
   /// en: 'Quit Biyi'
-  String get item_quit_app => 'Quit Biyi';
-
-  /// en: 'Join Discord'
-  String get item_discussion_subitem_discord_server => 'Join Discord';
-
-  /// en: 'Join QQ Group'
-  String get item_discussion_subitem_qq_group => 'Join QQ Group';
+  String get quit_app => 'Quit Biyi';
 }
 
-// Path: mini_translator
-class TranslationsMiniTranslatorEn {
-  TranslationsMiniTranslatorEn.internal(this._root);
+// Path: mini_translator.update_banner
+class TranslationsMiniTranslatorUpdateBannerEn {
+  TranslationsMiniTranslatorUpdateBannerEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
   /// en: 'New version found: {}'
-  String get newversion_banner_text_found_new_version =>
-      'New version found: {}';
+  String get found_new_version => 'New version found: {}';
 
-  /// en: 'Update'
-  String get newversion_banner_btn_update => 'Update';
+  late final TranslationsMiniTranslatorUpdateBannerButtonEn button =
+      TranslationsMiniTranslatorUpdateBannerButtonEn.internal(_root);
+}
+
+// Path: mini_translator.limited_banner
+class TranslationsMiniTranslatorLimitedBannerEn {
+  TranslationsMiniTranslatorLimitedBannerEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'Functionality is limited, please follow the tips to check.'
-  String get limited_banner_title =>
+  String get title =>
       'Functionality is limited, please follow the tips to check.';
 
-  /// en: 'Grant screen recording access'
-  String get limited_banner_text_screen_capture =>
-      'Grant screen recording access';
+  late final TranslationsMiniTranslatorLimitedBannerPermissionEn permission =
+      TranslationsMiniTranslatorLimitedBannerPermissionEn.internal(_root);
+  late final TranslationsMiniTranslatorLimitedBannerButtonEn button =
+      TranslationsMiniTranslatorLimitedBannerButtonEn.internal(_root);
+  late final TranslationsMiniTranslatorLimitedBannerTooltipEn tooltip =
+      TranslationsMiniTranslatorLimitedBannerTooltipEn.internal(_root);
+  late final TranslationsMiniTranslatorLimitedBannerMessageEn message =
+      TranslationsMiniTranslatorLimitedBannerMessageEn.internal(_root);
+}
 
-  /// en: 'Grant accessibility access'
-  String get limited_banner_text_screen_selection =>
-      'Grant accessibility access';
+// Path: mini_translator.input
+class TranslationsMiniTranslatorInputEn {
+  TranslationsMiniTranslatorInputEn.internal(this._root);
 
-  /// en: 'Allow'
-  String get limited_banner_btn_allow => 'Allow';
+  final Translations _root; // ignore: unused_field
 
-  /// en: 'Go Settings'
-  String get limited_banner_btn_go_settings => 'Go Settings';
-
-  /// en: 'Check Again'
-  String get limited_banner_btn_check_again => 'Check Again';
-
-  /// en: 'View the help document'
-  String get limited_banner_tip_help => 'View the help document';
-
-  /// en: 'If there is no response after clicking "Allow", please click "Go Settings" to set it manually.'
-  String get limited_banner_msg_allow_access_tip =>
-      'If there is no response after clicking "Allow", please click "Go Settings" to set it manually.';
-
-  /// en: 'The Screen extract text is enabled'
-  String get limited_banner_msg_all_access_allowed =>
-      'The Screen extract text is enabled';
-
-  /// en: 'The required access are not allowed. Please check and set again.'
-  String get limited_banner_msg_all_access_not_allowed =>
-      'The required access are not allowed.\nPlease check and set again.';
+  // Translations
 
   /// en: 'Enter the word or text here'
-  String get input_hint => 'Enter the word or text here';
+  String get hint => 'Enter the word or text here';
 
   /// en: 'Extracting text...'
-  String get text_extracting_text => 'Extracting text...';
+  String get extracting_text => 'Extracting text...';
+}
 
-  /// en: 'Current translation mode: {}'
-  String get tip_translation_mode => 'Current translation mode: {}';
+// Path: mini_translator.toolbar
+class TranslationsMiniTranslatorToolbarEn {
+  TranslationsMiniTranslatorToolbarEn.internal(this._root);
 
-  /// en: 'Capture screen area and recognize text'
-  String get tip_extract_text_from_screen_capture =>
-      'Capture screen area and recognize text';
+  final Translations _root; // ignore: unused_field
 
-  /// en: 'Read clipboard content'
-  String get tip_extract_text_from_clipboard => 'Read clipboard content';
+  // Translations
+  late final TranslationsMiniTranslatorToolbarTooltipEn tooltip =
+      TranslationsMiniTranslatorToolbarTooltipEn.internal(_root);
+}
+
+// Path: mini_translator.button
+class TranslationsMiniTranslatorButtonEn {
+  TranslationsMiniTranslatorButtonEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'Clear'
-  String get btn_clear => 'Clear';
+  String get clear => 'Clear';
 
   /// en: 'Translate'
-  String get btn_trans => 'Translate';
+  String get translate => 'Translate';
+}
+
+// Path: mini_translator.message
+class TranslationsMiniTranslatorMessageEn {
+  TranslationsMiniTranslatorMessageEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'No text entered or text not extracted'
-  String get msg_please_enter_word_or_text =>
+  String get please_enter_word_or_text =>
       'No text entered or text not extracted';
 
   /// en: 'Capture screen area has been canceled'
-  String get msg_capture_screen_area_canceled =>
+  String get capture_screen_area_canceled =>
       'Capture screen area has been canceled';
 }
 
-// Path: page_language_chooser
-class TranslationsPageLanguageChooserEn {
-  TranslationsPageLanguageChooserEn.internal(this._root);
+// Path: settings.general
+class TranslationsSettingsGeneralEn {
+  TranslationsSettingsGeneralEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Choose language'
-  String get title => 'Choose language';
-
-  /// en: 'All'
-  String get pref_section_title_all => 'All';
+  /// en: 'General'
+  String get title => 'General';
 }
 
-// Path: page_ocr_engine_chooser
-class TranslationsPageOcrEngineChooserEn {
-  TranslationsPageOcrEngineChooserEn.internal(this._root);
+// Path: settings.appearance
+class TranslationsSettingsAppearanceEn {
+  TranslationsSettingsAppearanceEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Text Detection Engine'
-  String get title => 'Text Detection Engine';
-
-  /// en: 'Private'
-  String get pref_section_title_private => 'Private';
-
-  /// en: 'No available engines'
-  String get pref_item_title_no_available_engines => 'No available engines';
+  /// en: 'Appearance'
+  String get title => 'Appearance';
 }
 
-// Path: page_ocr_engine_create_or_edit
-class TranslationsPageOcrEngineCreateOrEditEn {
-  TranslationsPageOcrEngineCreateOrEditEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Add Text Detection Engine'
-  String get title => 'Add Text Detection Engine';
-
-  /// en: 'Engine type'
-  String get pref_section_title_engine_type => 'Engine type';
-
-  /// en: 'Option'
-  String get pref_section_title_option => 'Option';
-}
-
-// Path: page_ocr_engine_type_chooser
-class TranslationsPageOcrEngineTypeChooserEn {
-  TranslationsPageOcrEngineTypeChooserEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Engine Type'
-  String get title => 'Engine Type';
-}
-
-// Path: page_ocr_engines_manage
-class TranslationsPageOcrEnginesManageEn {
-  TranslationsPageOcrEnginesManageEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Text Detection Engine'
-  String get title => 'Text Detection Engine';
-
-  /// en: 'Private'
-  String get pref_section_title_private => 'Private';
-
-  /// en: 'Long press an item to reorder it'
-  String get pref_section_description_private =>
-      'Long press an item to reorder it';
-}
-
-// Path: page_setting_app_language
-class TranslationsPageSettingAppLanguageEn {
-  TranslationsPageSettingAppLanguageEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Display Language'
-  String get title => 'Display Language';
-}
-
-// Path: page_setting_extract_text
-class TranslationsPageSettingExtractTextEn {
-  TranslationsPageSettingExtractTextEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Screen extract text'
-  String get title => 'Screen extract text';
-
-  /// en: 'Default detect text engine'
-  String get pref_section_title_default_detect_text_engine =>
-      'Default detect text engine';
-
-  /// en: 'Auto copy the detected text'
-  String get pref_item_auto_copy_detected_text => 'Auto copy the detected text';
-}
-
-// Path: page_setting_interface
-class TranslationsPageSettingInterfaceEn {
-  TranslationsPageSettingInterfaceEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Interface'
-  String get title => 'Interface';
-
-  /// en: 'Tray Icon'
-  String get pref_section_title_tray_icon => 'Tray Icon';
-
-  /// en: 'Tray Icon Style'
-  String get pref_section_title_tray_icon_style => 'Tray Icon Style';
-
-  /// en: 'Maximum window height (logical pixels)'
-  String get pref_section_title_max_window_height =>
-      'Maximum window height (logical pixels)';
-
-  /// en: 'Show Tray Icon'
-  String get pref_item_title_show_tray_icon => 'Show Tray Icon';
-}
-
-// Path: page_setting_shortcuts
-class TranslationsPageSettingShortcutsEn {
-  TranslationsPageSettingShortcutsEn.internal(this._root);
+// Path: settings.shortcuts
+class TranslationsSettingsShortcutsEn {
+  TranslationsSettingsShortcutsEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
@@ -860,300 +872,125 @@ class TranslationsPageSettingShortcutsEn {
 
   /// en: 'Shortcuts'
   String get title => 'Shortcuts';
-
-  /// en: 'Screen / Clipboard extract text'
-  String get pref_section_title_extract_text =>
-      'Screen / Clipboard extract text';
-
-  /// en: 'Input assist function'
-  String get pref_section_title_input_assist_function =>
-      'Input assist function';
-
-  /// en: 'Show/Hide'
-  String get pref_item_title_show_or_hide => 'Show/Hide';
-
-  /// en: 'Hide'
-  String get pref_item_title_hide => 'Hide';
-
-  /// en: 'Selection'
-  String get pref_item_title_extract_text_from_selection => 'Selection';
-
-  /// en: 'Capture Area'
-  String get pref_item_title_extract_text_from_capture => 'Capture Area';
-
-  /// en: 'Clipboard'
-  String get pref_item_title_extract_text_from_clipboard => 'Clipboard';
-
-  /// en: 'Translate input content'
-  String get pref_item_title_translate_input_content =>
-      'Translate input content';
 }
 
-// Path: page_setting_theme_mode
-class TranslationsPageSettingThemeModeEn {
-  TranslationsPageSettingThemeModeEn.internal(this._root);
+// Path: settings.input
+class TranslationsSettingsInputEn {
+  TranslationsSettingsInputEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
-
-  /// en: 'Theme Mode'
-  String get title => 'Theme Mode';
-}
-
-// Path: page_setting_translate
-class TranslationsPageSettingTranslateEn {
-  TranslationsPageSettingTranslateEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Translate'
-  String get title => 'Translate';
-
-  /// en: 'Default translate engine'
-  String get pref_section_title_default_translate_engine =>
-      'Default translate engine';
-
-  /// en: 'Translation mode'
-  String get pref_section_title_translation_mode => 'Translation mode';
-
-  /// en: 'Default detect language engine'
-  String get pref_section_title_default_detect_language_engine =>
-      'Default detect language engine';
-
-  /// en: 'Translation target'
-  String get pref_section_title_translation_target => 'Translation target';
-
-  /// en: 'Double-click to copy translation result'
-  String get pref_item_title_double_click_copy_result =>
-      'Double-click to copy translation result';
-}
-
-// Path: page_settings
-class TranslationsPageSettingsEn {
-  TranslationsPageSettingsEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Settings'
-  String get title => 'Settings';
-
-  /// en: 'Version {} BUILD {}'
-  String get text_version => 'Version {} BUILD {}';
-
-  /// en: 'General'
-  String get pref_section_title_general => 'General';
-
-  /// en: 'Appearance'
-  String get pref_section_title_appearance => 'Appearance';
-
-  /// en: 'Shortcuts'
-  String get pref_section_title_shortcuts => 'Shortcuts';
 
   /// en: 'Input Settings'
-  String get pref_section_title_input_settings => 'Input Settings';
+  String get title => 'Input Settings';
+}
+
+// Path: settings.advanced
+class TranslationsSettingsAdvancedEn {
+  TranslationsSettingsAdvancedEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'Advanced'
-  String get pref_section_title_advanced => 'Advanced';
+  String get title => 'Advanced';
+}
+
+// Path: settings.service_integration
+class TranslationsSettingsServiceIntegrationEn {
+  TranslationsSettingsServiceIntegrationEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'Service Integration'
-  String get pref_section_title_service_integration => 'Service Integration';
+  String get title => 'Service Integration';
+}
+
+// Path: settings.others
+class TranslationsSettingsOthersEn {
+  TranslationsSettingsOthersEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'Others'
-  String get pref_section_title_others => 'Others';
+  String get title => 'Others';
+}
+
+// Path: settings.exit_app_dialog
+class TranslationsSettingsExitAppDialogEn {
+  TranslationsSettingsExitAppDialogEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Are you sure you want to exit?'
+  String get title => 'Are you sure you want to exit?';
+}
+
+// Path: settings.preference
+class TranslationsSettingsPreferenceEn {
+  TranslationsSettingsPreferenceEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
 
   /// en: 'Your Plan'
-  String get pref_item_title_your_plan => 'Your Plan';
+  String get your_plan => 'Your Plan';
 
   /// en: 'Extract text'
-  String get pref_item_title_extract_text => 'Extract text';
-
-  /// en: 'Interface'
-  String get pref_item_title_interface => 'Interface';
+  String get extract_text => 'Extract text';
 
   /// en: 'Translate'
-  String get pref_item_title_translate => 'Translate';
+  String get translate => 'Translate';
+
+  /// en: 'Interface'
+  String get interface => 'Interface';
 
   /// en: 'Display Language'
-  String get pref_item_title_app_language => 'Display Language';
+  String get app_language => 'Display Language';
 
   /// en: 'Theme Mode'
-  String get pref_item_title_theme_mode => 'Theme Mode';
+  String get theme_mode => 'Theme Mode';
 
   /// en: 'Keyboard Shortcuts'
-  String get pref_item_title_keyboard_shortcuts => 'Keyboard Shortcuts';
+  String get keyboard_shortcuts => 'Keyboard Shortcuts';
 
   /// en: 'Submit with Enter'
-  String get pref_item_title_submit_with_enter => 'Submit with Enter';
+  String get submit_with_enter => 'Submit with Enter';
 
   /// en: 'Submit with Ctrl + Enter'
-  String get pref_item_title_submit_with_meta_enter =>
-      'Submit with Ctrl + Enter';
+  String get submit_with_meta_enter => 'Submit with Ctrl + Enter';
 
   /// en: 'Submit with ⌘ + Enter'
-  String get pref_item_title_submit_with_meta_enter_mac =>
-      'Submit with ⌘ + Enter';
+  String get submit_with_meta_enter_mac => 'Submit with ⌘ + Enter';
 
   /// en: 'Launch when you log in'
-  String get pref_item_title_launch_at_startup => 'Launch when you log in';
+  String get launch_at_startup => 'Launch when you log in';
 
   /// en: 'Text Translation'
-  String get pref_item_title_engines => 'Text Translation';
+  String get engines => 'Text Translation';
 
   /// en: 'Text Detection'
-  String get pref_item_title_ocr_engines => 'Text Detection';
+  String get ocr_engines => 'Text Detection';
 
   /// en: 'About Biyi'
-  String get pref_item_title_about => 'About Biyi';
+  String get about => 'About Biyi';
 
   /// en: 'Exit App'
-  String get pref_item_title_exit_app => 'Exit App';
-
-  late final TranslationsPageSettingsExitAppDialogEn exit_app_dialog =
-      TranslationsPageSettingsExitAppDialogEn.internal(_root);
+  String get exit_app => 'Exit App';
 }
 
-// Path: page_translation_engine_chooser
-class TranslationsPageTranslationEngineChooserEn {
-  TranslationsPageTranslationEngineChooserEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Text Translation Engine'
-  String get title => 'Text Translation Engine';
-
-  /// en: 'Private'
-  String get pref_section_title_private => 'Private';
-
-  /// en: 'No available engines'
-  String get pref_item_title_no_available_engines => 'No available engines';
-}
-
-// Path: page_translation_engine_create_or_edit
-class TranslationsPageTranslationEngineCreateOrEditEn {
-  TranslationsPageTranslationEngineCreateOrEditEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Add Text Translation Engine'
-  String get title => 'Add Text Translation Engine';
-
-  /// en: 'Engine type'
-  String get pref_section_title_engine_type => 'Engine type';
-
-  /// en: 'Support interface'
-  String get pref_section_title_support_interface => 'Support interface';
-
-  /// en: 'Option'
-  String get pref_section_title_option => 'Option';
-}
-
-// Path: page_translation_engine_type_chooser
-class TranslationsPageTranslationEngineTypeChooserEn {
-  TranslationsPageTranslationEngineTypeChooserEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Engine type'
-  String get title => 'Engine type';
-}
-
-// Path: page_translation_engines_manage
-class TranslationsPageTranslationEnginesManageEn {
-  TranslationsPageTranslationEnginesManageEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Text Translation Engine'
-  String get title => 'Text Translation Engine';
-
-  /// en: 'Private'
-  String get pref_section_title_private => 'Private';
-
-  /// en: 'Long press an item to reorder it'
-  String get pref_section_description_private =>
-      'Long press an item to reorder it';
-}
-
-// Path: page_translation_target_new
-class TranslationsPageTranslationTargetNewEn {
-  TranslationsPageTranslationTargetNewEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Add Translation Target'
-  String get title => 'Add Translation Target';
-
-  /// en: 'Edit Translation Target'
-  String get title_with_edit => 'Edit Translation Target';
-
-  /// en: 'Source language'
-  String get source_language => 'Source language';
-
-  /// en: 'Target language'
-  String get target_language => 'Target language';
-}
-
-// Path: page_your_plan_selector
-class TranslationsPageYourPlanSelectorEn {
-  TranslationsPageYourPlanSelectorEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Select Your Plan'
-  String get title => 'Select Your Plan';
-
-  /// en: 'Free'
-  String get label_free => 'Free';
-
-  /// en: 'Forever'
-  String get label_forever => 'Forever';
-
-  /// en: 'Plan benefits'
-  String get btn_plan_benefits => 'Plan benefits';
-
-  /// en: 'activate'
-  String get btn_activate => 'activate';
-
-  /// en: 'Activation code'
-  String get activation_code_input_hint => 'Activation code';
-
-  /// en: 'Choose the right plan for you.'
-  String get pref_section_title_plans => 'Choose the right plan for you.';
-
-  /// en: 'Activate Your Pla'
-  String get pref_section_title_activate_your_plan => 'Activate Your Pla';
-
-  /// en: 'Your plan expiry date'
-  String get pref_section_title_your_plan_expiry_date =>
-      'Your plan expiry date';
-
-  /// en: 'Get activation code'
-  String get pref_item_title_get_activation_code => 'Get activation code';
-
-  /// en: 'Coming soon, Please stay tuned.'
-  String get msg_plan_pro_coming_soon => 'Coming soon, Please stay tuned.';
-}
-
-// Path: widget_record_shortcut_dialog
-class TranslationsWidgetRecordShortcutDialogEn {
-  TranslationsWidgetRecordShortcutDialogEn.internal(this._root);
+// Path: shortcuts.record_dialog
+class TranslationsShortcutsRecordDialogEn {
+  TranslationsShortcutsRecordDialogEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
@@ -1163,16 +1000,118 @@ class TranslationsWidgetRecordShortcutDialogEn {
   String get title => 'Customize your shortcut';
 }
 
-// Path: page_settings.exit_app_dialog
-class TranslationsPageSettingsExitAppDialogEn {
-  TranslationsPageSettingsExitAppDialogEn.internal(this._root);
+// Path: tray.context_menu.discussion
+class TranslationsTrayContextMenuDiscussionEn {
+  TranslationsTrayContextMenuDiscussionEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Are you sure you want to exit?'
-  String get title => 'Are you sure you want to exit?';
+  /// en: 'Join Discussion'
+  String get title => 'Join Discussion';
+
+  /// en: 'Join Discord'
+  String get discord_server => 'Join Discord';
+
+  /// en: 'Join QQ Group'
+  String get qq_group => 'Join QQ Group';
+}
+
+// Path: mini_translator.update_banner.button
+class TranslationsMiniTranslatorUpdateBannerButtonEn {
+  TranslationsMiniTranslatorUpdateBannerButtonEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Update'
+  String get update => 'Update';
+}
+
+// Path: mini_translator.limited_banner.permission
+class TranslationsMiniTranslatorLimitedBannerPermissionEn {
+  TranslationsMiniTranslatorLimitedBannerPermissionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Grant screen recording access'
+  String get screen_capture => 'Grant screen recording access';
+
+  /// en: 'Grant accessibility access'
+  String get screen_selection => 'Grant accessibility access';
+}
+
+// Path: mini_translator.limited_banner.button
+class TranslationsMiniTranslatorLimitedBannerButtonEn {
+  TranslationsMiniTranslatorLimitedBannerButtonEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Allow'
+  String get allow => 'Allow';
+
+  /// en: 'Go Settings'
+  String get go_settings => 'Go Settings';
+
+  /// en: 'Check Again'
+  String get check_again => 'Check Again';
+}
+
+// Path: mini_translator.limited_banner.tooltip
+class TranslationsMiniTranslatorLimitedBannerTooltipEn {
+  TranslationsMiniTranslatorLimitedBannerTooltipEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'View the help document'
+  String get help => 'View the help document';
+}
+
+// Path: mini_translator.limited_banner.message
+class TranslationsMiniTranslatorLimitedBannerMessageEn {
+  TranslationsMiniTranslatorLimitedBannerMessageEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'If there is no response after clicking "Allow", please click "Go Settings" to set it manually.'
+  String get allow_access_tip =>
+      'If there is no response after clicking "Allow", please click "Go Settings" to set it manually.';
+
+  /// en: 'The Screen extract text is enabled'
+  String get all_access_allowed => 'The Screen extract text is enabled';
+
+  /// en: 'The required access are not allowed. Please check and set again.'
+  String get all_access_not_allowed =>
+      'The required access are not allowed.\nPlease check and set again.';
+}
+
+// Path: mini_translator.toolbar.tooltip
+class TranslationsMiniTranslatorToolbarTooltipEn {
+  TranslationsMiniTranslatorToolbarTooltipEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Current translation mode: {}'
+  String get translation_mode => 'Current translation mode: {}';
+
+  /// en: 'Capture screen area and recognize text'
+  String get extract_text_from_screen_capture =>
+      'Capture screen area and recognize text';
+
+  /// en: 'Read clipboard content'
+  String get extract_text_from_clipboard => 'Read clipboard content';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1183,311 +1122,214 @@ class TranslationsPageSettingsExitAppDialogEn {
 extension on Translations {
   dynamic _flatMapFunction(String path) {
     return switch (path) {
-      'app_name' => 'Beyond Translate',
-      'ok' => 'OK',
-      'cancel' => 'Cancel',
-      'add' => 'Add',
-      'delete' => 'Delete',
-      'copied' => 'Copied',
-      'please_choose' => 'Please Choose',
-      'language.af' => 'Afrikaans',
-      'language.am' => 'Amharic',
-      'language.ar' => 'Arabic',
-      'language.az' => 'Azerbaijani',
-      'language.be' => 'Belarusian',
-      'language.bg' => 'Bulgarian',
-      'language.bn' => 'Bengali',
-      'language.bs' => 'Bosnian',
-      'language.ca' => 'Catalan',
-      'language.ceb' => 'Cebuano',
-      'language.co' => 'Corsican',
-      'language.cs' => 'Czech',
-      'language.cy' => 'Welsh',
-      'language.da' => 'Danish',
-      'language.de' => 'German',
-      'language.el' => 'Greek',
-      'language.en' => 'English',
-      'language.eo' => 'Esperanto',
-      'language.es' => 'Spanish',
-      'language.et' => 'Estonian',
-      'language.eu' => 'Basque',
-      'language.fa' => 'Persian',
-      'language.fi' => 'Finnish',
-      'language.fr' => 'French',
-      'language.fy' => 'Frisian',
-      'language.ga' => 'Irish',
-      'language.gd' => 'Scots Gaelic',
-      'language.gl' => 'Galician',
-      'language.gu' => 'Gujarati',
-      'language.ha' => 'Hausa',
-      'language.haw' => 'Hawaiian',
-      'language.he' => 'Hebrew',
-      'language.hi' => 'Hindi',
-      'language.hmn' => 'Hmong',
-      'language.hr' => 'Croatian',
-      'language.ht' => 'Haitian Creole',
-      'language.hu' => 'Hungarian',
-      'language.hy' => 'Armenian',
-      'language.id' => 'Indonesian',
-      'language.ig' => 'Igbo',
-      'language.kIs' => 'Icelandic',
-      'language.it' => 'Italian',
-      'language.iw' => 'Hebrew',
-      'language.ja' => 'Japanese',
-      'language.jw' => 'Javanese',
-      'language.ka' => 'Georgian',
-      'language.kk' => 'Kazakh',
-      'language.km' => 'Khmer',
-      'language.kn' => 'Kannada',
-      'language.ko' => 'Korean',
-      'language.ku' => 'Kurdish (Kurmanji)',
-      'language.ky' => 'Kyrgyz',
-      'language.la' => 'Latin',
-      'language.lb' => 'Luxembourgish',
-      'language.lo' => 'Lao',
-      'language.lt' => 'Lithuanian',
-      'language.lv' => 'Latvian',
-      'language.mg' => 'Malagasy',
-      'language.mi' => 'Maori',
-      'language.mk' => 'Macedonian',
-      'language.ml' => 'Malayalam',
-      'language.mn' => 'Mongolian',
-      'language.mr' => 'Marathi',
-      'language.ms' => 'Malay',
-      'language.mt' => 'Maltese',
-      'language.my' => 'Myanmar (Burmese)',
-      'language.ne' => 'Nepali',
-      'language.nl' => 'Dutch',
-      'language.no' => 'Norwegian',
-      'language.ny' => 'Chichewa',
-      'language.or' => 'Odia (Oriya)',
-      'language.pa' => 'Punjabi',
-      'language.pl' => 'Polish',
-      'language.ps' => 'Pashto',
-      'language.pt' => 'Portuguese',
-      'language.ro' => 'Romanian',
-      'language.ru' => 'Russian',
-      'language.rw' => 'Kinyarwanda',
-      'language.sd' => 'Sindhi',
-      'language.si' => 'Sinhala',
-      'language.sk' => 'Slovak',
-      'language.sl' => 'Slovenian',
-      'language.sm' => 'Samoan',
-      'language.sn' => 'Shona',
-      'language.so' => 'Somali',
-      'language.sq' => 'Albanian',
-      'language.sr' => 'Serbian',
-      'language.st' => 'Sesotho',
-      'language.su' => 'Sundanese',
-      'language.sv' => 'Swedish',
-      'language.sw' => 'Swahili',
-      'language.ta' => 'Tamil',
-      'language.te' => 'Telugu',
-      'language.tg' => 'Tajik',
-      'language.th' => 'Thai',
-      'language.tk' => 'Turkmen',
-      'language.tl' => 'Filipino',
-      'language.tr' => 'Turkish',
-      'language.tt' => 'Tatar',
-      'language.ug' => 'Uyghur',
-      'language.uk' => 'Ukrainian',
-      'language.ur' => 'Urdu',
-      'language.uz' => 'Uzbek',
-      'language.vi' => 'Vietnamese',
-      'language.xh' => 'Xhosa',
-      'language.yi' => 'Yiddish',
-      'language.yo' => 'Yoruba',
-      'language.zh' => 'Chinese',
-      'language.zh_CN' => 'Chinese',
-      'language.zh_TW' => 'Chinese (Traditional)',
-      'language.zu' => 'Zulu',
-      'engine.baidu' => 'Baidu',
-      'engine.caiyun' => 'Caiyun',
-      'engine.deepl' => 'DeepL',
-      'engine.google' => 'Google',
-      'engine.ibmwatson' => 'IBMWatson',
-      'engine.iciba' => 'Iciba',
-      'engine.openai' => 'OpenAI',
-      'engine.sogou' => 'Sogou',
-      'engine.tencent' => 'Tencent',
-      'engine.youdao' => 'Youda',
-      'engine_scope.detectlanguage' => 'detectLanguage',
-      'engine_scope.lookup' => 'LookUp',
-      'engine_scope.translate' => 'Translate',
-      'ocr_engine.built_in' => 'Built In',
-      'ocr_engine.tesseract' => 'Tesseract OCR',
-      'ocr_engine.youdao' => 'Youdao',
-      'translation_mode.auto' => 'Auto',
-      'translation_mode.manual' => 'Manual',
-      'theme_mode.light' => 'Light',
-      'theme_mode.dark' => 'Dark',
-      'theme_mode.system' => 'System',
-      'word_pronunciation.us' => 'US',
-      'word_pronunciation.uk' => 'UK',
-      'tray_context_menu.item_show' => 'Show',
-      'tray_context_menu.item_quick_start_guide' => 'Quick Start',
-      'tray_context_menu.item_discussion' => 'Join Discussion',
-      'tray_context_menu.item_quit_app' => 'Quit Biyi',
-      'tray_context_menu.item_discussion_subitem_discord_server' =>
-        'Join Discord',
-      'tray_context_menu.item_discussion_subitem_qq_group' => 'Join QQ Group',
-      'mini_translator.newversion_banner_text_found_new_version' =>
+      'common.app.name' => 'Beyond Translate',
+      'common.button.ok' => 'OK',
+      'common.button.cancel' => 'Cancel',
+      'common.button.add' => 'Add',
+      'common.button.delete' => 'Delete',
+      'common.feedback.copied' => 'Copied',
+      'common.placeholder.choose' => 'Please Choose',
+      'common.language.af' => 'Afrikaans',
+      'common.language.am' => 'Amharic',
+      'common.language.ar' => 'Arabic',
+      'common.language.az' => 'Azerbaijani',
+      'common.language.be' => 'Belarusian',
+      'common.language.bg' => 'Bulgarian',
+      'common.language.bn' => 'Bengali',
+      'common.language.bs' => 'Bosnian',
+      'common.language.ca' => 'Catalan',
+      'common.language.ceb' => 'Cebuano',
+      'common.language.co' => 'Corsican',
+      'common.language.cs' => 'Czech',
+      'common.language.cy' => 'Welsh',
+      'common.language.da' => 'Danish',
+      'common.language.de' => 'German',
+      'common.language.el' => 'Greek',
+      'common.language.en' => 'English',
+      'common.language.eo' => 'Esperanto',
+      'common.language.es' => 'Spanish',
+      'common.language.et' => 'Estonian',
+      'common.language.eu' => 'Basque',
+      'common.language.fa' => 'Persian',
+      'common.language.fi' => 'Finnish',
+      'common.language.fr' => 'French',
+      'common.language.fy' => 'Frisian',
+      'common.language.ga' => 'Irish',
+      'common.language.gd' => 'Scots Gaelic',
+      'common.language.gl' => 'Galician',
+      'common.language.gu' => 'Gujarati',
+      'common.language.ha' => 'Hausa',
+      'common.language.haw' => 'Hawaiian',
+      'common.language.he' => 'Hebrew',
+      'common.language.hi' => 'Hindi',
+      'common.language.hmn' => 'Hmong',
+      'common.language.hr' => 'Croatian',
+      'common.language.ht' => 'Haitian Creole',
+      'common.language.hu' => 'Hungarian',
+      'common.language.hy' => 'Armenian',
+      'common.language.id' => 'Indonesian',
+      'common.language.ig' => 'Igbo',
+      'common.language.kIs' => 'Icelandic',
+      'common.language.it' => 'Italian',
+      'common.language.iw' => 'Hebrew',
+      'common.language.ja' => 'Japanese',
+      'common.language.jw' => 'Javanese',
+      'common.language.ka' => 'Georgian',
+      'common.language.kk' => 'Kazakh',
+      'common.language.km' => 'Khmer',
+      'common.language.kn' => 'Kannada',
+      'common.language.ko' => 'Korean',
+      'common.language.ku' => 'Kurdish (Kurmanji)',
+      'common.language.ky' => 'Kyrgyz',
+      'common.language.la' => 'Latin',
+      'common.language.lb' => 'Luxembourgish',
+      'common.language.lo' => 'Lao',
+      'common.language.lt' => 'Lithuanian',
+      'common.language.lv' => 'Latvian',
+      'common.language.mg' => 'Malagasy',
+      'common.language.mi' => 'Maori',
+      'common.language.mk' => 'Macedonian',
+      'common.language.ml' => 'Malayalam',
+      'common.language.mn' => 'Mongolian',
+      'common.language.mr' => 'Marathi',
+      'common.language.ms' => 'Malay',
+      'common.language.mt' => 'Maltese',
+      'common.language.my' => 'Myanmar (Burmese)',
+      'common.language.ne' => 'Nepali',
+      'common.language.nl' => 'Dutch',
+      'common.language.no' => 'Norwegian',
+      'common.language.ny' => 'Chichewa',
+      'common.language.or' => 'Odia (Oriya)',
+      'common.language.pa' => 'Punjabi',
+      'common.language.pl' => 'Polish',
+      'common.language.ps' => 'Pashto',
+      'common.language.pt' => 'Portuguese',
+      'common.language.ro' => 'Romanian',
+      'common.language.ru' => 'Russian',
+      'common.language.rw' => 'Kinyarwanda',
+      'common.language.sd' => 'Sindhi',
+      'common.language.si' => 'Sinhala',
+      'common.language.sk' => 'Slovak',
+      'common.language.sl' => 'Slovenian',
+      'common.language.sm' => 'Samoan',
+      'common.language.sn' => 'Shona',
+      'common.language.so' => 'Somali',
+      'common.language.sq' => 'Albanian',
+      'common.language.sr' => 'Serbian',
+      'common.language.st' => 'Sesotho',
+      'common.language.su' => 'Sundanese',
+      'common.language.sv' => 'Swedish',
+      'common.language.sw' => 'Swahili',
+      'common.language.ta' => 'Tamil',
+      'common.language.te' => 'Telugu',
+      'common.language.tg' => 'Tajik',
+      'common.language.th' => 'Thai',
+      'common.language.tk' => 'Turkmen',
+      'common.language.tl' => 'Filipino',
+      'common.language.tr' => 'Turkish',
+      'common.language.tt' => 'Tatar',
+      'common.language.ug' => 'Uyghur',
+      'common.language.uk' => 'Ukrainian',
+      'common.language.ur' => 'Urdu',
+      'common.language.uz' => 'Uzbek',
+      'common.language.vi' => 'Vietnamese',
+      'common.language.xh' => 'Xhosa',
+      'common.language.yi' => 'Yiddish',
+      'common.language.yo' => 'Yoruba',
+      'common.language.zh' => 'Chinese',
+      'common.language.zh_CN' => 'Chinese',
+      'common.language.zh_TW' => 'Chinese (Traditional)',
+      'common.language.zu' => 'Zulu',
+      'provider.baidu' => 'Baidu',
+      'provider.caiyun' => 'Caiyun',
+      'provider.deepl' => 'DeepL',
+      'provider.google' => 'Google',
+      'provider.ibmwatson' => 'IBMWatson',
+      'provider.iciba' => 'Iciba',
+      'provider.openai' => 'OpenAI',
+      'provider.sogou' => 'Sogou',
+      'provider.tencent' => 'Tencent',
+      'provider.youdao' => 'Youda',
+      'translation.engine_scope.detect_language' => 'detectLanguage',
+      'translation.engine_scope.lookup' => 'LookUp',
+      'translation.engine_scope.translate' => 'Translate',
+      'translation.mode.auto' => 'Auto',
+      'translation.mode.manual' => 'Manual',
+      'translation.word_pronunciation.us' => 'US',
+      'translation.word_pronunciation.uk' => 'UK',
+      'ocr.engine.built_in' => 'Built In',
+      'ocr.engine.tesseract' => 'Tesseract OCR',
+      'ocr.engine.youdao' => 'Youdao',
+      'theme.mode.light' => 'Light',
+      'theme.mode.dark' => 'Dark',
+      'theme.mode.system' => 'System',
+      'tray.context_menu.show' => 'Show',
+      'tray.context_menu.quick_start_guide' => 'Quick Start',
+      'tray.context_menu.discussion.title' => 'Join Discussion',
+      'tray.context_menu.discussion.discord_server' => 'Join Discord',
+      'tray.context_menu.discussion.qq_group' => 'Join QQ Group',
+      'tray.context_menu.quit_app' => 'Quit Biyi',
+      'mini_translator.update_banner.found_new_version' =>
         'New version found: {}',
-      'mini_translator.newversion_banner_btn_update' => 'Update',
-      'mini_translator.limited_banner_title' =>
+      'mini_translator.update_banner.button.update' => 'Update',
+      'mini_translator.limited_banner.title' =>
         'Functionality is limited, please follow the tips to check.',
-      'mini_translator.limited_banner_text_screen_capture' =>
+      'mini_translator.limited_banner.permission.screen_capture' =>
         'Grant screen recording access',
-      'mini_translator.limited_banner_text_screen_selection' =>
+      'mini_translator.limited_banner.permission.screen_selection' =>
         'Grant accessibility access',
-      'mini_translator.limited_banner_btn_allow' => 'Allow',
-      'mini_translator.limited_banner_btn_go_settings' => 'Go Settings',
-      'mini_translator.limited_banner_btn_check_again' => 'Check Again',
-      'mini_translator.limited_banner_tip_help' => 'View the help document',
-      'mini_translator.limited_banner_msg_allow_access_tip' =>
+      'mini_translator.limited_banner.button.allow' => 'Allow',
+      'mini_translator.limited_banner.button.go_settings' => 'Go Settings',
+      'mini_translator.limited_banner.button.check_again' => 'Check Again',
+      'mini_translator.limited_banner.tooltip.help' => 'View the help document',
+      'mini_translator.limited_banner.message.allow_access_tip' =>
         'If there is no response after clicking "Allow", please click "Go Settings" to set it manually.',
-      'mini_translator.limited_banner_msg_all_access_allowed' =>
+      'mini_translator.limited_banner.message.all_access_allowed' =>
         'The Screen extract text is enabled',
-      'mini_translator.limited_banner_msg_all_access_not_allowed' =>
+      'mini_translator.limited_banner.message.all_access_not_allowed' =>
         'The required access are not allowed.\nPlease check and set again.',
-      'mini_translator.input_hint' => 'Enter the word or text here',
-      'mini_translator.text_extracting_text' => 'Extracting text...',
-      'mini_translator.tip_translation_mode' => 'Current translation mode: {}',
-      'mini_translator.tip_extract_text_from_screen_capture' =>
+      'mini_translator.input.hint' => 'Enter the word or text here',
+      'mini_translator.input.extracting_text' => 'Extracting text...',
+      'mini_translator.toolbar.tooltip.translation_mode' =>
+        'Current translation mode: {}',
+      'mini_translator.toolbar.tooltip.extract_text_from_screen_capture' =>
         'Capture screen area and recognize text',
-      'mini_translator.tip_extract_text_from_clipboard' =>
+      'mini_translator.toolbar.tooltip.extract_text_from_clipboard' =>
         'Read clipboard content',
-      'mini_translator.btn_clear' => 'Clear',
-      'mini_translator.btn_trans' => 'Translate',
-      'mini_translator.msg_please_enter_word_or_text' =>
+      'mini_translator.button.clear' => 'Clear',
+      'mini_translator.button.translate' => 'Translate',
+      'mini_translator.message.please_enter_word_or_text' =>
         'No text entered or text not extracted',
-      'mini_translator.msg_capture_screen_area_canceled' =>
+      'mini_translator.message.capture_screen_area_canceled' =>
         'Capture screen area has been canceled',
-      'page_language_chooser.title' => 'Choose language',
-      'page_language_chooser.pref_section_title_all' => 'All',
-      'page_ocr_engine_chooser.title' => 'Text Detection Engine',
-      'page_ocr_engine_chooser.pref_section_title_private' => 'Private',
-      'page_ocr_engine_chooser.pref_item_title_no_available_engines' =>
-        'No available engines',
-      'page_ocr_engine_create_or_edit.title' => 'Add Text Detection Engine',
-      'page_ocr_engine_create_or_edit.pref_section_title_engine_type' =>
-        'Engine type',
-      'page_ocr_engine_create_or_edit.pref_section_title_option' => 'Option',
-      'page_ocr_engine_type_chooser.title' => 'Engine Type',
-      'page_ocr_engines_manage.title' => 'Text Detection Engine',
-      'page_ocr_engines_manage.pref_section_title_private' => 'Private',
-      'page_ocr_engines_manage.pref_section_description_private' =>
-        'Long press an item to reorder it',
-      'page_setting_app_language.title' => 'Display Language',
-      'page_setting_extract_text.title' => 'Screen extract text',
-      'page_setting_extract_text.pref_section_title_default_detect_text_engine' =>
-        'Default detect text engine',
-      'page_setting_extract_text.pref_item_auto_copy_detected_text' =>
-        'Auto copy the detected text',
-      'page_setting_interface.title' => 'Interface',
-      'page_setting_interface.pref_section_title_tray_icon' => 'Tray Icon',
-      'page_setting_interface.pref_section_title_tray_icon_style' =>
-        'Tray Icon Style',
-      'page_setting_interface.pref_section_title_max_window_height' =>
-        'Maximum window height (logical pixels)',
-      'page_setting_interface.pref_item_title_show_tray_icon' =>
-        'Show Tray Icon',
-      'page_setting_shortcuts.title' => 'Shortcuts',
-      'page_setting_shortcuts.pref_section_title_extract_text' =>
-        'Screen / Clipboard extract text',
-      'page_setting_shortcuts.pref_section_title_input_assist_function' =>
-        'Input assist function',
-      'page_setting_shortcuts.pref_item_title_show_or_hide' => 'Show/Hide',
-      'page_setting_shortcuts.pref_item_title_hide' => 'Hide',
-      'page_setting_shortcuts.pref_item_title_extract_text_from_selection' =>
-        'Selection',
-      'page_setting_shortcuts.pref_item_title_extract_text_from_capture' =>
-        'Capture Area',
-      'page_setting_shortcuts.pref_item_title_extract_text_from_clipboard' =>
-        'Clipboard',
-      'page_setting_shortcuts.pref_item_title_translate_input_content' =>
-        'Translate input content',
-      'page_setting_theme_mode.title' => 'Theme Mode',
-      'page_setting_translate.title' => 'Translate',
-      'page_setting_translate.pref_section_title_default_translate_engine' =>
-        'Default translate engine',
-      'page_setting_translate.pref_section_title_translation_mode' =>
-        'Translation mode',
-      'page_setting_translate.pref_section_title_default_detect_language_engine' =>
-        'Default detect language engine',
-      'page_setting_translate.pref_section_title_translation_target' =>
-        'Translation target',
-      'page_setting_translate.pref_item_title_double_click_copy_result' =>
-        'Double-click to copy translation result',
-      'page_settings.title' => 'Settings',
-      'page_settings.text_version' => 'Version {} BUILD {}',
-      'page_settings.pref_section_title_general' => 'General',
-      'page_settings.pref_section_title_appearance' => 'Appearance',
-      'page_settings.pref_section_title_shortcuts' => 'Shortcuts',
-      'page_settings.pref_section_title_input_settings' => 'Input Settings',
-      'page_settings.pref_section_title_advanced' => 'Advanced',
-      'page_settings.pref_section_title_service_integration' =>
-        'Service Integration',
-      'page_settings.pref_section_title_others' => 'Others',
-      'page_settings.pref_item_title_your_plan' => 'Your Plan',
-      'page_settings.pref_item_title_extract_text' => 'Extract text',
-      'page_settings.pref_item_title_interface' => 'Interface',
-      'page_settings.pref_item_title_translate' => 'Translate',
-      'page_settings.pref_item_title_app_language' => 'Display Language',
-      'page_settings.pref_item_title_theme_mode' => 'Theme Mode',
-      'page_settings.pref_item_title_keyboard_shortcuts' =>
-        'Keyboard Shortcuts',
-      'page_settings.pref_item_title_submit_with_enter' => 'Submit with Enter',
-      'page_settings.pref_item_title_submit_with_meta_enter' =>
+      'settings.title' => 'Settings',
+      'settings.version' => 'Version {} BUILD {}',
+      'settings.general.title' => 'General',
+      'settings.appearance.title' => 'Appearance',
+      'settings.shortcuts.title' => 'Shortcuts',
+      'settings.input.title' => 'Input Settings',
+      'settings.advanced.title' => 'Advanced',
+      'settings.service_integration.title' => 'Service Integration',
+      'settings.others.title' => 'Others',
+      'settings.exit_app_dialog.title' => 'Are you sure you want to exit?',
+      'settings.preference.your_plan' => 'Your Plan',
+      'settings.preference.extract_text' => 'Extract text',
+      'settings.preference.translate' => 'Translate',
+      'settings.preference.interface' => 'Interface',
+      'settings.preference.app_language' => 'Display Language',
+      'settings.preference.theme_mode' => 'Theme Mode',
+      'settings.preference.keyboard_shortcuts' => 'Keyboard Shortcuts',
+      'settings.preference.submit_with_enter' => 'Submit with Enter',
+      'settings.preference.submit_with_meta_enter' =>
         'Submit with Ctrl + Enter',
-      'page_settings.pref_item_title_submit_with_meta_enter_mac' =>
+      'settings.preference.submit_with_meta_enter_mac' =>
         'Submit with ⌘ + Enter',
-      'page_settings.pref_item_title_launch_at_startup' =>
-        'Launch when you log in',
-      'page_settings.pref_item_title_engines' => 'Text Translation',
-      'page_settings.pref_item_title_ocr_engines' => 'Text Detection',
-      'page_settings.pref_item_title_about' => 'About Biyi',
-      'page_settings.pref_item_title_exit_app' => 'Exit App',
-      'page_settings.exit_app_dialog.title' => 'Are you sure you want to exit?',
-      'page_translation_engine_chooser.title' => 'Text Translation Engine',
-      'page_translation_engine_chooser.pref_section_title_private' => 'Private',
-      'page_translation_engine_chooser.pref_item_title_no_available_engines' =>
-        'No available engines',
-      'page_translation_engine_create_or_edit.title' =>
-        'Add Text Translation Engine',
-      'page_translation_engine_create_or_edit.pref_section_title_engine_type' =>
-        'Engine type',
-      'page_translation_engine_create_or_edit.pref_section_title_support_interface' =>
-        'Support interface',
-      'page_translation_engine_create_or_edit.pref_section_title_option' =>
-        'Option',
-      'page_translation_engine_type_chooser.title' => 'Engine type',
-      'page_translation_engines_manage.title' => 'Text Translation Engine',
-      'page_translation_engines_manage.pref_section_title_private' => 'Private',
-      'page_translation_engines_manage.pref_section_description_private' =>
-        'Long press an item to reorder it',
-      'page_translation_target_new.title' => 'Add Translation Target',
-      'page_translation_target_new.title_with_edit' =>
-        'Edit Translation Target',
-      'page_translation_target_new.source_language' => 'Source language',
-      'page_translation_target_new.target_language' => 'Target language',
-      'page_your_plan_selector.title' => 'Select Your Plan',
-      'page_your_plan_selector.label_free' => 'Free',
-      'page_your_plan_selector.label_forever' => 'Forever',
-      'page_your_plan_selector.btn_plan_benefits' => 'Plan benefits',
-      'page_your_plan_selector.btn_activate' => 'activate',
-      'page_your_plan_selector.activation_code_input_hint' => 'Activation code',
-      'page_your_plan_selector.pref_section_title_plans' =>
-        'Choose the right plan for you.',
-      'page_your_plan_selector.pref_section_title_activate_your_plan' =>
-        'Activate Your Pla',
-      'page_your_plan_selector.pref_section_title_your_plan_expiry_date' =>
-        'Your plan expiry date',
-      'page_your_plan_selector.pref_item_title_get_activation_code' =>
-        'Get activation code',
-      'page_your_plan_selector.msg_plan_pro_coming_soon' =>
-        'Coming soon, Please stay tuned.',
-      'widget_record_shortcut_dialog.title' => 'Customize your shortcut',
+      'settings.preference.launch_at_startup' => 'Launch when you log in',
+      'settings.preference.engines' => 'Text Translation',
+      'settings.preference.ocr_engines' => 'Text Detection',
+      'settings.preference.about' => 'About Biyi',
+      'settings.preference.exit_app' => 'Exit App',
+      'shortcuts.record_dialog.title' => 'Customize your shortcut',
       _ => null,
     };
   }

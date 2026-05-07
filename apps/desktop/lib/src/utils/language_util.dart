@@ -34,25 +34,25 @@ final List<String> kSupportedLanguages = [
 String getLanguageName(String language) {
   switch (language) {
     case kLanguageDE:
-      return t.language.de;
+      return t.common.language.de;
     case kLanguageEN:
-      return t.language.en;
+      return t.common.language.en;
     case kLanguageES:
-      return t.language.es;
+      return t.common.language.es;
     case kLanguageFR:
-      return t.language.fr;
+      return t.common.language.fr;
     case kLanguageIT:
-      return t.language.it;
+      return t.common.language.it;
     case kLanguageJA:
-      return t.language.ja;
+      return t.common.language.ja;
     case kLanguageKO:
-      return t.language.ko;
+      return t.common.language.ko;
     case kLanguagePT:
-      return t.language.pt;
+      return t.common.language.pt;
     case kLanguageRU:
-      return t.language.ru;
+      return t.common.language.ru;
     case kLanguageZH:
-      return t.language.zh;
+      return t.common.language.zh;
     default:
       return language;
   }

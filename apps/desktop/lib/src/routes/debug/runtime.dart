@@ -20,11 +20,11 @@ class RuntimeDebugRoutePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       appBar: CustomAppBar(
-        title: const Text('Runtime 调试'),
+        title: Text('Runtime Debug'),
       ),
-      body: const RuntimeDebugPage(),
+      body: RuntimeDebugPage(),
     );
   }
 }
@@ -199,17 +199,17 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     final isError = _errorText != null;
 
     final title = isError
-        ? 'Rust runtime 错误'
+        ? 'Rust runtime error'
         : hasResult
-            ? 'Rust runtime 响应'
-            : '结果';
+            ? 'Rust runtime response'
+            : 'Result';
     final content = isError
         ? _errorText!
         : _response != null
             ? _formatResponse(_response!)
             : _lookupResponse != null
                 ? _formatLookupResponse(_lookupResponse!)
-                : '提交一次请求后，这里会展示 Rust runtime 的响应。';
+                : 'Submit a request to see the Rust runtime response here.';
 
     return Container(
       width: double.infinity,
@@ -338,13 +338,13 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
         padding: const EdgeInsets.all(20),
         children: [
           Text(
-            '通过桌面端直接调用 Rust runtime，验证 flutter_rust_bridge 集成是否正常。',
+            'Call the Rust runtime directly from the desktop app to verify the flutter_rust_bridge integration.',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           if (!kIsMacOS) ...[
             const SizedBox(height: 12),
             Text(
-              '该验证页当前以 macOS 为主，其他桌面平台即使可以编译，也不在本次验证范围内。',
+              'This debug page currently targets macOS. Other desktop platforms may compile, but they are outside this verification scope.',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
@@ -357,7 +357,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
           _buildProviderPicker(context),
           const SizedBox(height: 20),
           Text(
-            '请求',
+            'Request',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 12),
@@ -365,12 +365,12 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
             controller: _sourceLanguageController,
             decoration: _decoration(
               context,
-              '源语言（可选）',
+              'Source language (optional)',
             ),
             validator: (value) {
               if (_isLookupProvider &&
                   (value == null || value.trim().isEmpty)) {
-                return '必须填写源语言';
+                return 'Source language is required';
               }
               return null;
             },
@@ -380,11 +380,11 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
             controller: _targetLanguageController,
             decoration: _decoration(
               context,
-              '目标语言',
+              'Target language',
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return '必须填写目标语言';
+                return 'Target language is required';
               }
               return null;
             },
@@ -396,11 +396,13 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
             maxLines: 8,
             decoration: _decoration(
               context,
-              _isLookupProvider ? '单词' : '文本',
+              _isLookupProvider ? 'Word' : 'Text',
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return _isLookupProvider ? '必须填写单词' : '必须填写文本';
+                return _isLookupProvider
+                    ? 'Word is required'
+                    : 'Text is required';
               }
               return null;
             },
@@ -416,8 +418,8 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
                         : _submit,
                 child: Text(
                   _isLookupProvider
-                      ? '使用 Rust runtime 查词'
-                      : '使用 Rust runtime 翻译',
+                      ? 'Look up with Rust runtime'
+                      : 'Translate with Rust runtime',
                 ),
               ),
             ],

@@ -547,7 +547,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     if (_capturedData == null) {
       BotToast.showText(
-        text: t.mini_translator.msg_capture_screen_area_canceled,
+        text: t.mini_translator.message.capture_screen_area_canceled,
         align: Alignment.center,
       );
       _setStateAndScheduleWindowResize(() {});
@@ -595,7 +595,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   void _handleButtonTappedTrans() async {
     if (_text.isEmpty) {
       BotToast.showText(
-        text: t.mini_translator.msg_please_enter_word_or_text,
+        text: t.mini_translator.message.please_enter_word_or_text,
         align: Alignment.center,
       );
       _focusNode.requestFocus();
@@ -632,14 +632,14 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
                 if (_isAllowedScreenCaptureAccess &&
                     _isAllowedScreenSelectionAccess) {
                   BotToast.showText(
-                    text:
-                        t.mini_translator.limited_banner_msg_all_access_allowed,
+                    text: t.mini_translator.limited_banner.message
+                        .all_access_allowed,
                     align: Alignment.center,
                   );
                 } else {
                   BotToast.showText(
-                    text: t.mini_translator
-                        .limited_banner_msg_all_access_not_allowed,
+                    text: t.mini_translator.limited_banner.message
+                        .all_access_not_allowed,
                     align: Alignment.center,
                   );
                 }

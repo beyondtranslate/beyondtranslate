@@ -51,7 +51,7 @@ class TranslationInputView extends StatelessWidget {
       children: [
         Tooltip(
           message: formatTranslation(
-            t.mini_translator.tip_translation_mode,
+            t.mini_translator.toolbar.tooltip.translation_mode,
             args: [_translationModeText()],
           ),
           child: SizedBox(
@@ -121,7 +121,8 @@ class TranslationInputView extends StatelessWidget {
           ),
         ),
         Tooltip(
-          message: t.mini_translator.tip_extract_text_from_screen_capture,
+          message: t
+              .mini_translator.toolbar.tooltip.extract_text_from_screen_capture,
           child: SizedBox(
             width: 30,
             height: 26,
@@ -137,7 +138,8 @@ class TranslationInputView extends StatelessWidget {
           ),
         ),
         Tooltip(
-          message: t.mini_translator.tip_extract_text_from_clipboard,
+          message:
+              t.mini_translator.toolbar.tooltip.extract_text_from_clipboard,
           child: SizedBox(
             width: 30,
             height: 26,
@@ -172,7 +174,7 @@ class TranslationInputView extends StatelessWidget {
             borderRadius: BorderRadius.circular(2),
             onPressed: onButtonTappedClear,
             child: Text(
-              t.mini_translator.btn_clear,
+              t.mini_translator.button.clear,
               style: const TextStyle(fontSize: 12),
             ),
           ),
@@ -191,7 +193,7 @@ class TranslationInputView extends StatelessWidget {
             borderRadius: BorderRadius.circular(2),
             onPressed: onButtonTappedTrans,
             child: Text(
-              t.mini_translator.btn_trans,
+              t.mini_translator.button.translate,
               style: const TextStyle(fontSize: 12),
             ),
           ),
@@ -243,7 +245,7 @@ class TranslationInputView extends StatelessWidget {
                         top: 14,
                         bottom: 12,
                       ),
-                      hintText: t.mini_translator.input_hint,
+                      hintText: t.mini_translator.input.hint,
                       hintStyle: textTheme.bodyMedium?.copyWith(
                         color:
                             textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
@@ -280,7 +282,7 @@ class TranslationInputView extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
-                                  t.mini_translator.text_extracting_text,
+                                  t.mini_translator.input.extracting_text,
                                   style: TextStyle(
                                     color: textTheme.bodySmall!.color,
                                     fontSize: 13,
@@ -325,9 +327,9 @@ class TranslationInputView extends StatelessWidget {
   String _translationModeText() {
     switch (translationMode) {
       case TranslationMode.auto:
-        return t.translation_mode.auto;
+        return t.translation.mode.auto;
       case TranslationMode.manual:
-        return t.translation_mode.manual;
+        return t.translation.mode.manual;
     }
   }
 }

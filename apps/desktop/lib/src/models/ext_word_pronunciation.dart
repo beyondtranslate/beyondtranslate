@@ -5,9 +5,9 @@ extension ExtWordPronunciation on WordPronunciation {
   String get localType {
     switch (type) {
       case 'us':
-        return t.word_pronunciation.us;
+        return t.translation.word_pronunciation.us;
       case 'uk':
-        return t.word_pronunciation.uk;
+        return t.translation.word_pronunciation.uk;
       default:
         return type ?? '';
     }

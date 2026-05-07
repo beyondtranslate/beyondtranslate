@@ -270,7 +270,7 @@ class _SettingsShellPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
             child: Text(
-              t.page_settings.title,
+              t.settings.title,
               style: textTheme.titleLarge,
             ),
           ),
@@ -282,19 +282,19 @@ class _SettingsShellPage extends StatelessWidget {
                   context,
                   category: _SettingsCategory.general,
                   icon: FluentIcons.settings_20_regular,
-                  title: t.page_settings.pref_section_title_general,
+                  title: t.settings.general.title,
                 ),
                 _buildSidebarItem(
                   context,
                   category: _SettingsCategory.appearance,
                   icon: FluentIcons.color_20_regular,
-                  title: t.page_settings.pref_section_title_appearance,
+                  title: t.settings.appearance.title,
                 ),
                 _buildSidebarItem(
                   context,
                   category: _SettingsCategory.shortcuts,
                   icon: FluentIcons.keyboard_20_regular,
-                  title: t.page_settings.pref_section_title_shortcuts,
+                  title: t.settings.shortcuts.title,
                 ),
                 _buildSidebarItem(
                   context,
@@ -306,7 +306,7 @@ class _SettingsShellPage extends StatelessWidget {
                   context,
                   category: _SettingsCategory.advanced,
                   icon: FluentIcons.code_block_20_regular,
-                  title: t.page_settings.pref_section_title_advanced,
+                  title: t.settings.advanced.title,
                 ),
               ],
             ),
@@ -315,7 +315,7 @@ class _SettingsShellPage extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
             child: Text(
               formatTranslation(
-                t.page_settings.text_version,
+                t.settings.version,
                 args: [
                   sharedEnv.appVersion,
                   '${sharedEnv.appBuildNumber}',
@@ -340,19 +340,19 @@ class _SettingsShellPage extends StatelessWidget {
             context,
             category: _SettingsCategory.general,
             icon: FluentIcons.settings_20_regular,
-            title: t.page_settings.pref_section_title_general,
+            title: t.settings.general.title,
           ),
           _buildCompactSidebarItem(
             context,
             category: _SettingsCategory.appearance,
             icon: FluentIcons.color_20_regular,
-            title: t.page_settings.pref_section_title_appearance,
+            title: t.settings.appearance.title,
           ),
           _buildCompactSidebarItem(
             context,
             category: _SettingsCategory.shortcuts,
             icon: FluentIcons.keyboard_20_regular,
-            title: t.page_settings.pref_section_title_shortcuts,
+            title: t.settings.shortcuts.title,
           ),
           _buildCompactSidebarItem(
             context,
@@ -364,7 +364,7 @@ class _SettingsShellPage extends StatelessWidget {
             context,
             category: _SettingsCategory.advanced,
             icon: FluentIcons.code_block_20_regular,
-            title: t.page_settings.pref_section_title_advanced,
+            title: t.settings.advanced.title,
           ),
         ],
       ),

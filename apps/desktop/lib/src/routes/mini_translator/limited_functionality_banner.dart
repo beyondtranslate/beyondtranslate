@@ -38,7 +38,7 @@ class _AllowAccessListItem extends StatelessWidget {
           const TextSpan(text: '      '),
           if (onTappedTryAllow != null)
             TextSpan(
-              text: t.mini_translator.limited_banner_btn_allow,
+              text: t.mini_translator.limited_banner.button.allow,
               style: const TextStyle(
                 decoration: TextDecoration.underline,
                 decorationColor: Colors.white,
@@ -48,7 +48,7 @@ class _AllowAccessListItem extends StatelessWidget {
           if (onTappedTryAllow != null) const TextSpan(text: ' / '),
           if (onTappedGoSettings != null)
             TextSpan(
-              text: t.mini_translator.limited_banner_btn_go_settings,
+              text: t.mini_translator.limited_banner.button.go_settings,
               style: const TextStyle(
                 decoration: TextDecoration.underline,
                 decorationColor: Colors.white,
@@ -105,7 +105,7 @@ class LimitedFunctionalityBanner extends StatelessWidget {
           children: [
             Text.rich(
               TextSpan(
-                text: t.mini_translator.limited_banner_title,
+                text: t.mini_translator.limited_banner.title,
               ),
               style: textTheme.bodyMedium!.copyWith(
                 color: Colors.white,
@@ -120,14 +120,14 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                 children: [
                   if (kIsMacOS)
                     _AllowAccessListItem(
-                      title:
-                          t.mini_translator.limited_banner_text_screen_capture,
+                      title: t.mini_translator.limited_banner.permission
+                          .screen_capture,
                       allowed: isAllowedScreenCaptureAccess,
                       onTappedTryAllow: () {
                         ScreenCapturer.instance.requestAccess();
                         BotToast.showText(
-                          text: t.mini_translator
-                              .limited_banner_msg_allow_access_tip,
+                          text: t.mini_translator.limited_banner.message
+                              .allow_access_tip,
                           align: Alignment.center,
                           duration: const Duration(seconds: 5),
                         );
@@ -140,14 +140,14 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                     ),
                   if (kIsMacOS)
                     _AllowAccessListItem(
-                      title: t
-                          .mini_translator.limited_banner_text_screen_selection,
+                      title: t.mini_translator.limited_banner.permission
+                          .screen_selection,
                       allowed: isAllowedScreenSelectionAccess,
                       onTappedTryAllow: () {
                         screenTextExtractor.requestAccess();
                         BotToast.showText(
-                          text: t.mini_translator
-                              .limited_banner_msg_allow_access_tip,
+                          text: t.mini_translator.limited_banner.message
+                              .allow_access_tip,
                           align: Alignment.center,
                           duration: const Duration(seconds: 5),
                         );
@@ -167,7 +167,7 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                   width: 18,
                   height: 18,
                   child: Tooltip(
-                    message: t.mini_translator.limited_banner_tip_help,
+                    message: t.mini_translator.limited_banner.tooltip.help,
                     child: Button(
                       minSize: 0,
                       padding: EdgeInsets.zero,
@@ -193,7 +193,8 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: t.mini_translator.limited_banner_btn_check_again,
+                        text:
+                            t.mini_translator.limited_banner.button.check_again,
                         style: const TextStyle(
                           color: Colors.white,
                           height: 1.3,
