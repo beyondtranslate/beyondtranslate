@@ -12,7 +12,7 @@ final class SettingsViewModel: ObservableObject {
 
   init(
     repository: SettingsRepository? = nil,
-    settingsPlugin: NativeSettingsPlugin? = nil
+    settingsPlugin: MacSettingsPlugin? = nil
   ) {
     let repository =
       repository ?? DefaultSettingsRepository(settingsPlugin)

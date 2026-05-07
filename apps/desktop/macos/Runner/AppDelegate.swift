@@ -16,8 +16,11 @@ class AppDelegate: FlutterAppDelegate {
     engine?.run(withEntrypoint: nil)
     if let engine {
       RegisterGeneratedPlugins(registry: engine)
-      NativeSettingsPlugin.register(
-        with: engine.registrar(forPlugin: "NativeSettingsPlugin")
+      MacSettingsPlugin.register(
+        with: engine.registrar(forPlugin: "MacSettingsPlugin")
+      )
+      MacWindowAppearancePlugin.register(
+        with: engine.registrar(forPlugin: "MacWindowAppearancePlugin")
       )
     }
   }

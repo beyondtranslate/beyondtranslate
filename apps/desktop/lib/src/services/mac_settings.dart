@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import '../rust/domain/settings.dart';
 import 'runtime.dart' as runtime_service;
 
-class NativeSettings {
+class MacSettings {
   static const MethodChannel _channel =
-      MethodChannel('beyondtranslate/native_settings');
+      MethodChannel('beyondtranslate/mac_settings');
 
   static bool _handlerRegistered = false;
 
@@ -167,7 +167,7 @@ class NativeSettings {
 
         default:
           throw MissingPluginException(
-              'Unknown native settings method: ${call.method}');
+              'Unknown mac settings method: ${call.method}');
       }
     });
 

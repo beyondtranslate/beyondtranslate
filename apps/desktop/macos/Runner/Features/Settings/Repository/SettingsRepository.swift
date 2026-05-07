@@ -25,10 +25,10 @@ protocol SettingsRepository {
 
 @MainActor
 final class DefaultSettingsRepository: SettingsRepository {
-  private let settingsPlugin: NativeSettingsPlugin?
+  private let settingsPlugin: MacSettingsPlugin?
   private var disabledProviders: Set<String> = []
 
-  init(_ settingsPlugin: NativeSettingsPlugin? = nil) {
+  init(_ settingsPlugin: MacSettingsPlugin? = nil) {
     self.settingsPlugin = settingsPlugin
   }
 
@@ -92,9 +92,9 @@ final class DefaultSettingsRepository: SettingsRepository {
     }
   }
 
-  private func plugin() throws -> NativeSettingsPlugin {
+  private func plugin() throws -> MacSettingsPlugin {
     guard let settingsPlugin else {
-      throw NativeSettingsError.notImplemented("settingsPlugin")
+      throw MacSettingsError.notImplemented("settingsPlugin")
     }
     return settingsPlugin
   }

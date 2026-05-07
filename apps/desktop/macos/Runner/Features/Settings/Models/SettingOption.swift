@@ -86,7 +86,7 @@ enum AppThemeMode: String, CaseIterable, Identifiable {
 
 @MainActor
 enum ThemeAppearanceController {
-  static let userDefaultsKey = "nativeSettings.appearance.themeMode"
+  static let userDefaultsKey = "macSettings.appearance.themeMode"
 
   static func applySavedPreference(userDefaults: UserDefaults = .standard) {
     apply(rawValue: userDefaults.string(forKey: userDefaultsKey))

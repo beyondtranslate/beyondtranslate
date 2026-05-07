@@ -94,35 +94,41 @@ class _ThreeBounceIndicator extends StatelessWidget {
   final double progress;
 
   double _dotScale(int index) {
-    final offset = (progress - index * 0.16) % 1.0;
-    final wave = math.sin(offset * math.pi);
-    return 0.45 + (wave.isNegative ? 0 : wave) * 0.55;
+    final phase = (progress - index * 0.18) % 1.0;
+    final wave = math.sin(phase * math.pi).clamp(0.0, 1.0);
+    return 0.55 + Curves.easeInOut.transform(wave) * 0.45;
   }
 
   @override
   Widget build(BuildContext context) {
-    final dotSize = size / 2.8;
-    final spacing = dotSize * 0.5;
+    final dotSize = size / 3;
+    final spacing = dotSize * 0.75;
+    final width = dotSize * 3 + spacing * 2;
 
     return SizedBox(
-      width: dotSize * 3 + spacing * 3,
+      width: width,
       height: size,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: List.generate(3, (index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: spacing / 2),
-            child: Transform.scale(
-              scale: _dotScale(index),
-              child: Opacity(
-                opacity: 0.35 + _dotScale(index) * 0.65,
-                child: Container(
-                  width: dotSize,
-                  height: dotSize,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
+          final scale = _dotScale(index);
+          return SizedBox(
+            width: index == 2 ? dotSize : dotSize + spacing,
+            height: size,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Transform.scale(
+                scale: scale,
+                child: Opacity(
+                  opacity: 0.35 + scale * 0.65,
+                  child: Container(
+                    width: dotSize,
+                    height: dotSize,
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 ),
               ),

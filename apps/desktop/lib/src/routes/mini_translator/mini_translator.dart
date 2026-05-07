@@ -20,7 +20,7 @@ import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
 import '../../rust/domain/settings.dart';
-import '../../services/native_settings.dart';
+import '../../services/mac_settings.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
 import '../../services/shortcut_service/shortcut_service.dart';
@@ -397,7 +397,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     }
 
     await Future.wait(futures);
-    _scheduleWindowResize(animate: true);
   }
 
   List<TranslationResult> _createPendingTranslationResults(
@@ -468,7 +467,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     }
 
     if (mounted) {
-      setState(() {});
+      _setStateAndScheduleWindowResize(() {});
     }
     return true;
   }
@@ -792,7 +791,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             Button(
               onPressed: () {
                 if (Platform.isMacOS) {
-                  NativeSettings.show();
+                  MacSettings.show();
                   return;
                 }
 

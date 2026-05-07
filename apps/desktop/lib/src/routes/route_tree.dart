@@ -23,7 +23,6 @@ class DebugRouteTree {
   const DebugRouteTree();
 
   final String path = '/debug';
-  final String nativeSettings = '/debug/native-settings';
   final String runtime = '/debug/runtime';
 }
 
@@ -58,11 +57,6 @@ final List<RouteNode> routeNodes = <RouteNode>[
     id: 'debug',
     path: RouteTree.debug.path,
     parentId: 'root',
-  ),
-  RouteNode(
-    id: 'debug-native-settings',
-    path: RouteTree.debug.nativeSettings,
-    parentId: 'debug',
   ),
   RouteNode(
     id: 'debug-runtime',

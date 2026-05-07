@@ -4,7 +4,7 @@ struct SettingsView: View {
   @State private var selectedSection: SettingsSection? = .general
   @StateObject private var viewModel: SettingsViewModel
 
-  init(settingsPlugin: NativeSettingsPlugin? = nil) {
+  init(settingsPlugin: MacSettingsPlugin? = nil) {
     _viewModel = StateObject(wrappedValue: SettingsViewModel(settingsPlugin: settingsPlugin))
   }
 
