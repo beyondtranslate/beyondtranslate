@@ -7,7 +7,10 @@
       "ok": "OK",
       "cancel": "Cancel",
       "add": "Add",
-      "delete": "Delete"
+      "delete": "Delete",
+      "edit": "Edit",
+      "save": "Save",
+      "manage": "Manage"
     },
     "feedback": {
       "copied": "Copied"
@@ -245,7 +248,39 @@
       "title": "Input Settings"
     },
     "advanced": {
-      "title": "Advanced"
+      "title": "Advanced",
+      "empty": "No advanced settings available."
+    },
+    "providers": {
+      "title": "Providers",
+      "add": "Add a Provider...",
+      "add_title": "Add Provider",
+      "edit_title": "Edit Provider",
+      "delete_title": "Delete Provider",
+      "delete_confirm": "Delete \"{}\"?",
+      "delete_message": "This action cannot be undone.",
+      "empty": "No providers configured. Add one to enable translation services.",
+      "error": "Error",
+      "help": "Help",
+      "help_edit": "Edit provider",
+      "id": "Provider ID",
+      "id_placeholder": "e.g. deepl-main",
+      "intro": "Choose the translation and dictionary providers used by the app.",
+      "intro_warning": "Providers you add may process the text you send, so only connect services you trust.",
+      "loading": "Loading providers...",
+      "type": "Provider Type",
+      "services": "Services",
+      "no_services": "No services available.",
+      "capability": {
+        "translation": "Translation",
+        "dictionary": "Dictionary"
+      },
+      "description": {
+        "all": "Provides dictionary lookup and text translation",
+        "translation": "Provides text translation between languages",
+        "dictionary": "Provides dictionary lookup and word definitions",
+        "fallback": "Provides translation services"
+      }
     },
     "service_integration": {
       "title": "Service Integration"
@@ -268,10 +303,47 @@
       "submit_with_meta_enter": "Submit with Ctrl + Enter",
       "submit_with_meta_enter_mac": "Submit with ⌘ + Enter",
       "launch_at_startup": "Launch when you log in",
+      "show_menu_bar": "Show menu bar",
+      "permissions": "Permissions",
+      "default_extract_text_service": "Default extract text service",
+      "auto_copy_detected_text": "Auto copy detected text",
+      "directory": "Directory",
+      "default_directory_service": "Default directory service",
+      "translation": "Translation",
+      "default_translation_service": "Default translation service",
+      "translation_mode": "Translation mode",
+      "double_click_copy_result": "Double click to copy translation result",
+      "translation_target": "Translation Target",
+      "add_target": "Add Target",
       "engines": "Text Translation",
       "ocr_engines": "Text Detection",
       "about": "About Biyi",
       "exit_app": "Exit App"
+    },
+    "empty": {
+      "title": "Select a Category",
+      "message": "Choose a settings section from the sidebar."
+    },
+    "option": {
+      "none": "None",
+      "no_services_available": "No services available",
+      "granted": "Granted",
+      "built_in_ocr": "Built-in OCR",
+      "tesseract": "Tesseract",
+      "youdao_ocr": "Youdao OCR",
+      "english": "English",
+      "chinese": "Chinese"
+    },
+    "shortcut": {
+      "section": "Shortcuts",
+      "show_or_hide": "Show or Hide",
+      "hide": "Hide",
+      "extract_text": "Extract Text",
+      "extract_selection": "Extract text from selection",
+      "extract_capture": "Extract text from capture",
+      "extract_clipboard": "Extract text from clipboard",
+      "input_assist": "Input Assist Function",
+      "translate_input": "Translate input content"
     }
   },
   "shortcuts": {

@@ -44,15 +44,15 @@ struct ProviderDetailView: View {
               .foregroundStyle(.secondary)
           }
           .buttonStyle(.plain)
-          .help("Edit provider")
+          .help(LocaleKeys.settings.providers.helpEdit.tr())
         }
         .padding(.vertical, 4)
       }
 
       // ── Services ────────────────────────────────────────────────
-      Section("Services") {
+      Section(LocaleKeys.settings.providers.services.tr()) {
         if currentProvider.capabilities.isEmpty {
-          Text("No services available.")
+          Text(LocaleKeys.settings.providers.noServices.tr())
             .foregroundStyle(.secondary)
         } else {
           ForEach(currentProvider.capabilities, id: \.self) { capability in
@@ -126,8 +126,9 @@ private struct ProviderServiceRow: View {
 extension ProviderCapability {
   var displayName: String {
     switch self {
-    case .translation: return "Translation"
-    case .dictionary: return "Dictionary"
+    case .translation:
+      return LocaleKeys.settings.providers.capability.translation.tr()
+    case .dictionary: return LocaleKeys.settings.providers.capability.dictionary.tr()
     }
   }
 

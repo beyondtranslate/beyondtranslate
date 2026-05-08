@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show ThemeMode;
+import 'package:launch_at_startup/launch_at_startup.dart';
 
 import '../rust/domain/settings.dart';
+import '../utils/platform_util.dart';
 import 'runtime.dart' as runtime_service;
 
 /// App-wide settings cache backed by the Rust runtime.
@@ -116,6 +118,13 @@ class SettingsStore extends ChangeNotifier {
   Future<void> updateGeneral(GeneralSettingsPatch patch) async {
     final settings = runtime_service.runtime.settings();
     _general = await settings.updateGeneral(patch);
+    if ((kIsMacOS || kIsWindows) && patch.launchAtLogin != null) {
+      if (patch.launchAtLogin!) {
+        await LaunchAtStartup.instance.enable();
+      } else {
+        await LaunchAtStartup.instance.disable();
+      }
+    }
     notifyListeners();
   }
 

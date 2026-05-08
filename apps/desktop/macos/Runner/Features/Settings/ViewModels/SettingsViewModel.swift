@@ -1,6 +1,19 @@
 import SwiftUI
 
 @MainActor
+final class SettingsHighlightCoordinator: ObservableObject {
+  static let shared = SettingsHighlightCoordinator()
+
+  @Published private(set) var permissionsHighlightID = 0
+
+  private init() {}
+
+  func highlightPermissions() {
+    permissionsHighlightID += 1
+  }
+}
+
+@MainActor
 final class SettingsViewModel: ObservableObject {
   let general: GeneralViewModel
   let appearance: AppearanceViewModel

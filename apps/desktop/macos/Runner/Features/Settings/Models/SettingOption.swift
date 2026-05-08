@@ -12,11 +12,11 @@ enum SettingsSection: String, CaseIterable, Identifiable {
 
   var title: String {
     switch self {
-    case .general: return "General"
-    case .appearance: return "Appearance"
-    case .shortcuts: return "Shortcuts"
-    case .providers: return "Providers"
-    case .advanced: return "Advanced"
+    case .general: return LocaleKeys.settings.general.title.tr()
+    case .appearance: return LocaleKeys.settings.appearance.title.tr()
+    case .shortcuts: return LocaleKeys.settings.shortcuts.title.tr()
+    case .providers: return LocaleKeys.settings.providers.title.tr()
+    case .advanced: return LocaleKeys.settings.advanced.title.tr()
     }
   }
 
@@ -34,8 +34,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
 extension TranslationMode {
   var title: String {
     switch self {
-    case .auto: return "Auto"
-    case .manual: return "Manual"
+    case .auto: return LocaleKeys.translation.mode.auto.tr()
+    case .manual: return LocaleKeys.translation.mode.manual.tr()
     }
   }
 }
@@ -43,8 +43,9 @@ extension TranslationMode {
 extension InputSubmitMode {
   var title: String {
     switch self {
-    case .enter: return "Submit with Enter"
-    case .commandEnter: return "Submit with Command + Enter"
+    case .enter: return LocaleKeys.settings.preference.submitWithEnter.tr()
+    case .commandEnter:
+      return LocaleKeys.settings.preference.submitWithMetaEnterMac.tr()
     }
   }
 }
@@ -58,9 +59,9 @@ enum AppThemeMode: String, CaseIterable, Identifiable {
 
   var title: String {
     switch self {
-    case .light: return "Light"
-    case .dark: return "Dark"
-    case .system: return "System"
+    case .light: return LocaleKeys.theme.mode.light.tr()
+    case .dark: return LocaleKeys.theme.mode.dark.tr()
+    case .system: return LocaleKeys.theme.mode.system.tr()
     }
   }
 
@@ -167,7 +168,9 @@ struct ProviderDraft: Identifiable {
   var fields: [String: String]
 
   var title: String {
-    localID == nil ? "Add Provider" : "Edit Provider"
+    localID == nil
+      ? LocaleKeys.settings.providers.addTitle.tr()
+      : LocaleKeys.settings.providers.editTitle.tr()
   }
 
   static func new() -> ProviderDraft {

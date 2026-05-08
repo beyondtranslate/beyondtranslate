@@ -4,9 +4,9 @@ struct AdvancedView: View {
   @ObservedObject var viewModel: AdvancedViewModel
 
   var body: some View {
-    SettingsPage(title: "Advanced") {
+    SettingsPage(title: LocaleKeys.settings.advanced.title.tr()) {
       Section {
-        Text("No advanced settings available.")
+        Text(LocaleKeys.settings.advanced.empty.tr())
           .foregroundStyle(.secondary)
       }
     }

@@ -3,7 +3,7 @@ import SwiftUI
 struct SettingRow: View {
   let title: String
   let detail: String
-  var actionTitle = "Manage"
+  var actionTitle = LocaleKeys.common.button.manage.tr()
   var action: () -> Void = {}
 
   var body: some View {

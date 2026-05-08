@@ -77,6 +77,9 @@
 		A1000000000000000000000C /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000C /* SettingsRepository.swift */; };
 		A1000000000000000000000E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000E /* Settings.swift */; };
 		A100000000000000000000F /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110000000000000000000F /* ProviderDetailView.swift */; };
+		A10000000000000000000010 /* LocaleKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000010 /* LocaleKeys.swift */; };
+		A10000000000000000000012 /* AppLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000013 /* AppLocale.swift */; };
+		A10000000000000000000011 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* Localizable.strings */; };
 		B6867768A75CBFFF8FFDC94A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */; };
 		F5B4FE382FA7367900D78055 /* TranslationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B4FE372FA7367900D78055 /* TranslationMode.swift */; };
 		F5B4FE3A2FA7391100D78055 /* InputSubmitMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B4FE392FA7391100D78055 /* InputSubmitMode.swift */; };
@@ -188,6 +191,10 @@
 		A1100000000000000000000C /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
 		A1100000000000000000000E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		A110000000000000000000F /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
+		A11000000000000000000010 /* LocaleKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleKeys.swift; sourceTree = "<group>"; };
+		A11000000000000000000013 /* AppLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocale.swift; sourceTree = "<group>"; };
+		A11000000000000000000011 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Runner/en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A11000000000000000000012 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = Runner/zh.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AB98A8540C162D94896470E6 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		F5B4FE372FA7367900D78055 /* TranslationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationMode.swift; sourceTree = "<group>"; };
 		F5B4FE392FA7391100D78055 /* InputSubmitMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputSubmitMode.swift; sourceTree = "<group>"; };
@@ -287,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				33CC10F22044A3C60003C045 /* Assets.xcassets */,
+				A2000000000000000000000E /* Localizable.strings */,
 				33CC10F42044A3C60003C045 /* MainMenu.xib */,
 				33CC10F72044A3C60003C045 /* Info.plist */,
 			);
@@ -450,6 +458,7 @@
 			isa = PBXGroup;
 			children = (
 				A2000000000000000000000C /* Components */,
+				A2000000000000000000000D /* I18n */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -460,6 +469,15 @@
 				A20000000000000000000007 /* Settings */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		A2000000000000000000000D /* I18n */ = {
+			isa = PBXGroup;
+			children = (
+				A11000000000000000000010 /* LocaleKeys.swift */,
+				A11000000000000000000013 /* AppLocale.swift */,
+			);
+			path = I18n;
 			sourceTree = "<group>";
 		};
 		D73912EC22F37F3D000D13A0 /* Frameworks */ = {
@@ -568,6 +586,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				zh,
 				Base,
 			);
 			mainGroup = 33CC10E42044A3C60003C045;
@@ -598,6 +617,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */,
+				A10000000000000000000011 /* Localizable.strings in Resources */,
 				33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -771,6 +791,8 @@
 				A1000000000000000000000B /* AdvancedViewModel.swift in Sources */,
 				A1000000000000000000000C /* SettingsRepository.swift in Sources */,
 				A1000000000000000000000E /* Settings.swift in Sources */,
+				A10000000000000000000010 /* LocaleKeys.swift in Sources */,
+				A10000000000000000000012 /* AppLocale.swift in Sources */,
 				33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */,
 				335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */,
 			);
@@ -799,6 +821,15 @@
 			);
 			name = MainMenu.xib;
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		A2000000000000000000000E /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A11000000000000000000011 /* en */,
+				A11000000000000000000012 /* zh */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

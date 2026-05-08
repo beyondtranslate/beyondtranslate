@@ -2,10 +2,11 @@ import SwiftUI
 
 struct AppearanceView: View {
   @ObservedObject var viewModel: AppearanceViewModel
+  @ObservedObject private var localization = AppLocale.shared
 
   var body: some View {
-    SettingsPage(title: "Appearance") {
-      Section("Display Language") {
+    SettingsPage(title: LocaleKeys.settings.appearance.title.tr()) {
+      Section(LocaleKeys.settings.preference.appLanguage.tr()) {
         SettingPicker(
           "",
           selection: Binding(
@@ -13,15 +14,15 @@ struct AppearanceView: View {
             set: { viewModel.setAppLanguage($0) }
           )
         ) {
-          ForEach(["English", "Chinese"], id: \.self) { language in
-            Text(language).tag(language)
+          ForEach(languageOptions, id: \.id) { language in
+            Text(language.title).tag(language.id)
           }
         }
         .labelsHidden()
         .pickerStyle(.radioGroup)
       }
 
-      Section("Theme Mode") {
+      Section(LocaleKeys.settings.preference.themeMode.tr()) {
         SettingPicker(
           "",
           selection: Binding(
@@ -29,8 +30,8 @@ struct AppearanceView: View {
             set: { viewModel.setThemeMode($0) }
           )
         ) {
-          ForEach(AppThemeMode.allCases) { mode in
-            Text(mode.title).tag(mode)
+          ForEach(viewModel.themeModeOptions) { option in
+            Text(option.title).tag(option.mode)
           }
         }
         .labelsHidden()
@@ -38,5 +39,13 @@ struct AppearanceView: View {
       }
     }
     .preferredColorScheme(viewModel.themeMode.colorScheme)
+    .environment(\.locale, Locale(identifier: localization.languageCode))
+  }
+
+  private var languageOptions: [(id: String, title: String)] {
+    [
+      ("en", LocaleKeys.settings.option.english.tr()),
+      ("zh", LocaleKeys.settings.option.chinese.tr()),
+    ]
   }
 }

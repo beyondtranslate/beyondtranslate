@@ -28,6 +28,11 @@ final class MacSettingsPlugin: NSObject, FlutterPlugin {
         SettingsWindowController.shared.showWindow(settingsPlugin: self)
         result(nil)
       }
+    case "highlightPermissions":
+      Task { @MainActor in
+        SettingsHighlightCoordinator.shared.highlightPermissions()
+        result(nil)
+      }
     default:
       result(FlutterMethodNotImplemented)
     }

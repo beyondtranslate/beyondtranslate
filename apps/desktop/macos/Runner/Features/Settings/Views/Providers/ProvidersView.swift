@@ -6,7 +6,7 @@ struct ProvidersView: View {
 
   var body: some View {
     NavigationStack {
-      SettingsPage(title: "Providers") {
+      SettingsPage(title: LocaleKeys.settings.providers.title.tr()) {
         Section {
           ProviderIntroRow()
         }
@@ -28,7 +28,7 @@ struct ProvidersView: View {
         } footer: {
           HStack {
             Spacer()
-            Button("Add a Provider...") {
+            Button(LocaleKeys.settings.providers.add.tr()) {
               draft = .new()
             }
           }
@@ -52,13 +52,13 @@ struct ProvidersView: View {
       }
     }
     .alert(
-      "Error",
+      LocaleKeys.settings.providers.error.tr(),
       isPresented: Binding(
         get: { viewModel.errorMessage != nil },
         set: { if !$0 { viewModel.errorMessage = nil } }
       )
     ) {
-      Button("OK") { viewModel.errorMessage = nil }
+      Button(LocaleKeys.common.button.ok.tr()) { viewModel.errorMessage = nil }
     } message: {
       if let msg = viewModel.errorMessage {
         Text(msg)
@@ -72,11 +72,11 @@ struct ProvidersView: View {
 private struct ProviderIntroRow: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
-      Text("Choose the translation and dictionary providers used by the app.")
+      Text(LocaleKeys.settings.providers.intro.tr())
         .fixedSize(horizontal: false, vertical: true)
 
       Text(
-        "Providers you add may process the text you send, so only connect services you trust."
+        LocaleKeys.settings.providers.introWarning.tr()
       )
       .foregroundStyle(.secondary)
       .fixedSize(horizontal: false, vertical: true)
@@ -126,23 +126,24 @@ private struct ProviderRow: View {
       .padding(.vertical, 2)
     }
     .contextMenu {
-      Button("Edit", action: onEdit)
+      Button(LocaleKeys.common.button.edit.tr(), action: onEdit)
 
       Divider()
 
-      Button("Delete", role: .destructive) {
+      Button(LocaleKeys.common.button.delete.tr(), role: .destructive) {
         showDeleteConfirm = true
       }
     }
     .confirmationDialog(
-      "Delete \"\(provider.name)\"?",
+      LocaleKeys.settings.providers.deleteConfirm.tr(provider.name),
       isPresented: $showDeleteConfirm,
       titleVisibility: .visible
     ) {
-      Button("Delete", role: .destructive, action: onDelete)
-      Button("Cancel", role: .cancel) {}
+      Button(
+        LocaleKeys.common.button.delete.tr(), role: .destructive, action: onDelete)
+      Button(LocaleKeys.common.button.cancel.tr(), role: .cancel) {}
     } message: {
-      Text("This action cannot be undone.")
+      Text(LocaleKeys.settings.providers.deleteMessage.tr())
     }
   }
 }
@@ -153,7 +154,7 @@ private struct LoadingProviderRow: View {
   var body: some View {
     HStack(spacing: 14) {
       ProgressView()
-      Text("Loading providers...")
+      Text(LocaleKeys.settings.providers.loading.tr())
         .font(.system(size: 13))
         .foregroundStyle(.secondary)
       Spacer()
@@ -168,7 +169,7 @@ private struct EmptyProviderRow: View {
         .font(.system(size: 20))
         .foregroundStyle(.tertiary)
         .frame(width: 28, height: 28)
-      Text("No providers configured. Add one to enable translation services.")
+      Text(LocaleKeys.settings.providers.empty.tr())
         .font(.system(size: 13))
         .foregroundStyle(.secondary)
         .fixedSize(horizontal: false, vertical: true)
@@ -271,11 +272,16 @@ struct ProviderEditorSheet: View {
         // Show Provider ID and Type picker only when creating a new provider
         if draft.localID == nil {
           Section {
-            TextField(text: $draft.backendID, prompt: Text("e.g. deepl-main")) {
-              Text("Provider ID")
+            TextField(
+              text: $draft.backendID,
+              prompt: Text(LocaleKeys.settings.providers.idPlaceholder.tr())
+            ) {
+              Text(LocaleKeys.settings.providers.id.tr())
             }
 
-            Picker("Provider Type", selection: $draft.providerType) {
+            Picker(
+              LocaleKeys.settings.providers.type.tr(), selection: $draft.providerType
+            ) {
               ForEach(ProviderType.allCases) { type in
                 Text(type.displayName).tag(type)
               }
@@ -319,7 +325,7 @@ struct ProviderEditorSheet: View {
             .foregroundStyle(.secondary)
         }
         .buttonStyle(.plain)
-        .help("Help")
+        .help(LocaleKeys.settings.providers.help.tr())
 
         // Destructive delete — bordered pill with red tint
         if let localID = draft.localID {
@@ -327,7 +333,7 @@ struct ProviderEditorSheet: View {
             onDelete(localID)
             dismiss()
           } label: {
-            Text("Delete Provider")
+            Text(LocaleKeys.settings.providers.deleteTitle.tr())
           }
           .buttonStyle(.bordered)
           .tint(.red)
@@ -335,13 +341,17 @@ struct ProviderEditorSheet: View {
 
         Spacer()
 
-        Button("Cancel") {
+        Button(LocaleKeys.common.button.cancel.tr()) {
           onCancel()
           dismiss()
         }
         .keyboardShortcut(.cancelAction)
 
-        Button(draft.localID == nil ? "Add" : "Save") {
+        Button(
+          draft.localID == nil
+            ? LocaleKeys.common.button.add.tr()
+            : LocaleKeys.common.button.save.tr()
+        ) {
           onSave(draft)
           dismiss()
         }
@@ -453,13 +463,13 @@ extension ProviderType {
 
   var displayName: String {
     switch self {
-    case .baidu: return "Baidu"
-    case .caiyun: return "Caiyun"
-    case .deepL: return "DeepL"
-    case .google: return "Google"
-    case .iciba: return "iCiba"
-    case .tencent: return "Tencent"
-    case .youdao: return "Youdao"
+    case .baidu: return LocaleKeys.provider.baidu.tr()
+    case .caiyun: return LocaleKeys.provider.caiyun.tr()
+    case .deepL: return LocaleKeys.provider.deepl.tr()
+    case .google: return LocaleKeys.provider.google.tr()
+    case .iciba: return LocaleKeys.provider.iciba.tr()
+    case .tencent: return LocaleKeys.provider.tencent.tr()
+    case .youdao: return LocaleKeys.provider.youdao.tr()
     }
   }
 
@@ -468,10 +478,12 @@ extension ProviderType {
     let hasTranslation = caps.contains(.translation)
     let hasDictionary = caps.contains(.dictionary)
     switch (hasTranslation, hasDictionary) {
-    case (true, true): return "Provides dictionary lookup and text translation"
-    case (true, false): return "Provides text translation between languages"
-    case (false, true): return "Provides dictionary lookup and word definitions"
-    default: return "Provides translation services"
+    case (true, true): return LocaleKeys.settings.providers.description.all.tr()
+    case (true, false):
+      return LocaleKeys.settings.providers.description.translation.tr()
+    case (false, true):
+      return LocaleKeys.settings.providers.description.dictionary.tr()
+    default: return LocaleKeys.settings.providers.description.fallback.tr()
     }
   }
 }

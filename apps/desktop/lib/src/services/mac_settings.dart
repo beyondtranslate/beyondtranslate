@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../rust/domain/settings.dart';
 import 'runtime.dart' as runtime_service;
+import 'settings_store.dart';
 
 class MacSettings {
   static const MethodChannel _channel =
@@ -25,12 +26,13 @@ class MacSettings {
 
         case 'settings.updateAppearance':
           final args = (call.arguments as Map).cast<String, dynamic>();
-          final result = await settings.updateAppearance(
+          await settingsStore.updateAppearance(
             AppearanceSettingsPatch(
               language: args['language'] as String?,
               themeMode: args['themeMode'] as String?,
             ),
           );
+          final result = settingsStore.appearance;
           return {'language': result.language, 'themeMode': result.themeMode};
 
         case 'settings.getShortcuts':
@@ -178,5 +180,18 @@ class MacSettings {
     if (!Platform.isMacOS) return;
 
     await _channel.invokeMethod<void>('showSettings');
+  }
+
+  static Future<void> highlightPermissions() async {
+    if (!Platform.isMacOS) return;
+
+    await _channel.invokeMethod<void>('highlightPermissions');
+  }
+
+  static Future<void> showAndHighlightPermissions() async {
+    if (!Platform.isMacOS) return;
+
+    await show();
+    await highlightPermissions();
   }
 }

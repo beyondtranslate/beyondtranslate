@@ -4,13 +4,15 @@ import SwiftUI
 final class AppearanceViewModel: ObservableObject {
   @Published var appLanguage: String
   @Published var themeMode: AppThemeMode
+  @Published private(set) var themeModeOptions: [ThemeModeOption]
 
   private let repository: SettingsRepository
 
   init(repository: SettingsRepository) {
     self.repository = repository
-    appLanguage = "English"
+    appLanguage = "en"
     themeMode = .system
+    themeModeOptions = Self.localizedThemeModeOptions()
     ThemeAppearanceController.apply(.system)
   }
 
@@ -24,10 +26,12 @@ final class AppearanceViewModel: ObservableObject {
 
   func setAppLanguage(_ value: String) {
     appLanguage = value
+    AppLocale.shared.setLocale(value)
+    refreshLocalizedOptions()
     Task {
       do {
         let updated = try await repository.updateAppearance(
-          AppearanceSettingsPatch(language: rustLanguage(from: value), themeMode: nil)
+          AppearanceSettingsPatch(language: value, themeMode: nil)
         )
         apply(updated)
       } catch {
@@ -52,31 +56,34 @@ final class AppearanceViewModel: ObservableObject {
   }
 
   private func apply(_ settings: AppearanceSettings) {
-    appLanguage = displayLanguage(from: settings.language)
+    appLanguage = languageCode(from: settings.language)
+    AppLocale.shared.setLocale(appLanguage)
+    refreshLocalizedOptions()
     let mode = AppThemeMode(rawValue: settings.themeMode) ?? .system
     themeMode = mode
     ThemeAppearanceController.apply(mode)
   }
 
-  private func rustLanguage(from displayLanguage: String) -> String {
-    switch displayLanguage {
-    case "Chinese":
-      return "zh"
-    case "English":
-      return "en"
-    default:
-      return displayLanguage
-    }
+  private func languageCode(from value: String) -> String {
+    value.hasPrefix("zh") ? "zh" : "en"
   }
 
-  private func displayLanguage(from rustLanguage: String) -> String {
-    switch rustLanguage {
-    case "zh":
-      return "Chinese"
-    case "en":
-      return "English"
-    default:
-      return rustLanguage
+  private func refreshLocalizedOptions() {
+    themeModeOptions = Self.localizedThemeModeOptions()
+  }
+
+  private static func localizedThemeModeOptions() -> [ThemeModeOption] {
+    AppThemeMode.allCases.map { mode in
+      ThemeModeOption(mode: mode, title: mode.title)
     }
+  }
+}
+
+struct ThemeModeOption: Identifiable {
+  let mode: AppThemeMode
+  let title: String
+
+  var id: String {
+    "\(mode.rawValue)-\(title)"
   }
 }

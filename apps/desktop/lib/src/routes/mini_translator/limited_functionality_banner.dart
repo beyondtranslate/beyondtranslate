@@ -1,69 +1,13 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
-import 'package:screen_capturer/screen_capturer.dart';
-import 'package:screen_text_extractor/screen_text_extractor.dart';
 
 import '../../i18n/i18n.dart';
+import '../../services/mac_settings.dart';
 import '../../utils/platform_util.dart';
 import '../../utils/utils.dart';
 import '../../widgets/ui/button.dart';
-
-class _AllowAccessListItem extends StatelessWidget {
-  const _AllowAccessListItem({
-    Key? key,
-    required this.title,
-    required this.allowed,
-    this.onTappedTryAllow,
-    this.onTappedGoSettings,
-  }) : super(key: key);
-
-  final String title;
-  final bool allowed;
-  final VoidCallback? onTappedTryAllow;
-  final VoidCallback? onTappedGoSettings;
-
-  @override
-  Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-
-    return Text.rich(
-      TextSpan(
-        text: allowed ? '✅' : '❌',
-        children: [
-          const TextSpan(text: '  '),
-          TextSpan(text: title),
-          const TextSpan(text: '      '),
-          if (onTappedTryAllow != null)
-            TextSpan(
-              text: t.mini_translator.limited_banner.button.allow,
-              style: const TextStyle(
-                decoration: TextDecoration.underline,
-                decorationColor: Colors.white,
-              ),
-              recognizer: TapGestureRecognizer()..onTap = onTappedTryAllow,
-            ),
-          if (onTappedTryAllow != null) const TextSpan(text: ' / '),
-          if (onTappedGoSettings != null)
-            TextSpan(
-              text: t.mini_translator.limited_banner.button.go_settings,
-              style: const TextStyle(
-                decoration: TextDecoration.underline,
-                decorationColor: Colors.white,
-              ),
-              recognizer: TapGestureRecognizer()..onTap = onTappedGoSettings,
-            ),
-        ],
-      ),
-      style: textTheme.bodyMedium!.copyWith(
-        color: Colors.white,
-        fontSize: 13,
-      ),
-    );
-  }
-}
 
 class LimitedFunctionalityBanner extends StatelessWidget {
   const LimitedFunctionalityBanner({
@@ -113,54 +57,7 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(top: 6, bottom: 6),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (kIsMacOS)
-                    _AllowAccessListItem(
-                      title: t.mini_translator.limited_banner.permission
-                          .screen_capture,
-                      allowed: isAllowedScreenCaptureAccess,
-                      onTappedTryAllow: () {
-                        ScreenCapturer.instance.requestAccess();
-                        BotToast.showText(
-                          text: t.mini_translator.limited_banner.message
-                              .allow_access_tip,
-                          align: Alignment.center,
-                          duration: const Duration(seconds: 5),
-                        );
-                      },
-                      onTappedGoSettings: () {
-                        ScreenCapturer.instance.requestAccess(
-                          onlyOpenPrefPane: true,
-                        );
-                      },
-                    ),
-                  if (kIsMacOS)
-                    _AllowAccessListItem(
-                      title: t.mini_translator.limited_banner.permission
-                          .screen_selection,
-                      allowed: isAllowedScreenSelectionAccess,
-                      onTappedTryAllow: () {
-                        screenTextExtractor.requestAccess();
-                        BotToast.showText(
-                          text: t.mini_translator.limited_banner.message
-                              .allow_access_tip,
-                          align: Alignment.center,
-                          duration: const Duration(seconds: 5),
-                        );
-                      },
-                      onTappedGoSettings: () {
-                        screenTextExtractor.requestAccess(
-                          onlyOpenPrefPane: true,
-                        );
-                      },
-                    ),
-                ],
-              ),
-            ),
+            const SizedBox(height: 6),
             Row(
               children: [
                 SizedBox(
@@ -189,6 +86,26 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                 Expanded(
                   child: Container(),
                 ),
+                if (kIsMacOS) ...[
+                  Text.rich(
+                    TextSpan(
+                      text: t.mini_translator.limited_banner.button.go_settings,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        height: 1.3,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.white,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = MacSettings.showAndHighlightPermissions,
+                    ),
+                    style: textTheme.bodyMedium!.copyWith(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(width: 18),
+                ],
                 Text.rich(
                   TextSpan(
                     children: [

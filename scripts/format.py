@@ -51,7 +51,7 @@ def is_ignored_file(path: Path, ignored_files: set[Path]) -> bool:
 
 def source_files(extension: str, ignored_files: set[Path]) -> list[Path]:
     tracked_files = subprocess.run(
-        ["git", "ls-files", f"*.{extension}"],
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard", f"*.{extension}"],
         cwd=ROOT,
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
@@ -61,7 +61,8 @@ def source_files(extension: str, ignored_files: set[Path]) -> list[Path]:
         return [
             Path(path)
             for path in tracked_files.stdout.splitlines()
-            if not any(part in EXCLUDED_DIRS for part in Path(path).parts)
+            if (ROOT / path).exists()
+            and not any(part in EXCLUDED_DIRS for part in Path(path).parts)
             and not is_ignored_file(Path(path), ignored_files)
         ]
 

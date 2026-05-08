@@ -254,6 +254,9 @@ class _TranslationsSettingsZh extends TranslationsSettingsEn {
   late final _TranslationsSettingsAdvancedZh advanced =
       _TranslationsSettingsAdvancedZh._(_root);
   @override
+  late final _TranslationsSettingsProvidersZh providers =
+      _TranslationsSettingsProvidersZh._(_root);
+  @override
   late final _TranslationsSettingsServiceIntegrationZh service_integration =
       _TranslationsSettingsServiceIntegrationZh._(_root);
   @override
@@ -265,6 +268,15 @@ class _TranslationsSettingsZh extends TranslationsSettingsEn {
   @override
   late final _TranslationsSettingsPreferenceZh preference =
       _TranslationsSettingsPreferenceZh._(_root);
+  @override
+  late final _TranslationsSettingsEmptyZh empty =
+      _TranslationsSettingsEmptyZh._(_root);
+  @override
+  late final _TranslationsSettingsOptionZh option =
+      _TranslationsSettingsOptionZh._(_root);
+  @override
+  late final _TranslationsSettingsShortcutZh shortcut =
+      _TranslationsSettingsShortcutZh._(_root);
 }
 
 // Path: shortcuts
@@ -311,6 +323,12 @@ class _TranslationsCommonButtonZh extends TranslationsCommonButtonEn {
   String get add => '添加';
   @override
   String get delete => '删除';
+  @override
+  String get edit => '编辑';
+  @override
+  String get save => '保存';
+  @override
+  String get manage => '管理';
 }
 
 // Path: common.feedback
@@ -845,6 +863,63 @@ class _TranslationsSettingsAdvancedZh extends TranslationsSettingsAdvancedEn {
   // Translations
   @override
   String get title => '高级';
+  @override
+  String get empty => '暂无高级设置。';
+}
+
+// Path: settings.providers
+class _TranslationsSettingsProvidersZh extends TranslationsSettingsProvidersEn {
+  _TranslationsSettingsProvidersZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '服务商';
+  @override
+  String get add => '添加服务商...';
+  @override
+  String get add_title => '添加服务商';
+  @override
+  String get edit_title => '编辑服务商';
+  @override
+  String get delete_title => '删除服务商';
+  @override
+  String get delete_confirm => '删除「{}」？';
+  @override
+  String get delete_message => '此操作无法撤销。';
+  @override
+  String get empty => '暂无已配置的服务商。添加一个服务商以启用翻译服务。';
+  @override
+  String get error => '错误';
+  @override
+  String get help => '帮助';
+  @override
+  String get help_edit => '编辑服务商';
+  @override
+  String get id => '服务商 ID';
+  @override
+  String get id_placeholder => '例如 deepl-main';
+  @override
+  String get intro => '选择应用使用的翻译和词典服务商。';
+  @override
+  String get intro_warning => '你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。';
+  @override
+  String get loading => '正在加载服务商...';
+  @override
+  String get type => '服务商类型';
+  @override
+  String get services => '服务';
+  @override
+  String get no_services => '暂无可用服务。';
+  @override
+  late final _TranslationsSettingsProvidersCapabilityZh capability =
+      _TranslationsSettingsProvidersCapabilityZh._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDescriptionZh description =
+      _TranslationsSettingsProvidersDescriptionZh._(_root);
 }
 
 // Path: settings.service_integration
@@ -921,6 +996,30 @@ class _TranslationsSettingsPreferenceZh
   @override
   String get launch_at_startup => '登录时启动';
   @override
+  String get show_menu_bar => '显示菜单栏';
+  @override
+  String get permissions => '权限';
+  @override
+  String get default_extract_text_service => '默认取词服务';
+  @override
+  String get auto_copy_detected_text => '自动复制识别文本';
+  @override
+  String get directory => '词典';
+  @override
+  String get default_directory_service => '默认词典服务';
+  @override
+  String get translation => '翻译';
+  @override
+  String get default_translation_service => '默认翻译服务';
+  @override
+  String get translation_mode => '翻译模式';
+  @override
+  String get double_click_copy_result => '双击复制翻译结果';
+  @override
+  String get translation_target => '翻译目标';
+  @override
+  String get add_target => '添加目标';
+  @override
   String get engines => '文本翻译';
   @override
   String get ocr_engines => '文字识别';
@@ -928,6 +1027,77 @@ class _TranslationsSettingsPreferenceZh
   String get about => '关于比译';
   @override
   String get exit_app => '退出应用';
+}
+
+// Path: settings.empty
+class _TranslationsSettingsEmptyZh extends TranslationsSettingsEmptyEn {
+  _TranslationsSettingsEmptyZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '选择一个分类';
+  @override
+  String get message => '从侧边栏选择一个设置分类。';
+}
+
+// Path: settings.option
+class _TranslationsSettingsOptionZh extends TranslationsSettingsOptionEn {
+  _TranslationsSettingsOptionZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get none => '无';
+  @override
+  String get no_services_available => '暂无可用服务';
+  @override
+  String get granted => '已授权';
+  @override
+  String get built_in_ocr => '内置 OCR';
+  @override
+  String get tesseract => 'Tesseract';
+  @override
+  String get youdao_ocr => '有道 OCR';
+  @override
+  String get english => '英文';
+  @override
+  String get chinese => '中文';
+}
+
+// Path: settings.shortcut
+class _TranslationsSettingsShortcutZh extends TranslationsSettingsShortcutEn {
+  _TranslationsSettingsShortcutZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get section => '快捷键';
+  @override
+  String get show_or_hide => '显示或隐藏';
+  @override
+  String get hide => '隐藏';
+  @override
+  String get extract_text => '取词';
+  @override
+  String get extract_selection => '从选区取词';
+  @override
+  String get extract_capture => '截图取词';
+  @override
+  String get extract_clipboard => '从剪贴板取词';
+  @override
+  String get input_assist => '输入辅助功能';
+  @override
+  String get translate_input => '翻译输入内容';
 }
 
 // Path: shortcuts.record_dialog
@@ -1060,6 +1230,42 @@ class _TranslationsMiniTranslatorToolbarTooltipZh
   String get extract_text_from_clipboard => '读取剪切板内容';
 }
 
+// Path: settings.providers.capability
+class _TranslationsSettingsProvidersCapabilityZh
+    extends TranslationsSettingsProvidersCapabilityEn {
+  _TranslationsSettingsProvidersCapabilityZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get translation => '翻译';
+  @override
+  String get dictionary => '词典';
+}
+
+// Path: settings.providers.description
+class _TranslationsSettingsProvidersDescriptionZh
+    extends TranslationsSettingsProvidersDescriptionEn {
+  _TranslationsSettingsProvidersDescriptionZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get all => '提供词典查询和文本翻译';
+  @override
+  String get translation => '提供语言间文本翻译';
+  @override
+  String get dictionary => '提供词典查询和单词释义';
+  @override
+  String get fallback => '提供翻译服务';
+}
+
 /// The flat map containing all translations for locale <zh>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -1073,6 +1279,9 @@ extension on TranslationsZh {
       'common.button.cancel' => '取消',
       'common.button.add' => '添加',
       'common.button.delete' => '删除',
+      'common.button.edit' => '编辑',
+      'common.button.save' => '保存',
+      'common.button.manage' => '管理',
       'common.feedback.copied' => '已复制',
       'common.placeholder.choose' => '请选择',
       'common.language.af' => '布尔语(南非荷兰语)',
@@ -1249,6 +1458,32 @@ extension on TranslationsZh {
       'settings.shortcuts.title' => '快捷键',
       'settings.input.title' => '输入设置',
       'settings.advanced.title' => '高级',
+      'settings.advanced.empty' => '暂无高级设置。',
+      'settings.providers.title' => '服务商',
+      'settings.providers.add' => '添加服务商...',
+      'settings.providers.add_title' => '添加服务商',
+      'settings.providers.edit_title' => '编辑服务商',
+      'settings.providers.delete_title' => '删除服务商',
+      'settings.providers.delete_confirm' => '删除「{}」？',
+      'settings.providers.delete_message' => '此操作无法撤销。',
+      'settings.providers.empty' => '暂无已配置的服务商。添加一个服务商以启用翻译服务。',
+      'settings.providers.error' => '错误',
+      'settings.providers.help' => '帮助',
+      'settings.providers.help_edit' => '编辑服务商',
+      'settings.providers.id' => '服务商 ID',
+      'settings.providers.id_placeholder' => '例如 deepl-main',
+      'settings.providers.intro' => '选择应用使用的翻译和词典服务商。',
+      'settings.providers.intro_warning' => '你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。',
+      'settings.providers.loading' => '正在加载服务商...',
+      'settings.providers.type' => '服务商类型',
+      'settings.providers.services' => '服务',
+      'settings.providers.no_services' => '暂无可用服务。',
+      'settings.providers.capability.translation' => '翻译',
+      'settings.providers.capability.dictionary' => '词典',
+      'settings.providers.description.all' => '提供词典查询和文本翻译',
+      'settings.providers.description.translation' => '提供语言间文本翻译',
+      'settings.providers.description.dictionary' => '提供词典查询和单词释义',
+      'settings.providers.description.fallback' => '提供翻译服务',
       'settings.service_integration.title' => '服务接入',
       'settings.others.title' => '其他',
       'settings.exit_app_dialog.title' => '您确定要退出吗？',
@@ -1263,10 +1498,41 @@ extension on TranslationsZh {
       'settings.preference.submit_with_meta_enter' => '用 Ctrl + Enter 提交',
       'settings.preference.submit_with_meta_enter_mac' => '用 ⌘ + Enter 提交',
       'settings.preference.launch_at_startup' => '登录时启动',
+      'settings.preference.show_menu_bar' => '显示菜单栏',
+      'settings.preference.permissions' => '权限',
+      'settings.preference.default_extract_text_service' => '默认取词服务',
+      'settings.preference.auto_copy_detected_text' => '自动复制识别文本',
+      'settings.preference.directory' => '词典',
+      'settings.preference.default_directory_service' => '默认词典服务',
+      'settings.preference.translation' => '翻译',
+      'settings.preference.default_translation_service' => '默认翻译服务',
+      'settings.preference.translation_mode' => '翻译模式',
+      'settings.preference.double_click_copy_result' => '双击复制翻译结果',
+      'settings.preference.translation_target' => '翻译目标',
+      'settings.preference.add_target' => '添加目标',
       'settings.preference.engines' => '文本翻译',
       'settings.preference.ocr_engines' => '文字识别',
       'settings.preference.about' => '关于比译',
       'settings.preference.exit_app' => '退出应用',
+      'settings.empty.title' => '选择一个分类',
+      'settings.empty.message' => '从侧边栏选择一个设置分类。',
+      'settings.option.none' => '无',
+      'settings.option.no_services_available' => '暂无可用服务',
+      'settings.option.granted' => '已授权',
+      'settings.option.built_in_ocr' => '内置 OCR',
+      'settings.option.tesseract' => 'Tesseract',
+      'settings.option.youdao_ocr' => '有道 OCR',
+      'settings.option.english' => '英文',
+      'settings.option.chinese' => '中文',
+      'settings.shortcut.section' => '快捷键',
+      'settings.shortcut.show_or_hide' => '显示或隐藏',
+      'settings.shortcut.hide' => '隐藏',
+      'settings.shortcut.extract_text' => '取词',
+      'settings.shortcut.extract_selection' => '从选区取词',
+      'settings.shortcut.extract_capture' => '截图取词',
+      'settings.shortcut.extract_clipboard' => '从剪贴板取词',
+      'settings.shortcut.input_assist' => '输入辅助功能',
+      'settings.shortcut.translate_input' => '翻译输入内容',
       'shortcuts.record_dialog.title' => '自定义快捷键',
       _ => null,
     };

@@ -4,22 +4,32 @@ struct ShortcutsView: View {
   @ObservedObject var viewModel: ShortcutsViewModel
 
   var body: some View {
-    SettingsPage(title: "Shortcuts") {
-      Section("Shortcuts") {
-        ShortcutSettingRow(title: "Show or Hide", shortcut: viewModel.showOrHide)
-        ShortcutSettingRow(title: "Hide", shortcut: viewModel.hide)
+    SettingsPage(title: LocaleKeys.settings.shortcuts.title.tr()) {
+      Section(LocaleKeys.settings.shortcut.section.tr()) {
+        ShortcutSettingRow(
+          title: LocaleKeys.settings.shortcut.showOrHide.tr(),
+          shortcut: viewModel.showOrHide)
+        ShortcutSettingRow(
+          title: LocaleKeys.settings.shortcut.hide.tr(),
+          shortcut: viewModel.hide)
       }
 
-      Section("Extract Text") {
+      Section(LocaleKeys.settings.shortcut.extractText.tr()) {
         ShortcutSettingRow(
-          title: "Extract text from selection", shortcut: viewModel.extractSelection)
-        ShortcutSettingRow(title: "Extract text from capture", shortcut: viewModel.extractCapture)
+          title: LocaleKeys.settings.shortcut.extractSelection.tr(),
+          shortcut: viewModel.extractSelection)
         ShortcutSettingRow(
-          title: "Extract text from clipboard", shortcut: viewModel.extractClipboard)
+          title: LocaleKeys.settings.shortcut.extractCapture.tr(),
+          shortcut: viewModel.extractCapture)
+        ShortcutSettingRow(
+          title: LocaleKeys.settings.shortcut.extractClipboard.tr(),
+          shortcut: viewModel.extractClipboard)
       }
 
-      Section("Input Assist Function") {
-        ShortcutSettingRow(title: "Translate input content", shortcut: viewModel.translateInput)
+      Section(LocaleKeys.settings.shortcut.inputAssist.tr()) {
+        ShortcutSettingRow(
+          title: LocaleKeys.settings.shortcut.translateInput.tr(),
+          shortcut: viewModel.translateInput)
       }
     }
   }
