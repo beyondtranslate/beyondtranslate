@@ -202,9 +202,6 @@ class TranslationsSettingsEn {
 
   // Translations
 
-  /// en: 'Settings'
-  String get title => 'Settings';
-
   /// en: 'Version {} BUILD {}'
   String get version => 'Version {} BUILD {}';
 
@@ -214,26 +211,15 @@ class TranslationsSettingsEn {
       TranslationsSettingsAppearanceEn.internal(_root);
   late final TranslationsSettingsShortcutsEn shortcuts =
       TranslationsSettingsShortcutsEn.internal(_root);
-  late final TranslationsSettingsInputEn input =
-      TranslationsSettingsInputEn.internal(_root);
   late final TranslationsSettingsAdvancedEn advanced =
       TranslationsSettingsAdvancedEn.internal(_root);
   late final TranslationsSettingsProvidersEn providers =
       TranslationsSettingsProvidersEn.internal(_root);
-  late final TranslationsSettingsServiceIntegrationEn service_integration =
-      TranslationsSettingsServiceIntegrationEn.internal(_root);
-  late final TranslationsSettingsOthersEn others =
-      TranslationsSettingsOthersEn.internal(_root);
-  late final TranslationsSettingsExitAppDialogEn exit_app_dialog =
-      TranslationsSettingsExitAppDialogEn.internal(_root);
-  late final TranslationsSettingsPreferenceEn preference =
-      TranslationsSettingsPreferenceEn.internal(_root);
-  late final TranslationsSettingsEmptyEn empty =
-      TranslationsSettingsEmptyEn.internal(_root);
-  late final TranslationsSettingsOptionEn option =
-      TranslationsSettingsOptionEn.internal(_root);
-  late final TranslationsSettingsShortcutEn shortcut =
-      TranslationsSettingsShortcutEn.internal(_root);
+  late final TranslationsSettingsLayoutEn layout =
+      TranslationsSettingsLayoutEn.internal(_root);
+
+  /// en: 'Settings'
+  String get title => 'Settings';
 }
 
 // Path: shortcuts
@@ -787,8 +773,6 @@ class TranslationsMiniTranslatorLimitedBannerEn {
   String get title =>
       'Functionality is limited, please follow the tips to check.';
 
-  late final TranslationsMiniTranslatorLimitedBannerPermissionEn permission =
-      TranslationsMiniTranslatorLimitedBannerPermissionEn.internal(_root);
   late final TranslationsMiniTranslatorLimitedBannerButtonEn button =
       TranslationsMiniTranslatorLimitedBannerButtonEn.internal(_root);
   late final TranslationsMiniTranslatorLimitedBannerTooltipEn tooltip =
@@ -865,6 +849,15 @@ class TranslationsSettingsGeneralEn {
 
   /// en: 'General'
   String get title => 'General';
+
+  late final TranslationsSettingsGeneralSectionEn section =
+      TranslationsSettingsGeneralSectionEn.internal(_root);
+  late final TranslationsSettingsGeneralRowEn row =
+      TranslationsSettingsGeneralRowEn.internal(_root);
+  late final TranslationsSettingsGeneralButtonEn button =
+      TranslationsSettingsGeneralButtonEn.internal(_root);
+  late final TranslationsSettingsGeneralOptionEn option =
+      TranslationsSettingsGeneralOptionEn.internal(_root);
 }
 
 // Path: settings.appearance
@@ -877,6 +870,11 @@ class TranslationsSettingsAppearanceEn {
 
   /// en: 'Appearance'
   String get title => 'Appearance';
+
+  late final TranslationsSettingsAppearanceSectionEn section =
+      TranslationsSettingsAppearanceSectionEn.internal(_root);
+  late final TranslationsSettingsAppearanceOptionEn option =
+      TranslationsSettingsAppearanceOptionEn.internal(_root);
 }
 
 // Path: settings.shortcuts
@@ -889,18 +887,11 @@ class TranslationsSettingsShortcutsEn {
 
   /// en: 'Shortcuts'
   String get title => 'Shortcuts';
-}
 
-// Path: settings.input
-class TranslationsSettingsInputEn {
-  TranslationsSettingsInputEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Input Settings'
-  String get title => 'Input Settings';
+  late final TranslationsSettingsShortcutsSectionEn section =
+      TranslationsSettingsShortcutsSectionEn.internal(_root);
+  late final TranslationsSettingsShortcutsRowEn row =
+      TranslationsSettingsShortcutsRowEn.internal(_root);
 }
 
 // Path: settings.advanced
@@ -929,278 +920,41 @@ class TranslationsSettingsProvidersEn {
   /// en: 'Providers'
   String get title => 'Providers';
 
-  /// en: 'Add a Provider...'
-  String get add => 'Add a Provider...';
-
-  /// en: 'Add Provider'
-  String get add_title => 'Add Provider';
-
-  /// en: 'Edit Provider'
-  String get edit_title => 'Edit Provider';
-
-  /// en: 'Delete Provider'
-  String get delete_title => 'Delete Provider';
-
-  /// en: 'Delete "{}"?'
-  String get delete_confirm => 'Delete "{}"?';
-
-  /// en: 'This action cannot be undone.'
-  String get delete_message => 'This action cannot be undone.';
-
-  /// en: 'No providers configured. Add one to enable translation services.'
-  String get empty =>
-      'No providers configured. Add one to enable translation services.';
-
-  /// en: 'Error'
-  String get error => 'Error';
-
-  /// en: 'Help'
-  String get help => 'Help';
-
-  /// en: 'Edit provider'
-  String get help_edit => 'Edit provider';
-
-  /// en: 'Provider ID'
-  String get id => 'Provider ID';
-
-  /// en: 'e.g. deepl-main'
-  String get id_placeholder => 'e.g. deepl-main';
-
-  /// en: 'Choose the translation and dictionary providers used by the app.'
-  String get intro =>
-      'Choose the translation and dictionary providers used by the app.';
-
-  /// en: 'Providers you add may process the text you send, so only connect services you trust.'
-  String get intro_warning =>
-      'Providers you add may process the text you send, so only connect services you trust.';
-
-  /// en: 'Loading providers...'
-  String get loading => 'Loading providers...';
-
-  /// en: 'Provider Type'
-  String get type => 'Provider Type';
-
-  /// en: 'Services'
-  String get services => 'Services';
-
-  /// en: 'No services available.'
-  String get no_services => 'No services available.';
-
+  late final TranslationsSettingsProvidersSectionEn section =
+      TranslationsSettingsProvidersSectionEn.internal(_root);
+  late final TranslationsSettingsProvidersItemEn item =
+      TranslationsSettingsProvidersItemEn.internal(_root);
+  late final TranslationsSettingsProvidersButtonEn button =
+      TranslationsSettingsProvidersButtonEn.internal(_root);
+  late final TranslationsSettingsProvidersDialogEn dialog =
+      TranslationsSettingsProvidersDialogEn.internal(_root);
+  late final TranslationsSettingsProvidersAlertEn alert =
+      TranslationsSettingsProvidersAlertEn.internal(_root);
+  late final TranslationsSettingsProvidersIntroEn intro =
+      TranslationsSettingsProvidersIntroEn.internal(_root);
+  late final TranslationsSettingsProvidersEditorEn editor =
+      TranslationsSettingsProvidersEditorEn.internal(_root);
+  late final TranslationsSettingsProvidersDetailEn detail =
+      TranslationsSettingsProvidersDetailEn.internal(_root);
   late final TranslationsSettingsProvidersCapabilityEn capability =
       TranslationsSettingsProvidersCapabilityEn.internal(_root);
   late final TranslationsSettingsProvidersDescriptionEn description =
       TranslationsSettingsProvidersDescriptionEn.internal(_root);
 }
 
-// Path: settings.service_integration
-class TranslationsSettingsServiceIntegrationEn {
-  TranslationsSettingsServiceIntegrationEn.internal(this._root);
+// Path: settings.layout
+class TranslationsSettingsLayoutEn {
+  TranslationsSettingsLayoutEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Service Integration'
-  String get title => 'Service Integration';
-}
-
-// Path: settings.others
-class TranslationsSettingsOthersEn {
-  TranslationsSettingsOthersEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Others'
-  String get title => 'Others';
-}
-
-// Path: settings.exit_app_dialog
-class TranslationsSettingsExitAppDialogEn {
-  TranslationsSettingsExitAppDialogEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Are you sure you want to exit?'
-  String get title => 'Are you sure you want to exit?';
-}
-
-// Path: settings.preference
-class TranslationsSettingsPreferenceEn {
-  TranslationsSettingsPreferenceEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Your Plan'
-  String get your_plan => 'Your Plan';
-
-  /// en: 'Extract text'
-  String get extract_text => 'Extract text';
-
-  /// en: 'Translate'
-  String get translate => 'Translate';
-
-  /// en: 'Interface'
-  String get interface => 'Interface';
-
-  /// en: 'Display Language'
-  String get app_language => 'Display Language';
-
-  /// en: 'Theme Mode'
-  String get theme_mode => 'Theme Mode';
-
-  /// en: 'Keyboard Shortcuts'
-  String get keyboard_shortcuts => 'Keyboard Shortcuts';
-
-  /// en: 'Submit with Enter'
-  String get submit_with_enter => 'Submit with Enter';
-
-  /// en: 'Submit with Ctrl + Enter'
-  String get submit_with_meta_enter => 'Submit with Ctrl + Enter';
-
-  /// en: 'Submit with ⌘ + Enter'
-  String get submit_with_meta_enter_mac => 'Submit with ⌘ + Enter';
-
-  /// en: 'Launch when you log in'
-  String get launch_at_startup => 'Launch when you log in';
-
-  /// en: 'Show menu bar'
-  String get show_menu_bar => 'Show menu bar';
-
-  /// en: 'Permissions'
-  String get permissions => 'Permissions';
-
-  /// en: 'Default extract text service'
-  String get default_extract_text_service => 'Default extract text service';
-
-  /// en: 'Auto copy detected text'
-  String get auto_copy_detected_text => 'Auto copy detected text';
-
-  /// en: 'Directory'
-  String get directory => 'Directory';
-
-  /// en: 'Default directory service'
-  String get default_directory_service => 'Default directory service';
-
-  /// en: 'Translation'
-  String get translation => 'Translation';
-
-  /// en: 'Default translation service'
-  String get default_translation_service => 'Default translation service';
-
-  /// en: 'Translation mode'
-  String get translation_mode => 'Translation mode';
-
-  /// en: 'Double click to copy translation result'
-  String get double_click_copy_result =>
-      'Double click to copy translation result';
-
-  /// en: 'Translation Target'
-  String get translation_target => 'Translation Target';
-
-  /// en: 'Add Target'
-  String get add_target => 'Add Target';
-
-  /// en: 'Text Translation'
-  String get engines => 'Text Translation';
-
-  /// en: 'Text Detection'
-  String get ocr_engines => 'Text Detection';
-
-  /// en: 'About Biyi'
-  String get about => 'About Biyi';
-
-  /// en: 'Exit App'
-  String get exit_app => 'Exit App';
-}
-
-// Path: settings.empty
-class TranslationsSettingsEmptyEn {
-  TranslationsSettingsEmptyEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Select a Category'
-  String get title => 'Select a Category';
-
-  /// en: 'Choose a settings section from the sidebar.'
-  String get message => 'Choose a settings section from the sidebar.';
-}
-
-// Path: settings.option
-class TranslationsSettingsOptionEn {
-  TranslationsSettingsOptionEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'None'
-  String get none => 'None';
-
-  /// en: 'No services available'
-  String get no_services_available => 'No services available';
-
-  /// en: 'Granted'
-  String get granted => 'Granted';
-
-  /// en: 'Built-in OCR'
-  String get built_in_ocr => 'Built-in OCR';
-
-  /// en: 'Tesseract'
-  String get tesseract => 'Tesseract';
-
-  /// en: 'Youdao OCR'
-  String get youdao_ocr => 'Youdao OCR';
-
-  /// en: 'English'
-  String get english => 'English';
-
-  /// en: 'Chinese'
-  String get chinese => 'Chinese';
-}
-
-// Path: settings.shortcut
-class TranslationsSettingsShortcutEn {
-  TranslationsSettingsShortcutEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Shortcuts'
-  String get section => 'Shortcuts';
-
-  /// en: 'Show or Hide'
-  String get show_or_hide => 'Show or Hide';
-
-  /// en: 'Hide'
-  String get hide => 'Hide';
-
-  /// en: 'Extract Text'
-  String get extract_text => 'Extract Text';
-
-  /// en: 'Extract text from selection'
-  String get extract_selection => 'Extract text from selection';
-
-  /// en: 'Extract text from capture'
-  String get extract_capture => 'Extract text from capture';
-
-  /// en: 'Extract text from clipboard'
-  String get extract_clipboard => 'Extract text from clipboard';
-
-  /// en: 'Input Assist Function'
-  String get input_assist => 'Input Assist Function';
-
-  /// en: 'Translate input content'
-  String get translate_input => 'Translate input content';
+  /// en: 'Settings'
+  String get title => 'Settings';
+
+  late final TranslationsSettingsLayoutEmptyEn empty =
+      TranslationsSettingsLayoutEmptyEn.internal(_root);
 }
 
 // Path: shortcuts.record_dialog
@@ -1245,21 +999,6 @@ class TranslationsMiniTranslatorUpdateBannerButtonEn {
   String get update => 'Update';
 }
 
-// Path: mini_translator.limited_banner.permission
-class TranslationsMiniTranslatorLimitedBannerPermissionEn {
-  TranslationsMiniTranslatorLimitedBannerPermissionEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Grant screen recording access'
-  String get screen_capture => 'Grant screen recording access';
-
-  /// en: 'Grant accessibility access'
-  String get screen_selection => 'Grant accessibility access';
-}
-
 // Path: mini_translator.limited_banner.button
 class TranslationsMiniTranslatorLimitedBannerButtonEn {
   TranslationsMiniTranslatorLimitedBannerButtonEn.internal(this._root);
@@ -1267,9 +1006,6 @@ class TranslationsMiniTranslatorLimitedBannerButtonEn {
   final Translations _root; // ignore: unused_field
 
   // Translations
-
-  /// en: 'Allow'
-  String get allow => 'Allow';
 
   /// en: 'Go Settings'
   String get go_settings => 'Go Settings';
@@ -1298,9 +1034,9 @@ class TranslationsMiniTranslatorLimitedBannerMessageEn {
 
   // Translations
 
-  /// en: 'If there is no response after clicking "Allow", please click "Go Settings" to set it manually.'
+  /// en: 'If there is no response after clicking "Grant", please click "Go Settings" to set it manually.'
   String get allow_access_tip =>
-      'If there is no response after clicking "Allow", please click "Go Settings" to set it manually.';
+      'If there is no response after clicking "Grant", please click "Go Settings" to set it manually.';
 
   /// en: 'The Screen extract text is enabled'
   String get all_access_allowed => 'The Screen extract text is enabled';
@@ -1327,6 +1063,314 @@ class TranslationsMiniTranslatorToolbarTooltipEn {
 
   /// en: 'Read clipboard content'
   String get extract_text_from_clipboard => 'Read clipboard content';
+}
+
+// Path: settings.general.section
+class TranslationsSettingsGeneralSectionEn {
+  TranslationsSettingsGeneralSectionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Permissions'
+  String get permissions => 'Permissions';
+
+  /// en: 'Extract text'
+  String get extract_text => 'Extract text';
+
+  /// en: 'Directory'
+  String get directory => 'Directory';
+
+  /// en: 'Translation'
+  String get translation => 'Translation';
+
+  /// en: 'Translation Target'
+  String get translation_target => 'Translation Target';
+
+  /// en: 'Input Settings'
+  String get input => 'Input Settings';
+}
+
+// Path: settings.general.row
+class TranslationsSettingsGeneralRowEn {
+  TranslationsSettingsGeneralRowEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Launch when you log in'
+  String get launch_at_startup => 'Launch when you log in';
+
+  /// en: 'Show menu bar'
+  String get show_menu_bar => 'Show menu bar';
+
+  /// en: 'Grant screen recording access'
+  String get screen_capture_access => 'Grant screen recording access';
+
+  /// en: 'Grant accessibility access'
+  String get screen_selection_access => 'Grant accessibility access';
+
+  /// en: 'Default extract text service'
+  String get default_extract_text_service => 'Default extract text service';
+
+  /// en: 'Auto copy detected text'
+  String get auto_copy_detected_text => 'Auto copy detected text';
+
+  /// en: 'Default directory service'
+  String get default_directory_service => 'Default directory service';
+
+  /// en: 'Default translation service'
+  String get default_translation_service => 'Default translation service';
+
+  /// en: 'Translation mode'
+  String get translation_mode => 'Translation mode';
+
+  /// en: 'Double click to copy translation result'
+  String get double_click_copy_result =>
+      'Double click to copy translation result';
+
+  /// en: 'Submit with Enter'
+  String get submit_with_enter => 'Submit with Enter';
+
+  /// en: 'Submit with ⌘ + Enter'
+  String get submit_with_meta_enter_mac => 'Submit with ⌘ + Enter';
+}
+
+// Path: settings.general.button
+class TranslationsSettingsGeneralButtonEn {
+  TranslationsSettingsGeneralButtonEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Add Target'
+  String get add_target => 'Add Target';
+
+  /// en: 'Grant'
+  String get grant => 'Grant';
+}
+
+// Path: settings.general.option
+class TranslationsSettingsGeneralOptionEn {
+  TranslationsSettingsGeneralOptionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'None'
+  String get none => 'None';
+
+  /// en: 'No services available'
+  String get no_services_available => 'No services available';
+
+  /// en: 'Granted'
+  String get granted => 'Granted';
+
+  /// en: 'Built-in OCR'
+  String get built_in_ocr => 'Built-in OCR';
+
+  /// en: 'Tesseract'
+  String get tesseract => 'Tesseract';
+
+  /// en: 'Youdao OCR'
+  String get youdao_ocr => 'Youdao OCR';
+}
+
+// Path: settings.appearance.section
+class TranslationsSettingsAppearanceSectionEn {
+  TranslationsSettingsAppearanceSectionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Display Language'
+  String get app_language => 'Display Language';
+
+  /// en: 'Theme Mode'
+  String get theme_mode => 'Theme Mode';
+}
+
+// Path: settings.appearance.option
+class TranslationsSettingsAppearanceOptionEn {
+  TranslationsSettingsAppearanceOptionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'English'
+  String get english => 'English';
+
+  /// en: 'Chinese'
+  String get chinese => 'Chinese';
+}
+
+// Path: settings.shortcuts.section
+class TranslationsSettingsShortcutsSectionEn {
+  TranslationsSettingsShortcutsSectionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Shortcuts'
+  String get shortcuts => 'Shortcuts';
+
+  /// en: 'Extract Text'
+  String get extract_text => 'Extract Text';
+
+  /// en: 'Input Assist Function'
+  String get input_assist => 'Input Assist Function';
+}
+
+// Path: settings.shortcuts.row
+class TranslationsSettingsShortcutsRowEn {
+  TranslationsSettingsShortcutsRowEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Show or Hide'
+  String get show_or_hide => 'Show or Hide';
+
+  /// en: 'Hide'
+  String get hide => 'Hide';
+
+  /// en: 'Extract text from selection'
+  String get extract_selection => 'Extract text from selection';
+
+  /// en: 'Extract text from capture'
+  String get extract_capture => 'Extract text from capture';
+
+  /// en: 'Extract text from clipboard'
+  String get extract_clipboard => 'Extract text from clipboard';
+
+  /// en: 'Translate input content'
+  String get translate_input => 'Translate input content';
+}
+
+// Path: settings.providers.section
+class TranslationsSettingsProvidersSectionEn {
+  TranslationsSettingsProvidersSectionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Services'
+  String get services => 'Services';
+}
+
+// Path: settings.providers.item
+class TranslationsSettingsProvidersItemEn {
+  TranslationsSettingsProvidersItemEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'No providers configured. Add one to enable translation services.'
+  String get empty =>
+      'No providers configured. Add one to enable translation services.';
+
+  /// en: 'Loading providers...'
+  String get loading => 'Loading providers...';
+
+  /// en: 'No services available.'
+  String get no_services => 'No services available.';
+}
+
+// Path: settings.providers.button
+class TranslationsSettingsProvidersButtonEn {
+  TranslationsSettingsProvidersButtonEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Add a Provider...'
+  String get add => 'Add a Provider...';
+}
+
+// Path: settings.providers.dialog
+class TranslationsSettingsProvidersDialogEn {
+  TranslationsSettingsProvidersDialogEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Delete Provider'
+  String get delete_title => 'Delete Provider';
+
+  /// en: 'Delete "{}"?'
+  String get delete_confirm => 'Delete "{}"?';
+
+  /// en: 'This action cannot be undone.'
+  String get delete_message => 'This action cannot be undone.';
+}
+
+// Path: settings.providers.alert
+class TranslationsSettingsProvidersAlertEn {
+  TranslationsSettingsProvidersAlertEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Error'
+  String get error => 'Error';
+}
+
+// Path: settings.providers.intro
+class TranslationsSettingsProvidersIntroEn {
+  TranslationsSettingsProvidersIntroEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Choose the translation and dictionary providers used by the app.'
+  String get body =>
+      'Choose the translation and dictionary providers used by the app.';
+
+  /// en: 'Providers you add may process the text you send, so only connect services you trust.'
+  String get warning =>
+      'Providers you add may process the text you send, so only connect services you trust.';
+}
+
+// Path: settings.providers.editor
+class TranslationsSettingsProvidersEditorEn {
+  TranslationsSettingsProvidersEditorEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsSettingsProvidersEditorTitleEn title =
+      TranslationsSettingsProvidersEditorTitleEn.internal(_root);
+  late final TranslationsSettingsProvidersEditorRowEn row =
+      TranslationsSettingsProvidersEditorRowEn.internal(_root);
+  late final TranslationsSettingsProvidersEditorPlaceholderEn placeholder =
+      TranslationsSettingsProvidersEditorPlaceholderEn.internal(_root);
+  late final TranslationsSettingsProvidersEditorTooltipEn tooltip =
+      TranslationsSettingsProvidersEditorTooltipEn.internal(_root);
+}
+
+// Path: settings.providers.detail
+class TranslationsSettingsProvidersDetailEn {
+  TranslationsSettingsProvidersDetailEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsSettingsProvidersDetailTooltipEn tooltip =
+      TranslationsSettingsProvidersDetailTooltipEn.internal(_root);
 }
 
 // Path: settings.providers.capability
@@ -1363,6 +1407,87 @@ class TranslationsSettingsProvidersDescriptionEn {
 
   /// en: 'Provides translation services'
   String get fallback => 'Provides translation services';
+}
+
+// Path: settings.layout.empty
+class TranslationsSettingsLayoutEmptyEn {
+  TranslationsSettingsLayoutEmptyEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Select a Category'
+  String get title => 'Select a Category';
+
+  /// en: 'Choose a settings section from the sidebar.'
+  String get message => 'Choose a settings section from the sidebar.';
+}
+
+// Path: settings.providers.editor.title
+class TranslationsSettingsProvidersEditorTitleEn {
+  TranslationsSettingsProvidersEditorTitleEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Add Provider'
+  String get add => 'Add Provider';
+
+  /// en: 'Edit Provider'
+  String get edit => 'Edit Provider';
+}
+
+// Path: settings.providers.editor.row
+class TranslationsSettingsProvidersEditorRowEn {
+  TranslationsSettingsProvidersEditorRowEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Provider ID'
+  String get id => 'Provider ID';
+
+  /// en: 'Provider Type'
+  String get type => 'Provider Type';
+}
+
+// Path: settings.providers.editor.placeholder
+class TranslationsSettingsProvidersEditorPlaceholderEn {
+  TranslationsSettingsProvidersEditorPlaceholderEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'e.g. deepl-main'
+  String get id => 'e.g. deepl-main';
+}
+
+// Path: settings.providers.editor.tooltip
+class TranslationsSettingsProvidersEditorTooltipEn {
+  TranslationsSettingsProvidersEditorTooltipEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Help'
+  String get help => 'Help';
+}
+
+// Path: settings.providers.detail.tooltip
+class TranslationsSettingsProvidersDetailTooltipEn {
+  TranslationsSettingsProvidersDetailTooltipEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Edit provider'
+  String get edit => 'Edit provider';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1528,16 +1653,11 @@ extension on Translations {
       'mini_translator.update_banner.button.update' => 'Update',
       'mini_translator.limited_banner.title' =>
         'Functionality is limited, please follow the tips to check.',
-      'mini_translator.limited_banner.permission.screen_capture' =>
-        'Grant screen recording access',
-      'mini_translator.limited_banner.permission.screen_selection' =>
-        'Grant accessibility access',
-      'mini_translator.limited_banner.button.allow' => 'Allow',
       'mini_translator.limited_banner.button.go_settings' => 'Go Settings',
       'mini_translator.limited_banner.button.check_again' => 'Check Again',
       'mini_translator.limited_banner.tooltip.help' => 'View the help document',
       'mini_translator.limited_banner.message.allow_access_tip' =>
-        'If there is no response after clicking "Allow", please click "Go Settings" to set it manually.',
+        'If there is no response after clicking "Grant", please click "Go Settings" to set it manually.',
       'mini_translator.limited_banner.message.all_access_allowed' =>
         'The Screen extract text is enabled',
       'mini_translator.limited_banner.message.all_access_not_allowed' =>
@@ -1556,36 +1676,85 @@ extension on Translations {
         'No text entered or text not extracted',
       'mini_translator.message.capture_screen_area_canceled' =>
         'Capture screen area has been canceled',
-      'settings.title' => 'Settings',
       'settings.version' => 'Version {} BUILD {}',
       'settings.general.title' => 'General',
+      'settings.general.section.permissions' => 'Permissions',
+      'settings.general.section.extract_text' => 'Extract text',
+      'settings.general.section.directory' => 'Directory',
+      'settings.general.section.translation' => 'Translation',
+      'settings.general.section.translation_target' => 'Translation Target',
+      'settings.general.section.input' => 'Input Settings',
+      'settings.general.row.launch_at_startup' => 'Launch when you log in',
+      'settings.general.row.show_menu_bar' => 'Show menu bar',
+      'settings.general.row.screen_capture_access' =>
+        'Grant screen recording access',
+      'settings.general.row.screen_selection_access' =>
+        'Grant accessibility access',
+      'settings.general.row.default_extract_text_service' =>
+        'Default extract text service',
+      'settings.general.row.auto_copy_detected_text' =>
+        'Auto copy detected text',
+      'settings.general.row.default_directory_service' =>
+        'Default directory service',
+      'settings.general.row.default_translation_service' =>
+        'Default translation service',
+      'settings.general.row.translation_mode' => 'Translation mode',
+      'settings.general.row.double_click_copy_result' =>
+        'Double click to copy translation result',
+      'settings.general.row.submit_with_enter' => 'Submit with Enter',
+      'settings.general.row.submit_with_meta_enter_mac' =>
+        'Submit with ⌘ + Enter',
+      'settings.general.button.add_target' => 'Add Target',
+      'settings.general.button.grant' => 'Grant',
+      'settings.general.option.none' => 'None',
+      'settings.general.option.no_services_available' =>
+        'No services available',
+      'settings.general.option.granted' => 'Granted',
+      'settings.general.option.built_in_ocr' => 'Built-in OCR',
+      'settings.general.option.tesseract' => 'Tesseract',
+      'settings.general.option.youdao_ocr' => 'Youdao OCR',
       'settings.appearance.title' => 'Appearance',
+      'settings.appearance.section.app_language' => 'Display Language',
+      'settings.appearance.section.theme_mode' => 'Theme Mode',
+      'settings.appearance.option.english' => 'English',
+      'settings.appearance.option.chinese' => 'Chinese',
       'settings.shortcuts.title' => 'Shortcuts',
-      'settings.input.title' => 'Input Settings',
+      'settings.shortcuts.section.shortcuts' => 'Shortcuts',
+      'settings.shortcuts.section.extract_text' => 'Extract Text',
+      'settings.shortcuts.section.input_assist' => 'Input Assist Function',
+      'settings.shortcuts.row.show_or_hide' => 'Show or Hide',
+      'settings.shortcuts.row.hide' => 'Hide',
+      'settings.shortcuts.row.extract_selection' =>
+        'Extract text from selection',
+      'settings.shortcuts.row.extract_capture' => 'Extract text from capture',
+      'settings.shortcuts.row.extract_clipboard' =>
+        'Extract text from clipboard',
+      'settings.shortcuts.row.translate_input' => 'Translate input content',
       'settings.advanced.title' => 'Advanced',
       'settings.advanced.empty' => 'No advanced settings available.',
       'settings.providers.title' => 'Providers',
-      'settings.providers.add' => 'Add a Provider...',
-      'settings.providers.add_title' => 'Add Provider',
-      'settings.providers.edit_title' => 'Edit Provider',
-      'settings.providers.delete_title' => 'Delete Provider',
-      'settings.providers.delete_confirm' => 'Delete "{}"?',
-      'settings.providers.delete_message' => 'This action cannot be undone.',
-      'settings.providers.empty' =>
+      'settings.providers.section.services' => 'Services',
+      'settings.providers.item.empty' =>
         'No providers configured. Add one to enable translation services.',
-      'settings.providers.error' => 'Error',
-      'settings.providers.help' => 'Help',
-      'settings.providers.help_edit' => 'Edit provider',
-      'settings.providers.id' => 'Provider ID',
-      'settings.providers.id_placeholder' => 'e.g. deepl-main',
-      'settings.providers.intro' =>
+      'settings.providers.item.loading' => 'Loading providers...',
+      'settings.providers.item.no_services' => 'No services available.',
+      'settings.providers.button.add' => 'Add a Provider...',
+      'settings.providers.dialog.delete_title' => 'Delete Provider',
+      'settings.providers.dialog.delete_confirm' => 'Delete "{}"?',
+      'settings.providers.dialog.delete_message' =>
+        'This action cannot be undone.',
+      'settings.providers.alert.error' => 'Error',
+      'settings.providers.intro.body' =>
         'Choose the translation and dictionary providers used by the app.',
-      'settings.providers.intro_warning' =>
+      'settings.providers.intro.warning' =>
         'Providers you add may process the text you send, so only connect services you trust.',
-      'settings.providers.loading' => 'Loading providers...',
-      'settings.providers.type' => 'Provider Type',
-      'settings.providers.services' => 'Services',
-      'settings.providers.no_services' => 'No services available.',
+      'settings.providers.editor.title.add' => 'Add Provider',
+      'settings.providers.editor.title.edit' => 'Edit Provider',
+      'settings.providers.editor.row.id' => 'Provider ID',
+      'settings.providers.editor.row.type' => 'Provider Type',
+      'settings.providers.editor.placeholder.id' => 'e.g. deepl-main',
+      'settings.providers.editor.tooltip.help' => 'Help',
+      'settings.providers.detail.tooltip.edit' => 'Edit provider',
       'settings.providers.capability.translation' => 'Translation',
       'settings.providers.capability.dictionary' => 'Dictionary',
       'settings.providers.description.all' =>
@@ -1596,62 +1765,11 @@ extension on Translations {
         'Provides dictionary lookup and word definitions',
       'settings.providers.description.fallback' =>
         'Provides translation services',
-      'settings.service_integration.title' => 'Service Integration',
-      'settings.others.title' => 'Others',
-      'settings.exit_app_dialog.title' => 'Are you sure you want to exit?',
-      'settings.preference.your_plan' => 'Your Plan',
-      'settings.preference.extract_text' => 'Extract text',
-      'settings.preference.translate' => 'Translate',
-      'settings.preference.interface' => 'Interface',
-      'settings.preference.app_language' => 'Display Language',
-      'settings.preference.theme_mode' => 'Theme Mode',
-      'settings.preference.keyboard_shortcuts' => 'Keyboard Shortcuts',
-      'settings.preference.submit_with_enter' => 'Submit with Enter',
-      'settings.preference.submit_with_meta_enter' =>
-        'Submit with Ctrl + Enter',
-      'settings.preference.submit_with_meta_enter_mac' =>
-        'Submit with ⌘ + Enter',
-      'settings.preference.launch_at_startup' => 'Launch when you log in',
-      'settings.preference.show_menu_bar' => 'Show menu bar',
-      'settings.preference.permissions' => 'Permissions',
-      'settings.preference.default_extract_text_service' =>
-        'Default extract text service',
-      'settings.preference.auto_copy_detected_text' =>
-        'Auto copy detected text',
-      'settings.preference.directory' => 'Directory',
-      'settings.preference.default_directory_service' =>
-        'Default directory service',
-      'settings.preference.translation' => 'Translation',
-      'settings.preference.default_translation_service' =>
-        'Default translation service',
-      'settings.preference.translation_mode' => 'Translation mode',
-      'settings.preference.double_click_copy_result' =>
-        'Double click to copy translation result',
-      'settings.preference.translation_target' => 'Translation Target',
-      'settings.preference.add_target' => 'Add Target',
-      'settings.preference.engines' => 'Text Translation',
-      'settings.preference.ocr_engines' => 'Text Detection',
-      'settings.preference.about' => 'About Biyi',
-      'settings.preference.exit_app' => 'Exit App',
-      'settings.empty.title' => 'Select a Category',
-      'settings.empty.message' => 'Choose a settings section from the sidebar.',
-      'settings.option.none' => 'None',
-      'settings.option.no_services_available' => 'No services available',
-      'settings.option.granted' => 'Granted',
-      'settings.option.built_in_ocr' => 'Built-in OCR',
-      'settings.option.tesseract' => 'Tesseract',
-      'settings.option.youdao_ocr' => 'Youdao OCR',
-      'settings.option.english' => 'English',
-      'settings.option.chinese' => 'Chinese',
-      'settings.shortcut.section' => 'Shortcuts',
-      'settings.shortcut.show_or_hide' => 'Show or Hide',
-      'settings.shortcut.hide' => 'Hide',
-      'settings.shortcut.extract_text' => 'Extract Text',
-      'settings.shortcut.extract_selection' => 'Extract text from selection',
-      'settings.shortcut.extract_capture' => 'Extract text from capture',
-      'settings.shortcut.extract_clipboard' => 'Extract text from clipboard',
-      'settings.shortcut.input_assist' => 'Input Assist Function',
-      'settings.shortcut.translate_input' => 'Translate input content',
+      'settings.layout.title' => 'Settings',
+      'settings.layout.empty.title' => 'Select a Category',
+      'settings.layout.empty.message' =>
+        'Choose a settings section from the sidebar.',
+      'settings.title' => 'Settings',
       'shortcuts.record_dialog.title' => 'Customize your shortcut',
       _ => null,
     };

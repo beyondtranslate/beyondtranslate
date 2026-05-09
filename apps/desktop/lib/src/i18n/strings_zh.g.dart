@@ -235,8 +235,6 @@ class _TranslationsSettingsZh extends TranslationsSettingsEn {
 
   // Translations
   @override
-  String get title => '设置';
-  @override
   String get version => '版本 {} BUILD {}';
   @override
   late final _TranslationsSettingsGeneralZh general =
@@ -248,35 +246,16 @@ class _TranslationsSettingsZh extends TranslationsSettingsEn {
   late final _TranslationsSettingsShortcutsZh shortcuts =
       _TranslationsSettingsShortcutsZh._(_root);
   @override
-  late final _TranslationsSettingsInputZh input =
-      _TranslationsSettingsInputZh._(_root);
-  @override
   late final _TranslationsSettingsAdvancedZh advanced =
       _TranslationsSettingsAdvancedZh._(_root);
   @override
   late final _TranslationsSettingsProvidersZh providers =
       _TranslationsSettingsProvidersZh._(_root);
   @override
-  late final _TranslationsSettingsServiceIntegrationZh service_integration =
-      _TranslationsSettingsServiceIntegrationZh._(_root);
+  late final _TranslationsSettingsLayoutZh layout =
+      _TranslationsSettingsLayoutZh._(_root);
   @override
-  late final _TranslationsSettingsOthersZh others =
-      _TranslationsSettingsOthersZh._(_root);
-  @override
-  late final _TranslationsSettingsExitAppDialogZh exit_app_dialog =
-      _TranslationsSettingsExitAppDialogZh._(_root);
-  @override
-  late final _TranslationsSettingsPreferenceZh preference =
-      _TranslationsSettingsPreferenceZh._(_root);
-  @override
-  late final _TranslationsSettingsEmptyZh empty =
-      _TranslationsSettingsEmptyZh._(_root);
-  @override
-  late final _TranslationsSettingsOptionZh option =
-      _TranslationsSettingsOptionZh._(_root);
-  @override
-  late final _TranslationsSettingsShortcutZh shortcut =
-      _TranslationsSettingsShortcutZh._(_root);
+  String get title => '设置';
 }
 
 // Path: shortcuts
@@ -723,9 +702,6 @@ class _TranslationsMiniTranslatorLimitedBannerZh
   @override
   String get title => '功能受限，请根据提示进行检查。';
   @override
-  late final _TranslationsMiniTranslatorLimitedBannerPermissionZh permission =
-      _TranslationsMiniTranslatorLimitedBannerPermissionZh._(_root);
-  @override
   late final _TranslationsMiniTranslatorLimitedBannerButtonZh button =
       _TranslationsMiniTranslatorLimitedBannerButtonZh._(_root);
   @override
@@ -810,6 +786,18 @@ class _TranslationsSettingsGeneralZh extends TranslationsSettingsGeneralEn {
   // Translations
   @override
   String get title => '常规';
+  @override
+  late final _TranslationsSettingsGeneralSectionZh section =
+      _TranslationsSettingsGeneralSectionZh._(_root);
+  @override
+  late final _TranslationsSettingsGeneralRowZh row =
+      _TranslationsSettingsGeneralRowZh._(_root);
+  @override
+  late final _TranslationsSettingsGeneralButtonZh button =
+      _TranslationsSettingsGeneralButtonZh._(_root);
+  @override
+  late final _TranslationsSettingsGeneralOptionZh option =
+      _TranslationsSettingsGeneralOptionZh._(_root);
 }
 
 // Path: settings.appearance
@@ -824,6 +812,12 @@ class _TranslationsSettingsAppearanceZh
   // Translations
   @override
   String get title => '外观';
+  @override
+  late final _TranslationsSettingsAppearanceSectionZh section =
+      _TranslationsSettingsAppearanceSectionZh._(_root);
+  @override
+  late final _TranslationsSettingsAppearanceOptionZh option =
+      _TranslationsSettingsAppearanceOptionZh._(_root);
 }
 
 // Path: settings.shortcuts
@@ -837,19 +831,12 @@ class _TranslationsSettingsShortcutsZh extends TranslationsSettingsShortcutsEn {
   // Translations
   @override
   String get title => '快捷键';
-}
-
-// Path: settings.input
-class _TranslationsSettingsInputZh extends TranslationsSettingsInputEn {
-  _TranslationsSettingsInputZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
   @override
-  String get title => '输入设置';
+  late final _TranslationsSettingsShortcutsSectionZh section =
+      _TranslationsSettingsShortcutsSectionZh._(_root);
+  @override
+  late final _TranslationsSettingsShortcutsRowZh row =
+      _TranslationsSettingsShortcutsRowZh._(_root);
 }
 
 // Path: settings.advanced
@@ -879,41 +866,29 @@ class _TranslationsSettingsProvidersZh extends TranslationsSettingsProvidersEn {
   @override
   String get title => '服务商';
   @override
-  String get add => '添加服务商...';
+  late final _TranslationsSettingsProvidersSectionZh section =
+      _TranslationsSettingsProvidersSectionZh._(_root);
   @override
-  String get add_title => '添加服务商';
+  late final _TranslationsSettingsProvidersItemZh item =
+      _TranslationsSettingsProvidersItemZh._(_root);
   @override
-  String get edit_title => '编辑服务商';
+  late final _TranslationsSettingsProvidersButtonZh button =
+      _TranslationsSettingsProvidersButtonZh._(_root);
   @override
-  String get delete_title => '删除服务商';
+  late final _TranslationsSettingsProvidersDialogZh dialog =
+      _TranslationsSettingsProvidersDialogZh._(_root);
   @override
-  String get delete_confirm => '删除「{}」？';
+  late final _TranslationsSettingsProvidersAlertZh alert =
+      _TranslationsSettingsProvidersAlertZh._(_root);
   @override
-  String get delete_message => '此操作无法撤销。';
+  late final _TranslationsSettingsProvidersIntroZh intro =
+      _TranslationsSettingsProvidersIntroZh._(_root);
   @override
-  String get empty => '暂无已配置的服务商。添加一个服务商以启用翻译服务。';
+  late final _TranslationsSettingsProvidersEditorZh editor =
+      _TranslationsSettingsProvidersEditorZh._(_root);
   @override
-  String get error => '错误';
-  @override
-  String get help => '帮助';
-  @override
-  String get help_edit => '编辑服务商';
-  @override
-  String get id => '服务商 ID';
-  @override
-  String get id_placeholder => '例如 deepl-main';
-  @override
-  String get intro => '选择应用使用的翻译和词典服务商。';
-  @override
-  String get intro_warning => '你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。';
-  @override
-  String get loading => '正在加载服务商...';
-  @override
-  String get type => '服务商类型';
-  @override
-  String get services => '服务';
-  @override
-  String get no_services => '暂无可用服务。';
+  late final _TranslationsSettingsProvidersDetailZh detail =
+      _TranslationsSettingsProvidersDetailZh._(_root);
   @override
   late final _TranslationsSettingsProvidersCapabilityZh capability =
       _TranslationsSettingsProvidersCapabilityZh._(_root);
@@ -922,10 +897,9 @@ class _TranslationsSettingsProvidersZh extends TranslationsSettingsProvidersEn {
       _TranslationsSettingsProvidersDescriptionZh._(_root);
 }
 
-// Path: settings.service_integration
-class _TranslationsSettingsServiceIntegrationZh
-    extends TranslationsSettingsServiceIntegrationEn {
-  _TranslationsSettingsServiceIntegrationZh._(TranslationsZh root)
+// Path: settings.layout
+class _TranslationsSettingsLayoutZh extends TranslationsSettingsLayoutEn {
+  _TranslationsSettingsLayoutZh._(TranslationsZh root)
       : this._root = root,
         super.internal(root);
 
@@ -933,171 +907,10 @@ class _TranslationsSettingsServiceIntegrationZh
 
   // Translations
   @override
-  String get title => '服务接入';
-}
-
-// Path: settings.others
-class _TranslationsSettingsOthersZh extends TranslationsSettingsOthersEn {
-  _TranslationsSettingsOthersZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
+  String get title => '设置';
   @override
-  String get title => '其他';
-}
-
-// Path: settings.exit_app_dialog
-class _TranslationsSettingsExitAppDialogZh
-    extends TranslationsSettingsExitAppDialogEn {
-  _TranslationsSettingsExitAppDialogZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => '您确定要退出吗？';
-}
-
-// Path: settings.preference
-class _TranslationsSettingsPreferenceZh
-    extends TranslationsSettingsPreferenceEn {
-  _TranslationsSettingsPreferenceZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get your_plan => '当前会员计划';
-  @override
-  String get extract_text => '取词';
-  @override
-  String get translate => '翻译';
-  @override
-  String get interface => '界面';
-  @override
-  String get app_language => '显示语言';
-  @override
-  String get theme_mode => '主题模式';
-  @override
-  String get keyboard_shortcuts => '键盘快捷键';
-  @override
-  String get submit_with_enter => '用 Enter 提交';
-  @override
-  String get submit_with_meta_enter => '用 Ctrl + Enter 提交';
-  @override
-  String get submit_with_meta_enter_mac => '用 ⌘ + Enter 提交';
-  @override
-  String get launch_at_startup => '登录时启动';
-  @override
-  String get show_menu_bar => '显示菜单栏';
-  @override
-  String get permissions => '权限';
-  @override
-  String get default_extract_text_service => '默认取词服务';
-  @override
-  String get auto_copy_detected_text => '自动复制识别文本';
-  @override
-  String get directory => '词典';
-  @override
-  String get default_directory_service => '默认词典服务';
-  @override
-  String get translation => '翻译';
-  @override
-  String get default_translation_service => '默认翻译服务';
-  @override
-  String get translation_mode => '翻译模式';
-  @override
-  String get double_click_copy_result => '双击复制翻译结果';
-  @override
-  String get translation_target => '翻译目标';
-  @override
-  String get add_target => '添加目标';
-  @override
-  String get engines => '文本翻译';
-  @override
-  String get ocr_engines => '文字识别';
-  @override
-  String get about => '关于比译';
-  @override
-  String get exit_app => '退出应用';
-}
-
-// Path: settings.empty
-class _TranslationsSettingsEmptyZh extends TranslationsSettingsEmptyEn {
-  _TranslationsSettingsEmptyZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => '选择一个分类';
-  @override
-  String get message => '从侧边栏选择一个设置分类。';
-}
-
-// Path: settings.option
-class _TranslationsSettingsOptionZh extends TranslationsSettingsOptionEn {
-  _TranslationsSettingsOptionZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get none => '无';
-  @override
-  String get no_services_available => '暂无可用服务';
-  @override
-  String get granted => '已授权';
-  @override
-  String get built_in_ocr => '内置 OCR';
-  @override
-  String get tesseract => 'Tesseract';
-  @override
-  String get youdao_ocr => '有道 OCR';
-  @override
-  String get english => '英文';
-  @override
-  String get chinese => '中文';
-}
-
-// Path: settings.shortcut
-class _TranslationsSettingsShortcutZh extends TranslationsSettingsShortcutEn {
-  _TranslationsSettingsShortcutZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get section => '快捷键';
-  @override
-  String get show_or_hide => '显示或隐藏';
-  @override
-  String get hide => '隐藏';
-  @override
-  String get extract_text => '取词';
-  @override
-  String get extract_selection => '从选区取词';
-  @override
-  String get extract_capture => '截图取词';
-  @override
-  String get extract_clipboard => '从剪贴板取词';
-  @override
-  String get input_assist => '输入辅助功能';
-  @override
-  String get translate_input => '翻译输入内容';
+  late final _TranslationsSettingsLayoutEmptyZh empty =
+      _TranslationsSettingsLayoutEmptyZh._(_root);
 }
 
 // Path: shortcuts.record_dialog
@@ -1146,22 +959,6 @@ class _TranslationsMiniTranslatorUpdateBannerButtonZh
   String get update => '立即更新';
 }
 
-// Path: mini_translator.limited_banner.permission
-class _TranslationsMiniTranslatorLimitedBannerPermissionZh
-    extends TranslationsMiniTranslatorLimitedBannerPermissionEn {
-  _TranslationsMiniTranslatorLimitedBannerPermissionZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get screen_capture => '授予屏幕录制权限';
-  @override
-  String get screen_selection => '授予辅助功能权限';
-}
-
 // Path: mini_translator.limited_banner.button
 class _TranslationsMiniTranslatorLimitedBannerButtonZh
     extends TranslationsMiniTranslatorLimitedBannerButtonEn {
@@ -1172,8 +969,6 @@ class _TranslationsMiniTranslatorLimitedBannerButtonZh
   final TranslationsZh _root; // ignore: unused_field
 
   // Translations
-  @override
-  String get allow => '允许';
   @override
   String get go_settings => '前往设置';
   @override
@@ -1230,6 +1025,313 @@ class _TranslationsMiniTranslatorToolbarTooltipZh
   String get extract_text_from_clipboard => '读取剪切板内容';
 }
 
+// Path: settings.general.section
+class _TranslationsSettingsGeneralSectionZh
+    extends TranslationsSettingsGeneralSectionEn {
+  _TranslationsSettingsGeneralSectionZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get permissions => '权限';
+  @override
+  String get extract_text => '取词';
+  @override
+  String get directory => '词典';
+  @override
+  String get translation => '翻译';
+  @override
+  String get translation_target => '翻译目标';
+  @override
+  String get input => '输入设置';
+}
+
+// Path: settings.general.row
+class _TranslationsSettingsGeneralRowZh
+    extends TranslationsSettingsGeneralRowEn {
+  _TranslationsSettingsGeneralRowZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get launch_at_startup => '登录时启动';
+  @override
+  String get show_menu_bar => '显示菜单栏';
+  @override
+  String get screen_capture_access => '授予屏幕录制权限';
+  @override
+  String get screen_selection_access => '授予辅助功能权限';
+  @override
+  String get default_extract_text_service => '默认取词服务';
+  @override
+  String get auto_copy_detected_text => '自动复制识别文本';
+  @override
+  String get default_directory_service => '默认词典服务';
+  @override
+  String get default_translation_service => '默认翻译服务';
+  @override
+  String get translation_mode => '翻译模式';
+  @override
+  String get double_click_copy_result => '双击复制翻译结果';
+  @override
+  String get submit_with_enter => '用 Enter 提交';
+  @override
+  String get submit_with_meta_enter_mac => '用 ⌘ + Enter 提交';
+}
+
+// Path: settings.general.button
+class _TranslationsSettingsGeneralButtonZh
+    extends TranslationsSettingsGeneralButtonEn {
+  _TranslationsSettingsGeneralButtonZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get add_target => '添加目标';
+  @override
+  String get grant => '授权';
+}
+
+// Path: settings.general.option
+class _TranslationsSettingsGeneralOptionZh
+    extends TranslationsSettingsGeneralOptionEn {
+  _TranslationsSettingsGeneralOptionZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get none => '无';
+  @override
+  String get no_services_available => '暂无可用服务';
+  @override
+  String get granted => '已授权';
+  @override
+  String get built_in_ocr => '内置 OCR';
+  @override
+  String get tesseract => 'Tesseract';
+  @override
+  String get youdao_ocr => '有道 OCR';
+}
+
+// Path: settings.appearance.section
+class _TranslationsSettingsAppearanceSectionZh
+    extends TranslationsSettingsAppearanceSectionEn {
+  _TranslationsSettingsAppearanceSectionZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get app_language => '显示语言';
+  @override
+  String get theme_mode => '主题模式';
+}
+
+// Path: settings.appearance.option
+class _TranslationsSettingsAppearanceOptionZh
+    extends TranslationsSettingsAppearanceOptionEn {
+  _TranslationsSettingsAppearanceOptionZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get english => '英文';
+  @override
+  String get chinese => '中文';
+}
+
+// Path: settings.shortcuts.section
+class _TranslationsSettingsShortcutsSectionZh
+    extends TranslationsSettingsShortcutsSectionEn {
+  _TranslationsSettingsShortcutsSectionZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get shortcuts => '快捷键';
+  @override
+  String get extract_text => '取词';
+  @override
+  String get input_assist => '输入辅助功能';
+}
+
+// Path: settings.shortcuts.row
+class _TranslationsSettingsShortcutsRowZh
+    extends TranslationsSettingsShortcutsRowEn {
+  _TranslationsSettingsShortcutsRowZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get show_or_hide => '显示或隐藏';
+  @override
+  String get hide => '隐藏';
+  @override
+  String get extract_selection => '从选区取词';
+  @override
+  String get extract_capture => '截图取词';
+  @override
+  String get extract_clipboard => '从剪贴板取词';
+  @override
+  String get translate_input => '翻译输入内容';
+}
+
+// Path: settings.providers.section
+class _TranslationsSettingsProvidersSectionZh
+    extends TranslationsSettingsProvidersSectionEn {
+  _TranslationsSettingsProvidersSectionZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get services => '服务';
+}
+
+// Path: settings.providers.item
+class _TranslationsSettingsProvidersItemZh
+    extends TranslationsSettingsProvidersItemEn {
+  _TranslationsSettingsProvidersItemZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get empty => '暂无已配置的服务商。添加一个服务商以启用翻译服务。';
+  @override
+  String get loading => '正在加载服务商...';
+  @override
+  String get no_services => '暂无可用服务。';
+}
+
+// Path: settings.providers.button
+class _TranslationsSettingsProvidersButtonZh
+    extends TranslationsSettingsProvidersButtonEn {
+  _TranslationsSettingsProvidersButtonZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get add => '添加服务商...';
+}
+
+// Path: settings.providers.dialog
+class _TranslationsSettingsProvidersDialogZh
+    extends TranslationsSettingsProvidersDialogEn {
+  _TranslationsSettingsProvidersDialogZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get delete_title => '删除服务商';
+  @override
+  String get delete_confirm => '删除「{}」？';
+  @override
+  String get delete_message => '此操作无法撤销。';
+}
+
+// Path: settings.providers.alert
+class _TranslationsSettingsProvidersAlertZh
+    extends TranslationsSettingsProvidersAlertEn {
+  _TranslationsSettingsProvidersAlertZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get error => '错误';
+}
+
+// Path: settings.providers.intro
+class _TranslationsSettingsProvidersIntroZh
+    extends TranslationsSettingsProvidersIntroEn {
+  _TranslationsSettingsProvidersIntroZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get body => '选择应用使用的翻译和词典服务商。';
+  @override
+  String get warning => '你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。';
+}
+
+// Path: settings.providers.editor
+class _TranslationsSettingsProvidersEditorZh
+    extends TranslationsSettingsProvidersEditorEn {
+  _TranslationsSettingsProvidersEditorZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final _TranslationsSettingsProvidersEditorTitleZh title =
+      _TranslationsSettingsProvidersEditorTitleZh._(_root);
+  @override
+  late final _TranslationsSettingsProvidersEditorRowZh row =
+      _TranslationsSettingsProvidersEditorRowZh._(_root);
+  @override
+  late final _TranslationsSettingsProvidersEditorPlaceholderZh placeholder =
+      _TranslationsSettingsProvidersEditorPlaceholderZh._(_root);
+  @override
+  late final _TranslationsSettingsProvidersEditorTooltipZh tooltip =
+      _TranslationsSettingsProvidersEditorTooltipZh._(_root);
+}
+
+// Path: settings.providers.detail
+class _TranslationsSettingsProvidersDetailZh
+    extends TranslationsSettingsProvidersDetailEn {
+  _TranslationsSettingsProvidersDetailZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final _TranslationsSettingsProvidersDetailTooltipZh tooltip =
+      _TranslationsSettingsProvidersDetailTooltipZh._(_root);
+}
+
 // Path: settings.providers.capability
 class _TranslationsSettingsProvidersCapabilityZh
     extends TranslationsSettingsProvidersCapabilityEn {
@@ -1264,6 +1366,96 @@ class _TranslationsSettingsProvidersDescriptionZh
   String get dictionary => '提供词典查询和单词释义';
   @override
   String get fallback => '提供翻译服务';
+}
+
+// Path: settings.layout.empty
+class _TranslationsSettingsLayoutEmptyZh
+    extends TranslationsSettingsLayoutEmptyEn {
+  _TranslationsSettingsLayoutEmptyZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '选择一个分类';
+  @override
+  String get message => '从侧边栏选择一个设置分类。';
+}
+
+// Path: settings.providers.editor.title
+class _TranslationsSettingsProvidersEditorTitleZh
+    extends TranslationsSettingsProvidersEditorTitleEn {
+  _TranslationsSettingsProvidersEditorTitleZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get add => '添加服务商';
+  @override
+  String get edit => '编辑服务商';
+}
+
+// Path: settings.providers.editor.row
+class _TranslationsSettingsProvidersEditorRowZh
+    extends TranslationsSettingsProvidersEditorRowEn {
+  _TranslationsSettingsProvidersEditorRowZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get id => '服务商 ID';
+  @override
+  String get type => '服务商类型';
+}
+
+// Path: settings.providers.editor.placeholder
+class _TranslationsSettingsProvidersEditorPlaceholderZh
+    extends TranslationsSettingsProvidersEditorPlaceholderEn {
+  _TranslationsSettingsProvidersEditorPlaceholderZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get id => '例如 deepl-main';
+}
+
+// Path: settings.providers.editor.tooltip
+class _TranslationsSettingsProvidersEditorTooltipZh
+    extends TranslationsSettingsProvidersEditorTooltipEn {
+  _TranslationsSettingsProvidersEditorTooltipZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get help => '帮助';
+}
+
+// Path: settings.providers.detail.tooltip
+class _TranslationsSettingsProvidersDetailTooltipZh
+    extends TranslationsSettingsProvidersDetailTooltipEn {
+  _TranslationsSettingsProvidersDetailTooltipZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get edit => '编辑服务商';
 }
 
 /// The flat map containing all translations for locale <zh>.
@@ -1427,10 +1619,6 @@ extension on TranslationsZh {
       'mini_translator.update_banner.found_new_version' => '发现新版本：{}',
       'mini_translator.update_banner.button.update' => '立即更新',
       'mini_translator.limited_banner.title' => '功能受限，请根据提示进行检查。',
-      'mini_translator.limited_banner.permission.screen_capture' => '授予屏幕录制权限',
-      'mini_translator.limited_banner.permission.screen_selection' =>
-        '授予辅助功能权限',
-      'mini_translator.limited_banner.button.allow' => '允许',
       'mini_translator.limited_banner.button.go_settings' => '前往设置',
       'mini_translator.limited_banner.button.check_again' => '重新检查',
       'mini_translator.limited_banner.tooltip.help' => '查看帮助文档',
@@ -1451,88 +1639,80 @@ extension on TranslationsZh {
       'mini_translator.button.translate' => '翻译',
       'mini_translator.message.please_enter_word_or_text' => '未输入或未提取到文本',
       'mini_translator.message.capture_screen_area_canceled' => '截取屏幕区域已取消',
-      'settings.title' => '设置',
       'settings.version' => '版本 {} BUILD {}',
       'settings.general.title' => '常规',
+      'settings.general.section.permissions' => '权限',
+      'settings.general.section.extract_text' => '取词',
+      'settings.general.section.directory' => '词典',
+      'settings.general.section.translation' => '翻译',
+      'settings.general.section.translation_target' => '翻译目标',
+      'settings.general.section.input' => '输入设置',
+      'settings.general.row.launch_at_startup' => '登录时启动',
+      'settings.general.row.show_menu_bar' => '显示菜单栏',
+      'settings.general.row.screen_capture_access' => '授予屏幕录制权限',
+      'settings.general.row.screen_selection_access' => '授予辅助功能权限',
+      'settings.general.row.default_extract_text_service' => '默认取词服务',
+      'settings.general.row.auto_copy_detected_text' => '自动复制识别文本',
+      'settings.general.row.default_directory_service' => '默认词典服务',
+      'settings.general.row.default_translation_service' => '默认翻译服务',
+      'settings.general.row.translation_mode' => '翻译模式',
+      'settings.general.row.double_click_copy_result' => '双击复制翻译结果',
+      'settings.general.row.submit_with_enter' => '用 Enter 提交',
+      'settings.general.row.submit_with_meta_enter_mac' => '用 ⌘ + Enter 提交',
+      'settings.general.button.add_target' => '添加目标',
+      'settings.general.button.grant' => '授权',
+      'settings.general.option.none' => '无',
+      'settings.general.option.no_services_available' => '暂无可用服务',
+      'settings.general.option.granted' => '已授权',
+      'settings.general.option.built_in_ocr' => '内置 OCR',
+      'settings.general.option.tesseract' => 'Tesseract',
+      'settings.general.option.youdao_ocr' => '有道 OCR',
       'settings.appearance.title' => '外观',
+      'settings.appearance.section.app_language' => '显示语言',
+      'settings.appearance.section.theme_mode' => '主题模式',
+      'settings.appearance.option.english' => '英文',
+      'settings.appearance.option.chinese' => '中文',
       'settings.shortcuts.title' => '快捷键',
-      'settings.input.title' => '输入设置',
+      'settings.shortcuts.section.shortcuts' => '快捷键',
+      'settings.shortcuts.section.extract_text' => '取词',
+      'settings.shortcuts.section.input_assist' => '输入辅助功能',
+      'settings.shortcuts.row.show_or_hide' => '显示或隐藏',
+      'settings.shortcuts.row.hide' => '隐藏',
+      'settings.shortcuts.row.extract_selection' => '从选区取词',
+      'settings.shortcuts.row.extract_capture' => '截图取词',
+      'settings.shortcuts.row.extract_clipboard' => '从剪贴板取词',
+      'settings.shortcuts.row.translate_input' => '翻译输入内容',
       'settings.advanced.title' => '高级',
       'settings.advanced.empty' => '暂无高级设置。',
       'settings.providers.title' => '服务商',
-      'settings.providers.add' => '添加服务商...',
-      'settings.providers.add_title' => '添加服务商',
-      'settings.providers.edit_title' => '编辑服务商',
-      'settings.providers.delete_title' => '删除服务商',
-      'settings.providers.delete_confirm' => '删除「{}」？',
-      'settings.providers.delete_message' => '此操作无法撤销。',
-      'settings.providers.empty' => '暂无已配置的服务商。添加一个服务商以启用翻译服务。',
-      'settings.providers.error' => '错误',
-      'settings.providers.help' => '帮助',
-      'settings.providers.help_edit' => '编辑服务商',
-      'settings.providers.id' => '服务商 ID',
-      'settings.providers.id_placeholder' => '例如 deepl-main',
-      'settings.providers.intro' => '选择应用使用的翻译和词典服务商。',
-      'settings.providers.intro_warning' => '你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。',
-      'settings.providers.loading' => '正在加载服务商...',
-      'settings.providers.type' => '服务商类型',
-      'settings.providers.services' => '服务',
-      'settings.providers.no_services' => '暂无可用服务。',
+      'settings.providers.section.services' => '服务',
+      'settings.providers.item.empty' => '暂无已配置的服务商。添加一个服务商以启用翻译服务。',
+      'settings.providers.item.loading' => '正在加载服务商...',
+      'settings.providers.item.no_services' => '暂无可用服务。',
+      'settings.providers.button.add' => '添加服务商...',
+      'settings.providers.dialog.delete_title' => '删除服务商',
+      'settings.providers.dialog.delete_confirm' => '删除「{}」？',
+      'settings.providers.dialog.delete_message' => '此操作无法撤销。',
+      'settings.providers.alert.error' => '错误',
+      'settings.providers.intro.body' => '选择应用使用的翻译和词典服务商。',
+      'settings.providers.intro.warning' => '你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。',
+      'settings.providers.editor.title.add' => '添加服务商',
+      'settings.providers.editor.title.edit' => '编辑服务商',
+      'settings.providers.editor.row.id' => '服务商 ID',
+      'settings.providers.editor.row.type' => '服务商类型',
+      'settings.providers.editor.placeholder.id' => '例如 deepl-main',
+      'settings.providers.editor.tooltip.help' => '帮助',
+      'settings.providers.detail.tooltip.edit' => '编辑服务商',
       'settings.providers.capability.translation' => '翻译',
       'settings.providers.capability.dictionary' => '词典',
       'settings.providers.description.all' => '提供词典查询和文本翻译',
       'settings.providers.description.translation' => '提供语言间文本翻译',
       'settings.providers.description.dictionary' => '提供词典查询和单词释义',
       'settings.providers.description.fallback' => '提供翻译服务',
-      'settings.service_integration.title' => '服务接入',
-      'settings.others.title' => '其他',
-      'settings.exit_app_dialog.title' => '您确定要退出吗？',
-      'settings.preference.your_plan' => '当前会员计划',
-      'settings.preference.extract_text' => '取词',
-      'settings.preference.translate' => '翻译',
-      'settings.preference.interface' => '界面',
-      'settings.preference.app_language' => '显示语言',
-      'settings.preference.theme_mode' => '主题模式',
-      'settings.preference.keyboard_shortcuts' => '键盘快捷键',
-      'settings.preference.submit_with_enter' => '用 Enter 提交',
-      'settings.preference.submit_with_meta_enter' => '用 Ctrl + Enter 提交',
-      'settings.preference.submit_with_meta_enter_mac' => '用 ⌘ + Enter 提交',
-      'settings.preference.launch_at_startup' => '登录时启动',
-      'settings.preference.show_menu_bar' => '显示菜单栏',
-      'settings.preference.permissions' => '权限',
-      'settings.preference.default_extract_text_service' => '默认取词服务',
-      'settings.preference.auto_copy_detected_text' => '自动复制识别文本',
-      'settings.preference.directory' => '词典',
-      'settings.preference.default_directory_service' => '默认词典服务',
-      'settings.preference.translation' => '翻译',
-      'settings.preference.default_translation_service' => '默认翻译服务',
-      'settings.preference.translation_mode' => '翻译模式',
-      'settings.preference.double_click_copy_result' => '双击复制翻译结果',
-      'settings.preference.translation_target' => '翻译目标',
-      'settings.preference.add_target' => '添加目标',
-      'settings.preference.engines' => '文本翻译',
-      'settings.preference.ocr_engines' => '文字识别',
-      'settings.preference.about' => '关于比译',
-      'settings.preference.exit_app' => '退出应用',
-      'settings.empty.title' => '选择一个分类',
-      'settings.empty.message' => '从侧边栏选择一个设置分类。',
-      'settings.option.none' => '无',
-      'settings.option.no_services_available' => '暂无可用服务',
-      'settings.option.granted' => '已授权',
-      'settings.option.built_in_ocr' => '内置 OCR',
-      'settings.option.tesseract' => 'Tesseract',
-      'settings.option.youdao_ocr' => '有道 OCR',
-      'settings.option.english' => '英文',
-      'settings.option.chinese' => '中文',
-      'settings.shortcut.section' => '快捷键',
-      'settings.shortcut.show_or_hide' => '显示或隐藏',
-      'settings.shortcut.hide' => '隐藏',
-      'settings.shortcut.extract_text' => '取词',
-      'settings.shortcut.extract_selection' => '从选区取词',
-      'settings.shortcut.extract_capture' => '截图取词',
-      'settings.shortcut.extract_clipboard' => '从剪贴板取词',
-      'settings.shortcut.input_assist' => '输入辅助功能',
-      'settings.shortcut.translate_input' => '翻译输入内容',
+      'settings.layout.title' => '设置',
+      'settings.layout.empty.title' => '选择一个分类',
+      'settings.layout.empty.message' => '从侧边栏选择一个设置分类。',
+      'settings.title' => '设置',
       'shortcuts.record_dialog.title' => '自定义快捷键',
       _ => null,
     };

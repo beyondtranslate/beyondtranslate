@@ -174,7 +174,6 @@ enum LocaleKeys {
     }
     enum limitedBanner {
       enum button {
-        static let allow = LocaleKey("mini_translator.limited_banner.button.allow")
         static let checkAgain = LocaleKey("mini_translator.limited_banner.button.check_again")
         static let goSettings = LocaleKey("mini_translator.limited_banner.button.go_settings")
       }
@@ -185,12 +184,6 @@ enum LocaleKeys {
           "mini_translator.limited_banner.message.all_access_not_allowed")
         static let allowAccessTip = LocaleKey(
           "mini_translator.limited_banner.message.allow_access_tip")
-      }
-      enum permission {
-        static let screenCapture = LocaleKey(
-          "mini_translator.limited_banner.permission.screen_capture")
-        static let screenSelection = LocaleKey(
-          "mini_translator.limited_banner.permission.screen_selection")
       }
       static let title = LocaleKey("mini_translator.limited_banner.title")
       enum tooltip {
@@ -244,113 +237,136 @@ enum LocaleKeys {
       static let title = LocaleKey("settings.advanced.title")
     }
     enum appearance {
+      enum option {
+        static let chinese = LocaleKey("settings.appearance.option.chinese")
+        static let english = LocaleKey("settings.appearance.option.english")
+      }
+      enum section {
+        static let appLanguage = LocaleKey("settings.appearance.section.app_language")
+        static let themeMode = LocaleKey("settings.appearance.section.theme_mode")
+      }
       static let title = LocaleKey("settings.appearance.title")
     }
-    enum empty {
-      static let message = LocaleKey("settings.empty.message")
-      static let title = LocaleKey("settings.empty.title")
-    }
-    enum exitAppDialog {
-      static let title = LocaleKey("settings.exit_app_dialog.title")
-    }
     enum general {
+      enum button {
+        static let addTarget = LocaleKey("settings.general.button.add_target")
+        static let grant = LocaleKey("settings.general.button.grant")
+      }
+      enum option {
+        static let builtInOcr = LocaleKey("settings.general.option.built_in_ocr")
+        static let granted = LocaleKey("settings.general.option.granted")
+        static let noServicesAvailable = LocaleKey("settings.general.option.no_services_available")
+        static let none = LocaleKey("settings.general.option.none")
+        static let tesseract = LocaleKey("settings.general.option.tesseract")
+        static let youdaoOcr = LocaleKey("settings.general.option.youdao_ocr")
+      }
+      enum row {
+        static let autoCopyDetectedText = LocaleKey("settings.general.row.auto_copy_detected_text")
+        static let defaultDirectoryService = LocaleKey(
+          "settings.general.row.default_directory_service")
+        static let defaultExtractTextService = LocaleKey(
+          "settings.general.row.default_extract_text_service")
+        static let defaultTranslationService = LocaleKey(
+          "settings.general.row.default_translation_service")
+        static let doubleClickCopyResult = LocaleKey(
+          "settings.general.row.double_click_copy_result")
+        static let launchAtStartup = LocaleKey("settings.general.row.launch_at_startup")
+        static let screenCaptureAccess = LocaleKey("settings.general.row.screen_capture_access")
+        static let screenSelectionAccess = LocaleKey("settings.general.row.screen_selection_access")
+        static let showMenuBar = LocaleKey("settings.general.row.show_menu_bar")
+        static let submitWithEnter = LocaleKey("settings.general.row.submit_with_enter")
+        static let submitWithMetaEnterMac = LocaleKey(
+          "settings.general.row.submit_with_meta_enter_mac")
+        static let translationMode = LocaleKey("settings.general.row.translation_mode")
+      }
+      enum section {
+        static let directory = LocaleKey("settings.general.section.directory")
+        static let extractText = LocaleKey("settings.general.section.extract_text")
+        static let input = LocaleKey("settings.general.section.input")
+        static let permissions = LocaleKey("settings.general.section.permissions")
+        static let translation = LocaleKey("settings.general.section.translation")
+        static let translationTarget = LocaleKey("settings.general.section.translation_target")
+      }
       static let title = LocaleKey("settings.general.title")
     }
-    enum input {
-      static let title = LocaleKey("settings.input.title")
-    }
-    enum option {
-      static let builtInOcr = LocaleKey("settings.option.built_in_ocr")
-      static let chinese = LocaleKey("settings.option.chinese")
-      static let english = LocaleKey("settings.option.english")
-      static let granted = LocaleKey("settings.option.granted")
-      static let noServicesAvailable = LocaleKey("settings.option.no_services_available")
-      static let none = LocaleKey("settings.option.none")
-      static let tesseract = LocaleKey("settings.option.tesseract")
-      static let youdaoOcr = LocaleKey("settings.option.youdao_ocr")
-    }
-    enum others {
-      static let title = LocaleKey("settings.others.title")
-    }
-    enum preference {
-      static let about = LocaleKey("settings.preference.about")
-      static let addTarget = LocaleKey("settings.preference.add_target")
-      static let appLanguage = LocaleKey("settings.preference.app_language")
-      static let autoCopyDetectedText = LocaleKey("settings.preference.auto_copy_detected_text")
-      static let defaultDirectoryService = LocaleKey(
-        "settings.preference.default_directory_service")
-      static let defaultExtractTextService = LocaleKey(
-        "settings.preference.default_extract_text_service")
-      static let defaultTranslationService = LocaleKey(
-        "settings.preference.default_translation_service")
-      static let directory = LocaleKey("settings.preference.directory")
-      static let doubleClickCopyResult = LocaleKey("settings.preference.double_click_copy_result")
-      static let engines = LocaleKey("settings.preference.engines")
-      static let exitApp = LocaleKey("settings.preference.exit_app")
-      static let extractText = LocaleKey("settings.preference.extract_text")
-      static let interface = LocaleKey("settings.preference.interface")
-      static let keyboardShortcuts = LocaleKey("settings.preference.keyboard_shortcuts")
-      static let launchAtStartup = LocaleKey("settings.preference.launch_at_startup")
-      static let ocrEngines = LocaleKey("settings.preference.ocr_engines")
-      static let permissions = LocaleKey("settings.preference.permissions")
-      static let showMenuBar = LocaleKey("settings.preference.show_menu_bar")
-      static let submitWithEnter = LocaleKey("settings.preference.submit_with_enter")
-      static let submitWithMetaEnter = LocaleKey("settings.preference.submit_with_meta_enter")
-      static let submitWithMetaEnterMac = LocaleKey(
-        "settings.preference.submit_with_meta_enter_mac")
-      static let themeMode = LocaleKey("settings.preference.theme_mode")
-      static let translate = LocaleKey("settings.preference.translate")
-      static let translation = LocaleKey("settings.preference.translation")
-      static let translationMode = LocaleKey("settings.preference.translation_mode")
-      static let translationTarget = LocaleKey("settings.preference.translation_target")
-      static let yourPlan = LocaleKey("settings.preference.your_plan")
+    enum layout {
+      enum empty {
+        static let message = LocaleKey("settings.layout.empty.message")
+        static let title = LocaleKey("settings.layout.empty.title")
+      }
+      static let title = LocaleKey("settings.layout.title")
     }
     enum providers {
-      static let add = LocaleKey("settings.providers.add")
-      static let addTitle = LocaleKey("settings.providers.add_title")
+      enum alert {
+        static let error = LocaleKey("settings.providers.alert.error")
+      }
+      enum button {
+        static let add = LocaleKey("settings.providers.button.add")
+      }
       enum capability {
         static let dictionary = LocaleKey("settings.providers.capability.dictionary")
         static let translation = LocaleKey("settings.providers.capability.translation")
       }
-      static let deleteConfirm = LocaleKey("settings.providers.delete_confirm")
-      static let deleteMessage = LocaleKey("settings.providers.delete_message")
-      static let deleteTitle = LocaleKey("settings.providers.delete_title")
       enum description {
         static let all = LocaleKey("settings.providers.description.all")
         static let dictionary = LocaleKey("settings.providers.description.dictionary")
         static let fallback = LocaleKey("settings.providers.description.fallback")
         static let translation = LocaleKey("settings.providers.description.translation")
       }
-      static let editTitle = LocaleKey("settings.providers.edit_title")
-      static let empty = LocaleKey("settings.providers.empty")
-      static let error = LocaleKey("settings.providers.error")
-      static let help = LocaleKey("settings.providers.help")
-      static let helpEdit = LocaleKey("settings.providers.help_edit")
-      static let id = LocaleKey("settings.providers.id")
-      static let idPlaceholder = LocaleKey("settings.providers.id_placeholder")
-      static let intro = LocaleKey("settings.providers.intro")
-      static let introWarning = LocaleKey("settings.providers.intro_warning")
-      static let loading = LocaleKey("settings.providers.loading")
-      static let noServices = LocaleKey("settings.providers.no_services")
-      static let services = LocaleKey("settings.providers.services")
+      enum detail {
+        enum tooltip {
+          static let edit = LocaleKey("settings.providers.detail.tooltip.edit")
+        }
+      }
+      enum dialog {
+        static let deleteConfirm = LocaleKey("settings.providers.dialog.delete_confirm")
+        static let deleteMessage = LocaleKey("settings.providers.dialog.delete_message")
+        static let deleteTitle = LocaleKey("settings.providers.dialog.delete_title")
+      }
+      enum editor {
+        enum placeholder {
+          static let id = LocaleKey("settings.providers.editor.placeholder.id")
+        }
+        enum row {
+          static let id = LocaleKey("settings.providers.editor.row.id")
+          static let type = LocaleKey("settings.providers.editor.row.type")
+        }
+        enum title {
+          static let add = LocaleKey("settings.providers.editor.title.add")
+          static let edit = LocaleKey("settings.providers.editor.title.edit")
+        }
+        enum tooltip {
+          static let help = LocaleKey("settings.providers.editor.tooltip.help")
+        }
+      }
+      enum intro {
+        static let body = LocaleKey("settings.providers.intro.body")
+        static let warning = LocaleKey("settings.providers.intro.warning")
+      }
+      enum item {
+        static let empty = LocaleKey("settings.providers.item.empty")
+        static let loading = LocaleKey("settings.providers.item.loading")
+        static let noServices = LocaleKey("settings.providers.item.no_services")
+      }
+      enum section {
+        static let services = LocaleKey("settings.providers.section.services")
+      }
       static let title = LocaleKey("settings.providers.title")
-      static let type = LocaleKey("settings.providers.type")
-    }
-    enum serviceIntegration {
-      static let title = LocaleKey("settings.service_integration.title")
-    }
-    enum shortcut {
-      static let extractCapture = LocaleKey("settings.shortcut.extract_capture")
-      static let extractClipboard = LocaleKey("settings.shortcut.extract_clipboard")
-      static let extractSelection = LocaleKey("settings.shortcut.extract_selection")
-      static let extractText = LocaleKey("settings.shortcut.extract_text")
-      static let hide = LocaleKey("settings.shortcut.hide")
-      static let inputAssist = LocaleKey("settings.shortcut.input_assist")
-      static let section = LocaleKey("settings.shortcut.section")
-      static let showOrHide = LocaleKey("settings.shortcut.show_or_hide")
-      static let translateInput = LocaleKey("settings.shortcut.translate_input")
     }
     enum shortcuts {
+      enum row {
+        static let extractCapture = LocaleKey("settings.shortcuts.row.extract_capture")
+        static let extractClipboard = LocaleKey("settings.shortcuts.row.extract_clipboard")
+        static let extractSelection = LocaleKey("settings.shortcuts.row.extract_selection")
+        static let hide = LocaleKey("settings.shortcuts.row.hide")
+        static let showOrHide = LocaleKey("settings.shortcuts.row.show_or_hide")
+        static let translateInput = LocaleKey("settings.shortcuts.row.translate_input")
+      }
+      enum section {
+        static let extractText = LocaleKey("settings.shortcuts.section.extract_text")
+        static let inputAssist = LocaleKey("settings.shortcuts.section.input_assist")
+        static let shortcuts = LocaleKey("settings.shortcuts.section.shortcuts")
+      }
       static let title = LocaleKey("settings.shortcuts.title")
     }
     static let title = LocaleKey("settings.title")

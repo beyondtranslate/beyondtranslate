@@ -44,15 +44,15 @@ struct ProviderDetailView: View {
               .foregroundStyle(.secondary)
           }
           .buttonStyle(.plain)
-          .help(LocaleKeys.settings.providers.helpEdit.tr())
+          .help(LocaleKeys.settings.providers.detail.tooltip.edit.tr())
         }
         .padding(.vertical, 4)
       }
 
       // ── Services ────────────────────────────────────────────────
-      Section(LocaleKeys.settings.providers.services.tr()) {
+      Section(LocaleKeys.settings.providers.section.services.tr()) {
         if currentProvider.capabilities.isEmpty {
-          Text(LocaleKeys.settings.providers.noServices.tr())
+          Text(LocaleKeys.settings.providers.item.noServices.tr())
             .foregroundStyle(.secondary)
         } else {
           ForEach(currentProvider.capabilities, id: \.self) { capability in

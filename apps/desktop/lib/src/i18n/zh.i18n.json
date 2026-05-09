@@ -194,12 +194,7 @@
     },
     "limited_banner": {
       "title": "功能受限，请根据提示进行检查。",
-      "permission": {
-        "screen_capture": "授予屏幕录制权限",
-        "screen_selection": "授予辅助功能权限"
-      },
       "button": {
-        "allow": "允许",
         "go_settings": "前往设置",
         "check_again": "重新检查"
       },
@@ -233,19 +228,70 @@
     }
   },
   "settings": {
-    "title": "设置",
     "version": "版本 {} BUILD {}",
     "general": {
-      "title": "常规"
+      "title": "常规",
+      "section": {
+        "permissions": "权限",
+        "extract_text": "取词",
+        "directory": "词典",
+        "translation": "翻译",
+        "translation_target": "翻译目标",
+        "input": "输入设置"
+      },
+      "row": {
+        "launch_at_startup": "登录时启动",
+        "show_menu_bar": "显示菜单栏",
+        "screen_capture_access": "授予屏幕录制权限",
+        "screen_selection_access": "授予辅助功能权限",
+        "default_extract_text_service": "默认取词服务",
+        "auto_copy_detected_text": "自动复制识别文本",
+        "default_directory_service": "默认词典服务",
+        "default_translation_service": "默认翻译服务",
+        "translation_mode": "翻译模式",
+        "double_click_copy_result": "双击复制翻译结果",
+        "submit_with_enter": "用 Enter 提交",
+        "submit_with_meta_enter_mac": "用 ⌘ + Enter 提交"
+      },
+      "button": {
+        "add_target": "添加目标",
+        "grant": "授权"
+      },
+      "option": {
+        "none": "无",
+        "no_services_available": "暂无可用服务",
+        "granted": "已授权",
+        "built_in_ocr": "内置 OCR",
+        "tesseract": "Tesseract",
+        "youdao_ocr": "有道 OCR"
+      }
     },
     "appearance": {
-      "title": "外观"
+      "title": "外观",
+      "section": {
+        "app_language": "显示语言",
+        "theme_mode": "主题模式"
+      },
+      "option": {
+        "english": "英文",
+        "chinese": "中文"
+      }
     },
     "shortcuts": {
-      "title": "快捷键"
-    },
-    "input": {
-      "title": "输入设置"
+      "title": "快捷键",
+      "section": {
+        "shortcuts": "快捷键",
+        "extract_text": "取词",
+        "input_assist": "输入辅助功能"
+      },
+      "row": {
+        "show_or_hide": "显示或隐藏",
+        "hide": "隐藏",
+        "extract_selection": "从选区取词",
+        "extract_capture": "截图取词",
+        "extract_clipboard": "从剪贴板取词",
+        "translate_input": "翻译输入内容"
+      }
     },
     "advanced": {
       "title": "高级",
@@ -253,24 +299,50 @@
     },
     "providers": {
       "title": "服务商",
-      "add": "添加服务商...",
-      "add_title": "添加服务商",
-      "edit_title": "编辑服务商",
-      "delete_title": "删除服务商",
-      "delete_confirm": "删除「{}」？",
-      "delete_message": "此操作无法撤销。",
-      "empty": "暂无已配置的服务商。添加一个服务商以启用翻译服务。",
-      "error": "错误",
-      "help": "帮助",
-      "help_edit": "编辑服务商",
-      "id": "服务商 ID",
-      "id_placeholder": "例如 deepl-main",
-      "intro": "选择应用使用的翻译和词典服务商。",
-      "intro_warning": "你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。",
-      "loading": "正在加载服务商...",
-      "type": "服务商类型",
-      "services": "服务",
-      "no_services": "暂无可用服务。",
+      "section": {
+        "services": "服务"
+      },
+      "item": {
+        "empty": "暂无已配置的服务商。添加一个服务商以启用翻译服务。",
+        "loading": "正在加载服务商...",
+        "no_services": "暂无可用服务。"
+      },
+      "button": {
+        "add": "添加服务商..."
+      },
+      "dialog": {
+        "delete_title": "删除服务商",
+        "delete_confirm": "删除「{}」？",
+        "delete_message": "此操作无法撤销。"
+      },
+      "alert": {
+        "error": "错误"
+      },
+      "intro": {
+        "body": "选择应用使用的翻译和词典服务商。",
+        "warning": "你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。"
+      },
+      "editor": {
+        "title": {
+          "add": "添加服务商",
+          "edit": "编辑服务商"
+        },
+        "row": {
+          "id": "服务商 ID",
+          "type": "服务商类型"
+        },
+        "placeholder": {
+          "id": "例如 deepl-main"
+        },
+        "tooltip": {
+          "help": "帮助"
+        }
+      },
+      "detail": {
+        "tooltip": {
+          "edit": "编辑服务商"
+        }
+      },
       "capability": {
         "translation": "翻译",
         "dictionary": "词典"
@@ -282,69 +354,14 @@
         "fallback": "提供翻译服务"
       }
     },
-    "service_integration": {
-      "title": "服务接入"
+    "layout": {
+      "title": "设置",
+      "empty": {
+        "title": "选择一个分类",
+        "message": "从侧边栏选择一个设置分类。"
+      }
     },
-    "others": {
-      "title": "其他"
-    },
-    "exit_app_dialog": {
-      "title": "您确定要退出吗？"
-    },
-    "preference": {
-      "your_plan": "当前会员计划",
-      "extract_text": "取词",
-      "translate": "翻译",
-      "interface": "界面",
-      "app_language": "显示语言",
-      "theme_mode": "主题模式",
-      "keyboard_shortcuts": "键盘快捷键",
-      "submit_with_enter": "用 Enter 提交",
-      "submit_with_meta_enter": "用 Ctrl + Enter 提交",
-      "submit_with_meta_enter_mac": "用 ⌘ + Enter 提交",
-      "launch_at_startup": "登录时启动",
-      "show_menu_bar": "显示菜单栏",
-      "permissions": "权限",
-      "default_extract_text_service": "默认取词服务",
-      "auto_copy_detected_text": "自动复制识别文本",
-      "directory": "词典",
-      "default_directory_service": "默认词典服务",
-      "translation": "翻译",
-      "default_translation_service": "默认翻译服务",
-      "translation_mode": "翻译模式",
-      "double_click_copy_result": "双击复制翻译结果",
-      "translation_target": "翻译目标",
-      "add_target": "添加目标",
-      "engines": "文本翻译",
-      "ocr_engines": "文字识别",
-      "about": "关于比译",
-      "exit_app": "退出应用"
-    },
-    "empty": {
-      "title": "选择一个分类",
-      "message": "从侧边栏选择一个设置分类。"
-    },
-    "option": {
-      "none": "无",
-      "no_services_available": "暂无可用服务",
-      "granted": "已授权",
-      "built_in_ocr": "内置 OCR",
-      "tesseract": "Tesseract",
-      "youdao_ocr": "有道 OCR",
-      "english": "英文",
-      "chinese": "中文"
-    },
-    "shortcut": {
-      "section": "快捷键",
-      "show_or_hide": "显示或隐藏",
-      "hide": "隐藏",
-      "extract_text": "取词",
-      "extract_selection": "从选区取词",
-      "extract_capture": "截图取词",
-      "extract_clipboard": "从剪贴板取词",
-      "input_assist": "输入辅助功能",
-      "translate_input": "翻译输入内容"
-    }
+    "title": "设置"
   },
   "shortcuts": {
     "record_dialog": {

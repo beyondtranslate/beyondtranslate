@@ -16,7 +16,7 @@ struct SettingsView: View {
         Label(section.title, systemImage: section.icon)
           .tag(section)
       }
-      .navigationTitle(LocaleKeys.settings.title.tr())
+      .navigationTitle(LocaleKeys.settings.layout.title.tr())
       .navigationSplitViewColumnWidth(min: 180, ideal: 210)
     } detail: {
       if let selectedSection {
@@ -60,9 +60,9 @@ private struct SettingsEmptyStateView: View {
       Image(systemName: "sidebar.left")
         .font(.system(size: 28))
         .foregroundStyle(.secondary)
-      Text(LocaleKeys.settings.empty.title.tr())
+      Text(LocaleKeys.settings.layout.empty.title.tr())
         .font(.headline)
-      Text(LocaleKeys.settings.empty.message.tr())
+      Text(LocaleKeys.settings.layout.empty.message.tr())
         .foregroundStyle(.secondary)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)

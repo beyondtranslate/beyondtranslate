@@ -28,7 +28,7 @@ struct ProvidersView: View {
         } footer: {
           HStack {
             Spacer()
-            Button(LocaleKeys.settings.providers.add.tr()) {
+            Button(LocaleKeys.settings.providers.button.add.tr()) {
               draft = .new()
             }
           }
@@ -52,7 +52,7 @@ struct ProvidersView: View {
       }
     }
     .alert(
-      LocaleKeys.settings.providers.error.tr(),
+      LocaleKeys.settings.providers.alert.error.tr(),
       isPresented: Binding(
         get: { viewModel.errorMessage != nil },
         set: { if !$0 { viewModel.errorMessage = nil } }
@@ -72,11 +72,11 @@ struct ProvidersView: View {
 private struct ProviderIntroRow: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
-      Text(LocaleKeys.settings.providers.intro.tr())
+      Text(LocaleKeys.settings.providers.intro.body.tr())
         .fixedSize(horizontal: false, vertical: true)
 
       Text(
-        LocaleKeys.settings.providers.introWarning.tr()
+        LocaleKeys.settings.providers.intro.warning.tr()
       )
       .foregroundStyle(.secondary)
       .fixedSize(horizontal: false, vertical: true)
@@ -135,7 +135,7 @@ private struct ProviderRow: View {
       }
     }
     .confirmationDialog(
-      LocaleKeys.settings.providers.deleteConfirm.tr(provider.name),
+      LocaleKeys.settings.providers.dialog.deleteConfirm.tr(provider.name),
       isPresented: $showDeleteConfirm,
       titleVisibility: .visible
     ) {
@@ -143,7 +143,7 @@ private struct ProviderRow: View {
         LocaleKeys.common.button.delete.tr(), role: .destructive, action: onDelete)
       Button(LocaleKeys.common.button.cancel.tr(), role: .cancel) {}
     } message: {
-      Text(LocaleKeys.settings.providers.deleteMessage.tr())
+      Text(LocaleKeys.settings.providers.dialog.deleteMessage.tr())
     }
   }
 }
@@ -154,7 +154,7 @@ private struct LoadingProviderRow: View {
   var body: some View {
     HStack(spacing: 14) {
       ProgressView()
-      Text(LocaleKeys.settings.providers.loading.tr())
+      Text(LocaleKeys.settings.providers.item.loading.tr())
         .font(.system(size: 13))
         .foregroundStyle(.secondary)
       Spacer()
@@ -169,7 +169,7 @@ private struct EmptyProviderRow: View {
         .font(.system(size: 20))
         .foregroundStyle(.tertiary)
         .frame(width: 28, height: 28)
-      Text(LocaleKeys.settings.providers.empty.tr())
+      Text(LocaleKeys.settings.providers.item.empty.tr())
         .font(.system(size: 13))
         .foregroundStyle(.secondary)
         .fixedSize(horizontal: false, vertical: true)
@@ -274,13 +274,13 @@ struct ProviderEditorSheet: View {
           Section {
             TextField(
               text: $draft.backendID,
-              prompt: Text(LocaleKeys.settings.providers.idPlaceholder.tr())
+              prompt: Text(LocaleKeys.settings.providers.editor.placeholder.id.tr())
             ) {
-              Text(LocaleKeys.settings.providers.id.tr())
+              Text(LocaleKeys.settings.providers.editor.row.id.tr())
             }
 
             Picker(
-              LocaleKeys.settings.providers.type.tr(), selection: $draft.providerType
+              LocaleKeys.settings.providers.editor.row.type.tr(), selection: $draft.providerType
             ) {
               ForEach(ProviderType.allCases) { type in
                 Text(type.displayName).tag(type)
@@ -325,7 +325,7 @@ struct ProviderEditorSheet: View {
             .foregroundStyle(.secondary)
         }
         .buttonStyle(.plain)
-        .help(LocaleKeys.settings.providers.help.tr())
+        .help(LocaleKeys.settings.providers.editor.tooltip.help.tr())
 
         // Destructive delete — bordered pill with red tint
         if let localID = draft.localID {
@@ -333,7 +333,7 @@ struct ProviderEditorSheet: View {
             onDelete(localID)
             dismiss()
           } label: {
-            Text(LocaleKeys.settings.providers.deleteTitle.tr())
+            Text(LocaleKeys.settings.providers.dialog.deleteTitle.tr())
           }
           .buttonStyle(.bordered)
           .tint(.red)

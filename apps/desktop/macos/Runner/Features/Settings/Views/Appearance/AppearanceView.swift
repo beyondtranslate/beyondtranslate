@@ -6,7 +6,7 @@ struct AppearanceView: View {
 
   var body: some View {
     SettingsPage(title: LocaleKeys.settings.appearance.title.tr()) {
-      Section(LocaleKeys.settings.preference.appLanguage.tr()) {
+      Section(LocaleKeys.settings.appearance.section.appLanguage.tr()) {
         SettingPicker(
           "",
           selection: Binding(
@@ -22,7 +22,7 @@ struct AppearanceView: View {
         .pickerStyle(.radioGroup)
       }
 
-      Section(LocaleKeys.settings.preference.themeMode.tr()) {
+      Section(LocaleKeys.settings.appearance.section.themeMode.tr()) {
         SettingPicker(
           "",
           selection: Binding(
@@ -44,8 +44,8 @@ struct AppearanceView: View {
 
   private var languageOptions: [(id: String, title: String)] {
     [
-      ("en", LocaleKeys.settings.option.english.tr()),
-      ("zh", LocaleKeys.settings.option.chinese.tr()),
+      ("en", LocaleKeys.settings.appearance.option.english.tr()),
+      ("zh", LocaleKeys.settings.appearance.option.chinese.tr()),
     ]
   }
 }

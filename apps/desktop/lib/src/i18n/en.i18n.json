@@ -194,12 +194,7 @@
     },
     "limited_banner": {
       "title": "Functionality is limited, please follow the tips to check.",
-      "permission": {
-        "screen_capture": "Grant screen recording access",
-        "screen_selection": "Grant accessibility access"
-      },
       "button": {
-        "allow": "Allow",
         "go_settings": "Go Settings",
         "check_again": "Check Again"
       },
@@ -207,7 +202,7 @@
         "help": "View the help document"
       },
       "message": {
-        "allow_access_tip": "If there is no response after clicking \"Allow\", please click \"Go Settings\" to set it manually.",
+        "allow_access_tip": "If there is no response after clicking \"Grant\", please click \"Go Settings\" to set it manually.",
         "all_access_allowed": "The Screen extract text is enabled",
         "all_access_not_allowed": "The required access are not allowed.\nPlease check and set again."
       }
@@ -233,19 +228,70 @@
     }
   },
   "settings": {
-    "title": "Settings",
     "version": "Version {} BUILD {}",
     "general": {
-      "title": "General"
+      "title": "General",
+      "section": {
+        "permissions": "Permissions",
+        "extract_text": "Extract text",
+        "directory": "Directory",
+        "translation": "Translation",
+        "translation_target": "Translation Target",
+        "input": "Input Settings"
+      },
+      "row": {
+        "launch_at_startup": "Launch when you log in",
+        "show_menu_bar": "Show menu bar",
+        "screen_capture_access": "Grant screen recording access",
+        "screen_selection_access": "Grant accessibility access",
+        "default_extract_text_service": "Default extract text service",
+        "auto_copy_detected_text": "Auto copy detected text",
+        "default_directory_service": "Default directory service",
+        "default_translation_service": "Default translation service",
+        "translation_mode": "Translation mode",
+        "double_click_copy_result": "Double click to copy translation result",
+        "submit_with_enter": "Submit with Enter",
+        "submit_with_meta_enter_mac": "Submit with ⌘ + Enter"
+      },
+      "button": {
+        "add_target": "Add Target",
+        "grant": "Grant"
+      },
+      "option": {
+        "none": "None",
+        "no_services_available": "No services available",
+        "granted": "Granted",
+        "built_in_ocr": "Built-in OCR",
+        "tesseract": "Tesseract",
+        "youdao_ocr": "Youdao OCR"
+      }
     },
     "appearance": {
-      "title": "Appearance"
+      "title": "Appearance",
+      "section": {
+        "app_language": "Display Language",
+        "theme_mode": "Theme Mode"
+      },
+      "option": {
+        "english": "English",
+        "chinese": "Chinese"
+      }
     },
     "shortcuts": {
-      "title": "Shortcuts"
-    },
-    "input": {
-      "title": "Input Settings"
+      "title": "Shortcuts",
+      "section": {
+        "shortcuts": "Shortcuts",
+        "extract_text": "Extract Text",
+        "input_assist": "Input Assist Function"
+      },
+      "row": {
+        "show_or_hide": "Show or Hide",
+        "hide": "Hide",
+        "extract_selection": "Extract text from selection",
+        "extract_capture": "Extract text from capture",
+        "extract_clipboard": "Extract text from clipboard",
+        "translate_input": "Translate input content"
+      }
     },
     "advanced": {
       "title": "Advanced",
@@ -253,24 +299,50 @@
     },
     "providers": {
       "title": "Providers",
-      "add": "Add a Provider...",
-      "add_title": "Add Provider",
-      "edit_title": "Edit Provider",
-      "delete_title": "Delete Provider",
-      "delete_confirm": "Delete \"{}\"?",
-      "delete_message": "This action cannot be undone.",
-      "empty": "No providers configured. Add one to enable translation services.",
-      "error": "Error",
-      "help": "Help",
-      "help_edit": "Edit provider",
-      "id": "Provider ID",
-      "id_placeholder": "e.g. deepl-main",
-      "intro": "Choose the translation and dictionary providers used by the app.",
-      "intro_warning": "Providers you add may process the text you send, so only connect services you trust.",
-      "loading": "Loading providers...",
-      "type": "Provider Type",
-      "services": "Services",
-      "no_services": "No services available.",
+      "section": {
+        "services": "Services"
+      },
+      "item": {
+        "empty": "No providers configured. Add one to enable translation services.",
+        "loading": "Loading providers...",
+        "no_services": "No services available."
+      },
+      "button": {
+        "add": "Add a Provider..."
+      },
+      "dialog": {
+        "delete_title": "Delete Provider",
+        "delete_confirm": "Delete \"{}\"?",
+        "delete_message": "This action cannot be undone."
+      },
+      "alert": {
+        "error": "Error"
+      },
+      "intro": {
+        "body": "Choose the translation and dictionary providers used by the app.",
+        "warning": "Providers you add may process the text you send, so only connect services you trust."
+      },
+      "editor": {
+        "title": {
+          "add": "Add Provider",
+          "edit": "Edit Provider"
+        },
+        "row": {
+          "id": "Provider ID",
+          "type": "Provider Type"
+        },
+        "placeholder": {
+          "id": "e.g. deepl-main"
+        },
+        "tooltip": {
+          "help": "Help"
+        }
+      },
+      "detail": {
+        "tooltip": {
+          "edit": "Edit provider"
+        }
+      },
       "capability": {
         "translation": "Translation",
         "dictionary": "Dictionary"
@@ -282,69 +354,14 @@
         "fallback": "Provides translation services"
       }
     },
-    "service_integration": {
-      "title": "Service Integration"
+    "layout": {
+      "title": "Settings",
+      "empty": {
+        "title": "Select a Category",
+        "message": "Choose a settings section from the sidebar."
+      }
     },
-    "others": {
-      "title": "Others"
-    },
-    "exit_app_dialog": {
-      "title": "Are you sure you want to exit?"
-    },
-    "preference": {
-      "your_plan": "Your Plan",
-      "extract_text": "Extract text",
-      "translate": "Translate",
-      "interface": "Interface",
-      "app_language": "Display Language",
-      "theme_mode": "Theme Mode",
-      "keyboard_shortcuts": "Keyboard Shortcuts",
-      "submit_with_enter": "Submit with Enter",
-      "submit_with_meta_enter": "Submit with Ctrl + Enter",
-      "submit_with_meta_enter_mac": "Submit with ⌘ + Enter",
-      "launch_at_startup": "Launch when you log in",
-      "show_menu_bar": "Show menu bar",
-      "permissions": "Permissions",
-      "default_extract_text_service": "Default extract text service",
-      "auto_copy_detected_text": "Auto copy detected text",
-      "directory": "Directory",
-      "default_directory_service": "Default directory service",
-      "translation": "Translation",
-      "default_translation_service": "Default translation service",
-      "translation_mode": "Translation mode",
-      "double_click_copy_result": "Double click to copy translation result",
-      "translation_target": "Translation Target",
-      "add_target": "Add Target",
-      "engines": "Text Translation",
-      "ocr_engines": "Text Detection",
-      "about": "About Biyi",
-      "exit_app": "Exit App"
-    },
-    "empty": {
-      "title": "Select a Category",
-      "message": "Choose a settings section from the sidebar."
-    },
-    "option": {
-      "none": "None",
-      "no_services_available": "No services available",
-      "granted": "Granted",
-      "built_in_ocr": "Built-in OCR",
-      "tesseract": "Tesseract",
-      "youdao_ocr": "Youdao OCR",
-      "english": "English",
-      "chinese": "Chinese"
-    },
-    "shortcut": {
-      "section": "Shortcuts",
-      "show_or_hide": "Show or Hide",
-      "hide": "Hide",
-      "extract_text": "Extract Text",
-      "extract_selection": "Extract text from selection",
-      "extract_capture": "Extract text from capture",
-      "extract_clipboard": "Extract text from clipboard",
-      "input_assist": "Input Assist Function",
-      "translate_input": "Translate input content"
-    }
+    "title": "Settings"
   },
   "shortcuts": {
     "record_dialog": {

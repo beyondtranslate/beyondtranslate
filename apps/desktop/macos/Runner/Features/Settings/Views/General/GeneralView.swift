@@ -11,44 +11,50 @@ struct GeneralView: View {
     SettingsPage(title: LocaleKeys.settings.general.title.tr()) {
       Section {
         SettingToggle(
-          LocaleKeys.settings.preference.launchAtStartup.tr(),
+          LocaleKeys.settings.general.row.launchAtStartup.tr(),
           isOn: Binding(
             get: { viewModel.launchAtLogin },
             set: { viewModel.setLaunchAtLogin($0) }
           ))
         SettingToggle(
-          LocaleKeys.settings.preference.showMenuBar.tr(),
+          LocaleKeys.settings.general.row.showMenuBar.tr(),
           isOn: Binding(
             get: { viewModel.showMenuBar },
             set: { viewModel.setShowMenuBar($0) }
           ))
       }
 
-      Section(LocaleKeys.settings.preference.permissions.tr()) {
+      Section(LocaleKeys.settings.general.section.permissions.tr()) {
         PermissionAccessRow(
-          title: LocaleKeys.miniTranslator.limitedBanner.permission.screenCapture.tr(),
+          title: LocaleKeys.settings.general.row.screenCaptureAccess.tr(),
           isAllowed: viewModel.screenCaptureAllowed,
           onRequest: viewModel.requestScreenCaptureAccess
         )
         PermissionAccessRow(
-          title: LocaleKeys.miniTranslator.limitedBanner.permission.screenSelection.tr(),
+          title: LocaleKeys.settings.general.row.screenSelectionAccess.tr(),
           isAllowed: viewModel.accessibilityAllowed,
           onRequest: viewModel.requestAccessibilityAccess
         )
       }
       .background(
-        RoundedRectangle(cornerRadius: 8)
+        RoundedRectangle(cornerRadius: 6)
           .fill(isPermissionsHighlighted ? Color.accentColor.opacity(0.16) : Color.clear)
+          .padding(.horizontal, -6)
+          .padding(.vertical, -4)
       )
       .overlay(
-        RoundedRectangle(cornerRadius: 8)
+        RoundedRectangle(cornerRadius: 6)
           .stroke(
-            isPermissionsHighlighted ? Color.accentColor.opacity(0.55) : Color.clear, lineWidth: 1)
+            isPermissionsHighlighted ? Color.accentColor.opacity(0.55) : Color.clear,
+            lineWidth: 1
+          )
+          .padding(.horizontal, -6)
+          .padding(.vertical, -4)
       )
 
-      Section(LocaleKeys.settings.preference.extractText.tr()) {
+      Section(LocaleKeys.settings.general.section.extractText.tr()) {
         SettingPicker(
-          LocaleKeys.settings.preference.defaultExtractTextService.tr(),
+          LocaleKeys.settings.general.row.defaultExtractTextService.tr(),
           selection: Binding(
             get: { viewModel.defaultOcrService },
             set: { viewModel.setDefaultOcrService($0) }
@@ -61,22 +67,22 @@ struct GeneralView: View {
         .pickerStyle(.menu)
 
         SettingToggle(
-          LocaleKeys.settings.preference.autoCopyDetectedText.tr(),
+          LocaleKeys.settings.general.row.autoCopyDetectedText.tr(),
           isOn: $viewModel.autoCopyDetectedText)
       }
 
-      Section(LocaleKeys.settings.preference.directory.tr()) {
+      Section(LocaleKeys.settings.general.section.directory.tr()) {
         SettingPicker(
-          LocaleKeys.settings.preference.defaultDirectoryService.tr(),
+          LocaleKeys.settings.general.row.defaultDirectoryService.tr(),
           selection: Binding(
             get: { viewModel.defaultDirectoryService },
             set: { viewModel.setDefaultDirectoryService($0) }
           )
         ) {
           if viewModel.dictionaryServiceOptions.isEmpty {
-            Text(LocaleKeys.settings.option.noServicesAvailable.tr()).tag("")
+            Text(LocaleKeys.settings.general.option.noServicesAvailable.tr()).tag("")
           } else {
-            Text(LocaleKeys.settings.option.none.tr()).tag("")
+            Text(LocaleKeys.settings.general.option.none.tr()).tag("")
             ForEach(viewModel.dictionaryServiceOptions) { option in
               Text(option.name).tag(option.id)
             }
@@ -86,18 +92,18 @@ struct GeneralView: View {
         .disabled(viewModel.dictionaryServiceOptions.isEmpty)
       }
 
-      Section(LocaleKeys.settings.preference.translation.tr()) {
+      Section(LocaleKeys.settings.general.section.translation.tr()) {
         SettingPicker(
-          LocaleKeys.settings.preference.defaultTranslationService.tr(),
+          LocaleKeys.settings.general.row.defaultTranslationService.tr(),
           selection: Binding(
             get: { viewModel.defaultTranslationService },
             set: { viewModel.setDefaultTranslationService($0) }
           )
         ) {
           if viewModel.translationServiceOptions.isEmpty {
-            Text(LocaleKeys.settings.option.noServicesAvailable.tr()).tag("")
+            Text(LocaleKeys.settings.general.option.noServicesAvailable.tr()).tag("")
           } else {
-            Text(LocaleKeys.settings.option.none.tr()).tag("")
+            Text(LocaleKeys.settings.general.option.none.tr()).tag("")
             ForEach(viewModel.translationServiceOptions) { option in
               Text(option.name).tag(option.id)
             }
@@ -107,7 +113,7 @@ struct GeneralView: View {
         .disabled(viewModel.translationServiceOptions.isEmpty)
 
         SettingPicker(
-          LocaleKeys.settings.preference.translationMode.tr(),
+          LocaleKeys.settings.general.row.translationMode.tr(),
           selection: Binding(
             get: { viewModel.translationMode },
             set: { viewModel.setTranslationMode($0) }
@@ -120,13 +126,13 @@ struct GeneralView: View {
         .pickerStyle(.menu)
 
         SettingToggle(
-          LocaleKeys.settings.preference.doubleClickCopyResult.tr(),
+          LocaleKeys.settings.general.row.doubleClickCopyResult.tr(),
           isOn: $viewModel.doubleClickCopyResult
         )
       }
 
       if viewModel.translationMode == .auto {
-        Section(LocaleKeys.settings.preference.translationTarget.tr()) {
+        Section(LocaleKeys.settings.general.section.translationTarget.tr()) {
           VStack(alignment: .leading, spacing: 10) {
             ForEach(viewModel.translationTargets) { item in
               HStack {
@@ -139,12 +145,12 @@ struct GeneralView: View {
               }
             }
 
-            Button(LocaleKeys.settings.preference.addTarget.tr()) {}
+            Button(LocaleKeys.settings.general.button.addTarget.tr()) {}
           }
         }
       }
 
-      Section(LocaleKeys.settings.input.title.tr()) {
+      Section(LocaleKeys.settings.general.section.input.tr()) {
         SettingPicker("", selection: $viewModel.inputSubmitMode) {
           ForEach(InputSubmitMode.allCases) { mode in
             Text(mode.title).tag(mode)
@@ -171,9 +177,9 @@ struct GeneralView: View {
 
   private var ocrOptions: [(id: String, title: String)] {
     [
-      ("Built-in OCR", LocaleKeys.settings.option.builtInOcr.tr()),
-      ("Tesseract", LocaleKeys.settings.option.tesseract.tr()),
-      ("Youdao OCR", LocaleKeys.settings.option.youdaoOcr.tr()),
+      ("Built-in OCR", LocaleKeys.settings.general.option.builtInOcr.tr()),
+      ("Tesseract", LocaleKeys.settings.general.option.tesseract.tr()),
+      ("Youdao OCR", LocaleKeys.settings.general.option.youdaoOcr.tr()),
     ]
   }
 
@@ -201,15 +207,24 @@ private struct PermissionAccessRow: View {
   let onRequest: () -> Void
 
   var body: some View {
-    HStack {
+    HStack(alignment: .center) {
       Text(title)
       Spacer()
 
-      if isAllowed {
-        Text(LocaleKeys.settings.option.granted.tr())
-          .foregroundStyle(.secondary)
-      } else {
-        Button(LocaleKeys.miniTranslator.limitedBanner.button.allow.tr(), action: onRequest)
+      ZStack(alignment: .trailing) {
+        Button(action: {}) {
+          Text(" ")
+        }
+        .opacity(0)
+        .accessibilityHidden(true)
+        .allowsHitTesting(false)
+
+        if isAllowed {
+          Text(LocaleKeys.settings.general.option.granted.tr())
+            .foregroundStyle(.secondary)
+        } else {
+          Button(LocaleKeys.settings.general.button.grant.tr(), action: onRequest)
+        }
       }
     }
   }

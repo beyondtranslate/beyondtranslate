@@ -43,9 +43,9 @@ extension TranslationMode {
 extension InputSubmitMode {
   var title: String {
     switch self {
-    case .enter: return LocaleKeys.settings.preference.submitWithEnter.tr()
+    case .enter: return LocaleKeys.settings.general.row.submitWithEnter.tr()
     case .commandEnter:
-      return LocaleKeys.settings.preference.submitWithMetaEnterMac.tr()
+      return LocaleKeys.settings.general.row.submitWithMetaEnterMac.tr()
     }
   }
 }
@@ -169,8 +169,8 @@ struct ProviderDraft: Identifiable {
 
   var title: String {
     localID == nil
-      ? LocaleKeys.settings.providers.addTitle.tr()
-      : LocaleKeys.settings.providers.editTitle.tr()
+      ? LocaleKeys.settings.providers.editor.title.add.tr()
+      : LocaleKeys.settings.providers.editor.title.edit.tr()
   }
 
   static func new() -> ProviderDraft {
