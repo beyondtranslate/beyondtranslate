@@ -1,4 +1,5 @@
 import Foundation
+import beyondtranslate_runtime
 
 @MainActor
 protocol SettingsRepository {
@@ -25,47 +26,47 @@ protocol SettingsRepository {
 
 @MainActor
 final class DefaultSettingsRepository: SettingsRepository {
-  private let settingsPlugin: MacSettingsPlugin?
+  private let settings: RuntimeSettings
   private var disabledProviders: Set<String> = []
 
-  init(_ settingsPlugin: MacSettingsPlugin? = nil) {
-    self.settingsPlugin = settingsPlugin
+  init(runtime: Runtime = RuntimeProvider.shared) {
+    self.settings = runtime.settings()
   }
 
   func getGeneral() async throws -> GeneralSettings {
-    try await plugin().getGeneral()
+    try await settings.getGeneral()
   }
 
   func updateGeneral(_ patch: GeneralSettingsPatch) async throws -> GeneralSettings {
-    try await plugin().updateGeneral(patch)
+    try await settings.updateGeneral(patch: patch)
   }
 
   func getAppearance() async throws -> AppearanceSettings {
-    try await plugin().getAppearance()
+    try await settings.getAppearance()
   }
 
   func updateAppearance(_ patch: AppearanceSettingsPatch) async throws -> AppearanceSettings {
-    try await plugin().updateAppearance(patch)
+    try await settings.updateAppearance(patch: patch)
   }
 
   func getShortcuts() async throws -> ShortcutSettings {
-    try await plugin().getShortcuts()
+    try await settings.getShortcuts()
   }
 
   func updateShortcuts(_ patch: ShortcutSettingsPatch) async throws -> ShortcutSettings {
-    try await plugin().updateShortcuts(patch)
+    try await settings.updateShortcuts(patch: patch)
   }
 
   func getAdvanced() async throws -> AdvancedSettings {
-    try await plugin().getAdvanced()
+    try await settings.getAdvanced()
   }
 
   func updateAdvanced(_ patch: AdvancedSettingsPatch) async throws -> AdvancedSettings {
-    try await plugin().updateAdvanced(patch)
+    try await settings.updateAdvanced(patch: patch)
   }
 
   func listProviders() async throws -> [ProviderConfigEntry] {
-    try await plugin().listProviders()
+    try await settings.listProviders()
   }
 
   func updateProvider(
@@ -73,11 +74,13 @@ final class DefaultSettingsRepository: SettingsRepository {
     providerType: String,
     fields: [String: String]
   ) async throws -> ProviderConfigEntry {
-    try await plugin().updateProvider(id: id, providerType: providerType, fields: fields)
+    try await settings.updateProvider(
+      providerId: id, providerType: providerType, fields: fields
+    )
   }
 
   func deleteProvider(id: String) async throws -> ProviderConfigEntry? {
-    try await plugin().deleteProvider(id: id)
+    try await settings.deleteProvider(providerId: id)
   }
 
   func disabledProviderIDs() -> Set<String> {
@@ -90,12 +93,5 @@ final class DefaultSettingsRepository: SettingsRepository {
     } else {
       disabledProviders.insert(id)
     }
-  }
-
-  private func plugin() throws -> MacSettingsPlugin {
-    guard let settingsPlugin else {
-      throw MacSettingsError.notImplemented("settingsPlugin")
-    }
-    return settingsPlugin
   }
 }

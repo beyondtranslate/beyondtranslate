@@ -23,12 +23,8 @@ final class SettingsViewModel: ObservableObject {
 
   private let repository: SettingsRepository
 
-  init(
-    repository: SettingsRepository? = nil,
-    settingsPlugin: MacSettingsPlugin? = nil
-  ) {
-    let repository =
-      repository ?? DefaultSettingsRepository(settingsPlugin)
+  init(repository: SettingsRepository? = nil) {
+    let repository = repository ?? DefaultSettingsRepository()
     self.repository = repository
 
     general = GeneralViewModel(repository: repository)

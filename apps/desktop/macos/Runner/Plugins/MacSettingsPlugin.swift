@@ -5,27 +5,19 @@ import SwiftUI
 final class MacSettingsPlugin: NSObject, FlutterPlugin {
   static let channelName = "beyondtranslate/mac_settings"
 
-  private let channel: FlutterMethodChannel
-
-  private init(channel: FlutterMethodChannel) {
-    self.channel = channel
-    super.init()
-  }
-
   static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(
       name: channelName,
       binaryMessenger: registrar.messenger
     )
-    let instance = MacSettingsPlugin(channel: channel)
-    registrar.addMethodCallDelegate(instance, channel: channel)
+    registrar.addMethodCallDelegate(MacSettingsPlugin(), channel: channel)
   }
 
   func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
     case "showSettings":
       Task { @MainActor in
-        SettingsWindowController.shared.showWindow(settingsPlugin: self)
+        SettingsWindowController.shared.showWindow()
         result(nil)
       }
     case "highlightPermissions":
@@ -35,136 +27,6 @@ final class MacSettingsPlugin: NSObject, FlutterPlugin {
       }
     default:
       result(FlutterMethodNotImplemented)
-    }
-  }
-
-  @MainActor
-  func getGeneral() async throws -> GeneralSettings {
-    try decode(from: try await invoke("settings.getGeneral"))
-  }
-
-  @MainActor
-  func updateGeneral(_ patch: GeneralSettingsPatch) async throws -> GeneralSettings {
-    try decode(
-      from: try await invoke(
-        "settings.updateGeneral",
-        arguments: encodePatch(patch)
-      ))
-  }
-
-  @MainActor
-  func getAppearance() async throws -> AppearanceSettings {
-    try decode(from: try await invoke("settings.getAppearance"))
-  }
-
-  @MainActor
-  func updateAppearance(_ patch: AppearanceSettingsPatch) async throws -> AppearanceSettings {
-    try decode(
-      from: try await invoke(
-        "settings.updateAppearance",
-        arguments: encodePatch(patch)
-      ))
-  }
-
-  @MainActor
-  func getShortcuts() async throws -> ShortcutSettings {
-    try decode(from: try await invoke("settings.getShortcuts"))
-  }
-
-  @MainActor
-  func updateShortcuts(_ patch: ShortcutSettingsPatch) async throws -> ShortcutSettings {
-    try decode(
-      from: try await invoke(
-        "settings.updateShortcuts",
-        arguments: encodePatch(patch)
-      ))
-  }
-
-  @MainActor
-  func getAdvanced() async throws -> AdvancedSettings {
-    try decode(from: try await invoke("settings.getAdvanced"))
-  }
-
-  @MainActor
-  func updateAdvanced(_ patch: AdvancedSettingsPatch) async throws -> AdvancedSettings {
-    try decode(
-      from: try await invoke(
-        "settings.updateAdvanced",
-        arguments: encodePatch(patch)
-      ))
-  }
-
-  @MainActor
-  func listProviders() async throws -> [ProviderConfigEntry] {
-    try decode(from: try await invoke("settings.listProviders"))
-  }
-
-  @MainActor
-  func updateProvider(
-    id: String,
-    providerType: String,
-    fields: [String: String]
-  ) async throws -> ProviderConfigEntry {
-    try decode(
-      from: try await invoke(
-        "settings.updateProvider",
-        arguments: ["id": id, "providerType": providerType, "fields": fields]
-      ))
-  }
-
-  @MainActor
-  func deleteProvider(id: String) async throws -> ProviderConfigEntry? {
-    let result = try await invoke("settings.deleteProvider", arguments: ["id": id])
-    guard let result, !(result is NSNull) else { return nil }
-    return try decode(from: result)
-  }
-
-  @MainActor
-  private func invoke(_ method: String, arguments: Any? = nil) async throws -> Any? {
-    try await withCheckedThrowingContinuation { continuation in
-      channel.invokeMethod(method, arguments: arguments) { result in
-        if let error = result as? FlutterError {
-          continuation.resume(
-            throwing: MacSettingsError.remote(
-              code: error.code,
-              message: error.message
-            ))
-        } else if FlutterMethodNotImplemented.isEqual(result) {
-          continuation.resume(throwing: MacSettingsError.notImplemented(method))
-        } else {
-          continuation.resume(returning: result)
-        }
-      }
-    }
-  }
-
-  @MainActor
-  private func decode<T: Decodable>(from value: Any?) throws -> T {
-    let data = try JSONSerialization.data(withJSONObject: value as Any)
-    return try JSONDecoder().decode(T.self, from: data)
-  }
-
-  /// Nil fields are omitted so Rust patch types treat them as "no change".
-  @MainActor
-  private func encodePatch<T: Encodable>(_ patch: T) throws -> [String: Any] {
-    let data = try JSONEncoder().encode(patch)
-    guard let object = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-      return [:]
-    }
-    return object
-  }
-}
-
-enum MacSettingsError: LocalizedError {
-  case notImplemented(String)
-  case remote(code: String, message: String?)
-
-  var errorDescription: String? {
-    switch self {
-    case .notImplemented(let method):
-      return "Method not implemented: \(method)"
-    case .remote(let code, let message):
-      return "[\(code)] \(message ?? "unknown error")"
     }
   }
 }
@@ -200,12 +62,10 @@ private final class SettingsWindowController: NSWindowController, NSWindowDelega
   /// Creates a fresh SettingsView (and SettingsViewModel) each time the
   /// window is shown, so settings are always loaded from the current
   /// Rust state rather than a stale snapshot.
-  func showWindow(settingsPlugin: MacSettingsPlugin) {
+  func showWindow() {
     guard let window else { return }
 
-    window.contentViewController = NSHostingController(
-      rootView: SettingsView(settingsPlugin: settingsPlugin)
-    )
+    window.contentViewController = NSHostingController(rootView: SettingsView())
     window.center()
     NSApp.activate(ignoringOtherApps: true)
     window.makeKeyAndOrderFront(nil)

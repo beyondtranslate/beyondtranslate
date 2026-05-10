@@ -1,4 +1,5 @@
 import SwiftUI
+import beyondtranslate_runtime
 
 @MainActor
 final class ProvidersViewModel: ObservableObject {

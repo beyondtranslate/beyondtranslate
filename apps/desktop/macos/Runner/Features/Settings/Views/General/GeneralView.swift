@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import beyondtranslate_runtime
 
 struct GeneralView: View {
   @ObservedObject var viewModel: GeneralViewModel

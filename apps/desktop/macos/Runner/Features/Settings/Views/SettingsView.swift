@@ -6,8 +6,8 @@ struct SettingsView: View {
   @ObservedObject private var highlightCoordinator = SettingsHighlightCoordinator.shared
   @ObservedObject private var localization = AppLocale.shared
 
-  init(settingsPlugin: MacSettingsPlugin? = nil) {
-    _viewModel = StateObject(wrappedValue: SettingsViewModel(settingsPlugin: settingsPlugin))
+  init() {
+    _viewModel = StateObject(wrappedValue: SettingsViewModel())
   }
 
   var body: some View {

@@ -1,6 +1,7 @@
 import AppKit
 import ApplicationServices
 import SwiftUI
+import beyondtranslate_runtime
 
 struct ServiceOption: Identifiable, Hashable {
   let id: String
@@ -74,47 +75,47 @@ final class GeneralViewModel: ObservableObject {
 
   func setLaunchAtLogin(_ value: Bool) {
     launchAtLogin = value
-    Task { await persist(GeneralSettingsPatch(launchAtLogin: value)) }
+    Task { await persist(.diff(launchAtLogin: value)) }
   }
 
   func setShowMenuBar(_ value: Bool) {
     showMenuBar = value
-    Task { await persist(GeneralSettingsPatch(showMenuBar: value)) }
+    Task { await persist(.diff(showMenuBar: value)) }
   }
 
   func setDefaultOcrService(_ value: String) {
     defaultOcrService = value
-    Task { await persist(GeneralSettingsPatch(defaultOcrService: value)) }
+    Task { await persist(.diff(defaultOcrService: value)) }
   }
 
   func setAutoCopyDetectedText(_ value: Bool) {
     autoCopyDetectedText = value
-    Task { await persist(GeneralSettingsPatch(autoCopyDetectedText: value)) }
+    Task { await persist(.diff(autoCopyDetectedText: value)) }
   }
 
   func setDefaultDirectoryService(_ value: String) {
     defaultDirectoryService = value
-    Task { await persist(GeneralSettingsPatch(defaultDirectoryService: value)) }
+    Task { await persist(.diff(defaultDirectoryService: value)) }
   }
 
   func setDefaultTranslationService(_ value: String) {
     defaultTranslationService = value
-    Task { await persist(GeneralSettingsPatch(defaultTranslationService: value)) }
+    Task { await persist(.diff(defaultTranslationService: value)) }
   }
 
   func setTranslationMode(_ value: TranslationMode) {
     translationMode = value
-    Task { await persist(GeneralSettingsPatch(translationMode: value)) }
+    Task { await persist(.diff(translationMode: value)) }
   }
 
   func setInputSubmitMode(_ value: InputSubmitMode) {
     inputSubmitMode = value
-    Task { await persist(GeneralSettingsPatch(inputSubmitMode: value)) }
+    Task { await persist(.diff(inputSubmitMode: value)) }
   }
 
   func setDoubleClickCopyResult(_ value: Bool) {
     doubleClickCopyResult = value
-    Task { await persist(GeneralSettingsPatch(doubleClickCopyResult: value)) }
+    Task { await persist(.diff(doubleClickCopyResult: value)) }
   }
 
   func refreshPermissions() {

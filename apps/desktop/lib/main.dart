@@ -10,7 +10,6 @@ import 'package:protocol_handler/protocol_handler.dart';
 import 'src/extensions/window_controller.dart';
 import 'src/i18n/i18n.dart';
 import 'src/routes/app_router.dart';
-import 'src/services/mac_settings.dart';
 import 'src/services/runtime.dart' show initRuntime;
 import 'src/services/settings_store.dart';
 import 'src/utils/env.dart';
@@ -33,7 +32,6 @@ Future<void> _ensureInitialized() async {
 
   await initEnv();
   await settingsStore.init();
-  MacSettings.registerMethodCallHandler();
 }
 
 void _smokeTestBeyondtranslateRuntime() {

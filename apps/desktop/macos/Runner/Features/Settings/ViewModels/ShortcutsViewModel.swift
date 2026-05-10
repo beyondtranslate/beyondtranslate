@@ -1,4 +1,5 @@
 import SwiftUI
+import beyondtranslate_runtime
 
 @MainActor
 final class ShortcutsViewModel: ObservableObject {
@@ -35,15 +36,7 @@ final class ShortcutsViewModel: ObservableObject {
     showOrHide = shortcut
     Task {
       do {
-        let updated = try await repository.updateShortcuts(
-          ShortcutSettingsPatch(
-            toggleApp: shortcut.rawValue,
-            hideApp: nil,
-            extractFromScreenSelection: nil,
-            extractFromScreenCapture: nil,
-            extractFromClipboard: nil
-          )
-        )
+        let updated = try await repository.updateShortcuts(.diff(toggleApp: shortcut.rawValue))
         apply(updated)
       } catch {
         await load()

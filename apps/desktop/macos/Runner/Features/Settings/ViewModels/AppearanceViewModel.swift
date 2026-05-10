@@ -1,4 +1,5 @@
 import SwiftUI
+import beyondtranslate_runtime
 
 @MainActor
 final class AppearanceViewModel: ObservableObject {
@@ -30,9 +31,7 @@ final class AppearanceViewModel: ObservableObject {
     refreshLocalizedOptions()
     Task {
       do {
-        let updated = try await repository.updateAppearance(
-          AppearanceSettingsPatch(language: value, themeMode: nil)
-        )
+        let updated = try await repository.updateAppearance(.diff(language: value))
         apply(updated)
       } catch {
         await load()
@@ -45,9 +44,7 @@ final class AppearanceViewModel: ObservableObject {
     ThemeAppearanceController.apply(value)
     Task {
       do {
-        let updated = try await repository.updateAppearance(
-          AppearanceSettingsPatch(language: nil, themeMode: value.rawValue)
-        )
+        let updated = try await repository.updateAppearance(.diff(themeMode: value.rawValue))
         apply(updated)
       } catch {
         await load()
