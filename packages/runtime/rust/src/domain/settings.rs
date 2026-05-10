@@ -4,15 +4,14 @@ use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use beyondtranslate_engine::{ProviderConfig, ProviderType};
-use flutter_rust_bridge::frb;
 use serde::de::Error as DeError;
 use serde::ser::SerializeMap;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::Value;
 use struct_patch::Patch;
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch)]
-#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
+#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize, uniffi::Record)))]
 pub struct ShortcutSettings {
     #[serde(default, rename = "toggleApp")]
     pub toggle_app: String,
@@ -38,8 +37,8 @@ impl Default for ShortcutSettings {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch)]
-#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
+#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize, uniffi::Record)))]
 #[serde(default)]
 pub struct AppearanceSettings {
     pub language: String,
@@ -56,7 +55,7 @@ impl Default for AppearanceSettings {
     }
 }
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize, uniffi::Enum)]
 #[serde(rename_all = "camelCase")]
 pub enum TranslationMode {
     #[default]
@@ -64,7 +63,7 @@ pub enum TranslationMode {
     Manual,
 }
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize, uniffi::Enum)]
 #[serde(rename_all = "camelCase")]
 pub enum InputSubmitMode {
     #[default]
@@ -72,15 +71,15 @@ pub enum InputSubmitMode {
     CommandEnter,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, uniffi::Record)]
 #[serde(default)]
 pub struct TranslationTarget {
     pub source: String,
     pub target: String,
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch)]
-#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
+#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize, uniffi::Record)))]
 #[serde(default)]
 pub struct GeneralSettings {
     #[serde(rename = "launchAtLogin")]
@@ -125,11 +124,11 @@ impl Default for GeneralSettings {
     }
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, Patch)]
-#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize)))]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
+#[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize, uniffi::Record)))]
 pub struct AdvancedSettings {}
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, uniffi::Record)]
 pub struct ProviderConfigEntry {
     #[serde(default)]
     pub id: String,
@@ -144,7 +143,6 @@ pub struct ProviderConfigEntry {
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
-#[frb(non_opaque)]
 pub struct Settings {
     #[serde(default, rename = "lastUpdated")]
     pub last_updated: u64,
@@ -172,7 +170,7 @@ impl Settings {
             return Ok(Self::default());
         }
 
-        let content = fs::read_to_string(&path).map_err(|error| {
+        let content = fs::read_to_string(path).map_err(|error| {
             format!("failed to read settings file `{}`: {error}", path.display())
         })?;
 
@@ -196,7 +194,7 @@ impl Settings {
         }
 
         let content = self.to_pretty_json()?;
-        fs::write(&path, content).map_err(|error| {
+        fs::write(path, content).map_err(|error| {
             format!(
                 "failed to write settings file `{}`: {error}",
                 path.display()

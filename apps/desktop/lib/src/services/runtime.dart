@@ -1,11 +1,24 @@
-import 'dart:io';
+import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
+import 'package:path_provider/path_provider.dart';
 
-import 'package:path/path.dart' as path;
-
-import '../rust/api/runtime.dart' as rust_api;
-export '../rust/api/mirrors.dart'
+// Re-export uniffi-generated types so that files importing this service do
+// not need a separate import of beyondtranslate_runtime.
+export 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
     show
-        ProviderCapability,
+        // Settings types
+        AdvancedSettings,
+        AdvancedSettingsPatch,
+        AppearanceSettings,
+        AppearanceSettingsPatch,
+        GeneralSettings,
+        GeneralSettingsPatch,
+        InputSubmitMode,
+        ProviderConfigEntry,
+        ShortcutSettings,
+        ShortcutSettingsPatch,
+        TranslationMode,
+        TranslationTarget,
+        // Translation / look-up types
         LookUpRequest,
         LookUpResponse,
         TextTranslation,
@@ -18,11 +31,28 @@ export '../rust/api/mirrors.dart'
         WordSentence,
         WordTag,
         WordTense;
-export '../rust/domain/settings.dart' show ProviderConfigEntry;
 
-/// A simple error class to replace [UniTranslateClientError] from the
-/// `uni_translate_client` package. Used to record translation / dictionary
-/// lookup failures in [TranslationResultRecord].
+/// [ProviderCapability] is a pure-Dart enum that mirrors the capability
+/// strings produced by the Rust engine (e.g. "dictionary", "translation").
+export 'provider_capability.dart' show ProviderCapability;
+
+/// Singleton [Runtime] instance, backed by the Rust native library.
+///
+/// Call [initRuntime] during app startup (before [settingsStore.init]) to
+/// populate this variable.
+late final Runtime runtime;
+
+/// Initialises the Rust runtime with the platform's application-support
+/// directory as the data directory.
+///
+/// Must be called before any code that accesses [runtime].
+Future<void> initRuntime() async {
+  final dataDir = await getApplicationSupportDirectory();
+  runtime = Runtime(dataDir: dataDir.path);
+}
+
+/// A simple error class used to record translation / dictionary lookup
+/// failures in [TranslationResultRecord].
 class TranslationError {
   final String message;
 
@@ -33,24 +63,3 @@ class TranslationError {
 
   Map<String, dynamic> toJson() => {'message': message};
 }
-
-String? _dataDir;
-
-String get dataDir {
-  if (_dataDir == null) {
-    final homeDirectoryPath = Platform.environment['HOME'] ??
-        Platform.environment['USERPROFILE'] ??
-        Directory.current.path;
-    final directory = Directory(
-      path.join(homeDirectoryPath),
-    );
-    if (!directory.existsSync()) {
-      directory.createSync(recursive: true);
-    }
-    _dataDir = directory.path;
-  }
-  return _dataDir!;
-}
-
-// This is the runtime instance that should be used throughout the app.
-final runtime = rust_api.Runtime(dataDir: dataDir);

@@ -19,7 +19,7 @@ import '../../extensions/window_controller.dart';
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
-import '../../rust/domain/settings.dart';
+
 import '../../services/mac_settings.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
@@ -437,8 +437,9 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
           targetLanguage: targetLanguage,
           word: _text,
         );
-        final lookUpResponse =
-            await runtime.dictionary(provider.id).lookup(lookUpRequest);
+        final lookUpResponse = await runtime
+            .dictionary(providerId: provider.id)
+            .lookup(request: lookUpRequest);
         translationResultRecord.lookUpRequest = lookUpRequest;
         translationResultRecord.lookUpResponse = lookUpResponse;
       } catch (error) {
@@ -455,8 +456,9 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
           targetLanguage: targetLanguage,
           text: _text,
         );
-        final translateResponse =
-            await runtime.translation(provider.id).translate(translateRequest);
+        final translateResponse = await runtime
+            .translation(providerId: provider.id)
+            .translate(request: translateRequest);
         translationResultRecord.translateRequest = translateRequest;
         translationResultRecord.translateResponse = translateResponse;
       } catch (error) {
@@ -897,8 +899,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       final providerId = generalSettings.defaultTranslationService;
 
       TranslateResponse translateResponse =
-          await runtime.translation(providerId).translate(
-                TranslateRequest(
+          await runtime.translation(providerId: providerId).translate(
+                request: TranslateRequest(
                   text: extractedData?.text ?? '',
                   sourceLanguage: kLanguageZH,
                   targetLanguage: kLanguageEN,

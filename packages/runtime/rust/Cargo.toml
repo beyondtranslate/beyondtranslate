@@ -14,12 +14,22 @@ uniffi = { version = "=0.31.1", features = ["cli"] }
 uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1" }
 anyhow = "1"
 camino = "1"
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+struct-patch.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
 
 [build-dependencies]
-uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1", features = ["build"] }
+uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1", features = [
+  "build",
+] }
 
 [dev-dependencies]
-uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1", features = ["bindgen-tests"] }
+uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1", features = [
+  "bindgen-tests",
+] }
 uniffi = { version = "=0.31.1", features = ["bindgen-tests"] }
 uniffi_testing = "=0.31.1"
 anyhow = "1"

@@ -4,6 +4,9 @@
 # generated Dart code emits `_uniffiAssetId = "package:<package_name>/uniffi:<cdylib_name>"`,
 # which must match the `CodeAsset(package: ..., name: ...)` registered by the
 # Flutter package's `hook/build.dart`.
+[uniffi]
+async_runtime = "tokio"
+
 [bindings.dart]
 package_name = "beyondtranslate_runtime"
 cdylib_name = "beyondtranslate_runtime"

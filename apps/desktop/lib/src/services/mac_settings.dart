@@ -48,7 +48,7 @@ class MacSettings {
         case 'settings.updateShortcuts':
           final args = (call.arguments as Map).cast<String, dynamic>();
           final result = await settings.updateShortcuts(
-            ShortcutSettingsPatch(
+            patch: ShortcutSettingsPatch(
               toggleApp: args['toggleApp'] as String?,
               hideApp: args['hideApp'] as String?,
               extractFromScreenSelection:
@@ -86,7 +86,7 @@ class MacSettings {
         case 'settings.updateGeneral':
           final args = (call.arguments as Map).cast<String, dynamic>();
           final result = await settings.updateGeneral(
-            GeneralSettingsPatch(
+            patch: GeneralSettingsPatch(
               launchAtLogin: args['launchAtLogin'] as bool?,
               showMenuBar: args['showMenuBar'] as bool?,
               defaultOcrService: args['defaultOcrService'] as String?,
@@ -126,7 +126,7 @@ class MacSettings {
           return {};
 
         case 'settings.updateAdvanced':
-          await settings.updateAdvanced(const AdvancedSettingsPatch());
+          await settings.updateAdvanced(patch: AdvancedSettingsPatch());
           return {};
 
         case 'settings.listProviders':

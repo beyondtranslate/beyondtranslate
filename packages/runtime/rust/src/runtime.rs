@@ -1,22 +1,32 @@
+use std::collections::HashMap;
 use std::future::Future;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::thread;
 
-pub use super::mirrors::{
-    LookUpRequest, LookUpResponse, TextTranslation, TranslateRequest, TranslateResponse,
-    WordDefinition, WordImage, WordPhrase, WordPronunciation, WordSentence, WordTag, WordTense,
-};
-pub use crate::domain::settings::{
-    provider_entry_from_config, AdvancedSettings, AdvancedSettingsPatch, AppearanceSettings,
-    AppearanceSettingsPatch, GeneralSettings, GeneralSettingsPatch, ProviderConfigEntry, Settings,
-    ShortcutSettings, ShortcutSettingsPatch,
-};
-use flutter_rust_bridge::frb;
+use beyondtranslate_core::{LookUpRequest, LookUpResponse, TranslateRequest, TranslateResponse};
 use struct_patch::Patch as ApplyPatch;
 use tokio::sync::RwLock;
 
 use crate::domain::engine;
+use crate::domain::settings::{
+    provider_entry_from_config, AdvancedSettings, AdvancedSettingsPatch, AppearanceSettings,
+    AppearanceSettingsPatch, GeneralSettings, GeneralSettingsPatch, ProviderConfigEntry, Settings,
+    ShortcutSettings, ShortcutSettingsPatch,
+};
+
+/// Error type returned by all uniffi-exported Runtime methods.
+#[derive(Debug, thiserror::Error, uniffi::Error)]
+pub enum RuntimeError {
+    #[error("{msg}")]
+    Error { msg: String },
+}
+
+impl From<String> for RuntimeError {
+    fn from(s: String) -> Self {
+        RuntimeError::Error { msg: s }
+    }
+}
 
 struct RuntimeState {
     settings: Settings,
@@ -30,33 +40,31 @@ impl RuntimeState {
     }
 }
 
-#[frb(opaque)]
-#[derive(Clone)]
+#[derive(Clone, uniffi::Object)]
 pub struct Runtime {
     settings_file_path: Arc<str>,
     state: Arc<RwLock<RuntimeState>>,
 }
 
-#[frb(opaque)]
+#[derive(uniffi::Object)]
 pub struct RuntimeSettings {
     runtime: Runtime,
 }
 
-#[frb(opaque)]
+#[derive(uniffi::Object)]
 pub struct RuntimeTranslation {
     runtime: Runtime,
     provider_id: String,
 }
 
-#[frb(opaque)]
+#[derive(uniffi::Object)]
 pub struct RuntimeDictionary {
     runtime: Runtime,
     provider_id: String,
 }
 
 impl Runtime {
-    #[frb(sync)]
-    pub fn new(data_dir: String) -> Result<Self, String> {
+    fn new_impl(data_dir: String) -> Result<Self, String> {
         let settings_file_path = runtime_settings_file_path(&data_dir);
         let settings = Settings::load(&settings_file_path)?;
         let state = RuntimeState::new(settings)?;
@@ -65,176 +73,48 @@ impl Runtime {
             state: Arc::new(RwLock::new(state)),
         })
     }
+}
 
-    #[frb(sync)]
-    pub fn settings(&self) -> RuntimeSettings {
-        RuntimeSettings {
-            runtime: self.clone(),
-        }
+#[uniffi::export]
+impl Runtime {
+    #[uniffi::constructor]
+    pub fn new(data_dir: String) -> Result<Arc<Self>, RuntimeError> {
+        Self::new_impl(data_dir).map(Arc::new).map_err(Into::into)
     }
 
-    #[frb(sync, positional)]
-    pub fn translation(&self, provider_id: String) -> Result<RuntimeTranslation, String> {
-        let provider_id = validate_provider_id(provider_id)?;
-        Ok(RuntimeTranslation {
-            runtime: self.clone(),
-            provider_id,
+    pub fn settings(self: Arc<Self>) -> Arc<RuntimeSettings> {
+        Arc::new(RuntimeSettings {
+            runtime: (*self).clone(),
         })
     }
 
-    #[frb(sync, positional)]
-    pub fn dictionary(&self, provider_id: String) -> Result<RuntimeDictionary, String> {
-        let provider_id = validate_provider_id(provider_id)?;
-        Ok(RuntimeDictionary {
-            runtime: self.clone(),
+    pub fn translation(
+        self: Arc<Self>,
+        provider_id: String,
+    ) -> Result<Arc<RuntimeTranslation>, RuntimeError> {
+        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        Ok(Arc::new(RuntimeTranslation {
+            runtime: (*self).clone(),
             provider_id,
-        })
+        }))
+    }
+
+    pub fn dictionary(
+        self: Arc<Self>,
+        provider_id: String,
+    ) -> Result<Arc<RuntimeDictionary>, RuntimeError> {
+        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        Ok(Arc::new(RuntimeDictionary {
+            runtime: (*self).clone(),
+            provider_id,
+        }))
     }
 }
 
 impl RuntimeSettings {
-    pub async fn get_json(&self) -> Result<String, String> {
+    async fn get_json_impl(&self) -> Result<String, String> {
         let state = self.runtime.state.read().await;
         state.settings.to_pretty_json()
-    }
-
-    pub async fn get(&self) -> Result<Settings, String> {
-        let state = self.runtime.state.read().await;
-        Ok(state.settings.clone())
-    }
-
-    pub async fn get_general(&self) -> Result<GeneralSettings, String> {
-        Ok(self.get_section(|s| &s.general).await)
-    }
-
-    #[frb(positional)]
-    pub async fn update_general(
-        &self,
-        patch: GeneralSettingsPatch,
-    ) -> Result<GeneralSettings, String> {
-        self.update_section(patch, |s| &mut s.general).await
-    }
-
-    pub async fn get_appearance(&self) -> Result<AppearanceSettings, String> {
-        Ok(self.get_section(|s| &s.appearance).await)
-    }
-
-    #[frb(positional)]
-    pub async fn update_appearance(
-        &self,
-        patch: AppearanceSettingsPatch,
-    ) -> Result<AppearanceSettings, String> {
-        self.update_section(patch, |s| &mut s.appearance).await
-    }
-
-    pub async fn get_shortcuts(&self) -> Result<ShortcutSettings, String> {
-        Ok(self.get_section(|s| &s.shortcuts).await)
-    }
-
-    #[frb(positional)]
-    pub async fn update_shortcuts(
-        &self,
-        patch: ShortcutSettingsPatch,
-    ) -> Result<ShortcutSettings, String> {
-        self.update_section(patch, |s| &mut s.shortcuts).await
-    }
-
-    pub async fn get_advanced(&self) -> Result<AdvancedSettings, String> {
-        Ok(self.get_section(|s| &s.advanced).await)
-    }
-
-    #[frb(positional)]
-    pub async fn update_advanced(
-        &self,
-        patch: AdvancedSettingsPatch,
-    ) -> Result<AdvancedSettings, String> {
-        self.update_section(patch, |s| &mut s.advanced).await
-    }
-
-    pub async fn list_providers(&self) -> Result<Vec<ProviderConfigEntry>, String> {
-        let state = self.runtime.state.read().await;
-        Ok(state
-            .settings
-            .providers
-            .iter()
-            .map(|(provider_id, provider)| {
-                let capabilities = state
-                    .engine
-                    .require(provider_id)
-                    .map(|p| {
-                        p.capabilities()
-                            .into_iter()
-                            .map(|c| {
-                                serde_json::to_value(&c)
-                                    .ok()
-                                    .and_then(|v| v.as_str().map(ToOwned::to_owned))
-                                    .unwrap_or_default()
-                            })
-                            .collect::<Vec<_>>()
-                    })
-                    .unwrap_or_default();
-                let mut entry = normalized_provider_entry(provider_id, provider);
-                entry.capabilities = capabilities;
-                entry
-            })
-            .collect())
-    }
-
-    pub async fn get_provider(
-        &self,
-        provider_id: String,
-    ) -> Result<Option<ProviderConfigEntry>, String> {
-        let provider_id = validate_provider_id(provider_id)?;
-        let state = self.runtime.state.read().await;
-        Ok(state
-            .settings
-            .providers
-            .get(&provider_id)
-            .map(|provider| normalized_provider_entry(&provider_id, provider)))
-    }
-
-    pub async fn update_provider(
-        &self,
-        provider_id: String,
-        provider_type: String,
-        fields: std::collections::HashMap<String, String>,
-    ) -> Result<ProviderConfigEntry, String> {
-        let provider_id = validate_provider_id(provider_id)?;
-        let provider_type = validate_required("provider_type", provider_type)?;
-        let entry = ProviderConfigEntry {
-            id: provider_id.clone(),
-            r#type: provider_type,
-            fields,
-            capabilities: Vec::new(),
-        };
-        let config = crate::domain::settings::provider_config_from_settings(&entry)?;
-
-        self.commit_settings(move |settings| {
-            let entry = provider_entry_from_config(&provider_id, &config)?;
-            if let Some(existing) = settings.providers.get_mut(&provider_id) {
-                existing.id = provider_id;
-                existing.r#type = entry.r#type.clone();
-                existing.fields = entry.fields.clone();
-            } else {
-                settings.providers.insert(provider_id, entry.clone());
-            }
-            Ok(entry)
-        })
-        .await
-    }
-
-    pub async fn delete_provider(
-        &self,
-        provider_id: String,
-    ) -> Result<Option<ProviderConfigEntry>, String> {
-        let provider_id = validate_provider_id(provider_id)?;
-        self.commit_settings(move |settings| {
-            Ok(settings
-                .providers
-                .remove(&provider_id)
-                .map(|provider| normalized_provider_entry(&provider_id, &provider)))
-        })
-        .await
     }
 
     async fn get_section<T: Clone>(&self, select: impl FnOnce(&Settings) -> &T) -> T {
@@ -285,9 +165,157 @@ impl RuntimeSettings {
     }
 }
 
+#[uniffi::export(async_runtime = "tokio")]
+impl RuntimeSettings {
+    pub async fn get_json(&self) -> Result<String, RuntimeError> {
+        self.get_json_impl().await.map_err(Into::into)
+    }
+
+    pub async fn get_general(&self) -> Result<GeneralSettings, RuntimeError> {
+        Ok(self.get_section(|s| &s.general).await)
+    }
+
+    pub async fn update_general(
+        &self,
+        patch: GeneralSettingsPatch,
+    ) -> Result<GeneralSettings, RuntimeError> {
+        self.update_section(patch, |s| &mut s.general)
+            .await
+            .map_err(Into::into)
+    }
+
+    pub async fn get_appearance(&self) -> Result<AppearanceSettings, RuntimeError> {
+        Ok(self.get_section(|s| &s.appearance).await)
+    }
+
+    pub async fn update_appearance(
+        &self,
+        patch: AppearanceSettingsPatch,
+    ) -> Result<AppearanceSettings, RuntimeError> {
+        self.update_section(patch, |s| &mut s.appearance)
+            .await
+            .map_err(Into::into)
+    }
+
+    pub async fn get_shortcuts(&self) -> Result<ShortcutSettings, RuntimeError> {
+        Ok(self.get_section(|s| &s.shortcuts).await)
+    }
+
+    pub async fn update_shortcuts(
+        &self,
+        patch: ShortcutSettingsPatch,
+    ) -> Result<ShortcutSettings, RuntimeError> {
+        self.update_section(patch, |s| &mut s.shortcuts)
+            .await
+            .map_err(Into::into)
+    }
+
+    pub async fn get_advanced(&self) -> Result<AdvancedSettings, RuntimeError> {
+        Ok(self.get_section(|s| &s.advanced).await)
+    }
+
+    pub async fn update_advanced(
+        &self,
+        patch: AdvancedSettingsPatch,
+    ) -> Result<AdvancedSettings, RuntimeError> {
+        self.update_section(patch, |s| &mut s.advanced)
+            .await
+            .map_err(Into::into)
+    }
+
+    pub async fn list_providers(&self) -> Result<Vec<ProviderConfigEntry>, RuntimeError> {
+        let state = self.runtime.state.read().await;
+        Ok(state
+            .settings
+            .providers
+            .iter()
+            .map(|(provider_id, provider)| {
+                let capabilities = state
+                    .engine
+                    .require(provider_id)
+                    .map(|p| {
+                        p.capabilities()
+                            .into_iter()
+                            .map(|c| {
+                                serde_json::to_value(&c)
+                                    .ok()
+                                    .and_then(|v| v.as_str().map(ToOwned::to_owned))
+                                    .unwrap_or_default()
+                            })
+                            .collect::<Vec<_>>()
+                    })
+                    .unwrap_or_default();
+                let mut entry = normalized_provider_entry(provider_id, provider);
+                entry.capabilities = capabilities;
+                entry
+            })
+            .collect())
+    }
+
+    pub async fn get_provider(
+        &self,
+        provider_id: String,
+    ) -> Result<Option<ProviderConfigEntry>, RuntimeError> {
+        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        let state = self.runtime.state.read().await;
+        Ok(state
+            .settings
+            .providers
+            .get(&provider_id)
+            .map(|provider| normalized_provider_entry(&provider_id, provider)))
+    }
+
+    pub async fn update_provider(
+        &self,
+        provider_id: String,
+        provider_type: String,
+        fields: HashMap<String, String>,
+    ) -> Result<ProviderConfigEntry, RuntimeError> {
+        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        let provider_type =
+            validate_required("provider_type", provider_type).map_err(RuntimeError::from)?;
+        let entry = ProviderConfigEntry {
+            id: provider_id.clone(),
+            r#type: provider_type,
+            fields,
+            capabilities: Vec::new(),
+        };
+        let config = crate::domain::settings::provider_config_from_settings(&entry)
+            .map_err(RuntimeError::from)?;
+
+        self.commit_settings(move |settings| {
+            let entry = provider_entry_from_config(&provider_id, &config)?;
+            if let Some(existing) = settings.providers.get_mut(&provider_id) {
+                existing.id = provider_id;
+                existing.r#type = entry.r#type.clone();
+                existing.fields = entry.fields.clone();
+            } else {
+                settings.providers.insert(provider_id, entry.clone());
+            }
+            Ok(entry)
+        })
+        .await
+        .map_err(Into::into)
+    }
+
+    pub async fn delete_provider(
+        &self,
+        provider_id: String,
+    ) -> Result<Option<ProviderConfigEntry>, RuntimeError> {
+        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        self.commit_settings(move |settings| {
+            Ok(settings
+                .providers
+                .remove(&provider_id)
+                .map(|provider| normalized_provider_entry(&provider_id, &provider)))
+        })
+        .await
+        .map_err(Into::into)
+    }
+}
+
 impl RuntimeTranslation {
-    #[frb(positional)]
-    pub async fn translate(&self, request: TranslateRequest) -> Result<TranslateResponse, String> {
+    async fn translate_impl(&self, request: TranslateRequest) -> Result<TranslateResponse, String> {
         let provider_id = self.provider_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
@@ -314,8 +342,7 @@ impl RuntimeTranslation {
 }
 
 impl RuntimeDictionary {
-    #[frb(positional)]
-    pub async fn lookup(&self, request: LookUpRequest) -> Result<LookUpResponse, String> {
+    async fn lookup_impl(&self, request: LookUpRequest) -> Result<LookUpResponse, String> {
         let provider_id = self.provider_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
@@ -341,9 +368,21 @@ impl RuntimeDictionary {
     }
 }
 
-#[flutter_rust_bridge::frb(init)]
-pub fn init_app() {
-    flutter_rust_bridge::setup_default_user_utils();
+#[uniffi::export(async_runtime = "tokio")]
+impl RuntimeTranslation {
+    pub async fn translate(
+        &self,
+        request: TranslateRequest,
+    ) -> Result<TranslateResponse, RuntimeError> {
+        self.translate_impl(request).await.map_err(Into::into)
+    }
+}
+
+#[uniffi::export(async_runtime = "tokio")]
+impl RuntimeDictionary {
+    pub async fn lookup(&self, request: LookUpRequest) -> Result<LookUpResponse, RuntimeError> {
+        self.lookup_impl(request).await.map_err(Into::into)
+    }
 }
 
 fn normalized_provider_entry(
@@ -413,7 +452,7 @@ where
 mod tests {
     use super::*;
 
-    fn create_runtime() -> Runtime {
+    fn create_runtime() -> Arc<Runtime> {
         let data_dir = std::env::temp_dir().join(format!(
             "beyondtranslate-runtime-{}",
             std::time::SystemTime::now()
@@ -445,6 +484,7 @@ mod tests {
             .block_on(async {
                 let before = current_timestamp_millis();
                 runtime
+                    .clone()
                     .settings()
                     .update_appearance(AppearanceSettingsPatch {
                         language: Some("en".to_owned()),
@@ -455,6 +495,7 @@ mod tests {
                 let after = current_timestamp_millis();
 
                 let json = runtime
+                    .clone()
                     .settings()
                     .get_json()
                     .await
@@ -480,6 +521,7 @@ mod tests {
             .unwrap()
             .block_on(async {
                 runtime
+                    .clone()
                     .translation("deepl".to_owned())
                     .unwrap()
                     .translate(TranslateRequest {
@@ -491,7 +533,7 @@ mod tests {
             })
             .unwrap_err();
 
-        assert_eq!(error, "target_language is required");
+        assert_eq!(error.to_string(), "target_language is required");
     }
 
     #[test]
@@ -503,6 +545,7 @@ mod tests {
             .unwrap()
             .block_on(async {
                 runtime
+                    .clone()
                     .dictionary("iciba".to_owned())
                     .unwrap()
                     .lookup(LookUpRequest {
@@ -514,6 +557,6 @@ mod tests {
             })
             .unwrap_err();
 
-        assert_eq!(error, "word is required");
+        assert_eq!(error.to_string(), "word is required");
     }
 }

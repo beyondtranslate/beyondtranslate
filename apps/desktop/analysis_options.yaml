@@ -12,7 +12,6 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - "build/**"
-    - "rust_builder/**"
 
 linter:
   # The lint rules applied to this project can be customized in the

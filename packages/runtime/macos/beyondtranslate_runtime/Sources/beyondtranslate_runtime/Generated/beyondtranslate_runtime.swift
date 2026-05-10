@@ -9,6 +9,14 @@ import Foundation
 #if canImport(beyondtranslate_runtimeFFI)
   import beyondtranslate_runtimeFFI
 #endif
+// Cross-crate types (DetectLanguageRequest, LookUpResponse, TranslateRequest, ...) live in
+// the sibling `beyondtranslate_core` Swift module. uniffi-rs's Swift backend assumes all
+// generated bindings are compiled together, so it never emits the import; we add it here as
+// a post-generation patch so this file builds when the two crates are split into separate
+// SPM targets.
+#if canImport(beyondtranslate_core)
+  import beyondtranslate_core
+#endif
 
 extension RustBuffer {
   // Allocate a new buffer, copying the contents of a `UInt8` array.
@@ -438,6 +446,30 @@ private struct FfiConverterInt32: FfiConverterPrimitive {
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
+private struct FfiConverterBool: FfiConverter {
+  typealias FfiType = Int8
+  typealias SwiftType = Bool
+
+  public static func lift(_ value: Int8) throws -> Bool {
+    return value != 0
+  }
+
+  public static func lower(_ value: Bool) -> Int8 {
+    return value ? 1 : 0
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Bool {
+    return try lift(readInt(&buf))
+  }
+
+  public static func write(_ value: Bool, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
 private struct FfiConverterString: FfiConverter {
   typealias SwiftType = String
   typealias FfiType = RustBuffer
@@ -473,6 +505,1843 @@ private struct FfiConverterString: FfiConverter {
     let len = Int32(value.utf8.count)
     writeInt(&buf, len)
     writeBytes(&buf, value.utf8)
+  }
+}
+
+public protocol RuntimeProtocol: AnyObject, Sendable {
+
+  func dictionary(providerId: String) throws -> RuntimeDictionary
+
+  func settings() -> RuntimeSettings
+
+  func translation(providerId: String) throws -> RuntimeTranslation
+
+}
+open class Runtime: RuntimeProtocol, @unchecked Sendable {
+  fileprivate let handle: UInt64
+
+  /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public struct NoHandle {
+    public init() {}
+  }
+
+  // TODO: We'd like this to be `private` but for Swifty reasons,
+  // we can't implement `FfiConverter` without making this `required` and we can't
+  // make it `required` without making it `public`.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  required public init(unsafeFromHandle handle: UInt64) {
+    self.handle = handle
+  }
+
+  // This constructor can be used to instantiate a fake object.
+  // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+  //
+  // - Warning:
+  //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public init(noHandle: NoHandle) {
+    self.handle = 0
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public func uniffiCloneHandle() -> UInt64 {
+    return try! rustCall { uniffi_beyondtranslate_runtime_fn_clone_runtime(self.handle, $0) }
+  }
+  public convenience init(dataDir: String) throws {
+    let handle =
+      try rustCallWithError(FfiConverterTypeRuntimeError_lift) {
+        uniffi_beyondtranslate_runtime_fn_constructor_runtime_new(
+          FfiConverterString.lower(dataDir), $0
+        )
+      }
+    self.init(unsafeFromHandle: handle)
+  }
+
+  deinit {
+    if handle == 0 {
+      // Mock objects have handle=0 don't try to free them
+      return
+    }
+
+    try! rustCall { uniffi_beyondtranslate_runtime_fn_free_runtime(handle, $0) }
+  }
+
+  open func dictionary(providerId: String) throws -> RuntimeDictionary {
+    return try FfiConverterTypeRuntimeDictionary_lift(
+      try rustCallWithError(FfiConverterTypeRuntimeError_lift) {
+        uniffi_beyondtranslate_runtime_fn_method_runtime_dictionary(
+          self.uniffiCloneHandle(),
+          FfiConverterString.lower(providerId), $0
+        )
+      })
+  }
+
+  open func settings() -> RuntimeSettings {
+    return try! FfiConverterTypeRuntimeSettings_lift(
+      try! rustCall {
+        uniffi_beyondtranslate_runtime_fn_method_runtime_settings(
+          self.uniffiCloneHandle(), $0
+        )
+      })
+  }
+
+  open func translation(providerId: String) throws -> RuntimeTranslation {
+    return try FfiConverterTypeRuntimeTranslation_lift(
+      try rustCallWithError(FfiConverterTypeRuntimeError_lift) {
+        uniffi_beyondtranslate_runtime_fn_method_runtime_translation(
+          self.uniffiCloneHandle(),
+          FfiConverterString.lower(providerId), $0
+        )
+      })
+  }
+
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRuntime: FfiConverter {
+  typealias FfiType = UInt64
+  typealias SwiftType = Runtime
+
+  public static func lift(_ handle: UInt64) throws -> Runtime {
+    return Runtime(unsafeFromHandle: handle)
+  }
+
+  public static func lower(_ value: Runtime) -> UInt64 {
+    return value.uniffiCloneHandle()
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Runtime {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  public static func write(_ value: Runtime, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntime_lift(_ handle: UInt64) throws -> Runtime {
+  return try FfiConverterTypeRuntime.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntime_lower(_ value: Runtime) -> UInt64 {
+  return FfiConverterTypeRuntime.lower(value)
+}
+
+public protocol RuntimeDictionaryProtocol: AnyObject, Sendable {
+
+  func lookup(request: LookUpRequest) async throws -> LookUpResponse
+
+}
+open class RuntimeDictionary: RuntimeDictionaryProtocol, @unchecked Sendable {
+  fileprivate let handle: UInt64
+
+  /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public struct NoHandle {
+    public init() {}
+  }
+
+  // TODO: We'd like this to be `private` but for Swifty reasons,
+  // we can't implement `FfiConverter` without making this `required` and we can't
+  // make it `required` without making it `public`.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  required public init(unsafeFromHandle handle: UInt64) {
+    self.handle = handle
+  }
+
+  // This constructor can be used to instantiate a fake object.
+  // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+  //
+  // - Warning:
+  //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public init(noHandle: NoHandle) {
+    self.handle = 0
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public func uniffiCloneHandle() -> UInt64 {
+    return try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_clone_runtimedictionary(self.handle, $0)
+    }
+  }
+  // No primary constructor declared for this class.
+
+  deinit {
+    if handle == 0 {
+      // Mock objects have handle=0 don't try to free them
+      return
+    }
+
+    try! rustCall { uniffi_beyondtranslate_runtime_fn_free_runtimedictionary(handle, $0) }
+  }
+
+  open func lookup(request: LookUpRequest) async throws -> LookUpResponse {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimedictionary_lookup(
+            self.uniffiCloneHandle(),
+            FfiConverterTypeLookUpRequest_lower(request)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeLookUpResponse_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRuntimeDictionary: FfiConverter {
+  typealias FfiType = UInt64
+  typealias SwiftType = RuntimeDictionary
+
+  public static func lift(_ handle: UInt64) throws -> RuntimeDictionary {
+    return RuntimeDictionary(unsafeFromHandle: handle)
+  }
+
+  public static func lower(_ value: RuntimeDictionary) -> UInt64 {
+    return value.uniffiCloneHandle()
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> RuntimeDictionary
+  {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  public static func write(_ value: RuntimeDictionary, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeDictionary_lift(_ handle: UInt64) throws -> RuntimeDictionary {
+  return try FfiConverterTypeRuntimeDictionary.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeDictionary_lower(_ value: RuntimeDictionary) -> UInt64 {
+  return FfiConverterTypeRuntimeDictionary.lower(value)
+}
+
+public protocol RuntimeSettingsProtocol: AnyObject, Sendable {
+
+  func deleteProvider(providerId: String) async throws -> ProviderConfigEntry?
+
+  func getAdvanced() async throws -> AdvancedSettings
+
+  func getAppearance() async throws -> AppearanceSettings
+
+  func getGeneral() async throws -> GeneralSettings
+
+  func getJson() async throws -> String
+
+  func getProvider(providerId: String) async throws -> ProviderConfigEntry?
+
+  func getShortcuts() async throws -> ShortcutSettings
+
+  func listProviders() async throws -> [ProviderConfigEntry]
+
+  func updateAdvanced(patch: AdvancedSettingsPatch) async throws -> AdvancedSettings
+
+  func updateAppearance(patch: AppearanceSettingsPatch) async throws -> AppearanceSettings
+
+  func updateGeneral(patch: GeneralSettingsPatch) async throws -> GeneralSettings
+
+  func updateProvider(providerId: String, providerType: String, fields: [String: String])
+    async throws -> ProviderConfigEntry
+
+  func updateShortcuts(patch: ShortcutSettingsPatch) async throws -> ShortcutSettings
+
+}
+open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
+  fileprivate let handle: UInt64
+
+  /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public struct NoHandle {
+    public init() {}
+  }
+
+  // TODO: We'd like this to be `private` but for Swifty reasons,
+  // we can't implement `FfiConverter` without making this `required` and we can't
+  // make it `required` without making it `public`.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  required public init(unsafeFromHandle handle: UInt64) {
+    self.handle = handle
+  }
+
+  // This constructor can be used to instantiate a fake object.
+  // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+  //
+  // - Warning:
+  //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public init(noHandle: NoHandle) {
+    self.handle = 0
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public func uniffiCloneHandle() -> UInt64 {
+    return try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_clone_runtimesettings(self.handle, $0)
+    }
+  }
+  // No primary constructor declared for this class.
+
+  deinit {
+    if handle == 0 {
+      // Mock objects have handle=0 don't try to free them
+      return
+    }
+
+    try! rustCall { uniffi_beyondtranslate_runtime_fn_free_runtimesettings(handle, $0) }
+  }
+
+  open func deleteProvider(providerId: String) async throws -> ProviderConfigEntry? {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_delete_provider(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(providerId)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterOptionTypeProviderConfigEntry.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func getAdvanced() async throws -> AdvancedSettings {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_advanced(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeAdvancedSettings_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func getAppearance() async throws -> AppearanceSettings {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_appearance(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeAppearanceSettings_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func getGeneral() async throws -> GeneralSettings {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_general(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeGeneralSettings_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func getJson() async throws -> String {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_json(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterString.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func getProvider(providerId: String) async throws -> ProviderConfigEntry? {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_provider(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(providerId)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterOptionTypeProviderConfigEntry.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func getShortcuts() async throws -> ShortcutSettings {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_shortcuts(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeShortcutSettings_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func listProviders() async throws -> [ProviderConfigEntry] {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_list_providers(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterSequenceTypeProviderConfigEntry.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func updateAdvanced(patch: AdvancedSettingsPatch) async throws -> AdvancedSettings {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_update_advanced(
+            self.uniffiCloneHandle(),
+            FfiConverterTypeAdvancedSettingsPatch_lower(patch)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeAdvancedSettings_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func updateAppearance(patch: AppearanceSettingsPatch) async throws -> AppearanceSettings {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_update_appearance(
+            self.uniffiCloneHandle(),
+            FfiConverterTypeAppearanceSettingsPatch_lower(patch)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeAppearanceSettings_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func updateGeneral(patch: GeneralSettingsPatch) async throws -> GeneralSettings {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_update_general(
+            self.uniffiCloneHandle(),
+            FfiConverterTypeGeneralSettingsPatch_lower(patch)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeGeneralSettings_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func updateProvider(providerId: String, providerType: String, fields: [String: String])
+    async throws -> ProviderConfigEntry
+  {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_update_provider(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(providerId), FfiConverterString.lower(providerType),
+            FfiConverterDictionaryStringString.lower(fields)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeProviderConfigEntry_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func updateShortcuts(patch: ShortcutSettingsPatch) async throws -> ShortcutSettings {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_update_shortcuts(
+            self.uniffiCloneHandle(),
+            FfiConverterTypeShortcutSettingsPatch_lower(patch)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeShortcutSettings_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRuntimeSettings: FfiConverter {
+  typealias FfiType = UInt64
+  typealias SwiftType = RuntimeSettings
+
+  public static func lift(_ handle: UInt64) throws -> RuntimeSettings {
+    return RuntimeSettings(unsafeFromHandle: handle)
+  }
+
+  public static func lower(_ value: RuntimeSettings) -> UInt64 {
+    return value.uniffiCloneHandle()
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> RuntimeSettings
+  {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  public static func write(_ value: RuntimeSettings, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeSettings_lift(_ handle: UInt64) throws -> RuntimeSettings {
+  return try FfiConverterTypeRuntimeSettings.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeSettings_lower(_ value: RuntimeSettings) -> UInt64 {
+  return FfiConverterTypeRuntimeSettings.lower(value)
+}
+
+public protocol RuntimeTranslationProtocol: AnyObject, Sendable {
+
+  func translate(request: TranslateRequest) async throws -> TranslateResponse
+
+}
+open class RuntimeTranslation: RuntimeTranslationProtocol, @unchecked Sendable {
+  fileprivate let handle: UInt64
+
+  /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public struct NoHandle {
+    public init() {}
+  }
+
+  // TODO: We'd like this to be `private` but for Swifty reasons,
+  // we can't implement `FfiConverter` without making this `required` and we can't
+  // make it `required` without making it `public`.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  required public init(unsafeFromHandle handle: UInt64) {
+    self.handle = handle
+  }
+
+  // This constructor can be used to instantiate a fake object.
+  // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+  //
+  // - Warning:
+  //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public init(noHandle: NoHandle) {
+    self.handle = 0
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public func uniffiCloneHandle() -> UInt64 {
+    return try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_clone_runtimetranslation(self.handle, $0)
+    }
+  }
+  // No primary constructor declared for this class.
+
+  deinit {
+    if handle == 0 {
+      // Mock objects have handle=0 don't try to free them
+      return
+    }
+
+    try! rustCall { uniffi_beyondtranslate_runtime_fn_free_runtimetranslation(handle, $0) }
+  }
+
+  open func translate(request: TranslateRequest) async throws -> TranslateResponse {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimetranslation_translate(
+            self.uniffiCloneHandle(),
+            FfiConverterTypeTranslateRequest_lower(request)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeTranslateResponse_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRuntimeTranslation: FfiConverter {
+  typealias FfiType = UInt64
+  typealias SwiftType = RuntimeTranslation
+
+  public static func lift(_ handle: UInt64) throws -> RuntimeTranslation {
+    return RuntimeTranslation(unsafeFromHandle: handle)
+  }
+
+  public static func lower(_ value: RuntimeTranslation) -> UInt64 {
+    return value.uniffiCloneHandle()
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> RuntimeTranslation
+  {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  public static func write(_ value: RuntimeTranslation, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeTranslation_lift(_ handle: UInt64) throws -> RuntimeTranslation {
+  return try FfiConverterTypeRuntimeTranslation.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeTranslation_lower(_ value: RuntimeTranslation) -> UInt64 {
+  return FfiConverterTypeRuntimeTranslation.lower(value)
+}
+
+public struct AdvancedSettings: Equatable, Hashable {
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init() {
+  }
+
+}
+
+#if compiler(>=6)
+  extension AdvancedSettings: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAdvancedSettings: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> AdvancedSettings
+  {
+    return
+      AdvancedSettings()
+  }
+
+  public static func write(_ value: AdvancedSettings, into buf: inout [UInt8]) {
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAdvancedSettings_lift(_ buf: RustBuffer) throws -> AdvancedSettings {
+  return try FfiConverterTypeAdvancedSettings.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAdvancedSettings_lower(_ value: AdvancedSettings) -> RustBuffer {
+  return FfiConverterTypeAdvancedSettings.lower(value)
+}
+
+public struct AdvancedSettingsPatch: Equatable, Hashable {
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init() {
+  }
+
+}
+
+#if compiler(>=6)
+  extension AdvancedSettingsPatch: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAdvancedSettingsPatch: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> AdvancedSettingsPatch
+  {
+    return
+      AdvancedSettingsPatch()
+  }
+
+  public static func write(_ value: AdvancedSettingsPatch, into buf: inout [UInt8]) {
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAdvancedSettingsPatch_lift(_ buf: RustBuffer) throws
+  -> AdvancedSettingsPatch
+{
+  return try FfiConverterTypeAdvancedSettingsPatch.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAdvancedSettingsPatch_lower(_ value: AdvancedSettingsPatch)
+  -> RustBuffer
+{
+  return FfiConverterTypeAdvancedSettingsPatch.lower(value)
+}
+
+public struct AppearanceSettings: Equatable, Hashable {
+  public var language: String
+  public var themeMode: String
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(language: String, themeMode: String) {
+    self.language = language
+    self.themeMode = themeMode
+  }
+
+}
+
+#if compiler(>=6)
+  extension AppearanceSettings: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAppearanceSettings: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> AppearanceSettings
+  {
+    return
+      try AppearanceSettings(
+        language: FfiConverterString.read(from: &buf),
+        themeMode: FfiConverterString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: AppearanceSettings, into buf: inout [UInt8]) {
+    FfiConverterString.write(value.language, into: &buf)
+    FfiConverterString.write(value.themeMode, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAppearanceSettings_lift(_ buf: RustBuffer) throws -> AppearanceSettings
+{
+  return try FfiConverterTypeAppearanceSettings.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAppearanceSettings_lower(_ value: AppearanceSettings) -> RustBuffer {
+  return FfiConverterTypeAppearanceSettings.lower(value)
+}
+
+public struct AppearanceSettingsPatch: Equatable, Hashable {
+  public var language: String?
+  public var themeMode: String?
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(language: String?, themeMode: String?) {
+    self.language = language
+    self.themeMode = themeMode
+  }
+
+}
+
+#if compiler(>=6)
+  extension AppearanceSettingsPatch: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAppearanceSettingsPatch: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> AppearanceSettingsPatch
+  {
+    return
+      try AppearanceSettingsPatch(
+        language: FfiConverterOptionString.read(from: &buf),
+        themeMode: FfiConverterOptionString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: AppearanceSettingsPatch, into buf: inout [UInt8]) {
+    FfiConverterOptionString.write(value.language, into: &buf)
+    FfiConverterOptionString.write(value.themeMode, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAppearanceSettingsPatch_lift(_ buf: RustBuffer) throws
+  -> AppearanceSettingsPatch
+{
+  return try FfiConverterTypeAppearanceSettingsPatch.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAppearanceSettingsPatch_lower(_ value: AppearanceSettingsPatch)
+  -> RustBuffer
+{
+  return FfiConverterTypeAppearanceSettingsPatch.lower(value)
+}
+
+public struct GeneralSettings: Equatable, Hashable {
+  public var launchAtLogin: Bool
+  public var showMenuBar: Bool
+  public var defaultOcrService: String
+  public var autoCopyDetectedText: Bool
+  public var defaultDirectoryService: String
+  public var defaultTranslationService: String
+  public var translationMode: TranslationMode
+  public var translationTargets: [TranslationTarget]
+  public var inputSubmitMode: InputSubmitMode
+  public var doubleClickCopyResult: Bool
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(
+    launchAtLogin: Bool, showMenuBar: Bool, defaultOcrService: String, autoCopyDetectedText: Bool,
+    defaultDirectoryService: String, defaultTranslationService: String,
+    translationMode: TranslationMode, translationTargets: [TranslationTarget],
+    inputSubmitMode: InputSubmitMode, doubleClickCopyResult: Bool
+  ) {
+    self.launchAtLogin = launchAtLogin
+    self.showMenuBar = showMenuBar
+    self.defaultOcrService = defaultOcrService
+    self.autoCopyDetectedText = autoCopyDetectedText
+    self.defaultDirectoryService = defaultDirectoryService
+    self.defaultTranslationService = defaultTranslationService
+    self.translationMode = translationMode
+    self.translationTargets = translationTargets
+    self.inputSubmitMode = inputSubmitMode
+    self.doubleClickCopyResult = doubleClickCopyResult
+  }
+
+}
+
+#if compiler(>=6)
+  extension GeneralSettings: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeGeneralSettings: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> GeneralSettings
+  {
+    return
+      try GeneralSettings(
+        launchAtLogin: FfiConverterBool.read(from: &buf),
+        showMenuBar: FfiConverterBool.read(from: &buf),
+        defaultOcrService: FfiConverterString.read(from: &buf),
+        autoCopyDetectedText: FfiConverterBool.read(from: &buf),
+        defaultDirectoryService: FfiConverterString.read(from: &buf),
+        defaultTranslationService: FfiConverterString.read(from: &buf),
+        translationMode: FfiConverterTypeTranslationMode.read(from: &buf),
+        translationTargets: FfiConverterSequenceTypeTranslationTarget.read(from: &buf),
+        inputSubmitMode: FfiConverterTypeInputSubmitMode.read(from: &buf),
+        doubleClickCopyResult: FfiConverterBool.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: GeneralSettings, into buf: inout [UInt8]) {
+    FfiConverterBool.write(value.launchAtLogin, into: &buf)
+    FfiConverterBool.write(value.showMenuBar, into: &buf)
+    FfiConverterString.write(value.defaultOcrService, into: &buf)
+    FfiConverterBool.write(value.autoCopyDetectedText, into: &buf)
+    FfiConverterString.write(value.defaultDirectoryService, into: &buf)
+    FfiConverterString.write(value.defaultTranslationService, into: &buf)
+    FfiConverterTypeTranslationMode.write(value.translationMode, into: &buf)
+    FfiConverterSequenceTypeTranslationTarget.write(value.translationTargets, into: &buf)
+    FfiConverterTypeInputSubmitMode.write(value.inputSubmitMode, into: &buf)
+    FfiConverterBool.write(value.doubleClickCopyResult, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeGeneralSettings_lift(_ buf: RustBuffer) throws -> GeneralSettings {
+  return try FfiConverterTypeGeneralSettings.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeGeneralSettings_lower(_ value: GeneralSettings) -> RustBuffer {
+  return FfiConverterTypeGeneralSettings.lower(value)
+}
+
+public struct GeneralSettingsPatch: Equatable, Hashable {
+  public var launchAtLogin: Bool?
+  public var showMenuBar: Bool?
+  public var defaultOcrService: String?
+  public var autoCopyDetectedText: Bool?
+  public var defaultDirectoryService: String?
+  public var defaultTranslationService: String?
+  public var translationMode: TranslationMode?
+  public var translationTargets: [TranslationTarget]?
+  public var inputSubmitMode: InputSubmitMode?
+  public var doubleClickCopyResult: Bool?
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(
+    launchAtLogin: Bool?, showMenuBar: Bool?, defaultOcrService: String?,
+    autoCopyDetectedText: Bool?, defaultDirectoryService: String?,
+    defaultTranslationService: String?, translationMode: TranslationMode?,
+    translationTargets: [TranslationTarget]?, inputSubmitMode: InputSubmitMode?,
+    doubleClickCopyResult: Bool?
+  ) {
+    self.launchAtLogin = launchAtLogin
+    self.showMenuBar = showMenuBar
+    self.defaultOcrService = defaultOcrService
+    self.autoCopyDetectedText = autoCopyDetectedText
+    self.defaultDirectoryService = defaultDirectoryService
+    self.defaultTranslationService = defaultTranslationService
+    self.translationMode = translationMode
+    self.translationTargets = translationTargets
+    self.inputSubmitMode = inputSubmitMode
+    self.doubleClickCopyResult = doubleClickCopyResult
+  }
+
+}
+
+#if compiler(>=6)
+  extension GeneralSettingsPatch: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeGeneralSettingsPatch: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> GeneralSettingsPatch
+  {
+    return
+      try GeneralSettingsPatch(
+        launchAtLogin: FfiConverterOptionBool.read(from: &buf),
+        showMenuBar: FfiConverterOptionBool.read(from: &buf),
+        defaultOcrService: FfiConverterOptionString.read(from: &buf),
+        autoCopyDetectedText: FfiConverterOptionBool.read(from: &buf),
+        defaultDirectoryService: FfiConverterOptionString.read(from: &buf),
+        defaultTranslationService: FfiConverterOptionString.read(from: &buf),
+        translationMode: FfiConverterOptionTypeTranslationMode.read(from: &buf),
+        translationTargets: FfiConverterOptionSequenceTypeTranslationTarget.read(from: &buf),
+        inputSubmitMode: FfiConverterOptionTypeInputSubmitMode.read(from: &buf),
+        doubleClickCopyResult: FfiConverterOptionBool.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: GeneralSettingsPatch, into buf: inout [UInt8]) {
+    FfiConverterOptionBool.write(value.launchAtLogin, into: &buf)
+    FfiConverterOptionBool.write(value.showMenuBar, into: &buf)
+    FfiConverterOptionString.write(value.defaultOcrService, into: &buf)
+    FfiConverterOptionBool.write(value.autoCopyDetectedText, into: &buf)
+    FfiConverterOptionString.write(value.defaultDirectoryService, into: &buf)
+    FfiConverterOptionString.write(value.defaultTranslationService, into: &buf)
+    FfiConverterOptionTypeTranslationMode.write(value.translationMode, into: &buf)
+    FfiConverterOptionSequenceTypeTranslationTarget.write(value.translationTargets, into: &buf)
+    FfiConverterOptionTypeInputSubmitMode.write(value.inputSubmitMode, into: &buf)
+    FfiConverterOptionBool.write(value.doubleClickCopyResult, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeGeneralSettingsPatch_lift(_ buf: RustBuffer) throws
+  -> GeneralSettingsPatch
+{
+  return try FfiConverterTypeGeneralSettingsPatch.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeGeneralSettingsPatch_lower(_ value: GeneralSettingsPatch) -> RustBuffer
+{
+  return FfiConverterTypeGeneralSettingsPatch.lower(value)
+}
+
+public struct ProviderConfigEntry: Equatable, Hashable {
+  public var id: String
+  public var type: String
+  public var fields: [String: String]
+  /**
+   * Provider capabilities, populated at runtime from the engine instance.
+   * Not written to the settings file.
+   */
+  public var capabilities: [String]
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(
+    id: String, type: String, fields: [String: String],
+    /**
+     * Provider capabilities, populated at runtime from the engine instance.
+     * Not written to the settings file.
+     */
+    capabilities: [String]
+  ) {
+    self.id = id
+    self.type = type
+    self.fields = fields
+    self.capabilities = capabilities
+  }
+
+}
+
+#if compiler(>=6)
+  extension ProviderConfigEntry: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeProviderConfigEntry: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> ProviderConfigEntry
+  {
+    return
+      try ProviderConfigEntry(
+        id: FfiConverterString.read(from: &buf),
+        type: FfiConverterString.read(from: &buf),
+        fields: FfiConverterDictionaryStringString.read(from: &buf),
+        capabilities: FfiConverterSequenceString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: ProviderConfigEntry, into buf: inout [UInt8]) {
+    FfiConverterString.write(value.id, into: &buf)
+    FfiConverterString.write(value.type, into: &buf)
+    FfiConverterDictionaryStringString.write(value.fields, into: &buf)
+    FfiConverterSequenceString.write(value.capabilities, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeProviderConfigEntry_lift(_ buf: RustBuffer) throws
+  -> ProviderConfigEntry
+{
+  return try FfiConverterTypeProviderConfigEntry.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeProviderConfigEntry_lower(_ value: ProviderConfigEntry) -> RustBuffer {
+  return FfiConverterTypeProviderConfigEntry.lower(value)
+}
+
+public struct ShortcutSettings: Equatable, Hashable {
+  public var toggleApp: String
+  public var hideApp: String
+  public var extractFromScreenSelection: String
+  public var extractFromScreenCapture: String
+  public var extractFromClipboard: String
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(
+    toggleApp: String, hideApp: String, extractFromScreenSelection: String,
+    extractFromScreenCapture: String, extractFromClipboard: String
+  ) {
+    self.toggleApp = toggleApp
+    self.hideApp = hideApp
+    self.extractFromScreenSelection = extractFromScreenSelection
+    self.extractFromScreenCapture = extractFromScreenCapture
+    self.extractFromClipboard = extractFromClipboard
+  }
+
+}
+
+#if compiler(>=6)
+  extension ShortcutSettings: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeShortcutSettings: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> ShortcutSettings
+  {
+    return
+      try ShortcutSettings(
+        toggleApp: FfiConverterString.read(from: &buf),
+        hideApp: FfiConverterString.read(from: &buf),
+        extractFromScreenSelection: FfiConverterString.read(from: &buf),
+        extractFromScreenCapture: FfiConverterString.read(from: &buf),
+        extractFromClipboard: FfiConverterString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: ShortcutSettings, into buf: inout [UInt8]) {
+    FfiConverterString.write(value.toggleApp, into: &buf)
+    FfiConverterString.write(value.hideApp, into: &buf)
+    FfiConverterString.write(value.extractFromScreenSelection, into: &buf)
+    FfiConverterString.write(value.extractFromScreenCapture, into: &buf)
+    FfiConverterString.write(value.extractFromClipboard, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeShortcutSettings_lift(_ buf: RustBuffer) throws -> ShortcutSettings {
+  return try FfiConverterTypeShortcutSettings.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeShortcutSettings_lower(_ value: ShortcutSettings) -> RustBuffer {
+  return FfiConverterTypeShortcutSettings.lower(value)
+}
+
+public struct ShortcutSettingsPatch: Equatable, Hashable {
+  public var toggleApp: String?
+  public var hideApp: String?
+  public var extractFromScreenSelection: String?
+  public var extractFromScreenCapture: String?
+  public var extractFromClipboard: String?
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(
+    toggleApp: String?, hideApp: String?, extractFromScreenSelection: String?,
+    extractFromScreenCapture: String?, extractFromClipboard: String?
+  ) {
+    self.toggleApp = toggleApp
+    self.hideApp = hideApp
+    self.extractFromScreenSelection = extractFromScreenSelection
+    self.extractFromScreenCapture = extractFromScreenCapture
+    self.extractFromClipboard = extractFromClipboard
+  }
+
+}
+
+#if compiler(>=6)
+  extension ShortcutSettingsPatch: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeShortcutSettingsPatch: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> ShortcutSettingsPatch
+  {
+    return
+      try ShortcutSettingsPatch(
+        toggleApp: FfiConverterOptionString.read(from: &buf),
+        hideApp: FfiConverterOptionString.read(from: &buf),
+        extractFromScreenSelection: FfiConverterOptionString.read(from: &buf),
+        extractFromScreenCapture: FfiConverterOptionString.read(from: &buf),
+        extractFromClipboard: FfiConverterOptionString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: ShortcutSettingsPatch, into buf: inout [UInt8]) {
+    FfiConverterOptionString.write(value.toggleApp, into: &buf)
+    FfiConverterOptionString.write(value.hideApp, into: &buf)
+    FfiConverterOptionString.write(value.extractFromScreenSelection, into: &buf)
+    FfiConverterOptionString.write(value.extractFromScreenCapture, into: &buf)
+    FfiConverterOptionString.write(value.extractFromClipboard, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeShortcutSettingsPatch_lift(_ buf: RustBuffer) throws
+  -> ShortcutSettingsPatch
+{
+  return try FfiConverterTypeShortcutSettingsPatch.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeShortcutSettingsPatch_lower(_ value: ShortcutSettingsPatch)
+  -> RustBuffer
+{
+  return FfiConverterTypeShortcutSettingsPatch.lower(value)
+}
+
+public struct TranslationTarget: Equatable, Hashable {
+  public var source: String
+  public var target: String
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(source: String, target: String) {
+    self.source = source
+    self.target = target
+  }
+
+}
+
+#if compiler(>=6)
+  extension TranslationTarget: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeTranslationTarget: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> TranslationTarget
+  {
+    return
+      try TranslationTarget(
+        source: FfiConverterString.read(from: &buf),
+        target: FfiConverterString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: TranslationTarget, into buf: inout [UInt8]) {
+    FfiConverterString.write(value.source, into: &buf)
+    FfiConverterString.write(value.target, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTranslationTarget_lift(_ buf: RustBuffer) throws -> TranslationTarget {
+  return try FfiConverterTypeTranslationTarget.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTranslationTarget_lower(_ value: TranslationTarget) -> RustBuffer {
+  return FfiConverterTypeTranslationTarget.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum InputSubmitMode: Equatable, Hashable {
+
+  case enter
+  case commandEnter
+
+}
+
+#if compiler(>=6)
+  extension InputSubmitMode: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeInputSubmitMode: FfiConverterRustBuffer {
+  typealias SwiftType = InputSubmitMode
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> InputSubmitMode
+  {
+    let variant: Int32 = try readInt(&buf)
+    switch variant {
+
+    case 1: return .enter
+
+    case 2: return .commandEnter
+
+    default: throw UniffiInternalError.unexpectedEnumCase
+    }
+  }
+
+  public static func write(_ value: InputSubmitMode, into buf: inout [UInt8]) {
+    switch value {
+
+    case .enter:
+      writeInt(&buf, Int32(1))
+
+    case .commandEnter:
+      writeInt(&buf, Int32(2))
+
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeInputSubmitMode_lift(_ buf: RustBuffer) throws -> InputSubmitMode {
+  return try FfiConverterTypeInputSubmitMode.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeInputSubmitMode_lower(_ value: InputSubmitMode) -> RustBuffer {
+  return FfiConverterTypeInputSubmitMode.lower(value)
+}
+
+/// Error type returned by all uniffi-exported Runtime methods.
+public enum RuntimeError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+
+  case Error(
+    msg: String
+  )
+
+  public var errorDescription: String? {
+    String(reflecting: self)
+  }
+
+}
+
+#if compiler(>=6)
+  extension RuntimeError: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRuntimeError: FfiConverterRustBuffer {
+  typealias SwiftType = RuntimeError
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RuntimeError {
+    let variant: Int32 = try readInt(&buf)
+    switch variant {
+
+    case 1:
+      return .Error(
+        msg: try FfiConverterString.read(from: &buf)
+      )
+
+    default: throw UniffiInternalError.unexpectedEnumCase
+    }
+  }
+
+  public static func write(_ value: RuntimeError, into buf: inout [UInt8]) {
+    switch value {
+
+    case .Error(let msg):
+      writeInt(&buf, Int32(1))
+      FfiConverterString.write(msg, into: &buf)
+
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeError_lift(_ buf: RustBuffer) throws -> RuntimeError {
+  return try FfiConverterTypeRuntimeError.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeError_lower(_ value: RuntimeError) -> RustBuffer {
+  return FfiConverterTypeRuntimeError.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum TranslationMode: Equatable, Hashable {
+
+  case auto
+  case manual
+
+}
+
+#if compiler(>=6)
+  extension TranslationMode: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeTranslationMode: FfiConverterRustBuffer {
+  typealias SwiftType = TranslationMode
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> TranslationMode
+  {
+    let variant: Int32 = try readInt(&buf)
+    switch variant {
+
+    case 1: return .auto
+
+    case 2: return .manual
+
+    default: throw UniffiInternalError.unexpectedEnumCase
+    }
+  }
+
+  public static func write(_ value: TranslationMode, into buf: inout [UInt8]) {
+    switch value {
+
+    case .auto:
+      writeInt(&buf, Int32(1))
+
+    case .manual:
+      writeInt(&buf, Int32(2))
+
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTranslationMode_lift(_ buf: RustBuffer) throws -> TranslationMode {
+  return try FfiConverterTypeTranslationMode.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTranslationMode_lower(_ value: TranslationMode) -> RustBuffer {
+  return FfiConverterTypeTranslationMode.lower(value)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionBool: FfiConverterRustBuffer {
+  typealias SwiftType = Bool?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterBool.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterBool.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionString: FfiConverterRustBuffer {
+  typealias SwiftType = String?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterString.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterString.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionTypeProviderConfigEntry: FfiConverterRustBuffer {
+  typealias SwiftType = ProviderConfigEntry?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterTypeProviderConfigEntry.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterTypeProviderConfigEntry.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionTypeInputSubmitMode: FfiConverterRustBuffer {
+  typealias SwiftType = InputSubmitMode?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterTypeInputSubmitMode.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterTypeInputSubmitMode.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionTypeTranslationMode: FfiConverterRustBuffer {
+  typealias SwiftType = TranslationMode?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterTypeTranslationMode.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterTypeTranslationMode.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionSequenceTypeTranslationTarget: FfiConverterRustBuffer {
+  typealias SwiftType = [TranslationTarget]?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterSequenceTypeTranslationTarget.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterSequenceTypeTranslationTarget.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterSequenceString: FfiConverterRustBuffer {
+  typealias SwiftType = [String]
+
+  public static func write(_ value: [String], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterString.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String] {
+    let len: Int32 = try readInt(&buf)
+    var seq = [String]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterString.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterSequenceTypeProviderConfigEntry: FfiConverterRustBuffer {
+  typealias SwiftType = [ProviderConfigEntry]
+
+  public static func write(_ value: [ProviderConfigEntry], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterTypeProviderConfigEntry.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> [ProviderConfigEntry]
+  {
+    let len: Int32 = try readInt(&buf)
+    var seq = [ProviderConfigEntry]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterTypeProviderConfigEntry.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterSequenceTypeTranslationTarget: FfiConverterRustBuffer {
+  typealias SwiftType = [TranslationTarget]
+
+  public static func write(_ value: [TranslationTarget], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterTypeTranslationTarget.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> [TranslationTarget]
+  {
+    let len: Int32 = try readInt(&buf)
+    var seq = [TranslationTarget]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterTypeTranslationTarget.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterDictionaryStringString: FfiConverterRustBuffer {
+  public static func write(_ value: [String: String], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for (key, value) in value {
+      FfiConverterString.write(key, into: &buf)
+      FfiConverterString.write(value, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String:
+    String]
+  {
+    let len: Int32 = try readInt(&buf)
+    var dict = [String: String]()
+    dict.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      let key = try FfiConverterString.read(from: &buf)
+      let value = try FfiConverterString.read(from: &buf)
+      dict[key] = value
+    }
+    return dict
+  }
+}
+private let UNIFFI_RUST_FUTURE_POLL_READY: Int8 = 0
+private let UNIFFI_RUST_FUTURE_POLL_WAKE: Int8 = 1
+
+private let uniffiContinuationHandleMap = UniffiHandleMap<UnsafeContinuation<Int8, Never>>()
+
+private func uniffiRustCallAsync<F, T>(
+  rustFutureFunc: () -> UInt64,
+  pollFunc: (UInt64, @escaping UniffiRustFutureContinuationCallback, UInt64) -> Void,
+  completeFunc: (UInt64, UnsafeMutablePointer<RustCallStatus>) -> F,
+  freeFunc: (UInt64) -> Void,
+  liftFunc: (F) throws -> T,
+  errorHandler: ((RustBuffer) throws -> Swift.Error)?
+) async throws -> T {
+  // Make sure to call the ensure init function since future creation doesn't have a
+  // RustCallStatus param, so doesn't use makeRustCall()
+  uniffiEnsureBeyondtranslateRuntimeInitialized()
+  let rustFuture = rustFutureFunc()
+  defer {
+    freeFunc(rustFuture)
+  }
+  var pollResult: Int8
+  repeat {
+    pollResult = await withUnsafeContinuation {
+      pollFunc(
+        rustFuture,
+        { handle, pollResult in
+          uniffiFutureContinuationCallback(handle: handle, pollResult: pollResult)
+        },
+        uniffiContinuationHandleMap.insert(obj: $0)
+      )
+    }
+  } while pollResult != UNIFFI_RUST_FUTURE_POLL_READY
+
+  return try liftFunc(
+    makeRustCall(
+      { completeFunc(rustFuture, $0) },
+      errorHandler: errorHandler
+    ))
+}
+
+// Callback handlers for an async calls.  These are invoked by Rust when the future is ready.  They
+// lift the return value or error and resume the suspended function.
+private func uniffiFutureContinuationCallback(handle: UInt64, pollResult: Int8) {
+  if let continuation = try? uniffiContinuationHandleMap.remove(handle: handle) {
+    continuation.resume(returning: pollResult)
+  } else {
+    print("uniffiFutureContinuationCallback invalid handle")
   }
 }
 public func add(a: Int32, b: Int32) -> Int32 {
@@ -699,6 +2568,63 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_func_version() != 42317 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtime_dictionary() != 13965 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtime_settings() != 37764 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtime_translation() != 36886 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimedictionary_lookup() != 25807 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_delete_provider() != 20557 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_advanced() != 3214 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_appearance() != 54826 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_general() != 54665 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_json() != 31105 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_provider() != 21807 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_shortcuts() != 44721 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_providers() != 34940 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_advanced() != 46849 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_appearance() != 59073 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_general() != 47378 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_provider() != 46276 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_shortcuts() != 11504 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_translate() != 54604 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_constructor_runtime_new() != 50884 {
     return InitializationResult.apiChecksumMismatch
   }
 

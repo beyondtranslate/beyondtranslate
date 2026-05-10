@@ -57,6 +57,13 @@ fn run_dart_test_with_library_mode() -> Result<()> {
         true,
     )?;
 
+    // Patch the generated beyondtranslate_runtime.dart to work around a
+    // uniffi-dart limitation: async methods returning cross-crate types
+    // (LookUpResponse, TranslateResponse) use FfiConverter.lift functions
+    // defined in beyondtranslate_core.dart which accept beyondtranslate_core's
+    // RustBuffer, but uniffiRustCallAsync expects this file's own RustBuffer.
+    patch_dart_cross_crate_lifters(&out_dir)?;
+
     let mut format = Command::new("dart");
     format.current_dir(&out_dir).arg("format").arg(".");
     let _ = format.spawn().and_then(|mut child| child.wait());
@@ -125,6 +132,45 @@ void main(List<String> args) async {{
         )
         .as_bytes(),
     )?;
+    Ok(())
+}
+
+fn patch_dart_cross_crate_lifters(out_dir: &Utf8Path) -> Result<()> {
+    let dart_file = out_dir.join("beyondtranslate_runtime.dart");
+    if !dart_file.exists() {
+        return Ok(());
+    }
+
+    let source = std::fs::read_to_string(&dart_file)?;
+    let import_anchor = r#"import "beyondtranslate_core.dart" as beyondtranslate_core;"#;
+
+    if !source.contains(import_anchor) {
+        return Ok(());
+    }
+
+    let bridge_functions = concat!(
+        "\n\n",
+        "// Bridge functions that adapt beyondtranslate_core converters to accept\n",
+        "// this file's RustBuffer type (both are structurally identical Uint8List\n",
+        "// wrappers, but Dart's nominal typing requires explicit adapters when\n",
+        "// they are passed to uniffiRustCallAsync).\n",
+        "LookUpResponse _liftLookUpResponse(RustBuffer buf) =>\n",
+        "    beyondtranslate_core.FfiConverterLookUpResponse.read(buf.asUint8List())\n",
+        "        .value;\n\n",
+        "TranslateResponse _liftTranslateResponse(RustBuffer buf) =>\n",
+        "    beyondtranslate_core.FfiConverterTranslateResponse.read(buf.asUint8List())\n",
+        "        .value;"
+    );
+
+    let patched = source
+        .replace(import_anchor, &format!("{import_anchor}{bridge_functions}"))
+        .replace("FfiConverterLookUpResponse.lift,", "_liftLookUpResponse,")
+        .replace(
+            "FfiConverterTranslateResponse.lift,",
+            "_liftTranslateResponse,",
+        );
+
+    std::fs::write(&dart_file, patched)?;
     Ok(())
 }
 

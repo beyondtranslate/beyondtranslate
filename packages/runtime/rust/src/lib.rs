@@ -1,3 +1,7 @@
+pub mod domain;
+pub mod runtime;
+pub use runtime::{Runtime, RuntimeDictionary, RuntimeError, RuntimeSettings, RuntimeTranslation};
+
 use beyondtranslate_core::{
     DetectLanguageRequest, DetectLanguageResponse, LanguagePair, LookUpRequest, LookUpResponse,
     TextDetection, TextTranslation, TranslateRequest, TranslateResponse, WordDefinition, WordImage,

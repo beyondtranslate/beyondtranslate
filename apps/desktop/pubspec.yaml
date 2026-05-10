@@ -11,8 +11,7 @@ dependencies:
   audioplayers: ^6.6.0
   beyondtranslate_runtime:
     path: ../../packages/runtime
-  beyondtranslate_desktop_rust:
-    path: rust_builder
+
   bot_toast: ^4.1.3
   collection: ^1.18.0
   dio: ^5.9.2
@@ -21,7 +20,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_rust_bridge: 2.11.1
+
   go_router: ^17.2.1
   hotkey_manager: ^0.2.3
   intl: ^0.20.2

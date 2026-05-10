@@ -22,23 +22,23 @@ class SettingsStore extends ChangeNotifier {
 
   static final SettingsStore instance = SettingsStore._();
 
-  GeneralSettings _general = const GeneralSettings(
+  GeneralSettings _general = GeneralSettings(
     launchAtLogin: false,
     showMenuBar: true,
     defaultOcrService: '',
     autoCopyDetectedText: true,
     defaultDirectoryService: '',
     defaultTranslationService: '',
-    translationMode: TranslationMode.manual,
+    translationMode: TranslationMode.auto,
     translationTargets: [],
     inputSubmitMode: InputSubmitMode.enter,
     doubleClickCopyResult: true,
   );
-  AppearanceSettings _appearance = const AppearanceSettings(
+  AppearanceSettings _appearance = AppearanceSettings(
     language: 'zh',
     themeMode: 'system',
   );
-  ShortcutSettings _shortcuts = const ShortcutSettings(
+  ShortcutSettings _shortcuts = ShortcutSettings(
     toggleApp: '',
     hideApp: '',
     extractFromScreenSelection: '',
@@ -117,7 +117,7 @@ class SettingsStore extends ChangeNotifier {
 
   Future<void> updateGeneral(GeneralSettingsPatch patch) async {
     final settings = runtime_service.runtime.settings();
-    _general = await settings.updateGeneral(patch);
+    _general = await settings.updateGeneral(patch: patch);
     if ((kIsMacOS || kIsWindows) && patch.launchAtLogin != null) {
       if (patch.launchAtLogin!) {
         await LaunchAtStartup.instance.enable();
@@ -130,13 +130,13 @@ class SettingsStore extends ChangeNotifier {
 
   Future<void> updateAppearance(AppearanceSettingsPatch patch) async {
     final settings = runtime_service.runtime.settings();
-    _appearance = await settings.updateAppearance(patch);
+    _appearance = await settings.updateAppearance(patch: patch);
     notifyListeners();
   }
 
   Future<void> updateShortcuts(ShortcutSettingsPatch patch) async {
     final settings = runtime_service.runtime.settings();
-    _shortcuts = await settings.updateShortcuts(patch);
+    _shortcuts = await settings.updateShortcuts(patch: patch);
     notifyListeners();
   }
 }
