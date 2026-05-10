@@ -8,7 +8,7 @@ name = "beyondtranslate_runtime"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [dependencies]
-beyondtranslate-core = { path = "../../../crates/core", features = ["uniffi"] }
+beyondtranslate-core = { path = "../../../crates/core" }
 beyondtranslate-engine = { path = "../../../crates/engine" }
 uniffi = { version = "=0.31.1", features = ["cli"] }
 uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1" }

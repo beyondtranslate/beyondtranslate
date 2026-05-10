@@ -11,10 +11,8 @@
 //
 // Two targets:
 //
-//   * `beyondtranslate_coreFFI` and `beyondtranslate_runtimeFFI` expose the C
-//     ABIs declared in the generated FFI headers to Swift via Clang modules.
-//   * `beyondtranslate_core` contains the UniFFI-generated Swift records from
-//     the shared core crate.
+//   * `beyondtranslate_runtimeFFI` exposes the C ABI declared in the
+//     generated FFI header to Swift via a Clang module.
 //   * `beyondtranslate_runtime` re-exports the uniffi-rs generated Swift binding
 //     (`Generated/beyondtranslate_runtime.swift`) plus a tiny `FlutterPlugin` stub
 //     (`BeyondtranslateRuntimePlugin.swift`) whose `register(with:)` performs a one-shot
@@ -43,7 +41,6 @@ let package = Package(
     .target(
       name: "beyondtranslate_runtime",
       dependencies: [
-        "beyondtranslate_core",
         "beyondtranslate_runtimeFFI",
         .product(name: "FlutterFramework", package: "FlutterFramework"),
       ],
@@ -51,21 +48,6 @@ let package = Package(
       linkerSettings: [
         .unsafeFlags(["-Xlinker", "-undefined", "-Xlinker", "dynamic_lookup"])
       ]
-    ),
-    .target(
-      name: "beyondtranslate_core",
-      dependencies: [
-        "beyondtranslate_coreFFI"
-      ],
-      path: "Sources/beyondtranslate_core",
-      linkerSettings: [
-        .unsafeFlags(["-Xlinker", "-undefined", "-Xlinker", "dynamic_lookup"])
-      ]
-    ),
-    .target(
-      name: "beyondtranslate_coreFFI",
-      path: "Sources/beyondtranslate_coreFFI",
-      publicHeadersPath: "include"
     ),
     .target(
       name: "beyondtranslate_runtimeFFI",

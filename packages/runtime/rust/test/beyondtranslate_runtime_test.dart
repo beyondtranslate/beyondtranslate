@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 
-import '../beyondtranslate_core.dart';
 import '../beyondtranslate_runtime.dart';
 
 void main() {

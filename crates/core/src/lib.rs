@@ -2,9 +2,6 @@ mod model;
 mod provider;
 mod service;
 
-#[cfg(feature = "uniffi")]
-uniffi::setup_scaffolding!();
-
 pub use model::{
     DetectLanguageRequest, DetectLanguageResponse, LanguagePair, LookUpRequest, LookUpResponse,
     TextDetection, TextTranslation, TranslateRequest, TranslateResponse, WordDefinition, WordImage,
