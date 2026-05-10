@@ -1,0 +1,9 @@
+# uniffi-dart bindings configuration.
+#
+# `package_name` controls the Dart package that owns the native asset. The
+# generated Dart code emits `_uniffiAssetId = "package:<package_name>/uniffi:<cdylib_name>"`,
+# which must match the `CodeAsset(package: ..., name: ...)` registered by the
+# Flutter package's `hook/build.dart`.
+[bindings.dart]
+package_name = "beyondtranslate_runtime"
+cdylib_name = "beyondtranslate_runtime"

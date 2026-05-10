@@ -9,6 +9,8 @@ environment:
 
 dependencies:
   audioplayers: ^6.6.0
+  beyondtranslate_runtime:
+    path: ../../packages/runtime
   beyondtranslate_desktop_rust:
     path: rust_builder
   bot_toast: ^4.1.3

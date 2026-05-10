@@ -1,5 +1,11 @@
 [workspace]
-members = ["apps/api", "apps/desktop/rust", "crates/core", "crates/engine"]
+members = [
+    "apps/api",
+    "apps/desktop/rust",
+    "crates/core",
+    "crates/engine",
+    "packages/runtime/rust",
+]
 resolver = "2"
 
 [workspace.dependencies]

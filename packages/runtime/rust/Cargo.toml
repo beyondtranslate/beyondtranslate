@@ -1,0 +1,30 @@
+[package]
+name = "beyondtranslate_runtime"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "beyondtranslate_runtime"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[dependencies]
+uniffi = { version = "=0.31.1", features = ["cli"] }
+uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1" }
+anyhow = "1"
+camino = "1"
+
+[build-dependencies]
+uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1", features = ["build"] }
+
+[dev-dependencies]
+uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1", features = ["bindgen-tests"] }
+uniffi = { version = "=0.31.1", features = ["bindgen-tests"] }
+anyhow = "1"
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bin/uniffi-bindgen.rs"
+
+[[bin]]
+name = "uniffi-bindgen-dart"
+path = "src/bin/uniffi-bindgen-dart.rs"

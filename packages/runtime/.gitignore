@@ -1,0 +1,23 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Native build artifacts
+target/
+macos/beyondtranslate_runtime/.build/
+macos/beyondtranslate_runtime/.swiftpm/
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+
+# IDEs
+.idea/
+*.iml
+.vscode/

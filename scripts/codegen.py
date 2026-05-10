@@ -9,6 +9,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 GENERATORS = [
     REPO_ROOT / "scripts/generate/frb_bindings.py",
+    REPO_ROOT / "scripts/generate/runtime_bindings.py",
     REPO_ROOT / "scripts/generate/macos_models.py",
     REPO_ROOT / "scripts/generate/macos_i18n.py",
 ]

@@ -1,0 +1,45 @@
+name: beyondtranslate_runtime
+description: Rust-backed plugin for BeyondTranslate. Dart bindings via uniffi-dart, Swift bindings via uniffi-rs.
+version: 0.0.1
+publish_to: "none"
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ffi: ^2.1.0
+  # Required by hook/build.dart. Must live under `dependencies` (not
+  # `dev_dependencies`) so that the consuming app's package_config resolves
+  # them when the Flutter tool compiles the build hook.
+  hooks: ^1.0.0
+  code_assets: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        ffiPlugin: true
+      ios:
+        # iOS is FFI-only for now. To call the Swift binding from native iOS
+        # code, mirror the macOS setup: drop a `Package.swift` under
+        # `ios/beyondtranslate_runtime/` and add `pluginClass: BeyondtranslateRuntimePlugin` here.
+        ffiPlugin: true
+      linux:
+        ffiPlugin: true
+      macos:
+        # `pluginClass` makes Flutter's macOS tooling pick up the SPM
+        # package shipped at `macos/beyondtranslate_runtime/`. The class itself is a
+        # thin `FlutterPlugin` stub that `dlopen`s the bundled cdylib so
+        # that native Swift call sites can resolve uniffi FFI symbols.
+        ffiPlugin: true
+        pluginClass: BeyondtranslateRuntimePlugin
+      windows:
+        ffiPlugin: true

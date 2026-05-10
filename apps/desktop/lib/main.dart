@@ -3,6 +3,8 @@
 import 'dart:io';
 
 import 'package:beyondtranslate_desktop/src/rust/frb_generated.dart';
+import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
+    as beyondtranslate_runtime;
 import 'package:flutter/material.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 
@@ -21,6 +23,7 @@ import 'src/utils/platform_util.dart';
 Future<void> _ensureInitialized() async {
   WidgetsFlutterBinding.ensureInitialized();
   await RustLib.init();
+  _smokeTestBeyondtranslateRuntime();
 
   if (kIsMacOS || kIsWindows) {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -34,6 +37,22 @@ Future<void> _ensureInitialized() async {
   await initEnv();
   await settingsStore.init();
   MacSettings.registerMethodCallHandler();
+}
+
+void _smokeTestBeyondtranslateRuntime() {
+  beyondtranslate_runtime.ensureInitialized();
+  debugPrint(
+    '[beyondtranslate_runtime] Dart version() = '
+    '${beyondtranslate_runtime.version()}',
+  );
+  debugPrint(
+    '[beyondtranslate_runtime] Dart add(a: 2, b: 3) = '
+    '${beyondtranslate_runtime.add(a: 2, b: 3)}',
+  );
+  debugPrint(
+    '[beyondtranslate_runtime] Dart greet(name: "main.dart") = '
+    '${beyondtranslate_runtime.greet(name: 'main.dart')}',
+  );
 }
 
 void main() async {

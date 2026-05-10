@@ -1,0 +1,8 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - lib/src/generated/**
+    # The only Dart files under the Rust crate are uniffi-dart fixture tests
+    # copied into a temp directory by `uniffi_dart::testing::run_test`.
+    - rust/**
