@@ -5,4 +5,22 @@
 /// changing either of those files.
 library;
 
+export 'src/generated/beyondtranslate_core.dart'
+    show
+        DetectLanguageRequest,
+        DetectLanguageResponse,
+        LanguagePair,
+        LookUpRequest,
+        LookUpResponse,
+        TextDetection,
+        TextTranslation,
+        TranslateRequest,
+        TranslateResponse,
+        WordDefinition,
+        WordImage,
+        WordPhrase,
+        WordPronunciation,
+        WordSentence,
+        WordTag,
+        WordTense;
 export 'src/generated/beyondtranslate_runtime.dart';

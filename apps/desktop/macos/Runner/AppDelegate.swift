@@ -31,11 +31,11 @@ class AppDelegate: FlutterAppDelegate {
     NSLog("[beyondtranslate_runtime] version() = %@", beyondtranslate_runtime.version())
     NSLog(
       "[beyondtranslate_runtime] add(a: 2, b: 3) = %d",
-      beyondtranslate_runtime.add(a: 2, b: 3)
+      add(a: 2, b: 3)
     )
     NSLog(
       "[beyondtranslate_runtime] greet(name: \"AppDelegate\") = %@",
-      beyondtranslate_runtime.greet(name: "AppDelegate")
+      greet(name: "AppDelegate")
     )
   }
 }

@@ -484,6 +484,134 @@ public func add(a: Int32, b: Int32) -> Int32 {
       )
     })
 }
+public func echoDetectLanguageRequest(request: DetectLanguageRequest) -> DetectLanguageRequest {
+  return try! FfiConverterTypeDetectLanguageRequest_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_detect_language_request(
+        FfiConverterTypeDetectLanguageRequest_lower(request), $0
+      )
+    })
+}
+public func echoDetectLanguageResponse(response: DetectLanguageResponse) -> DetectLanguageResponse {
+  return try! FfiConverterTypeDetectLanguageResponse_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_detect_language_response(
+        FfiConverterTypeDetectLanguageResponse_lower(response), $0
+      )
+    })
+}
+public func echoLanguagePair(languagePair: LanguagePair) -> LanguagePair {
+  return try! FfiConverterTypeLanguagePair_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_language_pair(
+        FfiConverterTypeLanguagePair_lower(languagePair), $0
+      )
+    })
+}
+public func echoLookUpRequest(request: LookUpRequest) -> LookUpRequest {
+  return try! FfiConverterTypeLookUpRequest_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_look_up_request(
+        FfiConverterTypeLookUpRequest_lower(request), $0
+      )
+    })
+}
+public func echoLookUpResponse(response: LookUpResponse) -> LookUpResponse {
+  return try! FfiConverterTypeLookUpResponse_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_look_up_response(
+        FfiConverterTypeLookUpResponse_lower(response), $0
+      )
+    })
+}
+public func echoTextDetection(textDetection: TextDetection) -> TextDetection {
+  return try! FfiConverterTypeTextDetection_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_text_detection(
+        FfiConverterTypeTextDetection_lower(textDetection), $0
+      )
+    })
+}
+public func echoTextTranslation(textTranslation: TextTranslation) -> TextTranslation {
+  return try! FfiConverterTypeTextTranslation_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_text_translation(
+        FfiConverterTypeTextTranslation_lower(textTranslation), $0
+      )
+    })
+}
+public func echoTranslateRequest(request: TranslateRequest) -> TranslateRequest {
+  return try! FfiConverterTypeTranslateRequest_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_translate_request(
+        FfiConverterTypeTranslateRequest_lower(request), $0
+      )
+    })
+}
+public func echoTranslateResponse(response: TranslateResponse) -> TranslateResponse {
+  return try! FfiConverterTypeTranslateResponse_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_translate_response(
+        FfiConverterTypeTranslateResponse_lower(response), $0
+      )
+    })
+}
+public func echoWordDefinition(wordDefinition: WordDefinition) -> WordDefinition {
+  return try! FfiConverterTypeWordDefinition_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_word_definition(
+        FfiConverterTypeWordDefinition_lower(wordDefinition), $0
+      )
+    })
+}
+public func echoWordImage(wordImage: WordImage) -> WordImage {
+  return try! FfiConverterTypeWordImage_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_word_image(
+        FfiConverterTypeWordImage_lower(wordImage), $0
+      )
+    })
+}
+public func echoWordPhrase(wordPhrase: WordPhrase) -> WordPhrase {
+  return try! FfiConverterTypeWordPhrase_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_word_phrase(
+        FfiConverterTypeWordPhrase_lower(wordPhrase), $0
+      )
+    })
+}
+public func echoWordPronunciation(wordPronunciation: WordPronunciation) -> WordPronunciation {
+  return try! FfiConverterTypeWordPronunciation_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_word_pronunciation(
+        FfiConverterTypeWordPronunciation_lower(wordPronunciation), $0
+      )
+    })
+}
+public func echoWordSentence(wordSentence: WordSentence) -> WordSentence {
+  return try! FfiConverterTypeWordSentence_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_word_sentence(
+        FfiConverterTypeWordSentence_lower(wordSentence), $0
+      )
+    })
+}
+public func echoWordTag(wordTag: WordTag) -> WordTag {
+  return try! FfiConverterTypeWordTag_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_word_tag(
+        FfiConverterTypeWordTag_lower(wordTag), $0
+      )
+    })
+}
+public func echoWordTense(wordTense: WordTense) -> WordTense {
+  return try! FfiConverterTypeWordTense_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_word_tense(
+        FfiConverterTypeWordTense_lower(wordTense), $0
+      )
+    })
+}
 public func greet(name: String) -> String {
   return try! FfiConverterString.lift(
     try! rustCall {
@@ -519,6 +647,54 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_func_add() != 17790 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_detect_language_request() != 8599 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_detect_language_response() != 47914 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_language_pair() != 18868 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_look_up_request() != 3060 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_look_up_response() != 3637 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_text_detection() != 46612 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_text_translation() != 36395 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_translate_request() != 25811 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_translate_response() != 58236 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_word_definition() != 5681 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_word_image() != 60210 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_word_phrase() != 9437 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_word_pronunciation() != 42325 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_word_sentence() != 4677 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_word_tag() != 35137 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_word_tense() != 21321 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_func_greet() != 35598 {
     return InitializationResult.apiChecksumMismatch
   }
@@ -526,6 +702,7 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
 
+  uniffiEnsureBeyondtranslateCoreInitialized()
   return InitializationResult.ok
 }()
 

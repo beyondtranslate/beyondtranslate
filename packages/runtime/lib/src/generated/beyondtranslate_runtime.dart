@@ -7,6 +7,8 @@ import "dart:io" show Platform, File, Directory;
 import "dart:isolate";
 import "dart:typed_data";
 import "package:ffi/ffi.dart";
+import "beyondtranslate_core.dart";
+import "beyondtranslate_core.dart" as beyondtranslate_core;
 
 class UniffiInternalError implements Exception {
   static const int bufferOverflow = 0;
@@ -213,29 +215,6 @@ Uint8List createUint8ListFromInt(int value) {
   return uint8List;
 }
 
-class FfiConverterInt32 {
-  static int lift(int value) => value;
-  static LiftRetVal<int> read(Uint8List buf) {
-    return LiftRetVal(buf.buffer.asByteData(buf.offsetInBytes).getInt32(0), 4);
-  }
-
-  static int lower(int value) {
-    if (value < -2147483648 || value > 2147483647) {
-      throw ArgumentError("Value out of range for i32: " + value.toString());
-    }
-    return value;
-  }
-
-  static int allocationSize([int value = 0]) {
-    return 4;
-  }
-
-  static int write(int value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, lower(value));
-    return 4;
-  }
-}
-
 class FfiConverterString {
   static String lift(RustBuffer buf) {
     return utf8.decoder.convert(buf.asUint8List());
@@ -259,6 +238,29 @@ class FfiConverterString {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, list.length);
     buf.setAll(4, list);
     return list.length + 4;
+  }
+}
+
+class FfiConverterInt32 {
+  static int lift(int value) => value;
+  static LiftRetVal<int> read(Uint8List buf) {
+    return LiftRetVal(buf.buffer.asByteData(buf.offsetInBytes).getInt32(0), 4);
+  }
+
+  static int lower(int value) {
+    if (value < -2147483648 || value > 2147483647) {
+      throw ArgumentError("Value out of range for i32: " + value.toString());
+    }
+    return value;
+  }
+
+  static int allocationSize([int value = 0]) {
+    return 4;
+  }
+
+  static int write(int value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, lower(value));
+    return 4;
   }
 }
 
@@ -407,6 +409,170 @@ int add({
       null);
 }
 
+DetectLanguageRequest echoDetectLanguageRequest({
+  required DetectLanguageRequest request,
+}) {
+  return rustCallWithLifter(
+      (status) =>
+          uniffi_beyondtranslate_runtime_fn_func_echo_detect_language_request(
+              FfiConverterDetectLanguageRequest.lower(request), status),
+      FfiConverterDetectLanguageRequest.lift,
+      null);
+}
+
+DetectLanguageResponse echoDetectLanguageResponse({
+  required DetectLanguageResponse response,
+}) {
+  return rustCallWithLifter(
+      (status) =>
+          uniffi_beyondtranslate_runtime_fn_func_echo_detect_language_response(
+              FfiConverterDetectLanguageResponse.lower(response), status),
+      FfiConverterDetectLanguageResponse.lift,
+      null);
+}
+
+LanguagePair echoLanguagePair({
+  required LanguagePair languagePair,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_language_pair(
+          FfiConverterLanguagePair.lower(languagePair), status),
+      FfiConverterLanguagePair.lift,
+      null);
+}
+
+LookUpRequest echoLookUpRequest({
+  required LookUpRequest request,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_look_up_request(
+          FfiConverterLookUpRequest.lower(request), status),
+      FfiConverterLookUpRequest.lift,
+      null);
+}
+
+LookUpResponse echoLookUpResponse({
+  required LookUpResponse response,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_look_up_response(
+          FfiConverterLookUpResponse.lower(response), status),
+      FfiConverterLookUpResponse.lift,
+      null);
+}
+
+TextDetection echoTextDetection({
+  required TextDetection textDetection,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_text_detection(
+          FfiConverterTextDetection.lower(textDetection), status),
+      FfiConverterTextDetection.lift,
+      null);
+}
+
+TextTranslation echoTextTranslation({
+  required TextTranslation textTranslation,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_text_translation(
+          FfiConverterTextTranslation.lower(textTranslation), status),
+      FfiConverterTextTranslation.lift,
+      null);
+}
+
+TranslateRequest echoTranslateRequest({
+  required TranslateRequest request,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_translate_request(
+          FfiConverterTranslateRequest.lower(request), status),
+      FfiConverterTranslateRequest.lift,
+      null);
+}
+
+TranslateResponse echoTranslateResponse({
+  required TranslateResponse response,
+}) {
+  return rustCallWithLifter(
+      (status) =>
+          uniffi_beyondtranslate_runtime_fn_func_echo_translate_response(
+              FfiConverterTranslateResponse.lower(response), status),
+      FfiConverterTranslateResponse.lift,
+      null);
+}
+
+WordDefinition echoWordDefinition({
+  required WordDefinition wordDefinition,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_word_definition(
+          FfiConverterWordDefinition.lower(wordDefinition), status),
+      FfiConverterWordDefinition.lift,
+      null);
+}
+
+WordImage echoWordImage({
+  required WordImage wordImage,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_word_image(
+          FfiConverterWordImage.lower(wordImage), status),
+      FfiConverterWordImage.lift,
+      null);
+}
+
+WordPhrase echoWordPhrase({
+  required WordPhrase wordPhrase,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_word_phrase(
+          FfiConverterWordPhrase.lower(wordPhrase), status),
+      FfiConverterWordPhrase.lift,
+      null);
+}
+
+WordPronunciation echoWordPronunciation({
+  required WordPronunciation wordPronunciation,
+}) {
+  return rustCallWithLifter(
+      (status) =>
+          uniffi_beyondtranslate_runtime_fn_func_echo_word_pronunciation(
+              FfiConverterWordPronunciation.lower(wordPronunciation), status),
+      FfiConverterWordPronunciation.lift,
+      null);
+}
+
+WordSentence echoWordSentence({
+  required WordSentence wordSentence,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_word_sentence(
+          FfiConverterWordSentence.lower(wordSentence), status),
+      FfiConverterWordSentence.lift,
+      null);
+}
+
+WordTag echoWordTag({
+  required WordTag wordTag,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_word_tag(
+          FfiConverterWordTag.lower(wordTag), status),
+      FfiConverterWordTag.lift,
+      null);
+}
+
+WordTense echoWordTense({
+  required WordTense wordTense,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_word_tense(
+          FfiConverterWordTense.lower(wordTense), status),
+      FfiConverterWordTense.lift,
+      null);
+}
+
 String greet({
   required String name,
 }) {
@@ -428,6 +594,134 @@ String version() {
     assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_fn_func_add(
     int a, int b, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_detect_language_request(
+        beyondtranslate_core.RustBuffer request,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_detect_language_response(
+        beyondtranslate_core.RustBuffer response,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_language_pair(
+        beyondtranslate_core.RustBuffer language_pair,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_look_up_request(
+        beyondtranslate_core.RustBuffer request,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_look_up_response(
+        beyondtranslate_core.RustBuffer response,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_text_detection(
+        beyondtranslate_core.RustBuffer text_detection,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_text_translation(
+        beyondtranslate_core.RustBuffer text_translation,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_translate_request(
+        beyondtranslate_core.RustBuffer request,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_translate_response(
+        beyondtranslate_core.RustBuffer response,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_word_definition(
+        beyondtranslate_core.RustBuffer word_definition,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_word_image(
+        beyondtranslate_core.RustBuffer word_image,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_word_phrase(
+        beyondtranslate_core.RustBuffer word_phrase,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_word_pronunciation(
+        beyondtranslate_core.RustBuffer word_pronunciation,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_word_sentence(
+        beyondtranslate_core.RustBuffer word_sentence,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_word_tag(
+        beyondtranslate_core.RustBuffer word_tag,
+        Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    beyondtranslate_core.RustBuffer Function(beyondtranslate_core.RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external beyondtranslate_core.RustBuffer
+    uniffi_beyondtranslate_runtime_fn_func_echo_word_tense(
+        beyondtranslate_core.RustBuffer word_tense,
+        Pointer<RustCallStatus> uniffiStatus);
 
 @Native<RustBuffer Function(RustBuffer, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
@@ -739,6 +1033,63 @@ external void ffi_beyondtranslate_runtime_rust_future_complete_void(
 external int uniffi_beyondtranslate_runtime_checksum_func_add();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_func_echo_detect_language_request();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_func_echo_detect_language_response();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_func_echo_language_pair();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_func_echo_look_up_request();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_func_echo_look_up_response();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_func_echo_text_detection();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_func_echo_text_translation();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_func_echo_translate_request();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_func_echo_translate_response();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_func_echo_word_definition();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_image();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_phrase();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_func_echo_word_pronunciation();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_sentence();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_tag();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_tense();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_checksum_func_greet();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -759,6 +1110,66 @@ void _checkApiVersion() {
 
 void _checkApiChecksums() {
   if (uniffi_beyondtranslate_runtime_checksum_func_add() != 17790) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_detect_language_request() !=
+      8599) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_detect_language_response() !=
+      47914) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_language_pair() !=
+      18868) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_look_up_request() !=
+      3060) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_look_up_response() !=
+      3637) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_text_detection() !=
+      46612) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_text_translation() !=
+      36395) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_translate_request() !=
+      25811) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_translate_response() !=
+      58236) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_definition() !=
+      5681) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_image() != 60210) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_phrase() != 9437) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_pronunciation() !=
+      42325) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_sentence() !=
+      4677) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_tag() != 35137) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_tense() != 21321) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_func_greet() != 35598) {

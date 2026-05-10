@@ -3,11 +3,15 @@ name = "beyondtranslate-core"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+uniffi = ["dep:uniffi"]
+
 [dependencies]
 async-trait.workspace = true
 reqwest.workspace = true
 serde.workspace = true
 thiserror.workspace = true
+uniffi = { workspace = true, optional = true }
 
 [dev-dependencies]
 tokio.workspace = true

@@ -55,6 +55,8 @@ Future<void> main(List<String> args) async {
     final result = await Process.run(
       'cargo',
       cargoArgs,
+      environment: await _cargoEnvironment(targetOS, triple),
+      includeParentEnvironment: true,
       runInShell: true,
     );
     stdout.write(result.stdout);
@@ -89,6 +91,35 @@ Future<void> main(List<String> args) async {
       rustDir.resolve('src/lib.rs'),
     ]);
   });
+}
+
+Future<Map<String, String>> _cargoEnvironment(OS os, String triple) async {
+  if (os != OS.macOS && os != OS.iOS) {
+    return const {};
+  }
+
+  final sdk = os == OS.iOS ? 'iphoneos' : 'macosx';
+  final sdkPath = await _xcrun(['--sdk', sdk, '--show-sdk-path']);
+  final cflags = '-isysroot $sdkPath';
+  final normalizedTriple = triple.replaceAll('-', '_');
+
+  return {
+    'SDKROOT': sdkPath,
+    'CFLAGS_$triple': cflags,
+    'CFLAGS_$normalizedTriple': cflags,
+    'MACOSX_DEPLOYMENT_TARGET': '10.15',
+  };
+}
+
+Future<String> _xcrun(List<String> args) async {
+  final result = await Process.run('xcrun', args, runInShell: true);
+  if (result.exitCode != 0) {
+    throw Exception(
+      '[beyondtranslate_runtime] xcrun ${args.join(' ')} failed with exit code '
+      '${result.exitCode}: ${result.stderr}',
+    );
+  }
+  return (result.stdout as String).trim();
 }
 
 String _rustTriple(CodeConfig code, OS os, Architecture arch) {

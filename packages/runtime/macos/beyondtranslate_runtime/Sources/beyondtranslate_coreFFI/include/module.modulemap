@@ -1,0 +1,7 @@
+module beyondtranslate_coreFFI {
+    header "beyondtranslate_coreFFI.h"
+    export *
+    use "Darwin"
+    use "_Builtin_stdbool"
+    use "_Builtin_stdint"
+}

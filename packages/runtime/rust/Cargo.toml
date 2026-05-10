@@ -8,6 +8,8 @@ name = "beyondtranslate_runtime"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [dependencies]
+beyondtranslate-core = { path = "../../../crates/core", features = ["uniffi"] }
+beyondtranslate-engine = { path = "../../../crates/engine" }
 uniffi = { version = "=0.31.1", features = ["cli"] }
 uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1" }
 anyhow = "1"
@@ -19,6 +21,7 @@ uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v
 [dev-dependencies]
 uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1", features = ["bindgen-tests"] }
 uniffi = { version = "=0.31.1", features = ["bindgen-tests"] }
+uniffi_testing = "=0.31.1"
 anyhow = "1"
 
 [[bin]]
