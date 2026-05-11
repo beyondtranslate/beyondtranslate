@@ -132,6 +132,7 @@ pub struct AdvancedSettings {}
 pub struct ProviderConfigEntry {
     #[serde(default)]
     pub id: String,
+    /// Provider type (baidu, deepl, google, etc.)
     #[serde(default, rename = "type")]
     pub r#type: String,
     #[serde(default)]

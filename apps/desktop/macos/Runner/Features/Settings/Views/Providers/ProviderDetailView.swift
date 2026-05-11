@@ -1,4 +1,5 @@
 import SwiftUI
+import beyondtranslate_runtime
 
 struct ProviderDetailView: View {
   let provider: ProviderItem
@@ -110,7 +111,7 @@ private struct ProviderServiceRow: View {
         Text(capability.displayName)
           .font(.system(size: 13))
           .foregroundStyle(.primary)
-        Text(capability.rawValue)
+        Text(capability.wireValue)
           .font(.system(size: 11))
           .foregroundStyle(.secondary)
       }

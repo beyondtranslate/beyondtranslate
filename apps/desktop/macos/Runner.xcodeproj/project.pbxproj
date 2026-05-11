@@ -36,10 +36,7 @@
 		8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000152E0A100100A1B2C3 /* SettingRow.swift */; };
 		8F1000062E0A100100A1B2C3 /* SettingSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */; };
 		8F1000072E0A100100A1B2C3 /* SettingToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000172E0A100100A1B2C3 /* SettingToggle.swift */; };
-		8F10003A2E0A100100A1B2C3 /* ProviderCapability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10003B2E0A100100A1B2C3 /* ProviderCapability.swift */; };
 		8F10003C2E0A100100A1B2C3 /* ProviderConfigField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */; };
-		8F10003E2E0A100100A1B2C3 /* ProviderType+Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10003F2E0A100100A1B2C3 /* ProviderType+Fields.swift */; };
-		8F10002A2E0A100100A1B2C3 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10002B2E0A100100A1B2C3 /* ProviderType.swift */; };
 		A10000000000000000000001 /* SettingPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000001 /* SettingPicker.swift */; };
 		A10000000000000000000002 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000002 /* GeneralView.swift */; };
 		A10000000000000000000003 /* AppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000003 /* AppearanceView.swift */; };
@@ -52,13 +49,14 @@
 		A1000000000000000000000A /* ProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000A /* ProvidersViewModel.swift */; };
 		A1000000000000000000000B /* AdvancedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000B /* AdvancedViewModel.swift */; };
 		A1000000000000000000000C /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000C /* SettingsRepository.swift */; };
-		A100000000000000000000F /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110000000000000000000F /* ProviderDetailView.swift */; };
-		A10000000000000000000021 /* SettingsRuntime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000021 /* SettingsRuntime+Extensions.swift */; };
 		A10000000000000000000010 /* LocaleKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000010 /* LocaleKeys.swift */; };
+		A10000000000000000000011 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* Localizable.strings */; };
 		A10000000000000000000012 /* AppLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000013 /* AppLocale.swift */; };
 		A10000000000000000000020 /* RuntimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000020 /* RuntimeProvider.swift */; };
-		A10000000000000000000011 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* Localizable.strings */; };
+		A10000000000000000000021 /* Settings+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000021 /* Settings+Extensions.swift */; };
+		A100000000000000000000F /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110000000000000000000F /* ProviderDetailView.swift */; };
 		B6867768A75CBFFF8FFDC94A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,10 +120,7 @@
 		8F1000152E0A100100A1B2C3 /* SettingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingRow.swift; sourceTree = "<group>"; };
 		8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSectionHeader.swift; sourceTree = "<group>"; };
 		8F1000172E0A100100A1B2C3 /* SettingToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingToggle.swift; sourceTree = "<group>"; };
-		8F10002B2E0A100100A1B2C3 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
-		8F10003B2E0A100100A1B2C3 /* ProviderCapability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderCapability.swift; sourceTree = "<group>"; };
 		8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderConfigField.swift; sourceTree = "<group>"; };
-		8F10003F2E0A100100A1B2C3 /* ProviderType+Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProviderType+Fields.swift"; sourceTree = "<group>"; };
 		921317546F1323EEECD70938 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		9D02942CF4EF133C90DEB98D /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
@@ -141,14 +136,15 @@
 		A1100000000000000000000A /* ProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersViewModel.swift; sourceTree = "<group>"; };
 		A1100000000000000000000B /* AdvancedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedViewModel.swift; sourceTree = "<group>"; };
 		A1100000000000000000000C /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
-		A110000000000000000000F /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
-		A11000000000000000000021 /* SettingsRuntime+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsRuntime+Extensions.swift"; sourceTree = "<group>"; };
 		A11000000000000000000010 /* LocaleKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleKeys.swift; sourceTree = "<group>"; };
-		A11000000000000000000013 /* AppLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocale.swift; sourceTree = "<group>"; };
-		A11000000000000000000020 /* RuntimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeProvider.swift; sourceTree = "<group>"; };
 		A11000000000000000000011 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Runner/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A11000000000000000000012 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = Runner/zh.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A11000000000000000000013 /* AppLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocale.swift; sourceTree = "<group>"; };
+		A11000000000000000000020 /* RuntimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeProvider.swift; sourceTree = "<group>"; };
+		A11000000000000000000021 /* Settings+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+Extensions.swift"; sourceTree = "<group>"; };
+		A110000000000000000000F /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
 		AB98A8540C162D94896470E6 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -360,12 +356,9 @@
 		A20000000000000000000009 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8F10003B2E0A100100A1B2C3 /* ProviderCapability.swift */,
 				8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */,
-				8F10002B2E0A100100A1B2C3 /* ProviderType.swift */,
-				8F10003F2E0A100100A1B2C3 /* ProviderType+Fields.swift */,
 				8F1000122E0A100100A1B2C3 /* SettingOption.swift */,
-				A11000000000000000000021 /* SettingsRuntime+Extensions.swift */,
+				A11000000000000000000021 /* Settings+Extensions.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -388,14 +381,6 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		A20000000000000000000020 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				A11000000000000000000020 /* RuntimeProvider.swift */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
 		A2000000000000000000000C /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -411,6 +396,14 @@
 				A11000000000000000000013 /* AppLocale.swift */,
 			);
 			path = I18n;
+			sourceTree = "<group>";
+		};
+		A20000000000000000000020 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A11000000000000000000020 /* RuntimeProvider.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		D73912EC22F37F3D000D13A0 /* Frameworks */ = {
@@ -674,12 +667,9 @@
 			files = (
 				2A0D6A402E0A100100A1B2C3 /* MacSettingsPlugin.swift in Sources */,
 				2A0D6A422E0A100100A1B2C3 /* MacWindowAppearancePlugin.swift in Sources */,
-				8F10002A2E0A100100A1B2C3 /* ProviderType.swift in Sources */,
-				8F10003A2E0A100100A1B2C3 /* ProviderCapability.swift in Sources */,
 				8F10003C2E0A100100A1B2C3 /* ProviderConfigField.swift in Sources */,
-				8F10003E2E0A100100A1B2C3 /* ProviderType+Fields.swift in Sources */,
 				8F1000022E0A100100A1B2C3 /* SettingOption.swift in Sources */,
-				A10000000000000000000021 /* SettingsRuntime+Extensions.swift in Sources */,
+				A10000000000000000000021 /* Settings+Extensions.swift in Sources */,
 				8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */,
 				8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */,
 				8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */,

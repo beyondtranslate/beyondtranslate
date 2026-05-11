@@ -2075,6 +2075,9 @@ public func FfiConverterTypeLookUpResponse_lower(_ value: LookUpResponse) -> Rus
 
 public struct ProviderConfigEntry: Equatable, Hashable {
   public var id: String
+  /**
+   * Provider type (baidu, deepl, google, etc.)
+   */
   public var type: String
   public var fields: [String: String]
   /**
@@ -2086,7 +2089,11 @@ public struct ProviderConfigEntry: Equatable, Hashable {
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
   public init(
-    id: String, type: String, fields: [String: String],
+    id: String,
+    /**
+     * Provider type (baidu, deepl, google, etc.)
+     */
+    type: String, fields: [String: String],
     /**
      * Provider capabilities, populated at runtime from the engine instance.
      * Not written to the settings file.
@@ -2948,6 +2955,157 @@ public func FfiConverterTypeInputSubmitMode_lift(_ buf: RustBuffer) throws -> In
 #endif
 public func FfiConverterTypeInputSubmitMode_lower(_ value: InputSubmitMode) -> RustBuffer {
   return FfiConverterTypeInputSubmitMode.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum ProviderCapability: Equatable, Hashable {
+
+  case dictionary
+  case translation
+
+}
+
+#if compiler(>=6)
+  extension ProviderCapability: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeProviderCapability: FfiConverterRustBuffer {
+  typealias SwiftType = ProviderCapability
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> ProviderCapability
+  {
+    let variant: Int32 = try readInt(&buf)
+    switch variant {
+
+    case 1: return .dictionary
+
+    case 2: return .translation
+
+    default: throw UniffiInternalError.unexpectedEnumCase
+    }
+  }
+
+  public static func write(_ value: ProviderCapability, into buf: inout [UInt8]) {
+    switch value {
+
+    case .dictionary:
+      writeInt(&buf, Int32(1))
+
+    case .translation:
+      writeInt(&buf, Int32(2))
+
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeProviderCapability_lift(_ buf: RustBuffer) throws -> ProviderCapability
+{
+  return try FfiConverterTypeProviderCapability.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeProviderCapability_lower(_ value: ProviderCapability) -> RustBuffer {
+  return FfiConverterTypeProviderCapability.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum ProviderType: Equatable, Hashable {
+
+  case baidu
+  case caiyun
+  case deepL
+  case google
+  case iciba
+  case tencent
+  case youdao
+
+}
+
+#if compiler(>=6)
+  extension ProviderType: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeProviderType: FfiConverterRustBuffer {
+  typealias SwiftType = ProviderType
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ProviderType {
+    let variant: Int32 = try readInt(&buf)
+    switch variant {
+
+    case 1: return .baidu
+
+    case 2: return .caiyun
+
+    case 3: return .deepL
+
+    case 4: return .google
+
+    case 5: return .iciba
+
+    case 6: return .tencent
+
+    case 7: return .youdao
+
+    default: throw UniffiInternalError.unexpectedEnumCase
+    }
+  }
+
+  public static func write(_ value: ProviderType, into buf: inout [UInt8]) {
+    switch value {
+
+    case .baidu:
+      writeInt(&buf, Int32(1))
+
+    case .caiyun:
+      writeInt(&buf, Int32(2))
+
+    case .deepL:
+      writeInt(&buf, Int32(3))
+
+    case .google:
+      writeInt(&buf, Int32(4))
+
+    case .iciba:
+      writeInt(&buf, Int32(5))
+
+    case .tencent:
+      writeInt(&buf, Int32(6))
+
+    case .youdao:
+      writeInt(&buf, Int32(7))
+
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeProviderType_lift(_ buf: RustBuffer) throws -> ProviderType {
+  return try FfiConverterTypeProviderType.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeProviderType_lower(_ value: ProviderType) -> RustBuffer {
+  return FfiConverterTypeProviderType.lower(value)
 }
 
 /// Error type returned by all uniffi-exported Runtime methods.

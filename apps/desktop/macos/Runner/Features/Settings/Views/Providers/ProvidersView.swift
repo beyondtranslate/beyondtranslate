@@ -1,4 +1,5 @@
 import SwiftUI
+import beyondtranslate_runtime
 
 struct ProvidersView: View {
   @ObservedObject var viewModel: ProvidersViewModel
@@ -210,7 +211,7 @@ struct ProviderTypeIcon: View {
   let providerType: ProviderType
 
   private var flutterAssetImage: NSImage? {
-    let iconFileName = "\(providerType.rawValue).png"
+    let iconFileName = "\(providerType.wireValue).png"
     let flutterAssetsURL = Bundle.main.bundleURL
       .appendingPathComponent("Contents/Frameworks/App.framework/Resources/flutter_assets")
       .appendingPathComponent("resources/images/translation_engine_icons")

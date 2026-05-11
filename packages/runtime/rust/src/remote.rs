@@ -22,6 +22,26 @@
 //! otherwise the generated bindings will silently corrupt the wire format.
 
 use beyondtranslate_core as core;
+use beyondtranslate_engine as engine;
+
+type ProviderCapability = core::ProviderCapability;
+#[uniffi::remote(Enum)]
+pub enum ProviderCapability {
+    Dictionary,
+    Translation,
+}
+
+type ProviderType = engine::ProviderType;
+#[uniffi::remote(Enum)]
+pub enum ProviderType {
+    Baidu,
+    Caiyun,
+    DeepL,
+    Google,
+    Iciba,
+    Tencent,
+    Youdao,
+}
 
 type DetectLanguageRequest = core::DetectLanguageRequest;
 #[uniffi::remote(Record)]

@@ -1,7 +1,0 @@
-module beyondtranslate_runtimeFFI {
-    header "beyondtranslate_runtimeFFI.h"
-    export *
-    use "Darwin"
-    use "_Builtin_stdbool"
-    use "_Builtin_stdint"
-}

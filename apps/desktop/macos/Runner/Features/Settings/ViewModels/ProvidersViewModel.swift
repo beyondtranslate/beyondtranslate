@@ -53,7 +53,7 @@ final class ProvidersViewModel: ObservableObject {
       do {
         _ = try await repository.updateProvider(
           id: draft.backendID,
-          providerType: draft.providerType.rawValue,
+          providerType: draft.providerType.wireValue,
           fields: draft.fields
         )
         await load()

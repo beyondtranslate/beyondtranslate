@@ -146,12 +146,12 @@ extension ProviderItem {
   init(id: UUID = UUID(), from entry: ProviderConfigEntry, isEnabled: Bool = true) {
     self.id = id
     self.backendID = entry.id
-    self.providerType = ProviderType(rawValue: entry.type) ?? .deepL
+    self.providerType = ProviderType.fromWire(entry.type) ?? .deepL
     self.name = entry.id
     self.description = entry.type
     self.endpoint = entry.fields["baseUrl"] ?? ""
     self.apiKeyHeader = ""
-    self.capabilities = entry.capabilities.compactMap { ProviderCapability(rawValue: $0) }
+    self.capabilities = entry.capabilities.compactMap { ProviderCapability.fromWire($0) }
     self.isEnabled = isEnabled
     self.fields = entry.fields
   }
