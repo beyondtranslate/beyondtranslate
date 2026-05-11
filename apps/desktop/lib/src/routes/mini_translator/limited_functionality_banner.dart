@@ -23,46 +23,49 @@ class LimitedFunctionalityBanner extends StatelessWidget {
   bool get _isAllowedAllAccess =>
       isAllowedScreenCaptureAccess && isAllowedScreenSelectionAccess;
 
+  String _titleText() {
+    final title = t.mini_translator.limited_banner.title;
+    if (!isAllowedScreenCaptureAccess && !isAllowedScreenSelectionAccess) {
+      return title.all;
+    }
+    if (!isAllowedScreenCaptureAccess) {
+      return title.screen_capture;
+    }
+    return title.screen_selection;
+  }
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
     if (_isAllowedAllAccess) return Container();
 
+    final baseStyle = textTheme.bodyMedium!.copyWith(
+      color: Colors.white,
+      fontSize: 13,
+      height: 1.45,
+    );
+    const linkStyle = TextStyle(
+      color: Colors.white,
+      decoration: TextDecoration.underline,
+      decorationColor: Colors.white,
+      fontWeight: FontWeight.w500,
+    );
+
     return Container(
       color: Colors.orange,
       width: double.infinity,
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.only(
-          left: 0,
-          right: 0,
-        ),
-        padding: const EdgeInsets.only(
-          top: 12,
-          bottom: 12,
-          left: 18,
-          right: 18,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      child: Text.rich(
+        TextSpan(
           children: [
-            Text.rich(
-              TextSpan(
-                text: t.mini_translator.limited_banner.title,
-              ),
-              style: textTheme.bodyMedium!.copyWith(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Row(
-              children: [
-                SizedBox(
-                  width: 18,
-                  height: 18,
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: SizedBox(
+                  width: 16,
+                  height: 16,
                   child: Tooltip(
                     message: t.mini_translator.limited_banner.tooltip.help,
                     child: Button(
@@ -78,60 +81,33 @@ class LimitedFunctionalityBanner extends StatelessWidget {
                       child: const Icon(
                         FluentIcons.question_circle_20_regular,
                         color: Colors.white,
-                        size: 18,
+                        size: 16,
                       ),
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
-                if (kIsMacOS) ...[
-                  Text.rich(
-                    TextSpan(
-                      text: t.mini_translator.limited_banner.button.go_settings,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        height: 1.3,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.white,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = MacSettings.showAndHighlightPermissions,
-                    ),
-                    style: textTheme.bodyMedium!.copyWith(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(width: 18),
-                ],
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text:
-                            t.mini_translator.limited_banner.button.check_again,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          height: 1.3,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.white,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = onTappedRecheckIsAllowedAllAccess,
-                      ),
-                    ],
-                  ),
-                  style: textTheme.bodyMedium!.copyWith(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            )
+              ),
+            ),
+            TextSpan(text: _titleText()),
+            const TextSpan(text: '  '),
+            if (kIsMacOS) ...[
+              TextSpan(
+                text: t.mini_translator.limited_banner.button.go_settings,
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = MacSettings.showAndHighlightPermissions,
+              ),
+              const TextSpan(text: '  '),
+            ],
+            TextSpan(
+              text: t.mini_translator.limited_banner.button.check_again,
+              style: linkStyle,
+              recognizer: TapGestureRecognizer()
+                ..onTap = onTappedRecheckIsAllowedAllAccess,
+            ),
           ],
         ),
+        style: baseStyle,
       ),
     );
   }

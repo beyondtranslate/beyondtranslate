@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
+    show SettingsChange, SettingsSubscription;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:launch_at_startup/launch_at_startup.dart';
@@ -21,6 +25,14 @@ class SettingsStore extends ChangeNotifier {
   SettingsStore._();
 
   static final SettingsStore instance = SettingsStore._();
+
+  /// Active subscription to runtime [SettingsChange] events. Started by
+  /// [init] and stopped by [dispose]; while alive, every change made
+  /// through any [Runtime] handle (Dart or Swift) triggers a reload of
+  /// the affected section so this store always reflects the latest
+  /// persisted state.
+  SettingsSubscription? _subscription;
+  bool _disposed = false;
 
   GeneralSettings _general = GeneralSettings(
     launchAtLogin: false,
@@ -79,6 +91,49 @@ class SettingsStore extends ChangeNotifier {
       reloadShortcuts(),
       reloadProviders(),
     ]);
+    _startListeningForChanges();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    _subscription = null;
+    super.dispose();
+  }
+
+  /// Subscribes to runtime change events. Idempotent.
+  void _startListeningForChanges() {
+    if (_subscription != null) return;
+    final subscription = runtime_service.runtime.settings().subscribe();
+    _subscription = subscription;
+    unawaited(_consumeChanges(subscription));
+  }
+
+  Future<void> _consumeChanges(SettingsSubscription subscription) async {
+    while (!_disposed && identical(_subscription, subscription)) {
+      SettingsChange? change;
+      try {
+        change = await subscription.next();
+      } catch (error, stackTrace) {
+        debugPrint('SettingsStore subscription error: $error\n$stackTrace');
+        break;
+      }
+      if (change == null) break;
+      switch (change) {
+        case SettingsChange.general:
+          await reloadGeneral();
+        case SettingsChange.appearance:
+          await reloadAppearance();
+        case SettingsChange.shortcuts:
+          await reloadShortcuts();
+        case SettingsChange.providers:
+          await reloadProviders();
+        case SettingsChange.advanced:
+          // No advanced cache to refresh yet; emit a notification so
+          // anything listening directly on the store still wakes up.
+          notifyListeners();
+      }
+    }
   }
 
   Future<void> reloadGeneral() async {

@@ -700,7 +700,8 @@ class _TranslationsMiniTranslatorLimitedBannerZh
 
   // Translations
   @override
-  String get title => '功能受限，请根据提示进行检查。';
+  late final _TranslationsMiniTranslatorLimitedBannerTitleZh title =
+      _TranslationsMiniTranslatorLimitedBannerTitleZh._(_root);
   @override
   late final _TranslationsMiniTranslatorLimitedBannerButtonZh button =
       _TranslationsMiniTranslatorLimitedBannerButtonZh._(_root);
@@ -959,6 +960,24 @@ class _TranslationsMiniTranslatorUpdateBannerButtonZh
   String get update => '立即更新';
 }
 
+// Path: mini_translator.limited_banner.title
+class _TranslationsMiniTranslatorLimitedBannerTitleZh
+    extends TranslationsMiniTranslatorLimitedBannerTitleEn {
+  _TranslationsMiniTranslatorLimitedBannerTitleZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get all => '请授予屏幕录制和辅助功能权限以启用完整功能。';
+  @override
+  String get screen_capture => '请授予屏幕录制权限以启用完整功能。';
+  @override
+  String get screen_selection => '请授予辅助功能权限以启用完整功能。';
+}
+
 // Path: mini_translator.limited_banner.button
 class _TranslationsMiniTranslatorLimitedBannerButtonZh
     extends TranslationsMiniTranslatorLimitedBannerButtonEn {
@@ -970,7 +989,7 @@ class _TranslationsMiniTranslatorLimitedBannerButtonZh
 
   // Translations
   @override
-  String get go_settings => '前往设置';
+  String get go_settings => '打开设置';
   @override
   String get check_again => '重新检查';
 }
@@ -1618,8 +1637,12 @@ extension on TranslationsZh {
       'tray.context_menu.quit_app' => '退出比译',
       'mini_translator.update_banner.found_new_version' => '发现新版本：{}',
       'mini_translator.update_banner.button.update' => '立即更新',
-      'mini_translator.limited_banner.title' => '功能受限，请根据提示进行检查。',
-      'mini_translator.limited_banner.button.go_settings' => '前往设置',
+      'mini_translator.limited_banner.title.all' => '请授予屏幕录制和辅助功能权限以启用完整功能。',
+      'mini_translator.limited_banner.title.screen_capture' =>
+        '请授予屏幕录制权限以启用完整功能。',
+      'mini_translator.limited_banner.title.screen_selection' =>
+        '请授予辅助功能权限以启用完整功能。',
+      'mini_translator.limited_banner.button.go_settings' => '打开设置',
       'mini_translator.limited_banner.button.check_again' => '重新检查',
       'mini_translator.limited_banner.tooltip.help' => '查看帮助文档',
       'mini_translator.limited_banner.message.allow_access_tip' =>

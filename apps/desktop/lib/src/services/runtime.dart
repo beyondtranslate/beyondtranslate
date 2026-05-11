@@ -36,7 +36,12 @@ export 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
 /// strings produced by the Rust engine (e.g. "dictionary", "translation").
 export 'provider_capability.dart' show ProviderCapability;
 
-/// Singleton [Runtime] instance, backed by the Rust native library.
+/// Singleton [Runtime] handle, backed by the Rust native library.
+///
+/// The Rust side keeps a single shared instance per `data_dir`, so this
+/// handle references the **same** in-memory state as the [Runtime] used
+/// by the native macOS Settings UI (Swift). Writes from either side are
+/// immediately visible to the other on the next read.
 ///
 /// Call [initRuntime] during app startup (before [settingsStore.init]) to
 /// populate this variable.

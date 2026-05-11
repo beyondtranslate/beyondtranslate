@@ -193,10 +193,14 @@
       }
     },
     "limited_banner": {
-      "title": "Functionality is limited, please follow the tips to check.",
+      "title": {
+        "all": "Grant screen recording and accessibility access to enable full functionality.",
+        "screen_capture": "Grant screen recording access to enable full functionality.",
+        "screen_selection": "Grant accessibility access to enable full functionality."
+      },
       "button": {
-        "go_settings": "Go Settings",
-        "check_again": "Check Again"
+        "go_settings": "Open Settings",
+        "check_again": "Recheck"
       },
       "tooltip": {
         "help": "View the help document"

@@ -185,7 +185,12 @@ enum LocaleKeys {
         static let allowAccessTip = LocaleKey(
           "mini_translator.limited_banner.message.allow_access_tip")
       }
-      static let title = LocaleKey("mini_translator.limited_banner.title")
+      enum title {
+        static let all = LocaleKey("mini_translator.limited_banner.title.all")
+        static let screenCapture = LocaleKey("mini_translator.limited_banner.title.screen_capture")
+        static let screenSelection = LocaleKey(
+          "mini_translator.limited_banner.title.screen_selection")
+      }
       enum tooltip {
         static let help = LocaleKey("mini_translator.limited_banner.tooltip.help")
       }

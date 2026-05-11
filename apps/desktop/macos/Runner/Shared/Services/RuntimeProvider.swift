@@ -3,10 +3,10 @@ import beyondtranslate_runtime
 
 /// Process-wide accessor for the Rust [Runtime] used by native (Swift) code.
 ///
-/// Note: The Flutter side maintains its own [Runtime] instance pointing at
-/// the same on-disk `settings.json`. Settings written through this provider
-/// are persisted, but changes will only be reflected in the Flutter cache
-/// after the next reload on the Flutter side.
+/// The Rust runtime maintains a single shared instance per `data_dir`, so
+/// the [Runtime] returned here references the **same** in-memory settings
+/// and engine state as the [Runtime] held on the Flutter side. Updates from
+/// either binding are immediately visible to the other on the next read.
 enum RuntimeProvider {
   static let shared: Runtime = {
     do {

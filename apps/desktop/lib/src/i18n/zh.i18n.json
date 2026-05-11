@@ -193,9 +193,13 @@
       }
     },
     "limited_banner": {
-      "title": "功能受限，请根据提示进行检查。",
+      "title": {
+        "all": "请授予屏幕录制和辅助功能权限以启用完整功能。",
+        "screen_capture": "请授予屏幕录制权限以启用完整功能。",
+        "screen_selection": "请授予辅助功能权限以启用完整功能。"
+      },
       "button": {
-        "go_settings": "前往设置",
+        "go_settings": "打开设置",
         "check_again": "重新检查"
       },
       "tooltip": {

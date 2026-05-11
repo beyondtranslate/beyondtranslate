@@ -768,11 +768,8 @@ class TranslationsMiniTranslatorLimitedBannerEn {
   final Translations _root; // ignore: unused_field
 
   // Translations
-
-  /// en: 'Functionality is limited, please follow the tips to check.'
-  String get title =>
-      'Functionality is limited, please follow the tips to check.';
-
+  late final TranslationsMiniTranslatorLimitedBannerTitleEn title =
+      TranslationsMiniTranslatorLimitedBannerTitleEn.internal(_root);
   late final TranslationsMiniTranslatorLimitedBannerButtonEn button =
       TranslationsMiniTranslatorLimitedBannerButtonEn.internal(_root);
   late final TranslationsMiniTranslatorLimitedBannerTooltipEn tooltip =
@@ -999,6 +996,27 @@ class TranslationsMiniTranslatorUpdateBannerButtonEn {
   String get update => 'Update';
 }
 
+// Path: mini_translator.limited_banner.title
+class TranslationsMiniTranslatorLimitedBannerTitleEn {
+  TranslationsMiniTranslatorLimitedBannerTitleEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Grant screen recording and accessibility access to enable full functionality.'
+  String get all =>
+      'Grant screen recording and accessibility access to enable full functionality.';
+
+  /// en: 'Grant screen recording access to enable full functionality.'
+  String get screen_capture =>
+      'Grant screen recording access to enable full functionality.';
+
+  /// en: 'Grant accessibility access to enable full functionality.'
+  String get screen_selection =>
+      'Grant accessibility access to enable full functionality.';
+}
+
 // Path: mini_translator.limited_banner.button
 class TranslationsMiniTranslatorLimitedBannerButtonEn {
   TranslationsMiniTranslatorLimitedBannerButtonEn.internal(this._root);
@@ -1007,11 +1025,11 @@ class TranslationsMiniTranslatorLimitedBannerButtonEn {
 
   // Translations
 
-  /// en: 'Go Settings'
-  String get go_settings => 'Go Settings';
+  /// en: 'Open Settings'
+  String get go_settings => 'Open Settings';
 
-  /// en: 'Check Again'
-  String get check_again => 'Check Again';
+  /// en: 'Recheck'
+  String get check_again => 'Recheck';
 }
 
 // Path: mini_translator.limited_banner.tooltip
@@ -1651,10 +1669,14 @@ extension on Translations {
       'mini_translator.update_banner.found_new_version' =>
         'New version found: {}',
       'mini_translator.update_banner.button.update' => 'Update',
-      'mini_translator.limited_banner.title' =>
-        'Functionality is limited, please follow the tips to check.',
-      'mini_translator.limited_banner.button.go_settings' => 'Go Settings',
-      'mini_translator.limited_banner.button.check_again' => 'Check Again',
+      'mini_translator.limited_banner.title.all' =>
+        'Grant screen recording and accessibility access to enable full functionality.',
+      'mini_translator.limited_banner.title.screen_capture' =>
+        'Grant screen recording access to enable full functionality.',
+      'mini_translator.limited_banner.title.screen_selection' =>
+        'Grant accessibility access to enable full functionality.',
+      'mini_translator.limited_banner.button.go_settings' => 'Open Settings',
+      'mini_translator.limited_banner.button.check_again' => 'Recheck',
       'mini_translator.limited_banner.tooltip.help' => 'View the help document',
       'mini_translator.limited_banner.message.allow_access_tip' =>
         'If there is no response after clicking "Grant", please click "Go Settings" to set it manually.',

@@ -1,4 +1,5 @@
 import SwiftUI
+import beyondtranslate_runtime
 
 @MainActor
 final class SettingsHighlightCoordinator: ObservableObject {
@@ -23,6 +24,12 @@ final class SettingsViewModel: ObservableObject {
 
   private let repository: SettingsRepository
 
+  /// Long-running task that consumes [`SettingsChange`] events from the
+  /// shared Rust runtime so changes initiated by the Flutter side (or any
+  /// other [`RuntimeSettings`] handle in this process) automatically
+  /// refresh the relevant sub-view-model.
+  private var changeListenerTask: Task<Void, Never>?
+
   init(repository: SettingsRepository? = nil) {
     let repository = repository ?? DefaultSettingsRepository()
     self.repository = repository
@@ -38,6 +45,50 @@ final class SettingsViewModel: ObservableObject {
       await appearance.load()
       await shortcuts.load()
       await providers.load()
+      await advanced.load()
+    }
+
+    startListeningForChanges()
+  }
+
+  deinit {
+    changeListenerTask?.cancel()
+  }
+
+  /// Subscribes to runtime [`SettingsChange`] events and reloads the
+  /// affected sub-view-model on the main actor. Idempotent.
+  private func startListeningForChanges() {
+    guard changeListenerTask == nil else { return }
+    let subscription = RuntimeProvider.shared.settings().subscribe()
+    changeListenerTask = Task { [weak self] in
+      while !Task.isCancelled {
+        let change: SettingsChange?
+        do {
+          change = try await subscription.next()
+        } catch {
+          break
+        }
+        guard let change else { break }
+        guard let self else { break }
+        await self.handle(change: change)
+      }
+    }
+  }
+
+  private func handle(change: SettingsChange) async {
+    switch change {
+    case .general:
+      await general.load()
+    case .appearance:
+      await appearance.load()
+    case .shortcuts:
+      await shortcuts.load()
+    case .providers:
+      await providers.load()
+      // Translation/dictionary service pickers in General also depend on
+      // the provider list, so refresh it as well.
+      await general.load()
+    case .advanced:
       await advanced.load()
     }
   }

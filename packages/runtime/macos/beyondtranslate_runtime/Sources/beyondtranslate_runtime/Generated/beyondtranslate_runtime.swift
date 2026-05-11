@@ -772,6 +772,14 @@ public protocol RuntimeSettingsProtocol: AnyObject, Sendable {
 
   func listProviders() async throws -> [ProviderConfigEntry]
 
+  /**
+   * Returns a fresh subscription that starts receiving
+   * [`SettingsChange`] events emitted **after** this call. Existing
+   * state should be loaded eagerly via the corresponding `get_*`
+   * methods; subscriptions are intentionally not replayed.
+   */
+  func subscribe() -> SettingsSubscription
+
   func updateAdvanced(patch: AdvancedSettingsPatch) async throws -> AdvancedSettings
 
   func updateAppearance(patch: AppearanceSettingsPatch) async throws -> AppearanceSettings
@@ -970,6 +978,21 @@ open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
         liftFunc: FfiConverterSequenceTypeProviderConfigEntry.lift,
         errorHandler: FfiConverterTypeRuntimeError_lift
       )
+  }
+
+  /**
+   * Returns a fresh subscription that starts receiving
+   * [`SettingsChange`] events emitted **after** this call. Existing
+   * state should be loaded eagerly via the corresponding `get_*`
+   * methods; subscriptions are intentionally not replayed.
+   */
+  open func subscribe() -> SettingsSubscription {
+    return try! FfiConverterTypeSettingsSubscription_lift(
+      try! rustCall {
+        uniffi_beyondtranslate_runtime_fn_method_runtimesettings_subscribe(
+          self.uniffiCloneHandle(), $0
+        )
+      })
   }
 
   open func updateAdvanced(patch: AdvancedSettingsPatch) async throws -> AdvancedSettings {
@@ -1218,6 +1241,159 @@ public func FfiConverterTypeRuntimeTranslation_lift(_ handle: UInt64) throws -> 
 #endif
 public func FfiConverterTypeRuntimeTranslation_lower(_ value: RuntimeTranslation) -> UInt64 {
   return FfiConverterTypeRuntimeTranslation.lower(value)
+}
+
+/// Foreign-language handle for observing [`SettingsChange`] events.
+///
+/// Obtain one via [`RuntimeSettings::subscribe`] and call
+/// [`SettingsSubscription::next`] in a loop:
+///
+/// * `Some(change)` — a section was modified; reload it if you care.
+/// * `None` — the runtime has been torn down and no further events
+/// will arrive (terminate the loop).
+///
+/// Each subscription has its own independent cursor in the broadcast
+/// channel; multiple subscribers can coexist and all see the same events.
+public protocol SettingsSubscriptionProtocol: AnyObject, Sendable {
+
+  /**
+   * Awaits the next [`SettingsChange`] event. Returns `None` when the
+   * owning [`Runtime`] has been dropped (no further events will arrive).
+   * If this subscription falls behind, missed events are silently
+   * skipped and the next available event is returned.
+   */
+  func next() async throws -> SettingsChange?
+
+}
+/// Foreign-language handle for observing [`SettingsChange`] events.
+///
+/// Obtain one via [`RuntimeSettings::subscribe`] and call
+/// [`SettingsSubscription::next`] in a loop:
+///
+/// * `Some(change)` — a section was modified; reload it if you care.
+/// * `None` — the runtime has been torn down and no further events
+/// will arrive (terminate the loop).
+///
+/// Each subscription has its own independent cursor in the broadcast
+/// channel; multiple subscribers can coexist and all see the same events.
+open class SettingsSubscription: SettingsSubscriptionProtocol, @unchecked Sendable {
+  fileprivate let handle: UInt64
+
+  /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public struct NoHandle {
+    public init() {}
+  }
+
+  // TODO: We'd like this to be `private` but for Swifty reasons,
+  // we can't implement `FfiConverter` without making this `required` and we can't
+  // make it `required` without making it `public`.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  required public init(unsafeFromHandle handle: UInt64) {
+    self.handle = handle
+  }
+
+  // This constructor can be used to instantiate a fake object.
+  // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+  //
+  // - Warning:
+  //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public init(noHandle: NoHandle) {
+    self.handle = 0
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public func uniffiCloneHandle() -> UInt64 {
+    return try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_clone_settingssubscription(self.handle, $0)
+    }
+  }
+  // No primary constructor declared for this class.
+
+  deinit {
+    if handle == 0 {
+      // Mock objects have handle=0 don't try to free them
+      return
+    }
+
+    try! rustCall { uniffi_beyondtranslate_runtime_fn_free_settingssubscription(handle, $0) }
+  }
+
+  /**
+   * Awaits the next [`SettingsChange`] event. Returns `None` when the
+   * owning [`Runtime`] has been dropped (no further events will arrive).
+   * If this subscription falls behind, missed events are silently
+   * skipped and the next available event is returned.
+   */
+  open func next() async throws -> SettingsChange? {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_settingssubscription_next(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterOptionTypeSettingsChange.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSettingsSubscription: FfiConverter {
+  typealias FfiType = UInt64
+  typealias SwiftType = SettingsSubscription
+
+  public static func lift(_ handle: UInt64) throws -> SettingsSubscription {
+    return SettingsSubscription(unsafeFromHandle: handle)
+  }
+
+  public static func lower(_ value: SettingsSubscription) -> UInt64 {
+    return value.uniffiCloneHandle()
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> SettingsSubscription
+  {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  public static func write(_ value: SettingsSubscription, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSettingsSubscription_lift(_ handle: UInt64) throws
+  -> SettingsSubscription
+{
+  return try FfiConverterTypeSettingsSubscription.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSettingsSubscription_lower(_ value: SettingsSubscription) -> UInt64 {
+  return FfiConverterTypeSettingsSubscription.lower(value)
 }
 
 public struct AdvancedSettings: Equatable, Hashable {
@@ -2837,6 +3013,93 @@ public func FfiConverterTypeRuntimeError_lower(_ value: RuntimeError) -> RustBuf
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
+ * Identifies which top-level settings section was just modified.
+ *
+ * Emitted by [`SettingsSubscription::next`] every time settings are
+ * successfully written through any [`RuntimeSettings`] handle. Consumers
+ * (Dart `SettingsStore`, Swift `SettingsViewModel`, etc.) receive these
+ * events regardless of which language binding initiated the change, and
+ * typically respond by re-fetching the affected section.
+ */
+
+public enum SettingsChange: Equatable, Hashable {
+
+  case general
+  case appearance
+  case shortcuts
+  case advanced
+  case providers
+
+}
+
+#if compiler(>=6)
+  extension SettingsChange: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSettingsChange: FfiConverterRustBuffer {
+  typealias SwiftType = SettingsChange
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SettingsChange
+  {
+    let variant: Int32 = try readInt(&buf)
+    switch variant {
+
+    case 1: return .general
+
+    case 2: return .appearance
+
+    case 3: return .shortcuts
+
+    case 4: return .advanced
+
+    case 5: return .providers
+
+    default: throw UniffiInternalError.unexpectedEnumCase
+    }
+  }
+
+  public static func write(_ value: SettingsChange, into buf: inout [UInt8]) {
+    switch value {
+
+    case .general:
+      writeInt(&buf, Int32(1))
+
+    case .appearance:
+      writeInt(&buf, Int32(2))
+
+    case .shortcuts:
+      writeInt(&buf, Int32(3))
+
+    case .advanced:
+      writeInt(&buf, Int32(4))
+
+    case .providers:
+      writeInt(&buf, Int32(5))
+
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSettingsChange_lift(_ buf: RustBuffer) throws -> SettingsChange {
+  return try FfiConverterTypeSettingsChange.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSettingsChange_lower(_ value: SettingsChange) -> RustBuffer {
+  return FfiConverterTypeSettingsChange.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
 public enum TranslationMode: Equatable, Hashable {
 
@@ -2987,6 +3250,30 @@ private struct FfiConverterOptionTypeInputSubmitMode: FfiConverterRustBuffer {
     switch try readInt(&buf) as Int8 {
     case 0: return nil
     case 1: return try FfiConverterTypeInputSubmitMode.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionTypeSettingsChange: FfiConverterRustBuffer {
+  typealias SwiftType = SettingsChange?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterTypeSettingsChange.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterTypeSettingsChange.read(from: &buf)
     default: throw UniffiInternalError.unexpectedOptionalTag
     }
   }
@@ -3907,6 +4194,9 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_providers() != 34940 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_subscribe() != 44725 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_advanced() != 46849 {
     return InitializationResult.apiChecksumMismatch
   }
@@ -3923,6 +4213,9 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_translate() != 61207 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_settingssubscription_next() != 20677 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_constructor_runtime_new() != 50884 {
