@@ -1,30 +1,44 @@
 import Cocoa
 import FlutterMacOS
+import SwiftUI
 import beyondtranslate_runtime
 
-@main
 class AppDelegate: FlutterAppDelegate {
+  private var engine: FlutterEngine?
+
+  @MainActor
+  var flutterEngine: FlutterEngine {
+    if let engine {
+      return engine
+    }
+
+    ThemeAppearanceController.applySavedPreference()
+
+    let engine = FlutterEngine(
+      name: "beyondtranslate",
+      project: nil,
+      allowHeadlessExecution: true
+    )
+    engine.run(withEntrypoint: nil)
+    RegisterGeneratedPlugins(registry: engine)
+    MacSettingsPlugin.register(
+      with: engine.registrar(forPlugin: "MacSettingsPlugin")
+    )
+    MacWindowAppearancePlugin.register(
+      with: engine.registrar(forPlugin: "MacWindowAppearancePlugin")
+    )
+    smokeTestBeyondtranslateRuntime()
+    self.engine = engine
+    return engine
+  }
+
   override func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
     return true
   }
 
-  var engine: FlutterEngine?
-
   override func applicationDidFinishLaunching(_ notification: Notification) {
-    ThemeAppearanceController.applySavedPreference()
-
-    engine = FlutterEngine(name: "project", project: nil)
-    engine?.run(withEntrypoint: nil)
-    if let engine {
-      RegisterGeneratedPlugins(registry: engine)
-      MacSettingsPlugin.register(
-        with: engine.registrar(forPlugin: "MacSettingsPlugin")
-      )
-      MacWindowAppearancePlugin.register(
-        with: engine.registrar(forPlugin: "MacWindowAppearancePlugin")
-      )
-      smokeTestBeyondtranslateRuntime()
-    }
+    super.applicationDidFinishLaunching(notification)
+    _ = flutterEngine
   }
 
   private func smokeTestBeyondtranslateRuntime() {
@@ -37,5 +51,18 @@ class AppDelegate: FlutterAppDelegate {
       "[beyondtranslate_runtime] greet(name: \"AppDelegate\") = %@",
       greet(name: "AppDelegate")
     )
+  }
+}
+
+@main
+struct RunnerApp: App {
+  @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+
+  var body: some Scene {
+    let _ = appDelegate.flutterEngine
+
+    Window("Settings", id: "AppSettings") {
+      SettingsView()
+    }
   }
 }
