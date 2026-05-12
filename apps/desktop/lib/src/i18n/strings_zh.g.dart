@@ -700,17 +700,20 @@ class _TranslationsMiniTranslatorLimitedBannerZh
 
   // Translations
   @override
-  late final _TranslationsMiniTranslatorLimitedBannerTitleZh title =
-      _TranslationsMiniTranslatorLimitedBannerTitleZh._(_root);
+  late final _TranslationsMiniTranslatorLimitedBannerPermissionZh permission =
+      _TranslationsMiniTranslatorLimitedBannerPermissionZh._(_root);
   @override
-  late final _TranslationsMiniTranslatorLimitedBannerButtonZh button =
-      _TranslationsMiniTranslatorLimitedBannerButtonZh._(_root);
+  late final _TranslationsMiniTranslatorLimitedBannerInstructionZh instruction =
+      _TranslationsMiniTranslatorLimitedBannerInstructionZh._(_root);
+  @override
+  late final _TranslationsMiniTranslatorLimitedBannerActionZh action =
+      _TranslationsMiniTranslatorLimitedBannerActionZh._(_root);
+  @override
+  late final _TranslationsMiniTranslatorLimitedBannerFeedbackZh feedback =
+      _TranslationsMiniTranslatorLimitedBannerFeedbackZh._(_root);
   @override
   late final _TranslationsMiniTranslatorLimitedBannerTooltipZh tooltip =
       _TranslationsMiniTranslatorLimitedBannerTooltipZh._(_root);
-  @override
-  late final _TranslationsMiniTranslatorLimitedBannerMessageZh message =
-      _TranslationsMiniTranslatorLimitedBannerMessageZh._(_root);
 }
 
 // Path: mini_translator.input
@@ -960,10 +963,10 @@ class _TranslationsMiniTranslatorUpdateBannerButtonZh
   String get update => '立即更新';
 }
 
-// Path: mini_translator.limited_banner.title
-class _TranslationsMiniTranslatorLimitedBannerTitleZh
-    extends TranslationsMiniTranslatorLimitedBannerTitleEn {
-  _TranslationsMiniTranslatorLimitedBannerTitleZh._(TranslationsZh root)
+// Path: mini_translator.limited_banner.permission
+class _TranslationsMiniTranslatorLimitedBannerPermissionZh
+    extends TranslationsMiniTranslatorLimitedBannerPermissionEn {
+  _TranslationsMiniTranslatorLimitedBannerPermissionZh._(TranslationsZh root)
       : this._root = root,
         super.internal(root);
 
@@ -971,17 +974,17 @@ class _TranslationsMiniTranslatorLimitedBannerTitleZh
 
   // Translations
   @override
-  String get all => '请授予屏幕录制和辅助功能权限以启用完整功能。';
+  String get missing_both => '请授予屏幕录制和辅助功能权限以启用完整功能。';
   @override
-  String get screen_capture => '请授予屏幕录制权限以启用完整功能。';
+  String get missing_screen_capture => '请授予屏幕录制权限以启用完整功能。';
   @override
-  String get screen_selection => '请授予辅助功能权限以启用完整功能。';
+  String get missing_accessibility => '请授予辅助功能权限以启用完整功能。';
 }
 
-// Path: mini_translator.limited_banner.button
-class _TranslationsMiniTranslatorLimitedBannerButtonZh
-    extends TranslationsMiniTranslatorLimitedBannerButtonEn {
-  _TranslationsMiniTranslatorLimitedBannerButtonZh._(TranslationsZh root)
+// Path: mini_translator.limited_banner.instruction
+class _TranslationsMiniTranslatorLimitedBannerInstructionZh
+    extends TranslationsMiniTranslatorLimitedBannerInstructionEn {
+  _TranslationsMiniTranslatorLimitedBannerInstructionZh._(TranslationsZh root)
       : this._root = root,
         super.internal(root);
 
@@ -989,9 +992,43 @@ class _TranslationsMiniTranslatorLimitedBannerButtonZh
 
   // Translations
   @override
-  String get go_settings => '打开设置';
+  String get app_settings_prefix => '请前往';
   @override
-  String get check_again => '重新检查';
+  String get follow_guide_prefix => '，按指引授权后点击';
+  @override
+  String get suffix => '。';
+}
+
+// Path: mini_translator.limited_banner.action
+class _TranslationsMiniTranslatorLimitedBannerActionZh
+    extends TranslationsMiniTranslatorLimitedBannerActionEn {
+  _TranslationsMiniTranslatorLimitedBannerActionZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get app_settings => '应用设置';
+  @override
+  String get recheck => '重新检查';
+}
+
+// Path: mini_translator.limited_banner.feedback
+class _TranslationsMiniTranslatorLimitedBannerFeedbackZh
+    extends TranslationsMiniTranslatorLimitedBannerFeedbackEn {
+  _TranslationsMiniTranslatorLimitedBannerFeedbackZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get enabled => '屏幕取词功能已启用';
+  @override
+  String get still_missing => '仍缺少所需权限，\n请检查设置后重试。';
 }
 
 // Path: mini_translator.limited_banner.tooltip
@@ -1006,24 +1043,6 @@ class _TranslationsMiniTranslatorLimitedBannerTooltipZh
   // Translations
   @override
   String get help => '查看帮助文档';
-}
-
-// Path: mini_translator.limited_banner.message
-class _TranslationsMiniTranslatorLimitedBannerMessageZh
-    extends TranslationsMiniTranslatorLimitedBannerMessageEn {
-  _TranslationsMiniTranslatorLimitedBannerMessageZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get allow_access_tip => '点击「授权」后如无任何响应，请点击「前往设置」进行手动设置。';
-  @override
-  String get all_access_allowed => '屏幕取词功能已启用';
-  @override
-  String get all_access_not_allowed => '未获得所需权限，\n请重新检查并进行设置。';
 }
 
 // Path: mini_translator.toolbar.tooltip
@@ -1637,20 +1656,22 @@ extension on TranslationsZh {
       'tray.context_menu.quit_app' => '退出比译',
       'mini_translator.update_banner.found_new_version' => '发现新版本：{}',
       'mini_translator.update_banner.button.update' => '立即更新',
-      'mini_translator.limited_banner.title.all' => '请授予屏幕录制和辅助功能权限以启用完整功能。',
-      'mini_translator.limited_banner.title.screen_capture' =>
+      'mini_translator.limited_banner.permission.missing_both' =>
+        '请授予屏幕录制和辅助功能权限以启用完整功能。',
+      'mini_translator.limited_banner.permission.missing_screen_capture' =>
         '请授予屏幕录制权限以启用完整功能。',
-      'mini_translator.limited_banner.title.screen_selection' =>
+      'mini_translator.limited_banner.permission.missing_accessibility' =>
         '请授予辅助功能权限以启用完整功能。',
-      'mini_translator.limited_banner.button.go_settings' => '打开设置',
-      'mini_translator.limited_banner.button.check_again' => '重新检查',
+      'mini_translator.limited_banner.instruction.app_settings_prefix' => '请前往',
+      'mini_translator.limited_banner.instruction.follow_guide_prefix' =>
+        '，按指引授权后点击',
+      'mini_translator.limited_banner.instruction.suffix' => '。',
+      'mini_translator.limited_banner.action.app_settings' => '应用设置',
+      'mini_translator.limited_banner.action.recheck' => '重新检查',
+      'mini_translator.limited_banner.feedback.enabled' => '屏幕取词功能已启用',
+      'mini_translator.limited_banner.feedback.still_missing' =>
+        '仍缺少所需权限，\n请检查设置后重试。',
       'mini_translator.limited_banner.tooltip.help' => '查看帮助文档',
-      'mini_translator.limited_banner.message.allow_access_tip' =>
-        '点击「授权」后如无任何响应，请点击「前往设置」进行手动设置。',
-      'mini_translator.limited_banner.message.all_access_allowed' =>
-        '屏幕取词功能已启用',
-      'mini_translator.limited_banner.message.all_access_not_allowed' =>
-        '未获得所需权限，\n请重新检查并进行设置。',
       'mini_translator.input.hint' => '在此处输入单词或文本',
       'mini_translator.input.extracting_text' => '正在提取文字...',
       'mini_translator.toolbar.tooltip.translation_mode' => '当前翻译模式：{}',

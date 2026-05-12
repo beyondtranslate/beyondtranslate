@@ -634,14 +634,13 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
                 if (_isAllowedScreenCaptureAccess &&
                     _isAllowedScreenSelectionAccess) {
                   BotToast.showText(
-                    text: t.mini_translator.limited_banner.message
-                        .all_access_allowed,
+                    text: t.mini_translator.limited_banner.feedback.enabled,
                     align: Alignment.center,
                   );
                 } else {
                   BotToast.showText(
-                    text: t.mini_translator.limited_banner.message
-                        .all_access_not_allowed,
+                    text:
+                        t.mini_translator.limited_banner.feedback.still_missing,
                     align: Alignment.center,
                   );
                 }

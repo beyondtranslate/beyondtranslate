@@ -768,14 +768,16 @@ class TranslationsMiniTranslatorLimitedBannerEn {
   final Translations _root; // ignore: unused_field
 
   // Translations
-  late final TranslationsMiniTranslatorLimitedBannerTitleEn title =
-      TranslationsMiniTranslatorLimitedBannerTitleEn.internal(_root);
-  late final TranslationsMiniTranslatorLimitedBannerButtonEn button =
-      TranslationsMiniTranslatorLimitedBannerButtonEn.internal(_root);
+  late final TranslationsMiniTranslatorLimitedBannerPermissionEn permission =
+      TranslationsMiniTranslatorLimitedBannerPermissionEn.internal(_root);
+  late final TranslationsMiniTranslatorLimitedBannerInstructionEn instruction =
+      TranslationsMiniTranslatorLimitedBannerInstructionEn.internal(_root);
+  late final TranslationsMiniTranslatorLimitedBannerActionEn action =
+      TranslationsMiniTranslatorLimitedBannerActionEn.internal(_root);
+  late final TranslationsMiniTranslatorLimitedBannerFeedbackEn feedback =
+      TranslationsMiniTranslatorLimitedBannerFeedbackEn.internal(_root);
   late final TranslationsMiniTranslatorLimitedBannerTooltipEn tooltip =
       TranslationsMiniTranslatorLimitedBannerTooltipEn.internal(_root);
-  late final TranslationsMiniTranslatorLimitedBannerMessageEn message =
-      TranslationsMiniTranslatorLimitedBannerMessageEn.internal(_root);
 }
 
 // Path: mini_translator.input
@@ -996,40 +998,74 @@ class TranslationsMiniTranslatorUpdateBannerButtonEn {
   String get update => 'Update';
 }
 
-// Path: mini_translator.limited_banner.title
-class TranslationsMiniTranslatorLimitedBannerTitleEn {
-  TranslationsMiniTranslatorLimitedBannerTitleEn.internal(this._root);
+// Path: mini_translator.limited_banner.permission
+class TranslationsMiniTranslatorLimitedBannerPermissionEn {
+  TranslationsMiniTranslatorLimitedBannerPermissionEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Grant screen recording and accessibility access to enable full functionality.'
-  String get all =>
-      'Grant screen recording and accessibility access to enable full functionality.';
+  /// en: 'Grant Screen Recording and Accessibility permissions to enable all features.'
+  String get missing_both =>
+      'Grant Screen Recording and Accessibility permissions to enable all features.';
 
-  /// en: 'Grant screen recording access to enable full functionality.'
-  String get screen_capture =>
-      'Grant screen recording access to enable full functionality.';
+  /// en: 'Grant Screen Recording permission to enable all features.'
+  String get missing_screen_capture =>
+      'Grant Screen Recording permission to enable all features.';
 
-  /// en: 'Grant accessibility access to enable full functionality.'
-  String get screen_selection =>
-      'Grant accessibility access to enable full functionality.';
+  /// en: 'Grant Accessibility permission to enable all features.'
+  String get missing_accessibility =>
+      'Grant Accessibility permission to enable all features.';
 }
 
-// Path: mini_translator.limited_banner.button
-class TranslationsMiniTranslatorLimitedBannerButtonEn {
-  TranslationsMiniTranslatorLimitedBannerButtonEn.internal(this._root);
+// Path: mini_translator.limited_banner.instruction
+class TranslationsMiniTranslatorLimitedBannerInstructionEn {
+  TranslationsMiniTranslatorLimitedBannerInstructionEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Open Settings'
-  String get go_settings => 'Open Settings';
+  /// en: 'Go to '
+  String get app_settings_prefix => 'Go to ';
+
+  /// en: ', follow the guide, then click '
+  String get follow_guide_prefix => ', follow the guide, then click ';
+
+  /// en: '.'
+  String get suffix => '.';
+}
+
+// Path: mini_translator.limited_banner.action
+class TranslationsMiniTranslatorLimitedBannerActionEn {
+  TranslationsMiniTranslatorLimitedBannerActionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'App Settings'
+  String get app_settings => 'App Settings';
 
   /// en: 'Recheck'
-  String get check_again => 'Recheck';
+  String get recheck => 'Recheck';
+}
+
+// Path: mini_translator.limited_banner.feedback
+class TranslationsMiniTranslatorLimitedBannerFeedbackEn {
+  TranslationsMiniTranslatorLimitedBannerFeedbackEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Screen text extraction is enabled.'
+  String get enabled => 'Screen text extraction is enabled.';
+
+  /// en: 'Required permissions are still missing. Please check your settings and try again.'
+  String get still_missing =>
+      'Required permissions are still missing.\nPlease check your settings and try again.';
 }
 
 // Path: mini_translator.limited_banner.tooltip
@@ -1040,28 +1076,8 @@ class TranslationsMiniTranslatorLimitedBannerTooltipEn {
 
   // Translations
 
-  /// en: 'View the help document'
-  String get help => 'View the help document';
-}
-
-// Path: mini_translator.limited_banner.message
-class TranslationsMiniTranslatorLimitedBannerMessageEn {
-  TranslationsMiniTranslatorLimitedBannerMessageEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'If there is no response after clicking "Grant", please click "Go Settings" to set it manually.'
-  String get allow_access_tip =>
-      'If there is no response after clicking "Grant", please click "Go Settings" to set it manually.';
-
-  /// en: 'The Screen extract text is enabled'
-  String get all_access_allowed => 'The Screen extract text is enabled';
-
-  /// en: 'The required access are not allowed. Please check and set again.'
-  String get all_access_not_allowed =>
-      'The required access are not allowed.\nPlease check and set again.';
+  /// en: 'View help'
+  String get help => 'View help';
 }
 
 // Path: mini_translator.toolbar.tooltip
@@ -1669,21 +1685,24 @@ extension on Translations {
       'mini_translator.update_banner.found_new_version' =>
         'New version found: {}',
       'mini_translator.update_banner.button.update' => 'Update',
-      'mini_translator.limited_banner.title.all' =>
-        'Grant screen recording and accessibility access to enable full functionality.',
-      'mini_translator.limited_banner.title.screen_capture' =>
-        'Grant screen recording access to enable full functionality.',
-      'mini_translator.limited_banner.title.screen_selection' =>
-        'Grant accessibility access to enable full functionality.',
-      'mini_translator.limited_banner.button.go_settings' => 'Open Settings',
-      'mini_translator.limited_banner.button.check_again' => 'Recheck',
-      'mini_translator.limited_banner.tooltip.help' => 'View the help document',
-      'mini_translator.limited_banner.message.allow_access_tip' =>
-        'If there is no response after clicking "Grant", please click "Go Settings" to set it manually.',
-      'mini_translator.limited_banner.message.all_access_allowed' =>
-        'The Screen extract text is enabled',
-      'mini_translator.limited_banner.message.all_access_not_allowed' =>
-        'The required access are not allowed.\nPlease check and set again.',
+      'mini_translator.limited_banner.permission.missing_both' =>
+        'Grant Screen Recording and Accessibility permissions to enable all features.',
+      'mini_translator.limited_banner.permission.missing_screen_capture' =>
+        'Grant Screen Recording permission to enable all features.',
+      'mini_translator.limited_banner.permission.missing_accessibility' =>
+        'Grant Accessibility permission to enable all features.',
+      'mini_translator.limited_banner.instruction.app_settings_prefix' =>
+        'Go to ',
+      'mini_translator.limited_banner.instruction.follow_guide_prefix' =>
+        ', follow the guide, then click ',
+      'mini_translator.limited_banner.instruction.suffix' => '.',
+      'mini_translator.limited_banner.action.app_settings' => 'App Settings',
+      'mini_translator.limited_banner.action.recheck' => 'Recheck',
+      'mini_translator.limited_banner.feedback.enabled' =>
+        'Screen text extraction is enabled.',
+      'mini_translator.limited_banner.feedback.still_missing' =>
+        'Required permissions are still missing.\nPlease check your settings and try again.',
+      'mini_translator.limited_banner.tooltip.help' => 'View help',
       'mini_translator.input.hint' => 'Enter the word or text here',
       'mini_translator.input.extracting_text' => 'Extracting text...',
       'mini_translator.toolbar.tooltip.translation_mode' =>

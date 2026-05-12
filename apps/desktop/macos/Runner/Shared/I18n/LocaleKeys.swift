@@ -173,23 +173,27 @@ enum LocaleKeys {
       static let hint = LocaleKey("mini_translator.input.hint")
     }
     enum limitedBanner {
-      enum button {
-        static let checkAgain = LocaleKey("mini_translator.limited_banner.button.check_again")
-        static let goSettings = LocaleKey("mini_translator.limited_banner.button.go_settings")
+      enum action {
+        static let appSettings = LocaleKey("mini_translator.limited_banner.action.app_settings")
+        static let recheck = LocaleKey("mini_translator.limited_banner.action.recheck")
       }
-      enum message {
-        static let allAccessAllowed = LocaleKey(
-          "mini_translator.limited_banner.message.all_access_allowed")
-        static let allAccessNotAllowed = LocaleKey(
-          "mini_translator.limited_banner.message.all_access_not_allowed")
-        static let allowAccessTip = LocaleKey(
-          "mini_translator.limited_banner.message.allow_access_tip")
+      enum feedback {
+        static let enabled = LocaleKey("mini_translator.limited_banner.feedback.enabled")
+        static let stillMissing = LocaleKey("mini_translator.limited_banner.feedback.still_missing")
       }
-      enum title {
-        static let all = LocaleKey("mini_translator.limited_banner.title.all")
-        static let screenCapture = LocaleKey("mini_translator.limited_banner.title.screen_capture")
-        static let screenSelection = LocaleKey(
-          "mini_translator.limited_banner.title.screen_selection")
+      enum instruction {
+        static let appSettingsPrefix = LocaleKey(
+          "mini_translator.limited_banner.instruction.app_settings_prefix")
+        static let followGuidePrefix = LocaleKey(
+          "mini_translator.limited_banner.instruction.follow_guide_prefix")
+        static let suffix = LocaleKey("mini_translator.limited_banner.instruction.suffix")
+      }
+      enum permission {
+        static let missingAccessibility = LocaleKey(
+          "mini_translator.limited_banner.permission.missing_accessibility")
+        static let missingBoth = LocaleKey("mini_translator.limited_banner.permission.missing_both")
+        static let missingScreenCapture = LocaleKey(
+          "mini_translator.limited_banner.permission.missing_screen_capture")
       }
       enum tooltip {
         static let help = LocaleKey("mini_translator.limited_banner.tooltip.help")

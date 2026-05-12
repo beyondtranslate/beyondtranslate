@@ -24,14 +24,14 @@ class LimitedFunctionalityBanner extends StatelessWidget {
       isAllowedScreenCaptureAccess && isAllowedScreenSelectionAccess;
 
   String _titleText() {
-    final title = t.mini_translator.limited_banner.title;
+    final permission = t.mini_translator.limited_banner.permission;
     if (!isAllowedScreenCaptureAccess && !isAllowedScreenSelectionAccess) {
-      return title.all;
+      return permission.missing_both;
     }
     if (!isAllowedScreenCaptureAccess) {
-      return title.screen_capture;
+      return permission.missing_screen_capture;
     }
-    return title.screen_selection;
+    return permission.missing_accessibility;
   }
 
   @override
@@ -51,6 +51,8 @@ class LimitedFunctionalityBanner extends StatelessWidget {
       decorationColor: Colors.white,
       fontWeight: FontWeight.w500,
     );
+    final limitedBanner = t.mini_translator.limited_banner;
+    final instruction = limitedBanner.instruction;
 
     return Container(
       color: Colors.orange,
@@ -89,22 +91,24 @@ class LimitedFunctionalityBanner extends StatelessWidget {
               ),
             ),
             TextSpan(text: _titleText()),
-            const TextSpan(text: '  '),
             if (kIsMacOS) ...[
+              const TextSpan(text: ' '),
+              TextSpan(text: instruction.app_settings_prefix),
               TextSpan(
-                text: t.mini_translator.limited_banner.button.go_settings,
+                text: limitedBanner.action.app_settings,
                 style: linkStyle,
                 recognizer: TapGestureRecognizer()
                   ..onTap = MacSettings.showAndHighlightPermissions,
               ),
-              const TextSpan(text: '  '),
+              TextSpan(text: instruction.follow_guide_prefix),
+              TextSpan(
+                text: limitedBanner.action.recheck,
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = onTappedRecheckIsAllowedAllAccess,
+              ),
+              TextSpan(text: instruction.suffix),
             ],
-            TextSpan(
-              text: t.mini_translator.limited_banner.button.check_again,
-              style: linkStyle,
-              recognizer: TapGestureRecognizer()
-                ..onTap = onTappedRecheckIsAllowedAllAccess,
-            ),
           ],
         ),
         style: baseStyle,

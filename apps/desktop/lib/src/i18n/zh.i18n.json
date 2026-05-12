@@ -193,22 +193,26 @@
       }
     },
     "limited_banner": {
-      "title": {
-        "all": "请授予屏幕录制和辅助功能权限以启用完整功能。",
-        "screen_capture": "请授予屏幕录制权限以启用完整功能。",
-        "screen_selection": "请授予辅助功能权限以启用完整功能。"
+      "permission": {
+        "missing_both": "请授予屏幕录制和辅助功能权限以启用完整功能。",
+        "missing_screen_capture": "请授予屏幕录制权限以启用完整功能。",
+        "missing_accessibility": "请授予辅助功能权限以启用完整功能。"
       },
-      "button": {
-        "go_settings": "打开设置",
-        "check_again": "重新检查"
+      "instruction": {
+        "app_settings_prefix": "请前往",
+        "follow_guide_prefix": "，按指引授权后点击",
+        "suffix": "。"
+      },
+      "action": {
+        "app_settings": "应用设置",
+        "recheck": "重新检查"
+      },
+      "feedback": {
+        "enabled": "屏幕取词功能已启用",
+        "still_missing": "仍缺少所需权限，\n请检查设置后重试。"
       },
       "tooltip": {
         "help": "查看帮助文档"
-      },
-      "message": {
-        "allow_access_tip": "点击「授权」后如无任何响应，请点击「前往设置」进行手动设置。",
-        "all_access_allowed": "屏幕取词功能已启用",
-        "all_access_not_allowed": "未获得所需权限，\n请重新检查并进行设置。"
       }
     },
     "input": {

@@ -193,22 +193,26 @@
       }
     },
     "limited_banner": {
-      "title": {
-        "all": "Grant screen recording and accessibility access to enable full functionality.",
-        "screen_capture": "Grant screen recording access to enable full functionality.",
-        "screen_selection": "Grant accessibility access to enable full functionality."
+      "permission": {
+        "missing_both": "Grant Screen Recording and Accessibility permissions to enable all features.",
+        "missing_screen_capture": "Grant Screen Recording permission to enable all features.",
+        "missing_accessibility": "Grant Accessibility permission to enable all features."
       },
-      "button": {
-        "go_settings": "Open Settings",
-        "check_again": "Recheck"
+      "instruction": {
+        "app_settings_prefix": "Go to ",
+        "follow_guide_prefix": ", follow the guide, then click ",
+        "suffix": "."
+      },
+      "action": {
+        "app_settings": "App Settings",
+        "recheck": "Recheck"
+      },
+      "feedback": {
+        "enabled": "Screen text extraction is enabled.",
+        "still_missing": "Required permissions are still missing.\nPlease check your settings and try again."
       },
       "tooltip": {
-        "help": "View the help document"
-      },
-      "message": {
-        "allow_access_tip": "If there is no response after clicking \"Grant\", please click \"Go Settings\" to set it manually.",
-        "all_access_allowed": "The Screen extract text is enabled",
-        "all_access_not_allowed": "The required access are not allowed.\nPlease check and set again."
+        "help": "View help"
       }
     },
     "input": {
