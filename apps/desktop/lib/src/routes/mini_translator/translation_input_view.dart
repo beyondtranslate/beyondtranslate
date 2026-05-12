@@ -1,11 +1,11 @@
 import 'dart:ui';
 
+import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 
 import '../../i18n/i18n.dart';
-import '../../rust/domain/settings.dart';
 import '../../services/settings_store.dart';
 import '../../widgets/ui/button.dart';
 import '../../widgets/ui/loading_indicator.dart';

@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
-import '../../rust/domain/settings.dart';
 import '../../utils/language_util.dart';
 import '../../widgets/language_label/language_label.dart';
 import '../../widgets/ui/button.dart';

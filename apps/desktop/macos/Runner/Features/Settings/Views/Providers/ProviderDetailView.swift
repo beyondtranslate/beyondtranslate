@@ -2,15 +2,14 @@ import SwiftUI
 import beyondtranslate_runtime
 
 struct ProviderDetailView: View {
-  let provider: ProviderItem
+  let provider: ProviderConfigEntry
   @ObservedObject var viewModel: ProvidersViewModel
 
   @Environment(\.dismiss) private var dismiss
 
-  @State private var draft: ProviderDraft?
-  @State private var pendingDismiss = false
+  @State private var draft: ProviderConfigEntry?
 
-  private var currentProvider: ProviderItem {
+  private var currentProvider: ProviderConfigEntry {
     viewModel.providers.first(where: { $0.id == provider.id }) ?? provider
   }
 
@@ -30,7 +29,7 @@ struct ProviderDetailView: View {
           Toggle(
             "",
             isOn: Binding(
-              get: { currentProvider.isEnabled },
+              get: { viewModel.isProviderEnabled(currentProvider.id) },
               set: { viewModel.toggleProvider(currentProvider.id, isEnabled: $0) }
             )
           )
@@ -38,7 +37,7 @@ struct ProviderDetailView: View {
           .labelsHidden()
 
           Button {
-            draft = .edit(item: currentProvider)
+            draft = currentProvider
           } label: {
             Image(systemName: "info.circle")
               .font(.system(size: 18))
@@ -52,35 +51,28 @@ struct ProviderDetailView: View {
 
       // ── Services ────────────────────────────────────────────────
       Section(LocaleKeys.settings.providers.section.services.tr()) {
-        if currentProvider.capabilities.isEmpty {
+        if currentProvider.providerCapabilities.isEmpty {
           Text(LocaleKeys.settings.providers.item.noServices.tr())
             .foregroundStyle(.secondary)
         } else {
-          ForEach(currentProvider.capabilities, id: \.self) { capability in
+          ForEach(currentProvider.providerCapabilities, id: \.self) { capability in
             ProviderServiceRow(capability: capability)
           }
         }
       }
     }
-    .sheet(
-      item: $draft,
-      onDismiss: {
-        if pendingDismiss {
-          pendingDismiss = false
-          dismiss()
-        }
-      }
-    ) { item in
+    .sheet(item: $draft) { item in
       ProviderEditorSheet(
         draft: item,
+        isCreating: false,
         onSave: { updatedDraft in
-          viewModel.saveProvider(updatedDraft)
           draft = nil
+          viewModel.saveProvider(updatedDraft)
         },
         onDelete: { providerID in
-          viewModel.deleteProvider(providerID)
-          pendingDismiss = true
           draft = nil
+          viewModel.deleteProvider(providerID)
+          dismiss()
         },
         onCancel: {
           draft = nil

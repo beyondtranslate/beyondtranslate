@@ -1,4 +1,4 @@
-import '../rust/domain/settings.dart';
+import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'translation_result_record.dart';
 
 class TranslationResult {

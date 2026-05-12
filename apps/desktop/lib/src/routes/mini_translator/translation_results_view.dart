@@ -1,8 +1,8 @@
+import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 import '../../models/translation_result.dart';
-import '../../rust/domain/settings.dart';
 import '../../utils/language_util.dart';
 import '../../widgets/translation_result_record_view/translation_result_record_view.dart';
 import '../../widgets/translation_result_view/translation_result_view.dart';

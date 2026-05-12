@@ -3,7 +3,8 @@ import beyondtranslate_runtime
 
 struct ProvidersView: View {
   @ObservedObject var viewModel: ProvidersViewModel
-  @State private var draft: ProviderDraft?
+  @State private var draft: ProviderConfigEntry?
+  @State private var isCreatingDraft = false
 
   var body: some View {
     NavigationStack {
@@ -21,7 +22,10 @@ struct ProvidersView: View {
             ForEach(viewModel.providers) { provider in
               ProviderRow(
                 provider: provider,
-                onEdit: { draft = .edit(item: provider) },
+                onEdit: {
+                  isCreatingDraft = false
+                  draft = provider
+                },
                 onDelete: { viewModel.deleteProvider(provider.id) }
               )
             }
@@ -30,27 +34,34 @@ struct ProvidersView: View {
           HStack {
             Spacer()
             Button(LocaleKeys.settings.providers.button.add.tr()) {
-              draft = .new()
+              isCreatingDraft = true
+              draft = .newProvider()
             }
           }
         }
       }
-      .navigationDestination(for: UUID.self) { providerID in
+      .navigationDestination(for: String.self) { providerID in
         if let provider = viewModel.providers.first(where: { $0.id == providerID }) {
           ProviderDetailView(provider: provider, viewModel: viewModel)
         }
       }
     }
     .sheet(item: $draft) { item in
-      ProviderEditorSheet(draft: item) { updatedDraft in
-        viewModel.saveProvider(updatedDraft)
-        draft = nil
-      } onDelete: { providerID in
-        viewModel.deleteProvider(providerID)
-        draft = nil
-      } onCancel: {
-        draft = nil
-      }
+      ProviderEditorSheet(
+        draft: item,
+        isCreating: isCreatingDraft,
+        onSave: { updatedDraft in
+          draft = nil
+          viewModel.saveProvider(updatedDraft)
+        },
+        onDelete: { providerID in
+          draft = nil
+          viewModel.deleteProvider(providerID)
+        },
+        onCancel: {
+          draft = nil
+        }
+      )
     }
     .alert(
       LocaleKeys.settings.providers.alert.error.tr(),
@@ -66,6 +77,7 @@ struct ProvidersView: View {
       }
     }
   }
+
 }
 
 // MARK: - Intro Row
@@ -90,7 +102,7 @@ private struct ProviderIntroRow: View {
 // MARK: - Provider Row  (NavigationLink → ProviderDetailView)
 
 private struct ProviderRow: View {
-  let provider: ProviderItem
+  let provider: ProviderConfigEntry
   let onEdit: () -> Void
   let onDelete: () -> Void
 
@@ -118,7 +130,7 @@ private struct ProviderRow: View {
 
         // Capability tags
         HStack(spacing: 4) {
-          ForEach(provider.capabilities, id: \.self) { cap in
+          ForEach(provider.providerCapabilities, id: \.self) { cap in
             ProviderCapabilityTag(capability: cap)
           }
         }
@@ -243,15 +255,15 @@ struct ProviderTypeIcon: View {
 // MARK: - Provider Editor Sheet
 
 struct ProviderEditorSheet: View {
-  @Environment(\.dismiss) private var dismiss
-  @State var draft: ProviderDraft
+  @State var draft: ProviderConfigEntry
 
-  let onSave: (ProviderDraft) -> Void
-  let onDelete: (UUID) -> Void
+  let isCreating: Bool
+  let onSave: (ProviderConfigEntry) -> Void
+  let onDelete: (String) -> Void
   let onCancel: () -> Void
 
   private var canSave: Bool {
-    guard !draft.backendID.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+    guard !draft.id.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
       return false
     }
     return draft.providerType.configFields
@@ -271,24 +283,21 @@ struct ProviderEditorSheet: View {
         }
 
         // Show Provider ID and Type picker only when creating a new provider
-        if draft.localID == nil {
+        if isCreating {
           Section {
             TextField(
-              text: $draft.backendID,
+              text: $draft.id,
               prompt: Text(LocaleKeys.settings.providers.editor.placeholder.id.tr())
             ) {
               Text(LocaleKeys.settings.providers.editor.row.id.tr())
             }
 
             Picker(
-              LocaleKeys.settings.providers.editor.row.type.tr(), selection: $draft.providerType
+              LocaleKeys.settings.providers.editor.row.type.tr(), selection: providerTypeBinding
             ) {
               ForEach(ProviderType.allCases) { type in
                 Text(type.displayName).tag(type)
               }
-            }
-            .onChange(of: draft.providerType) { _ in
-              draft.fields = [:]
             }
           }
         }
@@ -329,10 +338,9 @@ struct ProviderEditorSheet: View {
         .help(LocaleKeys.settings.providers.editor.tooltip.help.tr())
 
         // Destructive delete — bordered pill with red tint
-        if let localID = draft.localID {
+        if !isCreating {
           Button(role: .destructive) {
-            onDelete(localID)
-            dismiss()
+            onDelete(draft.id)
           } label: {
             Text(LocaleKeys.settings.providers.dialog.deleteTitle.tr())
           }
@@ -344,17 +352,15 @@ struct ProviderEditorSheet: View {
 
         Button(LocaleKeys.common.button.cancel.tr()) {
           onCancel()
-          dismiss()
         }
         .keyboardShortcut(.cancelAction)
 
         Button(
-          draft.localID == nil
+          isCreating
             ? LocaleKeys.common.button.add.tr()
             : LocaleKeys.common.button.save.tr()
         ) {
           onSave(draft)
-          dismiss()
         }
         .keyboardShortcut(.defaultAction)
         .disabled(!canSave)
@@ -371,12 +377,22 @@ struct ProviderEditorSheet: View {
       set: { draft.fields[key] = $0 }
     )
   }
+
+  private var providerTypeBinding: Binding<ProviderType> {
+    Binding(
+      get: { draft.providerType },
+      set: {
+        draft.type = $0.wireValue
+        draft.fields = [:]
+      }
+    )
+  }
 }
 
 // MARK: - Editor sub-views
 
 struct ProviderEditorHeader: View {
-  let draft: ProviderDraft
+  let draft: ProviderConfigEntry
 
   var body: some View {
     HStack(spacing: 10) {
@@ -431,11 +447,11 @@ struct ProviderFieldRow: View {
   }
 }
 
-// MARK: - ProviderDraft helpers
+// MARK: - Provider config helpers
 
-extension ProviderDraft {
+extension ProviderConfigEntry {
   fileprivate var displayName: String {
-    let trimmedID = backendID.trimmingCharacters(in: .whitespacesAndNewlines)
+    let trimmedID = id.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmedID.isEmpty else { return providerType.displayName }
     return
       trimmedID

@@ -128,62 +128,26 @@ struct ShortcutDisplay {
   }
 }
 
-struct ProviderItem: Identifiable {
-  let id: UUID
-  var backendID: String
-  var providerType: ProviderType
-  var name: String
-  var endpoint: String
-  var apiKeyHeader: String
-  var description: String
-  var capabilities: [ProviderCapability]
-  var isEnabled: Bool
-  var fields: [String: String]
-}
+extension ProviderConfigEntry: Identifiable {}
 
-extension ProviderItem {
-  /// Creates a `ProviderItem` from a backend `ProviderConfigEntry`.
-  init(id: UUID = UUID(), from entry: ProviderConfigEntry, isEnabled: Bool = true) {
-    self.id = id
-    self.backendID = entry.id
-    self.providerType = ProviderType.fromWire(entry.type) ?? .deepL
-    self.name = entry.id
-    self.description = entry.type
-    self.endpoint = entry.fields["baseUrl"] ?? ""
-    self.apiKeyHeader = ""
-    self.capabilities = entry.capabilities.compactMap { ProviderCapability.fromWire($0) }
-    self.isEnabled = isEnabled
-    self.fields = entry.fields
-  }
-}
-
-struct ProviderDraft: Identifiable {
-  let id = UUID()
-  /// `nil` for a new provider; the local UUID of the item being edited otherwise.
-  let localID: UUID?
-  /// The backend string identifier (e.g., "deepl-main").  Editable only when adding.
-  var backendID: String
-  /// The provider type, selected via a Picker.
-  var providerType: ProviderType
-  /// Type-specific config values keyed by provider field name (wire names, camelCase).
-  var fields: [String: String]
-
-  var title: String {
-    localID == nil
-      ? LocaleKeys.settings.providers.editor.title.add.tr()
-      : LocaleKeys.settings.providers.editor.title.edit.tr()
+extension ProviderConfigEntry {
+  static func newProvider() -> ProviderConfigEntry {
+    ProviderConfigEntry(id: "my-provider", type: ProviderType.deepL.wireValue, fields: [:], capabilities: [])
   }
 
-  static func new() -> ProviderDraft {
-    ProviderDraft(localID: nil, backendID: "my-provider", providerType: .deepL, fields: [:])
+  var providerType: ProviderType {
+    ProviderType.fromWire(type) ?? .deepL
   }
 
-  static func edit(item: ProviderItem) -> ProviderDraft {
-    ProviderDraft(
-      localID: item.id,
-      backendID: item.backendID,
-      providerType: item.providerType,
-      fields: item.fields
-    )
+  var name: String {
+    id
+  }
+
+  var endpoint: String {
+    fields["baseUrl"] ?? ""
+  }
+
+  var providerCapabilities: [ProviderCapability] {
+    capabilities.compactMap { ProviderCapability.fromWire($0) }
   }
 }

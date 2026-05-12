@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
-    show SettingsChange, SettingsSubscription;
+import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:launch_at_startup/launch_at_startup.dart';
 
-import '../rust/domain/settings.dart';
 import '../utils/platform_util.dart';
 import 'runtime.dart' as runtime_service;
 
