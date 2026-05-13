@@ -258,6 +258,7 @@ enum LocaleKeys {
     }
     enum general {
       enum button {
+        static let addProvider = LocaleKey("settings.general.button.add_provider")
         static let addTarget = LocaleKey("settings.general.button.add_target")
         static let grant = LocaleKey("settings.general.button.grant")
       }

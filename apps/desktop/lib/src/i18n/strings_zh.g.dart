@@ -868,7 +868,7 @@ class _TranslationsSettingsProvidersZh extends TranslationsSettingsProvidersEn {
 
   // Translations
   @override
-  String get title => '服务商';
+  String get title => '提供商';
   @override
   late final _TranslationsSettingsProvidersSectionZh section =
       _TranslationsSettingsProvidersSectionZh._(_root);
@@ -1134,6 +1134,8 @@ class _TranslationsSettingsGeneralButtonZh
 
   // Translations
   @override
+  String get add_provider => '添加提供商...';
+  @override
   String get add_target => '添加目标';
   @override
   String get grant => '授权';
@@ -1262,9 +1264,9 @@ class _TranslationsSettingsProvidersItemZh
 
   // Translations
   @override
-  String get empty => '暂无已配置的服务商。添加一个服务商以启用翻译服务。';
+  String get empty => '暂无已配置的提供商。添加一个提供商以启用翻译服务。';
   @override
-  String get loading => '正在加载服务商...';
+  String get loading => '正在加载提供商...';
   @override
   String get no_services => '暂无可用服务。';
 }
@@ -1280,7 +1282,7 @@ class _TranslationsSettingsProvidersButtonZh
 
   // Translations
   @override
-  String get add => '添加服务商...';
+  String get add => '添加提供商...';
 }
 
 // Path: settings.providers.dialog
@@ -1294,7 +1296,7 @@ class _TranslationsSettingsProvidersDialogZh
 
   // Translations
   @override
-  String get delete_title => '删除服务商';
+  String get delete_title => '删除提供商';
   @override
   String get delete_confirm => '删除「{}」？';
   @override
@@ -1326,9 +1328,9 @@ class _TranslationsSettingsProvidersIntroZh
 
   // Translations
   @override
-  String get body => '选择应用使用的翻译和词典服务商。';
+  String get body => '选择应用使用的翻译和词典提供商。';
   @override
-  String get warning => '你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。';
+  String get warning => '你添加的提供商可能会处理你发送的文本，请只连接你信任的服务。';
 }
 
 // Path: settings.providers.editor
@@ -1433,9 +1435,9 @@ class _TranslationsSettingsProvidersEditorTitleZh
 
   // Translations
   @override
-  String get add => '添加服务商';
+  String get add => '添加提供商';
   @override
-  String get edit => '编辑服务商';
+  String get edit => '编辑提供商';
 }
 
 // Path: settings.providers.editor.row
@@ -1449,9 +1451,9 @@ class _TranslationsSettingsProvidersEditorRowZh
 
   // Translations
   @override
-  String get id => '服务商 ID';
+  String get id => '提供商 ID';
   @override
-  String get type => '服务商类型';
+  String get type => '提供商类型';
 }
 
 // Path: settings.providers.editor.placeholder
@@ -1493,7 +1495,7 @@ class _TranslationsSettingsProvidersDetailTooltipZh
 
   // Translations
   @override
-  String get edit => '编辑服务商';
+  String get edit => '编辑提供商';
 }
 
 /// The flat map containing all translations for locale <zh>.
@@ -1703,6 +1705,7 @@ extension on TranslationsZh {
       'settings.general.row.double_click_copy_result' => '双击复制翻译结果',
       'settings.general.row.submit_with_enter' => '用 Enter 提交',
       'settings.general.row.submit_with_meta_enter_mac' => '用 ⌘ + Enter 提交',
+      'settings.general.button.add_provider' => '添加提供商...',
       'settings.general.button.add_target' => '添加目标',
       'settings.general.button.grant' => '授权',
       'settings.general.option.none' => '无',
@@ -1728,25 +1731,25 @@ extension on TranslationsZh {
       'settings.shortcuts.row.translate_input' => '翻译输入内容',
       'settings.advanced.title' => '高级',
       'settings.advanced.empty' => '暂无高级设置。',
-      'settings.providers.title' => '服务商',
+      'settings.providers.title' => '提供商',
       'settings.providers.section.services' => '服务',
-      'settings.providers.item.empty' => '暂无已配置的服务商。添加一个服务商以启用翻译服务。',
-      'settings.providers.item.loading' => '正在加载服务商...',
+      'settings.providers.item.empty' => '暂无已配置的提供商。添加一个提供商以启用翻译服务。',
+      'settings.providers.item.loading' => '正在加载提供商...',
       'settings.providers.item.no_services' => '暂无可用服务。',
-      'settings.providers.button.add' => '添加服务商...',
-      'settings.providers.dialog.delete_title' => '删除服务商',
+      'settings.providers.button.add' => '添加提供商...',
+      'settings.providers.dialog.delete_title' => '删除提供商',
       'settings.providers.dialog.delete_confirm' => '删除「{}」？',
       'settings.providers.dialog.delete_message' => '此操作无法撤销。',
       'settings.providers.alert.error' => '错误',
-      'settings.providers.intro.body' => '选择应用使用的翻译和词典服务商。',
-      'settings.providers.intro.warning' => '你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。',
-      'settings.providers.editor.title.add' => '添加服务商',
-      'settings.providers.editor.title.edit' => '编辑服务商',
-      'settings.providers.editor.row.id' => '服务商 ID',
-      'settings.providers.editor.row.type' => '服务商类型',
+      'settings.providers.intro.body' => '选择应用使用的翻译和词典提供商。',
+      'settings.providers.intro.warning' => '你添加的提供商可能会处理你发送的文本，请只连接你信任的服务。',
+      'settings.providers.editor.title.add' => '添加提供商',
+      'settings.providers.editor.title.edit' => '编辑提供商',
+      'settings.providers.editor.row.id' => '提供商 ID',
+      'settings.providers.editor.row.type' => '提供商类型',
       'settings.providers.editor.placeholder.id' => '例如 deepl-main',
       'settings.providers.editor.tooltip.help' => '帮助',
-      'settings.providers.detail.tooltip.edit' => '编辑服务商',
+      'settings.providers.detail.tooltip.edit' => '编辑提供商',
       'settings.providers.capability.translation' => '翻译',
       'settings.providers.capability.dictionary' => '词典',
       'settings.providers.description.all' => '提供词典查询和文本翻译',

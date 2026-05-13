@@ -4,11 +4,15 @@ import beyondtranslate_runtime
 
 struct GeneralView: View {
   @ObservedObject var viewModel: GeneralViewModel
+  let onAddProvider: () -> Void
   @ObservedObject private var highlightCoordinator = SettingsHighlightCoordinator.shared
   @State private var isPermissionsHighlighted = false
   @State private var lastHandledPermissionsHighlightID = 0
 
   var body: some View {
+    let hasDirectoryServices = !viewModel.dictionaryServiceOptions.isEmpty
+    let hasTranslationServices = !viewModel.translationServiceOptions.isEmpty
+
     SettingsPage(title: LocaleKeys.settings.general.title.tr()) {
       Section {
         SettingToggle(
@@ -73,45 +77,49 @@ struct GeneralView: View {
       }
 
       Section(LocaleKeys.settings.general.section.directory.tr()) {
-        SettingPicker(
-          LocaleKeys.settings.general.row.defaultDirectoryService.tr(),
-          selection: Binding(
-            get: { viewModel.defaultDirectoryService },
-            set: { viewModel.setDefaultDirectoryService($0) }
-          )
-        ) {
-          if viewModel.dictionaryServiceOptions.isEmpty {
-            Text(LocaleKeys.settings.general.option.noServicesAvailable.tr()).tag("")
-          } else {
+        if hasDirectoryServices {
+          SettingPicker(
+            LocaleKeys.settings.general.row.defaultDirectoryService.tr(),
+            selection: Binding(
+              get: { viewModel.validDefaultDirectoryService },
+              set: { viewModel.setDefaultDirectoryService($0) }
+            )
+          ) {
             Text(LocaleKeys.settings.general.option.none.tr()).tag("")
             ForEach(viewModel.dictionaryServiceOptions) { option in
               Text(option.name).tag(option.id)
             }
           }
+          .pickerStyle(.menu)
+        } else {
+          ServiceUnavailableSettingRow(
+            title: LocaleKeys.settings.general.row.defaultDirectoryService.tr(),
+            onAddProvider: onAddProvider
+          )
         }
-        .pickerStyle(.menu)
-        .disabled(viewModel.dictionaryServiceOptions.isEmpty)
       }
 
       Section(LocaleKeys.settings.general.section.translation.tr()) {
-        SettingPicker(
-          LocaleKeys.settings.general.row.defaultTranslationService.tr(),
-          selection: Binding(
-            get: { viewModel.defaultTranslationService },
-            set: { viewModel.setDefaultTranslationService($0) }
-          )
-        ) {
-          if viewModel.translationServiceOptions.isEmpty {
-            Text(LocaleKeys.settings.general.option.noServicesAvailable.tr()).tag("")
-          } else {
+        if hasTranslationServices {
+          SettingPicker(
+            LocaleKeys.settings.general.row.defaultTranslationService.tr(),
+            selection: Binding(
+              get: { viewModel.validDefaultTranslationService },
+              set: { viewModel.setDefaultTranslationService($0) }
+            )
+          ) {
             Text(LocaleKeys.settings.general.option.none.tr()).tag("")
             ForEach(viewModel.translationServiceOptions) { option in
               Text(option.name).tag(option.id)
             }
           }
+          .pickerStyle(.menu)
+        } else {
+          ServiceUnavailableSettingRow(
+            title: LocaleKeys.settings.general.row.defaultTranslationService.tr(),
+            onAddProvider: onAddProvider
+          )
         }
-        .pickerStyle(.menu)
-        .disabled(viewModel.translationServiceOptions.isEmpty)
 
         SettingPicker(
           LocaleKeys.settings.general.row.translationMode.tr(),
@@ -125,14 +133,16 @@ struct GeneralView: View {
           }
         }
         .pickerStyle(.menu)
+        .disabled(!hasTranslationServices)
 
         SettingToggle(
           LocaleKeys.settings.general.row.doubleClickCopyResult.tr(),
           isOn: $viewModel.doubleClickCopyResult
         )
+        .disabled(!hasTranslationServices)
       }
 
-      if viewModel.translationMode == .auto {
+      if hasTranslationServices && viewModel.translationMode == .auto {
         Section(LocaleKeys.settings.general.section.translationTarget.tr()) {
           VStack(alignment: .leading, spacing: 10) {
             ForEach(viewModel.translationTargets) { item in
@@ -198,6 +208,21 @@ struct GeneralView: View {
       withAnimation(.easeInOut(duration: 0.24)) {
         isPermissionsHighlighted = false
       }
+    }
+  }
+}
+
+private struct ServiceUnavailableSettingRow: View {
+  let title: String
+  let onAddProvider: () -> Void
+
+  var body: some View {
+    HStack {
+      Text(title)
+      Spacer()
+      Text(LocaleKeys.settings.general.option.noServicesAvailable.tr())
+        .foregroundStyle(.secondary)
+      Button(LocaleKeys.settings.general.button.addProvider.tr(), action: onAddProvider)
     }
   }
 }

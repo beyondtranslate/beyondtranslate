@@ -132,7 +132,8 @@ extension ProviderConfigEntry: Identifiable {}
 
 extension ProviderConfigEntry {
   static func newProvider() -> ProviderConfigEntry {
-    ProviderConfigEntry(id: "my-provider", type: ProviderType.deepL.wireValue, fields: [:], capabilities: [])
+    ProviderConfigEntry(
+      id: "my-provider", type: ProviderType.deepL.wireValue, fields: [:], capabilities: [])
   }
 
   var providerType: ProviderType {

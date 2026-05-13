@@ -6,6 +6,7 @@ final class ProvidersViewModel: ObservableObject {
   @Published var providers: [ProviderConfigEntry] = []
   @Published var isLoading = false
   @Published var errorMessage: String?
+  @Published private(set) var createRequestID = 0
 
   private let repository: SettingsRepository
 
@@ -38,6 +39,10 @@ final class ProvidersViewModel: ObservableObject {
   }
 
   // MARK: - Save (add or edit)
+
+  func requestCreateProvider() {
+    createRequestID += 1
+  }
 
   func saveProvider(_ entry: ProviderConfigEntry) {
     Task {

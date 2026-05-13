@@ -262,6 +262,7 @@
         "submit_with_meta_enter_mac": "Submit with ⌘ + Enter"
       },
       "button": {
+        "add_provider": "Add...",
         "add_target": "Add Target",
         "grant": "Grant"
       },

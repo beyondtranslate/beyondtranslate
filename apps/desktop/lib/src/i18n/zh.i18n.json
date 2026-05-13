@@ -262,6 +262,7 @@
         "submit_with_meta_enter_mac": "用 ⌘ + Enter 提交"
       },
       "button": {
+        "add_provider": "添加...",
         "add_target": "添加目标",
         "grant": "授权"
       },
@@ -306,20 +307,20 @@
       "empty": "暂无高级设置。"
     },
     "providers": {
-      "title": "服务商",
+      "title": "提供商",
       "section": {
         "services": "服务"
       },
       "item": {
-        "empty": "暂无已配置的服务商。添加一个服务商以启用翻译服务。",
-        "loading": "正在加载服务商...",
+        "empty": "暂无已配置的提供商。添加一个提供商以启用翻译服务。",
+        "loading": "正在加载提供商...",
         "no_services": "暂无可用服务。"
       },
       "button": {
-        "add": "添加服务商..."
+        "add": "添加提供商..."
       },
       "dialog": {
-        "delete_title": "删除服务商",
+        "delete_title": "删除提供商",
         "delete_confirm": "删除「{}」？",
         "delete_message": "此操作无法撤销。"
       },
@@ -327,17 +328,17 @@
         "error": "错误"
       },
       "intro": {
-        "body": "选择应用使用的翻译和词典服务商。",
-        "warning": "你添加的服务商可能会处理你发送的文本，请只连接你信任的服务。"
+        "body": "选择应用使用的翻译和词典提供商。",
+        "warning": "你添加的提供商可能会处理你发送的文本，请只连接你信任的服务。"
       },
       "editor": {
         "title": {
-          "add": "添加服务商",
-          "edit": "编辑服务商"
+          "add": "添加提供商",
+          "edit": "编辑提供商"
         },
         "row": {
-          "id": "服务商 ID",
-          "type": "服务商类型"
+          "id": "提供商 ID",
+          "type": "提供商类型"
         },
         "placeholder": {
           "id": "例如 deepl-main"
@@ -348,7 +349,7 @@
       },
       "detail": {
         "tooltip": {
-          "edit": "编辑服务商"
+          "edit": "编辑提供商"
         }
       },
       "capability": {

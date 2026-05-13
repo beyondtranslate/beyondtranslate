@@ -66,11 +66,29 @@ final class GeneralViewModel: ObservableObject {
       .map { ServiceOption(id: "\($0.id)+dictionary", name: $0.id) }
   }
 
+  var validDefaultDirectoryService: String {
+    isDefaultDirectoryServiceValid ? defaultDirectoryService : ""
+  }
+
   // Translation service options: {provider-id}+translation
   var translationServiceOptions: [ServiceOption] {
     providers
       .filter { $0.capabilities.contains("translation") }
       .map { ServiceOption(id: "\($0.id)+translation", name: $0.id) }
+  }
+
+  var validDefaultTranslationService: String {
+    isDefaultTranslationServiceValid ? defaultTranslationService : ""
+  }
+
+  private var isDefaultDirectoryServiceValid: Bool {
+    defaultDirectoryService.isEmpty
+      || dictionaryServiceOptions.contains { $0.id == defaultDirectoryService }
+  }
+
+  private var isDefaultTranslationServiceValid: Bool {
+    defaultTranslationService.isEmpty
+      || translationServiceOptions.contains { $0.id == defaultTranslationService }
   }
 
   func setLaunchAtLogin(_ value: Bool) {

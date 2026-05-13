@@ -20,7 +20,11 @@ struct SettingsView: View {
       .navigationSplitViewColumnWidth(min: 180, ideal: 210)
     } detail: {
       if let selectedSection {
-        SettingsSectionDetailView(section: selectedSection, viewModel: viewModel)
+        SettingsSectionDetailView(
+          section: selectedSection,
+          viewModel: viewModel,
+          selectedSection: $selectedSection
+        )
       } else {
         SettingsEmptyStateView()
       }
@@ -37,11 +41,18 @@ struct SettingsView: View {
 private struct SettingsSectionDetailView: View {
   let section: SettingsSection
   @ObservedObject var viewModel: SettingsViewModel
+  @Binding var selectedSection: SettingsSection?
 
   var body: some View {
     switch section {
     case .general:
-      GeneralView(viewModel: viewModel.general)
+      GeneralView(
+        viewModel: viewModel.general,
+        onAddProvider: {
+          selectedSection = .providers
+          viewModel.providers.requestCreateProvider()
+        }
+      )
     case .appearance:
       AppearanceView(viewModel: viewModel.appearance)
     case .shortcuts:

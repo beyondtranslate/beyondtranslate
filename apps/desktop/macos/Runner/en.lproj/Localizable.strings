@@ -163,6 +163,7 @@
 "settings.appearance.section.app_language" = "Display Language";
 "settings.appearance.section.theme_mode" = "Theme Mode";
 "settings.appearance.title" = "Appearance";
+"settings.general.button.add_provider" = "Add...";
 "settings.general.button.add_target" = "Add Target";
 "settings.general.button.grant" = "Grant";
 "settings.general.option.built_in_ocr" = "Built-in OCR";

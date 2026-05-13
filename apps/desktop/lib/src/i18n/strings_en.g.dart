@@ -1180,6 +1180,9 @@ class TranslationsSettingsGeneralButtonEn {
 
   // Translations
 
+  /// en: 'Add Provider...'
+  String get add_provider => 'Add Provider...';
+
   /// en: 'Add Target'
   String get add_target => 'Add Target';
 
@@ -1745,6 +1748,7 @@ extension on Translations {
       'settings.general.row.submit_with_enter' => 'Submit with Enter',
       'settings.general.row.submit_with_meta_enter_mac' =>
         'Submit with ⌘ + Enter',
+      'settings.general.button.add_provider' => 'Add Provider...',
       'settings.general.button.add_target' => 'Add Target',
       'settings.general.button.grant' => 'Grant',
       'settings.general.option.none' => 'None',
