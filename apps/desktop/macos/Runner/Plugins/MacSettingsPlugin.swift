@@ -22,7 +22,7 @@ final class MacSettingsPlugin: NSObject, FlutterPlugin {
       }
     case "highlightPermissions":
       Task { @MainActor in
-        SettingsHighlightCoordinator.shared.highlightPermissions()
+        SettingsHighlightCoordinator.shared.requestHighlightPermissionsSection()
         result(nil)
       }
     default:

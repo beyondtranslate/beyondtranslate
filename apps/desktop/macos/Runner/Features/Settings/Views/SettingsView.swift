@@ -31,8 +31,8 @@ struct SettingsView: View {
     }
     .frame(minWidth: 720, minHeight: 480)
     .environment(\.locale, Locale(identifier: localization.languageCode))
-    .onReceive(highlightCoordinator.$permissionsHighlightID) { highlightID in
-      guard highlightID > 0 else { return }
+    .onReceive(highlightCoordinator.$pendingHighlightPermissionsSectionID) { id in
+                  guard id != nil else { return }
       selectedSection = .general
     }
   }
@@ -50,7 +50,7 @@ private struct SettingsSectionDetailView: View {
         viewModel: viewModel.general,
         onAddProvider: {
           selectedSection = .providers
-          viewModel.providers.requestCreateProvider()
+          viewModel.providers.requestPresentProviderEditorSheet()
         }
       )
     case .appearance:

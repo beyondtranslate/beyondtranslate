@@ -5,7 +5,6 @@ struct ProvidersView: View {
   @ObservedObject var viewModel: ProvidersViewModel
   @State private var draft: ProviderConfigEntry?
   @State private var isCreatingDraft = false
-  @State private var lastHandledCreateRequestID = 0
 
   var body: some View {
     NavigationStack {
@@ -47,9 +46,8 @@ struct ProvidersView: View {
         }
       }
     }
-    .onReceive(viewModel.$createRequestID) { requestID in
-      guard requestID > 0, requestID > lastHandledCreateRequestID else { return }
-      lastHandledCreateRequestID = requestID
+    .onReceive(viewModel.$pendingPresentProviderEditorSheetID) { id in
+                  guard let id, viewModel.consumePresentProviderEditorSheet(id) else { return }
       isCreatingDraft = true
       draft = .newProvider()
     }

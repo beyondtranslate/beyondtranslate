@@ -7,7 +7,7 @@ struct GeneralView: View {
   let onAddProvider: () -> Void
   @ObservedObject private var highlightCoordinator = SettingsHighlightCoordinator.shared
   @State private var isPermissionsHighlighted = false
-  @State private var lastHandledPermissionsHighlightID = 0
+  @State private var permissionsHighlightGeneration = 0
 
   var body: some View {
     let hasDirectoryServices = !viewModel.dictionaryServiceOptions.isEmpty
@@ -179,10 +179,10 @@ struct GeneralView: View {
       viewModel.refreshPermissions()
     }
     .onAppear {
-      handlePermissionsHighlight(highlightCoordinator.permissionsHighlightID)
+      handlePermissionsHighlight(highlightCoordinator.pendingHighlightPermissionsSectionID)
     }
-    .onReceive(highlightCoordinator.$permissionsHighlightID) { highlightID in
-      handlePermissionsHighlight(highlightID)
+    .onChange(of: highlightCoordinator.pendingHighlightPermissionsSectionID) { newValue in
+      handlePermissionsHighlight(newValue)
     }
   }
 
@@ -194,17 +194,19 @@ struct GeneralView: View {
     ]
   }
 
-  private func handlePermissionsHighlight(_ highlightID: Int) {
-    guard highlightID > 0, highlightID > lastHandledPermissionsHighlightID else { return }
+  private func handlePermissionsHighlight(_ id: Int?) {
+    guard let id, highlightCoordinator.consumeHighlightPermissionsSection(id) else { return }
 
-    lastHandledPermissionsHighlightID = highlightID
+    permissionsHighlightGeneration += 1
+    let generation = permissionsHighlightGeneration
+
     withAnimation(.easeInOut(duration: 0.16)) {
       isPermissionsHighlighted = true
     }
 
     Task {
       try? await Task.sleep(nanoseconds: 1_600_000_000)
-      guard lastHandledPermissionsHighlightID == highlightID else { return }
+      guard generation == permissionsHighlightGeneration else { return }
       withAnimation(.easeInOut(duration: 0.24)) {
         isPermissionsHighlighted = false
       }

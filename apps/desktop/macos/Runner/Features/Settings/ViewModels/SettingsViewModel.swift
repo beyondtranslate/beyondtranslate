@@ -5,12 +5,18 @@ import beyondtranslate_runtime
 final class SettingsHighlightCoordinator: ObservableObject {
   static let shared = SettingsHighlightCoordinator()
 
-  @Published private(set) var permissionsHighlightID = 0
+  @Published private(set) var pendingHighlightPermissionsSectionID: Int? = nil
 
   private init() {}
 
-  func highlightPermissions() {
-    permissionsHighlightID += 1
+  func requestHighlightPermissionsSection() {
+    pendingHighlightPermissionsSectionID = (pendingHighlightPermissionsSectionID ?? 0) + 1
+  }
+
+  func consumeHighlightPermissionsSection(_ id: Int) -> Bool {
+    guard pendingHighlightPermissionsSectionID == id else { return false }
+    pendingHighlightPermissionsSectionID = nil
+    return true
   }
 }
 
