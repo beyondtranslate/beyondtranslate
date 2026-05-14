@@ -4,7 +4,10 @@ use std::path::PathBuf;
 use std::sync::{Arc, Mutex, OnceLock};
 use std::thread;
 
-use beyondtranslate_core::{LookUpRequest, LookUpResponse, TranslateRequest, TranslateResponse};
+use beyondtranslate_core::{
+    LookUpRequest, LookUpResponse, RecognizeTextRequest, RecognizeTextResponse, TranslateRequest,
+    TranslateResponse,
+};
 use struct_patch::Patch as ApplyPatch;
 use tokio::sync::{broadcast, Mutex as AsyncMutex, RwLock};
 
@@ -120,6 +123,12 @@ pub struct RuntimeDictionary {
     provider_id: String,
 }
 
+#[derive(uniffi::Object)]
+pub struct RuntimeOcr {
+    runtime: Runtime,
+    provider_id: String,
+}
+
 /// Foreign-language handle for observing [`SettingsChange`] events.
 ///
 /// Obtain one via [`RuntimeSettings::subscribe`] and call
@@ -194,6 +203,14 @@ impl Runtime {
     ) -> Result<Arc<RuntimeDictionary>, RuntimeError> {
         let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
         Ok(Arc::new(RuntimeDictionary {
+            runtime: (*self).clone(),
+            provider_id,
+        }))
+    }
+
+    pub fn ocr(self: Arc<Self>, provider_id: String) -> Result<Arc<RuntimeOcr>, RuntimeError> {
+        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        Ok(Arc::new(RuntimeOcr {
             runtime: (*self).clone(),
             provider_id,
         }))
@@ -509,6 +526,39 @@ impl RuntimeTranslation {
 impl RuntimeDictionary {
     pub async fn lookup(&self, request: LookUpRequest) -> Result<LookUpResponse, RuntimeError> {
         self.lookup_impl(request).await.map_err(Into::into)
+    }
+}
+
+impl RuntimeOcr {
+    async fn recognize_text_impl(
+        &self,
+        request: RecognizeTextRequest,
+    ) -> Result<RecognizeTextResponse, String> {
+        let provider_id = self.provider_id.clone();
+        let runtime = self.runtime.clone();
+        run_on_worker_thread(move || async move {
+            let state = runtime.inner.state.read().await;
+            let ocr_service = state
+                .engine
+                .ocr(&provider_id)
+                .map_err(|error| error.to_string())?;
+
+            ocr_service
+                .recognize_text(request)
+                .await
+                .map_err(|error| error.to_string())
+        })
+        .await
+    }
+}
+
+#[uniffi::export(async_runtime = "tokio")]
+impl RuntimeOcr {
+    pub async fn recognize_text(
+        &self,
+        request: RecognizeTextRequest,
+    ) -> Result<RecognizeTextResponse, RuntimeError> {
+        self.recognize_text_impl(request).await.map_err(Into::into)
     }
 }
 

@@ -29,5 +29,11 @@ sha1.workspace = true
 sha2.workspace = true
 thiserror.workspace = true
 
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.58", features = ["Media_Ocr", "Graphics_Imaging", "Storage_Streams"] }
+
 [dev-dependencies]
 tokio.workspace = true

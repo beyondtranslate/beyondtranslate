@@ -141,6 +141,7 @@
     "iciba": "爱词霸",
     "openai": "OpenAI",
     "sogou": "搜狗翻译",
+    "system": "系统",
     "tencent": "腾讯翻译君",
     "youdao": "有道翻译"
   },
@@ -354,7 +355,8 @@
       },
       "capability": {
         "translation": "翻译",
-        "dictionary": "词典"
+        "dictionary": "词典",
+        "ocr": "OCR"
       },
       "description": {
         "all": "提供词典查询和文本翻译",

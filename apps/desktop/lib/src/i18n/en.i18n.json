@@ -141,6 +141,7 @@
     "iciba": "Iciba",
     "openai": "OpenAI",
     "sogou": "Sogou",
+    "system": "System",
     "tencent": "Tencent",
     "youdao": "Youda"
   },
@@ -354,7 +355,8 @@
       },
       "capability": {
         "translation": "Translation",
-        "dictionary": "Dictionary"
+        "dictionary": "Dictionary",
+        "ocr": "OCR"
       },
       "description": {
         "all": "Provides dictionary lookup and text translation",

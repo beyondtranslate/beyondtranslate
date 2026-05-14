@@ -2,14 +2,15 @@ pub mod domain;
 mod remote;
 pub mod runtime;
 pub use runtime::{
-    Runtime, RuntimeDictionary, RuntimeError, RuntimeSettings, RuntimeTranslation, SettingsChange,
-    SettingsSubscription,
+    Runtime, RuntimeDictionary, RuntimeError, RuntimeOcr, RuntimeSettings, RuntimeTranslation,
+    SettingsChange, SettingsSubscription,
 };
 
 use beyondtranslate_core::{
     DetectLanguageRequest, DetectLanguageResponse, LanguagePair, LookUpRequest, LookUpResponse,
-    TextDetection, TextTranslation, TranslateRequest, TranslateResponse, WordDefinition, WordImage,
-    WordPhrase, WordPronunciation, WordSentence, WordTag, WordTense,
+    RecognizeTextRequest, RecognizeTextResponse, RecognizedRect, TextDetection, TextRecognition,
+    TextTranslation, TranslateRequest, TranslateResponse, WordDefinition, WordImage, WordPhrase,
+    WordPronunciation, WordSentence, WordTag, WordTense,
 };
 
 #[uniffi::export]
@@ -105,6 +106,26 @@ pub fn echo_word_tag(word_tag: WordTag) -> WordTag {
 #[uniffi::export]
 pub fn echo_word_tense(word_tense: WordTense) -> WordTense {
     word_tense
+}
+
+#[uniffi::export]
+pub fn echo_recognize_text_request(request: RecognizeTextRequest) -> RecognizeTextRequest {
+    request
+}
+
+#[uniffi::export]
+pub fn echo_recognize_text_response(response: RecognizeTextResponse) -> RecognizeTextResponse {
+    response
+}
+
+#[uniffi::export]
+pub fn echo_recognized_rect(rect: RecognizedRect) -> RecognizedRect {
+    rect
+}
+
+#[uniffi::export]
+pub fn echo_text_recognition(recognition: TextRecognition) -> TextRecognition {
+    recognition
 }
 
 uniffi::include_scaffolding!("api");

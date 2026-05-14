@@ -341,7 +341,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
         padding: const EdgeInsets.all(20),
         children: [
           Text(
-            'Call the Rust runtime directly from the desktop app to verify the flutter_rust_bridge integration.',
+            'Call the Rust runtime directly from the desktop app to verify the integration.',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           if (!kIsMacOS) ...[

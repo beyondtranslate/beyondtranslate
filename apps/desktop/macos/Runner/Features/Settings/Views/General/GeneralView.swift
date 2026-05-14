@@ -58,18 +58,28 @@ struct GeneralView: View {
       )
 
       Section(LocaleKeys.settings.general.section.extractText.tr()) {
-        SettingPicker(
-          LocaleKeys.settings.general.row.defaultExtractTextService.tr(),
-          selection: Binding(
-            get: { viewModel.defaultOcrService },
-            set: { viewModel.setDefaultOcrService($0) }
-          )
-        ) {
-          ForEach(ocrOptions, id: \.id) { item in
-            Text(item.title).tag(item.id)
+        let hasOcrServices = !viewModel.ocrServiceOptions.isEmpty
+
+        if hasOcrServices {
+          SettingPicker(
+            LocaleKeys.settings.general.row.defaultExtractTextService.tr(),
+            selection: Binding(
+              get: { viewModel.validDefaultOcrService },
+              set: { viewModel.setDefaultOcrService($0) }
+            )
+          ) {
+            Text(LocaleKeys.settings.general.option.none.tr()).tag("")
+            ForEach(viewModel.ocrServiceOptions) { option in
+              Text(option.name).tag(option.id)
+            }
           }
+          .pickerStyle(.menu)
+        } else {
+          ServiceUnavailableSettingRow(
+            title: LocaleKeys.settings.general.row.defaultExtractTextService.tr(),
+            onAddProvider: onAddProvider
+          )
         }
-        .pickerStyle(.menu)
 
         SettingToggle(
           LocaleKeys.settings.general.row.autoCopyDetectedText.tr(),
@@ -184,14 +194,6 @@ struct GeneralView: View {
     .onChange(of: highlightCoordinator.pendingHighlightPermissionsSectionID) { newValue in
       handlePermissionsHighlight(newValue)
     }
-  }
-
-  private var ocrOptions: [(id: String, title: String)] {
-    [
-      ("Built-in OCR", LocaleKeys.settings.general.option.builtInOcr.tr()),
-      ("Tesseract", LocaleKeys.settings.general.option.tesseract.tr()),
-      ("Youdao OCR", LocaleKeys.settings.general.option.youdaoOcr.tr()),
-    ]
   }
 
   private func handlePermissionsHighlight(_ id: Int?) {

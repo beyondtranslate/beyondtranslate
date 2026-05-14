@@ -28,6 +28,7 @@ type ProviderCapability = core::ProviderCapability;
 #[uniffi::remote(Enum)]
 pub enum ProviderCapability {
     Dictionary,
+    Ocr,
     Translation,
 }
 
@@ -41,6 +42,7 @@ pub enum ProviderType {
     Iciba,
     Tencent,
     Youdao,
+    System,
 }
 
 type DetectLanguageRequest = core::DetectLanguageRequest;
@@ -164,4 +166,38 @@ type TranslateResponse = core::TranslateResponse;
 #[uniffi::remote(Record)]
 pub struct TranslateResponse {
     pub translations: Vec<TextTranslation>,
+}
+
+type RecognizedRect = core::RecognizedRect;
+#[uniffi::remote(Record)]
+pub struct RecognizedRect {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+    pub top: Option<f64>,
+    pub right: Option<f64>,
+    pub bottom: Option<f64>,
+    pub left: Option<f64>,
+}
+
+type TextRecognition = core::TextRecognition;
+#[uniffi::remote(Record)]
+pub struct TextRecognition {
+    pub text: String,
+    pub recognized_rect: Option<RecognizedRect>,
+}
+
+type RecognizeTextRequest = core::RecognizeTextRequest;
+#[uniffi::remote(Record)]
+pub struct RecognizeTextRequest {
+    pub image_path: Option<String>,
+    pub base64_image: Option<String>,
+}
+
+type RecognizeTextResponse = core::RecognizeTextResponse;
+#[uniffi::remote(Record)]
+pub struct RecognizeTextResponse {
+    pub text: String,
+    pub recognitions: Option<Vec<TextRecognition>>,
 }

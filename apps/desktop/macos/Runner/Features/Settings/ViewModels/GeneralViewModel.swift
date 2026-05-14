@@ -59,6 +59,17 @@ final class GeneralViewModel: ObservableObject {
     }
   }
 
+  // Ocr service options: {provider-id}+ocr
+  var ocrServiceOptions: [ServiceOption] {
+    providers
+      .filter { $0.capabilities.contains("ocr") }
+      .map { ServiceOption(id: "\($0.id)+ocr", name: $0.id) }
+  }
+
+  var validDefaultOcrService: String {
+    isDefaultOcrServiceValid ? defaultOcrService : ""
+  }
+
   // Directory service options: {provider-id}+dictionary
   var dictionaryServiceOptions: [ServiceOption] {
     providers
@@ -79,6 +90,11 @@ final class GeneralViewModel: ObservableObject {
 
   var validDefaultTranslationService: String {
     isDefaultTranslationServiceValid ? defaultTranslationService : ""
+  }
+
+  private var isDefaultOcrServiceValid: Bool {
+    defaultOcrService.isEmpty
+      || ocrServiceOptions.contains { $0.id == defaultOcrService }
   }
 
   private var isDefaultDirectoryServiceValid: Bool {

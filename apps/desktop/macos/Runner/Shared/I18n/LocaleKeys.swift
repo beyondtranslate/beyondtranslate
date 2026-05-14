@@ -237,6 +237,7 @@ enum LocaleKeys {
     static let iciba = LocaleKey("provider.iciba")
     static let openai = LocaleKey("provider.openai")
     static let sogou = LocaleKey("provider.sogou")
+    static let system = LocaleKey("provider.system")
     static let tencent = LocaleKey("provider.tencent")
     static let youdao = LocaleKey("provider.youdao")
   }
@@ -315,6 +316,7 @@ enum LocaleKeys {
       }
       enum capability {
         static let dictionary = LocaleKey("settings.providers.capability.dictionary")
+        static let ocr = LocaleKey("settings.providers.capability.ocr")
         static let translation = LocaleKey("settings.providers.capability.translation")
       }
       enum description {

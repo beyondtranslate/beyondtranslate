@@ -122,6 +122,7 @@ extension ProviderCapability {
     case .translation:
       return LocaleKeys.settings.providers.capability.translation.tr()
     case .dictionary: return LocaleKeys.settings.providers.capability.dictionary.tr()
+    case .ocr: return LocaleKeys.settings.providers.capability.ocr.tr()
     }
   }
 
@@ -129,6 +130,7 @@ extension ProviderCapability {
     switch self {
     case .translation: return "character.bubble"
     case .dictionary: return "text.book.closed"
+    case .ocr: return "text.viewfinder"
     }
   }
 
@@ -136,6 +138,7 @@ extension ProviderCapability {
     switch self {
     case .translation: return .blue
     case .dictionary: return .orange
+    case .ocr: return .green
     }
   }
 }

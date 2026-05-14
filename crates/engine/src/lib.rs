@@ -3,8 +3,8 @@ mod engine;
 mod provider;
 
 pub use beyondtranslate_core::{
-    DictionaryError, DictionaryService, Provider, ProviderCapability, TranslationError,
-    TranslationService,
+    DictionaryError, DictionaryService, OcrError, OcrService, Provider, ProviderCapability,
+    TranslationError, TranslationService,
 };
 pub use engine::{
     from_yaml_str, load_from_file, Engine, EngineConfig, EngineError, ProviderConfig, ProviderType,
@@ -18,6 +18,7 @@ pub use provider::DeepLProvider;
 pub use provider::GoogleProvider;
 #[cfg(feature = "iciba")]
 pub use provider::IcibaProvider;
+pub use provider::SystemProvider;
 #[cfg(feature = "tencent")]
 pub use provider::TencentProvider;
 #[cfg(feature = "youdao")]

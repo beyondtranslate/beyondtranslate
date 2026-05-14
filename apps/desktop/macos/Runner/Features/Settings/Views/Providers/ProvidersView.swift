@@ -47,7 +47,7 @@ struct ProvidersView: View {
       }
     }
     .onReceive(viewModel.$pendingPresentProviderEditorSheetID) { id in
-                  guard let id, viewModel.consumePresentProviderEditorSheet(id) else { return }
+      guard let id, viewModel.consumePresentProviderEditorSheet(id) else { return }
       isCreatingDraft = true
       draft = .newProvider()
     }
@@ -479,6 +479,7 @@ extension ProviderType {
     case .google: return [.dictionary, .translation]
     case .iciba: return [.dictionary]
     case .tencent: return [.translation]
+    case .system: return [.ocr]
     case .youdao: return [.dictionary, .translation]
     }
   }
@@ -491,6 +492,7 @@ extension ProviderType {
     case .google: return LocaleKeys.provider.google.tr()
     case .iciba: return LocaleKeys.provider.iciba.tr()
     case .tencent: return LocaleKeys.provider.tencent.tr()
+    case .system: return LocaleKeys.provider.system.tr()
     case .youdao: return LocaleKeys.provider.youdao.tr()
     }
   }

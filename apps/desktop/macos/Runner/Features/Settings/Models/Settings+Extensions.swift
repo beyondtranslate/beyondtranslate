@@ -93,10 +93,11 @@ extension ProviderCapability: Identifiable {
 }
 
 extension ProviderCapability {
-  /// Convert from the wire string ("dictionary", "translation") used by the Rust backend.
+  /// Convert from the wire string ("dictionary", "ocr", "translation") used by the Rust backend.
   static func fromWire(_ value: String) -> ProviderCapability? {
     switch value {
     case "dictionary": return .dictionary
+    case "ocr": return .ocr
     case "translation": return .translation
     default: return nil
     }
@@ -106,6 +107,7 @@ extension ProviderCapability {
   var wireValue: String {
     switch self {
     case .dictionary: return "dictionary"
+    case .ocr: return "ocr"
     case .translation: return "translation"
     }
   }
@@ -115,7 +117,7 @@ extension ProviderCapability {
 
 extension ProviderType: CaseIterable {
   public static var allCases: [ProviderType] {
-    [.baidu, .caiyun, .deepL, .google, .iciba, .tencent, .youdao]
+    [.baidu, .caiyun, .deepL, .google, .iciba, .system, .tencent, .youdao]
   }
 }
 
@@ -134,6 +136,7 @@ extension ProviderType {
     case "deepl": return .deepL
     case "google": return .google
     case "iciba": return .iciba
+    case "system": return .system
     case "tencent": return .tencent
     case "youdao": return .youdao
     default: return nil
@@ -148,6 +151,7 @@ extension ProviderType {
     case .deepL: return "deepl"
     case .google: return "google"
     case .iciba: return "iciba"
+    case .system: return "system"
     case .tencent: return "tencent"
     case .youdao: return "youdao"
     }
@@ -226,6 +230,8 @@ extension ProviderType {
           key: "pictureBaseUrl", label: "Picture Base URL",
           placeholder: "https://picdict.youdao.com", isSecret: false, isOptional: true),
       ]
+    case .system:
+      return []
     }
   }
 }

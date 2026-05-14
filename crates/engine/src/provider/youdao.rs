@@ -2,9 +2,13 @@
 
 use crate::common::http_client::HttpClient;
 use async_trait::async_trait;
+use base64::Engine;
 use beyondtranslate_core::{
-    DictionaryError, DictionaryService, LookUpRequest, LookUpResponse, Provider, TextTranslation,
-    WordDefinition, WordImage, WordPronunciation, WordTag, WordTense,
+    DetectLanguageRequest, DetectLanguageResponse, DictionaryError, DictionaryService,
+    LookUpRequest, LookUpResponse, OcrError, OcrService, Provider, RecognizeTextRequest,
+    RecognizeTextResponse, TextDetection, TextTranslation, TranslateRequest, TranslateResponse,
+    TranslationError, TranslationService, WordDefinition, WordImage, WordPronunciation, WordTag,
+    WordTense,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -26,6 +30,8 @@ pub struct YoudaoProviderConfig {
 pub struct YoudaoProvider {
     config: YoudaoProviderConfig,
     dictionary_service: YoudaoDictionaryService,
+    ocr_service: YoudaoOcrService,
+    translation_service: YoudaoTranslationService,
 }
 
 struct YoudaoDictionaryService {
@@ -33,6 +39,18 @@ struct YoudaoDictionaryService {
     app_secret: String,
     http: HttpClient,
     picture_http: HttpClient,
+}
+
+struct YoudaoOcrService {
+    app_key: String,
+    app_secret: String,
+    http: HttpClient,
+}
+
+struct YoudaoTranslationService {
+    app_key: String,
+    app_secret: String,
+    http: HttpClient,
 }
 
 impl YoudaoProvider {
@@ -44,24 +62,34 @@ impl YoudaoProvider {
             return Err("app_secret must not be empty".to_owned());
         }
         let client = reqwest::Client::default();
+        let base_url = config
+            .base_url
+            .clone()
+            .unwrap_or_else(|| "https://openapi.youdao.com".to_owned());
 
         Ok(Self {
             config: config.clone(),
             dictionary_service: YoudaoDictionaryService {
-                app_key: config.app_key,
-                app_secret: config.app_secret,
-                http: HttpClient::new(
-                    config
-                        .base_url
-                        .unwrap_or_else(|| "https://openapi.youdao.com".to_owned()),
-                    client.clone(),
-                ),
+                app_key: config.app_key.clone(),
+                app_secret: config.app_secret.clone(),
+                http: HttpClient::new(base_url.clone(), client.clone()),
                 picture_http: HttpClient::new(
                     config
                         .picture_base_url
+                        .clone()
                         .unwrap_or_else(|| "https://picdict.youdao.com".to_owned()),
-                    client,
+                    client.clone(),
                 ),
+            },
+            ocr_service: YoudaoOcrService {
+                app_key: config.app_key.clone(),
+                app_secret: config.app_secret.clone(),
+                http: HttpClient::new(base_url.clone(), client.clone()),
+            },
+            translation_service: YoudaoTranslationService {
+                app_key: config.app_key,
+                app_secret: config.app_secret,
+                http: HttpClient::new(base_url, client),
             },
         })
     }
@@ -261,6 +289,278 @@ impl DictionaryService for YoudaoDictionaryService {
     }
 }
 
+#[async_trait(?Send)]
+impl OcrService for YoudaoOcrService {
+    async fn recognize_text(
+        &self,
+        request: RecognizeTextRequest,
+    ) -> Result<RecognizeTextResponse, OcrError> {
+        let base64_image = match (&request.base64_image, &request.image_path) {
+            (Some(base64), _) => base64.clone(),
+            (None, Some(path)) => {
+                let bytes = std::fs::read(path)
+                    .map_err(|e| OcrError::InvalidRequest(format!("failed to read image: {e}")))?;
+                base64::engine::general_purpose::STANDARD.encode(&bytes)
+            }
+            (None, None) => {
+                return Err(OcrError::InvalidRequest(
+                    "either base64_image or image_path must be provided".to_owned(),
+                ));
+            }
+        };
+
+        let input = if base64_image.len() > 20 {
+            format!(
+                "{}{}{}",
+                &base64_image[..10],
+                base64_image.len(),
+                &base64_image[base64_image.len() - 10..]
+            )
+        } else {
+            base64_image.clone()
+        };
+
+        let curtime = current_timestamp().to_string();
+        let salt = format!("{:x}", md5::compute("ocr_engine_youdao"));
+        let sign = format!(
+            "{:x}",
+            Sha256::digest(
+                format!(
+                    "{}{}{}{}{}",
+                    self.app_key, input, salt, curtime, self.app_secret
+                )
+                .as_bytes()
+            )
+        );
+
+        let response = self.http.post("/ocrapi").form(&[
+            ("img", base64_image.as_str()),
+            ("langType", "auto"),
+            ("detectType", "10012"),
+            ("imageType", "1"),
+            ("docType", ""),
+            ("angle", "0"),
+            ("column", "onecolumn"),
+            ("rotate", "donot_rotate"),
+            ("appKey", self.app_key.as_str()),
+            ("salt", salt.as_str()),
+            ("sign", sign.as_str()),
+            ("signType", "v3"),
+            ("curtime", curtime.as_str()),
+        ]);
+
+        let response = self
+            .http
+            .execute(response)
+            .await
+            .map_err(OcrError::from_network_error)?;
+        let response = OcrError::from_response("youdao", response).await?;
+        let data: Value = response
+            .json()
+            .await
+            .map_err(|e| OcrError::SerializationError(e.to_string()))?;
+
+        let error_code = data["errorCode"].as_str().unwrap_or("0");
+        if error_code != "0" {
+            return Err(OcrError::NetworkError(format!(
+                "youdao: {}",
+                youdao_error_message(error_code)
+            )));
+        }
+
+        let text = data["Result"]
+            .as_object()
+            .and_then(|result| {
+                result["regions"]
+                    .as_array()
+                    .and_then(|regions| regions.first())
+                    .and_then(|region| region["lines"].as_array())
+                    .map(|lines| {
+                        lines
+                            .iter()
+                            .filter_map(|line| line["text"].as_str())
+                            .collect::<Vec<_>>()
+                            .join(" ")
+                    })
+            })
+            .unwrap_or_default();
+
+        Ok(RecognizeTextResponse {
+            text,
+            recognitions: None,
+        })
+    }
+}
+
+#[async_trait(?Send)]
+impl TranslationService for YoudaoTranslationService {
+    async fn detect_language(
+        &self,
+        request: DetectLanguageRequest,
+    ) -> Result<DetectLanguageResponse, TranslationError> {
+        let text = request
+            .texts
+            .into_iter()
+            .next()
+            .ok_or_else(|| TranslationError::InvalidRequest("texts is required".to_owned()))?;
+
+        let input = truncate_input(&text);
+        let curtime = current_timestamp().to_string();
+        let salt = format!("{:x}", md5::compute("detect_engine_youdao"));
+        let sign = format!(
+            "{:x}",
+            Sha256::digest(
+                format!(
+                    "{}{}{}{}{}",
+                    self.app_key, input, salt, curtime, self.app_secret
+                )
+                .as_bytes()
+            )
+        );
+
+        let response = self.http.get("/api").query(&[
+            ("q", text.as_str()),
+            ("from", "auto"),
+            ("to", "zh-CHS"),
+            ("appKey", self.app_key.as_str()),
+            ("salt", salt.as_str()),
+            ("sign", sign.as_str()),
+            ("signType", "v3"),
+            ("curtime", curtime.as_str()),
+        ]);
+
+        let response = self
+            .http
+            .execute(response)
+            .await
+            .map_err(TranslationError::from_network_error)?;
+        let response = TranslationError::from_response("youdao", response).await?;
+        let data: Value = response
+            .json()
+            .await
+            .map_err(|e| TranslationError::SerializationError(e.to_string()))?;
+
+        let error_code = data["errorCode"].as_str().unwrap_or("0");
+        if error_code != "0" {
+            return Err(TranslationError::NetworkError(format!(
+                "youdao: {}",
+                youdao_error_message(error_code)
+            )));
+        }
+
+        // The `l` field has format `{source}2{target}`, e.g. "EN2zh-CHS" or "zh-CHS2ja"
+        let detected_language = data["l"]
+            .as_str()
+            .and_then(|l| l.split('2').next().map(|lang| lang.to_lowercase()))
+            .ok_or_else(|| {
+                TranslationError::SerializationError(
+                    "missing or invalid 'l' field in Youdao response".to_owned(),
+                )
+            })?;
+
+        Ok(DetectLanguageResponse {
+            detections: Some(vec![TextDetection {
+                detected_language,
+                text,
+            }]),
+        })
+    }
+
+    async fn translate(
+        &self,
+        request: TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError> {
+        let input = truncate_input(&request.text);
+        let curtime = current_timestamp().to_string();
+        let salt = format!("{:x}", md5::compute("translate_engine_youdao"));
+        let sign = format!(
+            "{:x}",
+            Sha256::digest(
+                format!(
+                    "{}{}{}{}{}",
+                    self.app_key, input, salt, curtime, self.app_secret
+                )
+                .as_bytes()
+            )
+        );
+
+        let from = request.source_language.as_deref().unwrap_or("auto");
+        let to = request.target_language.as_deref().ok_or_else(|| {
+            TranslationError::InvalidRequest("target_language is required".to_owned())
+        })?;
+
+        let response = self.http.get("/api").query(&[
+            ("q", request.text.as_str()),
+            ("from", from),
+            ("to", to),
+            ("appKey", self.app_key.as_str()),
+            ("salt", salt.as_str()),
+            ("sign", sign.as_str()),
+            ("signType", "v3"),
+            ("curtime", curtime.as_str()),
+        ]);
+
+        let response = self
+            .http
+            .execute(response)
+            .await
+            .map_err(TranslationError::from_network_error)?;
+        let response = TranslationError::from_response("youdao", response).await?;
+        let data: Value = response
+            .json()
+            .await
+            .map_err(|e| TranslationError::SerializationError(e.to_string()))?;
+
+        let error_code = data["errorCode"].as_str().unwrap_or("0");
+        if error_code != "0" {
+            return Err(TranslationError::NetworkError(format!(
+                "youdao: {}",
+                youdao_error_message(error_code)
+            )));
+        }
+
+        // Parse the `l` field to get detected source language when `from` was "auto"
+        let detected_source_language = if from == "auto" {
+            data["l"]
+                .as_str()
+                .and_then(|l| l.split('2').next())
+                .map(|lang| lang.to_lowercase())
+        } else {
+            None
+        };
+
+        let translations = data["translation"]
+            .as_array()
+            .map(|items| {
+                items
+                    .iter()
+                    .filter_map(|item| item.as_str())
+                    .enumerate()
+                    .map(|(i, text)| TextTranslation {
+                        detected_source_language: if i == 0 {
+                            detected_source_language.clone()
+                        } else {
+                            None
+                        },
+                        text: text.to_owned(),
+                        audio_url: if i == 0 {
+                            data["tSpeakUrl"].as_str().map(ToOwned::to_owned)
+                        } else {
+                            None
+                        },
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .ok_or_else(|| {
+                TranslationError::SerializationError(
+                    "missing 'translation' field in Youdao response".to_owned(),
+                )
+            })?;
+
+        Ok(TranslateResponse { translations })
+    }
+}
+
 impl Provider for YoudaoProvider {
     fn name(&self) -> &'static str {
         "youdao"
@@ -268,6 +568,14 @@ impl Provider for YoudaoProvider {
 
     fn dictionary(&self) -> Option<&dyn DictionaryService> {
         Some(&self.dictionary_service)
+    }
+
+    fn ocr(&self) -> Option<&dyn OcrService> {
+        Some(&self.ocr_service)
+    }
+
+    fn translation(&self) -> Option<&dyn TranslationService> {
+        Some(&self.translation_service)
     }
 }
 
@@ -318,16 +626,30 @@ fn youdao_error_message(code: &str) -> &str {
         "101" => "缺少必填的参数,首先确保必填参数齐全，然后确认参数书写是否正确。",
         "102" => "不支持的语言类型",
         "103" => "翻译文本过长",
+        "104" => "不支持的API类型",
+        "105" => "不支持的签名类型",
+        "106" => "不支持的响应类型",
+        "107" => "不支持的传输加密类型",
         "108" => "应用ID无效",
+        "110" => "无相关服务的有效应用",
         "111" => "开发者账号无效",
+        "113" => "q不能为空",
         "201" => "解密失败",
         "202" => "签名检验失败",
         "203" => "访问IP地址不在可访问IP列表",
+        "205" => "请求的接口与应用的平台类型不一致",
+        "206" => "因为时间戳无效导致签名校验失败",
+        "207" => "重放请求",
         "301" => "辞典查询失败",
         "302" => "翻译查询失败",
         "303" => "服务端的其它异常",
+        "304" => "翻译失败",
+        "308" => "rejectFallback参数错误",
+        "309" => "domain参数错误",
+        "310" => "未开通领域翻译服务",
         "401" => "账户已经欠费，请进行账户充值",
         "411" => "访问频率受限,请稍后访问",
+        "412" => "长请求过于频繁，请稍后访问",
         _ => "Youdao provider error",
     }
 }

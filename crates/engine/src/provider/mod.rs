@@ -3,6 +3,7 @@ pub mod caiyun;
 pub mod deepl;
 pub mod google;
 pub mod iciba;
+pub mod system;
 pub mod tencent;
 pub mod youdao;
 
@@ -19,6 +20,7 @@ pub use google::GoogleProviderConfig;
 #[cfg(feature = "iciba")]
 pub use iciba::IcibaProvider;
 pub use iciba::IcibaProviderConfig;
+pub use system::SystemProvider;
 #[cfg(feature = "tencent")]
 pub use tencent::TencentProvider;
 pub use tencent::TencentProviderConfig;

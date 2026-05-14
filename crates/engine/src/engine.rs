@@ -5,7 +5,7 @@ use std::{
     sync::Arc,
 };
 
-use beyondtranslate_core::{DictionaryService, Provider, TranslationService};
+use beyondtranslate_core::{DictionaryService, OcrService, Provider, TranslationService};
 use serde::{Deserialize, Serialize};
 use serde_yaml::{Mapping, Value};
 use thiserror::Error;
@@ -24,6 +24,7 @@ use crate::provider::GoogleProviderConfig;
 #[cfg(feature = "iciba")]
 use crate::provider::IcibaProvider;
 use crate::provider::IcibaProviderConfig;
+use crate::provider::SystemProvider;
 #[cfg(feature = "tencent")]
 use crate::provider::TencentProvider;
 use crate::provider::TencentProviderConfig;
@@ -59,6 +60,8 @@ pub enum EngineError {
     TranslationNotSupported(String),
     #[error("provider `{0}` does not support dictionary lookup")]
     DictionaryNotSupported(String),
+    #[error("provider `{0}` does not support ocr")]
+    OcrNotSupported(String),
 }
 
 // ── Registry ──────────────────────────────────────────────────────────────────
@@ -93,6 +96,13 @@ impl Engine {
         self.require(name)?
             .dictionary()
             .ok_or_else(|| EngineError::DictionaryNotSupported(name.to_owned()))
+    }
+
+    /// Returns the ocr service for the named provider.
+    pub fn ocr(&self, name: &str) -> Result<&dyn OcrService, EngineError> {
+        self.require(name)?
+            .ocr()
+            .ok_or_else(|| EngineError::OcrNotSupported(name.to_owned()))
     }
 
     /// Returns the raw provider by name. Prefer [`translation`] or [`dictionary`] for normal use.
@@ -136,6 +146,8 @@ pub enum ProviderType {
     Tencent,
     #[serde(rename = "youdao")]
     Youdao,
+    #[serde(rename = "system")]
+    System,
 }
 
 impl ProviderType {
@@ -148,6 +160,7 @@ impl ProviderType {
             Self::Iciba => "iciba",
             Self::Tencent => "tencent",
             Self::Youdao => "youdao",
+            Self::System => "system",
         }
     }
 }
@@ -213,6 +226,7 @@ fn build_provider(
         ProviderType::Iciba => build_iciba_provider(provider_id, config.decode(provider_id)?),
         ProviderType::Tencent => build_tencent_provider(provider_id, config.decode(provider_id)?),
         ProviderType::Youdao => build_youdao_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::System => build_system_provider(provider_id),
     }
 }
 
@@ -258,6 +272,14 @@ build_provider_fn!(
     YoudaoProvider,
     YoudaoProviderConfig
 );
+
+fn build_system_provider(provider_id: &str) -> Result<Arc<dyn Provider>, EngineError> {
+    let provider = SystemProvider::new().map_err(|reason| EngineError::ConfigValidationFailed {
+        provider: provider_id.to_owned(),
+        reason,
+    })?;
+    Ok(Arc::new(provider))
+}
 
 // ── Config ────────────────────────────────────────────────────────────────────
 

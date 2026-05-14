@@ -311,6 +311,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
     'deepl',
     'google',
     'iciba',
+    'system',
     'tencent',
     'youdao',
   ];
@@ -323,6 +324,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
     'deepl': ['authKey'],
     'google': ['apiKey'],
     'iciba': [],
+    'system': [],
     'tencent': ['secretId', 'secretKey'],
     'youdao': ['appKey', 'appSecret'],
   };

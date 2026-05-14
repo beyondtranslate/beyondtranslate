@@ -154,6 +154,7 @@
 "provider.iciba" = "Iciba";
 "provider.openai" = "OpenAI";
 "provider.sogou" = "Sogou";
+"provider.system" = "System";
 "provider.tencent" = "Tencent";
 "provider.youdao" = "Youda";
 "settings.advanced.empty" = "No advanced settings available.";
@@ -197,6 +198,7 @@
 "settings.providers.alert.error" = "Error";
 "settings.providers.button.add" = "Add a Provider...";
 "settings.providers.capability.dictionary" = "Dictionary";
+"settings.providers.capability.ocr" = "OCR";
 "settings.providers.capability.translation" = "Translation";
 "settings.providers.description.all" = "Provides dictionary lookup and text translation";
 "settings.providers.description.dictionary" = "Provides dictionary lookup and word definitions";
