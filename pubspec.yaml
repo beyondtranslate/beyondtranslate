@@ -1,9 +1,42 @@
 name: beyondtranslate_workspace
 publish_to: "none"
+repository: https://github.com/beyondtranslate/beyondtranslate
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: ">=3.6.0 <4.0.0"
+
+workspace:
+  - apps/desktop
+  - packages/runtime
 
 dev_dependencies:
   flutter_lints: ^2.0.0
-  melos: ^3.0.1
+  melos: ^7.0.0
+
+melos:
+  scripts:
+    analyze:
+      run: melos exec -c 10 -- flutter analyze --fatal-infos
+      description: Run `flutter analyze` for all packages.
+
+    format:
+      exec: dart format .
+      description: Run `dart format` for all packages.
+
+    format-check:
+      exec: dart format . --set-exit-if-changed
+      description: Run `dart format` checks for all packages.
+
+    fix:
+      exec: dart fix . --apply
+      description: Run `dart fix` for all packages.
+
+    test:
+      exec: flutter test
+      description: Run `flutter test` for all packages.
+
+    dependency_validator:
+      exec: flutter pub run dependency_validator
+      packageFilters:
+        dependsOn:
+          - dependency_validator

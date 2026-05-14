@@ -13,7 +13,7 @@
 #include <protocol_handler/protocol_handler_plugin.h>
 #include <screen_capturer_windows/screen_capturer_windows_plugin_c_api.h>
 #include <screen_text_extractor/screen_text_extractor_plugin.h>
-#include <vclibs/vclibs_plugin.h>
+#include <vclibs/vclibs_plugin_c_api.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   AudioplayersWindowsPluginRegisterWithRegistrar(
@@ -30,6 +30,6 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("ScreenCapturerWindowsPluginCApi"));
   ScreenTextExtractorPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("ScreenTextExtractorPlugin"));
-  VclibsPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("VclibsPlugin"));
+  VclibsPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("VclibsPluginCApi"));
 }

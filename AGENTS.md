@@ -53,9 +53,8 @@ beyondtranslate/
 │   ├── codegen.py                # Code generation entry
 │   └── format.py                 # Formatting helper
 ├── screenshots/                  # App screenshots
-├── melos.yaml                    # Melos workspace config
 ├── Cargo.toml                    # Rust workspace root
-└── pubspec.yaml                  # Workspace pubspec (root)
+└── pubspec.yaml                  # Pub Workspaces + Melos config (root)
 ```
 
 ### Key Packages and Their Roles
@@ -66,7 +65,7 @@ beyondtranslate/
 | `apps/api` | Rust + Cloudflare Workers | Backend API server |
 | `crates/core` | Rust | Shared core logic (models, utilities) |
 | `crates/engine` | Rust | Translation engine interface/logic |
-| `packages/runtime` | Dart + Rust | FFI bridge between Flutter and Rust |
+| `packages/runtime` | Dart + Rust + Swift | FFI bridge between Flutter and Rust; generates **Dart** bindings for Flutter and **Swift** bindings for the macOS SPM package |
 
 ---
 
@@ -78,8 +77,8 @@ beyondtranslate/
 - **Python** — Code generation and build scripts
 
 ### Key Frameworks & Tools
-- **Flutter** (SDK >=3.3.0) — Desktop UI framework
-- **Melos** (^3.0.1) — Monorepo management and orchestration
+- **Flutter** (SDK >=3.27.0) — Desktop UI framework. Dart SDK constraints for workspace packages are `>=3.6.0 <4.0.0` because Pub Workspaces require Dart 3.6+.
+- **Melos** (^7.0.0) — Monorepo orchestration. Configuration lives under the root `pubspec.yaml` `melos:` section.
 - **Cargo** — Rust build system
 - **wrangler** — Cloudflare Workers deployment (API server)
 - **go_router** — Flutter routing
@@ -89,7 +88,8 @@ beyondtranslate/
 - **screen_text_extractor / screen_capturer** — Screen text extraction
 - **hotkey_manager** — Global hotkeys
 - **audioplayers** — Audio playback
-- **uniffi** (0.31.1) — Rust FFI bindings generation
+- **uniffi** (0.31.1) — Rust FFI bindings generation (Swift via `uniffi-bindgen`)
+- **uniffi-dart** (0.2.0) — Dart FFI bindings generation (via `uniffi-bindgen-dart`)
 - **reqwest** — Rust HTTP client
 
 ---
@@ -97,9 +97,11 @@ beyondtranslate/
 ## Conventions & Guidelines
 
 ### Code Style
-- **Dart:** Use `dart format` for formatting. Run `melos run format` to format all packages.
+- **Dart:** Use `dart format` for formatting. Run `dart run melos run format` to format Dart packages managed by Melos.
 - **Rust:** Use `cargo fmt` for formatting. Follow standard Rust naming conventions (snake_case for functions/variables, PascalCase for types).
+- **Swift:** Use `swift-format` for Swift formatting.
 - **Python:** Follow PEP 8.
+- **Whole repository:** Run `python scripts/format.py` to format Dart, Rust, and Swift together. Use `python scripts/format.py --check` for a non-mutating check.
 
 ### Naming Conventions
 - **Dart files:** `snake_case.dart`
@@ -120,12 +122,14 @@ beyondtranslate/
 ### Setup
 
 ```bash
-# 1. Install Melos (if not already installed)
-flutter pub global activate melos
+# 1. Resolve the Pub Workspace dependencies
+dart pub get
 
-# 2. Bootstrap the workspace
-melos bs
+# 2. Bootstrap the Melos workspace
+dart run melos bootstrap
 ```
+
+This repository uses Dart Pub Workspaces. The root `pubspec.yaml` owns the `workspace:` package list and the single shared `pubspec.lock`. Workspace packages must include `resolution: workspace`, and internal workspace dependencies should use normal version constraints (for example `beyondtranslate_runtime: ^0.0.1`) instead of `path:` overrides.
 
 ### Development
 
@@ -135,13 +139,16 @@ cd apps/desktop
 flutter run -d linux   # or macos / windows
 
 # Run all tests across the workspace
-melos run test
+dart run melos run test
 
 # Run Dart analyzer across all packages
-melos run analyze
+dart run melos run analyze
 
-# Format all Dart code
-melos run format
+# Format Dart code in Melos packages
+dart run melos run format
+
+# Format Dart, Rust, and Swift across the repository
+python scripts/format.py
 ```
 
 ### Rust Development
@@ -158,23 +165,222 @@ cd packages/runtime/rust
 cargo build
 ```
 
+> **Important:** After modifying Rust code in `packages/runtime/rust/`, you **must** run the codegen script to regenerate the **Dart** and **Swift** FFI bindings. See the [Code Generation](#code-generation) section below.
+
 ### Code Generation
 
 ```bash
 # Run Python code generation scripts
+# Regenerates:
+#   - Dart FFI bindings   → packages/runtime/lib/src/generated/
+#   - Swift FFI bindings  → packages/runtime/macos/beyondtranslate_runtime/Sources/beyondtranslate_runtime/Generated/
+#   - FFI C header/modulemap → packages/runtime/macos/beyondtranslate_runtime/Sources/beyondtranslate_runtimeFFI/include/
+#   - macOS localization files → apps/desktop/macos/Runner/*.lproj/Localizable.strings
+#   - macOS locale key constants → apps/desktop/macos/Runner/Shared/I18n/LocaleKeys.swift
+# Then formats Dart, Rust, and Swift via scripts/format.py.
 python scripts/codegen.py
 
 # Run Dart build_runner (for generated code like routing, i18n)
 cd apps/desktop
-flutter pub run build_runner build
+dart run build_runner build --delete-conflicting-outputs
 ```
+
+
 
 ---
 
 ## Architecture Notes
 
+### Desktop App Architecture
+
+The desktop application (`apps/desktop/`) is built on **Flutter** across all three platforms (Linux, macOS, Windows), with **Rust** native modules providing core services via an FFI bridge.
+
+#### Cross-Platform Layer
+
+All platforms share the following architecture:
+
+| Layer | Technology | Location |
+|-------|-----------|----------|
+| **UI** | Flutter (Dart) | `apps/desktop/lib/` |
+| **FFI Bridge** | `packages/runtime` (Dart + Rust) | `packages/runtime/` |
+| **Dart Bindings** | `uniffi-bindgen-dart` generated | `packages/runtime/lib/src/generated/` |
+| **Rust cdylib** | Platform-native shared library | Built via `packages/runtime/hook/build.dart` (native-assets) |
+| **Rust Crates** | `core` + `engine` | `crates/` |
+
+At startup, Flutter's native-assets system loads the Rust cdylib (`.dylib` / `.so` / `.dll`) and Dart code calls into it via the generated uniffi bindings. The `Runtime` singleton manages settings, translation, OCR, and dictionary services — shared by all bindings that use the same `dataDir`.
+
+```
+┌──────────────────────────────────────┐
+│  Flutter (Dart)                      │
+│  ┌────────────────────────────────┐  │
+│  │ Dart FFI bindings (uniffi)     │  │
+│  └────────────┬───────────────────┘  │
+│               │                      │
+├───────────────┼──────────────────────┤
+│  OS Layer     │                      │
+│               ▼                      │
+│  ┌──────────────────────────────┐   │
+│  │ beyondtranslate_runtime      │   │
+│  │ (cdylib: .dylib/.so/.dll)    │   │
+│  │ - Runtime                    │   │
+│  │ - RuntimeSettings            │   │
+│  │ - RuntimeTranslation         │   │
+│  │ - RuntimeOcr                 │   │
+│  └──────────────────────────────┘   │
+└──────────────────────────────────────┘
+```
+
+On **Linux** and **Windows**, this is the complete architecture — Flutter + Rust via Dart FFI, with no platform-native code involved beyond what Flutter itself provides.
+
+---
+
+#### macOS Specifics
+
+macOS is unique in that it adopts a **SwiftUI + Flutter** hybrid architecture. In addition to the cross-platform Dart FFI path, macOS provides a native SwiftUI layer that calls Rust directly through **Swift bindings** generated by uniffi-rs. This requires an **SPM (Swift Package Manager)** package to bridge the Rust cdylib into the Swift runtime.
+
+##### macOS Directory Structure
+
+```
+apps/desktop/macos/
+├── Runner/                            # macOS app entry (SwiftUI + FlutterEngine)
+│   ├── AppDelegate.swift              # SwiftUI app entry, manages FlutterEngine
+│   ├── Info.plist                     # LSUIElement=true (menu bar only, no Dock icon)
+│   ├── Plugins/
+│   │   ├── MacSettingsPlugin.swift    # MethodChannel for native Settings window
+│   │   └── MacWindowAppearancePlugin.swift  # MethodChannel for window appearance
+│   ├── Shared/
+│   │   ├── Components/Settings/       # Reusable SwiftUI components (Picker, Row, Toggle, etc.)
+│   │   ├── I18n/                      # macOS-side localization (AppLocale, LocaleKeys)
+│   │   └── Services/RuntimeProvider.swift  # Rust Runtime singleton accessor
+│   └── Features/Settings/             # Native Settings window (SwiftUI)
+│       ├── Views/                     # Setting pages (General, Appearance, Shortcuts, Providers, Advanced)
+│       ├── ViewModels/                # ViewModels for each page
+│       ├── Models/                    # Data models (ProviderConfigField, SettingOption, etc.)
+│       └── Repository/SettingsRepository.swift  # Wraps Rust Runtime API calls
+├── Flutter/                           # Flutter framework integration
+├── Podfile                            # CocoaPods (for Flutter plugin dependencies)
+└── Runner.xcodeproj / Runner.xcworkspace
+```
+
+##### Startup Flow
+
+The macOS startup sequence involves both SwiftUI and Flutter:
+
+1. **`@main struct RunnerApp: App`** — SwiftUI app entry, `@NSApplicationDelegateAdaptor` bridges `AppDelegate`
+2. **`AppDelegate.applicationDidFinishLaunching`** — Creates and starts `FlutterEngine` (supports headless mode), calls `RegisterGeneratedPlugins` to register Flutter plugins
+3. **`BeyondtranslateRuntimePlugin.register(with:)`** — On plugin registration, `dlopen`s the Rust cdylib so native Swift code can resolve FFI symbols
+4. **`RuntimeProvider.shared`** — Creates the Rust `Runtime` singleton (shared with Flutter side, same `dataDir`)
+
+##### Flutter ↔ Native ↔ Rust Communication Paths
+
+On macOS, Flutter can reach Rust through **two separate paths**, both sharing the same underlying `Runtime` instance:
+
+```
+┌────────────────────────────────────────────────────┐
+│  Flutter (Dart)                                    │
+│  ┌──────────────────────┐   ┌───────────────────┐  │
+│  │ Dart FFI bindings    │   │ MethodChannel     │  │
+│  │ (uniffi-bindgen-dart)│   │ (e.g. mac_settings)│  │
+│  └──────────┬───────────┘   └────────┬──────────┘  │
+│             │                         │             │
+├─────────────┼─────────────────────────┼─────────────┤
+│  macOS      │                         │             │
+│             ▼                         ▼             │
+│  ┌──────────────────┐   ┌──────────────────────┐   │
+│  │ Swift bindings   │   │ FlutterPlugin         │   │
+│  │ (uniffi-rs)      │   │ (MethodChannel handler)│  │
+│  └──────────┬───────┘   └──────────────────────┘   │
+│             │                                       │
+│             ▼                                       │
+│  ┌──────────────────┐                              │
+│  │ RuntimeProvider  │━━ Shared Rust Runtime ━━     │
+│  │ (Swift singleton)│                              │
+│  └──────────┬───────┘                              │
+│             │                                       │
+├─────────────┼─────────────────────────────────────┤
+│  Rust       │                                       │
+│             ▼                                       │
+│  ┌──────────────────────────────────┐            │
+│  │ beyondtranslate_runtime (cdylib) │            │
+│  │ - Runtime                        │            │
+│  │ - RuntimeSettings                │            │
+│  │ - RuntimeTranslation             │            │
+│  │ - RuntimeOcr                     │            │
+│  └──────────────────────────────────┘            │
+└────────────────────────────────────────────────────┘
+```
+
+**Path 1 (Dart → Rust):** Flutter calls into Rust via `uniffi-bindgen-dart` generated Dart bindings — available on all platforms.
+
+**Path 2 (FlutterPlugin → Rust, or SwiftUI → Rust):** The Swift bindings (uniffi-rs) are used by `MacSettingsPlugin`, `MacWindowAppearancePlugin`, the native Settings window, and any other native Swift code. The `BeyondtranslateRuntimePlugin` performs a one-shot `dlopen` at registration time so that Swift FFI symbols resolve correctly.
+
+Both paths operate on handles backed by the same Rust runtime state when they use the same `dataDir`. Dart creates its handle in `apps/desktop/lib/src/services/runtime.dart`, Swift creates its handle through `RuntimeProvider`, and Rust deduplicates them through a process-wide registry keyed by the canonical `data_dir`. Configuration changes from the SwiftUI Settings window are immediately visible to the Flutter Dart code, and vice versa.
+
+##### SPM Package Structure (`packages/runtime/macos/beyondtranslate_runtime/`)
+
+| Target | Path | Description |
+|--------|------|-------------|
+| `beyondtranslate_runtime` | `Sources/beyondtranslate_runtime/` | Swift bindings + FlutterPlugin stub |
+| `beyondtranslate_runtimeFFI` | `Sources/beyondtranslate_runtimeFFI/` | C module exposing the FFI header |
+
+- **`Package.swift`** — SPM manifest, auto-discovered by Flutter's macOS plugin tooling and linked into the host app
+- **`Generated/beyondtranslate_runtime.swift`** — uniffi-rs auto-generated Swift bindings (generated by `python scripts/codegen.py`)
+- **`BeyondtranslateRuntimePlugin.swift`** — `FlutterPlugin` implementation; `register(with:)` calls `dlopen` on the cdylib to make FFI symbols resolvable
+- **`include/beyondtranslate_runtimeFFI.h`** — Auto-generated C FFI header
+- **`include/module.modulemap`** — Clang module map, exposes the C header to Swift
+- **`dummy.c`** — Placeholder source file required by SPM C targets (actual code lives in the header)
+
+##### Native Flutter Plugins
+
+macOS registers two additional Flutter plugins via MethodChannel (not present on Linux or Windows):
+
+| Plugin | MethodChannel | Purpose |
+|--------|---------------|---------|
+| `MacSettingsPlugin` | `beyondtranslate/mac_settings` | Show/focus the native Settings window, highlight permission sections |
+| `MacWindowAppearancePlugin` | `beyondtranslate/mac_window_appearance` | Set window transparency, toolbar style, frosted-glass background |
+
+##### Native Settings Window (SwiftUI)
+
+On Linux and Windows, settings are rendered with Flutter widgets. On macOS, a **native SwiftUI Settings window** is used instead, providing a more platform-consistent experience.
+
+The window uses a `NavigationSplitView` layout and reads/writes config via `SettingsRepository`, which calls the Rust Runtime's async API.
+
+```
+SettingsView
+├── General     — General (default services, permissions, shortcuts, etc.)
+├── Appearance  — Appearance (language, theme)
+├── Shortcuts   — Shortcut settings
+├── Providers   — Translation provider management
+└── Advanced    — Advanced settings
+```
+
+**Key macOS-specific features:**
+- The Rust `Runtime` singleton is **shared** between the Flutter Dart side and the native Swift side; config changes from either side are immediately visible to the other
+- Settings pages support English/Chinese switching via `AppLocale`, with language preference stored in `UserDefaults`
+- Supports custom URL schemes (`beyondtranslate://`, `biyiapp://`)
+- `LSUIElement = true` makes the app run in the menu bar without a Dock icon
+
+##### Summary: macOS vs. Linux/Windows
+
+| Aspect | Linux / Windows | macOS |
+|--------|----------------|-------|
+| **Flutter UI** | Full Flutter UI | Hybrid SwiftUI + Flutter |
+| **Settings UI** | Flutter widgets | Native SwiftUI window |
+| **Rust FFI bindings** | Dart only (uniffi-dart) | Dart + Swift (uniffi-dart + uniffi-rs) |
+| **Rust bridging** | Native assets (cdylib) | Native assets + SPM + `dlopen` |
+| **Platform plugins** | Standard Flutter plugins | MethodChannel plugins for native features |
+| **Runtime sharing** | Dart-only Runtime singleton | Shared Dart + Swift Runtime singleton via `RuntimeProvider` |
+| **App lifecycle** | Standard Flutter desktop | SwiftUI `@main` with `FlutterEngine` managed in `AppDelegate` |
+| **Menu bar / Dock** | Standard window | `LSUIElement=true` (menu bar only, no Dock icon) |
+
+---
+
 ### Flutter ↔ Rust Bridge
-The `packages/runtime` package uses **uniffi** to generate Dart FFI bindings for the Rust native code. The Rust source lives under `packages/runtime/rust/`.
+The `packages/runtime` package uses **uniffi** to generate Dart FFI bindings for the Rust native code. The Rust source lives under `packages/runtime/rust/`. After modifying any Rust code in this directory, you **must** run `python scripts/codegen.py` from the project root to regenerate the Dart and Swift FFI bindings.
+
+- **Dart bindings** are generated by `uniffi-bindgen-dart` and written to `packages/runtime/lib/src/generated/`.
+- **Swift bindings** are generated by `uniffi-bindgen` (uniffi-rs) and written to `packages/runtime/macos/beyondtranslate_runtime/Sources/beyondtranslate_runtime/Generated/`, along with a C header and modulemap deployed to `.../Sources/beyondtranslate_runtimeFFI/include/`.
+- The macOS side also includes a Swift Package Manager manifest (`Package.swift`) that provides an `beyondtranslate_runtime` SPM target, which is auto-discovered by Flutter's macOS plugin tooling.
 
 ### Translation Flow
 1. **Input:** User enters text (or selects from screen via `screen_text_extractor`).
@@ -185,32 +391,45 @@ The `packages/runtime` package uses **uniffi** to generate Dart FFI bindings for
 ### API Server
 The `apps/api` directory contains a Rust-based API server deployed via Cloudflare Workers. It uses `wrangler.toml` for configuration and is independent of the desktop app.
 
+Common API commands:
+
+```bash
+cd apps/api
+npm run dev      # Run wrangler dev
+npm run build    # Build the Cloudflare Worker
+npm run deploy   # Deploy the Cloudflare Worker
+```
+
 ---
 
 ## Useful Commands
 
 | Command | Description |
 |---------|-------------|
-| `melos bs` | Bootstrap the monorepo (install + link dependencies) |
-| `melos run analyze` | Run Flutter analyze on all packages |
-| `melos run format` | Format all Dart code |
-| `melos run test` | Run all Flutter tests |
-| `melos run fix` | Apply Dart fixes |
+| `dart pub get` | Resolve the Pub Workspace and update the shared root lockfile |
+| `dart run melos bootstrap` | Bootstrap the monorepo using Melos |
+| `dart run melos run analyze` | Run Flutter analyze on all packages |
+| `dart run melos run format` | Format all Dart code |
+| `dart run melos run test` | Run all Flutter tests |
+| `dart run melos run fix` | Apply Dart fixes |
 | `cargo build --workspace` | Build all Rust crates |
 | `cargo test --workspace` | Run all Rust tests |
+| `python scripts/format.py` | Format Dart, Rust, and Swift source files |
+| `python scripts/format.py --check` | Check Dart, Rust, and Swift formatting without modifying files |
 
 ---
 
 ## Troubleshooting
 
-### `melos bs` fails
-- Ensure Flutter SDK >=3.3.0 is installed.
-- Run `flutter pub global activate melos` to ensure Melos is installed.
-- Check that all dependencies in `pubspec.yaml` files are resolvable.
+### `dart run melos bootstrap` fails
+- Ensure Flutter SDK >=3.27.0 is installed and the bundled Dart SDK is >=3.6.0.
+- Run `dart pub get` from the repository root first; Pub Workspaces resolve dependencies at the root.
+- Do not add `path:` overrides between workspace packages. Use a version constraint and let Pub Workspaces resolve the local package.
 
 ### Rust build errors in `packages/runtime`
-- Ensure the correct Rust toolchain is installed (see `rust-toolchain.toml` or `Cargo.toml`).
+- Ensure a compatible stable Rust toolchain is installed. This repository currently does not pin a `rust-toolchain.toml`; use the crate/workspace `Cargo.toml` files and build errors as the source of truth for required targets and dependencies.
 - If uniffi bindings fail, try cleaning: `cargo clean` and rebuild.
+- After modifying Rust code, remember to run `python scripts/codegen.py` from the project root to regenerate the Dart and Swift FFI bindings.
 
 ### Flutter desktop build errors on Linux
 - Install required system dependencies: `libappindicator3-dev`, `keybinder-3.0`.
