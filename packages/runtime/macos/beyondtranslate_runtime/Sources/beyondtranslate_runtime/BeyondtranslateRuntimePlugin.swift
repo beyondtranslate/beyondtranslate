@@ -17,6 +17,7 @@ import Foundation
 public final class BeyondtranslateRuntimePlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     loadRustDylibIfNeeded()
+    SystemTranslationServiceBridge.start()
   }
 }
 

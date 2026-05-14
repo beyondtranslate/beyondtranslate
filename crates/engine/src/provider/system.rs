@@ -1,8 +1,9 @@
 use async_trait::async_trait;
 use base64::Engine;
 use beyondtranslate_core::{
-    OcrError, OcrService, Provider, RecognizeTextRequest, RecognizeTextResponse, RecognizedRect,
-    TextRecognition,
+    DetectLanguageRequest, DetectLanguageResponse, OcrError, OcrService, Provider,
+    RecognizeTextRequest, RecognizeTextResponse, RecognizedRect, TextDetection, TextRecognition,
+    TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
 };
 
 // ── macOS: Apple Vision Framework ──────────────────────────────────────────
@@ -232,6 +233,368 @@ mod platform {
             })
         }
     }
+
+    // ── Translation via CFNotificationCenter broadcast ──────────────────
+    //
+    // Communication protocol with Swift (SystemTranslationServiceBridge.swift):
+    //
+    //   Rust → Swift: CFNotification "com.beyondtranslate.systemTranslation.request"
+    //                 userInfo (NSDictionary):
+    //                   - translate: requestId, operation=translate, text,
+    //                                sourceLanguage, targetLanguage
+    //                   - detectLanguage: requestId, operation=detectLanguage,
+    //                                     texts (JSON string array)
+    //
+    //   Swift → Rust: CFNotification "com.beyondtranslate.systemTranslation.response"
+    //                 userInfo (NSDictionary): requestId, operation, success,
+    //                                          translatedText, detectedSourceLanguage,
+    //                                          detections (JSON string array), error
+    //
+    // ── CFNotificationCenter C FFI ──────────────────────────────────────
+
+    type CFNotificationCenterRef = *const c_void;
+    type CFStringRef = *const c_void;
+    type CFDictionaryRef = *const c_void;
+
+    extern "C" {
+        fn CFNotificationCenterGetLocalCenter() -> CFNotificationCenterRef;
+
+        fn CFNotificationCenterAddObserver(
+            center: CFNotificationCenterRef,
+            observer: *const c_void,
+            callback: unsafe extern "C" fn(
+                CFNotificationCenterRef,
+                *mut c_void,
+                CFStringRef,
+                *const c_void,
+                CFDictionaryRef,
+            ),
+            name: CFStringRef,
+            object: *const c_void,
+            suspensionBehavior: isize,
+        );
+
+        fn CFNotificationCenterPostNotification(
+            center: CFNotificationCenterRef,
+            name: CFStringRef,
+            object: *const c_void,
+            userInfo: CFDictionaryRef,
+            deliverImmediately: bool,
+        );
+
+        fn CFStringCreateWithCString(
+            alloc: *const c_void,
+            cStr: *const c_char,
+            encoding: u32,
+        ) -> CFStringRef;
+
+    }
+
+    const CF_STRING_ENCODING_UTF8: u32 = 0x08000100;
+
+    // ── Pending request registry (thread-safe) ──────────────────────────
+
+    use std::collections::HashMap;
+    use std::sync::atomic::{AtomicU64, Ordering};
+    use std::sync::mpsc;
+    use std::sync::{Mutex, OnceLock};
+
+    static NEXT_REQ_ID: AtomicU64 = AtomicU64::new(1);
+
+    enum SystemTranslationResponse {
+        Translation(TranslateResponse),
+        LanguageDetection(DetectLanguageResponse),
+    }
+
+    struct PendingTx {
+        sender: mpsc::Sender<Result<SystemTranslationResponse, TranslationError>>,
+    }
+
+    fn pending_registry() -> &'static Mutex<HashMap<String, PendingTx>> {
+        static REG: OnceLock<Mutex<HashMap<String, PendingTx>>> = OnceLock::new();
+        REG.get_or_init(|| Mutex::new(HashMap::new()))
+    }
+
+    // ── Response callback (called by CFNotificationCenter) ──────────────
+
+    unsafe extern "C" fn on_translation_response(
+        _center: CFNotificationCenterRef,
+        _observer: *mut c_void,
+        _name: CFStringRef,
+        _object: *const c_void,
+        user_info: CFDictionaryRef,
+    ) {
+        if user_info.is_null() {
+            return;
+        }
+
+        // Read values from the NSDictionary via objc2 msg_send!
+        let read_key = |key: &str| -> Option<String> {
+            unsafe {
+                let k = ns_string(key);
+                let v: *mut AnyObject = msg_send![user_info as *mut AnyObject, objectForKey: k];
+                if v.is_null() {
+                    None
+                } else {
+                    Some(rust_string(v))
+                }
+            }
+        };
+
+        let request_id = match read_key("requestId") {
+            Some(id) => id,
+            None => return,
+        };
+
+        let mut reg = pending_registry().lock().unwrap();
+        let entry = match reg.remove(&request_id) {
+            Some(e) => e,
+            None => return, // already handled or timed out
+        };
+
+        let success = read_key("success");
+        if success.as_deref() == Some("true") {
+            let operation = read_key("operation");
+            if operation.as_deref() == Some("detectLanguage") {
+                let detections_json = read_key("detections").unwrap_or_else(|| "[]".to_owned());
+                let detections = match serde_json::from_str::<Vec<TextDetection>>(&detections_json)
+                {
+                    Ok(detections) => detections,
+                    Err(error) => {
+                        let _ = entry
+                            .sender
+                            .send(Err(TranslationError::SerializationError(error.to_string())));
+                        return;
+                    }
+                };
+
+                let _ = entry
+                    .sender
+                    .send(Ok(SystemTranslationResponse::LanguageDetection(
+                        DetectLanguageResponse {
+                            detections: Some(detections),
+                        },
+                    )));
+            } else {
+                let translated = read_key("translatedText").unwrap_or_default();
+                let detected = read_key("detectedSourceLanguage").filter(|s| !s.is_empty());
+
+                let _ = entry.sender.send(Ok(SystemTranslationResponse::Translation(
+                    TranslateResponse {
+                        translations: vec![TextTranslation {
+                            detected_source_language: detected,
+                            text: translated,
+                            audio_url: None,
+                        }],
+                    },
+                )));
+            }
+        } else {
+            let err_msg =
+                read_key("error").unwrap_or_else(|| "unknown system translation error".into());
+            let _ = entry
+                .sender
+                .send(Err(TranslationError::NetworkError(err_msg)));
+        }
+    }
+
+    // ── One-shot observer registration ──────────────────────────────────
+
+    fn ensure_observer() {
+        use std::sync::Once;
+        static INIT: Once = Once::new();
+        INIT.call_once(|| unsafe {
+            let center = CFNotificationCenterGetLocalCenter();
+            let name = CFStringCreateWithCString(
+                std::ptr::null(),
+                b"com.beyondtranslate.systemTranslation.response\0".as_ptr() as *const c_char,
+                CF_STRING_ENCODING_UTF8,
+            );
+            CFNotificationCenterAddObserver(
+                center,
+                std::ptr::null(),
+                on_translation_response,
+                name,
+                std::ptr::null(),
+                0,
+            );
+        });
+    }
+
+    // ── Post a translation request via CFNotification ───────────────────
+
+    unsafe fn post_translation_request(
+        request_id: &str,
+        text: &str,
+        source: Option<&str>,
+        target: &str,
+    ) {
+        let keys = ns_array(&[
+            ns_string("requestId"),
+            ns_string("operation"),
+            ns_string("text"),
+            ns_string("sourceLanguage"),
+            ns_string("targetLanguage"),
+        ]);
+        let values = ns_array(&[
+            ns_string(request_id),
+            ns_string("translate"),
+            ns_string(text),
+            ns_string(source.unwrap_or("auto")),
+            ns_string(target),
+        ]);
+
+        let dict: Option<Retained<AnyObject>> = msg_send![
+            objc2::class!(NSDictionary),
+            dictionaryWithObjects: values,
+            forKeys: keys
+        ];
+
+        if let Some(dict) = dict {
+            let center = CFNotificationCenterGetLocalCenter();
+            let name = CFStringCreateWithCString(
+                std::ptr::null(),
+                b"com.beyondtranslate.systemTranslation.request\0".as_ptr() as *const c_char,
+                CF_STRING_ENCODING_UTF8,
+            );
+            CFNotificationCenterPostNotification(
+                center,
+                name,
+                std::ptr::null(),
+                &*dict as *const AnyObject as CFDictionaryRef,
+                true,
+            );
+        }
+    }
+
+    unsafe fn post_detect_language_request(request_id: &str, texts_json: &str) {
+        let keys = ns_array(&[
+            ns_string("requestId"),
+            ns_string("operation"),
+            ns_string("texts"),
+        ]);
+        let values = ns_array(&[
+            ns_string(request_id),
+            ns_string("detectLanguage"),
+            ns_string(texts_json),
+        ]);
+
+        let dict: Option<Retained<AnyObject>> = msg_send![
+            objc2::class!(NSDictionary),
+            dictionaryWithObjects: values,
+            forKeys: keys
+        ];
+
+        if let Some(dict) = dict {
+            let center = CFNotificationCenterGetLocalCenter();
+            let name = CFStringCreateWithCString(
+                std::ptr::null(),
+                b"com.beyondtranslate.systemTranslation.request\0".as_ptr() as *const c_char,
+                CF_STRING_ENCODING_UTF8,
+            );
+            CFNotificationCenterPostNotification(
+                center,
+                name,
+                std::ptr::null(),
+                &*dict as *const AnyObject as CFDictionaryRef,
+                true,
+            );
+        }
+    }
+
+    // ── Public translate API ────────────────────────────────────────────
+
+    pub async fn detect_language(
+        request: DetectLanguageRequest,
+    ) -> Result<DetectLanguageResponse, TranslationError> {
+        ensure_observer();
+
+        if request.texts.is_empty() {
+            return Err(TranslationError::InvalidRequest(
+                "texts is required".to_owned(),
+            ));
+        }
+
+        let texts_json = serde_json::to_string(&request.texts)
+            .map_err(|error| TranslationError::SerializationError(error.to_string()))?;
+        let request_id = NEXT_REQ_ID.fetch_add(1, Ordering::SeqCst).to_string();
+        let (tx, rx) = mpsc::channel();
+
+        pending_registry()
+            .lock()
+            .unwrap()
+            .insert(request_id.clone(), PendingTx { sender: tx });
+
+        unsafe {
+            post_detect_language_request(&request_id, &texts_json);
+        }
+
+        let result = std::thread::spawn(move || {
+            rx.recv().unwrap_or_else(|_| {
+                Err(TranslationError::NetworkError(
+                    "translation response channel closed unexpectedly".into(),
+                ))
+            })
+        })
+        .join()
+        .map_err(|_| TranslationError::NetworkError("translation thread panicked".into()))?;
+
+        match result? {
+            SystemTranslationResponse::LanguageDetection(response) => Ok(response),
+            SystemTranslationResponse::Translation(_) => Err(TranslationError::SerializationError(
+                "unexpected translation response for language detection request".to_owned(),
+            )),
+        }
+    }
+
+    pub async fn translate(
+        request: &TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError> {
+        ensure_observer();
+
+        let request_id = NEXT_REQ_ID.fetch_add(1, Ordering::SeqCst).to_string();
+        let (tx, rx) = mpsc::channel();
+
+        pending_registry()
+            .lock()
+            .unwrap()
+            .insert(request_id.clone(), PendingTx { sender: tx });
+
+        let target = request.target_language.as_deref().ok_or_else(|| {
+            TranslationError::InvalidRequest("target_language is required".into())
+        })?;
+
+        unsafe {
+            post_translation_request(
+                &request_id,
+                &request.text,
+                request.source_language.as_deref(),
+                target,
+            );
+        }
+
+        // Bridge from sync mpsc to async: spawn a blocking thread.
+        // The CFNotificationCenter callback fires on the main run loop,
+        // so blocking here is safe — no deadlock.
+        let result = std::thread::spawn(move || {
+            rx.recv().unwrap_or_else(|_| {
+                Err(TranslationError::NetworkError(
+                    "translation response channel closed unexpectedly".into(),
+                ))
+            })
+        })
+        .join()
+        .map_err(|_| TranslationError::NetworkError("translation thread panicked".into()))?;
+
+        match result? {
+            SystemTranslationResponse::Translation(response) => Ok(response),
+            SystemTranslationResponse::LanguageDetection(_) => {
+                Err(TranslationError::SerializationError(
+                    "unexpected language detection response for translation request".to_owned(),
+                ))
+            }
+        }
+    }
 }
 
 // ── Windows: Windows.Media.Ocr ────────────────────────────────────────────
@@ -324,6 +687,22 @@ mod platform {
             recognitions: None,
         })
     }
+
+    pub async fn detect_language(
+        _request: DetectLanguageRequest,
+    ) -> Result<DetectLanguageResponse, TranslationError> {
+        Err(TranslationError::UnsupportedMethod(
+            "system language detection is not supported on Windows",
+        ))
+    }
+
+    pub async fn translate(
+        _request: &TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError> {
+        Err(TranslationError::UnsupportedMethod(
+            "system translation is not supported on Windows",
+        ))
+    }
 }
 
 // ── Unsupported Platform ───────────────────────────────────────────────────
@@ -337,21 +716,66 @@ mod platform {
             "system OCR is not supported on this platform",
         ))
     }
+
+    pub async fn detect_language(
+        _request: DetectLanguageRequest,
+    ) -> Result<DetectLanguageResponse, TranslationError> {
+        Err(TranslationError::UnsupportedMethod(
+            "system language detection is not supported on this platform",
+        ))
+    }
+
+    pub async fn translate(
+        _request: &TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError> {
+        Err(TranslationError::UnsupportedMethod(
+            "system translation is not supported on this platform",
+        ))
+    }
+}
+
+// ── System Translation Service ───────────────────────────────────────────
+
+pub struct SystemTranslationService;
+
+#[async_trait(?Send)]
+impl TranslationService for SystemTranslationService {
+    async fn detect_language(
+        &self,
+        request: DetectLanguageRequest,
+    ) -> Result<DetectLanguageResponse, TranslationError> {
+        platform::detect_language(request).await
+    }
+
+    async fn translate(
+        &self,
+        request: TranslateRequest,
+    ) -> Result<TranslateResponse, TranslationError> {
+        platform::translate(&request).await
+    }
 }
 
 // ── Provider ───────────────────────────────────────────────────────────────
 
-pub struct SystemProvider;
+pub struct SystemProvider {
+    translation_service: SystemTranslationService,
+}
 
 impl SystemProvider {
     pub fn new() -> Result<Self, String> {
-        Ok(Self)
+        Ok(Self {
+            translation_service: SystemTranslationService,
+        })
     }
 }
 
 impl Provider for SystemProvider {
     fn name(&self) -> &'static str {
         "system"
+    }
+
+    fn translation(&self) -> Option<&dyn TranslationService> {
+        Some(&self.translation_service)
     }
 
     fn ocr(&self) -> Option<&dyn OcrService> {

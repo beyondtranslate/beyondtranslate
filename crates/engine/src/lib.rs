@@ -19,6 +19,7 @@ pub use provider::GoogleProvider;
 #[cfg(feature = "iciba")]
 pub use provider::IcibaProvider;
 pub use provider::SystemProvider;
+pub use provider::SystemTranslationService;
 #[cfg(feature = "tencent")]
 pub use provider::TencentProvider;
 #[cfg(feature = "youdao")]

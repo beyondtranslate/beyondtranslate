@@ -3412,117 +3412,50 @@ Uint8List createUint8ListFromInt(int value) {
   return uint8List;
 }
 
-class FfiConverterOptionalSequenceTextDetection {
-  static List<TextDetection>? lift(RustBuffer buf) {
-    return FfiConverterOptionalSequenceTextDetection.read(buf.asUint8List())
-        .value;
+class FfiConverterOptionalInputSubmitMode {
+  static InputSubmitMode? lift(RustBuffer buf) {
+    return FfiConverterOptionalInputSubmitMode.read(buf.asUint8List()).value;
   }
 
-  static LiftRetVal<List<TextDetection>?> read(Uint8List buf) {
+  static LiftRetVal<InputSubmitMode?> read(Uint8List buf) {
     if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
       return LiftRetVal(null, 1);
     }
-    final result = FfiConverterSequenceTextDetection.read(
+    final result = FfiConverterInputSubmitMode.read(
         Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<List<TextDetection>?>(result.value, result.bytesRead + 1);
+    return LiftRetVal<InputSubmitMode?>(result.value, result.bytesRead + 1);
   }
 
-  static int allocationSize([List<TextDetection>? value]) {
+  static int allocationSize([InputSubmitMode? value]) {
     if (value == null) {
       return 1;
     }
-    return FfiConverterSequenceTextDetection.allocationSize(value) + 1;
+    return FfiConverterInputSubmitMode.allocationSize(value) + 1;
   }
 
-  static RustBuffer lower(List<TextDetection>? value) {
+  static RustBuffer lower(InputSubmitMode? value) {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
-    final length =
-        FfiConverterOptionalSequenceTextDetection.allocationSize(value);
+    final length = FfiConverterOptionalInputSubmitMode.allocationSize(value);
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
-    FfiConverterOptionalSequenceTextDetection.write(value, buf);
+    FfiConverterOptionalInputSubmitMode.write(value, buf);
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
     return RustBuffer.fromBytes(bytes.ref);
   }
 
-  static int write(List<TextDetection>? value, Uint8List buf) {
+  static int write(InputSubmitMode? value, Uint8List buf) {
     if (value == null) {
       buf[0] = 0;
       return 1;
     }
     buf[0] = 1;
-    return FfiConverterSequenceTextDetection.write(
+    return FfiConverterInputSubmitMode.write(
             value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
         1;
-  }
-}
-
-class FfiConverterSequenceTextDetection {
-  static List<TextDetection> lift(RustBuffer buf) {
-    return FfiConverterSequenceTextDetection.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<TextDetection>> read(Uint8List buf) {
-    List<TextDetection> res = [];
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final ret =
-          FfiConverterTextDetection.read(Uint8List.view(buf.buffer, offset));
-      offset += ret.bytesRead;
-      res.add(ret.value);
-    }
-    return LiftRetVal(res, offset - buf.offsetInBytes);
-  }
-
-  static int write(List<TextDetection> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterTextDetection.write(
-          value[i], Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(List<TextDetection> value) {
-    return value
-            .map((l) => FfiConverterTextDetection.allocationSize(l))
-            .fold(0, (a, b) => a + b) +
-        4;
-  }
-
-  static RustBuffer lower(List<TextDetection> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
-class FfiConverterInt32 {
-  static int lift(int value) => value;
-  static LiftRetVal<int> read(Uint8List buf) {
-    return LiftRetVal(buf.buffer.asByteData(buf.offsetInBytes).getInt32(0), 4);
-  }
-
-  static int lower(int value) {
-    if (value < -2147483648 || value > 2147483647) {
-      throw ArgumentError("Value out of range for i32: " + value.toString());
-    }
-    return value;
-  }
-
-  static int allocationSize([int value = 0]) {
-    return 4;
-  }
-
-  static int write(int value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, lower(value));
-    return 4;
   }
 }
 
@@ -3609,262 +3542,6 @@ class FfiConverterSequenceWordTense {
   }
 
   static RustBuffer lower(List<WordTense> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
-class FfiConverterOptionalProviderConfigEntry {
-  static ProviderConfigEntry? lift(RustBuffer buf) {
-    return FfiConverterOptionalProviderConfigEntry.read(buf.asUint8List())
-        .value;
-  }
-
-  static LiftRetVal<ProviderConfigEntry?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterProviderConfigEntry.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<ProviderConfigEntry?>(result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([ProviderConfigEntry? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterProviderConfigEntry.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(ProviderConfigEntry? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length =
-        FfiConverterOptionalProviderConfigEntry.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalProviderConfigEntry.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(ProviderConfigEntry? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterProviderConfigEntry.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterBool {
-  static bool lift(int value) {
-    return value == 1;
-  }
-
-  static int lower(bool value) {
-    return value ? 1 : 0;
-  }
-
-  static LiftRetVal<bool> read(Uint8List buf) {
-    return LiftRetVal(FfiConverterBool.lift(buf.first), 1);
-  }
-
-  static RustBuffer lowerIntoRustBuffer(bool value) {
-    return toRustBuffer(Uint8List.fromList([FfiConverterBool.lower(value)]));
-  }
-
-  static int allocationSize([bool value = false]) {
-    return 1;
-  }
-
-  static int write(bool value, Uint8List buf) {
-    buf.setAll(0, [value ? 1 : 0]);
-    return allocationSize();
-  }
-}
-
-class FfiConverterSequenceString {
-  static List<String> lift(RustBuffer buf) {
-    return FfiConverterSequenceString.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<String>> read(Uint8List buf) {
-    List<String> res = [];
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final ret = FfiConverterString.read(Uint8List.view(buf.buffer, offset));
-      offset += ret.bytesRead;
-      res.add(ret.value);
-    }
-    return LiftRetVal(res, offset - buf.offsetInBytes);
-  }
-
-  static int write(List<String> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterString.write(
-          value[i], Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(List<String> value) {
-    return value
-            .map((l) => FfiConverterString.allocationSize(l))
-            .fold(0, (a, b) => a + b) +
-        4;
-  }
-
-  static RustBuffer lower(List<String> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
-class FfiConverterOptionalInputSubmitMode {
-  static InputSubmitMode? lift(RustBuffer buf) {
-    return FfiConverterOptionalInputSubmitMode.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<InputSubmitMode?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterInputSubmitMode.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<InputSubmitMode?>(result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([InputSubmitMode? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterInputSubmitMode.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(InputSubmitMode? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length = FfiConverterOptionalInputSubmitMode.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalInputSubmitMode.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(InputSubmitMode? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterInputSubmitMode.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterOptionalSequenceWordPronunciation {
-  static List<WordPronunciation>? lift(RustBuffer buf) {
-    return FfiConverterOptionalSequenceWordPronunciation.read(buf.asUint8List())
-        .value;
-  }
-
-  static LiftRetVal<List<WordPronunciation>?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterSequenceWordPronunciation.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<List<WordPronunciation>?>(
-        result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([List<WordPronunciation>? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterSequenceWordPronunciation.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(List<WordPronunciation>? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length =
-        FfiConverterOptionalSequenceWordPronunciation.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalSequenceWordPronunciation.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(List<WordPronunciation>? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterSequenceWordPronunciation.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterSequenceWordPronunciation {
-  static List<WordPronunciation> lift(RustBuffer buf) {
-    return FfiConverterSequenceWordPronunciation.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<WordPronunciation>> read(Uint8List buf) {
-    List<WordPronunciation> res = [];
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final ret = FfiConverterWordPronunciation.read(
-          Uint8List.view(buf.buffer, offset));
-      offset += ret.bytesRead;
-      res.add(ret.value);
-    }
-    return LiftRetVal(res, offset - buf.offsetInBytes);
-  }
-
-  static int write(List<WordPronunciation> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterWordPronunciation.write(
-          value[i], Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(List<WordPronunciation> value) {
-    return value
-            .map((l) => FfiConverterWordPronunciation.allocationSize(l))
-            .fold(0, (a, b) => a + b) +
-        4;
-  }
-
-  static RustBuffer lower(List<WordPronunciation> value) {
     final buf = Uint8List(allocationSize(value));
     write(value, buf);
     return toRustBuffer(buf);
@@ -3959,137 +3636,48 @@ class FfiConverterSequenceWordTag {
   }
 }
 
-class FfiConverterOptionalSequenceWordPhrase {
-  static List<WordPhrase>? lift(RustBuffer buf) {
-    return FfiConverterOptionalSequenceWordPhrase.read(buf.asUint8List()).value;
+class FfiConverterOptionalString {
+  static String? lift(RustBuffer buf) {
+    return FfiConverterOptionalString.read(buf.asUint8List()).value;
   }
 
-  static LiftRetVal<List<WordPhrase>?> read(Uint8List buf) {
+  static LiftRetVal<String?> read(Uint8List buf) {
     if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
       return LiftRetVal(null, 1);
     }
-    final result = FfiConverterSequenceWordPhrase.read(
+    final result = FfiConverterString.read(
         Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<List<WordPhrase>?>(result.value, result.bytesRead + 1);
+    return LiftRetVal<String?>(result.value, result.bytesRead + 1);
   }
 
-  static int allocationSize([List<WordPhrase>? value]) {
+  static int allocationSize([String? value]) {
     if (value == null) {
       return 1;
     }
-    return FfiConverterSequenceWordPhrase.allocationSize(value) + 1;
+    return FfiConverterString.allocationSize(value) + 1;
   }
 
-  static RustBuffer lower(List<WordPhrase>? value) {
+  static RustBuffer lower(String? value) {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
-    final length = FfiConverterOptionalSequenceWordPhrase.allocationSize(value);
+    final length = FfiConverterOptionalString.allocationSize(value);
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
-    FfiConverterOptionalSequenceWordPhrase.write(value, buf);
+    FfiConverterOptionalString.write(value, buf);
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
     return RustBuffer.fromBytes(bytes.ref);
   }
 
-  static int write(List<WordPhrase>? value, Uint8List buf) {
+  static int write(String? value, Uint8List buf) {
     if (value == null) {
       buf[0] = 0;
       return 1;
     }
     buf[0] = 1;
-    return FfiConverterSequenceWordPhrase.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterSequenceWordPhrase {
-  static List<WordPhrase> lift(RustBuffer buf) {
-    return FfiConverterSequenceWordPhrase.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<WordPhrase>> read(Uint8List buf) {
-    List<WordPhrase> res = [];
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final ret =
-          FfiConverterWordPhrase.read(Uint8List.view(buf.buffer, offset));
-      offset += ret.bytesRead;
-      res.add(ret.value);
-    }
-    return LiftRetVal(res, offset - buf.offsetInBytes);
-  }
-
-  static int write(List<WordPhrase> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterWordPhrase.write(
-          value[i], Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(List<WordPhrase> value) {
-    return value
-            .map((l) => FfiConverterWordPhrase.allocationSize(l))
-            .fold(0, (a, b) => a + b) +
-        4;
-  }
-
-  static RustBuffer lower(List<WordPhrase> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
-class FfiConverterOptionalSettingsChange {
-  static SettingsChange? lift(RustBuffer buf) {
-    return FfiConverterOptionalSettingsChange.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<SettingsChange?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterSettingsChange.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<SettingsChange?>(result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([SettingsChange? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterSettingsChange.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(SettingsChange? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length = FfiConverterOptionalSettingsChange.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalSettingsChange.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(SettingsChange? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterSettingsChange.write(
+    return FfiConverterString.write(
             value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
         1;
   }
@@ -4142,157 +3730,67 @@ class FfiConverterOptionalTranslationMode {
   }
 }
 
-class FfiConverterMapStringToString {
-  static Map<String, String> lift(RustBuffer buf) {
-    return FfiConverterMapStringToString.read(buf.asUint8List()).value;
+class FfiConverterOptionalSequenceWordPronunciation {
+  static List<WordPronunciation>? lift(RustBuffer buf) {
+    return FfiConverterOptionalSequenceWordPronunciation.read(buf.asUint8List())
+        .value;
   }
 
-  static LiftRetVal<Map<String, String>> read(Uint8List buf) {
-    final map = <String, String>{};
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final k = FfiConverterString.read(Uint8List.view(buf.buffer, offset));
-      offset += k.bytesRead;
-      final v = FfiConverterString.read(Uint8List.view(buf.buffer, offset));
-      offset += v.bytesRead;
-      map[k.value] = v.value;
-    }
-    return LiftRetVal(map, offset - buf.offsetInBytes);
-  }
-
-  static int write(Map<String, String> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (final entry in value.entries) {
-      offset += FfiConverterString.write(
-          entry.key, Uint8List.view(buf.buffer, offset));
-      offset += FfiConverterString.write(
-          entry.value, Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(Map<String, String> value) {
-    return value.entries
-        .map((e) =>
-            FfiConverterString.allocationSize(e.key) +
-            FfiConverterString.allocationSize(e.value))
-        .fold(4, (a, b) => a + b);
-  }
-
-  static RustBuffer lower(Map<String, String> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
-class FfiConverterOptionalSequenceString {
-  static List<String>? lift(RustBuffer buf) {
-    return FfiConverterOptionalSequenceString.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<String>?> read(Uint8List buf) {
+  static LiftRetVal<List<WordPronunciation>?> read(Uint8List buf) {
     if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
       return LiftRetVal(null, 1);
     }
-    final result = FfiConverterSequenceString.read(
+    final result = FfiConverterSequenceWordPronunciation.read(
         Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<List<String>?>(result.value, result.bytesRead + 1);
+    return LiftRetVal<List<WordPronunciation>?>(
+        result.value, result.bytesRead + 1);
   }
 
-  static int allocationSize([List<String>? value]) {
+  static int allocationSize([List<WordPronunciation>? value]) {
     if (value == null) {
       return 1;
     }
-    return FfiConverterSequenceString.allocationSize(value) + 1;
+    return FfiConverterSequenceWordPronunciation.allocationSize(value) + 1;
   }
 
-  static RustBuffer lower(List<String>? value) {
+  static RustBuffer lower(List<WordPronunciation>? value) {
     if (value == null) {
       return toRustBuffer(Uint8List.fromList([0]));
     }
-    final length = FfiConverterOptionalSequenceString.allocationSize(value);
+    final length =
+        FfiConverterOptionalSequenceWordPronunciation.allocationSize(value);
     final Pointer<Uint8> frameData = calloc<Uint8>(length);
     final buf = frameData.asTypedList(length);
-    FfiConverterOptionalSequenceString.write(value, buf);
+    FfiConverterOptionalSequenceWordPronunciation.write(value, buf);
     final bytes = calloc<ForeignBytes>();
     bytes.ref.len = length;
     bytes.ref.data = frameData;
     return RustBuffer.fromBytes(bytes.ref);
   }
 
-  static int write(List<String>? value, Uint8List buf) {
+  static int write(List<WordPronunciation>? value, Uint8List buf) {
     if (value == null) {
       buf[0] = 0;
       return 1;
     }
     buf[0] = 1;
-    return FfiConverterSequenceString.write(
+    return FfiConverterSequenceWordPronunciation.write(
             value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
         1;
   }
 }
 
-class FfiConverterOptionalString {
-  static String? lift(RustBuffer buf) {
-    return FfiConverterOptionalString.read(buf.asUint8List()).value;
+class FfiConverterSequenceWordPronunciation {
+  static List<WordPronunciation> lift(RustBuffer buf) {
+    return FfiConverterSequenceWordPronunciation.read(buf.asUint8List()).value;
   }
 
-  static LiftRetVal<String?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterString.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<String?>(result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([String? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterString.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(String? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length = FfiConverterOptionalString.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalString.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(String? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterString.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterSequenceTranslationTarget {
-  static List<TranslationTarget> lift(RustBuffer buf) {
-    return FfiConverterSequenceTranslationTarget.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<TranslationTarget>> read(Uint8List buf) {
-    List<TranslationTarget> res = [];
+  static LiftRetVal<List<WordPronunciation>> read(Uint8List buf) {
+    List<WordPronunciation> res = [];
     final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
     int offset = buf.offsetInBytes + 4;
     for (var i = 0; i < length; i++) {
-      final ret = FfiConverterTranslationTarget.read(
+      final ret = FfiConverterWordPronunciation.read(
           Uint8List.view(buf.buffer, offset));
       offset += ret.bytesRead;
       res.add(ret.value);
@@ -4300,24 +3798,24 @@ class FfiConverterSequenceTranslationTarget {
     return LiftRetVal(res, offset - buf.offsetInBytes);
   }
 
-  static int write(List<TranslationTarget> value, Uint8List buf) {
+  static int write(List<WordPronunciation> value, Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
     int offset = buf.offsetInBytes + 4;
     for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterTranslationTarget.write(
+      offset += FfiConverterWordPronunciation.write(
           value[i], Uint8List.view(buf.buffer, offset));
     }
     return offset - buf.offsetInBytes;
   }
 
-  static int allocationSize(List<TranslationTarget> value) {
+  static int allocationSize(List<WordPronunciation> value) {
     return value
-            .map((l) => FfiConverterTranslationTarget.allocationSize(l))
+            .map((l) => FfiConverterWordPronunciation.allocationSize(l))
             .fold(0, (a, b) => a + b) +
         4;
   }
 
-  static RustBuffer lower(List<TranslationTarget> value) {
+  static RustBuffer lower(List<WordPronunciation> value) {
     final buf = Uint8List(allocationSize(value));
     write(value, buf);
     return toRustBuffer(buf);
@@ -4421,21 +3919,234 @@ class FfiConverterOptionalSequenceTranslationTarget {
   }
 }
 
-class FfiConverterDouble64 {
-  static double lift(double value) => value;
-  static LiftRetVal<double> read(Uint8List buf) {
-    return LiftRetVal(
-        buf.buffer.asByteData(buf.offsetInBytes).getFloat64(0), 8);
+class FfiConverterOptionalProviderConfigEntry {
+  static ProviderConfigEntry? lift(RustBuffer buf) {
+    return FfiConverterOptionalProviderConfigEntry.read(buf.asUint8List())
+        .value;
   }
 
-  static double lower(double value) => value;
-  static int allocationSize([double value = 0]) {
-    return 8;
+  static LiftRetVal<ProviderConfigEntry?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterProviderConfigEntry.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<ProviderConfigEntry?>(result.value, result.bytesRead + 1);
   }
 
-  static int write(double value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setFloat64(0, value);
-    return FfiConverterDouble64.allocationSize();
+  static int allocationSize([ProviderConfigEntry? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterProviderConfigEntry.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(ProviderConfigEntry? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length =
+        FfiConverterOptionalProviderConfigEntry.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalProviderConfigEntry.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(ProviderConfigEntry? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterProviderConfigEntry.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterMapStringToString {
+  static Map<String, String> lift(RustBuffer buf) {
+    return FfiConverterMapStringToString.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<Map<String, String>> read(Uint8List buf) {
+    final map = <String, String>{};
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final k = FfiConverterString.read(Uint8List.view(buf.buffer, offset));
+      offset += k.bytesRead;
+      final v = FfiConverterString.read(Uint8List.view(buf.buffer, offset));
+      offset += v.bytesRead;
+      map[k.value] = v.value;
+    }
+    return LiftRetVal(map, offset - buf.offsetInBytes);
+  }
+
+  static int write(Map<String, String> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (final entry in value.entries) {
+      offset += FfiConverterString.write(
+          entry.key, Uint8List.view(buf.buffer, offset));
+      offset += FfiConverterString.write(
+          entry.value, Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(Map<String, String> value) {
+    return value.entries
+        .map((e) =>
+            FfiConverterString.allocationSize(e.key) +
+            FfiConverterString.allocationSize(e.value))
+        .fold(4, (a, b) => a + b);
+  }
+
+  static RustBuffer lower(Map<String, String> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterOptionalSequenceString {
+  static List<String>? lift(RustBuffer buf) {
+    return FfiConverterOptionalSequenceString.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<String>?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterSequenceString.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<List<String>?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([List<String>? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterSequenceString.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(List<String>? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length = FfiConverterOptionalSequenceString.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalSequenceString.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(List<String>? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterSequenceString.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterOptionalSequenceWordPhrase {
+  static List<WordPhrase>? lift(RustBuffer buf) {
+    return FfiConverterOptionalSequenceWordPhrase.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<WordPhrase>?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterSequenceWordPhrase.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<List<WordPhrase>?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([List<WordPhrase>? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterSequenceWordPhrase.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(List<WordPhrase>? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length = FfiConverterOptionalSequenceWordPhrase.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalSequenceWordPhrase.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(List<WordPhrase>? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterSequenceWordPhrase.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterSequenceWordPhrase {
+  static List<WordPhrase> lift(RustBuffer buf) {
+    return FfiConverterSequenceWordPhrase.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<WordPhrase>> read(Uint8List buf) {
+    List<WordPhrase> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterWordPhrase.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<WordPhrase> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterWordPhrase.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<WordPhrase> value) {
+    return value
+            .map((l) => FfiConverterWordPhrase.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<WordPhrase> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
   }
 }
 
@@ -4476,414 +4187,6 @@ class FfiConverterSequenceProviderConfigEntry {
   }
 
   static RustBuffer lower(List<ProviderConfigEntry> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
-class FfiConverterOptionalDouble64 {
-  static double? lift(RustBuffer buf) {
-    return FfiConverterOptionalDouble64.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<double?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterDouble64.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<double?>(result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([double? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterDouble64.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(double? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length = FfiConverterOptionalDouble64.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalDouble64.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(double? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterDouble64.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterOptionalRecognizedRect {
-  static RecognizedRect? lift(RustBuffer buf) {
-    return FfiConverterOptionalRecognizedRect.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<RecognizedRect?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterRecognizedRect.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<RecognizedRect?>(result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([RecognizedRect? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterRecognizedRect.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(RecognizedRect? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length = FfiConverterOptionalRecognizedRect.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalRecognizedRect.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(RecognizedRect? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterRecognizedRect.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterOptionalSequenceWordSentence {
-  static List<WordSentence>? lift(RustBuffer buf) {
-    return FfiConverterOptionalSequenceWordSentence.read(buf.asUint8List())
-        .value;
-  }
-
-  static LiftRetVal<List<WordSentence>?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterSequenceWordSentence.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<List<WordSentence>?>(result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([List<WordSentence>? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterSequenceWordSentence.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(List<WordSentence>? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length =
-        FfiConverterOptionalSequenceWordSentence.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalSequenceWordSentence.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(List<WordSentence>? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterSequenceWordSentence.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterSequenceWordSentence {
-  static List<WordSentence> lift(RustBuffer buf) {
-    return FfiConverterSequenceWordSentence.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<WordSentence>> read(Uint8List buf) {
-    List<WordSentence> res = [];
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final ret =
-          FfiConverterWordSentence.read(Uint8List.view(buf.buffer, offset));
-      offset += ret.bytesRead;
-      res.add(ret.value);
-    }
-    return LiftRetVal(res, offset - buf.offsetInBytes);
-  }
-
-  static int write(List<WordSentence> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterWordSentence.write(
-          value[i], Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(List<WordSentence> value) {
-    return value
-            .map((l) => FfiConverterWordSentence.allocationSize(l))
-            .fold(0, (a, b) => a + b) +
-        4;
-  }
-
-  static RustBuffer lower(List<WordSentence> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
-class FfiConverterOptionalSequenceWordDefinition {
-  static List<WordDefinition>? lift(RustBuffer buf) {
-    return FfiConverterOptionalSequenceWordDefinition.read(buf.asUint8List())
-        .value;
-  }
-
-  static LiftRetVal<List<WordDefinition>?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterSequenceWordDefinition.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<List<WordDefinition>?>(
-        result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([List<WordDefinition>? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterSequenceWordDefinition.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(List<WordDefinition>? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length =
-        FfiConverterOptionalSequenceWordDefinition.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalSequenceWordDefinition.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(List<WordDefinition>? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterSequenceWordDefinition.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterSequenceWordDefinition {
-  static List<WordDefinition> lift(RustBuffer buf) {
-    return FfiConverterSequenceWordDefinition.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<WordDefinition>> read(Uint8List buf) {
-    List<WordDefinition> res = [];
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final ret =
-          FfiConverterWordDefinition.read(Uint8List.view(buf.buffer, offset));
-      offset += ret.bytesRead;
-      res.add(ret.value);
-    }
-    return LiftRetVal(res, offset - buf.offsetInBytes);
-  }
-
-  static int write(List<WordDefinition> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterWordDefinition.write(
-          value[i], Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(List<WordDefinition> value) {
-    return value
-            .map((l) => FfiConverterWordDefinition.allocationSize(l))
-            .fold(0, (a, b) => a + b) +
-        4;
-  }
-
-  static RustBuffer lower(List<WordDefinition> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
-class FfiConverterSequenceTextTranslation {
-  static List<TextTranslation> lift(RustBuffer buf) {
-    return FfiConverterSequenceTextTranslation.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<TextTranslation>> read(Uint8List buf) {
-    List<TextTranslation> res = [];
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final ret =
-          FfiConverterTextTranslation.read(Uint8List.view(buf.buffer, offset));
-      offset += ret.bytesRead;
-      res.add(ret.value);
-    }
-    return LiftRetVal(res, offset - buf.offsetInBytes);
-  }
-
-  static int write(List<TextTranslation> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterTextTranslation.write(
-          value[i], Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(List<TextTranslation> value) {
-    return value
-            .map((l) => FfiConverterTextTranslation.allocationSize(l))
-            .fold(0, (a, b) => a + b) +
-        4;
-  }
-
-  static RustBuffer lower(List<TextTranslation> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
-class FfiConverterOptionalSequenceWordImage {
-  static List<WordImage>? lift(RustBuffer buf) {
-    return FfiConverterOptionalSequenceWordImage.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<WordImage>?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterSequenceWordImage.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<List<WordImage>?>(result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([List<WordImage>? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterSequenceWordImage.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(List<WordImage>? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length = FfiConverterOptionalSequenceWordImage.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalSequenceWordImage.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(List<WordImage>? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterSequenceWordImage.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
-class FfiConverterSequenceWordImage {
-  static List<WordImage> lift(RustBuffer buf) {
-    return FfiConverterSequenceWordImage.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<WordImage>> read(Uint8List buf) {
-    List<WordImage> res = [];
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final ret =
-          FfiConverterWordImage.read(Uint8List.view(buf.buffer, offset));
-      offset += ret.bytesRead;
-      res.add(ret.value);
-    }
-    return LiftRetVal(res, offset - buf.offsetInBytes);
-  }
-
-  static int write(List<WordImage> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterWordImage.write(
-          value[i], Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(List<WordImage> value) {
-    return value
-            .map((l) => FfiConverterWordImage.allocationSize(l))
-            .fold(0, (a, b) => a + b) +
-        4;
-  }
-
-  static RustBuffer lower(List<WordImage> value) {
     final buf = Uint8List(allocationSize(value));
     write(value, buf);
     return toRustBuffer(buf);
@@ -4982,6 +4285,335 @@ class FfiConverterSequenceTextRecognition {
   }
 }
 
+class FfiConverterSequenceString {
+  static List<String> lift(RustBuffer buf) {
+    return FfiConverterSequenceString.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<String>> read(Uint8List buf) {
+    List<String> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret = FfiConverterString.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<String> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterString.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<String> value) {
+    return value
+            .map((l) => FfiConverterString.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<String> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterOptionalSequenceWordDefinition {
+  static List<WordDefinition>? lift(RustBuffer buf) {
+    return FfiConverterOptionalSequenceWordDefinition.read(buf.asUint8List())
+        .value;
+  }
+
+  static LiftRetVal<List<WordDefinition>?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterSequenceWordDefinition.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<List<WordDefinition>?>(
+        result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([List<WordDefinition>? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterSequenceWordDefinition.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(List<WordDefinition>? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length =
+        FfiConverterOptionalSequenceWordDefinition.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalSequenceWordDefinition.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(List<WordDefinition>? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterSequenceWordDefinition.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterSequenceWordDefinition {
+  static List<WordDefinition> lift(RustBuffer buf) {
+    return FfiConverterSequenceWordDefinition.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<WordDefinition>> read(Uint8List buf) {
+    List<WordDefinition> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterWordDefinition.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<WordDefinition> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterWordDefinition.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<WordDefinition> value) {
+    return value
+            .map((l) => FfiConverterWordDefinition.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<WordDefinition> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterOptionalSequenceWordImage {
+  static List<WordImage>? lift(RustBuffer buf) {
+    return FfiConverterOptionalSequenceWordImage.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<WordImage>?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterSequenceWordImage.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<List<WordImage>?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([List<WordImage>? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterSequenceWordImage.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(List<WordImage>? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length = FfiConverterOptionalSequenceWordImage.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalSequenceWordImage.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(List<WordImage>? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterSequenceWordImage.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterSequenceWordImage {
+  static List<WordImage> lift(RustBuffer buf) {
+    return FfiConverterSequenceWordImage.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<WordImage>> read(Uint8List buf) {
+    List<WordImage> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterWordImage.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<WordImage> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterWordImage.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<WordImage> value) {
+    return value
+            .map((l) => FfiConverterWordImage.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<WordImage> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterDouble64 {
+  static double lift(double value) => value;
+  static LiftRetVal<double> read(Uint8List buf) {
+    return LiftRetVal(
+        buf.buffer.asByteData(buf.offsetInBytes).getFloat64(0), 8);
+  }
+
+  static double lower(double value) => value;
+  static int allocationSize([double value = 0]) {
+    return 8;
+  }
+
+  static int write(double value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setFloat64(0, value);
+    return FfiConverterDouble64.allocationSize();
+  }
+}
+
+class FfiConverterSequenceTextTranslation {
+  static List<TextTranslation> lift(RustBuffer buf) {
+    return FfiConverterSequenceTextTranslation.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<TextTranslation>> read(Uint8List buf) {
+    List<TextTranslation> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterTextTranslation.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<TextTranslation> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterTextTranslation.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<TextTranslation> value) {
+    return value
+            .map((l) => FfiConverterTextTranslation.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<TextTranslation> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterOptionalSettingsChange {
+  static SettingsChange? lift(RustBuffer buf) {
+    return FfiConverterOptionalSettingsChange.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<SettingsChange?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterSettingsChange.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<SettingsChange?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([SettingsChange? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterSettingsChange.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(SettingsChange? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length = FfiConverterOptionalSettingsChange.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalSettingsChange.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(SettingsChange? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterSettingsChange.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
 class FfiConverterString {
   static String lift(RustBuffer buf) {
     return utf8.decoder.convert(buf.asUint8List());
@@ -5005,6 +4637,374 @@ class FfiConverterString {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, list.length);
     buf.setAll(4, list);
     return list.length + 4;
+  }
+}
+
+class FfiConverterOptionalRecognizedRect {
+  static RecognizedRect? lift(RustBuffer buf) {
+    return FfiConverterOptionalRecognizedRect.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<RecognizedRect?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterRecognizedRect.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<RecognizedRect?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([RecognizedRect? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterRecognizedRect.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(RecognizedRect? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length = FfiConverterOptionalRecognizedRect.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalRecognizedRect.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(RecognizedRect? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterRecognizedRect.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterOptionalSequenceTextDetection {
+  static List<TextDetection>? lift(RustBuffer buf) {
+    return FfiConverterOptionalSequenceTextDetection.read(buf.asUint8List())
+        .value;
+  }
+
+  static LiftRetVal<List<TextDetection>?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterSequenceTextDetection.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<List<TextDetection>?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([List<TextDetection>? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterSequenceTextDetection.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(List<TextDetection>? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length =
+        FfiConverterOptionalSequenceTextDetection.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalSequenceTextDetection.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(List<TextDetection>? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterSequenceTextDetection.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterSequenceTextDetection {
+  static List<TextDetection> lift(RustBuffer buf) {
+    return FfiConverterSequenceTextDetection.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<TextDetection>> read(Uint8List buf) {
+    List<TextDetection> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterTextDetection.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<TextDetection> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterTextDetection.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<TextDetection> value) {
+    return value
+            .map((l) => FfiConverterTextDetection.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<TextDetection> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterBool {
+  static bool lift(int value) {
+    return value == 1;
+  }
+
+  static int lower(bool value) {
+    return value ? 1 : 0;
+  }
+
+  static LiftRetVal<bool> read(Uint8List buf) {
+    return LiftRetVal(FfiConverterBool.lift(buf.first), 1);
+  }
+
+  static RustBuffer lowerIntoRustBuffer(bool value) {
+    return toRustBuffer(Uint8List.fromList([FfiConverterBool.lower(value)]));
+  }
+
+  static int allocationSize([bool value = false]) {
+    return 1;
+  }
+
+  static int write(bool value, Uint8List buf) {
+    buf.setAll(0, [value ? 1 : 0]);
+    return allocationSize();
+  }
+}
+
+class FfiConverterInt32 {
+  static int lift(int value) => value;
+  static LiftRetVal<int> read(Uint8List buf) {
+    return LiftRetVal(buf.buffer.asByteData(buf.offsetInBytes).getInt32(0), 4);
+  }
+
+  static int lower(int value) {
+    if (value < -2147483648 || value > 2147483647) {
+      throw ArgumentError("Value out of range for i32: " + value.toString());
+    }
+    return value;
+  }
+
+  static int allocationSize([int value = 0]) {
+    return 4;
+  }
+
+  static int write(int value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, lower(value));
+    return 4;
+  }
+}
+
+class FfiConverterOptionalSequenceWordSentence {
+  static List<WordSentence>? lift(RustBuffer buf) {
+    return FfiConverterOptionalSequenceWordSentence.read(buf.asUint8List())
+        .value;
+  }
+
+  static LiftRetVal<List<WordSentence>?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterSequenceWordSentence.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<List<WordSentence>?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([List<WordSentence>? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterSequenceWordSentence.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(List<WordSentence>? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length =
+        FfiConverterOptionalSequenceWordSentence.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalSequenceWordSentence.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(List<WordSentence>? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterSequenceWordSentence.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterSequenceWordSentence {
+  static List<WordSentence> lift(RustBuffer buf) {
+    return FfiConverterSequenceWordSentence.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<WordSentence>> read(Uint8List buf) {
+    List<WordSentence> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterWordSentence.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<WordSentence> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterWordSentence.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<WordSentence> value) {
+    return value
+            .map((l) => FfiConverterWordSentence.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<WordSentence> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterSequenceTranslationTarget {
+  static List<TranslationTarget> lift(RustBuffer buf) {
+    return FfiConverterSequenceTranslationTarget.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<TranslationTarget>> read(Uint8List buf) {
+    List<TranslationTarget> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret = FfiConverterTranslationTarget.read(
+          Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<TranslationTarget> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterTranslationTarget.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<TranslationTarget> value) {
+    return value
+            .map((l) => FfiConverterTranslationTarget.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<TranslationTarget> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterOptionalDouble64 {
+  static double? lift(RustBuffer buf) {
+    return FfiConverterOptionalDouble64.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<double?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterDouble64.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<double?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([double? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterDouble64.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(double? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length = FfiConverterOptionalDouble64.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalDouble64.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(double? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterDouble64.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
   }
 }
 

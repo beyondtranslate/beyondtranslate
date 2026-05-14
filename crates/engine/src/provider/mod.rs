@@ -21,6 +21,7 @@ pub use google::GoogleProviderConfig;
 pub use iciba::IcibaProvider;
 pub use iciba::IcibaProviderConfig;
 pub use system::SystemProvider;
+pub use system::SystemTranslationService;
 #[cfg(feature = "tencent")]
 pub use tencent::TencentProvider;
 pub use tencent::TencentProviderConfig;
