@@ -4,8 +4,4 @@ exclude:
 ignore:
   - dio
   - flutter_test
-  - ocr_engine_builtin
-  - ocr_engine_youdao
-  - shortid
-  - uni_ocr_client
   - vclibs

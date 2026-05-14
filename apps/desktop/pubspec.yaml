@@ -27,19 +27,15 @@ dependencies:
   keypress_simulator: ^0.2.0
   launch_at_startup: ^0.3.1
   nativeapi: ^0.1.1
-  ocr_engine_builtin: ^0.1.1
-  ocr_engine_youdao: ^0.1.1
   package_info_plus: ^9.0.0
   path: ^1.8.3
   path_provider: ^2.1.1
   protocol_handler: ^0.1.6
   screen_capturer: ^0.2.2
   screen_text_extractor: ^0.1.3
-  shortid: ^0.1.2
   slang: ^4.13.0
   slang_flutter: ^4.13.0
   sticky_headers: ^0.3.0+2
-  uni_ocr_client: ^0.1.1
   vclibs: ^0.1.0
 
 dev_dependencies:
@@ -62,7 +58,6 @@ flutter:
 
   assets:
     - resources/images/
-    - resources/images/ocr_engine_icons/
     - resources/images/translation_engine_icons/
 
   fonts:

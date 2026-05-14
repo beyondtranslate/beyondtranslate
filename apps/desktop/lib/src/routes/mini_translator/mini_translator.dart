@@ -555,7 +555,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _setStateAndScheduleWindowResize(() {});
       return;
     } else {
-      // OCR was previously performed by the in-app `uni_ocr_client`. The
+      // OCR was previously performed by the in-app OCR client. The
       // Rust runtime has not yet exposed a generic OCR endpoint, so for now we
       // surface a toast to indicate the action is unsupported. The captured
       // image is still stored on disk for future processing.
