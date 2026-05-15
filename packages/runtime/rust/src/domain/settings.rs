@@ -3,6 +3,7 @@ use std::fs;
 use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use beyondtranslate_core::ProviderCapability;
 use beyondtranslate_engine::{ProviderConfig, ProviderType};
 use serde::de::Error as DeError;
 use serde::ser::SerializeMap;
@@ -128,19 +129,34 @@ impl Default for GeneralSettings {
 #[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize, uniffi::Record)))]
 pub struct AdvancedSettings {}
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, uniffi::Record)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, uniffi::Record)]
 pub struct ProviderConfigEntry {
     #[serde(default)]
     pub id: String,
     /// Provider type (baidu, deepl, google, etc.)
-    #[serde(default, rename = "type")]
-    pub r#type: String,
+    #[serde(default = "default_provider_type", rename = "type")]
+    pub r#type: ProviderType,
     #[serde(default)]
     pub fields: HashMap<String, String>,
     /// Provider capabilities, populated at runtime from the engine instance.
     /// Not written to the settings file.
     #[serde(default, skip_serializing)]
-    pub capabilities: Vec<String>,
+    pub capabilities: Vec<ProviderCapability>,
+}
+
+impl Default for ProviderConfigEntry {
+    fn default() -> Self {
+        Self {
+            id: String::default(),
+            r#type: ProviderType::DeepL,
+            fields: HashMap::default(),
+            capabilities: Vec::default(),
+        }
+    }
+}
+
+fn default_provider_type() -> ProviderType {
+    ProviderType::DeepL
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -233,7 +249,7 @@ fn current_timestamp_millis() -> Result<u64, String> {
 pub fn provider_config_from_settings(
     provider: &ProviderConfigEntry,
 ) -> Result<ProviderConfig, String> {
-    let provider_type = parse_provider_type(&provider.r#type)?;
+    let provider_type = provider.r#type;
     let mut options = BTreeMap::new();
     for (key, value) in &provider.fields {
         options.insert(key.clone(), serde_yaml::Value::String(value.clone()));
@@ -303,13 +319,13 @@ pub fn provider_entry_from_config(
 
     Ok(ProviderConfigEntry {
         id: provider_id.to_owned(),
-        r#type: config.provider_type.as_str().to_owned(),
+        r#type: config.provider_type,
         fields,
         capabilities: Vec::new(),
     })
 }
 
-fn parse_provider_type(value: &str) -> Result<ProviderType, String> {
+pub(crate) fn parse_provider_type(value: &str) -> Result<ProviderType, String> {
     serde_yaml::from_value::<ProviderType>(serde_yaml::Value::String(value.to_owned()))
         .map_err(|error| format!("invalid provider type `{value}`: {error}"))
 }
@@ -436,7 +452,7 @@ mod tests {
         assert_eq!(settings.providers.len(), 1);
         let provider = settings.providers.get("deepl-main").unwrap();
         assert_eq!(provider.id, "deepl-main");
-        assert_eq!(provider.r#type, "deepl");
+        assert_eq!(provider.r#type, ProviderType::DeepL);
         let parsed = provider_config_from_settings(provider).unwrap();
         assert_eq!(parsed.provider_type.as_str(), "deepl");
         assert_eq!(
@@ -464,7 +480,7 @@ mod tests {
             "deepl-main".to_owned(),
             ProviderConfigEntry {
                 id: "deepl-main".to_owned(),
-                r#type: "deepl".to_owned(),
+                r#type: ProviderType::DeepL,
                 fields: HashMap::from([("appKey".to_owned(), "test-key".to_owned())]),
                 capabilities: Vec::new(),
             },

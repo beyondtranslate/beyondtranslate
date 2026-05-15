@@ -30,11 +30,13 @@ export 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
         WordPronunciation,
         WordSentence,
         WordTag,
-        WordTense;
+        WordTense,
+        ProviderCapability,
+        ProviderType;
 
-/// [ProviderCapability] is a pure-Dart enum that mirrors the capability
-/// strings produced by the Rust engine (e.g. "dictionary", "translation").
-export 'provider_capability.dart' show ProviderCapability;
+/// [ProviderCapability] is provided by the generated FFI bindings, not
+/// from provider_capability.dart which is no longer used.
+// export 'provider_capability.dart' show ProviderCapability;
 
 /// Singleton [Runtime] handle, backed by the Rust native library.
 ///

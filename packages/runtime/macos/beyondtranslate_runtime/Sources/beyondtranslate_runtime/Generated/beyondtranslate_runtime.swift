@@ -2219,13 +2219,13 @@ public struct ProviderConfigEntry: Equatable, Hashable {
   /**
    * Provider type (baidu, deepl, google, etc.)
    */
-  public var type: String
+  public var type: ProviderType
   public var fields: [String: String]
   /**
    * Provider capabilities, populated at runtime from the engine instance.
    * Not written to the settings file.
    */
-  public var capabilities: [String]
+  public var capabilities: [ProviderCapability]
 
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
@@ -2234,12 +2234,12 @@ public struct ProviderConfigEntry: Equatable, Hashable {
     /**
      * Provider type (baidu, deepl, google, etc.)
      */
-    type: String, fields: [String: String],
+    type: ProviderType, fields: [String: String],
     /**
      * Provider capabilities, populated at runtime from the engine instance.
      * Not written to the settings file.
      */
-    capabilities: [String]
+    capabilities: [ProviderCapability]
   ) {
     self.id = id
     self.type = type
@@ -2263,17 +2263,17 @@ public struct FfiConverterTypeProviderConfigEntry: FfiConverterRustBuffer {
     return
       try ProviderConfigEntry(
         id: FfiConverterString.read(from: &buf),
-        type: FfiConverterString.read(from: &buf),
+        type: FfiConverterTypeProviderType.read(from: &buf),
         fields: FfiConverterDictionaryStringString.read(from: &buf),
-        capabilities: FfiConverterSequenceString.read(from: &buf)
+        capabilities: FfiConverterSequenceTypeProviderCapability.read(from: &buf)
       )
   }
 
   public static func write(_ value: ProviderConfigEntry, into buf: inout [UInt8]) {
     FfiConverterString.write(value.id, into: &buf)
-    FfiConverterString.write(value.type, into: &buf)
+    FfiConverterTypeProviderType.write(value.type, into: &buf)
     FfiConverterDictionaryStringString.write(value.fields, into: &buf)
-    FfiConverterSequenceString.write(value.capabilities, into: &buf)
+    FfiConverterSequenceTypeProviderCapability.write(value.capabilities, into: &buf)
   }
 }
 
@@ -4498,6 +4498,33 @@ private struct FfiConverterSequenceTypeWordTense: FfiConverterRustBuffer {
     seq.reserveCapacity(Int(len))
     for _ in 0..<len {
       seq.append(try FfiConverterTypeWordTense.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterSequenceTypeProviderCapability: FfiConverterRustBuffer {
+  typealias SwiftType = [ProviderCapability]
+
+  public static func write(_ value: [ProviderCapability], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterTypeProviderCapability.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> [ProviderCapability]
+  {
+    let len: Int32 = try readInt(&buf)
+    var seq = [ProviderCapability]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterTypeProviderCapability.read(from: &buf))
     }
     return seq
   }

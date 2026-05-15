@@ -59,33 +59,33 @@ final class GeneralViewModel: ObservableObject {
     }
   }
 
-  // Ocr service options: {provider-id}+ocr
+  // Ocr service options.
   var ocrServiceOptions: [ServiceOption] {
     providers
-      .filter { $0.capabilities.contains("ocr") }
-      .map { ServiceOption(id: "\($0.id)+ocr", name: $0.id) }
+      .filter { $0.capabilities.contains(.ocr) }
+      .map { ServiceOption(id: $0.id, name: $0.id) }
   }
 
   var validDefaultOcrService: String {
     isDefaultOcrServiceValid ? defaultOcrService : ""
   }
 
-  // Directory service options: {provider-id}+dictionary
+  // Directory service options.
   var dictionaryServiceOptions: [ServiceOption] {
     providers
-      .filter { $0.capabilities.contains("dictionary") }
-      .map { ServiceOption(id: "\($0.id)+dictionary", name: $0.id) }
+      .filter { $0.capabilities.contains(.dictionary) }
+      .map { ServiceOption(id: $0.id, name: $0.id) }
   }
 
   var validDefaultDirectoryService: String {
     isDefaultDirectoryServiceValid ? defaultDirectoryService : ""
   }
 
-  // Translation service options: {provider-id}+translation
+  // Translation service options.
   var translationServiceOptions: [ServiceOption] {
     providers
-      .filter { $0.capabilities.contains("translation") }
-      .map { ServiceOption(id: "\($0.id)+translation", name: $0.id) }
+      .filter { $0.capabilities.contains(.translation) }
+      .map { ServiceOption(id: $0.id, name: $0.id) }
   }
 
   var validDefaultTranslationService: String {
@@ -118,8 +118,9 @@ final class GeneralViewModel: ObservableObject {
   }
 
   func setDefaultOcrService(_ value: String) {
-    defaultOcrService = value
-    Task { await persist(.diff(defaultOcrService: value)) }
+    let providerID = Self.providerID(fromServiceID: value)
+    defaultOcrService = providerID
+    Task { await persist(.diff(defaultOcrService: providerID)) }
   }
 
   func setAutoCopyDetectedText(_ value: Bool) {
@@ -128,13 +129,15 @@ final class GeneralViewModel: ObservableObject {
   }
 
   func setDefaultDirectoryService(_ value: String) {
-    defaultDirectoryService = value
-    Task { await persist(.diff(defaultDirectoryService: value)) }
+    let providerID = Self.providerID(fromServiceID: value)
+    defaultDirectoryService = providerID
+    Task { await persist(.diff(defaultDirectoryService: providerID)) }
   }
 
   func setDefaultTranslationService(_ value: String) {
-    defaultTranslationService = value
-    Task { await persist(.diff(defaultTranslationService: value)) }
+    let providerID = Self.providerID(fromServiceID: value)
+    defaultTranslationService = providerID
+    Task { await persist(.diff(defaultTranslationService: providerID)) }
   }
 
   func setTranslationMode(_ value: TranslationMode) {
@@ -185,14 +188,23 @@ final class GeneralViewModel: ObservableObject {
   private func apply(_ settings: GeneralSettings) {
     launchAtLogin = settings.launchAtLogin
     showMenuBar = settings.showMenuBar
-    defaultOcrService = settings.defaultOcrService
+    defaultOcrService = Self.providerID(fromServiceID: settings.defaultOcrService)
     autoCopyDetectedText = settings.autoCopyDetectedText
-    defaultDirectoryService = settings.defaultDirectoryService
-    defaultTranslationService = settings.defaultTranslationService
+    defaultDirectoryService = Self.providerID(fromServiceID: settings.defaultDirectoryService)
+    defaultTranslationService = Self.providerID(fromServiceID: settings.defaultTranslationService)
     translationMode = settings.translationMode
     translationTargets = settings.translationTargets
     inputSubmitMode = settings.inputSubmitMode
     doubleClickCopyResult = settings.doubleClickCopyResult
+  }
+
+  private static func providerID(fromServiceID serviceID: String) -> String {
+    for suffix in ["+translation", "+dictionary", "+ocr"] {
+      if serviceID.hasSuffix(suffix) {
+        return String(serviceID.dropLast(suffix.count))
+      }
+    }
+    return serviceID
   }
 
   private func openPrivacyPane(_ anchor: String) {

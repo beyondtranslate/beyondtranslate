@@ -1,9 +1,10 @@
 use async_trait::async_trait;
 use base64::Engine;
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, OcrError, OcrService, Provider,
-    RecognizeTextRequest, RecognizeTextResponse, RecognizedRect, TextDetection, TextRecognition,
-    TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
+    DetectLanguageRequest, DetectLanguageResponse, DictionaryError, DictionaryService,
+    LookUpRequest, LookUpResponse, OcrError, OcrService, Provider, RecognizeTextRequest,
+    RecognizeTextResponse, RecognizedRect, TextDetection, TextRecognition, TextTranslation,
+    TranslateRequest, TranslateResponse, TranslationError, TranslationService, WordDefinition,
 };
 
 // ── macOS: Apple Vision Framework ──────────────────────────────────────────
@@ -256,6 +257,13 @@ mod platform {
     type CFStringRef = *const c_void;
     type CFDictionaryRef = *const c_void;
 
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    struct CFRange {
+        location: isize,
+        length: isize,
+    }
+
     extern "C" {
         fn CFNotificationCenterGetLocalCenter() -> CFNotificationCenterRef;
 
@@ -288,9 +296,58 @@ mod platform {
             encoding: u32,
         ) -> CFStringRef;
 
+        fn CFStringGetLength(theString: CFStringRef) -> isize;
+
+        fn CFStringGetMaximumSizeForEncoding(length: isize, encoding: u32) -> isize;
+
+        fn CFStringGetCString(
+            theString: CFStringRef,
+            buffer: *mut c_char,
+            bufferSize: isize,
+            encoding: u32,
+        ) -> bool;
+
+        fn CFRelease(cf: *const c_void);
+    }
+
+    #[link(name = "CoreServices", kind = "framework")]
+    extern "C" {
+        fn DCSCopyTextDefinition(
+            dictionary: *const c_void,
+            textString: CFStringRef,
+            range: CFRange,
+        ) -> CFStringRef;
     }
 
     const CF_STRING_ENCODING_UTF8: u32 = 0x08000100;
+
+    unsafe fn cf_string_to_string(value: CFStringRef) -> Option<String> {
+        if value.is_null() {
+            return None;
+        }
+
+        let length = CFStringGetLength(value);
+        let max_size = CFStringGetMaximumSizeForEncoding(length, CF_STRING_ENCODING_UTF8) + 1;
+        if max_size <= 0 {
+            return Some(String::new());
+        }
+
+        let mut buffer = vec![0_i8; max_size as usize];
+        if !CFStringGetCString(
+            value,
+            buffer.as_mut_ptr(),
+            max_size,
+            CF_STRING_ENCODING_UTF8,
+        ) {
+            return None;
+        }
+
+        Some(
+            CStr::from_ptr(buffer.as_ptr())
+                .to_string_lossy()
+                .into_owned(),
+        )
+    }
 
     // ── Pending request registry (thread-safe) ──────────────────────────
 
@@ -595,6 +652,85 @@ mod platform {
             }
         }
     }
+
+    pub async fn look_up(request: &LookUpRequest) -> Result<LookUpResponse, DictionaryError> {
+        let word = request.word.trim();
+        if word.is_empty() {
+            return Err(DictionaryError::InvalidRequest(
+                "word is required".to_owned(),
+            ));
+        }
+
+        let c_word = CString::new(word)
+            .map_err(|_| DictionaryError::InvalidRequest("word contains NUL byte".to_owned()))?;
+
+        unsafe {
+            let text = CFStringCreateWithCString(
+                std::ptr::null(),
+                c_word.as_ptr(),
+                CF_STRING_ENCODING_UTF8,
+            );
+            if text.is_null() {
+                return Err(DictionaryError::SerializationError(
+                    "failed to create CFString".to_owned(),
+                ));
+            }
+
+            let definition = DCSCopyTextDefinition(
+                std::ptr::null(),
+                text,
+                CFRange {
+                    location: 0,
+                    length: CFStringGetLength(text),
+                },
+            );
+            CFRelease(text);
+
+            let definition_text = match cf_string_to_string(definition) {
+                Some(value) if !value.trim().is_empty() => value.trim().to_owned(),
+                _ => {
+                    if !definition.is_null() {
+                        CFRelease(definition);
+                    }
+                    return Ok(empty_lookup_response(word));
+                }
+            };
+
+            CFRelease(definition);
+
+            Ok(LookUpResponse {
+                translations: Vec::<TextTranslation>::new(),
+                word: Some(word.to_owned()),
+                tip: None,
+                tags: None,
+                definitions: Some(vec![WordDefinition {
+                    r#type: None,
+                    name: None,
+                    values: Some(vec![definition_text]),
+                }]),
+                pronunciations: None,
+                images: None,
+                phrases: None,
+                tenses: None,
+                sentences: None,
+            })
+        }
+    }
+
+    fn empty_lookup_response(word: &str) -> LookUpResponse {
+        LookUpResponse {
+            translations: Vec::<TextTranslation>::new(),
+            word: Some(word.to_owned()),
+            tip: None,
+            tags: None,
+            definitions: None,
+            pronunciations: None,
+            images: None,
+            phrases: None,
+            tenses: None,
+            sentences: None,
+        }
+    }
 }
 
 // ── Windows: Windows.Media.Ocr ────────────────────────────────────────────
@@ -703,6 +839,12 @@ mod platform {
             "system translation is not supported on Windows",
         ))
     }
+
+    pub async fn look_up(_request: &LookUpRequest) -> Result<LookUpResponse, DictionaryError> {
+        Err(DictionaryError::UnsupportedMethod(
+            "system dictionary is not supported on Windows",
+        ))
+    }
 }
 
 // ── Unsupported Platform ───────────────────────────────────────────────────
@@ -732,6 +874,12 @@ mod platform {
             "system translation is not supported on this platform",
         ))
     }
+
+    pub async fn look_up(_request: &LookUpRequest) -> Result<LookUpResponse, DictionaryError> {
+        Err(DictionaryError::UnsupportedMethod(
+            "system dictionary is not supported on this platform",
+        ))
+    }
 }
 
 // ── System Translation Service ───────────────────────────────────────────
@@ -755,16 +903,29 @@ impl TranslationService for SystemTranslationService {
     }
 }
 
+// ── System Dictionary Service ─────────────────────────────────────────────
+
+pub struct SystemDictionaryService;
+
+#[async_trait(?Send)]
+impl DictionaryService for SystemDictionaryService {
+    async fn look_up(&self, request: LookUpRequest) -> Result<LookUpResponse, DictionaryError> {
+        platform::look_up(&request).await
+    }
+}
+
 // ── Provider ───────────────────────────────────────────────────────────────
 
 pub struct SystemProvider {
     translation_service: SystemTranslationService,
+    dictionary_service: SystemDictionaryService,
 }
 
 impl SystemProvider {
     pub fn new() -> Result<Self, String> {
         Ok(Self {
             translation_service: SystemTranslationService,
+            dictionary_service: SystemDictionaryService,
         })
     }
 }
@@ -772,6 +933,10 @@ impl SystemProvider {
 impl Provider for SystemProvider {
     fn name(&self) -> &'static str {
         "system"
+    }
+
+    fn dictionary(&self) -> Option<&dyn DictionaryService> {
+        Some(&self.dictionary_service)
     }
 
     fn translation(&self) -> Option<&dyn TranslationService> {

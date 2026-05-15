@@ -27,6 +27,9 @@ class TranslationResultRecordView extends StatelessWidget {
   }) : super(key: key);
 
   bool get _isErrorOccurred {
+    final hasResponse = translationResultRecord.lookUpResponse != null ||
+        translationResultRecord.translateResponse != null;
+    if (hasResponse) return false;
     return translationResultRecord.lookUpError != null ||
         translationResultRecord.translateError != null;
   }
@@ -84,8 +87,8 @@ class TranslationResultRecordView extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    // String? word;
-    List<TextTranslation>? translations; // 翻译
+    List<TextTranslation>? lookUpTranslations; // 词典翻译
+    List<TextTranslation>? translateTranslations; // 文本翻译
     List<WordTag>? tags; // 标签
     List<WordDefinition>? definitions; // 定义（基本释义）
     List<WordPronunciation>? pronunciations; // 发音
@@ -96,8 +99,7 @@ class TranslationResultRecordView extends StatelessWidget {
 
     if (translationResultRecord.lookUpResponse != null) {
       final resp = translationResultRecord.lookUpResponse;
-      // word = resp?.word;
-      translations = resp?.translations;
+      lookUpTranslations = resp?.translations;
       tags = resp?.tags;
       definitions = resp?.definitions;
       pronunciations = resp?.pronunciations;
@@ -105,52 +107,18 @@ class TranslationResultRecordView extends StatelessWidget {
       // phrases = resp.phrases;
       tenses = resp?.tenses;
       // sentences = resp.sentences;
-    } else if (translationResultRecord.translateResponse != null) {
-      final resp = translationResultRecord.translateResponse;
-      translations = resp?.translations;
     }
+    translateTranslations =
+        translationResultRecord.translateResponse?.translations;
 
     // 是否显示为查词结果
     bool isShowAsLookUpResult = (definitions ?? []).isNotEmpty ||
         (pronunciations ?? []).isNotEmpty ||
-        (images ?? []).isNotEmpty;
+        (images ?? []).isNotEmpty ||
+        (lookUpTranslations ?? []).isNotEmpty;
 
-    if (!isShowAsLookUpResult && (translations ?? []).isNotEmpty) {
-      TextTranslation textTranslation = translations!.first;
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onDoubleTap: () {
-          if (settingsStore.doubleClickCopyResult) {
-            Clipboard.setData(ClipboardData(text: textTranslation.text));
-            BotToast.showText(
-              text: t.common.feedback.copied,
-              align: Alignment.center,
-            );
-          }
-        },
-        child: Container(
-          constraints: const BoxConstraints(
-            minHeight: 40,
-          ),
-          padding: const EdgeInsets.only(
-            left: 12,
-            right: 12,
-            top: 7,
-            bottom: 7,
-          ),
-          alignment: Alignment.centerLeft,
-          child: SelectableText.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: textTranslation.text),
-              ],
-            ),
-            style: textTheme.bodyMedium!.copyWith(
-              height: 1.4,
-            ),
-          ),
-        ),
-      );
+    if (!isShowAsLookUpResult && (translateTranslations ?? []).isNotEmpty) {
+      return _buildTranslateText(context, translateTranslations!.first);
     }
 
     return Container(
@@ -165,11 +133,19 @@ class TranslationResultRecordView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 翻译
-          if ((translations ?? []).isNotEmpty)
-            WordTranslationView(translations!.first),
-          // 包含查词结果时显示分割线
-          if ((translations ?? []).isNotEmpty) const Divider(height: 0),
+          // 文本翻译
+          if ((translateTranslations ?? []).isNotEmpty)
+            _buildTranslateText(
+              context,
+              translateTranslations!.first,
+              padding: const EdgeInsets.only(top: 7, bottom: 7),
+            ),
+          if ((translateTranslations ?? []).isNotEmpty && isShowAsLookUpResult)
+            const Divider(height: 0),
+          // 词典翻译
+          if ((lookUpTranslations ?? []).isNotEmpty)
+            WordTranslationView(lookUpTranslations!.first),
+          if ((lookUpTranslations ?? []).isNotEmpty) const Divider(height: 0),
           // 音标
           if ((pronunciations ?? []).isNotEmpty)
             Container(
@@ -331,6 +307,47 @@ class TranslationResultRecordView extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTranslateText(
+    BuildContext context,
+    TextTranslation textTranslation, {
+    EdgeInsetsGeometry padding = const EdgeInsets.only(
+      left: 12,
+      right: 12,
+      top: 7,
+      bottom: 7,
+    ),
+  }) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onDoubleTap: () {
+        if (settingsStore.doubleClickCopyResult) {
+          Clipboard.setData(ClipboardData(text: textTranslation.text));
+          BotToast.showText(
+            text: t.common.feedback.copied,
+            align: Alignment.center,
+          );
+        }
+      },
+      child: Container(
+        constraints: const BoxConstraints(
+          minHeight: 40,
+        ),
+        padding: padding,
+        alignment: Alignment.centerLeft,
+        child: SelectableText.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: textTranslation.text),
+            ],
+          ),
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                height: 1.4,
+              ),
+        ),
       ),
     );
   }

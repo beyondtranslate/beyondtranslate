@@ -15,7 +15,7 @@ protocol SettingsRepository {
   @discardableResult
   func updateProvider(
     id: String,
-    providerType: String,
+    providerType: ProviderType,
     fields: [String: String]
   ) async throws -> ProviderConfigEntry
   @discardableResult
@@ -71,11 +71,11 @@ final class DefaultSettingsRepository: SettingsRepository {
 
   func updateProvider(
     id: String,
-    providerType: String,
+    providerType: ProviderType,
     fields: [String: String]
   ) async throws -> ProviderConfigEntry {
     try await settings.updateProvider(
-      providerId: id, providerType: providerType, fields: fields
+      providerId: id, providerType: providerType.wireValue, fields: fields
     )
   }
 

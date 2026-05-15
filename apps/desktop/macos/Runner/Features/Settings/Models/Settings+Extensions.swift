@@ -92,27 +92,6 @@ extension ProviderCapability: Identifiable {
   }
 }
 
-extension ProviderCapability {
-  /// Convert from the wire string ("dictionary", "ocr", "translation") used by the Rust backend.
-  static func fromWire(_ value: String) -> ProviderCapability? {
-    switch value {
-    case "dictionary": return .dictionary
-    case "ocr": return .ocr
-    case "translation": return .translation
-    default: return nil
-    }
-  }
-
-  /// The wire string used by the Rust backend.
-  var wireValue: String {
-    switch self {
-    case .dictionary: return "dictionary"
-    case .ocr: return "ocr"
-    case .translation: return "translation"
-    }
-  }
-}
-
 // MARK: - ProviderType
 
 extension ProviderType: CaseIterable {
@@ -128,21 +107,6 @@ extension ProviderType: Identifiable {
 }
 
 extension ProviderType {
-  /// Convert from the wire string ("baidu", "deepl", …) used by the Rust backend.
-  static func fromWire(_ value: String) -> ProviderType? {
-    switch value {
-    case "baidu": return .baidu
-    case "caiyun": return .caiyun
-    case "deepl": return .deepL
-    case "google": return .google
-    case "iciba": return .iciba
-    case "system": return .system
-    case "tencent": return .tencent
-    case "youdao": return .youdao
-    default: return nil
-    }
-  }
-
   /// The wire string used by the Rust backend ("baidu", "deepl", …).
   var wireValue: String {
     switch self {

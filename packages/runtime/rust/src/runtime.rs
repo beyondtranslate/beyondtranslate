@@ -190,7 +190,8 @@ impl Runtime {
         self: Arc<Self>,
         provider_id: String,
     ) -> Result<Arc<RuntimeTranslation>, RuntimeError> {
-        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        let provider_id = validate_service_provider_id(provider_id, "+translation")
+            .map_err(RuntimeError::from)?;
         Ok(Arc::new(RuntimeTranslation {
             runtime: (*self).clone(),
             provider_id,
@@ -201,7 +202,8 @@ impl Runtime {
         self: Arc<Self>,
         provider_id: String,
     ) -> Result<Arc<RuntimeDictionary>, RuntimeError> {
-        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        let provider_id =
+            validate_service_provider_id(provider_id, "+dictionary").map_err(RuntimeError::from)?;
         Ok(Arc::new(RuntimeDictionary {
             runtime: (*self).clone(),
             provider_id,
@@ -209,7 +211,8 @@ impl Runtime {
     }
 
     pub fn ocr(self: Arc<Self>, provider_id: String) -> Result<Arc<RuntimeOcr>, RuntimeError> {
-        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        let provider_id =
+            validate_service_provider_id(provider_id, "+ocr").map_err(RuntimeError::from)?;
         Ok(Arc::new(RuntimeOcr {
             runtime: (*self).clone(),
             provider_id,
@@ -346,23 +349,12 @@ impl RuntimeSettings {
             .providers
             .iter()
             .map(|(provider_id, provider)| {
-                let capabilities = state
+                let mut entry = normalized_provider_entry(provider_id, provider);
+                entry.capabilities = state
                     .engine
                     .require(provider_id)
-                    .map(|p| {
-                        p.capabilities()
-                            .into_iter()
-                            .map(|c| {
-                                serde_json::to_value(&c)
-                                    .ok()
-                                    .and_then(|v| v.as_str().map(ToOwned::to_owned))
-                                    .unwrap_or_default()
-                            })
-                            .collect::<Vec<_>>()
-                    })
+                    .map(|p| p.capabilities())
                     .unwrap_or_default();
-                let mut entry = normalized_provider_entry(provider_id, provider);
-                entry.capabilities = capabilities;
                 entry
             })
             .collect())
@@ -374,11 +366,15 @@ impl RuntimeSettings {
     ) -> Result<Option<ProviderConfigEntry>, RuntimeError> {
         let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
         let state = self.runtime.inner.state.read().await;
-        Ok(state
-            .settings
-            .providers
-            .get(&provider_id)
-            .map(|provider| normalized_provider_entry(&provider_id, provider)))
+        Ok(state.settings.providers.get(&provider_id).map(|provider| {
+            let mut entry = normalized_provider_entry(&provider_id, provider);
+            entry.capabilities = state
+                .engine
+                .require(&provider_id)
+                .map(|p| p.capabilities())
+                .unwrap_or_default();
+            entry
+        }))
     }
 
     pub async fn update_provider(
@@ -390,6 +386,8 @@ impl RuntimeSettings {
         let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
         let provider_type =
             validate_required("provider_type", provider_type).map_err(RuntimeError::from)?;
+        let provider_type = crate::domain::settings::parse_provider_type(&provider_type)
+            .map_err(RuntimeError::from)?;
         let entry = ProviderConfigEntry {
             id: provider_id.clone(),
             r#type: provider_type,
@@ -577,6 +575,14 @@ fn validate_provider_id(provider_id: String) -> Result<String, String> {
     validate_required("provider_id", provider_id)
 }
 
+fn validate_service_provider_id(provider_id: String, suffix: &str) -> Result<String, String> {
+    let provider_id = validate_provider_id(provider_id)?;
+    Ok(provider_id
+        .strip_suffix(suffix)
+        .unwrap_or(&provider_id)
+        .to_owned())
+}
+
 fn validate_optional_required(name: &str, value: Option<String>) -> Result<String, String> {
     validate_required(name, value.unwrap_or_default())
 }
@@ -686,6 +692,26 @@ mod tests {
                 assert!(last_updated >= before);
                 assert!(last_updated <= after);
             });
+    }
+
+    #[test]
+    fn service_provider_id_suffixes_are_accepted_for_compatibility() {
+        assert_eq!(
+            validate_service_provider_id("system+translation".to_owned(), "+translation").unwrap(),
+            "system"
+        );
+        assert_eq!(
+            validate_service_provider_id("system+dictionary".to_owned(), "+dictionary").unwrap(),
+            "system"
+        );
+        assert_eq!(
+            validate_service_provider_id("system+ocr".to_owned(), "+ocr").unwrap(),
+            "system"
+        );
+        assert_eq!(
+            validate_service_provider_id("system".to_owned(), "+translation").unwrap(),
+            "system"
+        );
     }
 
     #[test]

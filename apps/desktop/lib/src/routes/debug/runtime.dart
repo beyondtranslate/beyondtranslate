@@ -318,7 +318,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     return buffer.toString().trimRight();
   }
 
-  String? get _selectedProviderType {
+  ProviderType? get _selectedProviderType {
     final providerId = _providerId;
     if (providerId == null) {
       return null;
@@ -331,7 +331,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     return null;
   }
 
-  bool get _isLookupProvider => _selectedProviderType == 'iciba';
+  bool get _isLookupProvider => _selectedProviderType == ProviderType.iciba;
 
   @override
   Widget build(BuildContext context) {

@@ -64,7 +64,7 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
     try {
       await runtime.settings().updateProvider(
             providerId: draft.id,
-            providerType: draft.type,
+            providerType: _providerTypeValue(draft.type),
             fields: draft.fields,
           );
       await settingsStore.reloadProviders();
@@ -215,11 +215,12 @@ class _ProviderRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return PreferenceListItem(
       title: Text(provider.id),
-      summary: Text(provider.type),
+      summary: Text(provider.type.name),
       detailText: Wrap(
         spacing: 4,
         children: [
-          for (final cap in provider.capabilities) _CapabilityTag(label: cap),
+          for (final cap in provider.capabilities)
+            _CapabilityTag(capability: cap),
         ],
       ),
       onTap: onEdit,
@@ -245,12 +246,12 @@ class _ProviderRow extends StatelessWidget {
 }
 
 class _CapabilityTag extends StatelessWidget {
-  const _CapabilityTag({required this.label});
-  final String label;
+  const _CapabilityTag({required this.capability});
+  final ProviderCapability capability;
 
   @override
   Widget build(BuildContext context) {
-    final color = _capabilityColor(label, Theme.of(context).colorScheme);
+    final color = _capabilityColor(capability, Theme.of(context).colorScheme);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
@@ -258,7 +259,7 @@ class _CapabilityTag extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
-        label,
+        capability.name,
         style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w600,
@@ -268,11 +269,11 @@ class _CapabilityTag extends StatelessWidget {
     );
   }
 
-  Color _capabilityColor(String capability, ColorScheme scheme) {
+  Color _capabilityColor(ProviderCapability capability, ColorScheme scheme) {
     switch (capability) {
-      case 'translation':
+      case ProviderCapability.translation:
         return scheme.primary;
-      case 'dictionary':
+      case ProviderCapability.dictionary:
         return scheme.secondary;
       default:
         return scheme.tertiary;
@@ -287,7 +288,7 @@ class _ProviderDraft {
     required this.fields,
   });
   final String id;
-  final String type;
+  final ProviderType type;
   final Map<String, String> fields;
 }
 
@@ -302,31 +303,31 @@ class _ProviderEditorDialog extends StatefulWidget {
 
 class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
   late final TextEditingController _idController;
-  late String _selectedType;
+  late ProviderType _selectedType;
   late Map<String, TextEditingController> _fieldControllers;
 
-  static const _knownProviderTypes = <String>[
-    'baidu',
-    'caiyun',
-    'deepl',
-    'google',
-    'iciba',
-    'system',
-    'tencent',
-    'youdao',
+  static const _knownProviderTypes = <ProviderType>[
+    ProviderType.baidu,
+    ProviderType.caiyun,
+    ProviderType.deepL,
+    ProviderType.google,
+    ProviderType.iciba,
+    ProviderType.system,
+    ProviderType.tencent,
+    ProviderType.youdao,
   ];
 
   // Known field keys for each provider type. This intentionally mirrors the
   // `*ProviderConfig+Fields.swift` files (lowest common denominator).
-  static const Map<String, List<String>> _providerFields = {
-    'baidu': ['appId', 'appKey'],
-    'caiyun': ['token'],
-    'deepl': ['authKey'],
-    'google': ['apiKey'],
-    'iciba': [],
-    'system': [],
-    'tencent': ['secretId', 'secretKey'],
-    'youdao': ['appKey', 'appSecret'],
+  static const Map<ProviderType, List<String>> _providerFields = {
+    ProviderType.baidu: ['appId', 'appKey'],
+    ProviderType.caiyun: ['token'],
+    ProviderType.deepL: ['authKey'],
+    ProviderType.google: ['apiKey'],
+    ProviderType.iciba: [],
+    ProviderType.system: [],
+    ProviderType.tencent: ['secretId', 'secretKey'],
+    ProviderType.youdao: ['appKey', 'appSecret'],
   };
 
   @override
@@ -339,7 +340,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
   }
 
   Map<String, TextEditingController> _buildControllers(
-    String type,
+    ProviderType type,
     Map<String, String>? initial,
   ) {
     final keys = _providerFields[type] ?? const <String>[];
@@ -359,7 +360,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
     super.dispose();
   }
 
-  void _changeType(String type) {
+  void _changeType(ProviderType type) {
     final preserved = {
       for (final entry in _fieldControllers.entries)
         entry.key: entry.value.text,
@@ -402,13 +403,13 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
                   onChanged: (_) => setState(() {}),
                 ),
                 const SizedBox(height: 12),
-                DropdownButtonFormField<String>(
-                  initialValue: _selectedType,
+                DropdownButtonFormField<ProviderType>(
+                  value: _selectedType,
                   items: [
                     for (final type in _knownProviderTypes)
-                      DropdownMenuItem<String>(
+                      DropdownMenuItem<ProviderType>(
                         value: type,
-                        child: Text(type),
+                        child: Text(_providerTypeDisplayName(type)),
                       ),
                   ],
                   decoration: const InputDecoration(
@@ -424,7 +425,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
-                    '${widget.existing!.id} · ${widget.existing!.type}',
+                    '${widget.existing!.id} · ${_providerTypeDisplayName(widget.existing!.type)}',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
@@ -480,5 +481,47 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
         lower.contains('secret') ||
         lower.contains('token') ||
         lower.contains('password');
+  }
+}
+
+String _providerTypeValue(ProviderType type) {
+  switch (type) {
+    case ProviderType.baidu:
+      return 'baidu';
+    case ProviderType.caiyun:
+      return 'caiyun';
+    case ProviderType.deepL:
+      return 'deepl';
+    case ProviderType.google:
+      return 'google';
+    case ProviderType.iciba:
+      return 'iciba';
+    case ProviderType.system:
+      return 'system';
+    case ProviderType.tencent:
+      return 'tencent';
+    case ProviderType.youdao:
+      return 'youdao';
+  }
+}
+
+String _providerTypeDisplayName(ProviderType type) {
+  switch (type) {
+    case ProviderType.baidu:
+      return 'Baidu';
+    case ProviderType.caiyun:
+      return 'Caiyun';
+    case ProviderType.deepL:
+      return 'DeepL';
+    case ProviderType.google:
+      return 'Google';
+    case ProviderType.iciba:
+      return 'Iciba';
+    case ProviderType.system:
+      return 'System';
+    case ProviderType.tencent:
+      return 'Tencent';
+    case ProviderType.youdao:
+      return 'Youdao';
   }
 }

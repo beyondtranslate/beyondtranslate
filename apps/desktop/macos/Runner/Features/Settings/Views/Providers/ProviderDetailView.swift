@@ -18,7 +18,7 @@ struct ProviderDetailView: View {
       // ── Header ──────────────────────────────────────────────────
       Section {
         HStack(spacing: 14) {
-          ProviderTypeIcon(providerType: currentProvider.providerType)
+          ProviderTypeIcon(providerType: currentProvider.type)
             .frame(width: 40, height: 40)
 
           Text(currentProvider.name)
@@ -51,11 +51,11 @@ struct ProviderDetailView: View {
 
       // ── Services ────────────────────────────────────────────────
       Section(LocaleKeys.settings.providers.section.services.tr()) {
-        if currentProvider.providerCapabilities.isEmpty {
+        if currentProvider.capabilities.isEmpty {
           Text(LocaleKeys.settings.providers.item.noServices.tr())
             .foregroundStyle(.secondary)
         } else {
-          ForEach(currentProvider.providerCapabilities, id: \.self) { capability in
+          ForEach(currentProvider.capabilities, id: \.self) { capability in
             ProviderServiceRow(capability: capability)
           }
         }
@@ -103,7 +103,7 @@ private struct ProviderServiceRow: View {
         Text(capability.displayName)
           .font(.system(size: 13))
           .foregroundStyle(.primary)
-        Text(capability.wireValue)
+        Text(capability.displayName)
           .font(.system(size: 11))
           .foregroundStyle(.secondary)
       }

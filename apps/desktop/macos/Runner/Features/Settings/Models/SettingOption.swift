@@ -133,11 +133,7 @@ extension ProviderConfigEntry: Identifiable {}
 extension ProviderConfigEntry {
   static func newProvider() -> ProviderConfigEntry {
     ProviderConfigEntry(
-      id: "my-provider", type: ProviderType.deepL.wireValue, fields: [:], capabilities: [])
-  }
-
-  var providerType: ProviderType {
-    ProviderType.fromWire(type) ?? .deepL
+      id: "my-provider", type: .deepL, fields: [:], capabilities: [])
   }
 
   var name: String {
@@ -146,9 +142,5 @@ extension ProviderConfigEntry {
 
   var endpoint: String {
     fields["baseUrl"] ?? ""
-  }
-
-  var providerCapabilities: [ProviderCapability] {
-    capabilities.compactMap { ProviderCapability.fromWire($0) }
   }
 }

@@ -39,15 +39,40 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
   }
 
   String get _translationEngineType {
-    return _providerConfigEntry?.type ?? _translationEngineId ?? '';
+    final type = _providerConfigEntry?.type;
+    if (type != null) {
+      return _providerTypeValue(type);
+    }
+    return _translationEngineId ?? '';
   }
 
   String get _translationEngineName {
     final providerType = _providerConfigEntry?.type;
     if (providerType != null) {
-      return getTranslationEngineTypeName(providerType);
+      return getTranslationEngineTypeName(_providerTypeValue(providerType));
     }
     return _translationEngineId ?? '';
+  }
+
+  static String _providerTypeValue(ProviderType type) {
+    switch (type) {
+      case ProviderType.baidu:
+        return 'baidu';
+      case ProviderType.caiyun:
+        return 'caiyun';
+      case ProviderType.deepL:
+        return 'deepl';
+      case ProviderType.google:
+        return 'google';
+      case ProviderType.iciba:
+        return 'iciba';
+      case ProviderType.system:
+        return 'system';
+      case ProviderType.tencent:
+        return 'tencent';
+      case ProviderType.youdao:
+        return 'youdao';
+    }
   }
 
   @override

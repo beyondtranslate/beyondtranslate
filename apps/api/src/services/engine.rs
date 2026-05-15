@@ -13,12 +13,12 @@ pub fn to_api_error(error: EngineError) -> ApiError {
         EngineError::UnknownProvider(name) | EngineError::ProviderNotEnabled(name) => {
             ApiError::bad_request("INVALID_PROVIDER", format!("Unsupported provider: {name}"))
         }
-        EngineError::TranslationNotSupported(name) | EngineError::DictionaryNotSupported(name) => {
-            ApiError::bad_request(
-                "SERVICE_NOT_SUPPORTED",
-                format!("Provider `{name}` does not support this service"),
-            )
-        }
+        EngineError::TranslationNotSupported(name)
+        | EngineError::DictionaryNotSupported(name)
+        | EngineError::OcrNotSupported(name) => ApiError::bad_request(
+            "SERVICE_NOT_SUPPORTED",
+            format!("Provider `{name}` does not support this service"),
+        ),
         EngineError::ReadConfigFile { .. }
         | EngineError::ParseConfig(_)
         | EngineError::InvalidProviderConfig { .. }

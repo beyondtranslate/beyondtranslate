@@ -13,14 +13,14 @@ pub trait Provider: Send + Sync {
     fn name(&self) -> &'static str;
 
     /// Returns the capabilities of this provider instance.
-    /// The default implementation derives capabilities from `translation()` / `dictionary()` / `ocr()`.
+    /// The default implementation derives capabilities from `dictionary()` / `translation()` / `ocr()`.
     fn capabilities(&self) -> Vec<ProviderCapability> {
         let mut caps = Vec::new();
-        if self.translation().is_some() {
-            caps.push(ProviderCapability::Translation);
-        }
         if self.dictionary().is_some() {
             caps.push(ProviderCapability::Dictionary);
+        }
+        if self.translation().is_some() {
+            caps.push(ProviderCapability::Translation);
         }
         if self.ocr().is_some() {
             caps.push(ProviderCapability::Ocr);

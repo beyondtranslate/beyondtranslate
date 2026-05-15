@@ -425,48 +425,55 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }) async {
     final sourceLanguage = translationTarget?.source;
     final targetLanguage = translationTarget?.target;
+    final futures = <Future<void>>[];
 
-    if (provider.capabilities.contains(ProviderCapability.dictionary.name)) {
-      try {
-        if (sourceLanguage == null || targetLanguage == null) {
-          throw Exception('Translation target language is missing');
+    if (provider.capabilities.contains(ProviderCapability.dictionary)) {
+      futures.add(() async {
+        try {
+          if (sourceLanguage == null || targetLanguage == null) {
+            throw Exception('Translation target language is missing');
+          }
+
+          final lookUpRequest = LookUpRequest(
+            sourceLanguage: sourceLanguage,
+            targetLanguage: targetLanguage,
+            word: _text,
+          );
+          final lookUpResponse = await runtime
+              .dictionary(providerId: provider.id)
+              .lookup(request: lookUpRequest);
+          translationResultRecord.lookUpRequest = lookUpRequest;
+          translationResultRecord.lookUpResponse = lookUpResponse;
+        } catch (error) {
+          translationResultRecord.lookUpError = TranslationError(
+            message: error.toString(),
+          );
         }
-
-        final lookUpRequest = LookUpRequest(
-          sourceLanguage: sourceLanguage,
-          targetLanguage: targetLanguage,
-          word: _text,
-        );
-        final lookUpResponse = await runtime
-            .dictionary(providerId: provider.id)
-            .lookup(request: lookUpRequest);
-        translationResultRecord.lookUpRequest = lookUpRequest;
-        translationResultRecord.lookUpResponse = lookUpResponse;
-      } catch (error) {
-        translationResultRecord.lookUpError = TranslationError(
-          message: error.toString(),
-        );
-      }
+      }());
     }
 
-    if (provider.capabilities.contains(ProviderCapability.translation.name)) {
-      try {
-        final translateRequest = TranslateRequest(
-          sourceLanguage: sourceLanguage,
-          targetLanguage: targetLanguage,
-          text: _text,
-        );
-        final translateResponse = await runtime
-            .translation(providerId: provider.id)
-            .translate(request: translateRequest);
-        translationResultRecord.translateRequest = translateRequest;
-        translationResultRecord.translateResponse = translateResponse;
-      } catch (error) {
-        translationResultRecord.translateError = TranslationError(
-          message: error.toString(),
-        );
-      }
+    if (provider.capabilities.contains(ProviderCapability.translation)) {
+      futures.add(() async {
+        try {
+          final translateRequest = TranslateRequest(
+            sourceLanguage: sourceLanguage,
+            targetLanguage: targetLanguage,
+            text: _text,
+          );
+          final translateResponse = await runtime
+              .translation(providerId: provider.id)
+              .translate(request: translateRequest);
+          translationResultRecord.translateRequest = translateRequest;
+          translationResultRecord.translateResponse = translateResponse;
+        } catch (error) {
+          translationResultRecord.translateError = TranslationError(
+            message: error.toString(),
+          );
+        }
+      }());
     }
+
+    await Future.wait(futures);
 
     if (mounted) {
       _setStateAndScheduleWindowResize(() {});
@@ -895,7 +902,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
       final settings = runtime.settings();
       final generalSettings = await settings.getGeneral();
-      final providerId = generalSettings.defaultTranslationService;
+      final providerId = _providerId(generalSettings.defaultTranslationService);
 
       TranslateResponse translateResponse =
           await runtime.translation(providerId: providerId).translate(
@@ -933,4 +940,13 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _commandModifiers,
     );
   }
+}
+
+String _providerId(String serviceId) {
+  for (final suffix in const ['+translation', '+dictionary', '+ocr']) {
+    if (serviceId.endsWith(suffix)) {
+      return serviceId.substring(0, serviceId.length - suffix.length);
+    }
+  }
+  return serviceId;
 }

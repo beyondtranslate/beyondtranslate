@@ -116,7 +116,7 @@ private struct ProviderRow: View {
   var body: some View {
     NavigationLink(value: provider.id) {
       HStack(spacing: 14) {
-        ProviderTypeIcon(providerType: provider.providerType)
+        ProviderTypeIcon(providerType: provider.type)
 
         VStack(alignment: .leading, spacing: 3) {
           Text(provider.name)
@@ -135,7 +135,7 @@ private struct ProviderRow: View {
 
         // Capability tags
         HStack(spacing: 4) {
-          ForEach(provider.providerCapabilities, id: \.self) { cap in
+          ForEach(provider.capabilities, id: \.self) { cap in
             ProviderCapabilityTag(capability: cap)
           }
         }
@@ -271,7 +271,7 @@ struct ProviderEditorSheet: View {
     guard !draft.id.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
       return false
     }
-    return draft.providerType.configFields
+    return draft.type.configFields
       .filter { !$0.isOptional }
       .allSatisfy {
         !(draft.fields[$0.key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
@@ -308,7 +308,7 @@ struct ProviderEditorSheet: View {
         }
 
         // Required fields
-        let requiredFields = draft.providerType.configFields.filter { !$0.isOptional }
+        let requiredFields = draft.type.configFields.filter { !$0.isOptional }
         if !requiredFields.isEmpty {
           Section {
             ForEach(requiredFields) { fieldDef in
@@ -318,7 +318,7 @@ struct ProviderEditorSheet: View {
         }
 
         // Optional fields
-        let optionalFields = draft.providerType.configFields.filter { $0.isOptional }
+        let optionalFields = draft.type.configFields.filter { $0.isOptional }
         if !optionalFields.isEmpty {
           Section {
             ForEach(optionalFields) { fieldDef in
@@ -385,9 +385,9 @@ struct ProviderEditorSheet: View {
 
   private var providerTypeBinding: Binding<ProviderType> {
     Binding(
-      get: { draft.providerType },
+      get: { draft.type },
       set: {
-        draft.type = $0.wireValue
+        draft.type = $0
         draft.fields = [:]
       }
     )
@@ -401,7 +401,7 @@ struct ProviderEditorHeader: View {
 
   var body: some View {
     HStack(spacing: 10) {
-      ProviderTypeIcon(providerType: draft.providerType)
+      ProviderTypeIcon(providerType: draft.type)
         .frame(width: 36, height: 36)
 
       VStack(alignment: .leading, spacing: 3) {
@@ -409,7 +409,7 @@ struct ProviderEditorHeader: View {
           .font(.system(size: 14, weight: .semibold))
           .foregroundStyle(.primary)
 
-        Text(draft.providerType.hostingDescription)
+        Text(draft.type.hostingDescription)
           .font(.system(size: 13))
           .foregroundStyle(.secondary)
       }
@@ -457,7 +457,7 @@ struct ProviderFieldRow: View {
 extension ProviderConfigEntry {
   fileprivate var displayName: String {
     let trimmedID = id.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmedID.isEmpty else { return providerType.displayName }
+    guard !trimmedID.isEmpty else { return type.displayName }
     return
       trimmedID
       .split(whereSeparator: { $0 == "-" || $0 == "_" || $0 == "." })
@@ -479,7 +479,7 @@ extension ProviderType {
     case .google: return [.dictionary, .translation]
     case .iciba: return [.dictionary]
     case .tencent: return [.translation]
-    case .system: return [.ocr]
+    case .system: return [.dictionary, .ocr, .translation]
     case .youdao: return [.dictionary, .translation]
     }
   }

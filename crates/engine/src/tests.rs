@@ -3,6 +3,8 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
+use beyondtranslate_core::ProviderCapability;
+
 use crate::{from_yaml_str, load_from_file, EngineError};
 
 #[test]
@@ -138,6 +140,25 @@ providers:
     fs::remove_file(&path).expect("remove temp config");
 
     assert_eq!(registry.names(), vec!["deepl"]);
+}
+
+#[test]
+fn system_provider_advertises_dictionary() {
+    let registry = from_yaml_str(
+        r#"
+providers:
+  system:
+    type: system
+"#,
+    )
+    .expect("valid config");
+
+    let provider = registry.require("system").expect("system provider");
+    let capabilities = provider.capabilities();
+
+    assert!(capabilities.contains(&ProviderCapability::Translation));
+    assert!(capabilities.contains(&ProviderCapability::Ocr));
+    assert!(capabilities.contains(&ProviderCapability::Dictionary));
 }
 
 #[test]

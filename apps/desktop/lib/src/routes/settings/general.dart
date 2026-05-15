@@ -37,8 +37,8 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
   GeneralSettings get _general => settingsStore.general;
 
   // Service options (mirrors Swift `dictionaryServiceOptions` /
-  // `translationServiceOptions`). The id is `{providerId}+{capability}` to
-  // match the runtime contract.
+  // `translationServiceOptions`). The id is the provider id consumed by the
+  // runtime.
   List<_ServiceOption> get _ocrServiceOptions {
     return [
       const _ServiceOption(id: 'builtin', name: 'Built-in OCR'),
@@ -49,15 +49,15 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
 
   List<_ServiceOption> get _dictionaryServiceOptions {
     return settingsStore.providers
-        .where((p) => p.capabilities.contains('dictionary'))
-        .map((p) => _ServiceOption(id: '${p.id}+dictionary', name: p.id))
+        .where((p) => p.capabilities.contains(ProviderCapability.dictionary))
+        .map((p) => _ServiceOption(id: p.id, name: p.id))
         .toList();
   }
 
   List<_ServiceOption> get _translationServiceOptions {
     return settingsStore.providers
-        .where((p) => p.capabilities.contains('translation'))
-        .map((p) => _ServiceOption(id: '${p.id}+translation', name: p.id))
+        .where((p) => p.capabilities.contains(ProviderCapability.translation))
+        .map((p) => _ServiceOption(id: p.id, name: p.id))
         .toList();
   }
 
@@ -94,10 +94,10 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
             _ServicePickerItem(
               title: 'Default extract text service',
               options: _ocrServiceOptions,
-              value: _general.defaultOcrService,
+              value: _providerId(_general.defaultOcrService),
               onChanged: (v) async {
                 await settingsStore.updateGeneral(
-                  GeneralSettingsPatch(defaultOcrService: v),
+                  GeneralSettingsPatch(defaultOcrService: _providerId(v)),
                 );
               },
             ),
@@ -118,11 +118,11 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
             _ServicePickerItem(
               title: 'Default directory service',
               options: _dictionaryServiceOptions,
-              value: _general.defaultDirectoryService,
+              value: _providerId(_general.defaultDirectoryService),
               emptyLabel: 'No services available',
               onChanged: (v) async {
                 await settingsStore.updateGeneral(
-                  GeneralSettingsPatch(defaultDirectoryService: v),
+                  GeneralSettingsPatch(defaultDirectoryService: _providerId(v)),
                 );
               },
             ),
@@ -134,11 +134,12 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
             _ServicePickerItem(
               title: 'Default translation service',
               options: _translationServiceOptions,
-              value: _general.defaultTranslationService,
+              value: _providerId(_general.defaultTranslationService),
               emptyLabel: 'No services available',
               onChanged: (v) async {
                 await settingsStore.updateGeneral(
-                  GeneralSettingsPatch(defaultTranslationService: v),
+                  GeneralSettingsPatch(
+                      defaultTranslationService: _providerId(v)),
                 );
               },
             ),
@@ -219,6 +220,15 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
       ],
     );
   }
+}
+
+String _providerId(String serviceId) {
+  for (final suffix in const ['+translation', '+dictionary', '+ocr']) {
+    if (serviceId.endsWith(suffix)) {
+      return serviceId.substring(0, serviceId.length - suffix.length);
+    }
+  }
+  return serviceId;
 }
 
 String _translationModeTitle(TranslationMode mode) {
