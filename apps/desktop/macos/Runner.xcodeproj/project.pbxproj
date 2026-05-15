@@ -58,6 +58,7 @@
 		F5F222552FB75BFD0025B9D4 /* ShortcutDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222532FB75BFD0025B9D4 /* ShortcutDisplay.swift */; };
 		F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */; };
 		F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */; };
+		F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +148,7 @@
 		F5F222532FB75BFD0025B9D4 /* ShortcutDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutDisplay.swift; sourceTree = "<group>"; };
 		F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode.swift; sourceTree = "<group>"; };
 		F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeAppearanceController.swift; sourceTree = "<group>"; };
+		F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderEditorSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,6 +319,7 @@
 		A20000000000000000000005 /* Providers */ = {
 			isa = PBXGroup;
 			children = (
+				F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */,
 				A11000000000000000000005 /* ProvidersView.swift */,
 				A110000000000000000000F /* ProviderDetailView.swift */,
 			);
@@ -681,6 +684,7 @@
 				8F1000062E0A100100A1B2C3 /* SettingSectionHeader.swift in Sources */,
 				8F1000072E0A100100A1B2C3 /* SettingToggle.swift in Sources */,
 				A10000000000000000000001 /* SettingPicker.swift in Sources */,
+				F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */,
 				A10000000000000000000002 /* GeneralView.swift in Sources */,
 				A10000000000000000000003 /* AppearanceView.swift in Sources */,
 				A10000000000000000000004 /* ShortcutsView.swift in Sources */,

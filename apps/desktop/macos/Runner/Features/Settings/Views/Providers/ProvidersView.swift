@@ -3,8 +3,10 @@ import beyondtranslate_runtime
 
 struct ProvidersView: View {
   @ObservedObject var viewModel: ProvidersViewModel
-  @State private var draft: ProviderConfigEntry?
-  @State private var isCreatingDraft = false
+  @State private var showEditorSheet = false
+  @State private var editingProvider: ProviderConfigEntry?
+
+  private var isCreating: Bool { editingProvider == nil }
 
   var body: some View {
     NavigationStack {
@@ -23,8 +25,8 @@ struct ProvidersView: View {
               ProviderRow(
                 provider: provider,
                 onEdit: {
-                  isCreatingDraft = false
-                  draft = provider
+                  editingProvider = provider
+                  showEditorSheet = true
                 },
                 onDelete: { viewModel.deleteProvider(provider.id) }
               )
@@ -34,8 +36,8 @@ struct ProvidersView: View {
           HStack {
             Spacer()
             Button(LocaleKeys.settings.providers.button.add.tr()) {
-              isCreatingDraft = true
-              draft = .newProvider(type: .baidu)
+              editingProvider = nil
+              showEditorSheet = true
             }
           }
         }
@@ -48,23 +50,26 @@ struct ProvidersView: View {
     }
     .onReceive(viewModel.$pendingPresentProviderEditorSheetID) { id in
       guard let id, viewModel.consumePresentProviderEditorSheet(id) else { return }
-      isCreatingDraft = true
-      draft = .newProvider(type: .baidu)
+      editingProvider = nil
+      showEditorSheet = true
     }
-    .sheet(item: $draft) { item in
+    .sheet(isPresented: $showEditorSheet) {
       ProviderEditorSheet(
-        draft: item,
-        isCreating: isCreatingDraft,
+        draft: editingProvider,
+        isCreating: isCreating,
+        onGenerateProviderId: { providerType in
+          await viewModel.generateProviderId(for: providerType)
+        },
         onSave: { updatedDraft in
-          draft = nil
+          showEditorSheet = false
           viewModel.saveProvider(updatedDraft)
         },
         onDelete: { providerID in
-          draft = nil
+          showEditorSheet = false
           viewModel.deleteProvider(providerID)
         },
         onCancel: {
-          draft = nil
+          showEditorSheet = false
         }
       )
     }
@@ -253,261 +258,6 @@ struct ProviderTypeIcon: View {
           .foregroundStyle(Color.accentColor)
       }
       .frame(width: 28, height: 28)
-    }
-  }
-}
-
-// MARK: - Provider Editor Sheet
-
-struct ProviderEditorSheet: View {
-  @State var draft: ProviderConfigEntry
-
-  let isCreating: Bool
-  let onSave: (ProviderConfigEntry) -> Void
-  let onDelete: (String) -> Void
-  let onCancel: () -> Void
-
-  private var canSave: Bool {
-    guard !draft.id.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-      return false
-    }
-    return draft.type.configFields
-      .filter { !$0.isOptional }
-      .allSatisfy {
-        !(draft.fields[$0.key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-          .isEmpty
-      }
-  }
-
-  var body: some View {
-    VStack(spacing: 0) {
-      Form {
-        // Header — provider icon, name, hosting type
-        Section {
-          ProviderEditorHeader(draft: draft)
-        }
-
-        // Show Provider ID and Type picker only when creating a new provider
-        if isCreating {
-          Section {
-            TextField(
-              text: $draft.id,
-              prompt: Text(LocaleKeys.settings.providers.editor.placeholder.id.tr())
-            ) {
-              Text(LocaleKeys.settings.providers.editor.row.id.tr())
-            }
-
-            Picker(
-              LocaleKeys.settings.providers.editor.row.type.tr(), selection: providerTypeBinding
-            ) {
-              ForEach(ProviderType.allCases) { type in
-                Text(type.displayName).tag(type)
-              }
-            }
-          }
-        }
-
-        // Required fields
-        let requiredFields = draft.type.configFields.filter { !$0.isOptional }
-        if !requiredFields.isEmpty {
-          Section {
-            ForEach(requiredFields) { fieldDef in
-              ProviderFieldRow(fieldDef: fieldDef, text: fieldBinding(fieldDef.key))
-            }
-          }
-        }
-
-        // Optional fields
-        let optionalFields = draft.type.configFields.filter { $0.isOptional }
-        if !optionalFields.isEmpty {
-          Section {
-            ForEach(optionalFields) { fieldDef in
-              ProviderFieldRow(fieldDef: fieldDef, text: fieldBinding(fieldDef.key))
-            }
-          }
-        }
-      }
-      .formStyle(.grouped)
-
-      Divider()
-
-      HStack(spacing: 8) {
-        // Help button — far left circle
-        Button {
-        } label: {
-          Image(systemName: "questionmark.circle")
-            .font(.system(size: 16))
-            .foregroundStyle(.secondary)
-        }
-        .buttonStyle(.plain)
-        .help(LocaleKeys.settings.providers.editor.tooltip.help.tr())
-
-        // Destructive delete — bordered pill with red tint
-        if !isCreating {
-          Button(role: .destructive) {
-            onDelete(draft.id)
-          } label: {
-            Text(LocaleKeys.settings.providers.dialog.deleteTitle.tr())
-          }
-          .buttonStyle(.bordered)
-          .tint(.red)
-        }
-
-        Spacer()
-
-        Button(LocaleKeys.common.button.cancel.tr()) {
-          onCancel()
-        }
-        .keyboardShortcut(.cancelAction)
-
-        Button(
-          isCreating
-            ? LocaleKeys.common.button.add.tr()
-            : LocaleKeys.common.button.save.tr()
-        ) {
-          onSave(draft)
-        }
-        .keyboardShortcut(.defaultAction)
-        .disabled(!canSave)
-      }
-      .padding(.horizontal, 20)
-      .padding(.vertical, 16)
-    }
-    .frame(width: 500)
-  }
-
-  private func fieldBinding(_ key: String) -> Binding<String> {
-    Binding(
-      get: { draft.fields[key] ?? "" },
-      set: { draft.fields[key] = $0 }
-    )
-  }
-
-  private var providerTypeBinding: Binding<ProviderType> {
-    Binding(
-      get: { draft.type },
-      set: {
-        draft.type = $0
-        draft.fields = [:]
-      }
-    )
-  }
-}
-
-// MARK: - Editor sub-views
-
-struct ProviderEditorHeader: View {
-  let draft: ProviderConfigEntry
-
-  var body: some View {
-    HStack(spacing: 10) {
-      ProviderTypeIcon(providerType: draft.type)
-        .frame(width: 36, height: 36)
-
-      VStack(alignment: .leading, spacing: 3) {
-        Text(draft.displayName)
-          .font(.system(size: 14, weight: .semibold))
-          .foregroundStyle(.primary)
-
-        Text(draft.type.hostingDescription)
-          .font(.system(size: 13))
-          .foregroundStyle(.secondary)
-      }
-
-      Spacer()
-    }
-    .padding(.vertical, 4)
-  }
-}
-
-struct ProviderFieldRow: View {
-  let fieldDef: ProviderConfigField
-  let text: Binding<String>
-
-  var body: some View {
-    if fieldDef.isSecret {
-      SecureField(text: text, prompt: promptText) {
-        rowLabel
-      }
-    } else {
-      TextField(text: text, prompt: promptText) {
-        rowLabel
-      }
-    }
-  }
-
-  private var rowLabel: some View {
-    HStack(spacing: 0) {
-      if !fieldDef.isOptional {
-        Text("*")
-          .foregroundStyle(.red)
-          .padding(.trailing, 2)
-      }
-      Text(fieldDef.label)
-    }
-  }
-
-  private var promptText: Text? {
-    fieldDef.placeholder.isEmpty ? nil : Text(fieldDef.placeholder)
-  }
-}
-
-// MARK: - Provider config helpers
-
-extension ProviderConfigEntry {
-  fileprivate var displayName: String {
-    let trimmedID = id.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmedID.isEmpty else { return type.displayName }
-    return
-      trimmedID
-      .split(whereSeparator: { $0 == "-" || $0 == "_" || $0 == "." })
-      .map { part in
-        let lowercased = part.lowercased()
-        guard let first = lowercased.first else { return "" }
-        return first.uppercased() + lowercased.dropFirst()
-      }
-      .joined(separator: " ")
-  }
-}
-
-extension ProviderType {
-  fileprivate var defaultCapabilities: [ProviderCapability] {
-    switch self {
-    case .baidu: return [.dictionary, .translation]
-    case .caiyun: return [.translation]
-    case .deepL: return [.translation]
-    case .google: return [.dictionary, .translation]
-    case .iciba: return [.dictionary]
-    case .tencent: return [.translation]
-    case .system: return [.dictionary, .ocr, .translation]
-    case .youdao: return [.dictionary, .translation]
-    }
-  }
-
-  var displayName: String {
-    switch self {
-    case .baidu: return LocaleKeys.provider.baidu.tr()
-    case .caiyun: return LocaleKeys.provider.caiyun.tr()
-    case .deepL: return LocaleKeys.provider.deepl.tr()
-    case .google: return LocaleKeys.provider.google.tr()
-    case .iciba: return LocaleKeys.provider.iciba.tr()
-    case .tencent: return LocaleKeys.provider.tencent.tr()
-    case .system: return LocaleKeys.provider.system.tr()
-    case .youdao: return LocaleKeys.provider.youdao.tr()
-    }
-  }
-
-  fileprivate var hostingDescription: String {
-    let caps = defaultCapabilities
-    let hasTranslation = caps.contains(.translation)
-    let hasDictionary = caps.contains(.dictionary)
-    switch (hasTranslation, hasDictionary) {
-    case (true, true): return LocaleKeys.settings.providers.description.all.tr()
-    case (true, false):
-      return LocaleKeys.settings.providers.description.translation.tr()
-    case (false, true):
-      return LocaleKeys.settings.providers.description.dictionary.tr()
-    default: return LocaleKeys.settings.providers.description.fallback.tr()
     }
   }
 }

@@ -11,6 +11,7 @@ protocol SettingsRepository {
   func updateShortcuts(_ patch: ShortcutSettingsPatch) async throws -> ShortcutSettings
   func getAdvanced() async throws -> AdvancedSettings
   func updateAdvanced(_ patch: AdvancedSettingsPatch) async throws -> AdvancedSettings
+  func generateProviderId(providerType: ProviderType) async throws -> String
   func listProviders() async throws -> [ProviderConfigEntry]
   @discardableResult
   func updateProvider(
@@ -63,6 +64,10 @@ final class DefaultSettingsRepository: SettingsRepository {
 
   func updateAdvanced(_ patch: AdvancedSettingsPatch) async throws -> AdvancedSettings {
     try await settings.updateAdvanced(patch: patch)
+  }
+
+  func generateProviderId(providerType: ProviderType) async throws -> String {
+    try await settings.generateProviderId(providerType: providerType.wireValue)
   }
 
   func listProviders() async throws -> [ProviderConfigEntry] {

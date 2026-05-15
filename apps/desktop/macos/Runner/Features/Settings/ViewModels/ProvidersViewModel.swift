@@ -38,6 +38,12 @@ final class ProvidersViewModel: ObservableObject {
     objectWillChange.send()
   }
 
+  // MARK: - Generate ID
+
+  func generateProviderId(for providerType: ProviderType) async -> String {
+    (try? await repository.generateProviderId(providerType: providerType)) ?? providerType.wireValue
+  }
+
   // MARK: - Save (add or edit)
 
   func requestPresentProviderEditorSheet() {

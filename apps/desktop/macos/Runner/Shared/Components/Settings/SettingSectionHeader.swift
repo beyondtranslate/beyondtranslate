@@ -28,6 +28,7 @@ struct SettingsPage<Content: View>: View {
       content
     }
     .formStyle(.grouped)
+    .padding(.top, 4)
     .navigationTitle(title)
   }
 }

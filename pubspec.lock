@@ -277,10 +277,10 @@ packages:
     dependency: transitive
     description:
       name: dependency_validator
-      sha256: f727a5627aa405965fab4aef4f468e50a9b632ba0737fd2f98c932fec6d712b9
+      sha256: d6084f8df7677843c8fd0e08b66c11d9c2ce9bae1bb1f18cc574bcb28ebe71b0
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.3"
+    version: "5.0.5"
   dio:
     dependency: transitive
     description:

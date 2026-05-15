@@ -11,12 +11,8 @@ String getTranslationEngineTypeName(String type) {
       return t.provider.deepl;
     case 'google':
       return t.provider.google;
-    case 'ibmwatson':
-      return t.provider.ibmwatson;
     case 'iciba':
       return t.provider.iciba;
-    case 'openai':
-      return t.provider.openai;
     case 'sogou':
       return t.provider.sogou;
     case 'tencent':

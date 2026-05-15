@@ -10,7 +10,8 @@
       "delete": "删除",
       "edit": "编辑",
       "save": "保存",
-      "manage": "管理"
+      "manage": "管理",
+      "continue": "继续"
     },
     "feedback": {
       "copied": "已复制"
@@ -341,6 +342,9 @@
         },
         "placeholder": {
           "id": "例如 deepl-main"
+        },
+        "type_picker": {
+          "prompt": "请选择要添加的提供商类型："
         },
         "tooltip": {
           "help": "帮助"

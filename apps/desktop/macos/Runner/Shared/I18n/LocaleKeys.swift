@@ -37,6 +37,7 @@ enum LocaleKeys {
     enum button {
       static let add = LocaleKey("common.button.add")
       static let cancel = LocaleKey("common.button.cancel")
+      static let `continue` = LocaleKey("common.button.continue")
       static let delete = LocaleKey("common.button.delete")
       static let edit = LocaleKey("common.button.edit")
       static let manage = LocaleKey("common.button.manage")
@@ -347,6 +348,9 @@ enum LocaleKeys {
         }
         enum tooltip {
           static let help = LocaleKey("settings.providers.editor.tooltip.help")
+        }
+        enum typePicker {
+          static let prompt = LocaleKey("settings.providers.editor.type_picker.prompt")
         }
       }
       enum intro {

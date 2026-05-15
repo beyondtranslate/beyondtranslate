@@ -3,6 +3,7 @@
 "common.app.name" = "比译";
 "common.button.add" = "添加";
 "common.button.cancel" = "取消";
+"common.button.continue" = "继续";
 "common.button.delete" = "删除";
 "common.button.edit" = "编辑";
 "common.button.manage" = "管理";
@@ -212,6 +213,7 @@
 "settings.providers.editor.title.add" = "添加提供商";
 "settings.providers.editor.title.edit" = "编辑提供商";
 "settings.providers.editor.tooltip.help" = "帮助";
+"settings.providers.editor.type_picker.prompt" = "请选择要添加的提供商类型：";
 "settings.providers.intro.body" = "选择应用使用的翻译和词典提供商。";
 "settings.providers.intro.warning" = "你添加的提供商可能会处理你发送的文本，请只连接你信任的服务。";
 "settings.providers.item.empty" = "暂无已配置的提供商。添加一个提供商以启用翻译服务。";

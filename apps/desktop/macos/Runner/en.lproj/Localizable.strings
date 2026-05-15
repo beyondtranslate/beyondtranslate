@@ -3,6 +3,7 @@
 "common.app.name" = "Beyond Translate";
 "common.button.add" = "Add";
 "common.button.cancel" = "Cancel";
+"common.button.continue" = "Continue";
 "common.button.delete" = "Delete";
 "common.button.edit" = "Edit";
 "common.button.manage" = "Manage";
@@ -212,6 +213,7 @@
 "settings.providers.editor.title.add" = "Add Provider";
 "settings.providers.editor.title.edit" = "Edit Provider";
 "settings.providers.editor.tooltip.help" = "Help";
+"settings.providers.editor.type_picker.prompt" = "Select the type of provider you would like to add:";
 "settings.providers.intro.body" = "Choose the translation and dictionary providers used by the app.";
 "settings.providers.intro.warning" = "Providers you add may process the text you send, so only connect services you trust.";
 "settings.providers.item.empty" = "No providers configured. Add one to enable translation services.";

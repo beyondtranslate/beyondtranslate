@@ -342,6 +342,34 @@ impl RuntimeSettings {
             .map_err(Into::into)
     }
 
+    pub async fn generate_provider_id(
+        &self,
+        provider_type: String,
+    ) -> Result<String, RuntimeError> {
+        let base_id = provider_type.trim().to_lowercase();
+        if base_id.is_empty() {
+            return Err(RuntimeError::from("provider_type is required".to_owned()));
+        }
+
+        let state = self.runtime.inner.state.read().await;
+        let existing_ids: Vec<&String> = state.settings.providers.keys().collect();
+
+        // If the base ID is free, use it as-is
+        if !existing_ids.contains(&&base_id) {
+            return Ok(base_id);
+        }
+
+        // Find the first available numeric suffix starting from 1
+        for suffix in 1.. {
+            let candidate = format!("{base_id}{suffix}");
+            if !existing_ids.contains(&&candidate) {
+                return Ok(candidate);
+            }
+        }
+
+        unreachable!()
+    }
+
     pub async fn list_providers(&self) -> Result<Vec<ProviderConfigEntry>, RuntimeError> {
         let state = self.runtime.inner.state.read().await;
         Ok(state

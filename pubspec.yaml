@@ -36,7 +36,5 @@ melos:
       description: Run `flutter test` for all packages.
 
     dependency_validator:
-      exec: flutter pub run dependency_validator
-      packageFilters:
-        dependsOn:
-          - dependency_validator
+      run: dart run dependency_validator -C apps/desktop
+      description: Validate dependencies for workspace packages.

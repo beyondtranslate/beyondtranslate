@@ -899,6 +899,8 @@ public protocol RuntimeSettingsProtocol: AnyObject, Sendable {
 
   func deleteProvider(providerId: String) async throws -> ProviderConfigEntry?
 
+  func generateProviderId(providerType: String) async throws -> String
+
   func getAdvanced() async throws -> AdvancedSettings
 
   func getAppearance() async throws -> AppearanceSettings
@@ -998,6 +1000,23 @@ open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
         completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
         freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
         liftFunc: FfiConverterOptionTypeProviderConfigEntry.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func generateProviderId(providerType: String) async throws -> String {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_generate_provider_id(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(providerType)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterString.lift,
         errorHandler: FfiConverterTypeRuntimeError_lift
       )
   }
@@ -4895,6 +4914,9 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_delete_provider() != 20557 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_generate_provider_id() != 9759 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_advanced() != 3214 {

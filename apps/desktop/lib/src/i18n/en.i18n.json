@@ -10,7 +10,8 @@
       "delete": "Delete",
       "edit": "Edit",
       "save": "Save",
-      "manage": "Manage"
+      "manage": "Manage",
+      "continue": "Continue"
     },
     "feedback": {
       "copied": "Copied"
@@ -341,6 +342,9 @@
         },
         "placeholder": {
           "id": "e.g. deepl-main"
+        },
+        "type_picker": {
+          "prompt": "Select the type of provider you would like to add:"
         },
         "tooltip": {
           "help": "Help"

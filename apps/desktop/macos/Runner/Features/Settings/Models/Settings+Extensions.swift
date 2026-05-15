@@ -216,11 +216,6 @@ extension ProviderType {
 }
 
 extension ProviderConfigEntry: Identifiable {
-  static func newProvider(type: ProviderType) -> ProviderConfigEntry {
-    ProviderConfigEntry(
-      id: "my-provider", type: type, fields: [:], capabilities: [])
-  }
-
   var name: String {
     id
   }
