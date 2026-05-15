@@ -134,7 +134,7 @@ pub struct ProviderConfigEntry {
     #[serde(default)]
     pub id: String,
     /// Provider type (baidu, deepl, google, etc.)
-    #[serde(default = "default_provider_type", rename = "type")]
+    #[serde(rename = "type")]
     pub r#type: ProviderType,
     #[serde(default)]
     pub fields: HashMap<String, String>,
@@ -148,15 +148,11 @@ impl Default for ProviderConfigEntry {
     fn default() -> Self {
         Self {
             id: String::default(),
-            r#type: ProviderType::DeepL,
+            r#type: ProviderType::System,
             fields: HashMap::default(),
             capabilities: Vec::default(),
         }
     }
-}
-
-fn default_provider_type() -> ProviderType {
-    ProviderType::DeepL
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]

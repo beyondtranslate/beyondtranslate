@@ -4,7 +4,7 @@ import beyondtranslate_runtime
 @MainActor
 final class AppearanceViewModel: ObservableObject {
   @Published var appLanguage: String
-  @Published var themeMode: AppThemeMode
+  @Published var themeMode: ThemeMode
   @Published private(set) var themeModeOptions: [ThemeModeOption]
 
   private let repository: SettingsRepository
@@ -39,7 +39,7 @@ final class AppearanceViewModel: ObservableObject {
     }
   }
 
-  func setThemeMode(_ value: AppThemeMode) {
+  func setThemeMode(_ value: ThemeMode) {
     themeMode = value
     ThemeAppearanceController.apply(value)
     Task {
@@ -56,7 +56,7 @@ final class AppearanceViewModel: ObservableObject {
     appLanguage = languageCode(from: settings.language)
     AppLocale.shared.setLocale(appLanguage)
     refreshLocalizedOptions()
-    let mode = AppThemeMode(rawValue: settings.themeMode) ?? .system
+    let mode = ThemeMode(rawValue: settings.themeMode) ?? .system
     themeMode = mode
     ThemeAppearanceController.apply(mode)
   }
@@ -70,14 +70,14 @@ final class AppearanceViewModel: ObservableObject {
   }
 
   private static func localizedThemeModeOptions() -> [ThemeModeOption] {
-    AppThemeMode.allCases.map { mode in
+    ThemeMode.allCases.map { mode in
       ThemeModeOption(mode: mode, title: mode.title)
     }
   }
 }
 
 struct ThemeModeOption: Identifiable {
-  let mode: AppThemeMode
+  let mode: ThemeMode
   let title: String
 
   var id: String {

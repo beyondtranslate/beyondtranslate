@@ -30,7 +30,6 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
-		8F1000022E0A100100A1B2C3 /* SettingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000122E0A100100A1B2C3 /* SettingOption.swift */; };
 		8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000132E0A100100A1B2C3 /* SettingsView.swift */; };
 		8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */; };
 		8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000152E0A100100A1B2C3 /* SettingRow.swift */; };
@@ -56,7 +55,9 @@
 		A10000000000000000000021 /* Settings+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000021 /* Settings+Extensions.swift */; };
 		A100000000000000000000F /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110000000000000000000F /* ProviderDetailView.swift */; };
 		B6867768A75CBFFF8FFDC94A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */; };
-
+		F5F222552FB75BFD0025B9D4 /* ShortcutDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222532FB75BFD0025B9D4 /* ShortcutDisplay.swift */; };
+		F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */; };
+		F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,7 +115,6 @@
 		74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FlutterGeneratedPluginSwiftPackage; path = ephemeral/Packages/FlutterGeneratedPluginSwiftPackage; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		8F1000122E0A100100A1B2C3 /* SettingOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOption.swift; sourceTree = "<group>"; };
 		8F1000132E0A100100A1B2C3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		8F1000152E0A100100A1B2C3 /* SettingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingRow.swift; sourceTree = "<group>"; };
@@ -144,7 +144,9 @@
 		A11000000000000000000021 /* Settings+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+Extensions.swift"; sourceTree = "<group>"; };
 		A110000000000000000000F /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
 		AB98A8540C162D94896470E6 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
-
+		F5F222532FB75BFD0025B9D4 /* ShortcutDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutDisplay.swift; sourceTree = "<group>"; };
+		F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode.swift; sourceTree = "<group>"; };
+		F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeAppearanceController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -357,8 +359,9 @@
 			isa = PBXGroup;
 			children = (
 				8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */,
-				8F1000122E0A100100A1B2C3 /* SettingOption.swift */,
 				A11000000000000000000021 /* Settings+Extensions.swift */,
+				F5F222532FB75BFD0025B9D4 /* ShortcutDisplay.swift */,
+				F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 		A20000000000000000000020 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */,
 				A11000000000000000000020 /* RuntimeProvider.swift */,
 			);
 			path = Services;
@@ -665,10 +669,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5F222552FB75BFD0025B9D4 /* ShortcutDisplay.swift in Sources */,
+				F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */,
 				2A0D6A402E0A100100A1B2C3 /* MacSettingsPlugin.swift in Sources */,
 				2A0D6A422E0A100100A1B2C3 /* MacWindowAppearancePlugin.swift in Sources */,
 				8F10003C2E0A100100A1B2C3 /* ProviderConfigField.swift in Sources */,
-				8F1000022E0A100100A1B2C3 /* SettingOption.swift in Sources */,
 				A10000000000000000000021 /* Settings+Extensions.swift in Sources */,
 				8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */,
 				8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */,
@@ -687,6 +692,7 @@
 				A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */,
 				A1000000000000000000000A /* ProvidersViewModel.swift in Sources */,
 				A1000000000000000000000B /* AdvancedViewModel.swift in Sources */,
+				F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */,
 				A1000000000000000000000C /* SettingsRepository.swift in Sources */,
 				A10000000000000000000010 /* LocaleKeys.swift in Sources */,
 				A10000000000000000000012 /* AppLocale.swift in Sources */,

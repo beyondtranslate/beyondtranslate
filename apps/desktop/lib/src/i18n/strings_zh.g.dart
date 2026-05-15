@@ -114,25 +114,23 @@ class _TranslationsProviderZh extends TranslationsProviderEn {
 
   // Translations
   @override
-  String get baidu => '百度翻译';
+  String get baidu => '百度';
   @override
   String get caiyun => '彩云小译';
   @override
   String get deepl => 'DeepL';
   @override
-  String get google => '谷歌翻译';
-  @override
-  String get ibmwatson => 'IBMWatson';
+  String get google => '谷歌';
   @override
   String get iciba => '爱词霸';
   @override
-  String get openai => 'OpenAI';
+  String get sogou => '搜狗';
   @override
-  String get sogou => '搜狗翻译';
+  String get system => '系统';
   @override
-  String get tencent => '腾讯翻译君';
+  String get tencent => '腾讯';
   @override
-  String get youdao => '有道翻译';
+  String get youdao => '有道';
 }
 
 // Path: translation
@@ -1134,7 +1132,7 @@ class _TranslationsSettingsGeneralButtonZh
 
   // Translations
   @override
-  String get add_provider => '添加提供商...';
+  String get add_provider => '添加...';
   @override
   String get add_target => '添加目标';
   @override
@@ -1386,6 +1384,8 @@ class _TranslationsSettingsProvidersCapabilityZh
   String get translation => '翻译';
   @override
   String get dictionary => '词典';
+  @override
+  String get ocr => 'OCR';
 }
 
 // Path: settings.providers.description
@@ -1627,16 +1627,15 @@ extension on TranslationsZh {
       'common.language.zh_CN' => '中文',
       'common.language.zh_TW' => '中文(繁体)',
       'common.language.zu' => '南非祖鲁语',
-      'provider.baidu' => '百度翻译',
+      'provider.baidu' => '百度',
       'provider.caiyun' => '彩云小译',
       'provider.deepl' => 'DeepL',
-      'provider.google' => '谷歌翻译',
-      'provider.ibmwatson' => 'IBMWatson',
+      'provider.google' => '谷歌',
       'provider.iciba' => '爱词霸',
-      'provider.openai' => 'OpenAI',
-      'provider.sogou' => '搜狗翻译',
-      'provider.tencent' => '腾讯翻译君',
-      'provider.youdao' => '有道翻译',
+      'provider.sogou' => '搜狗',
+      'provider.system' => '系统',
+      'provider.tencent' => '腾讯',
+      'provider.youdao' => '有道',
       'translation.engine_scope.detect_language' => '语种识别',
       'translation.engine_scope.lookup' => '查词',
       'translation.engine_scope.translate' => '翻译',
@@ -1705,7 +1704,7 @@ extension on TranslationsZh {
       'settings.general.row.double_click_copy_result' => '双击复制翻译结果',
       'settings.general.row.submit_with_enter' => '用 Enter 提交',
       'settings.general.row.submit_with_meta_enter_mac' => '用 ⌘ + Enter 提交',
-      'settings.general.button.add_provider' => '添加提供商...',
+      'settings.general.button.add_provider' => '添加...',
       'settings.general.button.add_target' => '添加目标',
       'settings.general.button.grant' => '授权',
       'settings.general.option.none' => '无',
@@ -1752,6 +1751,7 @@ extension on TranslationsZh {
       'settings.providers.detail.tooltip.edit' => '编辑提供商',
       'settings.providers.capability.translation' => '翻译',
       'settings.providers.capability.dictionary' => '词典',
+      'settings.providers.capability.ocr' => 'OCR',
       'settings.providers.description.all' => '提供词典查询和文本翻译',
       'settings.providers.description.translation' => '提供语言间文本翻译',
       'settings.providers.description.dictionary' => '提供词典查询和单词释义',

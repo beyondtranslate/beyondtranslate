@@ -11,11 +11,26 @@ import beyondtranslate_runtime
 extension TranslationMode: Identifiable, CaseIterable {
   public static var allCases: [TranslationMode] { [.auto, .manual] }
   public var id: String { String(describing: self) }
+
+  var title: String {
+    switch self {
+    case .auto: return LocaleKeys.translation.mode.auto.tr()
+    case .manual: return LocaleKeys.translation.mode.manual.tr()
+    }
+  }
 }
 
 extension InputSubmitMode: Identifiable, CaseIterable {
   public static var allCases: [InputSubmitMode] { [.enter, .commandEnter] }
   public var id: String { String(describing: self) }
+
+  var title: String {
+    switch self {
+    case .enter: return LocaleKeys.settings.general.row.submitWithEnter.tr()
+    case .commandEnter:
+      return LocaleKeys.settings.general.row.submitWithMetaEnterMac.tr()
+    }
+  }
 }
 
 extension TranslationTarget: Identifiable {
@@ -197,5 +212,20 @@ extension ProviderType {
     case .system:
       return []
     }
+  }
+}
+
+extension ProviderConfigEntry: Identifiable {
+  static func newProvider(type: ProviderType) -> ProviderConfigEntry {
+    ProviderConfigEntry(
+      id: "my-provider", type: type, fields: [:], capabilities: [])
+  }
+
+  var name: String {
+    id
+  }
+
+  var endpoint: String {
+    fields["baseUrl"] ?? ""
   }
 }

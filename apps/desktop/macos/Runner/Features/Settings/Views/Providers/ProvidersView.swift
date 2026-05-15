@@ -35,7 +35,7 @@ struct ProvidersView: View {
             Spacer()
             Button(LocaleKeys.settings.providers.button.add.tr()) {
               isCreatingDraft = true
-              draft = .newProvider()
+              draft = .newProvider(type: .baidu)
             }
           }
         }
@@ -49,7 +49,7 @@ struct ProvidersView: View {
     .onReceive(viewModel.$pendingPresentProviderEditorSheetID) { id in
       guard let id, viewModel.consumePresentProviderEditorSheet(id) else { return }
       isCreatingDraft = true
-      draft = .newProvider()
+      draft = .newProvider(type: .baidu)
     }
     .sheet(item: $draft) { item in
       ProviderEditorSheet(

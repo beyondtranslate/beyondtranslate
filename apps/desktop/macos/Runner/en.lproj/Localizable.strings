@@ -150,9 +150,7 @@
 "provider.caiyun" = "Caiyun";
 "provider.deepl" = "DeepL";
 "provider.google" = "Google";
-"provider.ibmwatson" = "IBMWatson";
 "provider.iciba" = "Iciba";
-"provider.openai" = "OpenAI";
 "provider.sogou" = "Sogou";
 "provider.system" = "System";
 "provider.tencent" = "Tencent";

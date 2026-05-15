@@ -106,17 +106,14 @@ class TranslationsProviderEn {
   /// en: 'Google'
   String get google => 'Google';
 
-  /// en: 'IBMWatson'
-  String get ibmwatson => 'IBMWatson';
-
   /// en: 'Iciba'
   String get iciba => 'Iciba';
 
-  /// en: 'OpenAI'
-  String get openai => 'OpenAI';
-
   /// en: 'Sogou'
   String get sogou => 'Sogou';
+
+  /// en: 'System'
+  String get system => 'System';
 
   /// en: 'Tencent'
   String get tencent => 'Tencent';
@@ -1180,8 +1177,8 @@ class TranslationsSettingsGeneralButtonEn {
 
   // Translations
 
-  /// en: 'Add Provider...'
-  String get add_provider => 'Add Provider...';
+  /// en: 'Add...'
+  String get add_provider => 'Add...';
 
   /// en: 'Add Target'
   String get add_target => 'Add Target';
@@ -1423,6 +1420,9 @@ class TranslationsSettingsProvidersCapabilityEn {
 
   /// en: 'Dictionary'
   String get dictionary => 'Dictionary';
+
+  /// en: 'OCR'
+  String get ocr => 'OCR';
 }
 
 // Path: settings.providers.description
@@ -1660,10 +1660,9 @@ extension on Translations {
       'provider.caiyun' => 'Caiyun',
       'provider.deepl' => 'DeepL',
       'provider.google' => 'Google',
-      'provider.ibmwatson' => 'IBMWatson',
       'provider.iciba' => 'Iciba',
-      'provider.openai' => 'OpenAI',
       'provider.sogou' => 'Sogou',
+      'provider.system' => 'System',
       'provider.tencent' => 'Tencent',
       'provider.youdao' => 'Youda',
       'translation.engine_scope.detect_language' => 'detectLanguage',
@@ -1748,7 +1747,7 @@ extension on Translations {
       'settings.general.row.submit_with_enter' => 'Submit with Enter',
       'settings.general.row.submit_with_meta_enter_mac' =>
         'Submit with ⌘ + Enter',
-      'settings.general.button.add_provider' => 'Add Provider...',
+      'settings.general.button.add_provider' => 'Add...',
       'settings.general.button.add_target' => 'Add Target',
       'settings.general.button.grant' => 'Grant',
       'settings.general.option.none' => 'None',
@@ -1802,6 +1801,7 @@ extension on Translations {
       'settings.providers.detail.tooltip.edit' => 'Edit provider',
       'settings.providers.capability.translation' => 'Translation',
       'settings.providers.capability.dictionary' => 'Dictionary',
+      'settings.providers.capability.ocr' => 'OCR',
       'settings.providers.description.all' =>
         'Provides dictionary lookup and text translation',
       'settings.providers.description.translation' =>

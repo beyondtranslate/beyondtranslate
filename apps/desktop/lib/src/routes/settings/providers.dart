@@ -303,7 +303,7 @@ class _ProviderEditorDialog extends StatefulWidget {
 
 class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
   late final TextEditingController _idController;
-  late ProviderType _selectedType;
+  ProviderType? _selectedType;
   late Map<String, TextEditingController> _fieldControllers;
 
   static const _knownProviderTypes = <ProviderType>[
@@ -335,14 +335,15 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
     super.initState();
     final existing = widget.existing;
     _idController = TextEditingController(text: existing?.id ?? '');
-    _selectedType = existing?.type ?? _knownProviderTypes.first;
+    _selectedType = existing?.type;
     _fieldControllers = _buildControllers(_selectedType, existing?.fields);
   }
 
   Map<String, TextEditingController> _buildControllers(
-    ProviderType type,
+    ProviderType? type,
     Map<String, String>? initial,
   ) {
+    if (type == null) return {};
     final keys = _providerFields[type] ?? const <String>[];
     final controllers = <String, TextEditingController>{};
     for (final key in keys) {
@@ -376,6 +377,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
 
   bool get _canSave {
     if (_idController.text.trim().isEmpty) return false;
+    if (widget.existing == null && _selectedType == null) return false;
     return true;
   }
 
@@ -397,7 +399,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
                   controller: _idController,
                   decoration: const InputDecoration(
                     labelText: 'Provider ID',
-                    hintText: 'e.g. deepl-main',
+                    hintText: 'e.g. my-provider',
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (_) => setState(() {}),
@@ -405,6 +407,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
                 const SizedBox(height: 12),
                 DropdownButtonFormField<ProviderType>(
                   value: _selectedType,
+                  hint: const Text('Select a provider type...'),
                   items: [
                     for (final type in _knownProviderTypes)
                       DropdownMenuItem<ProviderType>(
@@ -425,7 +428,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
-                    '${widget.existing!.id} · ${_providerTypeDisplayName(widget.existing!.type)}',
+                    '${widget.existing!.id} \u00b7 ${_providerTypeDisplayName(widget.existing!.type)}',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
@@ -460,7 +463,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
               ? () {
                   final draft = _ProviderDraft(
                     id: _idController.text.trim(),
-                    type: _selectedType,
+                    type: _selectedType!,
                     fields: {
                       for (final entry in _fieldControllers.entries)
                         entry.key: entry.value.text,

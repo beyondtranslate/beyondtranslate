@@ -133,17 +133,15 @@
     }
   },
   "provider": {
-    "baidu": "百度翻译",
+    "baidu": "百度",
     "caiyun": "彩云小译",
     "deepl": "DeepL",
-    "google": "谷歌翻译",
-    "ibmwatson": "IBMWatson",
+    "google": "谷歌",
     "iciba": "爱词霸",
-    "openai": "OpenAI",
-    "sogou": "搜狗翻译",
+    "sogou": "搜狗",
     "system": "系统",
-    "tencent": "腾讯翻译君",
-    "youdao": "有道翻译"
+    "tencent": "腾讯",
+    "youdao": "有道"
   },
   "translation": {
     "engine_scope": {
