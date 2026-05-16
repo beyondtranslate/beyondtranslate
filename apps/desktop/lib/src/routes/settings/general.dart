@@ -89,10 +89,10 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
           ],
         ),
         PreferenceListSection(
-          title: const Text('Extract Text'),
+          title: const Text('Text Recognition'),
           children: [
             _ServicePickerItem(
-              title: 'Default extract text service',
+              title: 'Default text recognition service',
               options: _ocrServiceOptions,
               value: _providerId(_general.defaultOcrService),
               onChanged: (v) async {

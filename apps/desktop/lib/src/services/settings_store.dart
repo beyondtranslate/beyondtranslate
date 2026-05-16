@@ -50,9 +50,10 @@ class SettingsStore extends ChangeNotifier {
   );
   ShortcutSettings _shortcuts = ShortcutSettings(
     toggleMiniTranslator: '',
-    extractFromScreenSelection: '',
-    extractFromScreenCapture: '',
-    extractFromClipboard: '',
+    extractTextFromScreenSelection: '',
+    extractTextFromScreenCapture: '',
+    extractTextFromClipboard: '',
+    translateInputContent: '',
   );
   List<ProviderConfigEntry> _providers = const [];
 

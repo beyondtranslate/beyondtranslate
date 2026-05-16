@@ -174,7 +174,7 @@
 "settings.general.option.youdao_ocr" = "有道 OCR";
 "settings.general.row.auto_copy_detected_text" = "自动复制识别文本";
 "settings.general.row.default_directory_service" = "默认词典服务";
-"settings.general.row.default_extract_text_service" = "默认取词服务";
+"settings.general.row.default_ocr_service" = "默认文字识别服务";
 "settings.general.row.default_translation_service" = "默认翻译服务";
 "settings.general.row.double_click_copy_result" = "双击复制翻译结果";
 "settings.general.row.launch_at_startup" = "登录时启动";
@@ -185,8 +185,8 @@
 "settings.general.row.submit_with_meta_enter_mac" = "用 ⌘ + Enter 提交";
 "settings.general.row.translation_mode" = "翻译模式";
 "settings.general.section.directory" = "词典";
-"settings.general.section.extract_text" = "取词";
 "settings.general.section.input" = "输入设置";
+"settings.general.section.ocr" = "文字识别";
 "settings.general.section.permissions" = "权限";
 "settings.general.section.translation" = "翻译";
 "settings.general.section.translation_target" = "翻译目标";
@@ -221,14 +221,14 @@
 "settings.providers.item.no_services" = "暂无可用服务。";
 "settings.providers.section.services" = "服务";
 "settings.providers.title" = "提供商";
-"settings.shortcuts.row.extract_from_capture" = "从截图取词";
-"settings.shortcuts.row.extract_from_clipboard" = "从剪贴板取词";
-"settings.shortcuts.row.extract_from_selection" = "从选区取词";
+"settings.shortcuts.row.extract_text_from_clipboard" = "从剪贴板提取文字";
+"settings.shortcuts.row.extract_text_from_screen_capture" = "从屏幕截图提取文字";
+"settings.shortcuts.row.extract_text_from_screen_selection" = "从屏幕选区提取文字";
 "settings.shortcuts.row.toggle_mini_translator" = "显示/隐藏窗口";
 "settings.shortcuts.row.translate_input" = "翻译输入内容";
-"settings.shortcuts.section.extract_text" = "取词";
 "settings.shortcuts.section.input_assist" = "输入辅助功能";
 "settings.shortcuts.section.shortcuts" = "快捷键";
+"settings.shortcuts.section.text_extraction" = "文字提取";
 "settings.shortcuts.title" = "快捷键";
 "settings.title" = "设置";
 "settings.version" = "版本 {} BUILD {}";

@@ -10,33 +10,43 @@ struct ShortcutsView: View {
           title: LocaleKeys.settings.shortcuts.row.toggleMiniTranslator.tr(),
           shortcut: viewModel.toggleMiniTranslator,
           onShortcutRecorded: { viewModel.setToggleMiniTranslator($0) },
-          onClear: { viewModel.clearToggleMiniTranslator() })
+          onClear: { viewModel.clearToggleMiniTranslator() }
+        )
+        .id("toggleMiniTranslator")
       }
 
-      Section(LocaleKeys.settings.shortcuts.section.extractText.tr()) {
+      Section(LocaleKeys.settings.shortcuts.section.textExtraction.tr()) {
         ShortcutSettingRow(
-          title: LocaleKeys.settings.shortcuts.row.extractFromSelection.tr(),
-          shortcut: viewModel.extractSelection,
-          onShortcutRecorded: { viewModel.setExtractSelection($0) },
-          onClear: { viewModel.clearExtractSelection() })
+          title: LocaleKeys.settings.shortcuts.row.extractTextFromScreenSelection.tr(),
+          shortcut: viewModel.extractTextFromScreenSelection,
+          onShortcutRecorded: { viewModel.setExtractTextFromScreenSelection($0) },
+          onClear: { viewModel.clearExtractTextFromScreenSelection() }
+        )
+        .id("extractTextFromScreenSelection")
         ShortcutSettingRow(
-          title: LocaleKeys.settings.shortcuts.row.extractFromCapture.tr(),
-          shortcut: viewModel.extractCapture,
-          onShortcutRecorded: { viewModel.setExtractCapture($0) },
-          onClear: { viewModel.clearExtractCapture() })
+          title: LocaleKeys.settings.shortcuts.row.extractTextFromScreenCapture.tr(),
+          shortcut: viewModel.extractTextFromScreenCapture,
+          onShortcutRecorded: { viewModel.setExtractTextFromScreenCapture($0) },
+          onClear: { viewModel.clearExtractTextFromScreenCapture() }
+        )
+        .id("extractTextFromScreenCapture")
         ShortcutSettingRow(
-          title: LocaleKeys.settings.shortcuts.row.extractFromClipboard.tr(),
-          shortcut: viewModel.extractClipboard,
-          onShortcutRecorded: { viewModel.setExtractClipboard($0) },
-          onClear: { viewModel.clearExtractClipboard() })
+          title: LocaleKeys.settings.shortcuts.row.extractTextFromClipboard.tr(),
+          shortcut: viewModel.extractTextFromClipboard,
+          onShortcutRecorded: { viewModel.setExtractTextFromClipboard($0) },
+          onClear: { viewModel.clearExtractTextFromClipboard() }
+        )
+        .id("extractTextFromClipboard")
       }
 
       Section(LocaleKeys.settings.shortcuts.section.inputAssist.tr()) {
         ShortcutSettingRow(
           title: LocaleKeys.settings.shortcuts.row.translateInput.tr(),
-          shortcut: viewModel.translateInput,
-          onShortcutRecorded: { viewModel.setTranslateInput($0) },
-          onClear: { viewModel.clearTranslateInput() })
+          shortcut: viewModel.translateInputContent,
+          onShortcutRecorded: { viewModel.setTranslateInputContent($0) },
+          onClear: { viewModel.clearTranslateInputContent() }
+        )
+        .id("translateInputContent")
       }
     }
   }

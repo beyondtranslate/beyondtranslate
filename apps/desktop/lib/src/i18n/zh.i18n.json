@@ -241,7 +241,7 @@
       "title": "常规",
       "section": {
         "permissions": "权限",
-        "extract_text": "取词",
+        "ocr": "文字识别",
         "directory": "词典",
         "translation": "翻译",
         "translation_target": "翻译目标",
@@ -252,7 +252,7 @@
         "show_in_menu_bar": "在菜单栏中显示",
         "screen_capture_access": "授予屏幕录制权限",
         "screen_selection_access": "授予辅助功能权限",
-        "default_extract_text_service": "默认取词服务",
+        "default_ocr_service": "默认文字识别服务",
         "auto_copy_detected_text": "自动复制识别文本",
         "default_directory_service": "默认词典服务",
         "default_translation_service": "默认翻译服务",
@@ -290,14 +290,14 @@
       "title": "快捷键",
       "section": {
         "shortcuts": "快捷键",
-        "extract_text": "取词",
+        "text_extraction": "文字提取",
         "input_assist": "输入辅助功能"
       },
       "row": {
         "toggle_mini_translator": "显示/隐藏窗口",
-        "extract_from_selection": "从选区取词",
-        "extract_from_capture": "从截图取词",
-        "extract_from_clipboard": "从剪贴板取词",
+        "extract_text_from_screen_selection": "从屏幕选区提取文字",
+        "extract_text_from_screen_capture": "从屏幕截图提取文字",
+        "extract_text_from_clipboard": "从剪贴板提取文字",
         "translate_input": "翻译输入内容"
       }
     },

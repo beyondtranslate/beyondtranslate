@@ -849,9 +849,10 @@ mod tests {
                 settings
                     .update_shortcuts(ShortcutSettingsPatch {
                         toggle_mini_translator: Some("Cmd+Space".to_owned()),
-                        extract_from_screen_selection: None,
-                        extract_from_screen_capture: None,
-                        extract_from_clipboard: None,
+                        extract_text_from_screen_selection: None,
+                        extract_text_from_screen_capture: None,
+                        extract_text_from_clipboard: None,
+                        translate_input_content: None,
                     })
                     .await
                     .expect("update_shortcuts failed");

@@ -84,15 +84,17 @@ extension AppearanceSettingsPatch {
 extension ShortcutSettingsPatch {
   static func diff(
     toggleMiniTranslator: String? = nil,
-    extractFromScreenSelection: String? = nil,
-    extractFromScreenCapture: String? = nil,
-    extractFromClipboard: String? = nil
+    extractTextFromScreenSelection: String? = nil,
+    extractTextFromScreenCapture: String? = nil,
+    extractTextFromClipboard: String? = nil,
+    translateInputContent: String? = nil
   ) -> ShortcutSettingsPatch {
     ShortcutSettingsPatch(
       toggleMiniTranslator: toggleMiniTranslator,
-      extractFromScreenSelection: extractFromScreenSelection,
-      extractFromScreenCapture: extractFromScreenCapture,
-      extractFromClipboard: extractFromClipboard
+      extractTextFromScreenSelection: extractTextFromScreenSelection,
+      extractTextFromScreenCapture: extractTextFromScreenCapture,
+      extractTextFromClipboard: extractTextFromClipboard,
+      translateInputContent: translateInputContent
     )
   }
 }

@@ -16,21 +16,36 @@ use struct_patch::Patch;
 pub struct ShortcutSettings {
     #[serde(default, rename = "toggleMiniTranslator")]
     pub toggle_mini_translator: String,
-    #[serde(default, rename = "extractFromScreenSelection")]
-    pub extract_from_screen_selection: String,
-    #[serde(default, rename = "extractFromScreenCapture")]
-    pub extract_from_screen_capture: String,
-    #[serde(default, rename = "extractFromClipboard")]
-    pub extract_from_clipboard: String,
+    #[serde(
+        default,
+        rename = "extractTextFromScreenSelection",
+        alias = "extractFromScreenSelection"
+    )]
+    pub extract_text_from_screen_selection: String,
+    #[serde(
+        default,
+        rename = "extractTextFromScreenCapture",
+        alias = "extractFromScreenCapture"
+    )]
+    pub extract_text_from_screen_capture: String,
+    #[serde(
+        default,
+        rename = "extractTextFromClipboard",
+        alias = "extractFromClipboard"
+    )]
+    pub extract_text_from_clipboard: String,
+    #[serde(default, rename = "translateInputContent")]
+    pub translate_input_content: String,
 }
 
 impl Default for ShortcutSettings {
     fn default() -> Self {
         Self {
             toggle_mini_translator: "Option+1".to_owned(),
-            extract_from_screen_selection: "Option+Q".to_owned(),
-            extract_from_screen_capture: "Option+W".to_owned(),
-            extract_from_clipboard: "Option+E".to_owned(),
+            extract_text_from_screen_selection: "Option+Q".to_owned(),
+            extract_text_from_screen_capture: "Option+W".to_owned(),
+            extract_text_from_clipboard: "Option+E".to_owned(),
+            translate_input_content: "Option+Z".to_owned(),
         }
     }
 }
@@ -412,11 +427,12 @@ mod tests {
         fs::write(
             &path,
             r#"{
-  "shortcuts": {
+    "shortcuts": {
     "toggleMiniTranslator": "Command+Shift+Space",
-    "extractFromScreenSelection": "Command+Shift+1",
-    "extractFromScreenCapture": "Command+Shift+2",
-    "extractFromClipboard": "Command+Shift+3"
+    "extractTextFromScreenSelection": "Command+Shift+1",
+    "extractTextFromScreenCapture": "Command+Shift+2",
+    "extractTextFromClipboard": "Command+Shift+3",
+    "translateInputContent": "Option+Z"
   },
   "appearance": {
     "language": "en",
@@ -445,14 +461,18 @@ mod tests {
             "Command+Shift+Space"
         );
         assert_eq!(
-            settings.shortcuts.extract_from_screen_selection,
+            settings.shortcuts.extract_text_from_screen_selection,
             "Command+Shift+1"
         );
         assert_eq!(
-            settings.shortcuts.extract_from_screen_capture,
+            settings.shortcuts.extract_text_from_screen_capture,
             "Command+Shift+2"
         );
-        assert_eq!(settings.shortcuts.extract_from_clipboard, "Command+Shift+3");
+        assert_eq!(
+            settings.shortcuts.extract_text_from_clipboard,
+            "Command+Shift+3"
+        );
+        assert_eq!(settings.shortcuts.translate_input_content, "Option+Z");
         assert_eq!(settings.appearance.language, "en");
         assert_eq!(settings.appearance.theme_mode, "dark");
         assert!(settings.general.launch_at_login);
@@ -470,15 +490,47 @@ mod tests {
     }
 
     #[test]
+    fn load_shortcuts_accepts_legacy_extract_keys() {
+        let path = temp_settings_file();
+        fs::create_dir_all(path.parent().unwrap()).expect("failed to create temp dir");
+        fs::write(
+            &path,
+            r#"{
+  "shortcuts": {
+    "extractFromScreenSelection": "Command+Shift+1",
+    "extractFromScreenCapture": "Command+Shift+2",
+    "extractFromClipboard": "Command+Shift+3"
+  }
+}"#,
+        )
+        .expect("failed to write settings");
+
+        let settings = Settings::load(&path).expect("failed to load settings");
+        assert_eq!(
+            settings.shortcuts.extract_text_from_screen_selection,
+            "Command+Shift+1"
+        );
+        assert_eq!(
+            settings.shortcuts.extract_text_from_screen_capture,
+            "Command+Shift+2"
+        );
+        assert_eq!(
+            settings.shortcuts.extract_text_from_clipboard,
+            "Command+Shift+3"
+        );
+    }
+
+    #[test]
     fn save_writes_settings_schema() {
         let path = temp_settings_file();
         fs::create_dir_all(path.parent().unwrap()).expect("failed to create temp dir");
 
         let mut settings = Settings::default();
         settings.shortcuts.toggle_mini_translator = "Command+Shift+Space".to_owned();
-        settings.shortcuts.extract_from_screen_selection = "Command+Shift+1".to_owned();
-        settings.shortcuts.extract_from_screen_capture = "Command+Shift+2".to_owned();
-        settings.shortcuts.extract_from_clipboard = "Command+Shift+3".to_owned();
+        settings.shortcuts.extract_text_from_screen_selection = "Command+Shift+1".to_owned();
+        settings.shortcuts.extract_text_from_screen_capture = "Command+Shift+2".to_owned();
+        settings.shortcuts.extract_text_from_clipboard = "Command+Shift+3".to_owned();
+        settings.shortcuts.translate_input_content = "Option+Z".to_owned();
         settings.appearance.language = "en".to_owned();
         settings.appearance.theme_mode = "system".to_owned();
         settings.general.launch_at_login = true;
@@ -502,17 +554,22 @@ mod tests {
             Some(Value::String("Command+Shift+Space".to_owned()))
         );
         assert_eq!(
-            json.pointer("/shortcuts/extractFromScreenSelection")
+            json.pointer("/shortcuts/extractTextFromScreenSelection")
                 .cloned(),
             Some(Value::String("Command+Shift+1".to_owned()))
         );
         assert_eq!(
-            json.pointer("/shortcuts/extractFromScreenCapture").cloned(),
+            json.pointer("/shortcuts/extractTextFromScreenCapture")
+                .cloned(),
             Some(Value::String("Command+Shift+2".to_owned()))
         );
         assert_eq!(
-            json.pointer("/shortcuts/extractFromClipboard").cloned(),
+            json.pointer("/shortcuts/extractTextFromClipboard").cloned(),
             Some(Value::String("Command+Shift+3".to_owned()))
+        );
+        assert_eq!(
+            json.pointer("/shortcuts/translateInputContent").cloned(),
+            Some(Value::String("Option+Z".to_owned()))
         );
         assert_eq!(
             json.pointer("/appearance/language").cloned(),

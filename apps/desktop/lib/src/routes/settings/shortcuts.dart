@@ -53,28 +53,28 @@ class _ShortcutsSettingsPageState extends State<ShortcutsSettingsPage> {
           ],
         ),
         PreferenceListSection(
-          title: const Text('Extract Text'),
+          title: const Text('Text Extraction'),
           children: [
             _ShortcutRow(
-              title: 'Extract text from selection',
-              shortcut: shortcuts.extractFromScreenSelection,
+              title: 'Extract text from screen selection',
+              shortcut: shortcuts.extractTextFromScreenSelection,
             ),
             _ShortcutRow(
-              title: 'Extract text from capture',
-              shortcut: shortcuts.extractFromScreenCapture,
+              title: 'Extract text from screen capture',
+              shortcut: shortcuts.extractTextFromScreenCapture,
             ),
             _ShortcutRow(
               title: 'Extract text from clipboard',
-              shortcut: shortcuts.extractFromClipboard,
+              shortcut: shortcuts.extractTextFromClipboard,
             ),
           ],
         ),
-        const PreferenceListSection(
-          title: Text('Input Assist Function'),
+        PreferenceListSection(
+          title: const Text('Input Assist Function'),
           children: [
             _ShortcutRow(
               title: 'Translate input content',
-              shortcut: 'Control+Shift+Return',
+              shortcut: shortcuts.translateInputContent,
             ),
           ],
         ),

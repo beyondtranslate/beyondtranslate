@@ -174,7 +174,7 @@
 "settings.general.option.youdao_ocr" = "Youdao OCR";
 "settings.general.row.auto_copy_detected_text" = "Auto copy detected text";
 "settings.general.row.default_directory_service" = "Default directory service";
-"settings.general.row.default_extract_text_service" = "Default extract text service";
+"settings.general.row.default_ocr_service" = "Default text recognition service";
 "settings.general.row.default_translation_service" = "Default translation service";
 "settings.general.row.double_click_copy_result" = "Double click to copy translation result";
 "settings.general.row.launch_at_startup" = "Launch when you log in";
@@ -185,8 +185,8 @@
 "settings.general.row.submit_with_meta_enter_mac" = "Submit with ⌘ + Enter";
 "settings.general.row.translation_mode" = "Translation mode";
 "settings.general.section.directory" = "Directory";
-"settings.general.section.extract_text" = "Extract text";
 "settings.general.section.input" = "Input Settings";
+"settings.general.section.ocr" = "Text Recognition";
 "settings.general.section.permissions" = "Permissions";
 "settings.general.section.translation" = "Translation";
 "settings.general.section.translation_target" = "Translation Target";
@@ -221,14 +221,14 @@
 "settings.providers.item.no_services" = "No services available.";
 "settings.providers.section.services" = "Services";
 "settings.providers.title" = "Providers";
-"settings.shortcuts.row.extract_from_capture" = "Extract text from capture";
-"settings.shortcuts.row.extract_from_clipboard" = "Extract text from clipboard";
-"settings.shortcuts.row.extract_from_selection" = "Extract text from selection";
+"settings.shortcuts.row.extract_text_from_clipboard" = "Extract text from clipboard";
+"settings.shortcuts.row.extract_text_from_screen_capture" = "Extract text from screen capture";
+"settings.shortcuts.row.extract_text_from_screen_selection" = "Extract text from screen selection";
 "settings.shortcuts.row.toggle_mini_translator" = "Show/Hide Window";
 "settings.shortcuts.row.translate_input" = "Translate input content";
-"settings.shortcuts.section.extract_text" = "Extract Text";
 "settings.shortcuts.section.input_assist" = "Input Assist Function";
 "settings.shortcuts.section.shortcuts" = "Shortcuts";
+"settings.shortcuts.section.text_extraction" = "Text Extraction";
 "settings.shortcuts.title" = "Shortcuts";
 "settings.title" = "Settings";
 "settings.version" = "Version {} BUILD {}";

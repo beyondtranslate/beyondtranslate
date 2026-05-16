@@ -1110,8 +1110,8 @@ class TranslationsSettingsGeneralSectionEn {
   /// en: 'Permissions'
   String get permissions => 'Permissions';
 
-  /// en: 'Extract text'
-  String get extract_text => 'Extract text';
+  /// en: 'Text Recognition'
+  String get ocr => 'Text Recognition';
 
   /// en: 'Directory'
   String get directory => 'Directory';
@@ -1146,8 +1146,8 @@ class TranslationsSettingsGeneralRowEn {
   /// en: 'Grant accessibility access'
   String get screen_selection_access => 'Grant accessibility access';
 
-  /// en: 'Default extract text service'
-  String get default_extract_text_service => 'Default extract text service';
+  /// en: 'Default text recognition service'
+  String get default_ocr_service => 'Default text recognition service';
 
   /// en: 'Auto copy detected text'
   String get auto_copy_detected_text => 'Auto copy detected text';
@@ -1258,8 +1258,8 @@ class TranslationsSettingsShortcutsSectionEn {
   /// en: 'Shortcuts'
   String get shortcuts => 'Shortcuts';
 
-  /// en: 'Extract Text'
-  String get extract_text => 'Extract Text';
+  /// en: 'Text Extraction'
+  String get text_extraction => 'Text Extraction';
 
   /// en: 'Input Assist Function'
   String get input_assist => 'Input Assist Function';
@@ -1276,14 +1276,16 @@ class TranslationsSettingsShortcutsRowEn {
   /// en: 'Show/Hide Window'
   String get toggle_mini_translator => 'Show/Hide Window';
 
-  /// en: 'Extract text from selection'
-  String get extract_from_selection => 'Extract text from selection';
+  /// en: 'Extract text from screen selection'
+  String get extract_text_from_screen_selection =>
+      'Extract text from screen selection';
 
-  /// en: 'Extract text from capture'
-  String get extract_from_capture => 'Extract text from capture';
+  /// en: 'Extract text from screen capture'
+  String get extract_text_from_screen_capture =>
+      'Extract text from screen capture';
 
   /// en: 'Extract text from clipboard'
-  String get extract_from_clipboard => 'Extract text from clipboard';
+  String get extract_text_from_clipboard => 'Extract text from clipboard';
 
   /// en: 'Translate input content'
   String get translate_input => 'Translate input content';
@@ -1737,7 +1739,7 @@ extension on Translations {
       'settings.version' => 'Version {} BUILD {}',
       'settings.general.title' => 'General',
       'settings.general.section.permissions' => 'Permissions',
-      'settings.general.section.extract_text' => 'Extract text',
+      'settings.general.section.ocr' => 'Text Recognition',
       'settings.general.section.directory' => 'Directory',
       'settings.general.section.translation' => 'Translation',
       'settings.general.section.translation_target' => 'Translation Target',
@@ -1748,8 +1750,8 @@ extension on Translations {
         'Grant screen recording access',
       'settings.general.row.screen_selection_access' =>
         'Grant accessibility access',
-      'settings.general.row.default_extract_text_service' =>
-        'Default extract text service',
+      'settings.general.row.default_ocr_service' =>
+        'Default text recognition service',
       'settings.general.row.auto_copy_detected_text' =>
         'Auto copy detected text',
       'settings.general.row.default_directory_service' =>
@@ -1779,14 +1781,14 @@ extension on Translations {
       'settings.appearance.option.chinese' => 'Chinese',
       'settings.shortcuts.title' => 'Shortcuts',
       'settings.shortcuts.section.shortcuts' => 'Shortcuts',
-      'settings.shortcuts.section.extract_text' => 'Extract Text',
+      'settings.shortcuts.section.text_extraction' => 'Text Extraction',
       'settings.shortcuts.section.input_assist' => 'Input Assist Function',
       'settings.shortcuts.row.toggle_mini_translator' => 'Show/Hide Window',
-      'settings.shortcuts.row.extract_from_selection' =>
-        'Extract text from selection',
-      'settings.shortcuts.row.extract_from_capture' =>
-        'Extract text from capture',
-      'settings.shortcuts.row.extract_from_clipboard' =>
+      'settings.shortcuts.row.extract_text_from_screen_selection' =>
+        'Extract text from screen selection',
+      'settings.shortcuts.row.extract_text_from_screen_capture' =>
+        'Extract text from screen capture',
+      'settings.shortcuts.row.extract_text_from_clipboard' =>
         'Extract text from clipboard',
       'settings.shortcuts.row.translate_input' => 'Translate input content',
       'settings.advanced.title' => 'Advanced',

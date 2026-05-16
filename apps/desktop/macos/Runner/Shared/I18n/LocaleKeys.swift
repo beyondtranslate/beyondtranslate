@@ -274,8 +274,7 @@ enum LocaleKeys {
         static let autoCopyDetectedText = LocaleKey("settings.general.row.auto_copy_detected_text")
         static let defaultDirectoryService = LocaleKey(
           "settings.general.row.default_directory_service")
-        static let defaultExtractTextService = LocaleKey(
-          "settings.general.row.default_extract_text_service")
+        static let defaultOcrService = LocaleKey("settings.general.row.default_ocr_service")
         static let defaultTranslationService = LocaleKey(
           "settings.general.row.default_translation_service")
         static let doubleClickCopyResult = LocaleKey(
@@ -291,8 +290,8 @@ enum LocaleKeys {
       }
       enum section {
         static let directory = LocaleKey("settings.general.section.directory")
-        static let extractText = LocaleKey("settings.general.section.extract_text")
         static let input = LocaleKey("settings.general.section.input")
+        static let ocr = LocaleKey("settings.general.section.ocr")
         static let permissions = LocaleKey("settings.general.section.permissions")
         static let translation = LocaleKey("settings.general.section.translation")
         static let translationTarget = LocaleKey("settings.general.section.translation_target")
@@ -369,16 +368,19 @@ enum LocaleKeys {
     }
     enum shortcuts {
       enum row {
-        static let extractFromCapture = LocaleKey("settings.shortcuts.row.extract_from_capture")
-        static let extractFromClipboard = LocaleKey("settings.shortcuts.row.extract_from_clipboard")
-        static let extractFromSelection = LocaleKey("settings.shortcuts.row.extract_from_selection")
+        static let extractTextFromClipboard = LocaleKey(
+          "settings.shortcuts.row.extract_text_from_clipboard")
+        static let extractTextFromScreenCapture = LocaleKey(
+          "settings.shortcuts.row.extract_text_from_screen_capture")
+        static let extractTextFromScreenSelection = LocaleKey(
+          "settings.shortcuts.row.extract_text_from_screen_selection")
         static let toggleMiniTranslator = LocaleKey("settings.shortcuts.row.toggle_mini_translator")
         static let translateInput = LocaleKey("settings.shortcuts.row.translate_input")
       }
       enum section {
-        static let extractText = LocaleKey("settings.shortcuts.section.extract_text")
         static let inputAssist = LocaleKey("settings.shortcuts.section.input_assist")
         static let shortcuts = LocaleKey("settings.shortcuts.section.shortcuts")
+        static let textExtraction = LocaleKey("settings.shortcuts.section.text_extraction")
       }
       static let title = LocaleKey("settings.shortcuts.title")
     }

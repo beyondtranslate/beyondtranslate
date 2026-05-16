@@ -120,7 +120,7 @@ private struct ProviderRow: View {
         ProviderTypeIcon(providerType: provider.type)
 
         VStack(alignment: .leading, spacing: 3) {
-          Text(provider.name)
+          Text(provider.type.displayName)
             .font(.system(size: 13))
             .foregroundStyle(.primary)
 

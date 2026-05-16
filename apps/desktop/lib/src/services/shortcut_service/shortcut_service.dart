@@ -42,11 +42,11 @@ class ShortcutService {
   // Hooks for tests / future direct invocation.
   void notifyToggleMiniTranslator() =>
       _listener?.onShortcutKeyDownToggleMiniTranslator();
-  void notifyExtractSelection() =>
+  void notifyExtractTextFromScreenSelection() =>
       _listener?.onShortcutKeyDownExtractFromScreenSelection();
-  void notifyExtractCapture() =>
+  void notifyExtractTextFromScreenCapture() =>
       _listener?.onShortcutKeyDownExtractFromScreenCapture();
-  void notifyExtractClipboard() =>
+  void notifyExtractTextFromClipboard() =>
       _listener?.onShortcutKeyDownExtractFromClipboard();
   void notifyTranslateInputContent() =>
       _listener?.onShortcutKeyDownTranslateInputContent();

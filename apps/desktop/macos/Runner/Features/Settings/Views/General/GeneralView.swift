@@ -57,12 +57,12 @@ struct GeneralView: View {
           .padding(.vertical, -4)
       )
 
-      Section(LocaleKeys.settings.general.section.extractText.tr()) {
+      Section(LocaleKeys.settings.general.section.ocr.tr()) {
         let hasOcrServices = !viewModel.ocrServiceOptions.isEmpty
 
         if hasOcrServices {
           SettingPicker(
-            LocaleKeys.settings.general.row.defaultExtractTextService.tr(),
+            LocaleKeys.settings.general.row.defaultOcrService.tr(),
             selection: Binding(
               get: { viewModel.validDefaultOcrService },
               set: { viewModel.setDefaultOcrService($0) }
@@ -76,7 +76,7 @@ struct GeneralView: View {
           .pickerStyle(.menu)
         } else {
           ServiceUnavailableSettingRow(
-            title: LocaleKeys.settings.general.row.defaultExtractTextService.tr(),
+            title: LocaleKeys.settings.general.row.defaultOcrService.tr(),
             onAddProvider: onAddProvider
           )
         }

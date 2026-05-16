@@ -1076,7 +1076,7 @@ class _TranslationsSettingsGeneralSectionZh
   @override
   String get permissions => '权限';
   @override
-  String get extract_text => '取词';
+  String get ocr => '文字识别';
   @override
   String get directory => '词典';
   @override
@@ -1106,7 +1106,7 @@ class _TranslationsSettingsGeneralRowZh
   @override
   String get screen_selection_access => '授予辅助功能权限';
   @override
-  String get default_extract_text_service => '默认取词服务';
+  String get default_ocr_service => '默认文字识别服务';
   @override
   String get auto_copy_detected_text => '自动复制识别文本';
   @override
@@ -1210,7 +1210,7 @@ class _TranslationsSettingsShortcutsSectionZh
   @override
   String get shortcuts => '快捷键';
   @override
-  String get extract_text => '取词';
+  String get text_extraction => '文字提取';
   @override
   String get input_assist => '输入辅助功能';
 }
@@ -1228,11 +1228,11 @@ class _TranslationsSettingsShortcutsRowZh
   @override
   String get toggle_mini_translator => '显示/隐藏窗口';
   @override
-  String get extract_from_selection => '从选区取词';
+  String get extract_text_from_screen_selection => '从屏幕选区提取文字';
   @override
-  String get extract_from_capture => '从截图取词';
+  String get extract_text_from_screen_capture => '从屏幕截图提取文字';
   @override
-  String get extract_from_clipboard => '从剪贴板取词';
+  String get extract_text_from_clipboard => '从剪贴板提取文字';
   @override
   String get translate_input => '翻译输入内容';
 }
@@ -1705,7 +1705,7 @@ extension on TranslationsZh {
       'settings.version' => '版本 {} BUILD {}',
       'settings.general.title' => '常规',
       'settings.general.section.permissions' => '权限',
-      'settings.general.section.extract_text' => '取词',
+      'settings.general.section.ocr' => '文字识别',
       'settings.general.section.directory' => '词典',
       'settings.general.section.translation' => '翻译',
       'settings.general.section.translation_target' => '翻译目标',
@@ -1714,7 +1714,7 @@ extension on TranslationsZh {
       'settings.general.row.show_in_menu_bar' => '在菜单栏中显示',
       'settings.general.row.screen_capture_access' => '授予屏幕录制权限',
       'settings.general.row.screen_selection_access' => '授予辅助功能权限',
-      'settings.general.row.default_extract_text_service' => '默认取词服务',
+      'settings.general.row.default_ocr_service' => '默认文字识别服务',
       'settings.general.row.auto_copy_detected_text' => '自动复制识别文本',
       'settings.general.row.default_directory_service' => '默认词典服务',
       'settings.general.row.default_translation_service' => '默认翻译服务',
@@ -1738,12 +1738,13 @@ extension on TranslationsZh {
       'settings.appearance.option.chinese' => '中文',
       'settings.shortcuts.title' => '快捷键',
       'settings.shortcuts.section.shortcuts' => '快捷键',
-      'settings.shortcuts.section.extract_text' => '取词',
+      'settings.shortcuts.section.text_extraction' => '文字提取',
       'settings.shortcuts.section.input_assist' => '输入辅助功能',
       'settings.shortcuts.row.toggle_mini_translator' => '显示/隐藏窗口',
-      'settings.shortcuts.row.extract_from_selection' => '从选区取词',
-      'settings.shortcuts.row.extract_from_capture' => '从截图取词',
-      'settings.shortcuts.row.extract_from_clipboard' => '从剪贴板取词',
+      'settings.shortcuts.row.extract_text_from_screen_selection' =>
+        '从屏幕选区提取文字',
+      'settings.shortcuts.row.extract_text_from_screen_capture' => '从屏幕截图提取文字',
+      'settings.shortcuts.row.extract_text_from_clipboard' => '从剪贴板提取文字',
       'settings.shortcuts.row.translate_input' => '翻译输入内容',
       'settings.advanced.title' => '高级',
       'settings.advanced.empty' => '暂无高级设置。',

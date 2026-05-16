@@ -1,37 +1,248 @@
 import AppKit
 import Carbon
-import ObjectiveC
 import SwiftUI
 
-// MARK: - Closure storage via associated objects
+struct ShortcutRecorderView: View {
+  let shortcut: ShortcutDisplay
+  let onShortcutRecorded: ((ShortcutDisplay) -> Void)?
+  let onClear: (() -> Void)?
 
-private var onShortcutRecordedKey: UInt8 = 0
-private var onClearKey: UInt8 = 0
+  @State private var isRecording = false
+  @State private var focusRequest = 0
 
-extension ShortcutRecorderNSView {
-  fileprivate var onShortcutRecorded: ((ShortcutDisplay) -> Void)? {
-    get { objc_getAssociatedObject(self, &onShortcutRecordedKey) as? (ShortcutDisplay) -> Void }
-    set {
-      objc_setAssociatedObject(
-        self, &onShortcutRecordedKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+  init(
+    shortcut: ShortcutDisplay,
+    onShortcutRecorded: ((ShortcutDisplay) -> Void)? = nil,
+    onClear: (() -> Void)? = nil
+  ) {
+    self.shortcut = shortcut
+    self.onShortcutRecorded = onShortcutRecorded
+    self.onClear = onClear
+  }
+
+  var body: some View {
+    ZStack {
+      Button(action: beginRecording) {
+        RoundedRectangle(cornerRadius: 13)
+          .fill(Color(nsColor: .textBackgroundColor))
+          .overlay(
+            RoundedRectangle(cornerRadius: 13)
+              .stroke(borderColor, lineWidth: isRecording ? 1.5 : 1)
+          )
+      }
+      .buttonStyle(.plain)
+
+      Text(displayText)
+        .foregroundStyle(textColor)
+        .lineLimit(1)
+        .truncationMode(.middle)
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.horizontal, shortcut.parts.isEmpty ? 8 : 24)
+        .allowsHitTesting(false)
+
+      if !shortcut.parts.isEmpty {
+        HStack {
+          Spacer(minLength: 0)
+          Button(action: clearShortcut) {
+            Image(systemName: "xmark.circle.fill")
+              .font(.system(size: 12, weight: .medium))
+              .foregroundStyle(Color(nsColor: .secondaryLabelColor))
+          }
+          .buttonStyle(.plain)
+          .help("Clear")
+          .padding(.trailing, 6)
+        }
+      }
+
+      ShortcutKeyCaptureView(
+        isRecording: $isRecording,
+        focusRequest: focusRequest,
+        onShortcutRecorded: { shortcut in
+          onShortcutRecorded?(shortcut)
+        },
+        onClear: {
+          onClear?()
+        }
+      )
+      .allowsHitTesting(false)
+    }
+    .frame(height: 26)
+  }
+
+  private var displayText: String {
+    if !shortcut.parts.isEmpty {
+      return ShortcutSymbolFormatter.displayText(for: shortcut)
+    }
+    return isRecording ? "Press Shortcut" : "Record Shortcut"
+  }
+
+  private var textColor: Color {
+    if !shortcut.parts.isEmpty {
+      return Color(nsColor: .labelColor)
+    }
+    return Color(nsColor: .placeholderTextColor)
+  }
+
+  private var borderColor: Color {
+    if isRecording {
+      return .accentColor
+    }
+    return Color(nsColor: .separatorColor)
+  }
+
+  private func beginRecording() {
+    isRecording = true
+    focusRequest += 1
+  }
+
+  private func clearShortcut() {
+    isRecording = false
+    onClear?()
+  }
+}
+
+private struct ShortcutKeyCaptureView: NSViewRepresentable {
+  @Binding var isRecording: Bool
+
+  let focusRequest: Int
+  let onShortcutRecorded: (ShortcutDisplay) -> Void
+  let onClear: () -> Void
+
+  func makeNSView(context: Context) -> ShortcutKeyCaptureNSView {
+    ShortcutKeyCaptureNSView(frame: .zero)
+  }
+
+  func updateNSView(_ nsView: ShortcutKeyCaptureNSView, context: Context) {
+    context.coordinator.parent = self
+    nsView.onShortcutRecorded = { shortcut in
+      context.coordinator.record(shortcut)
+    }
+    nsView.onClear = {
+      context.coordinator.clear()
+    }
+    nsView.onCancel = {
+      context.coordinator.cancel()
+    }
+    nsView.onFocusChange = { focused in
+      context.coordinator.setFocused(focused)
+    }
+
+    if isRecording {
+      DispatchQueue.main.async {
+        guard nsView.window != nil else { return }
+        if nsView.window?.firstResponder !== nsView {
+          nsView.window?.makeFirstResponder(nsView)
+        }
+      }
+    } else if nsView.window?.firstResponder === nsView {
+      DispatchQueue.main.async {
+        nsView.window?.makeFirstResponder(nil)
+      }
     }
   }
 
-  fileprivate var onClear: (() -> Void)? {
-    get { objc_getAssociatedObject(self, &onClearKey) as? () -> Void }
-    set {
-      objc_setAssociatedObject(self, &onClearKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+  func makeCoordinator() -> Coordinator {
+    Coordinator(parent: self)
+  }
+
+  final class Coordinator {
+    var parent: ShortcutKeyCaptureView
+
+    init(parent: ShortcutKeyCaptureView) {
+      self.parent = parent
+    }
+
+    func record(_ shortcut: ShortcutDisplay) {
+      parent.isRecording = false
+      parent.onShortcutRecorded(shortcut)
+    }
+
+    func clear() {
+      parent.isRecording = false
+      parent.onClear()
+    }
+
+    func cancel() {
+      parent.isRecording = false
+    }
+
+    func setFocused(_ focused: Bool) {
+      if !focused {
+        parent.isRecording = false
+      }
     }
   }
 }
 
-// MARK: - NSSearchField Subclass (Recording Logic)
+private final class ShortcutKeyCaptureNSView: NSView {
+  var onShortcutRecorded: ((ShortcutDisplay) -> Void)?
+  var onClear: (() -> Void)?
+  var onCancel: (() -> Void)?
+  var onFocusChange: ((Bool) -> Void)?
 
-final class ShortcutRecorderNSView: NSSearchField, NSSearchFieldDelegate {
-  private var eventMonitor: Any?
-  private var isRecording = false
-  private var cancelButtonCell: NSButtonCell?
+  override var acceptsFirstResponder: Bool {
+    true
+  }
 
+  override func becomeFirstResponder() -> Bool {
+    onFocusChange?(true)
+    return true
+  }
+
+  override func resignFirstResponder() -> Bool {
+    onFocusChange?(false)
+    return true
+  }
+
+  override func cancelOperation(_ sender: Any?) {
+    cancelRecording()
+  }
+
+  override func keyDown(with event: NSEvent) {
+    if shouldCancel(event) {
+      cancelRecording()
+      return
+    }
+
+    if shouldClear(event) {
+      onClear?()
+      window?.makeFirstResponder(nil)
+      return
+    }
+
+    guard ShortcutKeyConverter.isRecordable(event),
+      let shortcut = ShortcutKeyConverter.shortcut(from: event)
+    else {
+      NSSound.beep()
+      return
+    }
+
+    onShortcutRecorded?(shortcut)
+    window?.makeFirstResponder(nil)
+  }
+
+  private func cancelRecording() {
+    onCancel?()
+    window?.makeFirstResponder(nil)
+  }
+
+  private func shouldCancel(_ event: NSEvent) -> Bool {
+    event.keyCode == kVK_Escape
+  }
+
+  private func shouldClear(_ event: NSEvent) -> Bool {
+    let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+    let hasModifier =
+      flags.contains(.control) || flags.contains(.option) || flags.contains(.command)
+      || flags.contains(.shift)
+
+    guard !hasModifier else { return false }
+    return event.specialKey == .delete || event.specialKey == .deleteForward
+      || event.specialKey == .backspace
+  }
+}
+
+private enum ShortcutKeyConverter {
   private static let functionKeyNames: [Int: String] = [
     kVK_F1: "F1", kVK_F2: "F2", kVK_F3: "F3", kVK_F4: "F4",
     kVK_F5: "F5", kVK_F6: "F6", kVK_F7: "F7", kVK_F8: "F8",
@@ -62,7 +273,6 @@ final class ShortcutRecorderNSView: NSSearchField, NSSearchFieldDelegate {
     kVK_Space: "Space",
     kVK_Return: "Return", kVK_Tab: "Tab",
     kVK_Delete: "Delete", kVK_ForwardDelete: "DeleteForward",
-    kVK_Escape: "Escape",
     kVK_Home: "Home", kVK_End: "End",
     kVK_PageUp: "PageUp", kVK_PageDown: "PageDown",
     kVK_UpArrow: "UpArrow", kVK_DownArrow: "DownArrow",
@@ -83,168 +293,12 @@ final class ShortcutRecorderNSView: NSSearchField, NSSearchFieldDelegate {
     kVK_ANSI_KeypadPlus: "KeypadPlus",
   ]
 
-  override init(frame frameRect: NSRect) {
-    super.init(frame: frameRect)
-    configureView()
+  static func isRecordable(_ event: NSEvent) -> Bool {
+    hasNonShiftModifier(event) || functionKeyNames.keys.contains(Int(event.keyCode))
   }
 
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  deinit {
-    stopRecording()
-  }
-
-  private func configureView() {
-    delegate = self
-    placeholderString = "Record Shortcut"
-    alignment = .center
-    (cell as? NSSearchFieldCell)?.searchButtonCell = nil
-    wantsLayer = true
-    font = .monospacedSystemFont(ofSize: 13, weight: .regular)
-
-    cancelButtonCell = (cell as? NSSearchFieldCell)?.cancelButtonCell
-    (cell as? NSSearchFieldCell)?.cancelButtonCell = nil
-  }
-
-  override func cancelOperation(_ sender: Any?) {
-    if !isRecording {
-      clearShortcut()
-    }
-  }
-
-  func setShortcut(_ shortcut: ShortcutDisplay?) {
-    if let shortcut, !shortcut.parts.isEmpty {
-      stringValue = shortcut.displayText
-      placeholderString = ""
-      (cell as? NSSearchFieldCell)?.cancelButtonCell = cancelButtonCell
-    } else {
-      stringValue = ""
-      placeholderString = "Record Shortcut"
-      (cell as? NSSearchFieldCell)?.cancelButtonCell = nil
-    }
-  }
-
-  // MARK: - First Responder
-
-  override func becomeFirstResponder() -> Bool {
-    guard window != nil else { return false }
-    guard super.becomeFirstResponder() else { return false }
-
-    isRecording = true
-    placeholderString = "Press Shortcut"
-    stringValue = ""
-    (cell as? NSSearchFieldCell)?.cancelButtonCell = nil
-
-    eventMonitor = NSEvent.addLocalMonitorForEvents(matching: [
-      .keyDown, .leftMouseUp, .rightMouseUp,
-    ]) { [weak self] event in
-      self?.handleEvent(event)
-    }
-
-    return true
-  }
-
-  override func resignFirstResponder() -> Bool {
-    stopRecording()
-    return super.resignFirstResponder()
-  }
-
-  private func stopRecording() {
-    guard isRecording else { return }
-    isRecording = false
-
-    if let monitor = eventMonitor {
-      NSEvent.removeMonitor(monitor)
-      eventMonitor = nil
-    }
-
-    if stringValue.isEmpty {
-      placeholderString = "Record Shortcut"
-    }
-  }
-
-  // MARK: - Event Handling
-
-  private func handleEvent(_ event: NSEvent) -> NSEvent? {
-    if event.type == .leftMouseUp || event.type == .rightMouseUp {
-      let clickPoint = convert(event.locationInWindow, from: nil)
-      if !bounds.insetBy(dx: -3, dy: -3).contains(clickPoint) {
-        abortRecording()
-        return event
-      }
-      return nil
-    }
-
-    guard event.type == .keyDown else { return nil }
-
-    if event.modifierFlags.isSubset(of: [.shift, .function]) || event.modifierFlags.isEmpty {
-      switch event.specialKey {
-      case .tab:
-        abortRecording()
-        return event
-      case .delete, .deleteForward, .backspace:
-        clearShortcut()
-        return nil
-      default:
-        break
-      }
-
-      if event.keyCode == kVK_Escape {
-        abortRecording()
-        return nil
-      }
-    }
-
-    let hasNonShiftModifier = !event.modifierFlags.subtracting([.shift, .function]).isEmpty
-    let isFunctionKey = Self.functionKeyNames.keys.contains(Int(event.keyCode))
-
-    guard
-      hasNonShiftModifier || isFunctionKey,
-      let shortcut = shortcutFromEvent(event)
-    else {
-      NSSound.beep()
-      return nil
-    }
-
-    stringValue = shortcut.displayText
-    placeholderString = ""
-    onShortcutRecorded?(shortcut)
-    abortRecording()
-
-    return nil
-  }
-
-  private func abortRecording() {
-    if stringValue.isEmpty {
-      placeholderString = "Record Shortcut"
-    }
-    window?.makeFirstResponder(nil)
-  }
-
-  private func clearShortcut() {
-    stringValue = ""
-    onClear?()
-    window?.makeFirstResponder(nil)
-  }
-
-  // MARK: - NSSearchFieldDelegate
-
-  func controlTextDidChange(_ obj: Notification) {
-    if !isRecording {
-      stringValue = ""
-    }
-  }
-
-  func controlTextDidEndEditing(_ obj: Notification) {
-    stopRecording()
-  }
-
-  // MARK: - Shortcut Conversion
-
-  private func shortcutFromEvent(_ event: NSEvent) -> ShortcutDisplay? {
-    let flags = event.modifierFlags
+  static func shortcut(from event: NSEvent) -> ShortcutDisplay? {
+    let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
     var parts: [String] = []
 
     if flags.contains(.control) { parts.append("Control") }
@@ -263,7 +317,12 @@ final class ShortcutRecorderNSView: NSSearchField, NSSearchFieldDelegate {
     return ShortcutDisplay(parts: parts)
   }
 
-  private func specialKeyName(_ specialKey: NSEvent.SpecialKey) -> String? {
+  private static func hasNonShiftModifier(_ event: NSEvent) -> Bool {
+    let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+    return flags.contains(.control) || flags.contains(.option) || flags.contains(.command)
+  }
+
+  private static func specialKeyName(_ specialKey: NSEvent.SpecialKey) -> String? {
     switch specialKey {
     case .backspace: return "Delete"
     case .tab: return "Tab"
@@ -285,14 +344,14 @@ final class ShortcutRecorderNSView: NSSearchField, NSSearchFieldDelegate {
     }
   }
 
-  private func keyCodeToName(_ keyCode: Int) -> String? {
-    if let name = Self.functionKeyNames[keyCode] { return name }
+  private static func keyCodeToName(_ keyCode: Int) -> String? {
+    if let name = functionKeyNames[keyCode] { return name }
 
     guard
       let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource()?.takeRetainedValue(),
       let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
     else {
-      return Self.fallbackKeyMap[keyCode]
+      return fallbackKeyMap[keyCode]
     }
 
     let layoutData = unsafeBitCast(layoutDataPointer, to: CFData.self)
@@ -323,42 +382,35 @@ final class ShortcutRecorderNSView: NSSearchField, NSSearchFieldDelegate {
       }
     }
 
-    return Self.fallbackKeyMap[keyCode]
+    return fallbackKeyMap[keyCode]
   }
 }
 
-// MARK: - NSViewRepresentable
+private enum ShortcutSymbolFormatter {
+  private static let symbols: [String: String] = [
+    "Control": "⌃",
+    "Option": "⌥",
+    "Shift": "⇧",
+    "Command": "⌘",
+    "Return": "↩",
+    "Enter": "⌤",
+    "Tab": "⇥",
+    "Delete": "⌫",
+    "DeleteForward": "⌦",
+    "Escape": "⎋",
+    "Space": "Space",
+    "UpArrow": "↑",
+    "DownArrow": "↓",
+    "LeftArrow": "←",
+    "RightArrow": "→",
+    "Home": "↖",
+    "End": "↘",
+    "PageUp": "⇞",
+    "PageDown": "⇟",
+    "Help": "?⃝",
+  ]
 
-struct ShortcutRecorderView: NSViewRepresentable {
-  let shortcut: ShortcutDisplay
-  let onShortcutRecorded: ((ShortcutDisplay) -> Void)?
-  let onClear: (() -> Void)?
-
-  init(
-    shortcut: ShortcutDisplay,
-    onShortcutRecorded: ((ShortcutDisplay) -> Void)? = nil,
-    onClear: (() -> Void)? = nil
-  ) {
-    self.shortcut = shortcut
-    self.onShortcutRecorded = onShortcutRecorded
-    self.onClear = onClear
-  }
-
-  func makeNSView(context: Context) -> ShortcutRecorderNSView {
-    let nsView = ShortcutRecorderNSView(frame: .zero)
-    nsView.setShortcut(shortcut)
-    // Store closures directly on the NSView instance via associated objects.
-    // These are set ONCE here and NEVER overwritten in updateNSView,
-    // guaranteeing the closures stay bound to the correct NSView.
-    nsView.onShortcutRecorded = onShortcutRecorded
-    nsView.onClear = onClear
-    return nsView
-  }
-
-  func updateNSView(_ nsView: ShortcutRecorderNSView, context: Context) {
-    nsView.setShortcut(shortcut)
-    // Intentionally do NOT update the closures here.
-    // The closures are set once in makeNSView and remain valid for the
-    // lifetime of the NSView. This avoids any SwiftUI identity confusion.
+  static func displayText(for shortcut: ShortcutDisplay) -> String {
+    shortcut.parts.map { symbols[$0] ?? $0 }.joined()
   }
 }

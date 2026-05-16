@@ -4,17 +4,21 @@ import beyondtranslate_runtime
 @MainActor
 final class ShortcutsViewModel: ObservableObject {
   @Published var toggleMiniTranslator: ShortcutDisplay
-  @Published var extractSelection: ShortcutDisplay
-  @Published var extractCapture: ShortcutDisplay
-  @Published var extractClipboard: ShortcutDisplay
-  @Published var translateInput: ShortcutDisplay
+  @Published var extractTextFromScreenSelection: ShortcutDisplay
+  @Published var extractTextFromScreenCapture: ShortcutDisplay
+  @Published var extractTextFromClipboard: ShortcutDisplay
+  @Published var translateInputContent: ShortcutDisplay
   @Published var recordingID: String?
 
   var isRecordingToggleMiniTranslator: Bool { recordingID == "toggleMiniTranslator" }
-  var isRecordingExtractSelection: Bool { recordingID == "extractSelection" }
-  var isRecordingExtractCapture: Bool { recordingID == "extractCapture" }
-  var isRecordingExtractClipboard: Bool { recordingID == "extractClipboard" }
-  var isRecordingTranslateInput: Bool { recordingID == "translateInput" }
+  var isRecordingExtractTextFromScreenSelection: Bool {
+    recordingID == "extractTextFromScreenSelection"
+  }
+  var isRecordingExtractTextFromScreenCapture: Bool {
+    recordingID == "extractTextFromScreenCapture"
+  }
+  var isRecordingExtractTextFromClipboard: Bool { recordingID == "extractTextFromClipboard" }
+  var isRecordingTranslateInputContent: Bool { recordingID == "translateInputContent" }
 
   private let repository: SettingsRepository
 
@@ -23,10 +27,10 @@ final class ShortcutsViewModel: ObservableObject {
   ) {
     self.repository = repository
     toggleMiniTranslator = ShortcutDisplay(parts: [])
-    extractSelection = ShortcutDisplay(parts: [])
-    extractCapture = ShortcutDisplay(parts: [])
-    extractClipboard = ShortcutDisplay(parts: [])
-    translateInput = ShortcutDisplay(parts: ["Control", "Shift", "Return"])
+    extractTextFromScreenSelection = ShortcutDisplay(parts: [])
+    extractTextFromScreenCapture = ShortcutDisplay(parts: [])
+    extractTextFromClipboard = ShortcutDisplay(parts: [])
+    translateInputContent = ShortcutDisplay(parts: ["Option", "Z"])
   }
 
   func startRecording(_ id: String) {
@@ -62,12 +66,12 @@ final class ShortcutsViewModel: ObservableObject {
     setToggleMiniTranslator(ShortcutDisplay(parts: []))
   }
 
-  func setExtractSelection(_ shortcut: ShortcutDisplay) {
-    extractSelection = shortcut
+  func setExtractTextFromScreenSelection(_ shortcut: ShortcutDisplay) {
+    extractTextFromScreenSelection = shortcut
     Task {
       do {
         let updated = try await repository.updateShortcuts(
-          .diff(extractFromScreenSelection: shortcut.rawValue))
+          .diff(extractTextFromScreenSelection: shortcut.rawValue))
         apply(updated)
       } catch {
         await load()
@@ -75,16 +79,16 @@ final class ShortcutsViewModel: ObservableObject {
     }
   }
 
-  func clearExtractSelection() {
-    setExtractSelection(ShortcutDisplay(parts: []))
+  func clearExtractTextFromScreenSelection() {
+    setExtractTextFromScreenSelection(ShortcutDisplay(parts: []))
   }
 
-  func setExtractCapture(_ shortcut: ShortcutDisplay) {
-    extractCapture = shortcut
+  func setExtractTextFromScreenCapture(_ shortcut: ShortcutDisplay) {
+    extractTextFromScreenCapture = shortcut
     Task {
       do {
         let updated = try await repository.updateShortcuts(
-          .diff(extractFromScreenCapture: shortcut.rawValue))
+          .diff(extractTextFromScreenCapture: shortcut.rawValue))
         apply(updated)
       } catch {
         await load()
@@ -92,16 +96,16 @@ final class ShortcutsViewModel: ObservableObject {
     }
   }
 
-  func clearExtractCapture() {
-    setExtractCapture(ShortcutDisplay(parts: []))
+  func clearExtractTextFromScreenCapture() {
+    setExtractTextFromScreenCapture(ShortcutDisplay(parts: []))
   }
 
-  func setExtractClipboard(_ shortcut: ShortcutDisplay) {
-    extractClipboard = shortcut
+  func setExtractTextFromClipboard(_ shortcut: ShortcutDisplay) {
+    extractTextFromClipboard = shortcut
     Task {
       do {
         let updated = try await repository.updateShortcuts(
-          .diff(extractFromClipboard: shortcut.rawValue))
+          .diff(extractTextFromClipboard: shortcut.rawValue))
         apply(updated)
       } catch {
         await load()
@@ -109,22 +113,33 @@ final class ShortcutsViewModel: ObservableObject {
     }
   }
 
-  func clearExtractClipboard() {
-    setExtractClipboard(ShortcutDisplay(parts: []))
+  func clearExtractTextFromClipboard() {
+    setExtractTextFromClipboard(ShortcutDisplay(parts: []))
   }
 
-  func setTranslateInput(_ shortcut: ShortcutDisplay) {
-    translateInput = shortcut
+  func setTranslateInputContent(_ shortcut: ShortcutDisplay) {
+    translateInputContent = shortcut
+    Task {
+      do {
+        let updated = try await repository.updateShortcuts(
+          .diff(translateInputContent: shortcut.rawValue))
+        apply(updated)
+      } catch {
+        await load()
+      }
+    }
   }
 
-  func clearTranslateInput() {
-    setTranslateInput(ShortcutDisplay(parts: []))
+  func clearTranslateInputContent() {
+    setTranslateInputContent(ShortcutDisplay(parts: []))
   }
 
   private func apply(_ settings: ShortcutSettings) {
     toggleMiniTranslator = ShortcutDisplay(rawValue: settings.toggleMiniTranslator)
-    extractSelection = ShortcutDisplay(rawValue: settings.extractFromScreenSelection)
-    extractCapture = ShortcutDisplay(rawValue: settings.extractFromScreenCapture)
-    extractClipboard = ShortcutDisplay(rawValue: settings.extractFromClipboard)
+    extractTextFromScreenSelection = ShortcutDisplay(
+      rawValue: settings.extractTextFromScreenSelection)
+    extractTextFromScreenCapture = ShortcutDisplay(rawValue: settings.extractTextFromScreenCapture)
+    extractTextFromClipboard = ShortcutDisplay(rawValue: settings.extractTextFromClipboard)
+    translateInputContent = ShortcutDisplay(rawValue: settings.translateInputContent)
   }
 }

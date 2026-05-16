@@ -241,7 +241,7 @@
       "title": "General",
       "section": {
         "permissions": "Permissions",
-        "extract_text": "Extract text",
+        "ocr": "Text Recognition",
         "directory": "Directory",
         "translation": "Translation",
         "translation_target": "Translation Target",
@@ -252,7 +252,7 @@
         "show_in_menu_bar": "Show in menu bar",
         "screen_capture_access": "Grant screen recording access",
         "screen_selection_access": "Grant accessibility access",
-        "default_extract_text_service": "Default extract text service",
+        "default_ocr_service": "Default text recognition service",
         "auto_copy_detected_text": "Auto copy detected text",
         "default_directory_service": "Default directory service",
         "default_translation_service": "Default translation service",
@@ -290,14 +290,14 @@
       "title": "Shortcuts",
       "section": {
         "shortcuts": "Shortcuts",
-        "extract_text": "Extract Text",
+        "text_extraction": "Text Extraction",
         "input_assist": "Input Assist Function"
       },
       "row": {
         "toggle_mini_translator": "Show/Hide Window",
-        "extract_from_selection": "Extract text from selection",
-        "extract_from_capture": "Extract text from capture",
-        "extract_from_clipboard": "Extract text from clipboard",
+        "extract_text_from_screen_selection": "Extract text from screen selection",
+        "extract_text_from_screen_capture": "Extract text from screen capture",
+        "extract_text_from_clipboard": "Extract text from clipboard",
         "translate_input": "Translate input content"
       }
     },
