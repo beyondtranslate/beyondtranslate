@@ -78,11 +78,11 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               },
             ),
             PreferenceListSwitchItem(
-              title: const Text('Show menu bar'),
-              value: _general.showMenuBar,
+              title: const Text('Show in menu bar'),
+              value: _general.showInMenuBar,
               onChanged: (v) async {
                 await settingsStore.updateGeneral(
-                  GeneralSettingsPatch(showMenuBar: v),
+                  GeneralSettingsPatch(showInMenuBar: v),
                 );
               },
             ),

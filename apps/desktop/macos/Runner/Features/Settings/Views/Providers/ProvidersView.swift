@@ -16,9 +16,7 @@ struct ProvidersView: View {
         }
 
         Section {
-          if viewModel.isLoading {
-            LoadingProviderRow()
-          } else if viewModel.providers.isEmpty {
+          if viewModel.providers.isEmpty {
             EmptyProviderRow()
           } else {
             ForEach(viewModel.providers) { provider in
@@ -104,8 +102,6 @@ private struct ProviderIntroRow: View {
       .foregroundStyle(.secondary)
       .fixedSize(horizontal: false, vertical: true)
     }
-    .padding(.top, -6)
-    .padding(.bottom, 2)
   }
 }
 
@@ -171,19 +167,7 @@ private struct ProviderRow: View {
   }
 }
 
-// MARK: - Loading / Empty states
-
-private struct LoadingProviderRow: View {
-  var body: some View {
-    HStack(spacing: 14) {
-      ProgressView()
-      Text(LocaleKeys.settings.providers.item.loading.tr())
-        .font(.system(size: 13))
-        .foregroundStyle(.secondary)
-      Spacer()
-    }
-  }
-}
+// MARK: - Empty state
 
 private struct EmptyProviderRow: View {
   var body: some View {
@@ -247,7 +231,7 @@ struct ProviderTypeIcon: View {
         .resizable()
         .interpolation(.high)
         .antialiased(true)
-        .frame(width: 28, height: 28)
+        .frame(width: 24, height: 24)
         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
     } else {
       ZStack {
@@ -257,7 +241,7 @@ struct ProviderTypeIcon: View {
           .font(.system(size: 12, weight: .medium))
           .foregroundStyle(Color.accentColor)
       }
-      .frame(width: 28, height: 28)
+      .frame(width: 24, height: 24)
     }
   }
 }

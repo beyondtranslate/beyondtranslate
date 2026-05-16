@@ -90,6 +90,9 @@ final class SettingsViewModel: ObservableObject {
     case .shortcuts:
       await shortcuts.load()
     case .providers:
+      // Silent refresh — operations are fast, and save/delete already update
+      // the local array in-place. This refresh is only needed for cross-process
+      // synchronization (e.g. changes from the Flutter side).
       await providers.load()
       // Translation/dictionary service pickers in General also depend on
       // the provider list, so refresh it as well.

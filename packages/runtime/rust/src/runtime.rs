@@ -3,6 +3,7 @@ use std::future::Future;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex, OnceLock};
 use std::thread;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use beyondtranslate_core::{
     LookUpRequest, LookUpResponse, RecognizeTextRequest, RecognizeTextResponse, TranslateRequest,
@@ -421,9 +422,15 @@ impl RuntimeSettings {
             r#type: provider_type,
             fields,
             capabilities: Vec::new(),
+            created_at: None,
         };
         let config = crate::domain::settings::provider_config_from_settings(&entry)
             .map_err(RuntimeError::from)?;
+
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .ok();
 
         self.commit_settings(SettingsChange::Providers, move |settings| {
             let entry = provider_entry_from_config(&provider_id, &config)?;
@@ -432,7 +439,9 @@ impl RuntimeSettings {
                 existing.r#type = entry.r#type.clone();
                 existing.fields = entry.fields.clone();
             } else {
-                settings.providers.insert(provider_id, entry.clone());
+                let mut new_entry = entry.clone();
+                new_entry.created_at = now;
+                settings.providers.insert(provider_id, new_entry);
             }
             Ok(entry)
         })
@@ -820,7 +829,7 @@ mod tests {
                 settings
                     .update_general(GeneralSettingsPatch {
                         launch_at_login: Some(true),
-                        show_menu_bar: None,
+                        show_in_menu_bar: None,
                         default_ocr_service: None,
                         auto_copy_detected_text: None,
                         default_directory_service: None,

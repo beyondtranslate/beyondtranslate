@@ -249,7 +249,7 @@
       },
       "row": {
         "launch_at_startup": "登录时启动",
-        "show_menu_bar": "显示菜单栏",
+        "show_in_menu_bar": "在菜单栏中显示",
         "screen_capture_access": "授予屏幕录制权限",
         "screen_selection_access": "授予辅助功能权限",
         "default_extract_text_service": "默认取词服务",

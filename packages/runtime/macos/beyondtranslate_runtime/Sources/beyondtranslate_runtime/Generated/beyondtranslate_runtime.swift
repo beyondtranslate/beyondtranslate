@@ -438,6 +438,22 @@ private struct FfiConverterInt32: FfiConverterPrimitive {
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
+private struct FfiConverterUInt64: FfiConverterPrimitive {
+  typealias FfiType = UInt64
+  typealias SwiftType = UInt64
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt64 {
+    return try lift(readInt(&buf))
+  }
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
 private struct FfiConverterDouble: FfiConverterPrimitive {
   typealias FfiType = Double
   typealias SwiftType = Double
@@ -1855,7 +1871,7 @@ public func FfiConverterTypeDetectLanguageResponse_lower(_ value: DetectLanguage
 
 public struct GeneralSettings: Equatable, Hashable {
   public var launchAtLogin: Bool
-  public var showMenuBar: Bool
+  public var showInMenuBar: Bool
   public var defaultOcrService: String
   public var autoCopyDetectedText: Bool
   public var defaultDirectoryService: String
@@ -1868,13 +1884,13 @@ public struct GeneralSettings: Equatable, Hashable {
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
   public init(
-    launchAtLogin: Bool, showMenuBar: Bool, defaultOcrService: String, autoCopyDetectedText: Bool,
+    launchAtLogin: Bool, showInMenuBar: Bool, defaultOcrService: String, autoCopyDetectedText: Bool,
     defaultDirectoryService: String, defaultTranslationService: String,
     translationMode: TranslationMode, translationTargets: [TranslationTarget],
     inputSubmitMode: InputSubmitMode, doubleClickCopyResult: Bool
   ) {
     self.launchAtLogin = launchAtLogin
-    self.showMenuBar = showMenuBar
+    self.showInMenuBar = showInMenuBar
     self.defaultOcrService = defaultOcrService
     self.autoCopyDetectedText = autoCopyDetectedText
     self.defaultDirectoryService = defaultDirectoryService
@@ -1901,7 +1917,7 @@ public struct FfiConverterTypeGeneralSettings: FfiConverterRustBuffer {
     return
       try GeneralSettings(
         launchAtLogin: FfiConverterBool.read(from: &buf),
-        showMenuBar: FfiConverterBool.read(from: &buf),
+        showInMenuBar: FfiConverterBool.read(from: &buf),
         defaultOcrService: FfiConverterString.read(from: &buf),
         autoCopyDetectedText: FfiConverterBool.read(from: &buf),
         defaultDirectoryService: FfiConverterString.read(from: &buf),
@@ -1915,7 +1931,7 @@ public struct FfiConverterTypeGeneralSettings: FfiConverterRustBuffer {
 
   public static func write(_ value: GeneralSettings, into buf: inout [UInt8]) {
     FfiConverterBool.write(value.launchAtLogin, into: &buf)
-    FfiConverterBool.write(value.showMenuBar, into: &buf)
+    FfiConverterBool.write(value.showInMenuBar, into: &buf)
     FfiConverterString.write(value.defaultOcrService, into: &buf)
     FfiConverterBool.write(value.autoCopyDetectedText, into: &buf)
     FfiConverterString.write(value.defaultDirectoryService, into: &buf)
@@ -1943,7 +1959,7 @@ public func FfiConverterTypeGeneralSettings_lower(_ value: GeneralSettings) -> R
 
 public struct GeneralSettingsPatch: Equatable, Hashable {
   public var launchAtLogin: Bool?
-  public var showMenuBar: Bool?
+  public var showInMenuBar: Bool?
   public var defaultOcrService: String?
   public var autoCopyDetectedText: Bool?
   public var defaultDirectoryService: String?
@@ -1956,14 +1972,14 @@ public struct GeneralSettingsPatch: Equatable, Hashable {
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
   public init(
-    launchAtLogin: Bool?, showMenuBar: Bool?, defaultOcrService: String?,
+    launchAtLogin: Bool?, showInMenuBar: Bool?, defaultOcrService: String?,
     autoCopyDetectedText: Bool?, defaultDirectoryService: String?,
     defaultTranslationService: String?, translationMode: TranslationMode?,
     translationTargets: [TranslationTarget]?, inputSubmitMode: InputSubmitMode?,
     doubleClickCopyResult: Bool?
   ) {
     self.launchAtLogin = launchAtLogin
-    self.showMenuBar = showMenuBar
+    self.showInMenuBar = showInMenuBar
     self.defaultOcrService = defaultOcrService
     self.autoCopyDetectedText = autoCopyDetectedText
     self.defaultDirectoryService = defaultDirectoryService
@@ -1990,7 +2006,7 @@ public struct FfiConverterTypeGeneralSettingsPatch: FfiConverterRustBuffer {
     return
       try GeneralSettingsPatch(
         launchAtLogin: FfiConverterOptionBool.read(from: &buf),
-        showMenuBar: FfiConverterOptionBool.read(from: &buf),
+        showInMenuBar: FfiConverterOptionBool.read(from: &buf),
         defaultOcrService: FfiConverterOptionString.read(from: &buf),
         autoCopyDetectedText: FfiConverterOptionBool.read(from: &buf),
         defaultDirectoryService: FfiConverterOptionString.read(from: &buf),
@@ -2004,7 +2020,7 @@ public struct FfiConverterTypeGeneralSettingsPatch: FfiConverterRustBuffer {
 
   public static func write(_ value: GeneralSettingsPatch, into buf: inout [UInt8]) {
     FfiConverterOptionBool.write(value.launchAtLogin, into: &buf)
-    FfiConverterOptionBool.write(value.showMenuBar, into: &buf)
+    FfiConverterOptionBool.write(value.showInMenuBar, into: &buf)
     FfiConverterOptionString.write(value.defaultOcrService, into: &buf)
     FfiConverterOptionBool.write(value.autoCopyDetectedText, into: &buf)
     FfiConverterOptionString.write(value.defaultDirectoryService, into: &buf)
@@ -2245,6 +2261,12 @@ public struct ProviderConfigEntry: Equatable, Hashable {
    * Not written to the settings file.
    */
   public var capabilities: [ProviderCapability]
+  /**
+   * Creation timestamp (Unix epoch seconds). Set automatically when a
+   * provider is first created; `None` for providers migrated from an
+   * older version of the settings file.
+   */
+  public var createdAt: UInt64?
 
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
@@ -2258,12 +2280,19 @@ public struct ProviderConfigEntry: Equatable, Hashable {
      * Provider capabilities, populated at runtime from the engine instance.
      * Not written to the settings file.
      */
-    capabilities: [ProviderCapability]
+    capabilities: [ProviderCapability],
+    /**
+     * Creation timestamp (Unix epoch seconds). Set automatically when a
+     * provider is first created; `None` for providers migrated from an
+     * older version of the settings file.
+     */
+    createdAt: UInt64?
   ) {
     self.id = id
     self.type = type
     self.fields = fields
     self.capabilities = capabilities
+    self.createdAt = createdAt
   }
 
 }
@@ -2284,7 +2313,8 @@ public struct FfiConverterTypeProviderConfigEntry: FfiConverterRustBuffer {
         id: FfiConverterString.read(from: &buf),
         type: FfiConverterTypeProviderType.read(from: &buf),
         fields: FfiConverterDictionaryStringString.read(from: &buf),
-        capabilities: FfiConverterSequenceTypeProviderCapability.read(from: &buf)
+        capabilities: FfiConverterSequenceTypeProviderCapability.read(from: &buf),
+        createdAt: FfiConverterOptionUInt64.read(from: &buf)
       )
   }
 
@@ -2293,6 +2323,7 @@ public struct FfiConverterTypeProviderConfigEntry: FfiConverterRustBuffer {
     FfiConverterTypeProviderType.write(value.type, into: &buf)
     FfiConverterDictionaryStringString.write(value.fields, into: &buf)
     FfiConverterSequenceTypeProviderCapability.write(value.capabilities, into: &buf)
+    FfiConverterOptionUInt64.write(value.createdAt, into: &buf)
   }
 }
 
@@ -3724,6 +3755,30 @@ public func FfiConverterTypeTranslationMode_lift(_ buf: RustBuffer) throws -> Tr
 #endif
 public func FfiConverterTypeTranslationMode_lower(_ value: TranslationMode) -> RustBuffer {
   return FfiConverterTypeTranslationMode.lower(value)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionUInt64: FfiConverterRustBuffer {
+  typealias SwiftType = UInt64?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterUInt64.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterUInt64.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
 }
 
 #if swift(>=5.8)

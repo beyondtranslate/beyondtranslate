@@ -33,7 +33,6 @@
 		8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000132E0A100100A1B2C3 /* SettingsView.swift */; };
 		8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */; };
 		8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000152E0A100100A1B2C3 /* SettingRow.swift */; };
-		8F1000062E0A100100A1B2C3 /* SettingSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */; };
 		8F1000072E0A100100A1B2C3 /* SettingToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1000172E0A100100A1B2C3 /* SettingToggle.swift */; };
 		8F10003C2E0A100100A1B2C3 /* ProviderConfigField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */; };
 		A10000000000000000000001 /* SettingPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000001 /* SettingPicker.swift */; };
@@ -59,6 +58,7 @@
 		F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */; };
 		F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */; };
 		F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */; };
+		F5F2225E2FB81BE70025B9D4 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F2225D2FB81BE70025B9D4 /* SettingsPage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,7 +119,6 @@
 		8F1000132E0A100100A1B2C3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		8F1000152E0A100100A1B2C3 /* SettingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingRow.swift; sourceTree = "<group>"; };
-		8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSectionHeader.swift; sourceTree = "<group>"; };
 		8F1000172E0A100100A1B2C3 /* SettingToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingToggle.swift; sourceTree = "<group>"; };
 		8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderConfigField.swift; sourceTree = "<group>"; };
 		921317546F1323EEECD70938 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +148,7 @@
 		F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode.swift; sourceTree = "<group>"; };
 		F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeAppearanceController.swift; sourceTree = "<group>"; };
 		F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderEditorSheet.swift; sourceTree = "<group>"; };
+		F5F2225D2FB81BE70025B9D4 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -337,10 +337,10 @@
 		A20000000000000000000007 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				F5F2225D2FB81BE70025B9D4 /* SettingsPage.swift */,
 				8F1000152E0A100100A1B2C3 /* SettingRow.swift */,
 				8F1000172E0A100100A1B2C3 /* SettingToggle.swift */,
 				A11000000000000000000001 /* SettingPicker.swift */,
-				8F1000162E0A100100A1B2C3 /* SettingSectionHeader.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -681,7 +681,6 @@
 				8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */,
 				8F1000042E0A100100A1B2C3 /* SettingsViewModel.swift in Sources */,
 				8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */,
-				8F1000062E0A100100A1B2C3 /* SettingSectionHeader.swift in Sources */,
 				8F1000072E0A100100A1B2C3 /* SettingToggle.swift in Sources */,
 				A10000000000000000000001 /* SettingPicker.swift in Sources */,
 				F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */,
@@ -696,6 +695,7 @@
 				A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */,
 				A1000000000000000000000A /* ProvidersViewModel.swift in Sources */,
 				A1000000000000000000000B /* AdvancedViewModel.swift in Sources */,
+				F5F2225E2FB81BE70025B9D4 /* SettingsPage.swift in Sources */,
 				F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */,
 				A1000000000000000000000C /* SettingsRepository.swift in Sources */,
 				A10000000000000000000010 /* LocaleKeys.swift in Sources */,

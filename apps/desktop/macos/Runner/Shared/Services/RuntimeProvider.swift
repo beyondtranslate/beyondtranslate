@@ -1,5 +1,6 @@
 import Foundation
 import beyondtranslate_runtime
+import os
 
 /// Process-wide accessor for the Rust [Runtime] used by native (Swift) code.
 ///
@@ -9,8 +10,12 @@ import beyondtranslate_runtime
 /// either binding are immediately visible to the other on the next read.
 enum RuntimeProvider {
   static let shared: Runtime = {
+    let dataDir = applicationSupportDirectory()
+    let settingsPath = (dataDir as NSString).appendingPathComponent("settings.json")
+    os_log("[RuntimeProvider] dataDir: %{public}@", dataDir)
+    os_log("[RuntimeProvider] settings.json: %{public}@", settingsPath)
     do {
-      return try Runtime(dataDir: applicationSupportDirectory())
+      return try Runtime(dataDir: dataDir)
     } catch {
       fatalError("Failed to initialise beyondtranslate Runtime: \(error)")
     }

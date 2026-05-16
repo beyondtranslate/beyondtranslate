@@ -47,7 +47,7 @@ extension TranslationTarget: Identifiable {
 extension GeneralSettingsPatch {
   static func diff(
     launchAtLogin: Bool? = nil,
-    showMenuBar: Bool? = nil,
+    showInMenuBar: Bool? = nil,
     defaultOcrService: String? = nil,
     autoCopyDetectedText: Bool? = nil,
     defaultDirectoryService: String? = nil,
@@ -59,7 +59,7 @@ extension GeneralSettingsPatch {
   ) -> GeneralSettingsPatch {
     GeneralSettingsPatch(
       launchAtLogin: launchAtLogin,
-      showMenuBar: showMenuBar,
+      showInMenuBar: showInMenuBar,
       defaultOcrService: defaultOcrService,
       autoCopyDetectedText: autoCopyDetectedText,
       defaultDirectoryService: defaultDirectoryService,

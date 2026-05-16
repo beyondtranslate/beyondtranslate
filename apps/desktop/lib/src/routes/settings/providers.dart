@@ -406,7 +406,7 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<ProviderType>(
-                  value: _selectedType,
+                  initialValue: _selectedType,
                   hint: const Text('Select a provider type...'),
                   items: [
                     for (final type in _knownProviderTypes)

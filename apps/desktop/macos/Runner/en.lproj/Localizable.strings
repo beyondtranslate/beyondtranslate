@@ -180,7 +180,7 @@
 "settings.general.row.launch_at_startup" = "Launch when you log in";
 "settings.general.row.screen_capture_access" = "Grant screen recording access";
 "settings.general.row.screen_selection_access" = "Grant accessibility access";
-"settings.general.row.show_menu_bar" = "Show menu bar";
+"settings.general.row.show_in_menu_bar" = "Show in menu bar";
 "settings.general.row.submit_with_enter" = "Submit with Enter";
 "settings.general.row.submit_with_meta_enter_mac" = "Submit with ⌘ + Enter";
 "settings.general.row.translation_mode" = "Translation mode";

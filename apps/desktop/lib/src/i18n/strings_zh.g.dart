@@ -1098,7 +1098,7 @@ class _TranslationsSettingsGeneralRowZh
   @override
   String get launch_at_startup => '登录时启动';
   @override
-  String get show_menu_bar => '显示菜单栏';
+  String get show_in_menu_bar => '在菜单栏中显示';
   @override
   String get screen_capture_access => '授予屏幕录制权限';
   @override
@@ -1693,7 +1693,7 @@ extension on TranslationsZh {
       'settings.general.section.translation_target' => '翻译目标',
       'settings.general.section.input' => '输入设置',
       'settings.general.row.launch_at_startup' => '登录时启动',
-      'settings.general.row.show_menu_bar' => '显示菜单栏',
+      'settings.general.row.show_in_menu_bar' => '在菜单栏中显示',
       'settings.general.row.screen_capture_access' => '授予屏幕录制权限',
       'settings.general.row.screen_selection_access' => '授予辅助功能权限',
       'settings.general.row.default_extract_text_service' => '默认取词服务',

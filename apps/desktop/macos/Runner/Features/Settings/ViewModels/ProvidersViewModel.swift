@@ -4,7 +4,6 @@ import beyondtranslate_runtime
 @MainActor
 final class ProvidersViewModel: ObservableObject {
   @Published var providers: [ProviderConfigEntry] = []
-  @Published var isLoading = false
   @Published var errorMessage: String?
   @Published private(set) var pendingPresentProviderEditorSheetID: Int? = nil
 
@@ -17,10 +16,15 @@ final class ProvidersViewModel: ObservableObject {
   // MARK: - Load
 
   func load() async {
-    isLoading = true
-    defer { isLoading = false }
     do {
       providers = try await repository.listProviders()
+        .sorted { lhs, rhs in
+          switch (lhs.createdAt, rhs.createdAt) {
+          case (let l?, let r?): return l < r
+          case (nil, _): return false
+          case (_?, nil): return true
+          }
+        }
     } catch {
       // Keep whatever state we have; errors are non-fatal for the list view.
       errorMessage = error.localizedDescription
@@ -59,7 +63,7 @@ final class ProvidersViewModel: ObservableObject {
   func saveProvider(_ entry: ProviderConfigEntry) {
     Task {
       do {
-        _ = try await repository.updateProvider(
+        try await repository.updateProvider(
           id: entry.id,
           providerType: entry.type,
           fields: entry.fields

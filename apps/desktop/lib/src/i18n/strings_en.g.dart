@@ -1134,8 +1134,8 @@ class TranslationsSettingsGeneralRowEn {
   /// en: 'Launch when you log in'
   String get launch_at_startup => 'Launch when you log in';
 
-  /// en: 'Show menu bar'
-  String get show_menu_bar => 'Show menu bar';
+  /// en: 'Show in menu bar'
+  String get show_in_menu_bar => 'Show in menu bar';
 
   /// en: 'Grant screen recording access'
   String get screen_capture_access => 'Grant screen recording access';
@@ -1728,7 +1728,7 @@ extension on Translations {
       'settings.general.section.translation_target' => 'Translation Target',
       'settings.general.section.input' => 'Input Settings',
       'settings.general.row.launch_at_startup' => 'Launch when you log in',
-      'settings.general.row.show_menu_bar' => 'Show menu bar',
+      'settings.general.row.show_in_menu_bar' => 'Show in menu bar',
       'settings.general.row.screen_capture_access' =>
         'Grant screen recording access',
       'settings.general.row.screen_selection_access' =>

@@ -22,10 +22,10 @@ struct GeneralView: View {
             set: { viewModel.setLaunchAtLogin($0) }
           ))
         SettingToggle(
-          LocaleKeys.settings.general.row.showMenuBar.tr(),
+          LocaleKeys.settings.general.row.showInMenuBar.tr(),
           isOn: Binding(
-            get: { viewModel.showMenuBar },
-            set: { viewModel.setShowMenuBar($0) }
+            get: { viewModel.showInMenuBar },
+            set: { viewModel.setShowInMenuBar($0) }
           ))
       }
 

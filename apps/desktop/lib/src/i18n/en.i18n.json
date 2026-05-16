@@ -249,7 +249,7 @@
       },
       "row": {
         "launch_at_startup": "Launch when you log in",
-        "show_menu_bar": "Show menu bar",
+        "show_in_menu_bar": "Show in menu bar",
         "screen_capture_access": "Grant screen recording access",
         "screen_selection_access": "Grant accessibility access",
         "default_extract_text_service": "Default extract text service",

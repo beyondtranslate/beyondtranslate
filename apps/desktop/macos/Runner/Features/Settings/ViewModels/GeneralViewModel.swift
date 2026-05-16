@@ -12,7 +12,7 @@ struct ServiceOption: Identifiable, Hashable {
 final class GeneralViewModel: ObservableObject {
   // Rust-backed settings
   @Published var launchAtLogin: Bool
-  @Published var showMenuBar: Bool
+  @Published var showInMenuBar: Bool
   @Published var defaultOcrService: String
   @Published var autoCopyDetectedText: Bool
   @Published var defaultDirectoryService: String
@@ -31,7 +31,7 @@ final class GeneralViewModel: ObservableObject {
 
   init(repository: SettingsRepository) {
     launchAtLogin = false
-    showMenuBar = true
+    showInMenuBar = true
     defaultOcrService = ""
     autoCopyDetectedText = true
     defaultDirectoryService = ""
@@ -112,9 +112,9 @@ final class GeneralViewModel: ObservableObject {
     Task { await persist(.diff(launchAtLogin: value)) }
   }
 
-  func setShowMenuBar(_ value: Bool) {
-    showMenuBar = value
-    Task { await persist(.diff(showMenuBar: value)) }
+  func setShowInMenuBar(_ value: Bool) {
+    showInMenuBar = value
+    Task { await persist(.diff(showInMenuBar: value)) }
   }
 
   func setDefaultOcrService(_ value: String) {
@@ -187,7 +187,7 @@ final class GeneralViewModel: ObservableObject {
 
   private func apply(_ settings: GeneralSettings) {
     launchAtLogin = settings.launchAtLogin
-    showMenuBar = settings.showMenuBar
+    showInMenuBar = settings.showInMenuBar
     defaultOcrService = Self.providerID(fromServiceID: settings.defaultOcrService)
     autoCopyDetectedText = settings.autoCopyDetectedText
     defaultDirectoryService = Self.providerID(fromServiceID: settings.defaultDirectoryService)

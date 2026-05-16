@@ -38,7 +38,7 @@ struct ProviderEditorSheet: View {
               Task {
                 let id = await onGenerateProviderId(selectedType)
                 draft = ProviderConfigEntry(
-                  id: id, type: selectedType, fields: [:], capabilities: [])
+                  id: id, type: selectedType, fields: [:], capabilities: [], createdAt: nil)
                 showConfigEditor = true
               }
             } else {

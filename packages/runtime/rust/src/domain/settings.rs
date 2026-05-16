@@ -85,8 +85,8 @@ pub struct TranslationTarget {
 pub struct GeneralSettings {
     #[serde(rename = "launchAtLogin")]
     pub launch_at_login: bool,
-    #[serde(rename = "showMenuBar")]
-    pub show_menu_bar: bool,
+    #[serde(rename = "showInMenuBar")]
+    pub show_in_menu_bar: bool,
     // OCR
     #[serde(rename = "defaultOcrService")]
     pub default_ocr_service: String,
@@ -112,7 +112,7 @@ impl Default for GeneralSettings {
     fn default() -> Self {
         Self {
             launch_at_login: false,
-            show_menu_bar: true,
+            show_in_menu_bar: true,
             default_ocr_service: String::new(),
             auto_copy_detected_text: true,
             default_directory_service: String::new(),
@@ -142,6 +142,11 @@ pub struct ProviderConfigEntry {
     /// Not written to the settings file.
     #[serde(default, skip_serializing)]
     pub capabilities: Vec<ProviderCapability>,
+    /// Creation timestamp (Unix epoch seconds). Set automatically when a
+    /// provider is first created; `None` for providers migrated from an
+    /// older version of the settings file.
+    #[serde(default, rename = "createdAt", skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<u64>,
 }
 
 impl Default for ProviderConfigEntry {
@@ -151,6 +156,7 @@ impl Default for ProviderConfigEntry {
             r#type: ProviderType::System,
             fields: HashMap::default(),
             capabilities: Vec::default(),
+            created_at: None,
         }
     }
 }
@@ -179,7 +185,9 @@ pub struct Settings {
 impl Settings {
     pub fn load(file_path: impl AsRef<Path>) -> Result<Self, String> {
         let path = file_path.as_ref();
+        eprintln!("[Settings::load] path: {}", path.display());
         if !path.exists() {
+            eprintln!("[Settings::load] file not found, returning defaults");
             return Ok(Self::default());
         }
 
@@ -187,12 +195,17 @@ impl Settings {
             format!("failed to read settings file `{}`: {error}", path.display())
         })?;
 
-        serde_json::from_str::<Self>(&content).map_err(|error| {
+        let settings: Self = serde_json::from_str(&content).map_err(|error| {
             format!(
                 "failed to parse settings file `{}`: {error}",
                 path.display()
             )
-        })
+        })?;
+        eprintln!(
+            "[Settings::load] loaded {} providers",
+            settings.providers.len()
+        );
+        Ok(settings)
     }
 
     pub fn save(&self, file_path: impl AsRef<Path>) -> Result<(), String> {
@@ -318,6 +331,7 @@ pub fn provider_entry_from_config(
         r#type: config.provider_type,
         fields,
         capabilities: Vec::new(),
+        created_at: None,
     })
 }
 
@@ -414,7 +428,7 @@ mod tests {
   },
   "general": {
     "launchAtLogin": true,
-    "showMenuBar": false
+    "showInMenuBar": false
   },
   "advanced": {},
   "providers": {
@@ -444,7 +458,7 @@ mod tests {
         assert_eq!(settings.appearance.language, "en");
         assert_eq!(settings.appearance.theme_mode, "dark");
         assert!(settings.general.launch_at_login);
-        assert!(!settings.general.show_menu_bar);
+        assert!(!settings.general.show_in_menu_bar);
         assert_eq!(settings.providers.len(), 1);
         let provider = settings.providers.get("deepl-main").unwrap();
         assert_eq!(provider.id, "deepl-main");
@@ -471,7 +485,7 @@ mod tests {
         settings.appearance.language = "en".to_owned();
         settings.appearance.theme_mode = "system".to_owned();
         settings.general.launch_at_login = true;
-        settings.general.show_menu_bar = false;
+        settings.general.show_in_menu_bar = false;
         settings.providers.insert(
             "deepl-main".to_owned(),
             ProviderConfigEntry {
@@ -479,6 +493,7 @@ mod tests {
                 r#type: ProviderType::DeepL,
                 fields: HashMap::from([("appKey".to_owned(), "test-key".to_owned())]),
                 capabilities: Vec::new(),
+                created_at: None,
             },
         );
         settings.save(&path).expect("failed to save settings");
@@ -519,7 +534,7 @@ mod tests {
             Some(Value::Bool(true))
         );
         assert_eq!(
-            json.pointer("/general/showMenuBar").cloned(),
+            json.pointer("/general/showInMenuBar").cloned(),
             Some(Value::Bool(false))
         );
         assert_eq!(

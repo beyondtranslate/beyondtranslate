@@ -34,7 +34,7 @@ class SettingsStore extends ChangeNotifier {
 
   GeneralSettings _general = GeneralSettings(
     launchAtLogin: false,
-    showMenuBar: true,
+    showInMenuBar: true,
     defaultOcrService: '',
     autoCopyDetectedText: true,
     defaultDirectoryService: '',

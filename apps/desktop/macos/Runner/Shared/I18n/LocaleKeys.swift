@@ -283,7 +283,7 @@ enum LocaleKeys {
         static let launchAtStartup = LocaleKey("settings.general.row.launch_at_startup")
         static let screenCaptureAccess = LocaleKey("settings.general.row.screen_capture_access")
         static let screenSelectionAccess = LocaleKey("settings.general.row.screen_selection_access")
-        static let showMenuBar = LocaleKey("settings.general.row.show_menu_bar")
+        static let showInMenuBar = LocaleKey("settings.general.row.show_in_menu_bar")
         static let submitWithEnter = LocaleKey("settings.general.row.submit_with_enter")
         static let submitWithMetaEnterMac = LocaleKey(
           "settings.general.row.submit_with_meta_enter_mac")
