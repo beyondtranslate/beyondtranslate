@@ -221,11 +221,10 @@
 "settings.providers.item.no_services" = "暂无可用服务。";
 "settings.providers.section.services" = "服务";
 "settings.providers.title" = "提供商";
-"settings.shortcuts.row.extract_capture" = "截图取词";
-"settings.shortcuts.row.extract_clipboard" = "从剪贴板取词";
-"settings.shortcuts.row.extract_selection" = "从选区取词";
-"settings.shortcuts.row.hide" = "隐藏";
-"settings.shortcuts.row.show_or_hide" = "显示或隐藏";
+"settings.shortcuts.row.extract_from_capture" = "从截图取词";
+"settings.shortcuts.row.extract_from_clipboard" = "从剪贴板取词";
+"settings.shortcuts.row.extract_from_selection" = "从选区取词";
+"settings.shortcuts.row.toggle_mini_translator" = "显示/隐藏窗口";
 "settings.shortcuts.row.translate_input" = "翻译输入内容";
 "settings.shortcuts.section.extract_text" = "取词";
 "settings.shortcuts.section.input_assist" = "输入辅助功能";

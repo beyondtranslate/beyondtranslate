@@ -49,8 +49,7 @@ class SettingsStore extends ChangeNotifier {
     themeMode: 'system',
   );
   ShortcutSettings _shortcuts = ShortcutSettings(
-    toggleApp: '',
-    hideApp: '',
+    toggleMiniTranslator: '',
     extractFromScreenSelection: '',
     extractFromScreenCapture: '',
     extractFromClipboard: '',

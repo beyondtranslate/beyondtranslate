@@ -837,18 +837,13 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   @override
-  void onShortcutKeyDownShowOrHide() async {
+  void onShortcutKeyDownToggleMiniTranslator() async {
     final isVisible = _window.isVisible;
     if (isVisible) {
       _windowHide();
     } else {
       _windowShow();
     }
-  }
-
-  @override
-  void onShortcutKeyDownHide() async {
-    _windowHide();
   }
 
   @override

@@ -221,11 +221,10 @@
 "settings.providers.item.no_services" = "No services available.";
 "settings.providers.section.services" = "Services";
 "settings.providers.title" = "Providers";
-"settings.shortcuts.row.extract_capture" = "Extract text from capture";
-"settings.shortcuts.row.extract_clipboard" = "Extract text from clipboard";
-"settings.shortcuts.row.extract_selection" = "Extract text from selection";
-"settings.shortcuts.row.hide" = "Hide";
-"settings.shortcuts.row.show_or_hide" = "Show or Hide";
+"settings.shortcuts.row.extract_from_capture" = "Extract text from capture";
+"settings.shortcuts.row.extract_from_clipboard" = "Extract text from clipboard";
+"settings.shortcuts.row.extract_from_selection" = "Extract text from selection";
+"settings.shortcuts.row.toggle_mini_translator" = "Show/Hide Window";
 "settings.shortcuts.row.translate_input" = "Translate input content";
 "settings.shortcuts.section.extract_text" = "Extract Text";
 "settings.shortcuts.section.input_assist" = "Input Assist Function";

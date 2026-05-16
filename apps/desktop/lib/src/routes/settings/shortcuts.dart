@@ -47,12 +47,8 @@ class _ShortcutsSettingsPageState extends State<ShortcutsSettingsPage> {
           title: const Text('Shortcuts'),
           children: [
             _ShortcutRow(
-              title: 'Show or Hide',
-              shortcut: shortcuts.toggleApp,
-            ),
-            _ShortcutRow(
-              title: 'Hide',
-              shortcut: shortcuts.hideApp,
+              title: 'Toggle Mini Translator',
+              shortcut: shortcuts.toggleMiniTranslator,
             ),
           ],
         ),

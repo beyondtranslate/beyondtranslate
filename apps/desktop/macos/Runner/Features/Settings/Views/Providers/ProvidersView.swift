@@ -231,7 +231,7 @@ struct ProviderTypeIcon: View {
         .resizable()
         .interpolation(.high)
         .antialiased(true)
-        .frame(width: 24, height: 24)
+        .frame(width: 22, height: 22)
         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
     } else {
       ZStack {
@@ -241,7 +241,7 @@ struct ProviderTypeIcon: View {
           .font(.system(size: 12, weight: .medium))
           .foregroundStyle(Color.accentColor)
       }
-      .frame(width: 24, height: 24)
+      .frame(width: 22, height: 22)
     }
   }
 }

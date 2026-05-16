@@ -848,8 +848,7 @@ mod tests {
 
                 settings
                     .update_shortcuts(ShortcutSettingsPatch {
-                        toggle_app: Some("Cmd+Space".to_owned()),
-                        hide_app: None,
+                        toggle_mini_translator: Some("Cmd+Space".to_owned()),
                         extract_from_screen_selection: None,
                         extract_from_screen_capture: None,
                         extract_from_clipboard: None,

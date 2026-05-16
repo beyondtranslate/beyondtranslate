@@ -59,6 +59,7 @@
 		F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */; };
 		F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */; };
 		F5F2225E2FB81BE70025B9D4 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F2225D2FB81BE70025B9D4 /* SettingsPage.swift */; };
+		F5F222602FB8ABB40025B9D4 /* ShortcutRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F2225F2FB8ABB40025B9D4 /* ShortcutRecorderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,6 +150,7 @@
 		F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeAppearanceController.swift; sourceTree = "<group>"; };
 		F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderEditorSheet.swift; sourceTree = "<group>"; };
 		F5F2225D2FB81BE70025B9D4 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
+		F5F2225F2FB8ABB40025B9D4 /* ShortcutRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRecorderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -337,6 +339,7 @@
 		A20000000000000000000007 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				F5F2225F2FB8ABB40025B9D4 /* ShortcutRecorderView.swift */,
 				F5F2225D2FB81BE70025B9D4 /* SettingsPage.swift */,
 				8F1000152E0A100100A1B2C3 /* SettingRow.swift */,
 				8F1000172E0A100100A1B2C3 /* SettingToggle.swift */,
@@ -674,6 +677,7 @@
 			files = (
 				F5F222552FB75BFD0025B9D4 /* ShortcutDisplay.swift in Sources */,
 				F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */,
+				F5F222602FB8ABB40025B9D4 /* ShortcutRecorderView.swift in Sources */,
 				2A0D6A402E0A100100A1B2C3 /* MacSettingsPlugin.swift in Sources */,
 				2A0D6A422E0A100100A1B2C3 /* MacWindowAppearancePlugin.swift in Sources */,
 				8F10003C2E0A100100A1B2C3 /* ProviderConfigField.swift in Sources */,

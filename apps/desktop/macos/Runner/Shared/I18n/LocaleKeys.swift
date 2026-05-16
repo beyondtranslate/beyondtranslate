@@ -369,11 +369,10 @@ enum LocaleKeys {
     }
     enum shortcuts {
       enum row {
-        static let extractCapture = LocaleKey("settings.shortcuts.row.extract_capture")
-        static let extractClipboard = LocaleKey("settings.shortcuts.row.extract_clipboard")
-        static let extractSelection = LocaleKey("settings.shortcuts.row.extract_selection")
-        static let hide = LocaleKey("settings.shortcuts.row.hide")
-        static let showOrHide = LocaleKey("settings.shortcuts.row.show_or_hide")
+        static let extractFromCapture = LocaleKey("settings.shortcuts.row.extract_from_capture")
+        static let extractFromClipboard = LocaleKey("settings.shortcuts.row.extract_from_clipboard")
+        static let extractFromSelection = LocaleKey("settings.shortcuts.row.extract_from_selection")
+        static let toggleMiniTranslator = LocaleKey("settings.shortcuts.row.toggle_mini_translator")
         static let translateInput = LocaleKey("settings.shortcuts.row.translate_input")
       }
       enum section {

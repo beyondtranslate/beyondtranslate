@@ -294,11 +294,10 @@
         "input_assist": "输入辅助功能"
       },
       "row": {
-        "show_or_hide": "显示或隐藏",
-        "hide": "隐藏",
-        "extract_selection": "从选区取词",
-        "extract_capture": "截图取词",
-        "extract_clipboard": "从剪贴板取词",
+        "toggle_mini_translator": "显示/隐藏窗口",
+        "extract_from_selection": "从选区取词",
+        "extract_from_capture": "从截图取词",
+        "extract_from_clipboard": "从剪贴板取词",
         "translate_input": "翻译输入内容"
       }
     },

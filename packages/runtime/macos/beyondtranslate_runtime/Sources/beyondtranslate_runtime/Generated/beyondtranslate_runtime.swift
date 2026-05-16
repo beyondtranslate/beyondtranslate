@@ -2530,8 +2530,7 @@ public func FfiConverterTypeRecognizedRect_lower(_ value: RecognizedRect) -> Rus
 }
 
 public struct ShortcutSettings: Equatable, Hashable {
-  public var toggleApp: String
-  public var hideApp: String
+  public var toggleMiniTranslator: String
   public var extractFromScreenSelection: String
   public var extractFromScreenCapture: String
   public var extractFromClipboard: String
@@ -2539,11 +2538,10 @@ public struct ShortcutSettings: Equatable, Hashable {
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
   public init(
-    toggleApp: String, hideApp: String, extractFromScreenSelection: String,
+    toggleMiniTranslator: String, extractFromScreenSelection: String,
     extractFromScreenCapture: String, extractFromClipboard: String
   ) {
-    self.toggleApp = toggleApp
-    self.hideApp = hideApp
+    self.toggleMiniTranslator = toggleMiniTranslator
     self.extractFromScreenSelection = extractFromScreenSelection
     self.extractFromScreenCapture = extractFromScreenCapture
     self.extractFromClipboard = extractFromClipboard
@@ -2564,8 +2562,7 @@ public struct FfiConverterTypeShortcutSettings: FfiConverterRustBuffer {
   {
     return
       try ShortcutSettings(
-        toggleApp: FfiConverterString.read(from: &buf),
-        hideApp: FfiConverterString.read(from: &buf),
+        toggleMiniTranslator: FfiConverterString.read(from: &buf),
         extractFromScreenSelection: FfiConverterString.read(from: &buf),
         extractFromScreenCapture: FfiConverterString.read(from: &buf),
         extractFromClipboard: FfiConverterString.read(from: &buf)
@@ -2573,8 +2570,7 @@ public struct FfiConverterTypeShortcutSettings: FfiConverterRustBuffer {
   }
 
   public static func write(_ value: ShortcutSettings, into buf: inout [UInt8]) {
-    FfiConverterString.write(value.toggleApp, into: &buf)
-    FfiConverterString.write(value.hideApp, into: &buf)
+    FfiConverterString.write(value.toggleMiniTranslator, into: &buf)
     FfiConverterString.write(value.extractFromScreenSelection, into: &buf)
     FfiConverterString.write(value.extractFromScreenCapture, into: &buf)
     FfiConverterString.write(value.extractFromClipboard, into: &buf)
@@ -2596,8 +2592,7 @@ public func FfiConverterTypeShortcutSettings_lower(_ value: ShortcutSettings) ->
 }
 
 public struct ShortcutSettingsPatch: Equatable, Hashable {
-  public var toggleApp: String?
-  public var hideApp: String?
+  public var toggleMiniTranslator: String?
   public var extractFromScreenSelection: String?
   public var extractFromScreenCapture: String?
   public var extractFromClipboard: String?
@@ -2605,11 +2600,10 @@ public struct ShortcutSettingsPatch: Equatable, Hashable {
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
   public init(
-    toggleApp: String?, hideApp: String?, extractFromScreenSelection: String?,
+    toggleMiniTranslator: String?, extractFromScreenSelection: String?,
     extractFromScreenCapture: String?, extractFromClipboard: String?
   ) {
-    self.toggleApp = toggleApp
-    self.hideApp = hideApp
+    self.toggleMiniTranslator = toggleMiniTranslator
     self.extractFromScreenSelection = extractFromScreenSelection
     self.extractFromScreenCapture = extractFromScreenCapture
     self.extractFromClipboard = extractFromClipboard
@@ -2630,8 +2624,7 @@ public struct FfiConverterTypeShortcutSettingsPatch: FfiConverterRustBuffer {
   {
     return
       try ShortcutSettingsPatch(
-        toggleApp: FfiConverterOptionString.read(from: &buf),
-        hideApp: FfiConverterOptionString.read(from: &buf),
+        toggleMiniTranslator: FfiConverterOptionString.read(from: &buf),
         extractFromScreenSelection: FfiConverterOptionString.read(from: &buf),
         extractFromScreenCapture: FfiConverterOptionString.read(from: &buf),
         extractFromClipboard: FfiConverterOptionString.read(from: &buf)
@@ -2639,8 +2632,7 @@ public struct FfiConverterTypeShortcutSettingsPatch: FfiConverterRustBuffer {
   }
 
   public static func write(_ value: ShortcutSettingsPatch, into buf: inout [UInt8]) {
-    FfiConverterOptionString.write(value.toggleApp, into: &buf)
-    FfiConverterOptionString.write(value.hideApp, into: &buf)
+    FfiConverterOptionString.write(value.toggleMiniTranslator, into: &buf)
     FfiConverterOptionString.write(value.extractFromScreenSelection, into: &buf)
     FfiConverterOptionString.write(value.extractFromScreenCapture, into: &buf)
     FfiConverterOptionString.write(value.extractFromClipboard, into: &buf)

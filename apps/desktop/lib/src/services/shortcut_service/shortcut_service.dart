@@ -1,8 +1,7 @@
 import 'package:hotkey_manager/hotkey_manager.dart';
 
 abstract mixin class ShortcutListener {
-  void onShortcutKeyDownShowOrHide();
-  void onShortcutKeyDownHide();
+  void onShortcutKeyDownToggleMiniTranslator();
   void onShortcutKeyDownExtractFromScreenSelection();
   void onShortcutKeyDownExtractFromScreenCapture();
   void onShortcutKeyDownExtractFromClipboard();
@@ -41,8 +40,8 @@ class ShortcutService {
   }
 
   // Hooks for tests / future direct invocation.
-  void notifyShowOrHide() => _listener?.onShortcutKeyDownShowOrHide();
-  void notifyHide() => _listener?.onShortcutKeyDownHide();
+  void notifyToggleMiniTranslator() =>
+      _listener?.onShortcutKeyDownToggleMiniTranslator();
   void notifyExtractSelection() =>
       _listener?.onShortcutKeyDownExtractFromScreenSelection();
   void notifyExtractCapture() =>

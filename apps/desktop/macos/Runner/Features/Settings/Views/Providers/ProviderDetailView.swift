@@ -17,36 +17,26 @@ struct ProviderDetailView: View {
     SettingsPage(title: currentProvider.name) {
       // ── Header ──────────────────────────────────────────────────
       Section {
-        HStack(spacing: 14) {
+        HStack(spacing: 10) {
           ProviderTypeIcon(providerType: currentProvider.type)
-            .frame(width: 40, height: 40)
+            .frame(width: 28, height: 28)
 
           Text(currentProvider.name)
-            .font(.system(size: 15, weight: .semibold))
+            .font(.system(size: 13, weight: .semibold))
 
           Spacer()
-
-          Toggle(
-            "",
-            isOn: Binding(
-              get: { viewModel.isProviderEnabled(currentProvider.id) },
-              set: { viewModel.toggleProvider(currentProvider.id, isEnabled: $0) }
-            )
-          )
-          .toggleStyle(.switch)
-          .labelsHidden()
 
           Button {
             draft = currentProvider
           } label: {
             Image(systemName: "info.circle")
-              .font(.system(size: 18))
+              .font(.system(size: 14))
               .foregroundStyle(.secondary)
           }
           .buttonStyle(.plain)
           .help(LocaleKeys.settings.providers.detail.tooltip.edit.tr())
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 2)
       }
 
       // ── Services ────────────────────────────────────────────────
@@ -88,29 +78,23 @@ private struct ProviderServiceRow: View {
   let capability: ProviderCapability
 
   var body: some View {
-    HStack(spacing: 14) {
+    HStack(spacing: 10) {
       // Capability icon — mirrors ProviderTypeIcon style
       ZStack {
-        RoundedRectangle(cornerRadius: 6, style: .continuous)
+        RoundedRectangle(cornerRadius: 5, style: .continuous)
           .fill(capability.color.opacity(0.15))
         Image(systemName: capability.systemImage)
-          .font(.system(size: 12, weight: .medium))
+          .font(.system(size: 11, weight: .medium))
           .foregroundStyle(capability.color)
       }
-      .frame(width: 28, height: 28)
+      .frame(width: 22, height: 22)
 
-      VStack(alignment: .leading, spacing: 3) {
-        Text(capability.displayName)
-          .font(.system(size: 13))
-          .foregroundStyle(.primary)
-        Text(capability.displayName)
-          .font(.system(size: 11))
-          .foregroundStyle(.secondary)
-      }
+      Text(capability.displayName)
+        .font(.system(size: 12))
 
       Spacer()
     }
-    .padding(.vertical, 2)
+    .padding(.vertical, 1)
   }
 }
 

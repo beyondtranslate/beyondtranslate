@@ -14,10 +14,8 @@ use struct_patch::Patch;
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
 #[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize, uniffi::Record)))]
 pub struct ShortcutSettings {
-    #[serde(default, rename = "toggleApp")]
-    pub toggle_app: String,
-    #[serde(default, rename = "hideApp")]
-    pub hide_app: String,
+    #[serde(default, rename = "toggleMiniTranslator")]
+    pub toggle_mini_translator: String,
     #[serde(default, rename = "extractFromScreenSelection")]
     pub extract_from_screen_selection: String,
     #[serde(default, rename = "extractFromScreenCapture")]
@@ -29,11 +27,10 @@ pub struct ShortcutSettings {
 impl Default for ShortcutSettings {
     fn default() -> Self {
         Self {
-            toggle_app: "Control+Option+Space".to_owned(),
-            hide_app: "Escape".to_owned(),
-            extract_from_screen_selection: "Control+Shift+1".to_owned(),
-            extract_from_screen_capture: "Control+Shift+2".to_owned(),
-            extract_from_clipboard: "Control+Shift+3".to_owned(),
+            toggle_mini_translator: "Option+1".to_owned(),
+            extract_from_screen_selection: "Option+Q".to_owned(),
+            extract_from_screen_capture: "Option+W".to_owned(),
+            extract_from_clipboard: "Option+E".to_owned(),
         }
     }
 }
@@ -416,8 +413,7 @@ mod tests {
             &path,
             r#"{
   "shortcuts": {
-    "toggleApp": "Command+Shift+Space",
-    "hideApp": "Escape",
+    "toggleMiniTranslator": "Command+Shift+Space",
     "extractFromScreenSelection": "Command+Shift+1",
     "extractFromScreenCapture": "Command+Shift+2",
     "extractFromClipboard": "Command+Shift+3"
@@ -444,8 +440,10 @@ mod tests {
 
         let settings = Settings::load(&path).expect("failed to load settings");
         assert_eq!(settings.last_updated, 1710000000000);
-        assert_eq!(settings.shortcuts.toggle_app, "Command+Shift+Space");
-        assert_eq!(settings.shortcuts.hide_app, "Escape");
+        assert_eq!(
+            settings.shortcuts.toggle_mini_translator,
+            "Command+Shift+Space"
+        );
         assert_eq!(
             settings.shortcuts.extract_from_screen_selection,
             "Command+Shift+1"
@@ -477,8 +475,7 @@ mod tests {
         fs::create_dir_all(path.parent().unwrap()).expect("failed to create temp dir");
 
         let mut settings = Settings::default();
-        settings.shortcuts.toggle_app = "Command+Shift+Space".to_owned();
-        settings.shortcuts.hide_app = "Escape".to_owned();
+        settings.shortcuts.toggle_mini_translator = "Command+Shift+Space".to_owned();
         settings.shortcuts.extract_from_screen_selection = "Command+Shift+1".to_owned();
         settings.shortcuts.extract_from_screen_capture = "Command+Shift+2".to_owned();
         settings.shortcuts.extract_from_clipboard = "Command+Shift+3".to_owned();
@@ -501,12 +498,8 @@ mod tests {
         let saved = fs::read_to_string(path).expect("failed to read saved settings");
         let json = serde_json::from_str::<Value>(&saved).expect("invalid saved json");
         assert_eq!(
-            json.pointer("/shortcuts/toggleApp").cloned(),
+            json.pointer("/shortcuts/toggleMiniTranslator").cloned(),
             Some(Value::String("Command+Shift+Space".to_owned()))
-        );
-        assert_eq!(
-            json.pointer("/shortcuts/hideApp").cloned(),
-            Some(Value::String("Escape".to_owned()))
         );
         assert_eq!(
             json.pointer("/shortcuts/extractFromScreenSelection")

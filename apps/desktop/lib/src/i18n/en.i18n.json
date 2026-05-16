@@ -294,11 +294,10 @@
         "input_assist": "Input Assist Function"
       },
       "row": {
-        "show_or_hide": "Show or Hide",
-        "hide": "Hide",
-        "extract_selection": "Extract text from selection",
-        "extract_capture": "Extract text from capture",
-        "extract_clipboard": "Extract text from clipboard",
+        "toggle_mini_translator": "Show/Hide Window",
+        "extract_from_selection": "Extract text from selection",
+        "extract_from_capture": "Extract text from capture",
+        "extract_from_clipboard": "Extract text from clipboard",
         "translate_input": "Translate input content"
       }
     },

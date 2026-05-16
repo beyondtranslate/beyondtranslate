@@ -83,15 +83,13 @@ extension AppearanceSettingsPatch {
 
 extension ShortcutSettingsPatch {
   static func diff(
-    toggleApp: String? = nil,
-    hideApp: String? = nil,
+    toggleMiniTranslator: String? = nil,
     extractFromScreenSelection: String? = nil,
     extractFromScreenCapture: String? = nil,
     extractFromClipboard: String? = nil
   ) -> ShortcutSettingsPatch {
     ShortcutSettingsPatch(
-      toggleApp: toggleApp,
-      hideApp: hideApp,
+      toggleMiniTranslator: toggleMiniTranslator,
       extractFromScreenSelection: extractFromScreenSelection,
       extractFromScreenCapture: extractFromScreenCapture,
       extractFromClipboard: extractFromClipboard

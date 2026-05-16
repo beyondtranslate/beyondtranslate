@@ -306,6 +306,8 @@ class _TranslationsCommonButtonZh extends TranslationsCommonButtonEn {
   String get save => '保存';
   @override
   String get manage => '管理';
+  @override
+  String get kContinue => '继续';
 }
 
 // Path: common.feedback
@@ -1224,15 +1226,13 @@ class _TranslationsSettingsShortcutsRowZh
 
   // Translations
   @override
-  String get show_or_hide => '显示或隐藏';
+  String get toggle_mini_translator => '显示/隐藏窗口';
   @override
-  String get hide => '隐藏';
+  String get extract_from_selection => '从选区取词';
   @override
-  String get extract_selection => '从选区取词';
+  String get extract_from_capture => '从截图取词';
   @override
-  String get extract_capture => '截图取词';
-  @override
-  String get extract_clipboard => '从剪贴板取词';
+  String get extract_from_clipboard => '从剪贴板取词';
   @override
   String get translate_input => '翻译输入内容';
 }
@@ -1350,6 +1350,9 @@ class _TranslationsSettingsProvidersEditorZh
   @override
   late final _TranslationsSettingsProvidersEditorPlaceholderZh placeholder =
       _TranslationsSettingsProvidersEditorPlaceholderZh._(_root);
+  @override
+  late final _TranslationsSettingsProvidersEditorTypePickerZh type_picker =
+      _TranslationsSettingsProvidersEditorTypePickerZh._(_root);
   @override
   late final _TranslationsSettingsProvidersEditorTooltipZh tooltip =
       _TranslationsSettingsProvidersEditorTooltipZh._(_root);
@@ -1470,6 +1473,20 @@ class _TranslationsSettingsProvidersEditorPlaceholderZh
   String get id => '例如 deepl-main';
 }
 
+// Path: settings.providers.editor.type_picker
+class _TranslationsSettingsProvidersEditorTypePickerZh
+    extends TranslationsSettingsProvidersEditorTypePickerEn {
+  _TranslationsSettingsProvidersEditorTypePickerZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get prompt => '请选择要添加的提供商类型：';
+}
+
 // Path: settings.providers.editor.tooltip
 class _TranslationsSettingsProvidersEditorTooltipZh
     extends TranslationsSettingsProvidersEditorTooltipEn {
@@ -1514,6 +1531,7 @@ extension on TranslationsZh {
       'common.button.edit' => '编辑',
       'common.button.save' => '保存',
       'common.button.manage' => '管理',
+      'common.button.kContinue' => '继续',
       'common.feedback.copied' => '已复制',
       'common.placeholder.choose' => '请选择',
       'common.language.af' => '布尔语(南非荷兰语)',
@@ -1722,11 +1740,10 @@ extension on TranslationsZh {
       'settings.shortcuts.section.shortcuts' => '快捷键',
       'settings.shortcuts.section.extract_text' => '取词',
       'settings.shortcuts.section.input_assist' => '输入辅助功能',
-      'settings.shortcuts.row.show_or_hide' => '显示或隐藏',
-      'settings.shortcuts.row.hide' => '隐藏',
-      'settings.shortcuts.row.extract_selection' => '从选区取词',
-      'settings.shortcuts.row.extract_capture' => '截图取词',
-      'settings.shortcuts.row.extract_clipboard' => '从剪贴板取词',
+      'settings.shortcuts.row.toggle_mini_translator' => '显示/隐藏窗口',
+      'settings.shortcuts.row.extract_from_selection' => '从选区取词',
+      'settings.shortcuts.row.extract_from_capture' => '从截图取词',
+      'settings.shortcuts.row.extract_from_clipboard' => '从剪贴板取词',
       'settings.shortcuts.row.translate_input' => '翻译输入内容',
       'settings.advanced.title' => '高级',
       'settings.advanced.empty' => '暂无高级设置。',
@@ -1747,6 +1764,7 @@ extension on TranslationsZh {
       'settings.providers.editor.row.id' => '提供商 ID',
       'settings.providers.editor.row.type' => '提供商类型',
       'settings.providers.editor.placeholder.id' => '例如 deepl-main',
+      'settings.providers.editor.type_picker.prompt' => '请选择要添加的提供商类型：',
       'settings.providers.editor.tooltip.help' => '帮助',
       'settings.providers.detail.tooltip.edit' => '编辑提供商',
       'settings.providers.capability.translation' => '翻译',

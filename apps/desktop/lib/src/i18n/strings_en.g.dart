@@ -270,6 +270,9 @@ class TranslationsCommonButtonEn {
 
   /// en: 'Manage'
   String get manage => 'Manage';
+
+  /// en: 'Continue'
+  String get kContinue => 'Continue';
 }
 
 // Path: common.feedback
@@ -1270,20 +1273,17 @@ class TranslationsSettingsShortcutsRowEn {
 
   // Translations
 
-  /// en: 'Show or Hide'
-  String get show_or_hide => 'Show or Hide';
-
-  /// en: 'Hide'
-  String get hide => 'Hide';
+  /// en: 'Show/Hide Window'
+  String get toggle_mini_translator => 'Show/Hide Window';
 
   /// en: 'Extract text from selection'
-  String get extract_selection => 'Extract text from selection';
+  String get extract_from_selection => 'Extract text from selection';
 
   /// en: 'Extract text from capture'
-  String get extract_capture => 'Extract text from capture';
+  String get extract_from_capture => 'Extract text from capture';
 
   /// en: 'Extract text from clipboard'
-  String get extract_clipboard => 'Extract text from clipboard';
+  String get extract_from_clipboard => 'Extract text from clipboard';
 
   /// en: 'Translate input content'
   String get translate_input => 'Translate input content';
@@ -1392,6 +1392,8 @@ class TranslationsSettingsProvidersEditorEn {
       TranslationsSettingsProvidersEditorRowEn.internal(_root);
   late final TranslationsSettingsProvidersEditorPlaceholderEn placeholder =
       TranslationsSettingsProvidersEditorPlaceholderEn.internal(_root);
+  late final TranslationsSettingsProvidersEditorTypePickerEn type_picker =
+      TranslationsSettingsProvidersEditorTypePickerEn.internal(_root);
   late final TranslationsSettingsProvidersEditorTooltipEn tooltip =
       TranslationsSettingsProvidersEditorTooltipEn.internal(_root);
 }
@@ -1503,6 +1505,18 @@ class TranslationsSettingsProvidersEditorPlaceholderEn {
   String get id => 'e.g. deepl-main';
 }
 
+// Path: settings.providers.editor.type_picker
+class TranslationsSettingsProvidersEditorTypePickerEn {
+  TranslationsSettingsProvidersEditorTypePickerEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Select the type of provider you would like to add:'
+  String get prompt => 'Select the type of provider you would like to add:';
+}
+
 // Path: settings.providers.editor.tooltip
 class TranslationsSettingsProvidersEditorTooltipEn {
   TranslationsSettingsProvidersEditorTooltipEn.internal(this._root);
@@ -1543,6 +1557,7 @@ extension on Translations {
       'common.button.edit' => 'Edit',
       'common.button.save' => 'Save',
       'common.button.manage' => 'Manage',
+      'common.button.kContinue' => 'Continue',
       'common.feedback.copied' => 'Copied',
       'common.placeholder.choose' => 'Please Choose',
       'common.language.af' => 'Afrikaans',
@@ -1766,12 +1781,12 @@ extension on Translations {
       'settings.shortcuts.section.shortcuts' => 'Shortcuts',
       'settings.shortcuts.section.extract_text' => 'Extract Text',
       'settings.shortcuts.section.input_assist' => 'Input Assist Function',
-      'settings.shortcuts.row.show_or_hide' => 'Show or Hide',
-      'settings.shortcuts.row.hide' => 'Hide',
-      'settings.shortcuts.row.extract_selection' =>
+      'settings.shortcuts.row.toggle_mini_translator' => 'Show/Hide Window',
+      'settings.shortcuts.row.extract_from_selection' =>
         'Extract text from selection',
-      'settings.shortcuts.row.extract_capture' => 'Extract text from capture',
-      'settings.shortcuts.row.extract_clipboard' =>
+      'settings.shortcuts.row.extract_from_capture' =>
+        'Extract text from capture',
+      'settings.shortcuts.row.extract_from_clipboard' =>
         'Extract text from clipboard',
       'settings.shortcuts.row.translate_input' => 'Translate input content',
       'settings.advanced.title' => 'Advanced',
@@ -1797,6 +1812,8 @@ extension on Translations {
       'settings.providers.editor.row.id' => 'Provider ID',
       'settings.providers.editor.row.type' => 'Provider Type',
       'settings.providers.editor.placeholder.id' => 'e.g. deepl-main',
+      'settings.providers.editor.type_picker.prompt' =>
+        'Select the type of provider you would like to add:',
       'settings.providers.editor.tooltip.help' => 'Help',
       'settings.providers.detail.tooltip.edit' => 'Edit provider',
       'settings.providers.capability.translation' => 'Translation',
