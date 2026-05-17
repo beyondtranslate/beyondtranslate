@@ -4,10 +4,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/src/widgets/_window.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nativeapi/nativeapi.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../extensions/window_controller.dart';
 import '../i18n/i18n.dart';
@@ -250,6 +252,10 @@ class _RootBodyViewState extends State<_RootBodyView> {
   Window get _mainWindow => mainWindowController.window;
   Window get _miniTranslatorWindow => miniTranslatorWindowController.window;
 
+  /// Whether to use the native macOS settings window instead of the Flutter one.
+  /// Only meaningful on macOS; defaults to true.
+  bool _useNativeSettings = true;
+
   @override
   void initState() {
     settingsStore.addListener(_handleChanged);
@@ -260,6 +266,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
   @override
   void dispose() {
     settingsStore.removeListener(_handleChanged);
+    _trayIcon.dispose();
     super.dispose();
   }
 
@@ -271,29 +278,16 @@ class _RootBodyViewState extends State<_RootBodyView> {
     }
   }
 
+  // ────────────────────────────────────────────────────────────────────────────
+  // Tray icon
+  // ────────────────────────────────────────────────────────────────────────────
+
   void _setupTrayIcon() {
     _trayIcon = TrayIcon();
     final icon = Image.fromAsset('resources/images/tray_icon.png');
     if (icon != null) _trayIcon.icon = icon;
     _trayIcon.isVisible = true;
-    _trayIcon.contextMenu = Menu()
-      ..addItem(
-        MenuItem('Open Settings')
-          ..on<MenuItemClickedEvent>((_) {
-            if (Platform.isMacOS) {
-              MacSettings.show();
-              return;
-            }
-            _mainWindow.center();
-            _mainWindow.show();
-          }),
-      )
-      ..addItem(
-        MenuItem('Exit')
-          ..on<MenuItemClickedEvent>((_) {
-            // print('Clicked Exit');
-          }),
-      );
+    _trayIcon.contextMenu = _buildContextMenu();
     _trayIcon.contextMenuTrigger = ContextMenuTrigger.rightClicked;
     _trayIcon.on<TrayIconClickedEvent>((event) {
       final bounds = _trayIcon.bounds;
@@ -307,12 +301,94 @@ class _RootBodyViewState extends State<_RootBodyView> {
     });
   }
 
+  Menu _buildContextMenu() {
+    final menu = Menu();
+
+    // ── 显示窗口 ──
+    menu.addItem(
+      MenuItem(t.tray.context_menu.show_window)
+        ..on<MenuItemClickedEvent>((_) {
+          _mainWindow.center();
+          _mainWindow.show();
+        }),
+    );
+
+    menu.addSeparator();
+
+    // ── 🔧 开发工具 (仅 Debug 模式可见) ──
+    if (kDebugMode) {
+      final devToolsSubmenu = Menu();
+
+      // 打开数据目录
+      devToolsSubmenu.addItem(
+        MenuItem(t.tray.context_menu.dev_tools.open_data_directory)
+          ..on<MenuItemClickedEvent>((_) async {
+            final dir = await getApplicationSupportDirectory();
+            UrlOpener.instance.open('file://${dir.path}');
+          }),
+      );
+
+      // ☑ 使用原生设置页面 (checkbox, 仅 macOS 可用)
+      final nativeSettingsItem = MenuItem(
+        t.tray.context_menu.dev_tools.use_native_settings,
+        MenuItemType.checkbox,
+      );
+      nativeSettingsItem.state =
+          _useNativeSettings ? MenuItemState.checked : MenuItemState.unchecked;
+      nativeSettingsItem.enabled = Platform.isMacOS;
+      nativeSettingsItem.on<MenuItemClickedEvent>((_) {
+        _useNativeSettings = !_useNativeSettings;
+        nativeSettingsItem.state = _useNativeSettings
+            ? MenuItemState.checked
+            : MenuItemState.unchecked;
+      });
+      devToolsSubmenu.addItem(nativeSettingsItem);
+
+      final devToolsItem = MenuItem(
+        t.tray.context_menu.dev_tools.title,
+        MenuItemType.submenu,
+      );
+      devToolsItem.submenu = devToolsSubmenu;
+      menu.addItem(devToolsItem);
+    }
+
+    // ── Check for updates (暂不实现) ──
+    menu.addItem(
+      MenuItem(t.tray.context_menu.check_for_updates),
+    );
+
+    // ── 设置 ──
+    menu.addItem(
+      MenuItem(t.tray.context_menu.settings)
+        ..on<MenuItemClickedEvent>((_) {
+          if (Platform.isMacOS && _useNativeSettings) {
+            MacSettings.show();
+            return;
+          }
+          _mainWindow.center();
+          _mainWindow.show();
+        }),
+    );
+
+    menu.addSeparator();
+
+    // ── 退出 ──
+    menu.addItem(
+      MenuItem(t.tray.context_menu.quit)
+        ..on<MenuItemClickedEvent>((_) {
+          exit(0);
+        }),
+    );
+
+    return menu;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ViewCollection(
+    return const ViewCollection(
       views: [
-        if (!Platform.isMacOS) const MainApp(),
-        const MiniTranslatorApp(),
+        MainApp(),
+        MiniTranslatorApp(),
       ],
     );
   }

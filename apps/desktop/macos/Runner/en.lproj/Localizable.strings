@@ -247,9 +247,10 @@
 "translation.mode.manual" = "Manual";
 "translation.word_pronunciation.uk" = "UK";
 "translation.word_pronunciation.us" = "US";
-"tray.context_menu.discussion.discord_server" = "Join Discord";
-"tray.context_menu.discussion.qq_group" = "Join QQ Group";
-"tray.context_menu.discussion.title" = "Join Discussion";
-"tray.context_menu.quick_start_guide" = "Quick Start";
-"tray.context_menu.quit_app" = "Quit Biyi";
-"tray.context_menu.show" = "Show";
+"tray.context_menu.check_for_updates" = "Check for Updates";
+"tray.context_menu.dev_tools.open_data_directory" = "Open Data Directory";
+"tray.context_menu.dev_tools.title" = "Dev Tools";
+"tray.context_menu.dev_tools.use_native_settings" = "Use Native Settings Page";
+"tray.context_menu.quit" = "Quit";
+"tray.context_menu.settings" = "Settings";
+"tray.context_menu.show_window" = "Show Window";

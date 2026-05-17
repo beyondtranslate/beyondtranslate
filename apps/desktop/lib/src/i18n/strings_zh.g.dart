@@ -662,14 +662,34 @@ class _TranslationsTrayContextMenuZh extends TranslationsTrayContextMenuEn {
 
   // Translations
   @override
-  String get show => '显示';
+  String get show_window => '显示窗口';
   @override
-  String get quick_start_guide => '快速入门';
+  late final _TranslationsTrayContextMenuDevToolsZh dev_tools =
+      _TranslationsTrayContextMenuDevToolsZh._(_root);
   @override
-  late final _TranslationsTrayContextMenuDiscussionZh discussion =
-      _TranslationsTrayContextMenuDiscussionZh._(_root);
+  String get check_for_updates => '检查更新';
   @override
-  String get quit_app => '退出比译';
+  String get settings => '设置';
+  @override
+  String get quit => '退出';
+}
+
+// Path: tray.context_menu.dev_tools
+class _TranslationsTrayContextMenuDevToolsZh
+    extends TranslationsTrayContextMenuDevToolsEn {
+  _TranslationsTrayContextMenuDevToolsZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '开发工具';
+  @override
+  String get open_data_directory => '打开数据目录';
+  @override
+  String get use_native_settings => '使用原生设置页面';
 }
 
 // Path: mini_translator.update_banner
@@ -929,24 +949,6 @@ class _TranslationsShortcutsRecordDialogZh
   // Translations
   @override
   String get title => '自定义快捷键';
-}
-
-// Path: tray.context_menu.discussion
-class _TranslationsTrayContextMenuDiscussionZh
-    extends TranslationsTrayContextMenuDiscussionEn {
-  _TranslationsTrayContextMenuDiscussionZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => '加入讨论';
-  @override
-  String get discord_server => '加入 Discord';
-  @override
-  String get qq_group => '加入 QQ 群';
 }
 
 // Path: mini_translator.update_banner.button
@@ -1667,12 +1669,13 @@ extension on TranslationsZh {
       'theme.mode.light' => '浅色',
       'theme.mode.dark' => '深色',
       'theme.mode.system' => '跟随系统',
-      'tray.context_menu.show' => '显示',
-      'tray.context_menu.quick_start_guide' => '快速入门',
-      'tray.context_menu.discussion.title' => '加入讨论',
-      'tray.context_menu.discussion.discord_server' => '加入 Discord',
-      'tray.context_menu.discussion.qq_group' => '加入 QQ 群',
-      'tray.context_menu.quit_app' => '退出比译',
+      'tray.context_menu.show_window' => '显示窗口',
+      'tray.context_menu.dev_tools.title' => '开发工具',
+      'tray.context_menu.dev_tools.open_data_directory' => '打开数据目录',
+      'tray.context_menu.dev_tools.use_native_settings' => '使用原生设置页面',
+      'tray.context_menu.check_for_updates' => '检查更新',
+      'tray.context_menu.settings' => '设置',
+      'tray.context_menu.quit' => '退出',
       'mini_translator.update_banner.found_new_version' => '发现新版本：{}',
       'mini_translator.update_banner.button.update' => '立即更新',
       'mini_translator.limited_banner.permission.missing_both' =>

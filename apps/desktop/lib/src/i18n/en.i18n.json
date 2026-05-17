@@ -175,14 +175,15 @@
   },
   "tray": {
     "context_menu": {
-      "show": "Show",
-      "quick_start_guide": "Quick Start",
-      "discussion": {
-        "title": "Join Discussion",
-        "discord_server": "Join Discord",
-        "qq_group": "Join QQ Group"
+      "show_window": "Show Window",
+      "dev_tools": {
+        "title": "Dev Tools",
+        "open_data_directory": "Open Data Directory",
+        "use_native_settings": "Use Native Settings Page"
       },
-      "quit_app": "Quit Biyi"
+      "check_for_updates": "Check for Updates",
+      "settings": "Settings",
+      "quit": "Quit"
     }
   },
   "mini_translator": {

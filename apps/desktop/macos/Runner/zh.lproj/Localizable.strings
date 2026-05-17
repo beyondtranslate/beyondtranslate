@@ -247,9 +247,10 @@
 "translation.mode.manual" = "手动";
 "translation.word_pronunciation.uk" = "英";
 "translation.word_pronunciation.us" = "美";
-"tray.context_menu.discussion.discord_server" = "加入 Discord";
-"tray.context_menu.discussion.qq_group" = "加入 QQ 群";
-"tray.context_menu.discussion.title" = "加入讨论";
-"tray.context_menu.quick_start_guide" = "快速入门";
-"tray.context_menu.quit_app" = "退出比译";
-"tray.context_menu.show" = "显示";
+"tray.context_menu.check_for_updates" = "检查更新";
+"tray.context_menu.dev_tools.open_data_directory" = "打开数据目录";
+"tray.context_menu.dev_tools.title" = "开发工具";
+"tray.context_menu.dev_tools.use_native_settings" = "使用原生设置页面";
+"tray.context_menu.quit" = "退出";
+"tray.context_menu.settings" = "设置";
+"tray.context_menu.show_window" = "显示窗口";

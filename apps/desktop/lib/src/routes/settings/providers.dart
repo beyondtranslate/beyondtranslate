@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
-import '../../widgets/preference_list/preference_list.dart';
-import '../../widgets/preference_list/preference_list_item.dart';
-import '../../widgets/preference_list/preference_list_section.dart';
 import '../../widgets/ui/button.dart';
+import '../../widgets/ui/preference_list.dart';
+import '../../widgets/ui/preference_list_item.dart';
+import '../../widgets/ui/preference_list_section.dart';
 
 /// Mirrors macOS `ProvidersView.swift`.
 class ProvidersSettingsPage extends StatefulWidget {

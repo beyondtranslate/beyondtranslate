@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/preference_list/preference_list.dart';
-import '../../widgets/preference_list/preference_list_section.dart';
+import '../../widgets/ui/preference_list.dart';
+import '../../widgets/ui/preference_list_section.dart';
 
 /// Mirrors macOS `AdvancedView.swift`.
 class AdvancedSettingsPage extends StatelessWidget {

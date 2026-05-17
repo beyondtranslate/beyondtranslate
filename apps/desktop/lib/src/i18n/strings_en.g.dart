@@ -733,17 +733,38 @@ class TranslationsTrayContextMenuEn {
 
   // Translations
 
-  /// en: 'Show'
-  String get show => 'Show';
+  /// en: 'Show Window'
+  String get show_window => 'Show Window';
 
-  /// en: 'Quick Start'
-  String get quick_start_guide => 'Quick Start';
+  late final TranslationsTrayContextMenuDevToolsEn dev_tools =
+      TranslationsTrayContextMenuDevToolsEn.internal(_root);
 
-  late final TranslationsTrayContextMenuDiscussionEn discussion =
-      TranslationsTrayContextMenuDiscussionEn.internal(_root);
+  /// en: 'Check for Updates'
+  String get check_for_updates => 'Check for Updates';
 
-  /// en: 'Quit Biyi'
-  String get quit_app => 'Quit Biyi';
+  /// en: 'Settings'
+  String get settings => 'Settings';
+
+  /// en: 'Quit'
+  String get quit => 'Quit';
+}
+
+// Path: tray.context_menu.dev_tools
+class TranslationsTrayContextMenuDevToolsEn {
+  TranslationsTrayContextMenuDevToolsEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Dev Tools'
+  String get title => 'Dev Tools';
+
+  /// en: 'Open Data Directory'
+  String get open_data_directory => 'Open Data Directory';
+
+  /// en: 'Use Native Settings Page'
+  String get use_native_settings => 'Use Native Settings Page';
 }
 
 // Path: mini_translator.update_banner
@@ -966,24 +987,6 @@ class TranslationsShortcutsRecordDialogEn {
 
   /// en: 'Customize your shortcut'
   String get title => 'Customize your shortcut';
-}
-
-// Path: tray.context_menu.discussion
-class TranslationsTrayContextMenuDiscussionEn {
-  TranslationsTrayContextMenuDiscussionEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Join Discussion'
-  String get title => 'Join Discussion';
-
-  /// en: 'Join Discord'
-  String get discord_server => 'Join Discord';
-
-  /// en: 'Join QQ Group'
-  String get qq_group => 'Join QQ Group';
 }
 
 // Path: mini_translator.update_banner.button
@@ -1695,12 +1698,15 @@ extension on Translations {
       'theme.mode.light' => 'Light',
       'theme.mode.dark' => 'Dark',
       'theme.mode.system' => 'System',
-      'tray.context_menu.show' => 'Show',
-      'tray.context_menu.quick_start_guide' => 'Quick Start',
-      'tray.context_menu.discussion.title' => 'Join Discussion',
-      'tray.context_menu.discussion.discord_server' => 'Join Discord',
-      'tray.context_menu.discussion.qq_group' => 'Join QQ Group',
-      'tray.context_menu.quit_app' => 'Quit Biyi',
+      'tray.context_menu.show_window' => 'Show Window',
+      'tray.context_menu.dev_tools.title' => 'Dev Tools',
+      'tray.context_menu.dev_tools.open_data_directory' =>
+        'Open Data Directory',
+      'tray.context_menu.dev_tools.use_native_settings' =>
+        'Use Native Settings Page',
+      'tray.context_menu.check_for_updates' => 'Check for Updates',
+      'tray.context_menu.settings' => 'Settings',
+      'tray.context_menu.quit' => 'Quit',
       'mini_translator.update_banner.found_new_version' =>
         'New version found: {}',
       'mini_translator.update_banner.button.update' => 'Update',

@@ -175,14 +175,15 @@
   },
   "tray": {
     "context_menu": {
-      "show": "显示",
-      "quick_start_guide": "快速入门",
-      "discussion": {
-        "title": "加入讨论",
-        "discord_server": "加入 Discord",
-        "qq_group": "加入 QQ 群"
+      "show_window": "显示窗口",
+      "dev_tools": {
+        "title": "开发工具",
+        "open_data_directory": "打开数据目录",
+        "use_native_settings": "使用原生设置页面"
       },
-      "quit_app": "退出比译"
+      "check_for_updates": "检查更新",
+      "settings": "设置",
+      "quit": "退出"
     }
   },
   "mini_translator": {

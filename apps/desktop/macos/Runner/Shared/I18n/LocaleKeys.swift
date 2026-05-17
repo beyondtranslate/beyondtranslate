@@ -422,14 +422,15 @@ enum LocaleKeys {
   }
   enum tray {
     enum contextMenu {
-      enum discussion {
-        static let discordServer = LocaleKey("tray.context_menu.discussion.discord_server")
-        static let qqGroup = LocaleKey("tray.context_menu.discussion.qq_group")
-        static let title = LocaleKey("tray.context_menu.discussion.title")
+      static let checkForUpdates = LocaleKey("tray.context_menu.check_for_updates")
+      enum devTools {
+        static let openDataDirectory = LocaleKey("tray.context_menu.dev_tools.open_data_directory")
+        static let title = LocaleKey("tray.context_menu.dev_tools.title")
+        static let useNativeSettings = LocaleKey("tray.context_menu.dev_tools.use_native_settings")
       }
-      static let quickStartGuide = LocaleKey("tray.context_menu.quick_start_guide")
-      static let quitApp = LocaleKey("tray.context_menu.quit_app")
-      static let show = LocaleKey("tray.context_menu.show")
+      static let quit = LocaleKey("tray.context_menu.quit")
+      static let settings = LocaleKey("tray.context_menu.settings")
+      static let showWindow = LocaleKey("tray.context_menu.show_window")
     }
   }
 }
