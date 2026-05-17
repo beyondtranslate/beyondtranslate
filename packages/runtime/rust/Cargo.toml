@@ -11,7 +11,7 @@ crate-type = ["lib", "cdylib", "staticlib"]
 beyondtranslate-core = { path = "../../../crates/core" }
 beyondtranslate-engine = { path = "../../../crates/engine" }
 uniffi = { version = "=0.31.1", features = ["cli"] }
-uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1" }
+uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", branch = "main" }
 anyhow = "1"
 camino = "1"
 serde.workspace = true
@@ -22,12 +22,12 @@ thiserror.workspace = true
 tokio.workspace = true
 
 [build-dependencies]
-uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1", features = [
+uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", branch = "main", features = [
   "build",
 ] }
 
 [dev-dependencies]
-uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", tag = "v0.2.0+v0.31.1", features = [
+uniffi-dart = { git = "https://github.com/Uniffi-Dart/uniffi-dart.git", branch = "main", features = [
   "bindgen-tests",
 ] }
 uniffi = { version = "=0.31.1", features = ["bindgen-tests"] }

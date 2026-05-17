@@ -299,6 +299,12 @@
         "extract_text_from_screen_capture": "从屏幕截图提取文字",
         "extract_text_from_clipboard": "从剪贴板提取文字",
         "translate_input": "翻译输入内容"
+      },
+      "dialog": {
+        "reset_title": "重置快捷键",
+        "reset_message": "确定要重置所有快捷键为默认值吗？",
+        "reset_confirm": "重置",
+        "reset_cancel": "取消"
       }
     },
     "advanced": {

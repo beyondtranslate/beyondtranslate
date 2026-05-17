@@ -24,8 +24,8 @@ struct SettingRow: View {
 
 struct ShortcutSettingRow: View {
   let title: String
-  let shortcut: ShortcutDisplay
-  let onShortcutRecorded: ((ShortcutDisplay) -> Void)?
+  let shortcut: String
+  let onShortcutRecorded: ((String) -> Void)?
   let onClear: (() -> Void)?
 
   var body: some View {

@@ -299,6 +299,12 @@
         "extract_text_from_screen_capture": "Extract text from screen capture",
         "extract_text_from_clipboard": "Extract text from clipboard",
         "translate_input": "Translate input content"
+      },
+      "dialog": {
+        "reset_title": "Reset Shortcuts",
+        "reset_message": "Are you sure you want to reset all shortcuts to their default values?",
+        "reset_confirm": "Reset",
+        "reset_cancel": "Cancel"
       }
     },
     "advanced": {

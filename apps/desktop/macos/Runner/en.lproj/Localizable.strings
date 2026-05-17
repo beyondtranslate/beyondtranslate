@@ -221,6 +221,10 @@
 "settings.providers.item.no_services" = "No services available.";
 "settings.providers.section.services" = "Services";
 "settings.providers.title" = "Providers";
+"settings.shortcuts.dialog.reset_cancel" = "Cancel";
+"settings.shortcuts.dialog.reset_confirm" = "Reset";
+"settings.shortcuts.dialog.reset_message" = "Are you sure you want to reset all shortcuts to their default values?";
+"settings.shortcuts.dialog.reset_title" = "Reset Shortcuts";
 "settings.shortcuts.row.extract_text_from_clipboard" = "Extract text from clipboard";
 "settings.shortcuts.row.extract_text_from_screen_capture" = "Extract text from screen capture";
 "settings.shortcuts.row.extract_text_from_screen_selection" = "Extract text from screen selection";

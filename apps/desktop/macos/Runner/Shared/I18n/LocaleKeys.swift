@@ -367,6 +367,12 @@ enum LocaleKeys {
       static let title = LocaleKey("settings.providers.title")
     }
     enum shortcuts {
+      enum dialog {
+        static let resetCancel = LocaleKey("settings.shortcuts.dialog.reset_cancel")
+        static let resetConfirm = LocaleKey("settings.shortcuts.dialog.reset_confirm")
+        static let resetMessage = LocaleKey("settings.shortcuts.dialog.reset_message")
+        static let resetTitle = LocaleKey("settings.shortcuts.dialog.reset_title")
+      }
       enum row {
         static let extractTextFromClipboard = LocaleKey(
           "settings.shortcuts.row.extract_text_from_clipboard")

@@ -221,6 +221,10 @@
 "settings.providers.item.no_services" = "暂无可用服务。";
 "settings.providers.section.services" = "服务";
 "settings.providers.title" = "提供商";
+"settings.shortcuts.dialog.reset_cancel" = "取消";
+"settings.shortcuts.dialog.reset_confirm" = "重置";
+"settings.shortcuts.dialog.reset_message" = "确定要重置所有快捷键为默认值吗？";
+"settings.shortcuts.dialog.reset_title" = "重置快捷键";
 "settings.shortcuts.row.extract_text_from_clipboard" = "从剪贴板提取文字";
 "settings.shortcuts.row.extract_text_from_screen_capture" = "从屏幕截图提取文字";
 "settings.shortcuts.row.extract_text_from_screen_selection" = "从屏幕选区提取文字";

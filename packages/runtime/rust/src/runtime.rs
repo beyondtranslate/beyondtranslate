@@ -330,6 +330,15 @@ impl RuntimeSettings {
             .map_err(Into::into)
     }
 
+    pub async fn reset_shortcuts(&self) -> Result<ShortcutSettings, RuntimeError> {
+        self.commit_settings(SettingsChange::Shortcuts, |settings| {
+            settings.shortcuts = ShortcutSettings::default();
+            Ok(settings.shortcuts.clone())
+        })
+        .await
+        .map_err(Into::into)
+    }
+
     pub async fn get_advanced(&self) -> Result<AdvancedSettings, RuntimeError> {
         Ok(self.get_section(|s| &s.advanced).await)
     }
@@ -729,6 +738,98 @@ mod tests {
                 assert!(last_updated >= before);
                 assert!(last_updated <= after);
             });
+    }
+
+    #[test]
+    fn update_shortcuts_persists_all_fields_to_settings_file() {
+        let data_dir = unique_data_dir();
+        let settings_file = data_dir.join("settings.json");
+        let runtime =
+            Runtime::new(data_dir.display().to_string()).expect("failed to create runtime");
+
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(async {
+                runtime
+                    .clone()
+                    .settings()
+                    .update_shortcuts(ShortcutSettingsPatch {
+                        toggle_mini_translator: Some("Command+Shift+Space".to_owned()),
+                        extract_text_from_screen_selection: Some("Command+Shift+1".to_owned()),
+                        extract_text_from_screen_capture: Some("Command+Shift+2".to_owned()),
+                        extract_text_from_clipboard: Some("Command+Shift+3".to_owned()),
+                        translate_input_content: Some("Option+Z".to_owned()),
+                    })
+                    .await
+                    .expect("failed to update shortcuts");
+            });
+
+        let saved = std::fs::read_to_string(settings_file).expect("failed to read settings file");
+        let json =
+            serde_json::from_str::<serde_json::Value>(&saved).expect("invalid settings json");
+        assert_eq!(
+            json.pointer("/shortcuts/toggleMiniTranslator").cloned(),
+            Some(serde_json::Value::String("Command+Shift+Space".to_owned()))
+        );
+        assert_eq!(
+            json.pointer("/shortcuts/extractTextFromScreenSelection")
+                .cloned(),
+            Some(serde_json::Value::String("Command+Shift+1".to_owned()))
+        );
+        assert_eq!(
+            json.pointer("/shortcuts/extractTextFromScreenCapture")
+                .cloned(),
+            Some(serde_json::Value::String("Command+Shift+2".to_owned()))
+        );
+        assert_eq!(
+            json.pointer("/shortcuts/extractTextFromClipboard").cloned(),
+            Some(serde_json::Value::String("Command+Shift+3".to_owned()))
+        );
+        assert_eq!(
+            json.pointer("/shortcuts/translateInputContent").cloned(),
+            Some(serde_json::Value::String("Option+Z".to_owned()))
+        );
+    }
+
+    #[test]
+    fn reset_shortcuts_persists_rust_defaults_to_settings_file() {
+        let data_dir = unique_data_dir();
+        let settings_file = data_dir.join("settings.json");
+        let runtime =
+            Runtime::new(data_dir.display().to_string()).expect("failed to create runtime");
+
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(async {
+                runtime
+                    .clone()
+                    .settings()
+                    .update_shortcuts(ShortcutSettingsPatch {
+                        toggle_mini_translator: Some("Command+Shift+Space".to_owned()),
+                        extract_text_from_screen_selection: Some("Command+Shift+1".to_owned()),
+                        extract_text_from_screen_capture: Some("Command+Shift+2".to_owned()),
+                        extract_text_from_clipboard: Some("Command+Shift+3".to_owned()),
+                        translate_input_content: Some("Command+Shift+4".to_owned()),
+                    })
+                    .await
+                    .expect("failed to update shortcuts");
+
+                let reset = runtime
+                    .settings()
+                    .reset_shortcuts()
+                    .await
+                    .expect("failed to reset shortcuts");
+                assert_eq!(reset, ShortcutSettings::default());
+            });
+
+        let saved = std::fs::read_to_string(settings_file).expect("failed to read settings file");
+        let settings =
+            serde_json::from_str::<Settings>(&saved).expect("failed to parse settings file");
+        assert_eq!(settings.shortcuts, ShortcutSettings::default());
     }
 
     #[test]

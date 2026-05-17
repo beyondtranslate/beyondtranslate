@@ -54,7 +54,6 @@
 		A10000000000000000000021 /* Settings+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000021 /* Settings+Extensions.swift */; };
 		A100000000000000000000F /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110000000000000000000F /* ProviderDetailView.swift */; };
 		B6867768A75CBFFF8FFDC94A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */; };
-		F5F222552FB75BFD0025B9D4 /* ShortcutDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222532FB75BFD0025B9D4 /* ShortcutDisplay.swift */; };
 		F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */; };
 		F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */; };
 		F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */; };
@@ -145,7 +144,6 @@
 		A11000000000000000000021 /* Settings+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+Extensions.swift"; sourceTree = "<group>"; };
 		A110000000000000000000F /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
 		AB98A8540C162D94896470E6 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
-		F5F222532FB75BFD0025B9D4 /* ShortcutDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutDisplay.swift; sourceTree = "<group>"; };
 		F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode.swift; sourceTree = "<group>"; };
 		F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeAppearanceController.swift; sourceTree = "<group>"; };
 		F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderEditorSheet.swift; sourceTree = "<group>"; };
@@ -366,7 +364,6 @@
 			children = (
 				8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */,
 				A11000000000000000000021 /* Settings+Extensions.swift */,
-				F5F222532FB75BFD0025B9D4 /* ShortcutDisplay.swift */,
 				F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */,
 			);
 			path = Models;
@@ -675,7 +672,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5F222552FB75BFD0025B9D4 /* ShortcutDisplay.swift in Sources */,
 				F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */,
 				F5F222602FB8ABB40025B9D4 /* ShortcutRecorderView.swift in Sources */,
 				2A0D6A402E0A100100A1B2C3 /* MacSettingsPlugin.swift in Sources */,

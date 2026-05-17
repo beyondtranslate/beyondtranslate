@@ -3,16 +3,16 @@ import Carbon
 import SwiftUI
 
 struct ShortcutRecorderView: View {
-  let shortcut: ShortcutDisplay
-  let onShortcutRecorded: ((ShortcutDisplay) -> Void)?
+  let shortcut: String
+  let onShortcutRecorded: ((String) -> Void)?
   let onClear: (() -> Void)?
 
   @State private var isRecording = false
   @State private var focusRequest = 0
 
   init(
-    shortcut: ShortcutDisplay,
-    onShortcutRecorded: ((ShortcutDisplay) -> Void)? = nil,
+    shortcut: String,
+    onShortcutRecorded: ((String) -> Void)? = nil,
     onClear: (() -> Void)? = nil
   ) {
     self.shortcut = shortcut
@@ -37,10 +37,10 @@ struct ShortcutRecorderView: View {
         .lineLimit(1)
         .truncationMode(.middle)
         .frame(maxWidth: .infinity, alignment: .center)
-        .padding(.horizontal, shortcut.parts.isEmpty ? 8 : 24)
+        .padding(.horizontal, shortcutParts.isEmpty ? 8 : 24)
         .allowsHitTesting(false)
 
-      if !shortcut.parts.isEmpty {
+      if !shortcutParts.isEmpty {
         HStack {
           Spacer(minLength: 0)
           Button(action: clearShortcut) {
@@ -70,14 +70,18 @@ struct ShortcutRecorderView: View {
   }
 
   private var displayText: String {
-    if !shortcut.parts.isEmpty {
-      return ShortcutSymbolFormatter.displayText(for: shortcut)
+    if !shortcutParts.isEmpty {
+      return ShortcutSymbolFormatter.displayText(for: shortcutParts)
     }
     return isRecording ? "Press Shortcut" : "Record Shortcut"
   }
 
+  private var shortcutParts: [String] {
+    ShortcutStringParser.parts(from: shortcut)
+  }
+
   private var textColor: Color {
-    if !shortcut.parts.isEmpty {
+    if !shortcutParts.isEmpty {
       return Color(nsColor: .labelColor)
     }
     return Color(nsColor: .placeholderTextColor)
@@ -105,7 +109,7 @@ private struct ShortcutKeyCaptureView: NSViewRepresentable {
   @Binding var isRecording: Bool
 
   let focusRequest: Int
-  let onShortcutRecorded: (ShortcutDisplay) -> Void
+  let onShortcutRecorded: (String) -> Void
   let onClear: () -> Void
 
   func makeNSView(context: Context) -> ShortcutKeyCaptureNSView {
@@ -152,7 +156,7 @@ private struct ShortcutKeyCaptureView: NSViewRepresentable {
       self.parent = parent
     }
 
-    func record(_ shortcut: ShortcutDisplay) {
+    func record(_ shortcut: String) {
       parent.isRecording = false
       parent.onShortcutRecorded(shortcut)
     }
@@ -175,7 +179,7 @@ private struct ShortcutKeyCaptureView: NSViewRepresentable {
 }
 
 private final class ShortcutKeyCaptureNSView: NSView {
-  var onShortcutRecorded: ((ShortcutDisplay) -> Void)?
+  var onShortcutRecorded: ((String) -> Void)?
   var onClear: (() -> Void)?
   var onCancel: (() -> Void)?
   var onFocusChange: ((Bool) -> Void)?
@@ -211,7 +215,7 @@ private final class ShortcutKeyCaptureNSView: NSView {
     }
 
     guard ShortcutKeyConverter.isRecordable(event),
-      let shortcut = ShortcutKeyConverter.shortcut(from: event)
+      let shortcut = ShortcutKeyConverter.shortcutString(from: event)
     else {
       NSSound.beep()
       return
@@ -297,7 +301,7 @@ private enum ShortcutKeyConverter {
     hasNonShiftModifier(event) || functionKeyNames.keys.contains(Int(event.keyCode))
   }
 
-  static func shortcut(from event: NSEvent) -> ShortcutDisplay? {
+  static func shortcutString(from event: NSEvent) -> String? {
     let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
     var parts: [String] = []
 
@@ -314,7 +318,7 @@ private enum ShortcutKeyConverter {
       return nil
     }
 
-    return ShortcutDisplay(parts: parts)
+    return parts.joined(separator: "+")
   }
 
   private static func hasNonShiftModifier(_ event: NSEvent) -> Bool {
@@ -410,7 +414,16 @@ private enum ShortcutSymbolFormatter {
     "Help": "?⃝",
   ]
 
-  static func displayText(for shortcut: ShortcutDisplay) -> String {
-    shortcut.parts.map { symbols[$0] ?? $0 }.joined()
+  static func displayText(for parts: [String]) -> String {
+    parts.map { symbols[$0] ?? $0 }.joined()
+  }
+}
+
+private enum ShortcutStringParser {
+  static func parts(from shortcut: String) -> [String] {
+    shortcut
+      .split(separator: "+")
+      .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+      .filter { !$0.isEmpty }
   }
 }

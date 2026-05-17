@@ -1,13 +1,14 @@
 import SwiftUI
 import beyondtranslate_runtime
+import os
 
 @MainActor
 final class ShortcutsViewModel: ObservableObject {
-  @Published var toggleMiniTranslator: ShortcutDisplay
-  @Published var extractTextFromScreenSelection: ShortcutDisplay
-  @Published var extractTextFromScreenCapture: ShortcutDisplay
-  @Published var extractTextFromClipboard: ShortcutDisplay
-  @Published var translateInputContent: ShortcutDisplay
+  @Published var toggleMiniTranslator: String
+  @Published var extractTextFromScreenSelection: String
+  @Published var extractTextFromScreenCapture: String
+  @Published var extractTextFromClipboard: String
+  @Published var translateInputContent: String
   @Published var recordingID: String?
 
   var isRecordingToggleMiniTranslator: Bool { recordingID == "toggleMiniTranslator" }
@@ -21,16 +22,20 @@ final class ShortcutsViewModel: ObservableObject {
   var isRecordingTranslateInputContent: Bool { recordingID == "translateInputContent" }
 
   private let repository: SettingsRepository
+  private let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier ?? "BeyondTranslate",
+    category: "ShortcutsSettings"
+  )
 
   init(
     repository: SettingsRepository
   ) {
     self.repository = repository
-    toggleMiniTranslator = ShortcutDisplay(parts: [])
-    extractTextFromScreenSelection = ShortcutDisplay(parts: [])
-    extractTextFromScreenCapture = ShortcutDisplay(parts: [])
-    extractTextFromClipboard = ShortcutDisplay(parts: [])
-    translateInputContent = ShortcutDisplay(parts: ["Option", "Z"])
+    toggleMiniTranslator = ""
+    extractTextFromScreenSelection = ""
+    extractTextFromScreenCapture = ""
+    extractTextFromClipboard = ""
+    translateInputContent = ""
   }
 
   func startRecording(_ id: String) {
@@ -45,101 +50,104 @@ final class ShortcutsViewModel: ObservableObject {
     do {
       apply(try await repository.getShortcuts())
     } catch {
-      // Keep the local preview/default state when the Rust-backed settings cannot be loaded.
+      // Keep the current local state when Rust-backed settings cannot be loaded.
     }
   }
 
-  func setToggleMiniTranslator(_ shortcut: ShortcutDisplay) {
+  func setToggleMiniTranslator(_ shortcut: String) {
     toggleMiniTranslator = shortcut
-    Task {
-      do {
-        let updated = try await repository.updateShortcuts(
-          .diff(toggleMiniTranslator: shortcut.rawValue))
-        apply(updated)
-      } catch {
-        await load()
-      }
-    }
+    saveShortcut(
+      id: "toggleMiniTranslator",
+      patch: .diff(toggleMiniTranslator: shortcut)
+    )
   }
 
   func clearToggleMiniTranslator() {
-    setToggleMiniTranslator(ShortcutDisplay(parts: []))
+    setToggleMiniTranslator("")
   }
 
-  func setExtractTextFromScreenSelection(_ shortcut: ShortcutDisplay) {
+  func setExtractTextFromScreenSelection(_ shortcut: String) {
     extractTextFromScreenSelection = shortcut
-    Task {
-      do {
-        let updated = try await repository.updateShortcuts(
-          .diff(extractTextFromScreenSelection: shortcut.rawValue))
-        apply(updated)
-      } catch {
-        await load()
-      }
-    }
+    saveShortcut(
+      id: "extractTextFromScreenSelection",
+      patch: .diff(extractTextFromScreenSelection: shortcut)
+    )
   }
 
   func clearExtractTextFromScreenSelection() {
-    setExtractTextFromScreenSelection(ShortcutDisplay(parts: []))
+    setExtractTextFromScreenSelection("")
   }
 
-  func setExtractTextFromScreenCapture(_ shortcut: ShortcutDisplay) {
+  func setExtractTextFromScreenCapture(_ shortcut: String) {
     extractTextFromScreenCapture = shortcut
-    Task {
-      do {
-        let updated = try await repository.updateShortcuts(
-          .diff(extractTextFromScreenCapture: shortcut.rawValue))
-        apply(updated)
-      } catch {
-        await load()
-      }
-    }
+    saveShortcut(
+      id: "extractTextFromScreenCapture",
+      patch: .diff(extractTextFromScreenCapture: shortcut)
+    )
   }
 
   func clearExtractTextFromScreenCapture() {
-    setExtractTextFromScreenCapture(ShortcutDisplay(parts: []))
+    setExtractTextFromScreenCapture("")
   }
 
-  func setExtractTextFromClipboard(_ shortcut: ShortcutDisplay) {
+  func setExtractTextFromClipboard(_ shortcut: String) {
     extractTextFromClipboard = shortcut
-    Task {
-      do {
-        let updated = try await repository.updateShortcuts(
-          .diff(extractTextFromClipboard: shortcut.rawValue))
-        apply(updated)
-      } catch {
-        await load()
-      }
-    }
+    saveShortcut(
+      id: "extractTextFromClipboard",
+      patch: .diff(extractTextFromClipboard: shortcut)
+    )
   }
 
   func clearExtractTextFromClipboard() {
-    setExtractTextFromClipboard(ShortcutDisplay(parts: []))
+    setExtractTextFromClipboard("")
   }
 
-  func setTranslateInputContent(_ shortcut: ShortcutDisplay) {
+  func setTranslateInputContent(_ shortcut: String) {
     translateInputContent = shortcut
-    Task {
+    saveShortcut(
+      id: "translateInputContent",
+      patch: .diff(translateInputContent: shortcut)
+    )
+  }
+
+  func clearTranslateInputContent() {
+    setTranslateInputContent("")
+  }
+
+  func resetToDefaultShortcuts() {
+    Task { [weak self] in
+      guard let self else { return }
       do {
-        let updated = try await repository.updateShortcuts(
-          .diff(translateInputContent: shortcut.rawValue))
-        apply(updated)
+        apply(try await repository.resetShortcuts())
       } catch {
+        logger.error(
+          "Failed to reset shortcuts: \(String(describing: error), privacy: .public)"
+        )
         await load()
       }
     }
   }
 
-  func clearTranslateInputContent() {
-    setTranslateInputContent(ShortcutDisplay(parts: []))
+  private func saveShortcut(id: String, patch: ShortcutSettingsPatch) {
+    Task { [weak self] in
+      guard let self else { return }
+      do {
+        let updated = try await repository.updateShortcuts(patch)
+        apply(updated)
+      } catch {
+        logger.error(
+          "Failed to save shortcut \(id, privacy: .public): \(String(describing: error), privacy: .public)"
+        )
+        await load()
+      }
+    }
   }
 
   private func apply(_ settings: ShortcutSettings) {
-    toggleMiniTranslator = ShortcutDisplay(rawValue: settings.toggleMiniTranslator)
-    extractTextFromScreenSelection = ShortcutDisplay(
-      rawValue: settings.extractTextFromScreenSelection)
-    extractTextFromScreenCapture = ShortcutDisplay(rawValue: settings.extractTextFromScreenCapture)
-    extractTextFromClipboard = ShortcutDisplay(rawValue: settings.extractTextFromClipboard)
-    translateInputContent = ShortcutDisplay(rawValue: settings.translateInputContent)
+    toggleMiniTranslator = settings.toggleMiniTranslator
+    extractTextFromScreenSelection = settings.extractTextFromScreenSelection
+    extractTextFromScreenCapture = settings.extractTextFromScreenCapture
+    extractTextFromClipboard = settings.extractTextFromClipboard
+    translateInputContent = settings.translateInputContent
   }
 }

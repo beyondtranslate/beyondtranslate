@@ -9,6 +9,7 @@ protocol SettingsRepository {
   func updateAppearance(_ patch: AppearanceSettingsPatch) async throws -> AppearanceSettings
   func getShortcuts() async throws -> ShortcutSettings
   func updateShortcuts(_ patch: ShortcutSettingsPatch) async throws -> ShortcutSettings
+  func resetShortcuts() async throws -> ShortcutSettings
   func getAdvanced() async throws -> AdvancedSettings
   func updateAdvanced(_ patch: AdvancedSettingsPatch) async throws -> AdvancedSettings
   func generateProviderId(providerType: ProviderType) async throws -> String
@@ -56,6 +57,10 @@ final class DefaultSettingsRepository: SettingsRepository {
 
   func updateShortcuts(_ patch: ShortcutSettingsPatch) async throws -> ShortcutSettings {
     try await settings.updateShortcuts(patch: patch)
+  }
+
+  func resetShortcuts() async throws -> ShortcutSettings {
+    try await settings.resetShortcuts()
   }
 
   func getAdvanced() async throws -> AdvancedSettings {

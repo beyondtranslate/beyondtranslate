@@ -110,6 +110,22 @@ class _MainAppState extends State<MainApp> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    settingsStore.addListener(_onSettingsChanged);
+  }
+
+  @override
+  void dispose() {
+    settingsStore.removeListener(_onSettingsChanged);
+    super.dispose();
+  }
+
+  void _onSettingsChanged() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return RegularWindow(
       controller: mainWindowController,
@@ -149,6 +165,22 @@ class MiniTranslatorApp extends StatefulWidget {
 
 class _MiniTranslatorAppState extends State<MiniTranslatorApp> {
   late final GoRouter _router = createMiniTranslatorAppRouter();
+
+  @override
+  void initState() {
+    super.initState();
+    settingsStore.addListener(_onSettingsChanged);
+  }
+
+  @override
+  void dispose() {
+    settingsStore.removeListener(_onSettingsChanged);
+    super.dispose();
+  }
+
+  void _onSettingsChanged() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {

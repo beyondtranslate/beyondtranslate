@@ -14,40 +14,67 @@ use struct_patch::Patch;
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
 #[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize, uniffi::Record)))]
 pub struct ShortcutSettings {
-    #[serde(default, rename = "toggleMiniTranslator")]
+    #[serde(
+        default = "default_toggle_mini_translator_shortcut",
+        rename = "toggleMiniTranslator"
+    )]
     pub toggle_mini_translator: String,
     #[serde(
-        default,
+        default = "default_extract_text_from_screen_selection_shortcut",
         rename = "extractTextFromScreenSelection",
         alias = "extractFromScreenSelection"
     )]
     pub extract_text_from_screen_selection: String,
     #[serde(
-        default,
+        default = "default_extract_text_from_screen_capture_shortcut",
         rename = "extractTextFromScreenCapture",
         alias = "extractFromScreenCapture"
     )]
     pub extract_text_from_screen_capture: String,
     #[serde(
-        default,
+        default = "default_extract_text_from_clipboard_shortcut",
         rename = "extractTextFromClipboard",
         alias = "extractFromClipboard"
     )]
     pub extract_text_from_clipboard: String,
-    #[serde(default, rename = "translateInputContent")]
+    #[serde(
+        default = "default_translate_input_content_shortcut",
+        rename = "translateInputContent"
+    )]
     pub translate_input_content: String,
 }
 
 impl Default for ShortcutSettings {
     fn default() -> Self {
         Self {
-            toggle_mini_translator: "Option+1".to_owned(),
-            extract_text_from_screen_selection: "Option+Q".to_owned(),
-            extract_text_from_screen_capture: "Option+W".to_owned(),
-            extract_text_from_clipboard: "Option+E".to_owned(),
-            translate_input_content: "Option+Z".to_owned(),
+            toggle_mini_translator: default_toggle_mini_translator_shortcut(),
+            extract_text_from_screen_selection: default_extract_text_from_screen_selection_shortcut(
+            ),
+            extract_text_from_screen_capture: default_extract_text_from_screen_capture_shortcut(),
+            extract_text_from_clipboard: default_extract_text_from_clipboard_shortcut(),
+            translate_input_content: default_translate_input_content_shortcut(),
         }
     }
+}
+
+fn default_toggle_mini_translator_shortcut() -> String {
+    "Option+1".to_owned()
+}
+
+fn default_extract_text_from_screen_selection_shortcut() -> String {
+    "Option+Q".to_owned()
+}
+
+fn default_extract_text_from_screen_capture_shortcut() -> String {
+    "Option+W".to_owned()
+}
+
+fn default_extract_text_from_clipboard_shortcut() -> String {
+    "Option+E".to_owned()
+}
+
+fn default_translate_input_content_shortcut() -> String {
+    "Option+Z".to_owned()
 }
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
@@ -518,6 +545,37 @@ mod tests {
             settings.shortcuts.extract_text_from_clipboard,
             "Command+Shift+3"
         );
+    }
+
+    #[test]
+    fn load_shortcuts_uses_field_defaults_for_missing_keys() {
+        let path = temp_settings_file();
+        fs::create_dir_all(path.parent().unwrap()).expect("failed to create temp dir");
+        fs::write(
+            &path,
+            r#"{
+  "shortcuts": {
+    "toggleMiniTranslator": "Command+Shift+Space"
+  }
+}"#,
+        )
+        .expect("failed to write settings");
+
+        let settings = Settings::load(&path).expect("failed to load settings");
+        assert_eq!(
+            settings.shortcuts.toggle_mini_translator,
+            "Command+Shift+Space"
+        );
+        assert_eq!(
+            settings.shortcuts.extract_text_from_screen_selection,
+            "Option+Q"
+        );
+        assert_eq!(
+            settings.shortcuts.extract_text_from_screen_capture,
+            "Option+W"
+        );
+        assert_eq!(settings.shortcuts.extract_text_from_clipboard, "Option+E");
+        assert_eq!(settings.shortcuts.translate_input_content, "Option+Z");
     }
 
     #[test]

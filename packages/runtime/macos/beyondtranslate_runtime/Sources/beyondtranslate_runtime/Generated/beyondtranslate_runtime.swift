@@ -931,6 +931,8 @@ public protocol RuntimeSettingsProtocol: AnyObject, Sendable {
 
   func listProviders() async throws -> [ProviderConfigEntry]
 
+  func resetShortcuts() async throws -> ShortcutSettings
+
   /**
    * Returns a fresh subscription that starts receiving
    * [`SettingsChange`] events emitted **after** this call. Existing
@@ -1152,6 +1154,23 @@ open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
         completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
         freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
         liftFunc: FfiConverterSequenceTypeProviderConfigEntry.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func resetShortcuts() async throws -> ShortcutSettings {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_reset_shortcuts(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeShortcutSettings_lift,
         errorHandler: FfiConverterTypeRuntimeError_lift
       )
   }
@@ -4995,6 +5014,9 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_providers() != 34940 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_reset_shortcuts() != 46222 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_subscribe() != 44725 {

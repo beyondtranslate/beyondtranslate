@@ -38,7 +38,6 @@ struct AppearanceView: View {
         .pickerStyle(.radioGroup)
       }
     }
-    .preferredColorScheme(viewModel.themeMode.colorScheme)
     .environment(\.locale, Locale(identifier: localization.languageCode))
   }
 

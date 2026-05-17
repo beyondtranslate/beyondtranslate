@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ShortcutsView: View {
   @ObservedObject var viewModel: ShortcutsViewModel
+  @State private var showResetConfirmation = false
 
   var body: some View {
     SettingsPage(title: LocaleKeys.settings.shortcuts.title.tr()) {
@@ -48,6 +49,26 @@ struct ShortcutsView: View {
         )
         .id("translateInputContent")
       }
+    }
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        Button {
+          showResetConfirmation = true
+        } label: {
+          Image(systemName: "arrow.counterclockwise")
+        }
+        .help("Reset to Defaults")
+      }
+    }
+    .alert(
+      LocaleKeys.settings.shortcuts.dialog.resetTitle.tr(), isPresented: $showResetConfirmation
+    ) {
+      Button(LocaleKeys.settings.shortcuts.dialog.resetCancel.tr(), role: .cancel) {}
+      Button(LocaleKeys.settings.shortcuts.dialog.resetConfirm.tr(), role: .destructive) {
+        viewModel.resetToDefaultShortcuts()
+      }
+    } message: {
+      Text(LocaleKeys.settings.shortcuts.dialog.resetMessage.tr())
     }
   }
 }

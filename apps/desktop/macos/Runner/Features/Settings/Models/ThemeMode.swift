@@ -1,4 +1,3 @@
-import AppKit
 import SwiftUI
 
 enum ThemeMode: String, CaseIterable, Identifiable {
@@ -24,14 +23,4 @@ enum ThemeMode: String, CaseIterable, Identifiable {
     }
   }
 
-  var nsAppearance: NSAppearance? {
-    switch self {
-    case .light:
-      return NSAppearance(named: .aqua)
-    case .dark:
-      return NSAppearance(named: .darkAqua)
-    case .system:
-      return nil
-    }
-  }
 }
