@@ -206,12 +206,12 @@ class _SettingsShellPage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: Material(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           onTap: () => _navigateToCategory(context, category),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
                 Icon(icon, size: 20, color: foregroundColor),
@@ -262,7 +262,7 @@ class _SettingsShellPage extends StatelessWidget {
   Widget _buildSidebar(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Container(
-      width: 248,
+      width: 210,
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +270,7 @@ class _SettingsShellPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
             child: Text(
-              t.settings.title,
+              t.settings.layout.title,
               style: textTheme.titleLarge,
             ),
           ),
@@ -300,12 +300,12 @@ class _SettingsShellPage extends StatelessWidget {
                   context,
                   category: _SettingsCategory.providers,
                   icon: FluentIcons.connector_20_regular,
-                  title: 'Providers',
+                  title: t.settings.providers.title,
                 ),
                 _buildSidebarItem(
                   context,
                   category: _SettingsCategory.advanced,
-                  icon: FluentIcons.code_block_20_regular,
+                  icon: FluentIcons.options_20_regular,
                   title: t.settings.advanced.title,
                 ),
               ],
@@ -358,12 +358,12 @@ class _SettingsShellPage extends StatelessWidget {
             context,
             category: _SettingsCategory.providers,
             icon: FluentIcons.connector_20_regular,
-            title: 'Providers',
+            title: t.settings.providers.title,
           ),
           _buildCompactSidebarItem(
             context,
             category: _SettingsCategory.advanced,
-            icon: FluentIcons.code_block_20_regular,
+            icon: FluentIcons.options_20_regular,
             title: t.settings.advanced.title,
           ),
         ],
@@ -374,7 +374,7 @@ class _SettingsShellPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isCompact = constraints.maxWidth < 820;
+        final isCompact = constraints.maxWidth < 720;
         if (isCompact) {
           return Column(
             children: [

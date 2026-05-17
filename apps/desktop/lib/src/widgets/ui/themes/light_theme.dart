@@ -30,26 +30,35 @@ final lightThemeData = ThemeData(
   ),
   textTheme: TextTheme(
     titleLarge: _kDefaultTextStyle.copyWith(
-      fontSize: 18,
+      fontSize: 17,
       fontWeight: FontWeight.w600,
     ),
     titleMedium: _kDefaultTextStyle.copyWith(
-      fontSize: 16,
+      fontSize: 15,
       fontWeight: FontWeight.w600,
     ),
     titleSmall: _kDefaultTextStyle.copyWith(
-      fontSize: 14,
+      fontSize: 13,
       fontWeight: FontWeight.w600,
     ),
     bodyLarge: _kDefaultTextStyle.copyWith(
-      fontSize: 16,
+      fontSize: 15,
     ),
     bodyMedium: _kDefaultTextStyle.copyWith(
-      fontSize: 14,
+      fontSize: 13,
     ),
     bodySmall: _kDefaultTextStyle.copyWith(
       color: _kDefaultTextColor.withValues(alpha: 0.5),
+      fontSize: 11,
+    ),
+    labelLarge: _kDefaultTextStyle.copyWith(
+      fontSize: 13,
+    ),
+    labelMedium: _kDefaultTextStyle.copyWith(
       fontSize: 12,
+    ),
+    labelSmall: _kDefaultTextStyle.copyWith(
+      fontSize: 10,
     ),
   ),
   appBarTheme: AppBarTheme(
@@ -67,7 +76,8 @@ final lightThemeData = ThemeData(
       size: 24,
     ),
     titleTextStyle: _kDefaultTextStyle.copyWith(
-      fontSize: 15,
+      fontSize: 13,
+      fontWeight: FontWeight.w600,
     ),
   ),
 );

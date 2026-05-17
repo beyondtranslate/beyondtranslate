@@ -1,8 +1,13 @@
 import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../i18n/i18n.dart';
+import '../../services/mac_settings.dart';
 import '../../services/settings_store.dart';
-import '../../widgets/ui/preference_list.dart';
+import '../../utils/platform_util.dart';
+import '../../widgets/settings_page.dart';
+import '../../widgets/ui/button.dart';
 import '../../widgets/ui/preference_list_item.dart';
 import '../../widgets/ui/preference_list_section.dart';
 
@@ -41,9 +46,11 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
   // runtime.
   List<_ServiceOption> get _ocrServiceOptions {
     return [
-      const _ServiceOption(id: 'builtin', name: 'Built-in OCR'),
-      const _ServiceOption(id: 'tesseract', name: 'Tesseract'),
-      const _ServiceOption(id: 'youdao', name: 'Youdao OCR'),
+      _ServiceOption(
+          id: 'builtin', name: t.settings.general.option.built_in_ocr),
+      _ServiceOption(
+          id: 'tesseract', name: t.settings.general.option.tesseract),
+      _ServiceOption(id: 'youdao', name: t.settings.general.option.youdao_ocr),
     ];
   }
 
@@ -63,13 +70,17 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PreferenceList(
-      padding: const EdgeInsets.only(top: 16, bottom: 16),
+    final general = t.settings.general;
+    final hasDirectoryServices = _dictionaryServiceOptions.isNotEmpty;
+    final hasTranslationServices = _translationServiceOptions.isNotEmpty;
+
+    return SettingsPage(
+      title: general.title,
       children: [
         PreferenceListSection(
           children: [
             PreferenceListSwitchItem(
-              title: const Text('Launch at login'),
+              title: Text(general.row.launch_at_startup),
               value: _general.launchAtLogin,
               onChanged: (v) async {
                 await settingsStore.updateGeneral(
@@ -78,7 +89,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               },
             ),
             PreferenceListSwitchItem(
-              title: const Text('Show in menu bar'),
+              title: Text(general.row.show_in_menu_bar),
               value: _general.showInMenuBar,
               onChanged: (v) async {
                 await settingsStore.updateGeneral(
@@ -88,11 +99,19 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
             ),
           ],
         ),
+        if (kIsMacOS)
+          PreferenceListSection(
+            title: Text(general.section.permissions),
+            children: [
+              _PermissionAccessRow(title: general.row.screen_capture_access),
+              _PermissionAccessRow(title: general.row.screen_selection_access),
+            ],
+          ),
         PreferenceListSection(
-          title: const Text('Text Recognition'),
+          title: Text(general.section.ocr),
           children: [
             _ServicePickerItem(
-              title: 'Default text recognition service',
+              title: general.row.default_ocr_service,
               options: _ocrServiceOptions,
               value: _providerId(_general.defaultOcrService),
               onChanged: (v) async {
@@ -102,7 +121,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               },
             ),
             PreferenceListSwitchItem(
-              title: const Text('Auto copy detected text'),
+              title: Text(general.row.auto_copy_detected_text),
               value: _general.autoCopyDetectedText,
               onChanged: (v) async {
                 await settingsStore.updateGeneral(
@@ -113,38 +132,52 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
           ],
         ),
         PreferenceListSection(
-          title: const Text('Directory'),
+          title: Text(general.section.directory),
           children: [
-            _ServicePickerItem(
-              title: 'Default directory service',
-              options: _dictionaryServiceOptions,
-              value: _providerId(_general.defaultDirectoryService),
-              emptyLabel: 'No services available',
-              onChanged: (v) async {
-                await settingsStore.updateGeneral(
-                  GeneralSettingsPatch(defaultDirectoryService: _providerId(v)),
-                );
-              },
-            ),
+            if (hasDirectoryServices)
+              _ServicePickerItem(
+                title: general.row.default_directory_service,
+                options: _dictionaryServiceOptions,
+                value: _providerId(_general.defaultDirectoryService),
+                onChanged: (v) async {
+                  await settingsStore.updateGeneral(
+                    GeneralSettingsPatch(
+                      defaultDirectoryService: _providerId(v),
+                    ),
+                  );
+                },
+              )
+            else
+              _ServiceUnavailableItem(
+                title: general.row.default_directory_service,
+                onAddProvider: () => context.go('/settings/providers'),
+              ),
           ],
         ),
         PreferenceListSection(
-          title: const Text('Translation'),
+          title: Text(general.section.translation),
           children: [
-            _ServicePickerItem(
-              title: 'Default translation service',
-              options: _translationServiceOptions,
-              value: _providerId(_general.defaultTranslationService),
-              emptyLabel: 'No services available',
-              onChanged: (v) async {
-                await settingsStore.updateGeneral(
-                  GeneralSettingsPatch(
-                      defaultTranslationService: _providerId(v)),
-                );
-              },
-            ),
+            if (hasTranslationServices)
+              _ServicePickerItem(
+                title: general.row.default_translation_service,
+                options: _translationServiceOptions,
+                value: _providerId(_general.defaultTranslationService),
+                onChanged: (v) async {
+                  await settingsStore.updateGeneral(
+                    GeneralSettingsPatch(
+                      defaultTranslationService: _providerId(v),
+                    ),
+                  );
+                },
+              )
+            else
+              _ServiceUnavailableItem(
+                title: general.row.default_translation_service,
+                onAddProvider: () => context.go('/settings/providers'),
+              ),
             PreferenceListItem(
-              title: const Text('Translation mode'),
+              title: Text(general.row.translation_mode),
+              disabled: !hasTranslationServices,
               detailText: DropdownButton<TranslationMode>(
                 value: _general.translationMode,
                 underline: const SizedBox.shrink(),
@@ -152,21 +185,24 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     .map(
                       (mode) => DropdownMenuItem<TranslationMode>(
                         value: mode,
-                        child: Text(_translationModeTitle(mode)),
+                        child: Text(_translationModeTitle(context, mode)),
                       ),
                     )
                     .toList(),
-                onChanged: (mode) async {
-                  if (mode == null) return;
-                  await settingsStore.updateGeneral(
-                    GeneralSettingsPatch(translationMode: mode),
-                  );
-                },
+                onChanged: hasTranslationServices
+                    ? (mode) async {
+                        if (mode == null) return;
+                        await settingsStore.updateGeneral(
+                          GeneralSettingsPatch(translationMode: mode),
+                        );
+                      }
+                    : null,
               ),
             ),
             PreferenceListSwitchItem(
-              title: const Text('Double click to copy translation result'),
+              title: Text(general.row.double_click_copy_result),
               value: _general.doubleClickCopyResult,
+              disabled: !hasTranslationServices,
               onChanged: (v) async {
                 await settingsStore.updateGeneral(
                   GeneralSettingsPatch(doubleClickCopyResult: v),
@@ -175,9 +211,10 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
             ),
           ],
         ),
-        if (_general.translationMode == TranslationMode.auto)
+        if (hasTranslationServices &&
+            _general.translationMode == TranslationMode.auto)
           PreferenceListSection(
-            title: const Text('Translation Target'),
+            title: Text(general.section.translation_target),
             children: [
               for (final target in _general.translationTargets)
                 PreferenceListItem(
@@ -191,6 +228,10 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                       Text(target.target),
                     ],
                   ),
+                  detailText: TextButton(
+                    onPressed: () {},
+                    child: Text(t.common.button.edit),
+                  ),
                 ),
               if (_general.translationTargets.isEmpty)
                 const PreferenceListItem(
@@ -199,14 +240,21 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
+              PreferenceListItem(
+                title: TextButton(
+                  onPressed: () {},
+                  child: Text(general.button.add_target),
+                ),
+                accessoryView: const SizedBox.shrink(),
+              ),
             ],
           ),
         PreferenceListSection(
-          title: const Text('Input Settings'),
+          title: Text(general.section.input),
           children: [
             for (final mode in InputSubmitMode.values)
               PreferenceListRadioItem<InputSubmitMode>(
-                title: Text(_inputSubmitModeTitle(mode)),
+                title: Text(_inputSubmitModeTitle(context, mode)),
                 value: mode,
                 groupValue: _general.inputSubmitMode,
                 onChanged: (v) async {
@@ -231,21 +279,21 @@ String _providerId(String serviceId) {
   return serviceId;
 }
 
-String _translationModeTitle(TranslationMode mode) {
+String _translationModeTitle(BuildContext context, TranslationMode mode) {
   switch (mode) {
     case TranslationMode.auto:
-      return 'Auto';
+      return t.translation.mode.auto;
     case TranslationMode.manual:
-      return 'Manual';
+      return t.translation.mode.manual;
   }
 }
 
-String _inputSubmitModeTitle(InputSubmitMode mode) {
+String _inputSubmitModeTitle(BuildContext context, InputSubmitMode mode) {
   switch (mode) {
     case InputSubmitMode.enter:
-      return 'Submit with Enter';
+      return t.settings.general.row.submit_with_enter;
     case InputSubmitMode.commandEnter:
-      return 'Submit with Command + Enter';
+      return t.settings.general.row.submit_with_meta_enter_mac;
   }
 }
 
@@ -261,22 +309,20 @@ class _ServicePickerItem extends StatelessWidget {
     required this.options,
     required this.value,
     required this.onChanged,
-    this.emptyLabel,
   });
 
   final String title;
   final List<_ServiceOption> options;
   final String value;
   final ValueChanged<String> onChanged;
-  final String? emptyLabel;
 
   @override
   Widget build(BuildContext context) {
     final isEmpty = options.isEmpty;
     final items = <DropdownMenuItem<String>>[
-      const DropdownMenuItem<String>(
+      DropdownMenuItem<String>(
         value: '',
-        child: Text('None'),
+        child: Text(t.settings.general.option.none),
       ),
       for (final opt in options)
         DropdownMenuItem<String>(
@@ -300,7 +346,7 @@ class _ServicePickerItem extends StatelessWidget {
     return PreferenceListItem(
       title: Text(title),
       detailText: isEmpty
-          ? Text(emptyLabel ?? 'No services available')
+          ? Text(t.settings.general.option.no_services_available)
           : DropdownButton<String>(
               value: hasValue ? value : value,
               underline: const SizedBox.shrink(),
@@ -310,6 +356,51 @@ class _ServicePickerItem extends StatelessWidget {
                 onChanged(v);
               },
             ),
+    );
+  }
+}
+
+class _ServiceUnavailableItem extends StatelessWidget {
+  const _ServiceUnavailableItem({
+    required this.title,
+    required this.onAddProvider,
+  });
+
+  final String title;
+  final VoidCallback onAddProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    return PreferenceListItem(
+      title: Text(title),
+      detailText: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(t.settings.general.option.no_services_available),
+          const SizedBox(width: 8),
+          Button.outlined(
+            onPressed: onAddProvider,
+            child: Text(t.settings.general.button.add_provider),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PermissionAccessRow extends StatelessWidget {
+  const _PermissionAccessRow({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return PreferenceListItem(
+      title: Text(title),
+      detailText: Button.outlined(
+        onPressed: MacSettings.showAndHighlightPermissions,
+        child: Text(t.settings.general.button.grant),
+      ),
     );
   }
 }

@@ -749,24 +749,6 @@ class TranslationsTrayContextMenuEn {
   String get quit => 'Quit';
 }
 
-// Path: tray.context_menu.dev_tools
-class TranslationsTrayContextMenuDevToolsEn {
-  TranslationsTrayContextMenuDevToolsEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Dev Tools'
-  String get title => 'Dev Tools';
-
-  /// en: 'Open Data Directory'
-  String get open_data_directory => 'Open Data Directory';
-
-  /// en: 'Use Native Settings Page'
-  String get use_native_settings => 'Use Native Settings Page';
-}
-
 // Path: mini_translator.update_banner
 class TranslationsMiniTranslatorUpdateBannerEn {
   TranslationsMiniTranslatorUpdateBannerEn.internal(this._root);
@@ -912,6 +894,8 @@ class TranslationsSettingsShortcutsEn {
       TranslationsSettingsShortcutsSectionEn.internal(_root);
   late final TranslationsSettingsShortcutsRowEn row =
       TranslationsSettingsShortcutsRowEn.internal(_root);
+  late final TranslationsSettingsShortcutsDialogEn dialog =
+      TranslationsSettingsShortcutsDialogEn.internal(_root);
 }
 
 // Path: settings.advanced
@@ -987,6 +971,24 @@ class TranslationsShortcutsRecordDialogEn {
 
   /// en: 'Customize your shortcut'
   String get title => 'Customize your shortcut';
+}
+
+// Path: tray.context_menu.dev_tools
+class TranslationsTrayContextMenuDevToolsEn {
+  TranslationsTrayContextMenuDevToolsEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Dev Tools'
+  String get title => 'Dev Tools';
+
+  /// en: 'Open Data Directory'
+  String get open_data_directory => 'Open Data Directory';
+
+  /// en: 'Use Native Settings Page'
+  String get use_native_settings => 'Use Native Settings Page';
 }
 
 // Path: mini_translator.update_banner.button
@@ -1292,6 +1294,28 @@ class TranslationsSettingsShortcutsRowEn {
 
   /// en: 'Translate input content'
   String get translate_input => 'Translate input content';
+}
+
+// Path: settings.shortcuts.dialog
+class TranslationsSettingsShortcutsDialogEn {
+  TranslationsSettingsShortcutsDialogEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Reset Shortcuts'
+  String get reset_title => 'Reset Shortcuts';
+
+  /// en: 'Are you sure you want to reset all shortcuts to their default values?'
+  String get reset_message =>
+      'Are you sure you want to reset all shortcuts to their default values?';
+
+  /// en: 'Reset'
+  String get reset_confirm => 'Reset';
+
+  /// en: 'Cancel'
+  String get reset_cancel => 'Cancel';
 }
 
 // Path: settings.providers.section
@@ -1797,6 +1821,11 @@ extension on Translations {
       'settings.shortcuts.row.extract_text_from_clipboard' =>
         'Extract text from clipboard',
       'settings.shortcuts.row.translate_input' => 'Translate input content',
+      'settings.shortcuts.dialog.reset_title' => 'Reset Shortcuts',
+      'settings.shortcuts.dialog.reset_message' =>
+        'Are you sure you want to reset all shortcuts to their default values?',
+      'settings.shortcuts.dialog.reset_confirm' => 'Reset',
+      'settings.shortcuts.dialog.reset_cancel' => 'Cancel',
       'settings.advanced.title' => 'Advanced',
       'settings.advanced.empty' => 'No advanced settings available.',
       'settings.providers.title' => 'Providers',

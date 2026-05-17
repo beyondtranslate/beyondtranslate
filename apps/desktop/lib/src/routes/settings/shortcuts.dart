@@ -1,8 +1,10 @@
 import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
+import '../../i18n/i18n.dart';
 import '../../services/settings_store.dart';
-import '../../widgets/ui/preference_list.dart';
+import '../../widgets/settings_page.dart';
 import '../../widgets/ui/preference_list_item.dart';
 import '../../widgets/ui/preference_list_section.dart';
 
@@ -36,44 +38,74 @@ class _ShortcutsSettingsPageState extends State<ShortcutsSettingsPage> {
     if (mounted) setState(() {});
   }
 
+  Future<void> _resetToDefaults() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(t.settings.shortcuts.dialog.reset_title),
+        content: Text(t.settings.shortcuts.dialog.reset_message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(t.settings.shortcuts.dialog.reset_cancel),
+          ),
+          FilledButton.tonal(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(t.settings.shortcuts.dialog.reset_confirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await settingsStore.resetShortcuts();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ShortcutSettings shortcuts = settingsStore.shortcuts;
+    final shortcutsText = t.settings.shortcuts;
 
-    return PreferenceList(
-      padding: const EdgeInsets.only(top: 16, bottom: 16),
+    return SettingsPage(
+      title: shortcutsText.title,
+      actions: [
+        IconButton(
+          tooltip: shortcutsText.dialog.reset_title,
+          onPressed: _resetToDefaults,
+          icon: const Icon(FluentIcons.arrow_counterclockwise_20_regular),
+        ),
+      ],
       children: [
         PreferenceListSection(
-          title: const Text('Shortcuts'),
           children: [
             _ShortcutRow(
-              title: 'Toggle Mini Translator',
+              title: shortcutsText.row.toggle_mini_translator,
               shortcut: shortcuts.toggleMiniTranslator,
             ),
           ],
         ),
         PreferenceListSection(
-          title: const Text('Text Extraction'),
+          title: Text(shortcutsText.section.text_extraction),
           children: [
             _ShortcutRow(
-              title: 'Extract text from screen selection',
+              title: shortcutsText.row.extract_text_from_screen_selection,
               shortcut: shortcuts.extractTextFromScreenSelection,
             ),
             _ShortcutRow(
-              title: 'Extract text from screen capture',
+              title: shortcutsText.row.extract_text_from_screen_capture,
               shortcut: shortcuts.extractTextFromScreenCapture,
             ),
             _ShortcutRow(
-              title: 'Extract text from clipboard',
+              title: shortcutsText.row.extract_text_from_clipboard,
               shortcut: shortcuts.extractTextFromClipboard,
             ),
           ],
         ),
         PreferenceListSection(
-          title: const Text('Input Assist Function'),
+          title: Text(shortcutsText.section.input_assist),
           children: [
             _ShortcutRow(
-              title: 'Translate input content',
+              title: shortcutsText.row.translate_input,
               shortcut: shortcuts.translateInputContent,
             ),
           ],

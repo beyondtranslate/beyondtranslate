@@ -28,17 +28,26 @@ import 'settings/index.dart' show GeneralSettingsRoute;
 
 const _kMainAppTitle = 'Beyond Translate';
 const _kMiniTranslatorAppTitle = 'Mini Translator';
+const _kSettingsWindowSize = Size(720, 532);
 
 // ──────────────────────────────────────────────────────────────────────────────
 // Window controllers
 // ──────────────────────────────────────────────────────────────────────────────
 
 final mainWindowController = RegularWindowController(
-  preferredSize: const Size(900, 600),
+  preferredSize: _kSettingsWindowSize,
   title: _kMainAppTitle,
 )..setWillShowHook((window) {
     if (window.isFirstShow) {
       window.titleBarStyle = TitleBarStyle.hidden;
+      window.setMinimumSize(
+        _kSettingsWindowSize.width,
+        _kSettingsWindowSize.height,
+      );
+      window.setSize(
+        _kSettingsWindowSize.width,
+        _kSettingsWindowSize.height,
+      );
       window.center();
     }
     return true;
@@ -365,6 +374,14 @@ class _RootBodyViewState extends State<_RootBodyView> {
             MacSettings.show();
             return;
           }
+          _mainWindow.setMinimumSize(
+            _kSettingsWindowSize.width,
+            _kSettingsWindowSize.height,
+          );
+          _mainWindow.setSize(
+            _kSettingsWindowSize.width,
+            _kSettingsWindowSize.height,
+          );
           _mainWindow.center();
           _mainWindow.show();
         }),

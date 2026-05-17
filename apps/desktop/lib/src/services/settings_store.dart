@@ -192,6 +192,12 @@ class SettingsStore extends ChangeNotifier {
     _shortcuts = await settings.updateShortcuts(patch: patch);
     notifyListeners();
   }
+
+  Future<void> resetShortcuts() async {
+    final settings = runtime_service.runtime.settings();
+    _shortcuts = await settings.resetShortcuts();
+    notifyListeners();
+  }
 }
 
 /// Singleton accessor.

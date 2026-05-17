@@ -1,8 +1,9 @@
 import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:flutter/material.dart';
 
+import '../../i18n/i18n.dart';
 import '../../services/settings_store.dart';
-import '../../widgets/ui/preference_list.dart';
+import '../../widgets/settings_page.dart';
 import '../../widgets/ui/preference_list_item.dart';
 import '../../widgets/ui/preference_list_section.dart';
 
@@ -16,14 +17,14 @@ class AppearanceSettingsPage extends StatefulWidget {
 
 class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
   static const _languageOptions = <_LanguageOption>[
-    _LanguageOption(code: 'en', label: 'English'),
-    _LanguageOption(code: 'zh', label: 'Chinese'),
+    _LanguageOption(code: 'en'),
+    _LanguageOption(code: 'zh'),
   ];
 
   static const _themeModes = <_ThemeOption>[
-    _ThemeOption(value: 'light', label: 'Light'),
-    _ThemeOption(value: 'dark', label: 'Dark'),
-    _ThemeOption(value: 'system', label: 'System'),
+    _ThemeOption(value: 'light'),
+    _ThemeOption(value: 'dark'),
+    _ThemeOption(value: 'system'),
   ];
 
   @override
@@ -46,16 +47,17 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final appearance = settingsStore.appearance;
+    final appearanceText = t.settings.appearance;
 
-    return PreferenceList(
-      padding: const EdgeInsets.only(top: 16, bottom: 16),
+    return SettingsPage(
+      title: appearanceText.title,
       children: [
         PreferenceListSection(
-          title: const Text('Display Language'),
+          title: Text(appearanceText.section.app_language),
           children: [
             for (final option in _languageOptions)
               PreferenceListRadioItem<String>(
-                title: Text(option.label),
+                title: Text(option.title),
                 value: option.code,
                 groupValue: appearance.language,
                 onChanged: (v) async {
@@ -67,11 +69,11 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
           ],
         ),
         PreferenceListSection(
-          title: const Text('Theme Mode'),
+          title: Text(appearanceText.section.theme_mode),
           children: [
             for (final mode in _themeModes)
               PreferenceListRadioItem<String>(
-                title: Text(mode.label),
+                title: Text(mode.title),
                 value: mode.value,
                 groupValue: appearance.themeMode,
                 onChanged: (v) async {
@@ -88,13 +90,35 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
 }
 
 class _LanguageOption {
-  const _LanguageOption({required this.code, required this.label});
+  const _LanguageOption({required this.code});
   final String code;
-  final String label;
+
+  String get title {
+    switch (code) {
+      case 'en':
+        return t.settings.appearance.option.english;
+      case 'zh':
+        return t.settings.appearance.option.chinese;
+      default:
+        return code;
+    }
+  }
 }
 
 class _ThemeOption {
-  const _ThemeOption({required this.value, required this.label});
+  const _ThemeOption({required this.value});
   final String value;
-  final String label;
+
+  String get title {
+    switch (value) {
+      case 'light':
+        return t.theme.mode.light;
+      case 'dark':
+        return t.theme.mode.dark;
+      case 'system':
+        return t.theme.mode.system;
+      default:
+        return value;
+    }
+  }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../i18n/i18n.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
+import '../../widgets/settings_page.dart';
+import '../../widgets/translation_engine_icon/translation_engine_icon.dart';
 import '../../widgets/ui/button.dart';
-import '../../widgets/ui/preference_list.dart';
 import '../../widgets/ui/preference_list_item.dart';
 import '../../widgets/ui/preference_list_section.dart';
 
@@ -80,19 +82,24 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Delete "${entry.id}"?'),
-        content: const Text('This action cannot be undone.'),
+        title: Text(
+          formatTranslation(
+            t.settings.providers.dialog.delete_confirm,
+            args: [entry.id],
+          ),
+        ),
+        content: Text(t.settings.providers.dialog.delete_message),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel'),
+            child: Text(t.common.button.cancel),
           ),
           FilledButton.tonal(
             style: FilledButton.styleFrom(
               foregroundColor: Theme.of(ctx).colorScheme.error,
             ),
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Delete'),
+            child: Text(t.common.button.delete),
           ),
         ],
       ),
@@ -113,9 +120,10 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final providers = settingsStore.providers;
+    final providersText = t.settings.providers;
 
-    return PreferenceList(
-      padding: const EdgeInsets.only(top: 16, bottom: 16),
+    return SettingsPage(
+      title: providersText.title,
       children: [
         PreferenceListSection(
           children: [
@@ -125,14 +133,12 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Choose the translation and dictionary providers used '
-                    'by the app.',
+                    providersText.intro.body,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Providers you add may process the text you send, so '
-                    'only connect services you trust.',
+                    providersText.intro.warning,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -145,21 +151,22 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
         PreferenceListSection(
           children: [
             if (_isLoading)
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else if (providers.isEmpty)
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                child: Text(
-                  'No providers configured. Add one to enable translation '
-                  'services.',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(providersText.item.loading),
+                  ],
                 ),
               )
+            else if (providers.isEmpty)
+              const _EmptyProviderRow()
             else
               for (final provider in providers)
                 _ProviderRow(
@@ -174,7 +181,7 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
                   const Spacer(),
                   Button.outlined(
                     onPressed: () => _openEditor(),
-                    child: const Text('Add a Provider...'),
+                    child: Text(providersText.button.add),
                   ),
                 ],
               ),
@@ -214,8 +221,9 @@ class _ProviderRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PreferenceListItem(
-      title: Text(provider.id),
-      summary: Text(provider.type.name),
+      icon: _ProviderTypeIcon(type: provider.type),
+      title: Text(_providerTypeDisplayName(provider.type)),
+      summary: Text(provider.id),
       detailText: Wrap(
         spacing: 4,
         children: [
@@ -235,10 +243,16 @@ class _ProviderRow extends StatelessWidget {
               break;
           }
         },
-        itemBuilder: (_) => const [
-          PopupMenuItem<String>(value: 'edit', child: Text('Edit')),
-          PopupMenuDivider(),
-          PopupMenuItem<String>(value: 'delete', child: Text('Delete')),
+        itemBuilder: (_) => [
+          PopupMenuItem<String>(
+            value: 'edit',
+            child: Text(t.common.button.edit),
+          ),
+          const PopupMenuDivider(),
+          PopupMenuItem<String>(
+            value: 'delete',
+            child: Text(t.common.button.delete),
+          ),
         ],
       ),
     );
@@ -259,7 +273,7 @@ class _CapabilityTag extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
-        capability.name,
+        _capabilityLabel(capability),
         style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w600,
@@ -267,6 +281,17 @@ class _CapabilityTag extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _capabilityLabel(ProviderCapability capability) {
+    switch (capability) {
+      case ProviderCapability.translation:
+        return t.settings.providers.capability.translation;
+      case ProviderCapability.dictionary:
+        return t.settings.providers.capability.dictionary;
+      case ProviderCapability.ocr:
+        return t.settings.providers.capability.ocr;
+    }
   }
 
   Color _capabilityColor(ProviderCapability capability, ColorScheme scheme) {
@@ -278,6 +303,39 @@ class _CapabilityTag extends StatelessWidget {
       default:
         return scheme.tertiary;
     }
+  }
+}
+
+class _EmptyProviderRow extends StatelessWidget {
+  const _EmptyProviderRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return PreferenceListItem(
+      icon: Icon(
+        Icons.layers_clear_outlined,
+        size: 22,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+      title: Text(
+        t.settings.providers.item.empty,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+      ),
+      accessoryView: const SizedBox.shrink(),
+    );
+  }
+}
+
+class _ProviderTypeIcon extends StatelessWidget {
+  const _ProviderTypeIcon({required this.type});
+
+  final ProviderType type;
+
+  @override
+  Widget build(BuildContext context) {
+    return TranslationEngineIcon(_providerTypeValue(type), size: 22);
   }
 }
 

@@ -674,24 +674,6 @@ class _TranslationsTrayContextMenuZh extends TranslationsTrayContextMenuEn {
   String get quit => '退出';
 }
 
-// Path: tray.context_menu.dev_tools
-class _TranslationsTrayContextMenuDevToolsZh
-    extends TranslationsTrayContextMenuDevToolsEn {
-  _TranslationsTrayContextMenuDevToolsZh._(TranslationsZh root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZh _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => '开发工具';
-  @override
-  String get open_data_directory => '打开数据目录';
-  @override
-  String get use_native_settings => '使用原生设置页面';
-}
-
 // Path: mini_translator.update_banner
 class _TranslationsMiniTranslatorUpdateBannerZh
     extends TranslationsMiniTranslatorUpdateBannerEn {
@@ -861,6 +843,9 @@ class _TranslationsSettingsShortcutsZh extends TranslationsSettingsShortcutsEn {
   @override
   late final _TranslationsSettingsShortcutsRowZh row =
       _TranslationsSettingsShortcutsRowZh._(_root);
+  @override
+  late final _TranslationsSettingsShortcutsDialogZh dialog =
+      _TranslationsSettingsShortcutsDialogZh._(_root);
 }
 
 // Path: settings.advanced
@@ -949,6 +934,24 @@ class _TranslationsShortcutsRecordDialogZh
   // Translations
   @override
   String get title => '自定义快捷键';
+}
+
+// Path: tray.context_menu.dev_tools
+class _TranslationsTrayContextMenuDevToolsZh
+    extends TranslationsTrayContextMenuDevToolsEn {
+  _TranslationsTrayContextMenuDevToolsZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '开发工具';
+  @override
+  String get open_data_directory => '打开数据目录';
+  @override
+  String get use_native_settings => '使用原生设置页面';
 }
 
 // Path: mini_translator.update_banner.button
@@ -1237,6 +1240,26 @@ class _TranslationsSettingsShortcutsRowZh
   String get extract_text_from_clipboard => '从剪贴板提取文字';
   @override
   String get translate_input => '翻译输入内容';
+}
+
+// Path: settings.shortcuts.dialog
+class _TranslationsSettingsShortcutsDialogZh
+    extends TranslationsSettingsShortcutsDialogEn {
+  _TranslationsSettingsShortcutsDialogZh._(TranslationsZh root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZh _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get reset_title => '重置快捷键';
+  @override
+  String get reset_message => '确定要重置所有快捷键为默认值吗？';
+  @override
+  String get reset_confirm => '重置';
+  @override
+  String get reset_cancel => '取消';
 }
 
 // Path: settings.providers.section
@@ -1749,6 +1772,10 @@ extension on TranslationsZh {
       'settings.shortcuts.row.extract_text_from_screen_capture' => '从屏幕截图提取文字',
       'settings.shortcuts.row.extract_text_from_clipboard' => '从剪贴板提取文字',
       'settings.shortcuts.row.translate_input' => '翻译输入内容',
+      'settings.shortcuts.dialog.reset_title' => '重置快捷键',
+      'settings.shortcuts.dialog.reset_message' => '确定要重置所有快捷键为默认值吗？',
+      'settings.shortcuts.dialog.reset_confirm' => '重置',
+      'settings.shortcuts.dialog.reset_cancel' => '取消',
       'settings.advanced.title' => '高级',
       'settings.advanced.empty' => '暂无高级设置。',
       'settings.providers.title' => '提供商',

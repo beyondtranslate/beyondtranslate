@@ -178,6 +178,7 @@ class PreferenceListSwitchItem extends PreferenceListItem {
     Widget? summary,
     Widget? detailText,
     Widget? accessoryView,
+    bool disabled = false,
     VoidCallback? onTap,
     required this.value,
     required this.onChanged,
@@ -188,6 +189,7 @@ class PreferenceListSwitchItem extends PreferenceListItem {
           summary: summary,
           detailText: detailText,
           accessoryView: accessoryView,
+          disabled: disabled,
           onTap: onTap,
         );
   final bool value;
@@ -210,7 +212,7 @@ class PreferenceListSwitchItem extends PreferenceListItem {
         scale: 0.68,
         child: Switch(
           value: value,
-          onChanged: onChanged,
+          onChanged: disabled ? null : onChanged,
           activeTrackColor: Theme.of(context).primaryColor,
         ),
       ),

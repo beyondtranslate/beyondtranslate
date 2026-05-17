@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/ui/preference_list.dart';
+import '../../i18n/i18n.dart';
+import '../../widgets/settings_page.dart';
 import '../../widgets/ui/preference_list_section.dart';
 
 /// Mirrors macOS `AdvancedView.swift`.
@@ -9,15 +10,15 @@ class AdvancedSettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PreferenceList(
-      padding: const EdgeInsets.only(top: 16, bottom: 16),
+    return SettingsPage(
+      title: t.settings.advanced.title,
       children: [
         PreferenceListSection(
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
               child: Text(
-                'No advanced settings available.',
+                t.settings.advanced.empty,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
