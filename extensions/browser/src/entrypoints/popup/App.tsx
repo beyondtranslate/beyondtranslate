@@ -17,7 +17,6 @@ import type {
 } from '@/features/page-translation/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -142,19 +141,17 @@ function App() {
 
   return (
     <main className="w-[340px] bg-background p-4 text-foreground">
-      <Card>
-        <CardHeader className="flex-row items-start justify-between gap-3">
-          <div className="space-y-1">
-            <p className="text-xs font-semibold text-muted-foreground uppercase">
-              Beyond Translate
-            </p>
-            <CardTitle className="text-base">Page Translation</CardTitle>
-          </div>
-          <Badge variant={getStatusBadgeVariant(status.state)}>
-            {status.state}
-          </Badge>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <div className="flex-row items-start justify-between gap-3 mb-4 flex">
+        <div className="space-y-1">
+          <p className="text-xs font-semibold text-muted-foreground uppercase">
+            Beyond Translate
+          </p>
+        </div>
+        <Badge variant={getStatusBadgeVariant(status.state)}>
+          {status.state}
+        </Badge>
+      </div>
+      <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="provider">Provider</Label>
             <select
@@ -248,8 +245,7 @@ function App() {
               {popupState === 'running' ? 'Translating...' : 'Translate'}
             </Button>
           </div>
-        </CardContent>
-      </Card>
+      </div>
     </main>
   );
 }
