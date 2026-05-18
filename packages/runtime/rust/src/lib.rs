@@ -1,6 +1,8 @@
+mod api_server;
 pub mod domain;
 mod remote;
 pub mod runtime;
+pub use api_server::{ApiServerInfo, RuntimeApiServer};
 pub use runtime::{
     Runtime, RuntimeDictionary, RuntimeError, RuntimeOcr, RuntimeSettings, RuntimeTranslation,
     SettingsChange, SettingsSubscription,

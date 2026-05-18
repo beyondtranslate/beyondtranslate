@@ -156,7 +156,14 @@
 "provider.system" = "系统";
 "provider.tencent" = "腾讯";
 "provider.youdao" = "有道";
-"settings.advanced.empty" = "暂无高级设置。";
+"settings.advanced.address" = "地址";
+"settings.advanced.api_server" = "本地 API 服务";
+"settings.advanced.api_server_description" = "在 127.0.0.1 上开放翻译 API，供本机集成使用。";
+"settings.advanced.disabled" = "已关闭";
+"settings.advanced.enable" = "启用";
+"settings.advanced.host" = "主机";
+"settings.advanced.port" = "端口";
+"settings.advanced.running_at" = "运行于 {url}";
 "settings.advanced.title" = "高级";
 "settings.appearance.option.chinese" = "中文";
 "settings.appearance.option.english" = "英文";

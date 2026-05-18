@@ -1,6 +1,10 @@
 use worker::{Env, Request, Response, RouteContext, Router};
 
-use crate::{error::ApiError, handlers, middleware::cors};
+use crate::{
+    error::{ApiError, WorkerApiErrorExt},
+    handlers,
+    middleware::cors,
+};
 
 pub async fn handle(req: Request, env: Env) -> worker::Result<Response> {
     Router::new()

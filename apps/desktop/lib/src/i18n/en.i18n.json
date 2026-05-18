@@ -310,7 +310,14 @@
     },
     "advanced": {
       "title": "Advanced",
-      "empty": "No advanced settings available."
+      "api_server": "Local API server",
+      "api_server_description": "Expose the translation API on 127.0.0.1 for local integrations.",
+      "enable": "Enable",
+      "address": "Address",
+      "host": "Host",
+      "port": "Port",
+      "running_at": "Running at {url}",
+      "disabled": "Disabled"
     },
     "providers": {
       "title": "Providers",

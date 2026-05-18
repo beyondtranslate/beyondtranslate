@@ -909,8 +909,30 @@ class TranslationsSettingsAdvancedEn {
   /// en: 'Advanced'
   String get title => 'Advanced';
 
-  /// en: 'No advanced settings available.'
-  String get empty => 'No advanced settings available.';
+  /// en: 'Local API server'
+  String get api_server => 'Local API server';
+
+  /// en: 'Expose the translation API on 127.0.0.1 for local integrations.'
+  String get api_server_description =>
+      'Expose the translation API on 127.0.0.1 for local integrations.';
+
+  /// en: 'Enable'
+  String get enable => 'Enable';
+
+  /// en: 'Address'
+  String get address => 'Address';
+
+  /// en: 'Host'
+  String get host => 'Host';
+
+  /// en: 'Port'
+  String get port => 'Port';
+
+  /// en: 'Running at {url}'
+  String get running_at => 'Running at {url}';
+
+  /// en: 'Disabled'
+  String get disabled => 'Disabled';
 }
 
 // Path: settings.providers
@@ -1827,7 +1849,15 @@ extension on Translations {
       'settings.shortcuts.dialog.reset_confirm' => 'Reset',
       'settings.shortcuts.dialog.reset_cancel' => 'Cancel',
       'settings.advanced.title' => 'Advanced',
-      'settings.advanced.empty' => 'No advanced settings available.',
+      'settings.advanced.api_server' => 'Local API server',
+      'settings.advanced.api_server_description' =>
+        'Expose the translation API on 127.0.0.1 for local integrations.',
+      'settings.advanced.enable' => 'Enable',
+      'settings.advanced.address' => 'Address',
+      'settings.advanced.host' => 'Host',
+      'settings.advanced.port' => 'Port',
+      'settings.advanced.running_at' => 'Running at {url}',
+      'settings.advanced.disabled' => 'Disabled',
       'settings.providers.title' => 'Providers',
       'settings.providers.section.services' => 'Services',
       'settings.providers.item.empty' =>

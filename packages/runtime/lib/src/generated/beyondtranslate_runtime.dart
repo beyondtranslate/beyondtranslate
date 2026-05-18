@@ -8,8 +8,83 @@ import "dart:isolate";
 import "dart:typed_data";
 import "package:ffi/ffi.dart";
 
+class ApiServerInfo {
+  final String host;
+  final int port;
+  final String baseUrl;
+  ApiServerInfo({
+    required this.host,
+    required this.port,
+    required this.baseUrl,
+  });
+}
+
+class FfiConverterApiServerInfo {
+  static ApiServerInfo lift(RustBuffer buf) {
+    return FfiConverterApiServerInfo.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<ApiServerInfo> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final host_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final host = host_lifted.value;
+    new_offset += host_lifted.bytesRead;
+    final port_lifted =
+        FfiConverterUInt16.read(Uint8List.view(buf.buffer, new_offset));
+    final port = port_lifted.value;
+    new_offset += port_lifted.bytesRead;
+    final baseUrl_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final baseUrl = baseUrl_lifted.value;
+    new_offset += baseUrl_lifted.bytesRead;
+    return LiftRetVal(
+        ApiServerInfo(
+          host: host,
+          port: port,
+          baseUrl: baseUrl,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(ApiServerInfo value) {
+    final total_length = FfiConverterString.allocationSize(value.host) +
+        FfiConverterUInt16.allocationSize(value.port) +
+        FfiConverterString.allocationSize(value.baseUrl) +
+        0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(ApiServerInfo value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterString.write(
+        value.host, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterUInt16.write(
+        value.port, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterString.write(
+        value.baseUrl, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(ApiServerInfo value) {
+    return FfiConverterString.allocationSize(value.host) +
+        FfiConverterUInt16.allocationSize(value.port) +
+        FfiConverterString.allocationSize(value.baseUrl) +
+        0;
+  }
+}
+
 class AdvancedSettings {
-  AdvancedSettings();
+  final bool apiServerEnabled;
+  final String apiServerHost;
+  final int apiServerPort;
+  AdvancedSettings({
+    required this.apiServerEnabled,
+    required this.apiServerHost,
+    required this.apiServerPort,
+  });
 }
 
 class FfiConverterAdvancedSettings {
@@ -19,11 +94,33 @@ class FfiConverterAdvancedSettings {
 
   static LiftRetVal<AdvancedSettings> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
-    return LiftRetVal(AdvancedSettings(), new_offset - buf.offsetInBytes);
+    final apiServerEnabled_lifted =
+        FfiConverterBool.read(Uint8List.view(buf.buffer, new_offset));
+    final apiServerEnabled = apiServerEnabled_lifted.value;
+    new_offset += apiServerEnabled_lifted.bytesRead;
+    final apiServerHost_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final apiServerHost = apiServerHost_lifted.value;
+    new_offset += apiServerHost_lifted.bytesRead;
+    final apiServerPort_lifted =
+        FfiConverterUInt16.read(Uint8List.view(buf.buffer, new_offset));
+    final apiServerPort = apiServerPort_lifted.value;
+    new_offset += apiServerPort_lifted.bytesRead;
+    return LiftRetVal(
+        AdvancedSettings(
+          apiServerEnabled: apiServerEnabled,
+          apiServerHost: apiServerHost,
+          apiServerPort: apiServerPort,
+        ),
+        new_offset - buf.offsetInBytes);
   }
 
   static RustBuffer lower(AdvancedSettings value) {
-    final total_length = 0;
+    final total_length =
+        FfiConverterBool.allocationSize(value.apiServerEnabled) +
+            FfiConverterString.allocationSize(value.apiServerHost) +
+            FfiConverterUInt16.allocationSize(value.apiServerPort) +
+            0;
     final buf = Uint8List(total_length);
     write(value, buf);
     return toRustBuffer(buf);
@@ -31,16 +128,32 @@ class FfiConverterAdvancedSettings {
 
   static int write(AdvancedSettings value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterBool.write(
+        value.apiServerEnabled, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterString.write(
+        value.apiServerHost, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterUInt16.write(
+        value.apiServerPort, Uint8List.view(buf.buffer, new_offset));
     return new_offset - buf.offsetInBytes;
   }
 
   static int allocationSize(AdvancedSettings value) {
-    return 0;
+    return FfiConverterBool.allocationSize(value.apiServerEnabled) +
+        FfiConverterString.allocationSize(value.apiServerHost) +
+        FfiConverterUInt16.allocationSize(value.apiServerPort) +
+        0;
   }
 }
 
 class AdvancedSettingsPatch {
-  AdvancedSettingsPatch();
+  final bool? apiServerEnabled;
+  final String? apiServerHost;
+  final int? apiServerPort;
+  AdvancedSettingsPatch({
+    this.apiServerEnabled,
+    this.apiServerHost,
+    this.apiServerPort,
+  });
 }
 
 class FfiConverterAdvancedSettingsPatch {
@@ -50,11 +163,33 @@ class FfiConverterAdvancedSettingsPatch {
 
   static LiftRetVal<AdvancedSettingsPatch> read(Uint8List buf) {
     int new_offset = buf.offsetInBytes;
-    return LiftRetVal(AdvancedSettingsPatch(), new_offset - buf.offsetInBytes);
+    final apiServerEnabled_lifted =
+        FfiConverterOptionalBool.read(Uint8List.view(buf.buffer, new_offset));
+    final apiServerEnabled = apiServerEnabled_lifted.value;
+    new_offset += apiServerEnabled_lifted.bytesRead;
+    final apiServerHost_lifted =
+        FfiConverterOptionalString.read(Uint8List.view(buf.buffer, new_offset));
+    final apiServerHost = apiServerHost_lifted.value;
+    new_offset += apiServerHost_lifted.bytesRead;
+    final apiServerPort_lifted =
+        FfiConverterOptionalUInt16.read(Uint8List.view(buf.buffer, new_offset));
+    final apiServerPort = apiServerPort_lifted.value;
+    new_offset += apiServerPort_lifted.bytesRead;
+    return LiftRetVal(
+        AdvancedSettingsPatch(
+          apiServerEnabled: apiServerEnabled,
+          apiServerHost: apiServerHost,
+          apiServerPort: apiServerPort,
+        ),
+        new_offset - buf.offsetInBytes);
   }
 
   static RustBuffer lower(AdvancedSettingsPatch value) {
-    final total_length = 0;
+    final total_length =
+        FfiConverterOptionalBool.allocationSize(value.apiServerEnabled) +
+            FfiConverterOptionalString.allocationSize(value.apiServerHost) +
+            FfiConverterOptionalUInt16.allocationSize(value.apiServerPort) +
+            0;
     final buf = Uint8List(total_length);
     write(value, buf);
     return toRustBuffer(buf);
@@ -62,11 +197,20 @@ class FfiConverterAdvancedSettingsPatch {
 
   static int write(AdvancedSettingsPatch value, Uint8List buf) {
     int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterOptionalBool.write(
+        value.apiServerEnabled, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalString.write(
+        value.apiServerHost, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalUInt16.write(
+        value.apiServerPort, Uint8List.view(buf.buffer, new_offset));
     return new_offset - buf.offsetInBytes;
   }
 
   static int allocationSize(AdvancedSettingsPatch value) {
-    return 0;
+    return FfiConverterOptionalBool.allocationSize(value.apiServerEnabled) +
+        FfiConverterOptionalString.allocationSize(value.apiServerHost) +
+        FfiConverterOptionalUInt16.allocationSize(value.apiServerPort) +
+        0;
   }
 }
 
@@ -2561,6 +2705,72 @@ class FfiConverterSettingsChange {
   }
 }
 
+abstract class RuntimeApiServerInterface {
+  ApiServerInfo info();
+  void stop();
+}
+
+final _RuntimeApiServerFinalizer = Finalizer<Pointer<Void>>((ptr) {
+  rustCall((status) =>
+      uniffi_beyondtranslate_runtime_fn_free_runtimeapiserver(ptr, status));
+});
+
+class RuntimeApiServer implements RuntimeApiServerInterface {
+  late final Pointer<Void> _ptr;
+  RuntimeApiServer._(this._ptr) {
+    _RuntimeApiServerFinalizer.attach(this, _ptr, detach: this);
+  }
+  factory RuntimeApiServer.lift(Pointer<Void> ptr) {
+    return RuntimeApiServer._(ptr);
+  }
+  static Pointer<Void> lower(RuntimeApiServer value) {
+    return value.uniffiClonePointer();
+  }
+
+  Pointer<Void> uniffiClonePointer() {
+    return rustCall((status) =>
+        uniffi_beyondtranslate_runtime_fn_clone_runtimeapiserver(_ptr, status));
+  }
+
+  static int allocationSize(RuntimeApiServer value) {
+    return 8;
+  }
+
+  static LiftRetVal<RuntimeApiServer> read(Uint8List buf) {
+    final handle = buf.buffer.asByteData(buf.offsetInBytes).getInt64(0);
+    final pointer = Pointer<Void>.fromAddress(handle);
+    return LiftRetVal(RuntimeApiServer.lift(pointer), 8);
+  }
+
+  static int write(RuntimeApiServer value, Uint8List buf) {
+    final handle = lower(value);
+    buf.buffer.asByteData(buf.offsetInBytes).setInt64(0, handle.address);
+    return 8;
+  }
+
+  void dispose() {
+    _RuntimeApiServerFinalizer.detach(this);
+    rustCall((status) =>
+        uniffi_beyondtranslate_runtime_fn_free_runtimeapiserver(_ptr, status));
+  }
+
+  ApiServerInfo info() {
+    return rustCallWithLifter(
+        (status) =>
+            uniffi_beyondtranslate_runtime_fn_method_runtimeapiserver_info(
+                uniffiClonePointer(), status),
+        FfiConverterApiServerInfo.lift,
+        null);
+  }
+
+  void stop() {
+    return rustCall((status) {
+      uniffi_beyondtranslate_runtime_fn_method_runtimeapiserver_stop(
+          uniffiClonePointer(), status);
+    }, null);
+  }
+}
+
 abstract class RuntimeInterface {
   RuntimeDictionary dictionary({
     required String providerId,
@@ -2569,6 +2779,10 @@ abstract class RuntimeInterface {
     required String providerId,
   });
   RuntimeSettings settings();
+  RuntimeApiServer startApiServer({
+    required String host,
+    required int port,
+  });
   RuntimeTranslation translation({
     required String providerId,
   });
@@ -2653,6 +2867,21 @@ class Runtime implements RuntimeInterface {
             uniffiClonePointer(), status),
         RuntimeSettings.lift,
         null);
+  }
+
+  RuntimeApiServer startApiServer({
+    required String host,
+    required int port,
+  }) {
+    return rustCallWithLifter(
+        (status) =>
+            uniffi_beyondtranslate_runtime_fn_method_runtime_start_api_server(
+                uniffiClonePointer(),
+                FfiConverterString.lower(host),
+                FfiConverterUInt16.lower(port),
+                status),
+        RuntimeApiServer.lift,
+        runtimeExceptionErrorHandler);
   }
 
   RuntimeTranslation translation({
@@ -4873,6 +5102,53 @@ class FfiConverterOptionalTranslationMode {
   }
 }
 
+class FfiConverterOptionalUInt16 {
+  static int? lift(RustBuffer buf) {
+    return FfiConverterOptionalUInt16.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<int?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterUInt16.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<int?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([int? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterUInt16.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(int? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length = FfiConverterOptionalUInt16.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalUInt16.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(int? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterUInt16.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
 class FfiConverterOptionalUInt64 {
   static int? lift(RustBuffer buf) {
     return FfiConverterOptionalUInt64.read(buf.asUint8List()).value;
@@ -5176,6 +5452,29 @@ class FfiConverterString {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, list.length);
     buf.setAll(4, list);
     return list.length + 4;
+  }
+}
+
+class FfiConverterUInt16 {
+  static int lift(int value) => value;
+  static LiftRetVal<int> read(Uint8List buf) {
+    return LiftRetVal(buf.buffer.asByteData(buf.offsetInBytes).getUint16(0), 2);
+  }
+
+  static int lower(int value) {
+    if (value < 0 || value > 65535) {
+      throw ArgumentError("Value out of range for u16: " + value.toString());
+    }
+    return value;
+  }
+
+  static int allocationSize([int value = 0]) {
+    return 2;
+  }
+
+  static int write(int value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setUint16(0, lower(value));
+    return 2;
   }
 }
 
@@ -5551,6 +5850,27 @@ String version() {
 
 @Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
+external Pointer<Void> uniffi_beyondtranslate_runtime_fn_clone_runtimeapiserver(
+    Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Void Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external void uniffi_beyondtranslate_runtime_fn_free_runtimeapiserver(
+    Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<RustBuffer Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external RustBuffer
+    uniffi_beyondtranslate_runtime_fn_method_runtimeapiserver_info(
+        Pointer<Void> ptr, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Void Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external void uniffi_beyondtranslate_runtime_fn_method_runtimeapiserver_stop(
+    Pointer<Void> ptr, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
 external Pointer<Void> uniffi_beyondtranslate_runtime_fn_clone_runtime(
     Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
 
@@ -5587,6 +5907,16 @@ external Pointer<Void> uniffi_beyondtranslate_runtime_fn_method_runtime_ocr(
 external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtime_settings(
         Pointer<Void> ptr, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    Pointer<Void> Function(Pointer<Void>, RustBuffer, Uint16,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtime_start_api_server(
+        Pointer<Void> ptr,
+        RustBuffer host,
+        int port,
+        Pointer<RustCallStatus> uniffiStatus);
 
 @Native<
     Pointer<Void> Function(Pointer<Void>, RustBuffer,
@@ -6271,6 +6601,14 @@ external int uniffi_beyondtranslate_runtime_checksum_func_version();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimeapiserver_info();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimeapiserver_stop();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
     uniffi_beyondtranslate_runtime_checksum_method_runtime_dictionary();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -6278,6 +6616,10 @@ external int uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_checksum_method_runtime_settings();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtime_start_api_server();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
@@ -6466,6 +6808,14 @@ void _checkApiChecksums() {
   if (uniffi_beyondtranslate_runtime_checksum_func_version() != 42317) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimeapiserver_info() !=
+      36460) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimeapiserver_stop() !=
+      63804) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtime_dictionary() !=
       13965) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
@@ -6475,6 +6825,10 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtime_settings() !=
       37764) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtime_start_api_server() !=
+      26599) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtime_translation() !=

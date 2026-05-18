@@ -860,7 +860,21 @@ class _TranslationsSettingsAdvancedZh extends TranslationsSettingsAdvancedEn {
   @override
   String get title => '高级';
   @override
-  String get empty => '暂无高级设置。';
+  String get api_server => '本地 API 服务';
+  @override
+  String get api_server_description => '在 127.0.0.1 上开放翻译 API，供本机集成使用。';
+  @override
+  String get enable => '启用';
+  @override
+  String get address => '地址';
+  @override
+  String get host => '主机';
+  @override
+  String get port => '端口';
+  @override
+  String get running_at => '运行于 {url}';
+  @override
+  String get disabled => '已关闭';
 }
 
 // Path: settings.providers
@@ -1777,7 +1791,15 @@ extension on TranslationsZh {
       'settings.shortcuts.dialog.reset_confirm' => '重置',
       'settings.shortcuts.dialog.reset_cancel' => '取消',
       'settings.advanced.title' => '高级',
-      'settings.advanced.empty' => '暂无高级设置。',
+      'settings.advanced.api_server' => '本地 API 服务',
+      'settings.advanced.api_server_description' =>
+        '在 127.0.0.1 上开放翻译 API，供本机集成使用。',
+      'settings.advanced.enable' => '启用',
+      'settings.advanced.address' => '地址',
+      'settings.advanced.host' => '主机',
+      'settings.advanced.port' => '端口',
+      'settings.advanced.running_at' => '运行于 {url}',
+      'settings.advanced.disabled' => '已关闭',
       'settings.providers.title' => '提供商',
       'settings.providers.section.services' => '服务',
       'settings.providers.item.empty' => '暂无已配置的提供商。添加一个提供商以启用翻译服务。',

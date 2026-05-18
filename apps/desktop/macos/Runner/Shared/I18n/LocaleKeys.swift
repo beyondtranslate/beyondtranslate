@@ -242,7 +242,14 @@ enum LocaleKeys {
   }
   enum settings {
     enum advanced {
-      static let empty = LocaleKey("settings.advanced.empty")
+      static let address = LocaleKey("settings.advanced.address")
+      static let apiServer = LocaleKey("settings.advanced.api_server")
+      static let apiServerDescription = LocaleKey("settings.advanced.api_server_description")
+      static let disabled = LocaleKey("settings.advanced.disabled")
+      static let enable = LocaleKey("settings.advanced.enable")
+      static let host = LocaleKey("settings.advanced.host")
+      static let port = LocaleKey("settings.advanced.port")
+      static let runningAt = LocaleKey("settings.advanced.running_at")
       static let title = LocaleKey("settings.advanced.title")
     }
     enum appearance {

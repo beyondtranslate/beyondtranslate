@@ -1,0 +1,11 @@
+[package]
+name = "beyondtranslate-api-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+beyondtranslate-core = { path = "../core" }
+beyondtranslate-engine = { path = "../engine" }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+serde_yaml.workspace = true

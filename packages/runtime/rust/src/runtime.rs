@@ -6,8 +6,8 @@ use std::thread;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use beyondtranslate_core::{
-    LookUpRequest, LookUpResponse, RecognizeTextRequest, RecognizeTextResponse, TranslateRequest,
-    TranslateResponse,
+    DetectLanguageRequest, DetectLanguageResponse, LanguagePair, LookUpRequest, LookUpResponse,
+    RecognizeTextRequest, RecognizeTextResponse, TranslateRequest, TranslateResponse,
 };
 use struct_patch::Patch as ApplyPatch;
 use tokio::sync::{broadcast, Mutex as AsyncMutex, RwLock};
@@ -18,6 +18,7 @@ use crate::domain::settings::{
     AppearanceSettingsPatch, GeneralSettings, GeneralSettingsPatch, ProviderConfigEntry, Settings,
     ShortcutSettings, ShortcutSettingsPatch,
 };
+use crate::RuntimeApiServer;
 
 /// Error type returned by all uniffi-exported Runtime methods.
 #[derive(Debug, thiserror::Error, uniffi::Error)]
@@ -218,6 +219,77 @@ impl Runtime {
             runtime: (*self).clone(),
             provider_id,
         }))
+    }
+
+    pub fn start_api_server(
+        self: Arc<Self>,
+        host: String,
+        port: u16,
+    ) -> Result<Arc<RuntimeApiServer>, RuntimeError> {
+        RuntimeApiServer::start((*self).clone(), host, port)
+    }
+}
+
+impl Runtime {
+    pub(crate) async fn api_translate(
+        &self,
+        provider_id: String,
+        request: TranslateRequest,
+    ) -> Result<TranslateResponse, beyondtranslate_api_core::ApiError> {
+        let request = beyondtranslate_api_core::translate_request(request)?;
+        let state = self.inner.state.read().await;
+        let service = state
+            .engine
+            .translation(&provider_id)
+            .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?;
+
+        service.translate(request).await.map_err(Into::into)
+    }
+
+    pub(crate) async fn api_detect_language(
+        &self,
+        provider_id: String,
+        request: DetectLanguageRequest,
+    ) -> Result<DetectLanguageResponse, beyondtranslate_api_core::ApiError> {
+        let request = beyondtranslate_api_core::detect_language_request(request)?;
+        let state = self.inner.state.read().await;
+        let service = state
+            .engine
+            .translation(&provider_id)
+            .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?;
+
+        service.detect_language(request).await.map_err(Into::into)
+    }
+
+    pub(crate) async fn api_supported_language_pairs(
+        &self,
+        provider_id: String,
+    ) -> Result<Vec<LanguagePair>, beyondtranslate_api_core::ApiError> {
+        let state = self.inner.state.read().await;
+        let service = state
+            .engine
+            .translation(&provider_id)
+            .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?;
+
+        service
+            .get_supported_language_pairs()
+            .await
+            .map_err(Into::into)
+    }
+
+    pub(crate) async fn api_lookup(
+        &self,
+        provider_id: String,
+        request: LookUpRequest,
+    ) -> Result<LookUpResponse, beyondtranslate_api_core::ApiError> {
+        let request = beyondtranslate_api_core::lookup_request(request)?;
+        let state = self.inner.state.read().await;
+        let service = state
+            .engine
+            .dictionary(&provider_id)
+            .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?;
+
+        service.look_up(request).await.map_err(Into::into)
     }
 }
 

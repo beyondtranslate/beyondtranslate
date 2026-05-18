@@ -55,11 +55,17 @@ class SettingsStore extends ChangeNotifier {
     extractTextFromClipboard: '',
     translateInputContent: '',
   );
+  AdvancedSettings _advanced = AdvancedSettings(
+    apiServerEnabled: false,
+    apiServerHost: '127.0.0.1',
+    apiServerPort: 0,
+  );
   List<ProviderConfigEntry> _providers = const [];
 
   GeneralSettings get general => _general;
   AppearanceSettings get appearance => _appearance;
   ShortcutSettings get shortcuts => _shortcuts;
+  AdvancedSettings get advanced => _advanced;
   List<ProviderConfigEntry> get providers => List.unmodifiable(_providers);
 
   String get appLanguage => _appearance.language;
@@ -87,6 +93,7 @@ class SettingsStore extends ChangeNotifier {
       reloadGeneral(),
       reloadAppearance(),
       reloadShortcuts(),
+      reloadAdvanced(),
       reloadProviders(),
     ]);
     _startListeningForChanges();
@@ -127,9 +134,7 @@ class SettingsStore extends ChangeNotifier {
         case SettingsChange.providers:
           await reloadProviders();
         case SettingsChange.advanced:
-          // No advanced cache to refresh yet; emit a notification so
-          // anything listening directly on the store still wakes up.
-          notifyListeners();
+          await reloadAdvanced();
       }
     }
   }
@@ -168,6 +173,17 @@ class SettingsStore extends ChangeNotifier {
     } catch (_) {}
   }
 
+  Future<void> reloadAdvanced() async {
+    final settings = runtime_service.runtime.settings();
+    try {
+      _advanced = await settings.getAdvanced();
+      await runtime_service.applyApiServerSettings(_advanced);
+      notifyListeners();
+    } catch (error, stackTrace) {
+      debugPrint('Failed to reload advanced settings: $error\n$stackTrace');
+    }
+  }
+
   Future<void> updateGeneral(GeneralSettingsPatch patch) async {
     final settings = runtime_service.runtime.settings();
     _general = await settings.updateGeneral(patch: patch);
@@ -196,6 +212,13 @@ class SettingsStore extends ChangeNotifier {
   Future<void> resetShortcuts() async {
     final settings = runtime_service.runtime.settings();
     _shortcuts = await settings.resetShortcuts();
+    notifyListeners();
+  }
+
+  Future<void> updateAdvanced(AdvancedSettingsPatch patch) async {
+    final settings = runtime_service.runtime.settings();
+    _advanced = await settings.updateAdvanced(patch: patch);
+    await runtime_service.applyApiServerSettings(_advanced);
     notifyListeners();
   }
 }

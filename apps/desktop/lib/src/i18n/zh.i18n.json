@@ -310,7 +310,14 @@
     },
     "advanced": {
       "title": "高级",
-      "empty": "暂无高级设置。"
+      "api_server": "本地 API 服务",
+      "api_server_description": "在 127.0.0.1 上开放翻译 API，供本机集成使用。",
+      "enable": "启用",
+      "address": "地址",
+      "host": "主机",
+      "port": "端口",
+      "running_at": "运行于 {url}",
+      "disabled": "已关闭"
     },
     "providers": {
       "title": "提供商",

@@ -422,6 +422,22 @@ private final class UniffiHandleMap<T>: @unchecked Sendable {
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
+private struct FfiConverterUInt16: FfiConverterPrimitive {
+  typealias FfiType = UInt16
+  typealias SwiftType = UInt16
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt16 {
+    return try lift(readInt(&buf))
+  }
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
 private struct FfiConverterInt32: FfiConverterPrimitive {
   typealias FfiType = Int32
   typealias SwiftType = Int32
@@ -540,6 +556,8 @@ public protocol RuntimeProtocol: AnyObject, Sendable {
 
   func settings() -> RuntimeSettings
 
+  func startApiServer(host: String, port: UInt16) throws -> RuntimeApiServer
+
   func translation(providerId: String) throws -> RuntimeTranslation
 
 }
@@ -630,6 +648,17 @@ open class Runtime: RuntimeProtocol, @unchecked Sendable {
       })
   }
 
+  open func startApiServer(host: String, port: UInt16) throws -> RuntimeApiServer {
+    return try FfiConverterTypeRuntimeApiServer_lift(
+      try rustCallWithError(FfiConverterTypeRuntimeError_lift) {
+        uniffi_beyondtranslate_runtime_fn_method_runtime_start_api_server(
+          self.uniffiCloneHandle(),
+          FfiConverterString.lower(host),
+          FfiConverterUInt16.lower(port), $0
+        )
+      })
+  }
+
   open func translation(providerId: String) throws -> RuntimeTranslation {
     return try FfiConverterTypeRuntimeTranslation_lift(
       try rustCallWithError(FfiConverterTypeRuntimeError_lift) {
@@ -679,6 +708,125 @@ public func FfiConverterTypeRuntime_lift(_ handle: UInt64) throws -> Runtime {
 #endif
 public func FfiConverterTypeRuntime_lower(_ value: Runtime) -> UInt64 {
   return FfiConverterTypeRuntime.lower(value)
+}
+
+public protocol RuntimeApiServerProtocol: AnyObject, Sendable {
+
+  func info() -> ApiServerInfo
+
+  func stop()
+
+}
+open class RuntimeApiServer: RuntimeApiServerProtocol, @unchecked Sendable {
+  fileprivate let handle: UInt64
+
+  /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public struct NoHandle {
+    public init() {}
+  }
+
+  // TODO: We'd like this to be `private` but for Swifty reasons,
+  // we can't implement `FfiConverter` without making this `required` and we can't
+  // make it `required` without making it `public`.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  required public init(unsafeFromHandle handle: UInt64) {
+    self.handle = handle
+  }
+
+  // This constructor can be used to instantiate a fake object.
+  // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+  //
+  // - Warning:
+  //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public init(noHandle: NoHandle) {
+    self.handle = 0
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public func uniffiCloneHandle() -> UInt64 {
+    return try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_clone_runtimeapiserver(self.handle, $0)
+    }
+  }
+  // No primary constructor declared for this class.
+
+  deinit {
+    if handle == 0 {
+      // Mock objects have handle=0 don't try to free them
+      return
+    }
+
+    try! rustCall { uniffi_beyondtranslate_runtime_fn_free_runtimeapiserver(handle, $0) }
+  }
+
+  open func info() -> ApiServerInfo {
+    return try! FfiConverterTypeApiServerInfo_lift(
+      try! rustCall {
+        uniffi_beyondtranslate_runtime_fn_method_runtimeapiserver_info(
+          self.uniffiCloneHandle(), $0
+        )
+      })
+  }
+
+  open func stop() {
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_method_runtimeapiserver_stop(
+        self.uniffiCloneHandle(), $0
+      )
+    }
+  }
+
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRuntimeApiServer: FfiConverter {
+  typealias FfiType = UInt64
+  typealias SwiftType = RuntimeApiServer
+
+  public static func lift(_ handle: UInt64) throws -> RuntimeApiServer {
+    return RuntimeApiServer(unsafeFromHandle: handle)
+  }
+
+  public static func lower(_ value: RuntimeApiServer) -> UInt64 {
+    return value.uniffiCloneHandle()
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> RuntimeApiServer
+  {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  public static func write(_ value: RuntimeApiServer, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeApiServer_lift(_ handle: UInt64) throws -> RuntimeApiServer {
+  return try FfiConverterTypeRuntimeApiServer.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeApiServer_lower(_ value: RuntimeApiServer) -> UInt64 {
+  return FfiConverterTypeRuntimeApiServer.lower(value)
 }
 
 public protocol RuntimeDictionaryProtocol: AnyObject, Sendable {
@@ -1592,10 +1740,16 @@ public func FfiConverterTypeSettingsSubscription_lower(_ value: SettingsSubscrip
 }
 
 public struct AdvancedSettings: Equatable, Hashable {
+  public var apiServerEnabled: Bool
+  public var apiServerHost: String
+  public var apiServerPort: UInt16
 
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
-  public init() {
+  public init(apiServerEnabled: Bool, apiServerHost: String, apiServerPort: UInt16) {
+    self.apiServerEnabled = apiServerEnabled
+    self.apiServerHost = apiServerHost
+    self.apiServerPort = apiServerPort
   }
 
 }
@@ -1612,10 +1766,17 @@ public struct FfiConverterTypeAdvancedSettings: FfiConverterRustBuffer {
     -> AdvancedSettings
   {
     return
-      AdvancedSettings()
+      try AdvancedSettings(
+        apiServerEnabled: FfiConverterBool.read(from: &buf),
+        apiServerHost: FfiConverterString.read(from: &buf),
+        apiServerPort: FfiConverterUInt16.read(from: &buf)
+      )
   }
 
   public static func write(_ value: AdvancedSettings, into buf: inout [UInt8]) {
+    FfiConverterBool.write(value.apiServerEnabled, into: &buf)
+    FfiConverterString.write(value.apiServerHost, into: &buf)
+    FfiConverterUInt16.write(value.apiServerPort, into: &buf)
   }
 }
 
@@ -1634,10 +1795,16 @@ public func FfiConverterTypeAdvancedSettings_lower(_ value: AdvancedSettings) ->
 }
 
 public struct AdvancedSettingsPatch: Equatable, Hashable {
+  public var apiServerEnabled: Bool?
+  public var apiServerHost: String?
+  public var apiServerPort: UInt16?
 
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
-  public init() {
+  public init(apiServerEnabled: Bool?, apiServerHost: String?, apiServerPort: UInt16?) {
+    self.apiServerEnabled = apiServerEnabled
+    self.apiServerHost = apiServerHost
+    self.apiServerPort = apiServerPort
   }
 
 }
@@ -1654,10 +1821,17 @@ public struct FfiConverterTypeAdvancedSettingsPatch: FfiConverterRustBuffer {
     -> AdvancedSettingsPatch
   {
     return
-      AdvancedSettingsPatch()
+      try AdvancedSettingsPatch(
+        apiServerEnabled: FfiConverterOptionBool.read(from: &buf),
+        apiServerHost: FfiConverterOptionString.read(from: &buf),
+        apiServerPort: FfiConverterOptionUInt16.read(from: &buf)
+      )
   }
 
   public static func write(_ value: AdvancedSettingsPatch, into buf: inout [UInt8]) {
+    FfiConverterOptionBool.write(value.apiServerEnabled, into: &buf)
+    FfiConverterOptionString.write(value.apiServerHost, into: &buf)
+    FfiConverterOptionUInt16.write(value.apiServerPort, into: &buf)
   }
 }
 
@@ -1677,6 +1851,60 @@ public func FfiConverterTypeAdvancedSettingsPatch_lower(_ value: AdvancedSetting
   -> RustBuffer
 {
   return FfiConverterTypeAdvancedSettingsPatch.lower(value)
+}
+
+public struct ApiServerInfo: Equatable, Hashable {
+  public var host: String
+  public var port: UInt16
+  public var baseUrl: String
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(host: String, port: UInt16, baseUrl: String) {
+    self.host = host
+    self.port = port
+    self.baseUrl = baseUrl
+  }
+
+}
+
+#if compiler(>=6)
+  extension ApiServerInfo: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeApiServerInfo: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ApiServerInfo
+  {
+    return
+      try ApiServerInfo(
+        host: FfiConverterString.read(from: &buf),
+        port: FfiConverterUInt16.read(from: &buf),
+        baseUrl: FfiConverterString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: ApiServerInfo, into buf: inout [UInt8]) {
+    FfiConverterString.write(value.host, into: &buf)
+    FfiConverterUInt16.write(value.port, into: &buf)
+    FfiConverterString.write(value.baseUrl, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeApiServerInfo_lift(_ buf: RustBuffer) throws -> ApiServerInfo {
+  return try FfiConverterTypeApiServerInfo.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeApiServerInfo_lower(_ value: ApiServerInfo) -> RustBuffer {
+  return FfiConverterTypeApiServerInfo.lower(value)
 }
 
 public struct AppearanceSettings: Equatable, Hashable {
@@ -3781,6 +4009,30 @@ public func FfiConverterTypeTranslationMode_lower(_ value: TranslationMode) -> R
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
+private struct FfiConverterOptionUInt16: FfiConverterRustBuffer {
+  typealias SwiftType = UInt16?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterUInt16.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterUInt16.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
 private struct FfiConverterOptionUInt64: FfiConverterRustBuffer {
   typealias SwiftType = UInt64?
 
@@ -4971,6 +5223,12 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_func_version() != 42317 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimeapiserver_info() != 36460 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimeapiserver_stop() != 63804 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_dictionary() != 13965 {
     return InitializationResult.apiChecksumMismatch
   }
@@ -4978,6 +5236,9 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_settings() != 37764 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtime_start_api_server() != 26599 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_translation() != 36886 {

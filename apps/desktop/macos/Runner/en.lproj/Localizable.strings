@@ -156,7 +156,14 @@
 "provider.system" = "System";
 "provider.tencent" = "Tencent";
 "provider.youdao" = "Youda";
-"settings.advanced.empty" = "No advanced settings available.";
+"settings.advanced.address" = "Address";
+"settings.advanced.api_server" = "Local API server";
+"settings.advanced.api_server_description" = "Expose the translation API on 127.0.0.1 for local integrations.";
+"settings.advanced.disabled" = "Disabled";
+"settings.advanced.enable" = "Enable";
+"settings.advanced.host" = "Host";
+"settings.advanced.port" = "Port";
+"settings.advanced.running_at" = "Running at {url}";
 "settings.advanced.title" = "Advanced";
 "settings.appearance.option.chinese" = "Chinese";
 "settings.appearance.option.english" = "English";

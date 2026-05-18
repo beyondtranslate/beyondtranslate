@@ -164,9 +164,31 @@ impl Default for GeneralSettings {
     }
 }
 
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
 #[patch(attribute(derive(Clone, Debug, Default, Deserialize, Serialize, uniffi::Record)))]
-pub struct AdvancedSettings {}
+#[serde(default)]
+pub struct AdvancedSettings {
+    #[serde(rename = "apiServerEnabled")]
+    pub api_server_enabled: bool,
+    #[serde(default = "default_api_server_host", rename = "apiServerHost")]
+    pub api_server_host: String,
+    #[serde(rename = "apiServerPort")]
+    pub api_server_port: u16,
+}
+
+impl Default for AdvancedSettings {
+    fn default() -> Self {
+        Self {
+            api_server_enabled: false,
+            api_server_host: default_api_server_host(),
+            api_server_port: 0,
+        }
+    }
+}
+
+fn default_api_server_host() -> String {
+    "127.0.0.1".to_owned()
+}
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize, uniffi::Record)]
 pub struct ProviderConfigEntry {
