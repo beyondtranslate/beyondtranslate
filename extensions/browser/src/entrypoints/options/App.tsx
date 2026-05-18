@@ -1,6 +1,18 @@
 import { useMemo, useState } from 'react';
+import type { ComponentProps } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { ApiClientService, formatApiError } from '@/services/api-client';
-import './App.css';
 
 type EndpointId =
   | 'health'
@@ -12,7 +24,7 @@ type EndpointId =
 type RequestState = 'idle' | 'loading' | 'success' | 'error';
 
 const defaultBaseUrl = 'http://localhost:8787';
-const defaultProvider = 'iciba';
+const defaultProvider = 'baidu';
 
 const endpointOptions: Array<{ id: EndpointId; label: string; method: string }> =
   [
@@ -130,44 +142,48 @@ function App() {
   }
 
   return (
-    <main className="options-page">
-      <section className="debug-panel">
-        <header className="debug-header">
+    <main className="min-h-screen bg-muted/40 px-6 py-8 text-foreground">
+      <div className="mx-auto grid w-full max-w-6xl gap-6">
+        <Card>
+          <CardHeader className="flex-row items-start justify-between gap-4">
           <div>
-            <p className="eyebrow">Options</p>
-            <h1>API Client Debugger</h1>
+              <CardDescription>Options</CardDescription>
+              <CardTitle className="text-2xl">API Client Debugger</CardTitle>
           </div>
-          <button
-            className="primary-button"
+            <Button
             disabled={requestState === 'loading'}
             onClick={runRequest}
             type="button"
           >
             {requestState === 'loading' ? 'Running...' : 'Run'}
-          </button>
-        </header>
+            </Button>
+          </CardHeader>
 
-        <div className="form-grid">
-          <label className="field field-wide">
-            <span>Base URL</span>
-            <input
+          <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="base-url">Base URL</Label>
+              <Input
+                id="base-url"
               onChange={(event) => setBaseUrl(event.target.value)}
               placeholder={defaultBaseUrl}
               value={baseUrl}
             />
-          </label>
+            </div>
 
-          <label className="field">
-            <span>Provider</span>
-            <input
+            <div className="space-y-2">
+              <Label htmlFor="provider">Provider</Label>
+              <Input
+                id="provider"
               onChange={(event) => setProvider(event.target.value)}
               value={provider}
             />
-          </label>
+            </div>
 
-          <label className="field field-wide">
-            <span>Endpoint</span>
+            <div className="space-y-2">
+              <Label htmlFor="endpoint">Endpoint</Label>
             <select
+                className="border-input bg-background ring-offset-background focus-visible:ring-ring h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                id="endpoint"
               onChange={(event) => setEndpoint(event.target.value as EndpointId)}
               value={endpoint}
             >
@@ -177,75 +193,103 @@ function App() {
                 </option>
               ))}
             </select>
-          </label>
+            </div>
 
-          <div className="endpoint-path">{selectedEndpoint.method}</div>
+            <div className="rounded-md border bg-muted px-3 py-2 font-mono text-sm text-muted-foreground md:col-span-2">
+              {selectedEndpoint.method}
+            </div>
 
           {endpoint === 'translate' || endpoint === 'lookup' ? (
             <>
-              <label className="field">
-                <span>Source language</span>
-                <input
+                <div className="space-y-2">
+                  <Label htmlFor="source-language">Source language</Label>
+                  <Input
+                    id="source-language"
                   onChange={(event) => setSourceLanguage(event.target.value)}
                   value={sourceLanguage}
                 />
-              </label>
+                </div>
 
-              <label className="field">
-                <span>Target language</span>
-                <input
+                <div className="space-y-2">
+                  <Label htmlFor="target-language">Target language</Label>
+                  <Input
+                    id="target-language"
                   onChange={(event) => setTargetLanguage(event.target.value)}
                   value={targetLanguage}
                 />
-              </label>
+                </div>
             </>
           ) : null}
 
           {endpoint === 'translate' ? (
-            <label className="field field-wide">
-              <span>Text</span>
-              <textarea
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="text">Text</Label>
+                <Textarea
+                  id="text"
                 onChange={(event) => setText(event.target.value)}
                 rows={4}
                 value={text}
               />
-            </label>
+              </div>
           ) : null}
 
           {endpoint === 'detectLanguage' ? (
-            <label className="field field-wide">
-              <span>Texts</span>
-              <textarea
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="texts">Texts</Label>
+                <Textarea
+                  id="texts"
                 onChange={(event) => setTexts(event.target.value)}
                 rows={5}
                 value={texts}
               />
-            </label>
+              </div>
           ) : null}
 
           {endpoint === 'lookup' ? (
-            <label className="field field-wide">
-              <span>Word</span>
-              <input
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="word">Word</Label>
+                <Input
+                  id="word"
                 onChange={(event) => setWord(event.target.value)}
                 value={word}
               />
-            </label>
+              </div>
           ) : null}
-        </div>
-      </section>
+          </CardContent>
+        </Card>
 
-      <section className="result-panel">
-        <div className="result-toolbar">
-          <h2>Response</h2>
-          <span className={`status-badge status-${requestState}`}>
-            {requestState}
-          </span>
-        </div>
-        <pre>{result == null ? 'No request has been run.' : JSON.stringify(result, null, 2)}</pre>
-      </section>
+        <Card className="overflow-hidden">
+          <CardHeader className="flex-row items-center justify-between">
+            <CardTitle className="text-base">Response</CardTitle>
+            <Badge variant={getRequestBadgeVariant(requestState)}>
+              {requestState}
+            </Badge>
+          </CardHeader>
+          <CardContent>
+            <pre className="max-h-[480px] min-h-44 overflow-auto rounded-md bg-slate-950 p-4 text-left text-sm leading-6 whitespace-pre-wrap text-slate-100">
+              {result == null
+                ? 'No request has been run.'
+                : JSON.stringify(result, null, 2)}
+            </pre>
+          </CardContent>
+        </Card>
+      </div>
     </main>
   );
+}
+
+function getRequestBadgeVariant(
+  state: RequestState,
+): ComponentProps<typeof Badge>['variant'] {
+  if (state === 'error') {
+    return 'destructive';
+  }
+
+  if (state === 'success') {
+    return 'default';
+  }
+
+  return 'secondary';
 }
 
 export default App;
