@@ -6,5 +6,6 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   manifest: {
     name: 'Beyond Translate',
+    host_permissions: ['http://localhost/*', 'http://127.0.0.1/*'],
   },
 });

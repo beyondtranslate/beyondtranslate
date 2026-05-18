@@ -15,6 +15,7 @@
     "postinstall": "wxt prepare"
   },
   "dependencies": {
+    "@beyondtranslate/client": "file:./libs/client",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
