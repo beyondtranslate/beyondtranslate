@@ -59,6 +59,25 @@ providers:
     assert_eq!(registry.names(), vec!["deepl-main", "iciba-main"]);
 }
 
+#[cfg(feature = "baidu")]
+#[test]
+fn loads_baidu_provider() {
+    let registry = from_yaml_str(
+        r#"
+providers:
+  baidu-main:
+    type: baidu
+    appId: test-id
+    appKey: test-key
+"#,
+    )
+    .expect("valid config");
+
+    assert_eq!(registry.names(), vec!["baidu-main"]);
+    let provider = registry.require("baidu-main").expect("baidu provider");
+    assert_eq!(provider.name(), "baidu");
+}
+
 #[test]
 fn rejects_unknown_provider() {
     let error = from_yaml_str(
@@ -161,6 +180,7 @@ providers:
     assert!(capabilities.contains(&ProviderCapability::Dictionary));
 }
 
+#[cfg(not(feature = "baidu"))]
 #[test]
 fn errors_when_feature_is_disabled() {
     let error = from_yaml_str(

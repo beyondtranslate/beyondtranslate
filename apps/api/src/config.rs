@@ -46,6 +46,8 @@ where
             if key.is_empty() {
                 rendered.push_str("null");
             } else if let Some(value) = lookup(&key) {
+                let value =
+                    serde_json::to_string(&value).expect("serializing string to json cannot fail");
                 rendered.push_str(&value);
             } else {
                 rendered.push_str("null");
@@ -71,6 +73,19 @@ mod tests {
             _ => None,
         });
 
-        assert_eq!(rendered, "a: hello\nb: null");
+        assert_eq!(rendered, "a: \"hello\"\nb: null");
+    }
+
+    #[test]
+    fn renders_numeric_env_values_as_yaml_strings() {
+        let rendered = render_runtime_config(include_str!("../config.yaml"), |key| match key {
+            "BAIDU_APP_ID" => Some("20191221000368303".to_owned()),
+            "BAIDU_API_KEY" => Some("baidu-key".to_owned()),
+            "ICIBA_API_KEY" => Some("iciba-key".to_owned()),
+            _ => None,
+        });
+
+        let engine = beyondtranslate_engine::from_yaml_str(&rendered).expect("valid config");
+        assert_eq!(engine.names(), vec!["baidu", "iciba"]);
     }
 }
