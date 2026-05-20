@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart' hide Image;
-import 'package:flutter/src/widgets/_window.dart';
+import 'package:flutter/src/widgets/_window.dart' hide WindowManager;
 import 'package:go_router/go_router.dart';
 import 'package:nativeapi/nativeapi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -26,17 +26,41 @@ import 'mini_translator/mini_translator.dart';
 import 'settings/index.dart' as settings_route;
 import 'settings/index.dart' show GeneralSettingsRoute;
 
-const _kMainAppTitle = 'Beyond Translate';
+const _kSettingsWindowTitle = 'Settings';
 const _kMiniTranslatorAppTitle = 'Mini Translator';
 const _kSettingsWindowSize = Size(720, 532);
+const _kUseNativeSettingsPreferenceKey = 'use_native_settings';
+
+extension PreferencesExtension on Preferences {
+  bool get useNativeSettings =>
+      get(_kUseNativeSettingsPreferenceKey, 'true') == 'true';
+
+  set useNativeSettings(bool value) {
+    set(_kUseNativeSettingsPreferenceKey, value.toString());
+  }
+}
+
+final Preferences _devToolsPreferences = Preferences.withScope('dev_tools');
 
 // ──────────────────────────────────────────────────────────────────────────────
 // Window controllers
 // ──────────────────────────────────────────────────────────────────────────────
 
-final mainWindowController = RegularWindowController(
+/// Custom delegate that hides the window instead of destroying it when closed.
+/// The app continues running in the system tray.
+class _HideOnCloseDelegate extends RegularWindowControllerDelegate {
+  @override
+  void onWindowCloseRequested(RegularWindowController controller) {
+    if (controller.window == settingsWindowController.window) {
+      controller.window.hide();
+    }
+  }
+}
+
+final settingsWindowController = RegularWindowController(
   preferredSize: _kSettingsWindowSize,
-  title: _kMainAppTitle,
+  title: _kSettingsWindowTitle,
+  delegate: _HideOnCloseDelegate(),
 )..setWillShowHook((window) {
     if (window.isFirstShow) {
       window.titleBarStyle = TitleBarStyle.hidden;
@@ -49,9 +73,20 @@ final mainWindowController = RegularWindowController(
         _kSettingsWindowSize.height,
       );
       window.center();
+      return false;
     }
     return true;
   });
+
+// Shows the mini translator window.
+void showSettingsWindow() {
+  if (_devToolsPreferences.useNativeSettings) {
+    MacSettings.show();
+    return;
+  }
+  settingsWindowController.window.center();
+  settingsWindowController.window.show();
+}
 
 final miniTranslatorWindowController = RegularWindowController(
   preferredSize: const Size(380, 420),
@@ -68,6 +103,14 @@ final miniTranslatorWindowController = RegularWindowController(
     return true;
   });
 
+/// Shows the mini translator window.
+void showMiniTranslatorWindow({Offset? position}) {
+  if (position != null) {
+    miniTranslatorWindowController.window.setPosition(position.dx, position.dy);
+  }
+  miniTranslatorWindowController.window.show();
+}
+
 // ──────────────────────────────────────────────────────────────────────────────
 // Routers
 // ──────────────────────────────────────────────────────────────────────────────
@@ -77,7 +120,7 @@ final miniTranslatorWindowController = RegularWindowController(
 /// TanStack Start-inspired organization:
 /// - each route lives in its own module/file
 /// - this file is the composition root for router setup
-GoRouter createMainAppRouter({
+GoRouter createSettingsAppRouter({
   String? initialLocation,
 }) {
   return GoRouter(
@@ -108,15 +151,15 @@ GoRouter createMiniTranslatorAppRouter() {
 // App widgets
 // ──────────────────────────────────────────────────────────────────────────────
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+class SettingsApp extends StatefulWidget {
+  const SettingsApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  State<SettingsApp> createState() => _SettingsAppState();
 }
 
-class _MainAppState extends State<MainApp> {
-  late final GoRouter _router = createMainAppRouter(
+class _SettingsAppState extends State<SettingsApp> {
+  late final GoRouter _router = createSettingsAppRouter(
     initialLocation: const GeneralSettingsRoute().location,
   );
 
@@ -139,10 +182,10 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return RegularWindow(
-      controller: mainWindowController,
+      controller: settingsWindowController,
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title: _kMainAppTitle,
+        title: _kSettingsWindowTitle,
         theme: lightThemeData,
         darkTheme: darkThemeData,
         themeMode: settingsStore.themeMode,
@@ -258,13 +301,6 @@ class _RootBodyView extends StatefulWidget {
 class _RootBodyViewState extends State<_RootBodyView> {
   late final TrayIcon _trayIcon;
 
-  Window get _mainWindow => mainWindowController.window;
-  Window get _miniTranslatorWindow => miniTranslatorWindowController.window;
-
-  /// Whether to use the native macOS settings window instead of the Flutter one.
-  /// Only meaningful on macOS; defaults to true.
-  bool _useNativeSettings = true;
-
   @override
   void initState() {
     settingsStore.addListener(_handleChanged);
@@ -300,13 +336,16 @@ class _RootBodyViewState extends State<_RootBodyView> {
     _trayIcon.contextMenuTrigger = ContextMenuTrigger.rightClicked;
     _trayIcon.on<TrayIconClickedEvent>((event) {
       final bounds = _trayIcon.bounds;
-      if (bounds != null) {
-        _miniTranslatorWindow.setPosition(
-          bounds.left - (_miniTranslatorWindow.bounds.width - bounds.width) / 2,
-          bounds.bottom + 10,
-        );
-      }
-      _miniTranslatorWindow.show();
+      final newPosition = bounds != null
+          ? Offset(
+              bounds.left -
+                  (miniTranslatorWindowController.window.bounds.width -
+                          bounds.width) /
+                      2,
+              bounds.bottom + 10)
+          : null;
+
+      showMiniTranslatorWindow(position: newPosition);
     });
   }
 
@@ -317,8 +356,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
     menu.addItem(
       MenuItem(t.tray.context_menu.show_window)
         ..on<MenuItemClickedEvent>((_) {
-          _mainWindow.center();
-          _mainWindow.show();
+          showMiniTranslatorWindow();
         }),
     );
 
@@ -342,14 +380,18 @@ class _RootBodyViewState extends State<_RootBodyView> {
         t.tray.context_menu.dev_tools.use_native_settings,
         MenuItemType.checkbox,
       );
-      nativeSettingsItem.state =
-          _useNativeSettings ? MenuItemState.checked : MenuItemState.unchecked;
-      nativeSettingsItem.enabled = Platform.isMacOS;
-      nativeSettingsItem.on<MenuItemClickedEvent>((_) {
-        _useNativeSettings = !_useNativeSettings;
-        nativeSettingsItem.state = _useNativeSettings
+      void updateNativeSettingsItemState() {
+        nativeSettingsItem.state = _devToolsPreferences.useNativeSettings
             ? MenuItemState.checked
             : MenuItemState.unchecked;
+      }
+
+      updateNativeSettingsItemState();
+      nativeSettingsItem.enabled = Platform.isMacOS;
+      nativeSettingsItem.on<MenuItemClickedEvent>((_) {
+        _devToolsPreferences.useNativeSettings =
+            !_devToolsPreferences.useNativeSettings;
+        updateNativeSettingsItemState();
       });
       devToolsSubmenu.addItem(nativeSettingsItem);
 
@@ -370,20 +412,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
     menu.addItem(
       MenuItem(t.tray.context_menu.settings)
         ..on<MenuItemClickedEvent>((_) {
-          if (Platform.isMacOS && _useNativeSettings) {
-            MacSettings.show();
-            return;
-          }
-          _mainWindow.setMinimumSize(
-            _kSettingsWindowSize.width,
-            _kSettingsWindowSize.height,
-          );
-          _mainWindow.setSize(
-            _kSettingsWindowSize.width,
-            _kSettingsWindowSize.height,
-          );
-          _mainWindow.center();
-          _mainWindow.show();
+          showSettingsWindow();
         }),
     );
 
@@ -404,7 +433,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
   Widget build(BuildContext context) {
     return const ViewCollection(
       views: [
-        MainApp(),
+        SettingsApp(),
         MiniTranslatorApp(),
       ],
     );

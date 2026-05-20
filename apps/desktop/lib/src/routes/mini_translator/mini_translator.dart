@@ -19,7 +19,6 @@ import '../../extensions/window_controller.dart';
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
-
 import '../../services/mac_settings.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
@@ -29,7 +28,10 @@ import '../../utils/platform_util.dart';
 import '../../utils/utils.dart';
 import '../../widgets/ui/button.dart';
 import '../app_router.dart'
-    show mainWindowController, miniTranslatorWindowController;
+    show
+        miniTranslatorWindowController,
+        settingsWindowController,
+        showSettingsWindow;
 import 'limited_functionality_banner.dart';
 import 'translation_input_view.dart';
 import 'translation_results_view.dart';
@@ -778,7 +780,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
                 setState(() {
                   _isAlwaysOnTop = !_isAlwaysOnTop;
                 });
-                mainWindowController.window.isAlwaysOnTop = _isAlwaysOnTop;
+                _window.isAlwaysOnTop = _isAlwaysOnTop;
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
@@ -798,12 +800,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             Expanded(child: Container()),
             Button(
               onPressed: () {
-                if (Platform.isMacOS) {
-                  MacSettings.show();
-                  return;
-                }
-
-                mainWindowController.window.show();
+                showSettingsWindow();
               },
               child: const Icon(FluentIcons.settings_20_regular),
             ),
