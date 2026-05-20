@@ -924,6 +924,58 @@ mod tests {
         );
     }
 
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn system_dictionary_lookup_returns_structured_definitions() {
+        let runtime = create_runtime();
+
+        let response = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(async {
+                runtime
+                    .clone()
+                    .settings()
+                    .update_provider("system".to_owned(), "system".to_owned(), HashMap::new())
+                    .await
+                    .expect("failed to add system provider");
+
+                runtime
+                    .dictionary("system".to_owned())
+                    .expect("failed to get dictionary")
+                    .lookup(LookUpRequest {
+                        source_language: "en".to_owned(),
+                        target_language: "zh".to_owned(),
+                        word: "hello".to_owned(),
+                    })
+                    .await
+                    .expect("failed to look up hello")
+            });
+
+        let pronunciations = response.pronunciations.expect("pronunciations");
+        assert_eq!(pronunciations.len(), 2);
+        assert_eq!(pronunciations[0].r#type.as_deref(), Some("uk"));
+        assert_eq!(pronunciations[1].r#type.as_deref(), Some("us"));
+
+        let definitions = response.definitions.expect("definitions");
+        assert!(
+            definitions.iter().any(|definition| definition
+                .values
+                .as_ref()
+                .map(|values| values.iter().any(|value| value.contains("问候")))
+                .unwrap_or(false)),
+            "expected parsed definitions to include the noun translation: {definitions:#?}"
+        );
+        assert!(
+            definitions
+                .iter()
+                .flat_map(|definition| definition.values.as_deref().unwrap_or_default())
+                .all(|value| !value.trim().is_empty()),
+            "definitions should not contain empty values: {definitions:#?}"
+        );
+    }
+
     #[test]
     fn translation_requires_target_language() {
         let runtime = create_runtime();

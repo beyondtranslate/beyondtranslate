@@ -103,11 +103,26 @@ pub struct WordImage {
     pub url: String,
 }
 
+type WordEtymology = core::WordEtymology;
+#[uniffi::remote(Record)]
+pub struct WordEtymology {
+    pub origin: Option<String>,
+    pub root: Option<Vec<String>>,
+}
+
 type WordPhrase = core::WordPhrase;
 #[uniffi::remote(Record)]
 pub struct WordPhrase {
     pub text: String,
     pub translations: Vec<String>,
+}
+
+type WordSynonym = core::WordSynonym;
+#[uniffi::remote(Record)]
+pub struct WordSynonym {
+    pub r#type: Option<String>,
+    pub word: String,
+    pub definitions: Option<Vec<String>>,
 }
 
 type WordPronunciation = core::WordPronunciation;
@@ -152,6 +167,8 @@ pub struct LookUpResponse {
     pub phrases: Option<Vec<WordPhrase>>,
     pub tenses: Option<Vec<WordTense>>,
     pub sentences: Option<Vec<WordSentence>>,
+    pub etymology: Option<Vec<WordEtymology>>,
+    pub synonyms: Option<Vec<WordSynonym>>,
 }
 
 type TranslateRequest = core::TranslateRequest;

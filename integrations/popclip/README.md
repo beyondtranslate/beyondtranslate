@@ -1,6 +1,6 @@
 # popclipext
 
-Translate the text using `Biyi`.
+Translate the selected text using **Beyond Translate**.
 
 ## Preview
 
@@ -8,4 +8,4 @@ Translate the text using `Biyi`.
 
 ## Installation
 
-Download the file from [Releases](https://github.com/biyidev/biyi/releases) and double click to install the extension.
+Download the `.popclipextz` file from [Releases](https://github.com/beyondtranslate/beyondtranslate/releases) and double-click to install the extension.

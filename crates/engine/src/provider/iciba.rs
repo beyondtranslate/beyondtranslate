@@ -182,6 +182,8 @@ impl DictionaryService for IcibaDictionaryService {
             phrases: None,
             tenses,
             sentences: None,
+            etymology: None,
+            synonyms: None,
         })
     }
 }

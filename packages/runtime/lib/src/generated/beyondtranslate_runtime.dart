@@ -1235,6 +1235,8 @@ class LookUpResponse {
   final List<WordPhrase>? phrases;
   final List<WordTense>? tenses;
   final List<WordSentence>? sentences;
+  final List<WordEtymology>? etymology;
+  final List<WordSynonym>? synonyms;
   LookUpResponse({
     required this.translations,
     this.word,
@@ -1246,6 +1248,8 @@ class LookUpResponse {
     this.phrases,
     this.tenses,
     this.sentences,
+    this.etymology,
+    this.synonyms,
   });
 }
 
@@ -1297,6 +1301,14 @@ class FfiConverterLookUpResponse {
         Uint8List.view(buf.buffer, new_offset));
     final sentences = sentences_lifted.value;
     new_offset += sentences_lifted.bytesRead;
+    final etymology_lifted = FfiConverterOptionalSequenceWordEtymology.read(
+        Uint8List.view(buf.buffer, new_offset));
+    final etymology = etymology_lifted.value;
+    new_offset += etymology_lifted.bytesRead;
+    final synonyms_lifted = FfiConverterOptionalSequenceWordSynonym.read(
+        Uint8List.view(buf.buffer, new_offset));
+    final synonyms = synonyms_lifted.value;
+    new_offset += synonyms_lifted.bytesRead;
     return LiftRetVal(
         LookUpResponse(
           translations: translations,
@@ -1309,6 +1321,8 @@ class FfiConverterLookUpResponse {
           phrases: phrases,
           tenses: tenses,
           sentences: sentences,
+          etymology: etymology,
+          synonyms: synonyms,
         ),
         new_offset - buf.offsetInBytes);
   }
@@ -1328,6 +1342,9 @@ class FfiConverterLookUpResponse {
         FfiConverterOptionalSequenceWordTense.allocationSize(value.tenses) +
         FfiConverterOptionalSequenceWordSentence.allocationSize(
             value.sentences) +
+        FfiConverterOptionalSequenceWordEtymology.allocationSize(
+            value.etymology) +
+        FfiConverterOptionalSequenceWordSynonym.allocationSize(value.synonyms) +
         0;
     final buf = Uint8List(total_length);
     write(value, buf);
@@ -1356,6 +1373,10 @@ class FfiConverterLookUpResponse {
         value.tenses, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterOptionalSequenceWordSentence.write(
         value.sentences, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalSequenceWordEtymology.write(
+        value.etymology, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalSequenceWordSynonym.write(
+        value.synonyms, Uint8List.view(buf.buffer, new_offset));
     return new_offset - buf.offsetInBytes;
   }
 
@@ -1374,6 +1395,9 @@ class FfiConverterLookUpResponse {
         FfiConverterOptionalSequenceWordTense.allocationSize(value.tenses) +
         FfiConverterOptionalSequenceWordSentence.allocationSize(
             value.sentences) +
+        FfiConverterOptionalSequenceWordEtymology.allocationSize(
+            value.etymology) +
+        FfiConverterOptionalSequenceWordSynonym.allocationSize(value.synonyms) +
         0;
   }
 }
@@ -1991,6 +2015,64 @@ class FfiConverterWordDefinition {
   }
 }
 
+class WordEtymology {
+  final String? origin;
+  final List<String>? root;
+  WordEtymology({
+    this.origin,
+    this.root,
+  });
+}
+
+class FfiConverterWordEtymology {
+  static WordEtymology lift(RustBuffer buf) {
+    return FfiConverterWordEtymology.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<WordEtymology> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final origin_lifted =
+        FfiConverterOptionalString.read(Uint8List.view(buf.buffer, new_offset));
+    final origin = origin_lifted.value;
+    new_offset += origin_lifted.bytesRead;
+    final root_lifted = FfiConverterOptionalSequenceString.read(
+        Uint8List.view(buf.buffer, new_offset));
+    final root = root_lifted.value;
+    new_offset += root_lifted.bytesRead;
+    return LiftRetVal(
+        WordEtymology(
+          origin: origin,
+          root: root,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(WordEtymology value) {
+    final total_length =
+        FfiConverterOptionalString.allocationSize(value.origin) +
+            FfiConverterOptionalSequenceString.allocationSize(value.root) +
+            0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(WordEtymology value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterOptionalString.write(
+        value.origin, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalSequenceString.write(
+        value.root, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(WordEtymology value) {
+    return FfiConverterOptionalString.allocationSize(value.origin) +
+        FfiConverterOptionalSequenceString.allocationSize(value.root) +
+        0;
+  }
+}
+
 class WordImage {
   final String url;
   WordImage({
@@ -2213,6 +2295,74 @@ class FfiConverterWordSentence {
   static int allocationSize(WordSentence value) {
     return FfiConverterString.allocationSize(value.text) +
         FfiConverterSequenceString.allocationSize(value.translations) +
+        0;
+  }
+}
+
+class WordSynonym {
+  final String? type;
+  final String word;
+  final List<String>? definitions;
+  WordSynonym({
+    this.type,
+    required this.word,
+    this.definitions,
+  });
+}
+
+class FfiConverterWordSynonym {
+  static WordSynonym lift(RustBuffer buf) {
+    return FfiConverterWordSynonym.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<WordSynonym> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final type_lifted =
+        FfiConverterOptionalString.read(Uint8List.view(buf.buffer, new_offset));
+    final type = type_lifted.value;
+    new_offset += type_lifted.bytesRead;
+    final word_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final word = word_lifted.value;
+    new_offset += word_lifted.bytesRead;
+    final definitions_lifted = FfiConverterOptionalSequenceString.read(
+        Uint8List.view(buf.buffer, new_offset));
+    final definitions = definitions_lifted.value;
+    new_offset += definitions_lifted.bytesRead;
+    return LiftRetVal(
+        WordSynonym(
+          type: type,
+          word: word,
+          definitions: definitions,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(WordSynonym value) {
+    final total_length = FfiConverterOptionalString.allocationSize(value.type) +
+        FfiConverterString.allocationSize(value.word) +
+        FfiConverterOptionalSequenceString.allocationSize(value.definitions) +
+        0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(WordSynonym value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterOptionalString.write(
+        value.type, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterString.write(
+        value.word, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalSequenceString.write(
+        value.definitions, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(WordSynonym value) {
+    return FfiConverterOptionalString.allocationSize(value.type) +
+        FfiConverterString.allocationSize(value.word) +
+        FfiConverterOptionalSequenceString.allocationSize(value.definitions) +
         0;
   }
 }
@@ -4423,6 +4573,97 @@ class FfiConverterSequenceWordDefinition {
   }
 }
 
+class FfiConverterOptionalSequenceWordEtymology {
+  static List<WordEtymology>? lift(RustBuffer buf) {
+    return FfiConverterOptionalSequenceWordEtymology.read(buf.asUint8List())
+        .value;
+  }
+
+  static LiftRetVal<List<WordEtymology>?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterSequenceWordEtymology.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<List<WordEtymology>?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([List<WordEtymology>? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterSequenceWordEtymology.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(List<WordEtymology>? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length =
+        FfiConverterOptionalSequenceWordEtymology.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalSequenceWordEtymology.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(List<WordEtymology>? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterSequenceWordEtymology.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterSequenceWordEtymology {
+  static List<WordEtymology> lift(RustBuffer buf) {
+    return FfiConverterSequenceWordEtymology.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<WordEtymology>> read(Uint8List buf) {
+    List<WordEtymology> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterWordEtymology.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<WordEtymology> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterWordEtymology.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<WordEtymology> value) {
+    return value
+            .map((l) => FfiConverterWordEtymology.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<WordEtymology> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
 class FfiConverterOptionalSequenceWordImage {
   static List<WordImage>? lift(RustBuffer buf) {
     return FfiConverterOptionalSequenceWordImage.read(buf.asUint8List()).value;
@@ -4778,6 +5019,97 @@ class FfiConverterSequenceWordSentence {
   }
 
   static RustBuffer lower(List<WordSentence> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterOptionalSequenceWordSynonym {
+  static List<WordSynonym>? lift(RustBuffer buf) {
+    return FfiConverterOptionalSequenceWordSynonym.read(buf.asUint8List())
+        .value;
+  }
+
+  static LiftRetVal<List<WordSynonym>?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterSequenceWordSynonym.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<List<WordSynonym>?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([List<WordSynonym>? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterSequenceWordSynonym.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(List<WordSynonym>? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length =
+        FfiConverterOptionalSequenceWordSynonym.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalSequenceWordSynonym.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(List<WordSynonym>? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterSequenceWordSynonym.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterSequenceWordSynonym {
+  static List<WordSynonym> lift(RustBuffer buf) {
+    return FfiConverterSequenceWordSynonym.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<WordSynonym>> read(Uint8List buf) {
+    List<WordSynonym> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterWordSynonym.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<WordSynonym> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterWordSynonym.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<WordSynonym> value) {
+    return value
+            .map((l) => FfiConverterWordSynonym.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<WordSynonym> value) {
     final buf = Uint8List(allocationSize(value));
     write(value, buf);
     return toRustBuffer(buf);
@@ -5770,6 +6102,16 @@ WordDefinition echoWordDefinition({
       null);
 }
 
+WordEtymology echoWordEtymology({
+  required WordEtymology wordEtymology,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_word_etymology(
+          FfiConverterWordEtymology.lower(wordEtymology), status),
+      FfiConverterWordEtymology.lift,
+      null);
+}
+
 WordImage echoWordImage({
   required WordImage wordImage,
 }) {
@@ -5808,6 +6150,16 @@ WordSentence echoWordSentence({
       (status) => uniffi_beyondtranslate_runtime_fn_func_echo_word_sentence(
           FfiConverterWordSentence.lower(wordSentence), status),
       FfiConverterWordSentence.lift,
+      null);
+}
+
+WordSynonym echoWordSynonym({
+  required WordSynonym wordSynonym,
+}) {
+  return rustCallWithLifter(
+      (status) => uniffi_beyondtranslate_runtime_fn_func_echo_word_synonym(
+          FfiConverterWordSynonym.lower(wordSynonym), status),
+      FfiConverterWordSynonym.lift,
       null);
 }
 
@@ -6182,6 +6534,11 @@ external RustBuffer uniffi_beyondtranslate_runtime_fn_func_echo_word_definition(
 
 @Native<RustBuffer Function(RustBuffer, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
+external RustBuffer uniffi_beyondtranslate_runtime_fn_func_echo_word_etymology(
+    RustBuffer word_etymology, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<RustBuffer Function(RustBuffer, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
 external RustBuffer uniffi_beyondtranslate_runtime_fn_func_echo_word_image(
     RustBuffer word_image, Pointer<RustCallStatus> uniffiStatus);
 
@@ -6200,6 +6557,11 @@ external RustBuffer
     assetId: _uniffiAssetId)
 external RustBuffer uniffi_beyondtranslate_runtime_fn_func_echo_word_sentence(
     RustBuffer word_sentence, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<RustBuffer Function(RustBuffer, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external RustBuffer uniffi_beyondtranslate_runtime_fn_func_echo_word_synonym(
+    RustBuffer word_synonym, Pointer<RustCallStatus> uniffiStatus);
 
 @Native<RustBuffer Function(RustBuffer, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
@@ -6575,6 +6937,9 @@ external int
     uniffi_beyondtranslate_runtime_checksum_func_echo_word_definition();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_etymology();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_image();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -6586,6 +6951,9 @@ external int
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_sentence();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_synonym();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_checksum_func_echo_word_tag();
@@ -6781,6 +7149,10 @@ void _checkApiChecksums() {
       13074) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_etymology() !=
+      13993) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
   if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_image() != 48917) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
@@ -6794,6 +7166,10 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_sentence() !=
       37267) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_synonym() !=
+      27203) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_func_echo_word_tag() != 60766) {

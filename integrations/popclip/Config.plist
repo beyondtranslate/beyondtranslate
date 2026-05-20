@@ -3,20 +3,20 @@
 <plist version="1.0">
 <dict>
 	<key>Extension Name</key>
-	<string>比译</string>
+	<string>Beyond Translate</string>
 	<key>Extension Identifier</key>
-	<string>com.biyidev.popclip.extension</string>
+	<string>com.beyondtranslate.popclip.extension</string>
 	<key>Extension Description</key>
-	<string>用比译翻译选中的文本</string>
+	<string>Translate selected text with Beyond Translate</string>
 	<key>Actions</key>
 	<array>
 		<dict>
 			<key>URL</key>
-			<string>biyiapp://translate?text={popclip text}</string>
+			<string>beyondtranslate://translate?text={popclip text}</string>
 			<key>Image File</key>
 			<string>icon.png</string>
 			<key>Title</key>
-			<string>比译</string>
+			<string>Beyond Translate</string>
 			<key>Regular Expression</key>
 			<string>(?s)^.{1,1900}$</string>
 		</dict>

@@ -285,6 +285,8 @@ impl DictionaryService for YoudaoDictionaryService {
             phrases: None,
             tenses,
             sentences: None,
+            etymology: None,
+            synonyms: None,
         })
     }
 }

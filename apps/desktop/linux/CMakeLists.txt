@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "biyi")
-set(APPLICATION_ID "com.biyidev.app")
+set(BINARY_NAME "beyondtranslate")
+set(APPLICATION_ID "com.beyondtranslate.app")
 
 cmake_policy(SET CMP0063 NEW)
 

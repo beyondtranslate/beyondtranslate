@@ -11,8 +11,8 @@ pub use runtime::{
 use beyondtranslate_core::{
     DetectLanguageRequest, DetectLanguageResponse, LanguagePair, LookUpRequest, LookUpResponse,
     RecognizeTextRequest, RecognizeTextResponse, RecognizedRect, TextDetection, TextRecognition,
-    TextTranslation, TranslateRequest, TranslateResponse, WordDefinition, WordImage, WordPhrase,
-    WordPronunciation, WordSentence, WordTag, WordTense,
+    TextTranslation, TranslateRequest, TranslateResponse, WordDefinition, WordEtymology, WordImage,
+    WordPhrase, WordPronunciation, WordSentence, WordSynonym, WordTag, WordTense,
 };
 
 #[uniffi::export]
@@ -103,6 +103,16 @@ pub fn echo_word_sentence(word_sentence: WordSentence) -> WordSentence {
 #[uniffi::export]
 pub fn echo_word_tag(word_tag: WordTag) -> WordTag {
     word_tag
+}
+
+#[uniffi::export]
+pub fn echo_word_etymology(word_etymology: WordEtymology) -> WordEtymology {
+    word_etymology
+}
+
+#[uniffi::export]
+pub fn echo_word_synonym(word_synonym: WordSynonym) -> WordSynonym {
+    word_synonym
 }
 
 #[uniffi::export]

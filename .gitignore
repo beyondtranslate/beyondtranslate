@@ -20,3 +20,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Build artifacts
+**/dist/

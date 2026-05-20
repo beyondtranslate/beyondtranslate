@@ -5,8 +5,8 @@ mod service;
 pub use model::{
     DetectLanguageRequest, DetectLanguageResponse, LanguagePair, LookUpRequest, LookUpResponse,
     RecognizeTextRequest, RecognizeTextResponse, RecognizedRect, TextDetection, TextRecognition,
-    TextTranslation, TranslateRequest, TranslateResponse, WordDefinition, WordImage, WordPhrase,
-    WordPronunciation, WordSentence, WordTag, WordTense,
+    TextTranslation, TranslateRequest, TranslateResponse, WordDefinition, WordEtymology, WordImage,
+    WordPhrase, WordPronunciation, WordSentence, WordSynonym, WordTag, WordTense,
 };
 pub use provider::{Provider, ProviderCapability};
 pub use service::{

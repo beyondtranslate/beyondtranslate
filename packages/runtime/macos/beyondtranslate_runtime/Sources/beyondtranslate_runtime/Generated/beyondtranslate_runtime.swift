@@ -2421,13 +2421,16 @@ public struct LookUpResponse: Equatable, Hashable {
   public var phrases: [WordPhrase]?
   public var tenses: [WordTense]?
   public var sentences: [WordSentence]?
+  public var etymology: [WordEtymology]?
+  public var synonyms: [WordSynonym]?
 
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
   public init(
     translations: [TextTranslation], word: String?, tip: String?, tags: [WordTag]?,
     definitions: [WordDefinition]?, pronunciations: [WordPronunciation]?, images: [WordImage]?,
-    phrases: [WordPhrase]?, tenses: [WordTense]?, sentences: [WordSentence]?
+    phrases: [WordPhrase]?, tenses: [WordTense]?, sentences: [WordSentence]?,
+    etymology: [WordEtymology]?, synonyms: [WordSynonym]?
   ) {
     self.translations = translations
     self.word = word
@@ -2439,6 +2442,8 @@ public struct LookUpResponse: Equatable, Hashable {
     self.phrases = phrases
     self.tenses = tenses
     self.sentences = sentences
+    self.etymology = etymology
+    self.synonyms = synonyms
   }
 
 }
@@ -2464,7 +2469,9 @@ public struct FfiConverterTypeLookUpResponse: FfiConverterRustBuffer {
         images: FfiConverterOptionSequenceTypeWordImage.read(from: &buf),
         phrases: FfiConverterOptionSequenceTypeWordPhrase.read(from: &buf),
         tenses: FfiConverterOptionSequenceTypeWordTense.read(from: &buf),
-        sentences: FfiConverterOptionSequenceTypeWordSentence.read(from: &buf)
+        sentences: FfiConverterOptionSequenceTypeWordSentence.read(from: &buf),
+        etymology: FfiConverterOptionSequenceTypeWordEtymology.read(from: &buf),
+        synonyms: FfiConverterOptionSequenceTypeWordSynonym.read(from: &buf)
       )
   }
 
@@ -2479,6 +2486,8 @@ public struct FfiConverterTypeLookUpResponse: FfiConverterRustBuffer {
     FfiConverterOptionSequenceTypeWordPhrase.write(value.phrases, into: &buf)
     FfiConverterOptionSequenceTypeWordTense.write(value.tenses, into: &buf)
     FfiConverterOptionSequenceTypeWordSentence.write(value.sentences, into: &buf)
+    FfiConverterOptionSequenceTypeWordEtymology.write(value.etymology, into: &buf)
+    FfiConverterOptionSequenceTypeWordSynonym.write(value.synonyms, into: &buf)
   }
 }
 
@@ -3277,6 +3286,56 @@ public func FfiConverterTypeWordDefinition_lower(_ value: WordDefinition) -> Rus
   return FfiConverterTypeWordDefinition.lower(value)
 }
 
+public struct WordEtymology: Equatable, Hashable {
+  public var origin: String?
+  public var root: [String]?
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(origin: String?, root: [String]?) {
+    self.origin = origin
+    self.root = root
+  }
+
+}
+
+#if compiler(>=6)
+  extension WordEtymology: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWordEtymology: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WordEtymology
+  {
+    return
+      try WordEtymology(
+        origin: FfiConverterOptionString.read(from: &buf),
+        root: FfiConverterOptionSequenceString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: WordEtymology, into buf: inout [UInt8]) {
+    FfiConverterOptionString.write(value.origin, into: &buf)
+    FfiConverterOptionSequenceString.write(value.root, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWordEtymology_lift(_ buf: RustBuffer) throws -> WordEtymology {
+  return try FfiConverterTypeWordEtymology.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWordEtymology_lower(_ value: WordEtymology) -> RustBuffer {
+  return FfiConverterTypeWordEtymology.lower(value)
+}
+
 public struct WordImage: Equatable, Hashable {
   public var url: String
 
@@ -3473,6 +3532,59 @@ public func FfiConverterTypeWordSentence_lift(_ buf: RustBuffer) throws -> WordS
 #endif
 public func FfiConverterTypeWordSentence_lower(_ value: WordSentence) -> RustBuffer {
   return FfiConverterTypeWordSentence.lower(value)
+}
+
+public struct WordSynonym: Equatable, Hashable {
+  public var type: String?
+  public var word: String
+  public var definitions: [String]?
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(type: String?, word: String, definitions: [String]?) {
+    self.type = type
+    self.word = word
+    self.definitions = definitions
+  }
+
+}
+
+#if compiler(>=6)
+  extension WordSynonym: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWordSynonym: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WordSynonym {
+    return
+      try WordSynonym(
+        type: FfiConverterOptionString.read(from: &buf),
+        word: FfiConverterString.read(from: &buf),
+        definitions: FfiConverterOptionSequenceString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: WordSynonym, into buf: inout [UInt8]) {
+    FfiConverterOptionString.write(value.type, into: &buf)
+    FfiConverterString.write(value.word, into: &buf)
+    FfiConverterOptionSequenceString.write(value.definitions, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWordSynonym_lift(_ buf: RustBuffer) throws -> WordSynonym {
+  return try FfiConverterTypeWordSynonym.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWordSynonym_lower(_ value: WordSynonym) -> RustBuffer {
+  return FfiConverterTypeWordSynonym.lower(value)
 }
 
 public struct WordTag: Equatable, Hashable {
@@ -4369,6 +4481,30 @@ private struct FfiConverterOptionSequenceTypeWordDefinition: FfiConverterRustBuf
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
+private struct FfiConverterOptionSequenceTypeWordEtymology: FfiConverterRustBuffer {
+  typealias SwiftType = [WordEtymology]?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterSequenceTypeWordEtymology.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterSequenceTypeWordEtymology.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
 private struct FfiConverterOptionSequenceTypeWordImage: FfiConverterRustBuffer {
   typealias SwiftType = [WordImage]?
 
@@ -4457,6 +4593,30 @@ private struct FfiConverterOptionSequenceTypeWordSentence: FfiConverterRustBuffe
     switch try readInt(&buf) as Int8 {
     case 0: return nil
     case 1: return try FfiConverterSequenceTypeWordSentence.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionSequenceTypeWordSynonym: FfiConverterRustBuffer {
+  typealias SwiftType = [WordSynonym]?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterSequenceTypeWordSynonym.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterSequenceTypeWordSynonym.read(from: &buf)
     default: throw UniffiInternalError.unexpectedOptionalTag
     }
   }
@@ -4700,6 +4860,33 @@ private struct FfiConverterSequenceTypeWordDefinition: FfiConverterRustBuffer {
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
+private struct FfiConverterSequenceTypeWordEtymology: FfiConverterRustBuffer {
+  typealias SwiftType = [WordEtymology]
+
+  public static func write(_ value: [WordEtymology], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterTypeWordEtymology.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> [WordEtymology]
+  {
+    let len: Int32 = try readInt(&buf)
+    var seq = [WordEtymology]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterTypeWordEtymology.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
 private struct FfiConverterSequenceTypeWordImage: FfiConverterRustBuffer {
   typealias SwiftType = [WordImage]
 
@@ -4795,6 +4982,32 @@ private struct FfiConverterSequenceTypeWordSentence: FfiConverterRustBuffer {
     seq.reserveCapacity(Int(len))
     for _ in 0..<len {
       seq.append(try FfiConverterTypeWordSentence.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterSequenceTypeWordSynonym: FfiConverterRustBuffer {
+  typealias SwiftType = [WordSynonym]
+
+  public static func write(_ value: [WordSynonym], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterTypeWordSynonym.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [WordSynonym]
+  {
+    let len: Int32 = try readInt(&buf)
+    var seq = [WordSynonym]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterTypeWordSynonym.read(from: &buf))
     }
     return seq
   }
@@ -5074,6 +5287,14 @@ public func echoWordDefinition(wordDefinition: WordDefinition) -> WordDefinition
       )
     })
 }
+public func echoWordEtymology(wordEtymology: WordEtymology) -> WordEtymology {
+  return try! FfiConverterTypeWordEtymology_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_word_etymology(
+        FfiConverterTypeWordEtymology_lower(wordEtymology), $0
+      )
+    })
+}
 public func echoWordImage(wordImage: WordImage) -> WordImage {
   return try! FfiConverterTypeWordImage_lift(
     try! rustCall {
@@ -5103,6 +5324,14 @@ public func echoWordSentence(wordSentence: WordSentence) -> WordSentence {
     try! rustCall {
       uniffi_beyondtranslate_runtime_fn_func_echo_word_sentence(
         FfiConverterTypeWordSentence_lower(wordSentence), $0
+      )
+    })
+}
+public func echoWordSynonym(wordSynonym: WordSynonym) -> WordSynonym {
+  return try! FfiConverterTypeWordSynonym_lift(
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_func_echo_word_synonym(
+        FfiConverterTypeWordSynonym_lower(wordSynonym), $0
       )
     })
 }
@@ -5199,6 +5428,9 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_func_echo_word_definition() != 13074 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_word_etymology() != 13993 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_func_echo_word_image() != 48917 {
     return InitializationResult.apiChecksumMismatch
   }
@@ -5209,6 +5441,9 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_func_echo_word_sentence() != 37267 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_func_echo_word_synonym() != 27203 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_func_echo_word_tag() != 60766 {

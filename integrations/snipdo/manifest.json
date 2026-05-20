@@ -1,0 +1,13 @@
+{
+  "name": "Beyond Translate",
+  "identifier": "com.beyondtranslate.snipdo.extension",
+  "icon": "icon.png",
+  "actions": [
+    {
+      "title": "Beyond Translate",
+      "icon": "icon.png",
+      "url": "beyondtranslate://translate?text={PANTHERBAR_URLENCODED_TEXT}",
+      "regex": "(?s)^.{1,1900}$"
+    }
+  ]
+}

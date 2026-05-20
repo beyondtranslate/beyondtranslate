@@ -5,6 +5,7 @@ use beyondtranslate_core::{
     LookUpRequest, LookUpResponse, OcrError, OcrService, Provider, RecognizeTextRequest,
     RecognizeTextResponse, RecognizedRect, TextDetection, TextRecognition, TextTranslation,
     TranslateRequest, TranslateResponse, TranslationError, TranslationService, WordDefinition,
+    WordPronunciation,
 };
 
 // ── macOS: Apple Vision Framework ──────────────────────────────────────────
@@ -698,22 +699,680 @@ mod platform {
 
             CFRelease(definition);
 
-            Ok(LookUpResponse {
-                translations: Vec::<TextTranslation>::new(),
-                word: Some(word.to_owned()),
-                tip: None,
-                tags: None,
-                definitions: Some(vec![WordDefinition {
+            Ok(parse_lookup_response(word, &definition_text))
+        }
+    }
+
+    /// Parses the raw dictionary definition text from `DCSCopyTextDefinition`
+    /// into the structured `LookUpResponse` model fields.
+    ///
+    /// Strategy:
+    /// 1. Extract pronunciation from `|...|` blocks (works reliably)
+    /// 2. Strip those blocks and keep the remainder as definition body
+    /// 3. Try to split the body into structured sections using known markers
+    /// 4. If splitting fails, keep the entire body as one piece
+    fn parse_lookup_response(word: &str, text: &str) -> LookUpResponse {
+        let text = text.trim();
+        if text.is_empty() {
+            return empty_lookup_response(word);
+        }
+
+        let pronunciations = extract_pronunciation(text);
+        let body = strip_headword(&strip_pipe_blocks(text), word);
+
+        let definitions = if body.is_empty() {
+            vec![]
+        } else {
+            parse_definition_sections(&body)
+        };
+
+        LookUpResponse {
+            translations: Vec::<TextTranslation>::new(),
+            word: Some(word.to_owned()),
+            tip: None,
+            tags: None,
+            definitions: if definitions.is_empty() {
+                None
+            } else {
+                Some(definitions)
+            },
+            pronunciations: if pronunciations.is_empty() {
+                None
+            } else {
+                Some(pronunciations)
+            },
+            images: None,
+            phrases: None,
+            tenses: None,
+            sentences: None,
+            etymology: None,
+            synonyms: None,
+        }
+    }
+
+    /// Extracts pronunciation from the first `|...|` block in the text.
+    /// Handles patterns like: `| BrE ... , AmE ... |` or `|pronunciation|`.
+    fn extract_pronunciation(text: &str) -> Vec<WordPronunciation> {
+        // Find the first pipe pair
+        let pipe_start = match text.find('|') {
+            Some(p) => p,
+            None => return vec![],
+        };
+        let after_start = &text[pipe_start + 1..];
+        let pipe_end = match after_start.find('|') {
+            Some(p) => p,
+            None => return vec![],
+        };
+        let content = after_start[..pipe_end].trim();
+
+        if content.is_empty() {
+            return vec![];
+        }
+
+        // Detect if this looks like a pronunciation block by checking
+        // for IPA phonetic characters or known labels (BrE, AmE, etc.)
+        let has_ipa = content.chars().any(|c| {
+            matches!(
+                c,
+                'ə' | 'ː'
+                    | 'ˈ'
+                    | 'ˌ'
+                    | 'ɛ'
+                    | 'ɒ'
+                    | 'ʌ'
+                    | 'θ'
+                    | 'ð'
+                    | 'ʃ'
+                    | 'ʒ'
+                    | 'ŋ'
+                    | 'ɡ'
+                    | 'ɪ'
+                    | 'ʊ'
+                    | 'ɔ'
+                    | 'ɑ'
+                    | 'ɜ'
+                    | 'æ'
+                    | 'ɹ'
+                    | 'ɾ'
+            )
+        });
+        let has_label =
+            content.to_lowercase().contains("bre") || content.to_lowercase().contains("ame");
+
+        if !has_ipa && !has_label {
+            return vec![];
+        }
+
+        let mut result = Vec::new();
+
+        if has_label {
+            let mut current_type: Option<String> = None;
+            let mut current_symbols: Vec<String> = Vec::new();
+
+            let flush_current =
+                |result: &mut Vec<WordPronunciation>,
+                 current_type: &mut Option<String>,
+                 current_symbols: &mut Vec<String>| {
+                    if current_symbols.is_empty() {
+                        return;
+                    }
+
+                    result.push(WordPronunciation {
+                        r#type: current_type.take(),
+                        phonetic_symbol: Some(current_symbols.join(", ")),
+                        audio_url: None,
+                    });
+                    current_symbols.clear();
+                };
+
+            for part in content.split(',') {
+                let part = part.trim();
+                if part.is_empty() {
+                    continue;
+                }
+
+                let lower = part.to_ascii_lowercase();
+                let labeled = if lower.starts_with("bre") {
+                    Some(("uk".to_owned(), part[3..].trim().to_owned()))
+                } else if lower.starts_with("ame") {
+                    Some(("us".to_owned(), part[3..].trim().to_owned()))
+                } else {
+                    None
+                };
+
+                if let Some((label, symbol)) = labeled {
+                    flush_current(&mut result, &mut current_type, &mut current_symbols);
+                    current_type = Some(label);
+                    if !symbol.is_empty() {
+                        current_symbols.push(symbol);
+                    }
+                } else if !part.is_empty() {
+                    current_symbols.push(part.to_owned());
+                }
+            }
+
+            flush_current(&mut result, &mut current_type, &mut current_symbols);
+        } else {
+            result.push(WordPronunciation {
+                r#type: None,
+                phonetic_symbol: Some(content.to_owned()),
+                audio_url: None,
+            });
+        }
+
+        result
+    }
+
+    /// Removes all `|...|` blocks from the text and returns the remainder.
+    fn strip_pipe_blocks(text: &str) -> String {
+        let mut result = String::with_capacity(text.len());
+        let mut in_pipe = false;
+
+        for ch in text.chars() {
+            match ch {
+                '|' => in_pipe = !in_pipe,
+                _ if !in_pipe => result.push(ch),
+                _ => {}
+            }
+        }
+
+        result.trim().to_owned()
+    }
+
+    fn strip_headword(body: &str, word: &str) -> String {
+        let body = body.trim();
+        let word = word.trim();
+        if word.is_empty() || body.len() <= word.len() {
+            return body.to_owned();
+        }
+
+        let Some(prefix) = body.get(..word.len()) else {
+            return body.to_owned();
+        };
+        let rest = &body[word.len()..];
+        if prefix.eq_ignore_ascii_case(word)
+            && rest
+                .chars()
+                .next()
+                .map(char::is_whitespace)
+                .unwrap_or(false)
+        {
+            rest.trim().to_owned()
+        } else {
+            body.to_owned()
+        }
+    }
+
+    /// Parses the definition body into `WordDefinition` entries.
+    /// Tries multiple splitting strategies in order.
+    fn parse_definition_sections(body: &str) -> Vec<WordDefinition> {
+        let body = body.trim();
+        if body.is_empty() {
+            return vec![];
+        }
+
+        // Strategy 1: Try splitting by `▶` (U+25B6) — English dictionary format
+        let sections = split_by_triangle(body);
+        if sections.len() > 1 {
+            return sections
+                .iter()
+                .filter_map(|s| {
+                    let s = s.trim();
+                    if s.is_empty() {
+                        return None;
+                    }
+                    let (pos, lines) = split_pos_and_defs(s);
+                    make_def(pos, lines)
+                })
+                .collect();
+        }
+
+        // Strategy 2: Try splitting by "A.", "B.", "C." markers — bilingual dict format
+        let letter_sections = split_by_letters(body);
+        if !letter_sections.is_empty() {
+            return letter_sections
+                .into_iter()
+                .filter_map(|(_label, content)| parse_inline_definition_section(content))
+                .collect();
+        }
+
+        // Strategy 3: macOS bilingual dictionaries often return one inline section:
+        // `noun ① ... ② ...` or `noun translation`.
+        if let Some(definition) = parse_inline_definition_section(body) {
+            if definition.name.is_some()
+                || definition
+                    .values
+                    .as_ref()
+                    .map(|values| values.len() > 1)
+                    .unwrap_or(false)
+            {
+                return vec![definition];
+            }
+        }
+
+        // Strategy 4: Single section with circled-digit items
+        let items = split_by_circled(body);
+        if items.len() > 1 {
+            let values: Vec<String> = items
+                .into_iter()
+                .map(clean_definition_value)
+                .filter(|s| !s.is_empty())
+                .collect();
+            if !values.is_empty() {
+                return vec![WordDefinition {
                     r#type: None,
                     name: None,
-                    values: Some(vec![definition_text]),
-                }]),
-                pronunciations: None,
-                images: None,
-                phrases: None,
-                tenses: None,
-                sentences: None,
+                    values: Some(values),
+                }];
+            }
+        }
+
+        // Strategy 5: Single section with numbered items (1., 2., etc.)
+        let (_pos, lines) = split_pos_and_defs(body);
+        let stripped: Vec<String> = lines
+            .iter()
+            .map(|l| clean_definition_value(&strip_leading_number(l)))
+            .filter(|v| !v.is_empty())
+            .collect();
+        if !stripped.is_empty() {
+            return vec![WordDefinition {
+                r#type: None,
+                name: None,
+                values: Some(stripped),
+            }];
+        }
+
+        // Fallback: whole body as one definition
+        vec![WordDefinition {
+            r#type: None,
+            name: None,
+            values: Some(vec![clean_definition_value(body)]),
+        }]
+    }
+
+    fn parse_inline_definition_section(content: &str) -> Option<WordDefinition> {
+        let content = content.trim();
+        if content.is_empty() {
+            return None;
+        }
+
+        let marker_index = first_circled_marker_index(content);
+        let (head, values_text) = marker_index
+            .map(|index| (&content[..index], Some(&content[index..])))
+            .unwrap_or((content, None));
+
+        let (name, head_remainder) = split_part_of_speech(head);
+        let mut values = Vec::new();
+
+        if let Some(values_text) = values_text {
+            values.extend(
+                split_by_circled(values_text)
+                    .into_iter()
+                    .map(clean_definition_value)
+                    .filter(|value| !value.is_empty()),
+            );
+        }
+
+        if values.is_empty() {
+            let value = clean_definition_value(head_remainder.unwrap_or(head));
+            if !value.is_empty() {
+                values.push(value);
+            }
+        } else if let Some(remainder) = head_remainder {
+            let remainder = clean_definition_value(remainder);
+            if !remainder.is_empty() && !looks_like_form_metadata(&remainder) {
+                values.insert(0, remainder);
+            }
+        }
+
+        if name.is_none() && values.is_empty() {
+            None
+        } else {
+            Some(WordDefinition {
+                r#type: None,
+                name,
+                values: if values.is_empty() {
+                    None
+                } else {
+                    Some(values)
+                },
             })
+        }
+    }
+
+    fn split_part_of_speech(text: &str) -> (Option<String>, Option<&str>) {
+        let text = text.trim();
+        for part_of_speech in PARTS_OF_SPEECH {
+            if text.eq_ignore_ascii_case(part_of_speech) {
+                return (Some((*part_of_speech).to_owned()), None);
+            }
+            if text.len() > part_of_speech.len() {
+                if let Some(prefix) = text.get(..part_of_speech.len()) {
+                    if prefix.eq_ignore_ascii_case(part_of_speech) {
+                        let rest = &text[part_of_speech.len()..];
+                        if rest
+                            .chars()
+                            .next()
+                            .map(char::is_whitespace)
+                            .unwrap_or(false)
+                        {
+                            return (Some((*part_of_speech).to_owned()), Some(rest.trim()));
+                        }
+                    }
+                }
+            }
+        }
+
+        (None, Some(text))
+    }
+
+    const PARTS_OF_SPEECH: &[&str] = &[
+        "auxiliary verb",
+        "intransitive verb",
+        "transitive verb",
+        "modal verb",
+        "phrasal verb",
+        "proper noun",
+        "plural noun",
+        "cardinal number",
+        "ordinal number",
+        "combining form",
+        "past participle",
+        "present participle",
+        "adjective",
+        "adverb",
+        "article",
+        "conjunction",
+        "determiner",
+        "exclamation",
+        "interjection",
+        "noun",
+        "number",
+        "prefix",
+        "preposition",
+        "pronoun",
+        "suffix",
+        "symbol",
+        "verb",
+    ];
+
+    fn looks_like_form_metadata(value: &str) -> bool {
+        let lower = value.to_ascii_lowercase();
+        lower.contains("comparative form")
+            || lower.contains("superlative form")
+            || lower.contains("plural form")
+            || lower.contains("past tense")
+            || lower.contains("past participle")
+            || lower.contains("present participle")
+    }
+
+    fn clean_definition_value(value: &str) -> String {
+        value
+            .split_whitespace()
+            .collect::<Vec<_>>()
+            .join(" ")
+            .trim_matches(|c: char| c == ';' || c == ',' || c.is_whitespace())
+            .to_owned()
+    }
+
+    fn first_circled_marker_index(content: &str) -> Option<usize> {
+        content
+            .char_indices()
+            .find(|(_, c)| is_circled_marker(*c))
+            .map(|(index, _)| index)
+    }
+
+    fn is_circled_marker(c: char) -> bool {
+        matches!(
+            c,
+            '\u{2460}'
+                | '\u{2461}'
+                | '\u{2462}'
+                | '\u{2463}'
+                | '\u{2464}'
+                | '\u{2465}'
+                | '\u{2466}'
+                | '\u{2467}'
+                | '\u{2468}'
+                | '\u{2469}'
+                | '\u{246A}'
+                | '\u{246B}'
+                | '\u{246C}'
+                | '\u{246D}'
+                | '\u{246E}'
+                | '\u{246F}'
+                | '\u{2470}'
+                | '\u{2471}'
+                | '\u{2472}'
+                | '\u{2473}'
+                | '\u{3251}'
+                | '\u{3252}'
+                | '\u{3253}'
+                | '\u{3254}'
+                | '\u{3255}'
+                | '\u{3256}'
+                | '\u{3257}'
+                | '\u{3258}'
+                | '\u{3259}'
+                | '\u{325A}'
+                | '\u{325B}'
+                | '\u{325C}'
+                | '\u{325D}'
+                | '\u{325E}'
+                | '\u{325F}'
+        )
+    }
+
+    /// Splits text by `▶` (U+25B6) — marks part-of-speech sections in English dictionaries.
+    fn split_by_triangle(text: &str) -> Vec<&str> {
+        let marker = '\u{25B6}';
+        let mut sections: Vec<&str> = Vec::new();
+        let mut start = 0;
+        for (i, _c) in text.char_indices() {
+            if text[i..].starts_with(marker) {
+                if i > start {
+                    sections.push(&text[start..i]);
+                }
+                // Skip the marker character itself
+                start = i + marker.len_utf8();
+            }
+        }
+        if start < text.len() {
+            sections.push(&text[start..]);
+        }
+        sections
+    }
+
+    /// Splits a section (e.g. `"noun\n1. first def\n2. second def"`) into
+    /// the part-of-speech name and the individual definition lines.
+    fn split_pos_and_defs(section: &str) -> (String, Vec<String>) {
+        let section = section.trim();
+        if section.is_empty() {
+            return (String::new(), vec![]);
+        }
+
+        let lines: Vec<&str> = section.lines().collect();
+        if lines.is_empty() {
+            return (section.to_owned(), vec![]);
+        }
+
+        // Find the first definition line (starts with a digit + '.' or a bullet).
+        let def_start = lines.iter().position(|l| {
+            let trimmed = l.trim();
+            !trimmed.is_empty() && looks_like_definition_line(trimmed)
+        });
+
+        match def_start {
+            Some(idx) => {
+                let pos_name = lines[..idx]
+                    .iter()
+                    .map(|l| l.trim())
+                    .filter(|l| !l.is_empty())
+                    .collect::<Vec<_>>()
+                    .join(" ");
+                let def_lines: Vec<String> = lines[idx..]
+                    .iter()
+                    .map(|l| l.trim().to_owned())
+                    .filter(|l| !l.is_empty())
+                    .collect();
+                (pos_name, def_lines)
+            }
+            None => {
+                // No definition markers found; treat the whole section as a single definition
+                (String::new(), vec![section.to_owned()])
+            }
+        }
+    }
+
+    /// Returns `true` if a line looks like a dictionary definition entry.
+    fn looks_like_definition_line(line: &str) -> bool {
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            return false;
+        }
+        let first_char = trimmed.chars().next().unwrap();
+        // Starts with a digit + '.' (e.g., "1. ", "2. ")
+        if first_char.is_ascii_digit() {
+            if let Some(rest) = trimmed.get(1..) {
+                return rest.trim_start().starts_with('.');
+            }
+        }
+        // Starts with a bullet (•, -, etc.)
+        matches!(first_char, '•' | '-' | '*' | '·')
+    }
+
+    /// Strips a leading number + dot (e.g., "1. ", "2. ") from a definition line.
+    fn strip_leading_number(line: &str) -> String {
+        let trimmed = line.trim();
+        if let Some(dot_pos) = trimmed.find('.').or_else(|| trimmed.find(')')) {
+            let prefix = &trimmed[..dot_pos];
+            if prefix
+                .chars()
+                .all(|c| c.is_ascii_digit() || c == '(' || c == ' ')
+            {
+                let rest = trimmed[dot_pos + 1..].trim();
+                if !rest.is_empty() {
+                    return rest.to_owned();
+                }
+            }
+        }
+        trimmed.to_owned()
+    }
+
+    /// Splits text by section markers like `A.`, `B.`, `C.` (uppercase letter + period).
+    /// Returns `Vec<(label, content)>`.
+    fn split_by_letters(text: &str) -> Vec<(String, &str)> {
+        let mut sections: Vec<(String, &str)> = Vec::new();
+        // We need to preserve the original text to take slices from it.
+        // Use a manual scan for "A." at the start or " A." between sections.
+        if text.len() < 3 {
+            return sections;
+        }
+
+        let mut prev_start: Option<(usize, String)> = None;
+        for (i, ch) in text.char_indices() {
+            let remaining = &text[i..];
+            let marker_at_start = i == 0
+                && remaining.as_bytes().len() >= 2
+                && remaining.as_bytes()[0].is_ascii_uppercase()
+                && remaining.as_bytes()[1] == b'.';
+            let marker_after_space = ch.is_whitespace()
+                && remaining.as_bytes().len() >= 3
+                && remaining.as_bytes()[1].is_ascii_uppercase()
+                && remaining.as_bytes()[2] == b'.';
+
+            if marker_at_start || marker_after_space {
+                let label_index = if marker_at_start { i } else { i + 1 };
+                let label = char::from(text.as_bytes()[label_index]).to_string();
+                if let Some((start, prev_label)) = prev_start.take() {
+                    let content = &text[start..i];
+                    if !content.trim().is_empty() {
+                        sections.push((prev_label, content));
+                    }
+                }
+                prev_start = Some((label_index + 2, label));
+            }
+        }
+
+        if let Some((start, label)) = prev_start.take() {
+            let content = &text[start..];
+            if !content.trim().is_empty() {
+                sections.push((label, content));
+            }
+        }
+
+        sections
+    }
+
+    /// Splits content by circled-digit markers ①, ②, ③, etc.
+    /// Returns the parts BETWEEN the markers (excluding the markers themselves).
+    fn split_by_circled(content: &str) -> Vec<&str> {
+        let mut positions: Vec<usize> = Vec::new();
+        for (i, c) in content.char_indices() {
+            if is_circled_marker(c) {
+                positions.push(i);
+            }
+        }
+
+        if positions.is_empty() {
+            return vec![content];
+        }
+
+        let mut parts = Vec::new();
+        let mut last = 0;
+
+        for &pos in &positions {
+            // Everything from `last` to this marker (exclusive)
+            if pos > last {
+                parts.push(&content[last..pos]);
+            }
+            last = pos;
+            // Skip the marker character itself
+            let marker_len = content[last..]
+                .chars()
+                .next()
+                .map(|c| c.len_utf8())
+                .unwrap_or(0);
+            last += marker_len;
+        }
+        // Remaining text after the last marker
+        if last < content.len() {
+            parts.push(&content[last..]);
+        }
+
+        parts
+    }
+
+    /// Helper to build a `WordDefinition` from a part-of-speech name and definition lines.
+    fn make_def(pos_name: String, def_lines: Vec<String>) -> Option<WordDefinition> {
+        let stripped: Vec<String> = def_lines
+            .iter()
+            .map(|l| strip_leading_number(l))
+            .filter(|v| !v.is_empty())
+            .collect();
+
+        if !stripped.is_empty() {
+            Some(WordDefinition {
+                r#type: if pos_name.is_empty() {
+                    None
+                } else {
+                    Some(pos_name)
+                },
+                name: None,
+                values: Some(stripped),
+            })
+        } else if !def_lines.is_empty() {
+            Some(WordDefinition {
+                r#type: None,
+                name: if pos_name.is_empty() {
+                    None
+                } else {
+                    Some(pos_name)
+                },
+                values: Some(def_lines),
+            })
+        } else {
+            None
         }
     }
 
@@ -729,6 +1388,73 @@ mod platform {
             phrases: None,
             tenses: None,
             sentences: None,
+            etymology: None,
+            synonyms: None,
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn parses_macos_bilingual_lookup_sections() {
+            let response = parse_lookup_response(
+                "hello",
+                "hello | BrE həˈləʊ, hɛˈləʊ, AmE həˈloʊ, hɛˈloʊ | A. noun 问候 wènhòu B. exclamation ① (greeting) 你好 nǐ hǎo; (on phone) 喂 wèi ② British (in surprise) 嘿 hēi",
+            );
+
+            let pronunciations = response.pronunciations.expect("pronunciations");
+            assert_eq!(pronunciations.len(), 2);
+            assert_eq!(pronunciations[0].r#type.as_deref(), Some("uk"));
+            assert_eq!(
+                pronunciations[0].phonetic_symbol.as_deref(),
+                Some("həˈləʊ, hɛˈləʊ")
+            );
+            assert_eq!(pronunciations[1].r#type.as_deref(), Some("us"));
+            assert_eq!(
+                pronunciations[1].phonetic_symbol.as_deref(),
+                Some("həˈloʊ, hɛˈloʊ")
+            );
+
+            let definitions = response.definitions.expect("definitions");
+            assert_eq!(definitions.len(), 2);
+            assert_eq!(definitions[0].name.as_deref(), Some("noun"));
+            assert_eq!(
+                definitions[0].values.as_deref(),
+                Some(&["问候 wènhòu".to_owned()][..])
+            );
+            assert_eq!(definitions[1].name.as_deref(), Some("exclamation"));
+            assert_eq!(
+                definitions[1].values.as_deref(),
+                Some(
+                    &[
+                        "(greeting) 你好 nǐ hǎo; (on phone) 喂 wèi".to_owned(),
+                        "British (in surprise) 嘿 hēi".to_owned()
+                    ][..]
+                )
+            );
+        }
+
+        #[test]
+        fn parses_single_inline_circled_section() {
+            let response = parse_lookup_response(
+                "world",
+                "world | BrE wəːld, AmE wərld | noun ① (earth, universe) the world 世界 ② (section of earth) [世界的] 某一地区 mǒu yī dìqū",
+            );
+            let definitions = response.definitions.expect("definitions");
+
+            assert_eq!(definitions.len(), 1);
+            assert_eq!(definitions[0].name.as_deref(), Some("noun"));
+            assert_eq!(
+                definitions[0].values.as_deref(),
+                Some(
+                    &[
+                        "(earth, universe) the world 世界".to_owned(),
+                        "(section of earth) [世界的] 某一地区 mǒu yī dìqū".to_owned()
+                    ][..]
+                )
+            );
         }
     }
 }
