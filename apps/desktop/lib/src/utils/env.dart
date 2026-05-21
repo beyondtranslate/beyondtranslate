@@ -17,7 +17,7 @@ class Env {
   /// The shared instance of [Env].
   static final Env instance = Env._();
 
-  String webUrl = 'https://biyidev.com';
+  String webUrl = 'https://beyondtranslate.com';
 
   int appBuildNumber = 0;
   String appVersion = '0.0.0';

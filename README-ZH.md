@@ -10,7 +10,7 @@
 
 ---
 
-![](https://biyidev.com/images/screenshots/biyi_extract_text_from_screen_selection.gif)
+![](https://beyondtranslate.com/images/screenshots/beyondtranslate_extract_text_from_screen_selection.gif)
 
 ## 平台支持
 
@@ -25,8 +25,8 @@
 **要用 Homebrew 安装，请运行：**
 
 ```bash
-brew tap biyidev/biyi
-brew install biyi
+brew tap beyondtranslate/beyondtranslate
+brew install beyondtranslate
 ```
 
 ## 开发
@@ -78,7 +78,7 @@ $ flutter run -d linux / macos / windows
 
 ## 相关链接
 
-- https://github.com/biyidev/biyi
+- https://github.com/beyondtranslate/beyondtranslate
 - https://github.com/leanflutter/hotkey_manager
 - https://github.com/leanflutter/screen_text_extractor
 

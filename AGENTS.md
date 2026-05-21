@@ -357,7 +357,7 @@ SettingsView
 **Key macOS-specific features:**
 - The Rust `Runtime` singleton is **shared** between the Flutter Dart side and the native Swift side; config changes from either side are immediately visible to the other
 - Settings pages support English/Chinese switching via `AppLocale`, with language preference stored in `UserDefaults`
-- Supports custom URL schemes (`beyondtranslate://`, `biyiapp://`)
+- Supports custom URL schemes (`beyondtranslate://`)
 - `LSUIElement = true` makes the app run in the menu bar without a Dock icon
 
 ##### Summary: macOS vs. Linux/Windows

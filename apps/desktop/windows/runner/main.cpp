@@ -9,7 +9,7 @@
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
-  HWND hwnd = ::FindWindow(L"FLUTTER_RUNNER_WIN32_WINDOW", L"biyi");
+  HWND hwnd = ::FindWindow(L"FLUTTER_RUNNER_WIN32_WINDOW", L"beyondtranslate");
   if (hwnd != NULL) {
     DispatchToProtocolHandler(hwnd);
 
@@ -38,7 +38,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(380, 185);
-  if (!window.Create(L"biyi", origin, size)) {
+  if (!window.Create(L"beyondtranslate", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

@@ -27,7 +27,7 @@ Future<void> _ensureInitialized() async {
       appName: packageInfo.appName,
       appPath: Platform.resolvedExecutable,
     );
-    await protocolHandler.register('biyiapp');
+    await protocolHandler.register('beyondtranslate');
   }
 
   await initEnv();

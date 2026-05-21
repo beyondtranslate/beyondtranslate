@@ -1,8 +1,8 @@
 appId: 9DD27DE6-0D88-4CA9-8150-6454E5F2951D
 publisher: LiJianying
-publisher_url: https://biyidev.com
+publisher_url: https://beyondtranslate.com
 display_name: 比译
 create_desktop_icon: true
-install_dir_name: "{autopf64}\\Biyi"
+install_dir_name: "{autopf64}\\BeyondTranslate"
 locales:
   - zh

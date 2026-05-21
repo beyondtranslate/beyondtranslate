@@ -1,5 +1,5 @@
 output: dist/
-artifact_name: 'biyi{{#flavor}}-{{flavor}}{{/flavor}}-{{build_name}}+{{build_number}}{{#is_profile}}-{{build_mode}}{{/is_profile}}-{{platform}}{{#is_installer}}-setup{{/is_installer}}{{#ext}}.{{ext}}{{/ext}}'
+artifact_name: 'beyondtranslate{{#flavor}}-{{flavor}}{{/flavor}}-{{build_name}}+{{build_number}}{{#is_profile}}-{{build_mode}}{{/is_profile}}-{{platform}}{{#is_installer}}-setup{{/is_installer}}{{#ext}}.{{ext}}{{/ext}}'
 releases:
   - name: prod
     jobs:

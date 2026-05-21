@@ -30,6 +30,7 @@ const _kSettingsWindowTitle = 'Settings';
 const _kMiniTranslatorAppTitle = 'Mini Translator';
 const _kSettingsWindowSize = Size(720, 532);
 const _kUseNativeSettingsPreferenceKey = 'use_native_settings';
+const _kMiniTranslatorTrayGap = 10.0;
 
 extension PreferencesExtension on Preferences {
   bool get useNativeSettings =>
@@ -41,6 +42,7 @@ extension PreferencesExtension on Preferences {
 }
 
 final Preferences _devToolsPreferences = Preferences.withScope('dev_tools');
+TrayIcon? _mainTrayIcon;
 
 // ──────────────────────────────────────────────────────────────────────────────
 // Window controllers
@@ -104,11 +106,169 @@ final miniTranslatorWindowController = RegularWindowController(
   });
 
 /// Shows the mini translator window.
-void showMiniTranslatorWindow({Offset? position}) {
-  if (position != null) {
-    miniTranslatorWindowController.window.setPosition(position.dx, position.dy);
+void showMiniTranslatorWindow({Offset? position, bool belowTray = false}) {
+  final newPosition =
+      position ?? (belowTray ? miniTranslatorPositionBelowTray() : null);
+  if (newPosition != null) {
+    miniTranslatorWindowController.window.setPosition(
+      newPosition.dx,
+      newPosition.dy,
+    );
   }
   miniTranslatorWindowController.window.show();
+}
+
+Offset? miniTranslatorPositionBelowTray({Size? windowSize}) {
+  final trayBounds = _mainTrayIcon?.bounds;
+  if (trayBounds == null) return null;
+
+  final size = windowSize ?? miniTranslatorWindowController.window.size;
+  final anchor = _resolveTrayAnchor(trayBounds);
+  if (anchor == null) return null;
+
+  if (!kIsMacOS) {
+    final position = Offset(
+      anchor.bounds.left - (size.width - anchor.bounds.width) / 2,
+      anchor.bounds.bottom + _kMiniTranslatorTrayGap,
+    );
+    return _clampPositionToDisplay(position, size, anchor.display);
+  }
+
+  final displayBounds = _displayBounds(anchor.display);
+  final menuBarBottom = anchor.display.workArea.top > displayBounds.top
+      ? anchor.display.workArea.top
+      : displayBounds.top + anchor.bounds.height;
+  final position = Offset(
+    anchor.bounds.center.dx - size.width / 2,
+    menuBarBottom + _kMiniTranslatorTrayGap,
+  );
+  return _clampPositionToDisplay(position, size, anchor.display);
+}
+
+Offset _clampPositionToDisplay(
+  Offset position,
+  Size windowSize,
+  Display display,
+) {
+  final workArea = display.workArea;
+  return Offset(
+    _clampDouble(
+      position.dx,
+      workArea.left,
+      workArea.right - windowSize.width,
+    ),
+    _clampDouble(
+      position.dy,
+      workArea.top,
+      workArea.bottom - windowSize.height,
+    ),
+  );
+}
+
+_TrayAnchor? _resolveTrayAnchor(Rect rawBounds) {
+  final displays = DisplayManager.instance.getAll();
+  if (displays.isEmpty) return null;
+
+  final rawCenter = rawBounds.center;
+  for (final display in displays) {
+    if (_displayBounds(display).contains(rawCenter)) {
+      return _TrayAnchor(
+        display: display,
+        bounds: _trayBoundsOnDisplay(rawBounds, display),
+      );
+    }
+  }
+
+  for (final display in displays) {
+    if (_containsHorizontally(_displayBounds(display), rawCenter.dx)) {
+      return _TrayAnchor(
+        display: display,
+        bounds: _trayBoundsOnDisplay(rawBounds, display),
+      );
+    }
+  }
+
+  for (final display in displays) {
+    final normalizedBounds = _normalizeScaledTrayBounds(rawBounds, display);
+    if (_containsHorizontally(
+      _displayBounds(display),
+      normalizedBounds.center.dx,
+    )) {
+      return _TrayAnchor(
+        display: display,
+        bounds: _trayBoundsOnDisplay(normalizedBounds, display),
+      );
+    }
+  }
+
+  displays.sort((a, b) {
+    final aDistance = _distanceSquared(_displayBounds(a).center, rawCenter);
+    final bDistance = _distanceSquared(_displayBounds(b).center, rawCenter);
+    return aDistance.compareTo(bDistance);
+  });
+  final display = displays.first;
+  return _TrayAnchor(
+    display: display,
+    bounds: _trayBoundsOnDisplay(rawBounds, display),
+  );
+}
+
+Rect _displayBounds(Display display) {
+  return Rect.fromLTWH(
+    display.position.dx,
+    display.position.dy,
+    display.size.width,
+    display.size.height,
+  );
+}
+
+Rect _trayBoundsOnDisplay(Rect bounds, Display display) {
+  return Rect.fromLTWH(
+    bounds.left,
+    _displayBounds(display).top,
+    bounds.width,
+    bounds.height,
+  );
+}
+
+Rect _normalizeScaledTrayBounds(Rect bounds, Display display) {
+  final scaleFactor = display.scaleFactor;
+  if (scaleFactor == 0 || scaleFactor == 1) return bounds;
+
+  final displayBounds = _displayBounds(display);
+  return Rect.fromLTWH(
+    displayBounds.left +
+        (bounds.left - displayBounds.left * scaleFactor) / scaleFactor,
+    displayBounds.top +
+        (bounds.top - displayBounds.top * scaleFactor) / scaleFactor,
+    bounds.width / scaleFactor,
+    bounds.height / scaleFactor,
+  );
+}
+
+bool _containsHorizontally(Rect rect, double x) {
+  return x >= rect.left && x <= rect.right;
+}
+
+double _distanceSquared(Offset a, Offset b) {
+  final dx = a.dx - b.dx;
+  final dy = a.dy - b.dy;
+  return dx * dx + dy * dy;
+}
+
+double _clampDouble(double value, double min, double max) {
+  if (max < min) return min;
+  return value.clamp(min, max).toDouble();
+}
+
+class _TrayAnchor {
+  const _TrayAnchor({
+    required this.display,
+    required this.bounds,
+  });
+
+  final Display display;
+  final Rect bounds;
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -301,6 +461,8 @@ class _RootBodyView extends StatefulWidget {
 class _RootBodyViewState extends State<_RootBodyView> {
   late final TrayIcon _trayIcon;
 
+  bool get _useNativeSettings => _devToolsPreferences.useNativeSettings;
+
   @override
   void initState() {
     settingsStore.addListener(_handleChanged);
@@ -311,6 +473,9 @@ class _RootBodyViewState extends State<_RootBodyView> {
   @override
   void dispose() {
     settingsStore.removeListener(_handleChanged);
+    if (_mainTrayIcon == _trayIcon) {
+      _mainTrayIcon = null;
+    }
     _trayIcon.dispose();
     super.dispose();
   }
@@ -329,23 +494,14 @@ class _RootBodyViewState extends State<_RootBodyView> {
 
   void _setupTrayIcon() {
     _trayIcon = TrayIcon();
+    _mainTrayIcon = _trayIcon;
     final icon = Image.fromAsset('resources/images/tray_icon.png');
     if (icon != null) _trayIcon.icon = icon;
     _trayIcon.isVisible = true;
     _trayIcon.contextMenu = _buildContextMenu();
     _trayIcon.contextMenuTrigger = ContextMenuTrigger.rightClicked;
     _trayIcon.on<TrayIconClickedEvent>((event) {
-      final bounds = _trayIcon.bounds;
-      final newPosition = bounds != null
-          ? Offset(
-              bounds.left -
-                  (miniTranslatorWindowController.window.bounds.width -
-                          bounds.width) /
-                      2,
-              bounds.bottom + 10)
-          : null;
-
-      showMiniTranslatorWindow(position: newPosition);
+      showMiniTranslatorWindow(belowTray: true);
     });
   }
 
@@ -356,7 +512,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
     menu.addItem(
       MenuItem(t.tray.context_menu.show_window)
         ..on<MenuItemClickedEvent>((_) {
-          showMiniTranslatorWindow();
+          showMiniTranslatorWindow(belowTray: kIsMacOS);
         }),
     );
 
@@ -431,10 +587,10 @@ class _RootBodyViewState extends State<_RootBodyView> {
 
   @override
   Widget build(BuildContext context) {
-    return const ViewCollection(
+    return ViewCollection(
       views: [
-        SettingsApp(),
-        MiniTranslatorApp(),
+        if (!_useNativeSettings) const SettingsApp(),
+        const MiniTranslatorApp(),
       ],
     );
   }

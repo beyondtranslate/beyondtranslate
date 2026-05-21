@@ -12,6 +12,7 @@ class AppDelegate: FlutterAppDelegate {
       return engine
     }
 
+    SettingsWindowController.shared.installPresentationGate()
     ThemeAppearanceController.applySavedPreference()
 
     let engine = FlutterEngine(
@@ -37,7 +38,6 @@ class AppDelegate: FlutterAppDelegate {
   }
 
   override func applicationDidFinishLaunching(_ notification: Notification) {
-    super.applicationDidFinishLaunching(notification)
     _ = flutterEngine
   }
 

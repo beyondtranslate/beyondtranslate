@@ -19,7 +19,6 @@ import '../../extensions/window_controller.dart';
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
-import '../../services/mac_settings.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
 import '../../services/shortcut_service/shortcut_service.dart';
@@ -29,8 +28,8 @@ import '../../utils/utils.dart';
 import '../../widgets/ui/button.dart';
 import '../app_router.dart'
     show
+        miniTranslatorPositionBelowTray,
         miniTranslatorWindowController,
-        settingsWindowController,
         showSettingsWindow;
 import 'limited_functionality_banner.dart';
 import 'translation_input_view.dart';
@@ -167,6 +166,14 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
         );
       }
       _window.setPosition(_lastShownPosition.dx, _lastShownPosition.dy);
+    } else if (kIsMacOS) {
+      final position = miniTranslatorPositionBelowTray(
+        windowSize: _window.size,
+      );
+      if (position != null) {
+        _lastShownPosition = position;
+        _window.setPosition(position.dx, position.dy);
+      }
     }
     await Future.delayed(const Duration(milliseconds: 100));
     await _windowShow(

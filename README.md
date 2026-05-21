@@ -10,7 +10,7 @@ English | [简体中文](./README-ZH.md)
 
 ---
 
-![](https://biyidev.com/images/screenshots/biyi_extract_text_from_screen_selection.gif)
+![](https://beyondtranslate.com/images/screenshots/beyondtranslate_extract_text_from_screen_selection.gif)
 
 ## Platform Support
 
@@ -20,13 +20,13 @@ English | [简体中文](./README-ZH.md)
 
 ## Installation
 
-Downloads are available on the [Releases](https://github.com/beyondtranslate/beyondtranslate/releases/latest) page. Also check out the [website](https://biyidev.com/release-notes) for other installation methods.
+Downloads are available on the [Releases](https://github.com/beyondtranslate/beyondtranslate/releases/latest) page. Also check out the [website](https://beyondtranslate.com/release-notes) for other installation methods.
 
 **To install with Homebrew, run:**
 
 ```bash
-brew tap biyidev/biyi
-brew install biyi
+brew tap beyondtranslate/beyondtranslate
+brew install beyondtranslate
 ```
 
 ## Development
@@ -78,7 +78,7 @@ $ flutter run -d linux / macos / windows
 
 ## Related Links
 
-- https://github.com/biyidev/biyi
+- https://github.com/beyondtranslate/beyondtranslate
 - https://github.com/leanflutter/hotkey_manager
 - https://github.com/leanflutter/screen_text_extractor
 
