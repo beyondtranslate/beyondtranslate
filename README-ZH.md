@@ -4,6 +4,8 @@
 
 **BeyondTranslate**（原名 **Biyi**）是一款快速且原生体验出色的翻译应用，支持 macOS、Windows 和 Linux，由 Flutter 与 Rust 构建。通过从屏幕任意位置捕获文本，借助多引擎获得精准翻译——轻量不打扰，需要时随时在。[查看文档](https://beyondtranslate.com/docs/)
 
+> **⚠️ 说明：** 架构升级中：核心服务切换至 Rust 以提升性能与跨平台复用，UI 继续由 Flutter 承载，macOS 设置页面则由 SwiftUI 原生渲染。
+
 ---
 
 [English](./README.md) | 简体中文

@@ -4,6 +4,8 @@
 
 **BeyondTranslate** (formerly **Biyi**) is a fast, native-experience translation app for macOS, Windows and Linux, built with Flutter and Rust. Capture text from anywhere on screen and get accurate translations powered by multiple engines — all from a lightweight app that stays out of your way until you need it. [View document](https://beyondtranslate.com/docs/)
 
+> **⚠️ Note:** Architecture upgrade in progress: Core services have been switched to Rust to improve performance and cross-platform reuse. The UI layer continues to be powered by Flutter, while the macOS settings page is rendered natively with SwiftUI.
+
 ---
 
 English | [简体中文](./README-ZH.md)
