@@ -4,7 +4,7 @@ This file serves as a quick-start reference for AI agents (and human contributor
 
 ## Project Overview
 
-**BeyondTranslate** (formerly **Biyi**) is a convenient translation and dictionary app written in **Flutter** (desktop) with **Rust** native modules. It supports Linux, macOS, and Windows.
+**BeyondTranslate** is a convenient translation and dictionary app written in **Flutter** (desktop) with **Rust** native modules. It supports Linux, macOS, and Windows.
 
 - **Homepage:** <https://beyondtranslate.com/>
 - **Repository:** <https://github.com/beyondtranslate/beyondtranslate>

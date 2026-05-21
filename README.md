@@ -2,7 +2,7 @@
 
 [![GitHub (pre-)release](https://img.shields.io/github/release/beyondtranslate/beyondtranslate/all.svg?style=flat-square)](https://github.com/beyondtranslate/beyondtranslate/releases)
 
-**BeyondTranslate** is a convenient translation and dictionary app written in `Flutter`. [View document](https://beyondtranslate.com/docs/)
+**BeyondTranslate** (formerly **Biyi**) is a fast, native-experience translation app for macOS, Windows and Linux, built with Flutter and Rust. Capture text from anywhere on screen and get accurate translations powered by multiple engines — all from a lightweight, always-accessible menu-bar experience. [View document](https://beyondtranslate.com/docs/)
 
 ---
 

@@ -2,7 +2,7 @@
 
 [![GitHub (pre-)release](https://img.shields.io/github/release/beyondtranslate/beyondtranslate/all.svg?style=flat-square)](https://github.com/beyondtranslate/beyondtranslate/releases)
 
-**BeyondTranslate**（比译）是一个用 Flutter 编写的便捷翻译和词典应用。[查看文档](https://beyondtranslate.com/docs/)
+**BeyondTranslate**（原名 **Biyi**）是一款快速且原生体验出色的翻译应用，支持 macOS、Windows 和 Linux，由 Flutter 与 Rust 构建。通过从屏幕任意位置捕获文本，借助多引擎获得精准翻译——所有功能都来自轻量、随时可访问的菜单栏体验。[查看文档](https://beyondtranslate.com/docs/)
 
 ---
 
