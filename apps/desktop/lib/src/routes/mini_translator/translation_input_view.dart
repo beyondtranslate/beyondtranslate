@@ -2,12 +2,13 @@ import 'dart:ui';
 
 import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/material.dart' hide TextField;
+import 'package:flutter/material.dart' hide Card, TextField;
 import 'package:screen_capturer/screen_capturer.dart';
 
 import '../../i18n/i18n.dart';
 import '../../services/settings_store.dart';
 import '../../widgets/ui/button.dart';
+import '../../widgets/ui/card.dart';
 import '../../widgets/ui/loading_indicator.dart';
 import '../../widgets/ui/text_field.dart';
 
@@ -47,7 +48,10 @@ class TranslationInputView extends StatelessWidget {
 
   final bool isAddedToVocabulary = true;
 
+  static const _kCornerRadius = 10.0;
+
   Widget _buildToolbarItems(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       children: [
         Tooltip(
@@ -55,85 +59,76 @@ class TranslationInputView extends StatelessWidget {
             t.mini_translator.toolbar.tooltip.translation_mode,
             args: [_translationModeText()],
           ),
-          child: SizedBox(
-            width: 30,
-            height: 26,
-            child: Button(
-              padding: EdgeInsets.zero,
-              child: SizedBox(
-                width: 30,
-                height: 26,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Icon(
-                      FluentIcons.target_20_regular,
-                      size: 22,
-                      color: translationMode == TranslationMode.auto
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).iconTheme.color,
-                    ),
-                    if (translationMode == TranslationMode.auto)
-                      Positioned(
-                        bottom: 3,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .primaryColor
-                                .withValues(alpha: 0.9),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                          padding: const EdgeInsets.only(
-                            left: 2,
-                            right: 2,
-                            top: 1.4,
-                            bottom: 1.4,
-                          ),
-                          child: const Text(
-                            'AUTO',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 5.4,
-                              fontWeight: FontWeight.w500,
-                            ),
+          child: Button(
+            minSize: 0,
+            padding: const EdgeInsets.all(4),
+            child: SizedBox(
+              width: 28,
+              height: 28,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Icon(
+                    FluentIcons.target_20_regular,
+                    size: 20,
+                    color: translationMode == TranslationMode.auto
+                        ? Theme.of(context).primaryColor
+                        : theme.iconTheme.color?.withValues(alpha: 0.7),
+                  ),
+                  if (translationMode == TranslationMode.auto)
+                    Positioned(
+                      bottom: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .primaryColor
+                              .withValues(alpha: 0.9),
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2.5,
+                          vertical: 1,
+                        ),
+                        child: const Text(
+                          'AUTO',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 6.5,
+                            fontWeight: FontWeight.w600,
+                            height: 1,
                           ),
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
-              onPressed: () async {
-                final newTranslationMode =
-                    translationMode == TranslationMode.auto
-                        ? TranslationMode.manual
-                        : TranslationMode.auto;
-                await settingsStore.updateGeneral(
-                  GeneralSettingsPatch(translationMode: newTranslationMode),
-                );
-                onTranslationModeChanged(newTranslationMode);
-              },
             ),
+            onPressed: () async {
+              final newTranslationMode = translationMode == TranslationMode.auto
+                  ? TranslationMode.manual
+                  : TranslationMode.auto;
+              await settingsStore.updateGeneral(
+                GeneralSettingsPatch(translationMode: newTranslationMode),
+              );
+              onTranslationModeChanged(newTranslationMode);
+            },
           ),
         ),
-        const SizedBox(
-          height: 20,
-          child: VerticalDivider(
-            width: 8,
-          ),
-        ),
+        const SizedBox(width: 2),
         Tooltip(
           message: t
               .mini_translator.toolbar.tooltip.extract_text_from_screen_capture,
-          child: SizedBox(
-            width: 30,
-            height: 26,
-            child: Button(
-              padding: EdgeInsets.zero,
-              onPressed: onClickExtractTextFromScreenCapture,
+          child: Button(
+            minSize: 0,
+            padding: const EdgeInsets.all(4),
+            onPressed: onClickExtractTextFromScreenCapture,
+            child: SizedBox(
+              width: 28,
+              height: 28,
               child: Icon(
                 FluentIcons.crop_20_regular,
-                size: 22,
-                color: Theme.of(context).iconTheme.color,
+                size: 20,
+                color: theme.iconTheme.color?.withValues(alpha: 0.7),
               ),
             ),
           ),
@@ -141,16 +136,17 @@ class TranslationInputView extends StatelessWidget {
         Tooltip(
           message:
               t.mini_translator.toolbar.tooltip.extract_text_from_clipboard,
-          child: SizedBox(
-            width: 30,
-            height: 26,
-            child: Button(
-              padding: EdgeInsets.zero,
-              onPressed: onClickExtractTextFromClipboard,
+          child: Button(
+            minSize: 0,
+            padding: const EdgeInsets.all(4),
+            onPressed: onClickExtractTextFromClipboard,
+            child: SizedBox(
+              width: 28,
+              height: 28,
               child: Icon(
                 FluentIcons.clipboard_text_ltr_20_regular,
                 size: 20,
-                color: Theme.of(context).iconTheme.color,
+                color: theme.iconTheme.color?.withValues(alpha: 0.7),
               ),
             ),
           ),
@@ -160,19 +156,19 @@ class TranslationInputView extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
+    final theme = Theme.of(context);
+    final secondaryButtonColor =
+        theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.12) ??
+            theme.dividerColor;
+
     return Row(
       children: [
-        Container(
-          height: 24,
-          constraints: const BoxConstraints(
-            minWidth: 56,
-          ),
+        SizedBox(
+          height: 28,
           child: Button.outlined(
-            padding: const EdgeInsets.only(
-              left: 12,
-              right: 12,
-            ),
-            borderRadius: BorderRadius.circular(2),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            borderRadius: BorderRadius.circular(14), // pill-shaped
+            color: secondaryButtonColor,
             onPressed: onButtonTappedClear,
             child: Text(
               t.mini_translator.button.clear,
@@ -180,18 +176,12 @@ class TranslationInputView extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 10),
-        Container(
-          height: 24,
-          constraints: const BoxConstraints(
-            minWidth: 56,
-          ),
+        const SizedBox(width: 8),
+        SizedBox(
+          height: 28,
           child: Button.filled(
-            padding: const EdgeInsets.only(
-              left: 12,
-              right: 12,
-            ),
-            borderRadius: BorderRadius.circular(2),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            borderRadius: BorderRadius.circular(14), // pill-shaped
             onPressed: onButtonTappedTrans,
             child: Text(
               t.mini_translator.button.translate,
@@ -205,116 +195,95 @@ class TranslationInputView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    return Container(
-      margin: const EdgeInsets.only(
-        left: 12,
-        right: 12,
-        top: 0,
-        bottom: 12,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.circular(2),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              offset: const Offset(0.0, 1.0),
-              blurRadius: 3.0,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.zero,
-              child: Stack(
-                children: [
-                  TextField(
-                    focusNode: focusNode,
-                    selectionHeightStyle: BoxHeightStyle.max,
-                    controller: controller,
-                    padding: const EdgeInsets.only(
-                      left: 12,
-                      right: 12,
-                      top: 14,
-                      bottom: 12,
-                    ),
-                    placeholder: t.mini_translator.input.hint,
-                    placeholderStyle: textTheme.bodyMedium?.copyWith(
-                      color:
-                          textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
-                      height: 1.2,
-                    ),
-                    style: textTheme.bodyMedium?.copyWith(
-                      height: 1.2,
-                    ),
-                    maxLines: inputSubmitMode == InputSubmitMode.enter ? 1 : 6,
-                    minLines: 1,
-                    onChanged: onChanged,
-                    onSubmitted: (newValue) {
-                      onButtonTappedTrans();
-                    },
+    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return Card(
+      borderRadius: BorderRadius.circular(_kCornerRadius),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Text input area
+          SizedBox(
+            child: Stack(
+              children: [
+                TextField(
+                  focusNode: focusNode,
+                  selectionHeightStyle: BoxHeightStyle.max,
+                  controller: controller,
+                  padding: const EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                    top: 12,
+                    bottom: 10,
                   ),
-                  if (isTextDetecting)
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: 0,
-                      bottom: 0,
-                      child: Container(
-                        padding: const EdgeInsets.only(left: 12, right: 12),
-                        color: Theme.of(context).canvasColor,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                LoadingIndicator.doubleBounce(
-                                  color: textTheme.bodySmall!.color,
-                                  size: 18.0,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  t.mini_translator.input.extracting_text,
-                                  style: TextStyle(
-                                    color: textTheme.bodySmall!.color,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
+                  placeholder: t.mini_translator.input.hint,
+                  placeholderStyle: textTheme.bodyMedium?.copyWith(
+                    color: textTheme.bodyMedium?.color?.withValues(alpha: 0.4),
+                    height: 1.3,
+                  ),
+                  style: textTheme.bodyMedium?.copyWith(
+                    height: 1.3,
+                  ),
+                  maxLines: inputSubmitMode == InputSubmitMode.enter ? 1 : 6,
+                  minLines: 1,
+                  onChanged: onChanged,
+                  onSubmitted: (newValue) {
+                    onButtonTappedTrans();
+                  },
+                ),
+                if (isTextDetecting)
+                  Positioned.fill(
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 12, right: 12),
+                      color: theme.canvasColor.withValues(alpha: isDark ? 0.80 : 0.95),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          LoadingIndicator.doubleBounce(
+                            color: textTheme.bodySmall!.color,
+                            size: 18.0,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            t.mini_translator.input.extracting_text,
+                            style: TextStyle(
+                              color: textTheme.bodySmall!.color,
+                              fontSize: 13,
                             ),
-                            Expanded(child: Container()),
-                          ],
-                        ),
+                          ),
+                          const Spacer(),
+                        ],
                       ),
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
-            const Divider(
-              height: 0,
-              indent: 12,
-              endIndent: 12,
+          ),
+          // Divider with macOS style
+          Container(
+            height: 0.5,
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            color: theme.dividerColor.withValues(alpha: 0.3),
+          ),
+          // Bottom toolbar row
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 2,
+              right: 12,
+              top: 8,
+              bottom: 8,
             ),
-            Container(
-              padding: const EdgeInsets.only(
-                left: 6,
-                right: 12,
-                top: 8,
-                bottom: 8,
-              ),
-              child: Row(
-                children: [
-                  _buildToolbarItems(context),
-                  Expanded(child: Container()),
-                  _buildActionButtons(context),
-                ],
-              ),
+            child: Row(
+              children: [
+                _buildToolbarItems(context),
+                const Spacer(),
+                _buildActionButtons(context),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

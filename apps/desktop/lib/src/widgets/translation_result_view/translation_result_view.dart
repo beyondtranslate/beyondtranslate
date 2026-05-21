@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../models/translation_result.dart';
 import '../language_label/language_label.dart';
 import '../ui/button.dart';
+import '../ui/card.dart' as ui;
 
 class TranslationResultView extends StatelessWidget {
   const TranslationResultView(
@@ -16,65 +17,49 @@ class TranslationResultView extends StatelessWidget {
   String get sourceLanguage => translationResult.translationTarget!.source;
   String get targetLanguage => translationResult.translationTarget!.target;
 
+  static const _kSectionGap = 8.0;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      padding: const EdgeInsets.only(
-        left: 12,
-        right: 12,
-        top: 0,
-        bottom: 12,
-      ),
-      child: Container(
-        height: 40,
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.circular(2),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              offset: const Offset(0.0, 1.0),
-              blurRadius: 3.0,
+    final theme = Theme.of(context);
+
+    return ui.Card(
+      margin: const EdgeInsets.only(left: 12, right: 12, bottom: _kSectionGap),
+      height: 40,
+      child: Row(
+        children: [
+          Button(
+            padding: const EdgeInsets.only(left: 12, right: 12),
+            child: LanguageLabel(
+              sourceLanguage,
             ),
-          ],
-        ),
-        padding: EdgeInsets.zero,
-        child: Row(
-          children: [
-            Button(
-              padding: const EdgeInsets.only(left: 12, right: 12),
-              child: LanguageLabel(
-                sourceLanguage,
-              ),
-              onPressed: () => {},
-            ),
-            SizedBox(
-              width: 20,
-              height: 38,
-              child: Button(
-                padding: EdgeInsets.zero,
-                child: Container(
-                  margin: EdgeInsets.zero,
-                  child: Icon(
-                    FluentIcons.arrow_right_20_regular,
-                    size: 16,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
+            onPressed: () => {},
+          ),
+          SizedBox(
+            width: 20,
+            height: 38,
+            child: Button(
+              padding: EdgeInsets.zero,
+              child: Container(
+                margin: EdgeInsets.zero,
+                child: Icon(
+                  FluentIcons.arrow_right_20_regular,
+                  size: 16,
+                  color: theme.iconTheme.color?.withValues(alpha: 0.6),
                 ),
-                onPressed: () {},
               ),
+              onPressed: () {},
             ),
-            Button(
-              padding: const EdgeInsets.only(left: 12, right: 12),
-              child: LanguageLabel(
-                targetLanguage,
-              ),
-              onPressed: () => {},
+          ),
+          Button(
+            padding: const EdgeInsets.only(left: 12, right: 12),
+            child: LanguageLabel(
+              targetLanguage,
             ),
-            Expanded(child: Container()),
-          ],
-        ),
+            onPressed: () => {},
+          ),
+          Expanded(child: Container()),
+        ],
       ),
     );
   }

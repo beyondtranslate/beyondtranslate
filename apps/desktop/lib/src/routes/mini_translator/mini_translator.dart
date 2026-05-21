@@ -52,6 +52,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   final GlobalKey _bannersViewKey = GlobalKey();
   final GlobalKey _inputViewKey = GlobalKey();
   final GlobalKey _resultsViewKey = GlobalKey();
+  final GlobalKey _toolbarViewKey = GlobalKey();
 
   Brightness _brightness = Brightness.light;
 
@@ -330,11 +331,12 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   double _measureWindowHeight() {
+    final toolbarViewHeight = _renderBoxHeight(_toolbarViewKey);
     final bannersViewHeight = _renderBoxHeight(_bannersViewKey);
     final inputViewHeight = _renderBoxHeight(_inputViewKey);
     final resultsViewHeight = _renderBoxHeight(_resultsViewKey);
 
-    return 40.0 +
+    return toolbarViewHeight +
         bannersViewHeight +
         inputViewHeight +
         resultsViewHeight +
@@ -630,7 +632,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       key: _bannersViewKey,
       width: double.infinity,
       margin: EdgeInsets.only(
-        bottom: isNoAllowedAllAccess ? 12 : 0,
+        bottom: isNoAllowedAllAccess ? 8 : 0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -668,6 +670,9 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   Widget _buildInputView(BuildContext context) {
+    final isTranslationTargetSelectorVisible =
+        settingsStore.translationMode != TranslationMode.auto;
+
     return SizedBox(
       key: _inputViewKey,
       width: double.infinity,
@@ -691,36 +696,39 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             onButtonTappedClear: _handleButtonTappedClear,
             onButtonTappedTrans: _handleButtonTappedTrans,
           ),
-          TranslationTargetSelectView(
-            translationMode: settingsStore.translationMode,
-            isShowSourceLanguageSelector: _isShowSourceLanguageSelector,
-            isShowTargetLanguageSelector: _isShowTargetLanguageSelector,
-            onToggleShowSourceLanguageSelector: (newValue) {
-              _setStateAndScheduleWindowResize(() {
-                _isShowSourceLanguageSelector = newValue;
-                _isShowTargetLanguageSelector = false;
-              });
-            },
-            onToggleShowTargetLanguageSelector: (newValue) {
-              _setStateAndScheduleWindowResize(() {
-                _isShowSourceLanguageSelector = false;
-                _isShowTargetLanguageSelector = newValue;
-              });
-            },
-            sourceLanguage: _sourceLanguage,
-            targetLanguage: _targetLanguage,
-            onChanged: (newSourceLanguage, newTargetLanguage) {
-              _setStateAndScheduleWindowResize(() {
-                _isShowSourceLanguageSelector = false;
-                _isShowTargetLanguageSelector = false;
-                _sourceLanguage = newSourceLanguage;
-                _targetLanguage = newTargetLanguage;
-              });
-              if (_text.isNotEmpty) {
-                _handleButtonTappedTrans();
-              }
-            },
-          ),
+          if (isTranslationTargetSelectorVisible) ...[
+            const SizedBox(height: 8),
+            TranslationTargetSelectView(
+              translationMode: settingsStore.translationMode,
+              isShowSourceLanguageSelector: _isShowSourceLanguageSelector,
+              isShowTargetLanguageSelector: _isShowTargetLanguageSelector,
+              onToggleShowSourceLanguageSelector: (newValue) {
+                _setStateAndScheduleWindowResize(() {
+                  _isShowSourceLanguageSelector = newValue;
+                  _isShowTargetLanguageSelector = false;
+                });
+              },
+              onToggleShowTargetLanguageSelector: (newValue) {
+                _setStateAndScheduleWindowResize(() {
+                  _isShowSourceLanguageSelector = false;
+                  _isShowTargetLanguageSelector = newValue;
+                });
+              },
+              sourceLanguage: _sourceLanguage,
+              targetLanguage: _targetLanguage,
+              onChanged: (newSourceLanguage, newTargetLanguage) {
+                _setStateAndScheduleWindowResize(() {
+                  _isShowSourceLanguageSelector = false;
+                  _isShowTargetLanguageSelector = false;
+                  _sourceLanguage = newSourceLanguage;
+                  _targetLanguage = newTargetLanguage;
+                });
+                if (_text.isNotEmpty) {
+                  _handleButtonTappedTrans();
+                }
+              },
+            ),
+          ],
         ],
       ),
     );
@@ -773,46 +781,90 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     );
   }
 
-  PreferredSizeWidget _buildToolBar(BuildContext context) {
+  /// macOS 26 style inline toolbar — integrated into the window chrome area
+  Widget _buildToolBar(BuildContext context) {
     final theme = Theme.of(context);
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(40),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Button(
-              onPressed: () {
-                setState(() {
-                  _isAlwaysOnTop = !_isAlwaysOnTop;
-                });
-                _window.isAlwaysOnTop = _isAlwaysOnTop;
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.fastOutSlowIn,
-                transformAlignment: Alignment.center,
-                transform: Matrix4.rotationZ(
-                  _isAlwaysOnTop ? 0 : -0.8,
+    return Container(
+      key: _toolbarViewKey,
+      padding: const EdgeInsets.only(top: 8, bottom: 4, left: 12, right: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // macOS-style traffic light area simulation via spacing
+          SizedBox(
+            width: 52,
+            height: 24,
+            child: Row(
+              children: [
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: _isAlwaysOnTop
+                        ? theme.colorScheme.primary.withValues(alpha: 0.15)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Button(
+                    minSize: 0,
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      setState(() {
+                        _isAlwaysOnTop = !_isAlwaysOnTop;
+                      });
+                      _window.isAlwaysOnTop = _isAlwaysOnTop;
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.fastOutSlowIn,
+                      transformAlignment: Alignment.center,
+                      transform: Matrix4.rotationZ(
+                        _isAlwaysOnTop ? 0 : -0.78,
+                      ),
+                      child: Icon(
+                        _isAlwaysOnTop
+                            ? FluentIcons.pin_20_filled
+                            : FluentIcons.pin_20_regular,
+                        size: 18,
+                        color: _isAlwaysOnTop
+                            ? theme.colorScheme.primary
+                            : theme.iconTheme.color?.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  ),
                 ),
-                child: Icon(
-                  _isAlwaysOnTop
-                      ? FluentIcons.pin_20_filled
-                      : FluentIcons.pin_20_regular,
-                  color: _isAlwaysOnTop ? theme.colorScheme.primary : null,
+              ],
+            ),
+          ),
+          // macOS 26 style: center area kept empty for a clean, floating look
+          const Spacer(),
+          SizedBox(
+            width: 52,
+            height: 24,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Button(
+                minSize: 0,
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  showSettingsWindow();
+                },
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    FluentIcons.settings_20_regular,
+                    size: 18,
+                    color: theme.iconTheme.color?.withValues(alpha: 0.6),
+                  ),
                 ),
               ),
             ),
-            Expanded(child: Container()),
-            Button(
-              onPressed: () {
-                showSettingsWindow();
-              },
-              child: const Icon(FluentIcons.settings_20_regular),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -820,8 +872,16 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildToolBar(context),
-      body: _buildBody(context),
+      backgroundColor: Colors.transparent,
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildToolBar(context),
+          Expanded(
+            child: _buildBody(context),
+          ),
+        ],
+      ),
     );
   }
 

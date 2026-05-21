@@ -23,6 +23,7 @@ final darkThemeData = ThemeData(
   primaryColor: _kPrimaryColor,
   canvasColor: _kCanvasColor,
   scaffoldBackgroundColor: _kScaffoldBackgroundColor,
+  dividerColor: Colors.white.withValues(alpha: 0.12),
   fontFamily: 'MiSans',
   dialogTheme: const DialogThemeData(
     backgroundColor: _kCanvasColor,

@@ -8,6 +8,7 @@ import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
+import '../ui/card.dart' as ui;
 import '../ui/loading_indicator.dart';
 import 'translation_engine_tag.dart';
 import 'word_pronunciation_view.dart';
@@ -19,11 +20,17 @@ class TranslationResultRecordView extends StatelessWidget {
 
   final TranslationResultRecord translationResultRecord;
   final ValueChanged<String> onTextTapped;
+  final EdgeInsetsGeometry margin;
   const TranslationResultRecordView({
     Key? key,
     required this.translationResult,
     required this.translationResultRecord,
     required this.onTextTapped,
+    this.margin = const EdgeInsets.only(
+      left: 12,
+      right: 12,
+      bottom: _kSectionGap,
+    ),
   }) : super(key: key);
 
   bool get _isErrorOccurred {
@@ -40,46 +47,29 @@ class TranslationResultRecordView extends StatelessWidget {
         translationResultRecord.translateResponse == null;
   }
 
+  static const _kSectionGap = 8.0;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ui.Card(
       width: double.infinity,
-      margin: const EdgeInsets.only(
-        left: 12,
-        right: 12,
-        top: 0,
-        bottom: 12,
-      ),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.circular(2),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              offset: const Offset(0.0, 1.0),
-              blurRadius: 3.0,
+      margin: margin,
+      child: Stack(
+        children: [
+          if (_isLoading)
+            _buildRequestLoading(context)
+          else if (_isErrorOccurred)
+            _buildRequestError(context)
+          else
+            _buildBody(context),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: TranslationEngineTag(
+              translationResultRecord: translationResultRecord,
             ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            if (_isLoading)
-              _buildRequestLoading(context)
-            else if (_isErrorOccurred)
-              _buildRequestError(context)
-            else
-              _buildBody(context),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: TranslationEngineTag(
-                translationResultRecord: translationResultRecord,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

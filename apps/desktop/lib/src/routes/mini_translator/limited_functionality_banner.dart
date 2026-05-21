@@ -36,13 +36,12 @@ class LimitedFunctionalityBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
+    if (_isAllowedAllAccess) return const SizedBox.shrink();
 
-    if (_isAllowedAllAccess) return Container();
-
-    final baseStyle = textTheme.bodyMedium!.copyWith(
+    const baseStyle = TextStyle(
       color: Colors.white,
-      fontSize: 13,
+      fontSize: 12.5,
+      fontWeight: FontWeight.w400,
       height: 1.45,
     );
     const linkStyle = TextStyle(
@@ -55,63 +54,72 @@ class LimitedFunctionalityBanner extends StatelessWidget {
     final instruction = limitedBanner.instruction;
 
     return Container(
-      color: Colors.orange,
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      child: Text.rich(
-        TextSpan(
-          children: [
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 6),
-                child: SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: Tooltip(
-                    message: t.mini_translator.limited_banner.tooltip.help,
-                    child: Button(
-                      minSize: 0,
-                      padding: EdgeInsets.zero,
-                      onPressed: () async {
-                        final url = '${sharedEnv.webUrl}/docs';
-                        final result = nativeapi.UrlOpener.instance.open(url);
-                        if (!result.success) {
-                          throw 'Could not launch $url: ${result.errorMessage}';
-                        }
-                      },
-                      child: const Icon(
-                        FluentIcons.question_circle_20_regular,
-                        color: Colors.white,
-                        size: 16,
-                      ),
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE5892A),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 1),
+                child: Tooltip(
+                  message: t.mini_translator.limited_banner.tooltip.help,
+                  child: Button(
+                    minSize: 0,
+                    padding: EdgeInsets.zero,
+                    onPressed: () async {
+                      final url = '${sharedEnv.webUrl}/docs';
+                      final result = nativeapi.UrlOpener.instance.open(url);
+                      if (!result.success) {
+                        throw 'Could not launch $url: ${result.errorMessage}';
+                      }
+                    },
+                    child: const Icon(
+                      FluentIcons.question_circle_20_regular,
+                      color: Colors.white,
+                      size: 16,
                     ),
                   ),
                 ),
               ),
-            ),
-            TextSpan(text: _titleText()),
-            if (kIsMacOS) ...[
-              const TextSpan(text: ' '),
-              TextSpan(text: instruction.app_settings_prefix),
-              TextSpan(
-                text: limitedBanner.action.app_settings,
-                style: linkStyle,
-                recognizer: TapGestureRecognizer()
-                  ..onTap = MacSettings.showAndHighlightPermissions,
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: _titleText()),
+                      if (kIsMacOS) ...[
+                        const TextSpan(text: ' '),
+                        TextSpan(text: instruction.app_settings_prefix),
+                        TextSpan(
+                          text: limitedBanner.action.app_settings,
+                          style: linkStyle,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = MacSettings.showAndHighlightPermissions,
+                        ),
+                        TextSpan(text: instruction.follow_guide_prefix),
+                        TextSpan(
+                          text: limitedBanner.action.recheck,
+                          style: linkStyle,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = onTappedRecheckIsAllowedAllAccess,
+                        ),
+                        TextSpan(text: instruction.suffix),
+                      ],
+                    ],
+                  ),
+                  style: baseStyle,
+                ),
               ),
-              TextSpan(text: instruction.follow_guide_prefix),
-              TextSpan(
-                text: limitedBanner.action.recheck,
-                style: linkStyle,
-                recognizer: TapGestureRecognizer()
-                  ..onTap = onTappedRecheckIsAllowedAllAccess,
-              ),
-              TextSpan(text: instruction.suffix),
             ],
-          ],
+          ),
         ),
-        style: baseStyle,
       ),
     );
   }

@@ -50,6 +50,9 @@ final class MacWindowAppearancePlugin: NSObject, FlutterPlugin {
     configureToolbarWindow(window)
     clearFlutterViewBackground(in: window.contentViewController)
     installBackground(in: window)
+
+    window.contentView?.wantsLayer = true
+    window.contentView?.layer?.cornerRadius = 12.0
   }
 
   @MainActor
@@ -78,7 +81,7 @@ final class MacWindowAppearancePlugin: NSObject, FlutterPlugin {
     backgroundView.identifier = backgroundIdentifier
     backgroundView.autoresizingMask = [.width, .height]
     backgroundView.blendingMode = .withinWindow
-    backgroundView.material = .sidebar
+    backgroundView.material = .popover
     backgroundView.state = .active
     contentView.addSubview(backgroundView, positioned: .below, relativeTo: nil)
   }
