@@ -2,7 +2,7 @@
 
 [![GitHub (pre-)release](https://img.shields.io/github/release/beyondtranslate/beyondtranslate/all.svg?style=flat-square)](https://github.com/beyondtranslate/beyondtranslate/releases)
 
-**BeyondTranslate** (formerly **Biyi**) is a fast, native-experience translation app for macOS, Windows and Linux, built with Flutter and Rust. Capture text from anywhere on screen and get accurate translations powered by multiple engines — all from a lightweight, always-accessible menu-bar experience. [View document](https://beyondtranslate.com/docs/)
+**BeyondTranslate** (formerly **Biyi**) is a fast, native-experience translation app for macOS, Windows and Linux, built with Flutter and Rust. Capture text from anywhere on screen and get accurate translations powered by multiple engines — all from a lightweight app that stays out of your way until you need it. [View document](https://beyondtranslate.com/docs/)
 
 ---
 
@@ -10,7 +10,7 @@ English | [简体中文](./README-ZH.md)
 
 ---
 
-![](https://beyondtranslate.com/images/screenshots/beyondtranslate_extract_text_from_screen_selection.gif)
+![](https://beyondtranslate.com/images/screenshots/biyi_extract_text_from_screen_selection.gif)
 
 ## Platform Support
 
