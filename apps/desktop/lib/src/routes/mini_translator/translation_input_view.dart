@@ -237,7 +237,8 @@ class TranslationInputView extends StatelessWidget {
                   Positioned.fill(
                     child: Container(
                       padding: const EdgeInsets.only(left: 12, right: 12),
-                      color: theme.canvasColor.withValues(alpha: isDark ? 0.80 : 0.95),
+                      color: theme.canvasColor
+                          .withValues(alpha: isDark ? 0.80 : 0.95),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [

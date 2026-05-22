@@ -23,6 +23,9 @@ class Button extends StatefulWidget {
     Key? key,
     this.processing = false,
     required this.child,
+    this.leadingIcon,
+    this.trailingIcon,
+    this.iconGap = 4.0,
     this.padding,
     this.color,
     this.disabledColor = const Color(0x14000000),
@@ -47,6 +50,9 @@ class Button extends StatefulWidget {
     Key? key,
     this.processing = false,
     required this.child,
+    this.leadingIcon,
+    this.trailingIcon,
+    this.iconGap = 4.0,
     this.padding,
     this.disabledColor = const Color(0x14000000),
     this.minSize = _kButtonMinHeight,
@@ -65,6 +71,9 @@ class Button extends StatefulWidget {
     Key? key,
     this.processing = false,
     required this.child,
+    this.leadingIcon,
+    this.trailingIcon,
+    this.iconGap = 4.0,
     this.padding,
     this.disabledColor = const Color(0x3D1A2B48),
     this.minSize = _kOutlinedButtonMinHeight,
@@ -85,6 +94,21 @@ class Button extends StatefulWidget {
   ///
   /// Typically a [Text] widget.
   final Widget child;
+
+  /// An optional icon placed before the [child].
+  ///
+  /// The icon inherits the button's foreground color via [IconTheme].
+  final Widget? leadingIcon;
+
+  /// An optional icon placed after the [child].
+  ///
+  /// The icon inherits the button's foreground color via [IconTheme].
+  final Widget? trailingIcon;
+
+  /// The gap between [leadingIcon] / [trailingIcon] and [child].
+  ///
+  /// Defaults to 4.0.
+  final double iconGap;
 
   /// The amount of space to surround the child inside the bounds of the button.
   ///
@@ -257,6 +281,24 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
       fontWeight: FontWeight.w500,
     );
 
+    Widget content = widget.child;
+    if (widget.leadingIcon != null || widget.trailingIcon != null) {
+      content = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.leadingIcon != null) ...[
+            widget.leadingIcon!,
+            const SizedBox(width: 4)
+          ],
+          content,
+          if (widget.trailingIcon != null) ...[
+            const SizedBox(width: 4),
+            widget.trailingIcon!
+          ],
+        ],
+      );
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapDown: enabled ? _handleTapDown : null,
@@ -301,7 +343,7 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
                               color: foregroundColor,
                               size: 14.0,
                             )
-                          : widget.child,
+                          : content,
                     ),
                   ),
                 ),

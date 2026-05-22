@@ -69,8 +69,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   String _sourceLanguage = kLanguageEN;
   String _targetLanguage = kLanguageZH;
-  bool _isShowSourceLanguageSelector = false;
-  bool _isShowTargetLanguageSelector = false;
 
   bool _querySubmitted = false;
   String _text = '';
@@ -368,8 +366,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   Future<void> _queryData() async {
     setState(() {
-      _isShowSourceLanguageSelector = false;
-      _isShowTargetLanguageSelector = false;
       _querySubmitted = true;
       _textDetectedLanguage = null;
       _translationResultList = [];
@@ -700,26 +696,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             const SizedBox(height: 8),
             TranslationTargetSelectView(
               translationMode: settingsStore.translationMode,
-              isShowSourceLanguageSelector: _isShowSourceLanguageSelector,
-              isShowTargetLanguageSelector: _isShowTargetLanguageSelector,
-              onToggleShowSourceLanguageSelector: (newValue) {
-                _setStateAndScheduleWindowResize(() {
-                  _isShowSourceLanguageSelector = newValue;
-                  _isShowTargetLanguageSelector = false;
-                });
-              },
-              onToggleShowTargetLanguageSelector: (newValue) {
-                _setStateAndScheduleWindowResize(() {
-                  _isShowSourceLanguageSelector = false;
-                  _isShowTargetLanguageSelector = newValue;
-                });
-              },
               sourceLanguage: _sourceLanguage,
               targetLanguage: _targetLanguage,
               onChanged: (newSourceLanguage, newTargetLanguage) {
                 _setStateAndScheduleWindowResize(() {
-                  _isShowSourceLanguageSelector = false;
-                  _isShowTargetLanguageSelector = false;
                   _sourceLanguage = newSourceLanguage;
                   _targetLanguage = newTargetLanguage;
                 });

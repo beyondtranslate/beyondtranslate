@@ -1,10 +1,10 @@
+import 'package:beyondtranslate_desktop/src/utils/language_util.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Card;
 
 import '../../models/translation_result.dart';
-import '../language_label/language_label.dart';
 import '../ui/button.dart';
-import '../ui/card.dart' as ui;
+import '../ui/card.dart';
 
 class TranslationResultView extends StatelessWidget {
   const TranslationResultView(
@@ -23,22 +23,22 @@ class TranslationResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return ui.Card(
+    return Card(
       margin: const EdgeInsets.only(left: 12, right: 12, bottom: _kSectionGap),
       height: 40,
       child: Row(
         children: [
-          Button(
-            padding: const EdgeInsets.only(left: 12, right: 12),
-            child: LanguageLabel(
-              sourceLanguage,
+          Container(
+            padding: const EdgeInsets.only(left: 12, right: 8),
+            child: Text(
+              getLanguageName(sourceLanguage),
+              style: theme.textTheme.bodyMedium,
             ),
-            onPressed: () => {},
           ),
           SizedBox(
-            width: 20,
-            height: 38,
-            child: Button(
+            width: 28,
+            height: 28,
+            child: Container(
               padding: EdgeInsets.zero,
               child: Container(
                 margin: EdgeInsets.zero,
@@ -48,15 +48,14 @@ class TranslationResultView extends StatelessWidget {
                   color: theme.iconTheme.color?.withValues(alpha: 0.6),
                 ),
               ),
-              onPressed: () {},
             ),
           ),
-          Button(
-            padding: const EdgeInsets.only(left: 12, right: 12),
-            child: LanguageLabel(
-              targetLanguage,
+          Container(
+            padding: const EdgeInsets.only(left: 8, right: 12),
+            child: Text(
+              getLanguageName(targetLanguage),
+              style: theme.textTheme.bodyMedium,
             ),
-            onPressed: () => {},
           ),
           Expanded(child: Container()),
         ],

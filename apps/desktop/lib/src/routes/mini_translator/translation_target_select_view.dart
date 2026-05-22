@@ -1,97 +1,27 @@
 import 'dart:math' as math;
 
+import 'package:beyondtranslate_desktop/src/routes/app_router.dart';
 import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart' hide Card;
+import 'package:nativeapi/nativeapi.dart';
 
+import '../../extensions/window_controller.dart'
+    show ExtendedRegularWindowController;
 import '../../utils/language_util.dart';
-import '../../widgets/language_label/language_label.dart';
 import '../../widgets/ui/button.dart';
 import '../../widgets/ui/card.dart';
-
-class _AvailableLanguageSelector extends StatelessWidget {
-  const _AvailableLanguageSelector({
-    Key? key,
-    required this.value,
-    required this.onChanged,
-  }) : super(key: key);
-
-  final String value;
-  final ValueChanged<String> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final unselectedColor =
-        theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.12) ??
-            theme.dividerColor;
-
-    return Container(
-      margin: const EdgeInsets.only(left: 14, top: 12, bottom: 14),
-      width: double.infinity,
-      child: Wrap(
-        alignment: WrapAlignment.start,
-        runAlignment: WrapAlignment.start,
-        spacing: 8,
-        runSpacing: 8,
-        children: [
-          for (String supportedLanguage in kSupportedLanguages)
-            SizedBox(
-              height: 30,
-              child: Builder(builder: (_) {
-                bool isSelected = value == supportedLanguage;
-                EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 10);
-
-                Widget child = LanguageLabel(
-                  supportedLanguage,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: !isSelected
-                        ? theme.textTheme.bodyMedium?.color
-                            ?.withValues(alpha: 0.8)
-                        : Colors.white,
-                  ),
-                );
-
-                return isSelected
-                    ? Button.filled(
-                        padding: padding,
-                        borderRadius: BorderRadius.circular(15), // pill
-                        onPressed: () => onChanged(supportedLanguage),
-                        child: child,
-                      )
-                    : Button.outlined(
-                        padding: padding,
-                        color: unselectedColor,
-                        borderRadius: BorderRadius.circular(15), // pill
-                        onPressed: () => onChanged(supportedLanguage),
-                        child: child,
-                      );
-              }),
-            ),
-        ],
-      ),
-    );
-  }
-}
 
 class TranslationTargetSelectView extends StatefulWidget {
   const TranslationTargetSelectView({
     Key? key,
     required this.translationMode,
-    required this.isShowSourceLanguageSelector,
-    required this.isShowTargetLanguageSelector,
-    required this.onToggleShowSourceLanguageSelector,
-    required this.onToggleShowTargetLanguageSelector,
     required this.sourceLanguage,
     required this.targetLanguage,
     required this.onChanged,
   }) : super(key: key);
 
   final TranslationMode translationMode;
-  final bool isShowSourceLanguageSelector;
-  final bool isShowTargetLanguageSelector;
-  final ValueChanged<bool> onToggleShowSourceLanguageSelector;
-  final ValueChanged<bool> onToggleShowTargetLanguageSelector;
   final String sourceLanguage;
   final String targetLanguage;
   final Function(String sourceLanguage, String targetLanguage) onChanged;
@@ -104,11 +34,112 @@ class TranslationTargetSelectView extends StatefulWidget {
 class _TranslationTargetSelectViewState
     extends State<TranslationTargetSelectView> {
   bool _isRotated = false;
+  bool _isSourceMenuOpen = false;
+  bool _isTargetMenuOpen = false;
+  final _sourceButtonKey = GlobalKey();
+  final _targetButtonKey = GlobalKey();
 
   void _handleChanged(String sourceLanguage, String targetLanguage) {
     widget.onChanged(
       sourceLanguage,
       targetLanguage,
+    );
+  }
+
+  void _showLanguageMenu({
+    required GlobalKey buttonKey,
+    required bool isSource,
+    required String currentLanguage,
+    required ValueChanged<String> onSelected,
+  }) {
+    final renderBox =
+        buttonKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null || !renderBox.hasSize) return;
+
+    final window = miniTranslatorWindowController.window;
+
+    final localPosition = renderBox.localToGlobal(Offset.zero);
+    final size = renderBox.size;
+
+    final anchorPosition = Offset(
+      localPosition.dx + size.width / 2,
+      localPosition.dy + size.height + 6,
+    );
+
+    final menu = Menu();
+    menu.addCallbackListener<MenuOpenedEvent>((_) {
+      if (!mounted) return;
+      setState(() {
+        if (isSource) {
+          _isSourceMenuOpen = true;
+        } else {
+          _isTargetMenuOpen = true;
+        }
+      });
+    });
+    menu.addCallbackListener<MenuClosedEvent>((_) {
+      if (!mounted) return;
+      setState(() {
+        if (isSource) {
+          _isSourceMenuOpen = false;
+        } else {
+          _isTargetMenuOpen = false;
+        }
+      });
+    });
+    for (final lang in kSupportedLanguages) {
+      final item = MenuItem(
+        getLanguageName(lang),
+        MenuItemType.checkbox,
+      );
+      item.state = lang == currentLanguage
+          ? MenuItemState.checked
+          : MenuItemState.unchecked;
+      item.on<MenuItemClickedEvent>((_) {
+        onSelected(lang);
+      });
+      menu.addItem(item);
+    }
+    menu.open(
+      PositioningStrategy.relativeToWindow(window, anchorPosition),
+      Placement.bottom,
+    );
+  }
+
+  Widget _buildLanguageButton({
+    required GlobalKey buttonKey,
+    required bool isMenuOpen,
+    required String language,
+    required bool isSource,
+    required EdgeInsets padding,
+    required Color? highlightColor,
+    required ValueChanged<String> onSelected,
+  }) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Button(
+      key: buttonKey,
+      minSize: 40 - 8,
+      padding: padding,
+      color: isMenuOpen ? highlightColor : null,
+      borderRadius: BorderRadius.circular(8),
+      trailingIcon: Icon(
+        FluentIcons.chevron_down_20_regular,
+        size: 14,
+        color: textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
+      ),
+      child: Text(
+        getLanguageName(language),
+        style: textTheme.bodyMedium,
+      ),
+      onPressed: () {
+        _showLanguageMenu(
+          buttonKey: buttonKey,
+          isSource: isSource,
+          currentLanguage: language,
+          onSelected: onSelected,
+        );
+      },
     );
   }
 
@@ -125,165 +156,69 @@ class _TranslationTargetSelectViewState
     }
 
     return Card(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 44,
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Row(
-              children: [
-                // Source language selector
-                Button(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  color: widget.isShowSourceLanguageSelector
-                      ? selectorButtonColor
-                      : null,
-                  borderRadius: BorderRadius.circular(8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      LanguageLabel(
-                        widget.sourceLanguage,
-                        style: textTheme.bodyMedium!.copyWith(
-                          fontWeight: widget.isShowSourceLanguageSelector
-                              ? FontWeight.w600
-                              : FontWeight.w500,
-                          color: widget.isShowSourceLanguageSelector
-                              ? theme.primaryColor
-                              : textTheme.bodyMedium?.color
-                                  ?.withValues(alpha: 0.8),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.fastOutSlowIn,
-                        transformAlignment: Alignment.center,
-                        transform: Matrix4.rotationZ(
-                          widget.isShowSourceLanguageSelector ? math.pi : 0,
-                        ),
-                        child: Icon(
-                          FluentIcons.chevron_down_20_regular,
-                          size: 14,
-                          color: widget.isShowSourceLanguageSelector
-                              ? theme.primaryColor
-                              : textTheme.bodyMedium?.color
-                                  ?.withValues(alpha: 0.5),
-                        ),
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    widget.onToggleShowSourceLanguageSelector(
-                        !widget.isShowSourceLanguageSelector);
-                  },
-                ),
-                const Spacer(),
-                // Swap button
-                SizedBox(
-                  width: 28,
-                  height: 28,
-                  child: Button(
-                    minSize: 0,
-                    padding: EdgeInsets.zero,
-                    borderRadius: BorderRadius.circular(14),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.easeInOut,
-                      transformAlignment: Alignment.center,
-                      transform: Matrix4.rotationZ(
-                        _isRotated ? math.pi : 0,
-                      ),
-                      child: Icon(
-                        FluentIcons.arrow_swap_20_regular,
-                        size: 18,
-                        color: theme.iconTheme.color?.withValues(alpha: 0.6),
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isRotated = !_isRotated;
-                      });
-                      _handleChanged(
-                        widget.targetLanguage,
-                        widget.sourceLanguage,
-                      );
-                    },
-                  ),
-                ),
-                const Spacer(),
-                // Target language selector
-                Button(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  color: widget.isShowTargetLanguageSelector
-                      ? selectorButtonColor
-                      : null,
-                  borderRadius: BorderRadius.circular(8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      LanguageLabel(
-                        widget.targetLanguage,
-                        style: textTheme.bodyMedium!.copyWith(
-                          fontWeight: widget.isShowTargetLanguageSelector
-                              ? FontWeight.w600
-                              : FontWeight.w500,
-                          color: widget.isShowTargetLanguageSelector
-                              ? theme.primaryColor
-                              : textTheme.bodyMedium?.color
-                                  ?.withValues(alpha: 0.8),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.fastOutSlowIn,
-                        transformAlignment: Alignment.center,
-                        transform: Matrix4.rotationZ(
-                          widget.isShowTargetLanguageSelector ? math.pi : 0,
-                        ),
-                        child: Icon(
-                          FluentIcons.chevron_down_20_regular,
-                          size: 14,
-                          color: widget.isShowTargetLanguageSelector
-                              ? theme.primaryColor
-                              : textTheme.bodyMedium?.color
-                                  ?.withValues(alpha: 0.5),
-                        ),
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    widget.onToggleShowTargetLanguageSelector(
-                        !widget.isShowTargetLanguageSelector);
-                  },
-                ),
-              ],
-            ),
-          ),
-          if (widget.isShowSourceLanguageSelector ||
-              widget.isShowTargetLanguageSelector)
-            Container(
-              height: 0.5,
-              margin: const EdgeInsets.symmetric(horizontal: 14),
-              color: theme.dividerColor.withValues(alpha: 0.3),
-            ),
-          if (widget.isShowSourceLanguageSelector)
-            _AvailableLanguageSelector(
-              value: widget.sourceLanguage,
-              onChanged: (newLanguage) {
+      height: 40,
+      child: Container(
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Row(
+          children: [
+            _buildLanguageButton(
+              buttonKey: _sourceButtonKey,
+              isMenuOpen: _isSourceMenuOpen,
+              language: widget.sourceLanguage,
+              isSource: true,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              highlightColor: selectorButtonColor,
+              onSelected: (newLanguage) {
                 _handleChanged(newLanguage, widget.targetLanguage);
               },
             ),
-          if (widget.isShowTargetLanguageSelector)
-            _AvailableLanguageSelector(
-              value: widget.targetLanguage,
-              onChanged: (newLanguage) {
+            // Swap button
+            SizedBox(
+              width: 28,
+              height: 28,
+              child: Button(
+                minSize: 0,
+                padding: EdgeInsets.zero,
+                borderRadius: BorderRadius.circular(14),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  transformAlignment: Alignment.center,
+                  transform: Matrix4.rotationZ(
+                    _isRotated ? math.pi : 0,
+                  ),
+                  child: Icon(
+                    FluentIcons.arrow_swap_20_regular,
+                    size: 18,
+                    color: theme.iconTheme.color?.withValues(alpha: 0.6),
+                  ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isRotated = !_isRotated;
+                  });
+                  _handleChanged(
+                    widget.targetLanguage,
+                    widget.sourceLanguage,
+                  );
+                },
+              ),
+            ),
+            _buildLanguageButton(
+              buttonKey: _targetButtonKey,
+              isMenuOpen: _isTargetMenuOpen,
+              language: widget.targetLanguage,
+              isSource: false,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              highlightColor: selectorButtonColor,
+              onSelected: (newLanguage) {
                 _handleChanged(widget.sourceLanguage, newLanguage);
               },
             ),
-        ],
+            const Spacer(),
+          ],
+        ),
       ),
     );
   }
