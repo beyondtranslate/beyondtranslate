@@ -57,7 +57,7 @@ void main() async {
   setupGlobalWillHideHook();
 
   await LocaleSettings.setLocaleRaw(
-    languageToLocale(settingsStore.appLanguage).languageCode,
+    languageToLocale(settingsStore.appLanguage).toLanguageTag(),
   );
 
   runWidget(const RootView());

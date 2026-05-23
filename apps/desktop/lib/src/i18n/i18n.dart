@@ -26,6 +26,6 @@ extension SlangBuildContextExtension on BuildContext {
   }
 
   Future<void> setLocale(Locale locale) async {
-    await LocaleSettings.setLocaleRaw(locale.languageCode);
+    await LocaleSettings.setLocaleRaw(locale.toLanguageTag());
   }
 }

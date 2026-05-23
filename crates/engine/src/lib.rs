@@ -1,5 +1,6 @@
 mod common;
 mod engine;
+mod languages;
 mod provider;
 
 pub use beyondtranslate_core::{
@@ -9,6 +10,7 @@ pub use beyondtranslate_core::{
 pub use engine::{
     from_yaml_str, load_from_file, Engine, EngineConfig, EngineError, ProviderConfig, ProviderType,
 };
+pub use languages::{all_languages, app_languages};
 #[cfg(feature = "baidu")]
 pub use provider::BaiduProvider;
 #[cfg(feature = "caiyun")]

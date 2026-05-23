@@ -1,5 +1,6 @@
 mod detect_language_request;
 mod detect_language_response;
+mod language_info;
 mod language_pair;
 mod look_up_request;
 mod look_up_response;
@@ -23,6 +24,7 @@ mod word_tense;
 
 pub use detect_language_request::DetectLanguageRequest;
 pub use detect_language_response::DetectLanguageResponse;
+pub use language_info::LanguageInfo;
 pub use language_pair::LanguagePair;
 pub use look_up_request::LookUpRequest;
 pub use look_up_response::LookUpResponse;

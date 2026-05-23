@@ -64,6 +64,13 @@ pub struct DetectLanguageResponse {
     pub detections: Option<Vec<TextDetection>>,
 }
 
+type LanguageInfo = core::LanguageInfo;
+#[uniffi::remote(Record)]
+pub struct LanguageInfo {
+    pub code: String,
+    pub local_name: String,
+}
+
 type LanguagePair = core::LanguagePair;
 #[uniffi::remote(Record)]
 pub struct LanguagePair {

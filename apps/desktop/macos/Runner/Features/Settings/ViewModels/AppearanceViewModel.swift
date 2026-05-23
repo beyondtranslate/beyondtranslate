@@ -6,14 +6,18 @@ final class AppearanceViewModel: ObservableObject {
   @Published var appLanguage: String
   @Published var themeMode: ThemeMode
   @Published private(set) var themeModeOptions: [ThemeModeOption]
+  @Published private(set) var languageOptions: [LanguageInfo] = []
 
   private let repository: SettingsRepository
+  private let runtime: Runtime
 
-  init(repository: SettingsRepository) {
+  init(repository: SettingsRepository, runtime: Runtime = RuntimeProvider.shared) {
     self.repository = repository
+    self.runtime = runtime
     appLanguage = "en"
     themeMode = .system
     themeModeOptions = Self.localizedThemeModeOptions()
+    languageOptions = runtime.listAppLanguages()
     ThemeAppearanceController.apply(.system)
   }
 
@@ -28,7 +32,7 @@ final class AppearanceViewModel: ObservableObject {
   func setAppLanguage(_ value: String) {
     appLanguage = value
     AppLocale.shared.setLocale(value)
-    refreshLocalizedOptions()
+    themeModeOptions = Self.localizedThemeModeOptions()
     Task {
       do {
         let updated = try await repository.updateAppearance(.diff(language: value))
@@ -53,20 +57,12 @@ final class AppearanceViewModel: ObservableObject {
   }
 
   private func apply(_ settings: AppearanceSettings) {
-    appLanguage = languageCode(from: settings.language)
+    appLanguage = settings.language
     AppLocale.shared.setLocale(appLanguage)
-    refreshLocalizedOptions()
+    themeModeOptions = Self.localizedThemeModeOptions()
     let mode = ThemeMode(rawValue: settings.themeMode) ?? .system
     themeMode = mode
     ThemeAppearanceController.apply(mode)
-  }
-
-  private func languageCode(from value: String) -> String {
-    value.hasPrefix("zh") ? "zh" : "en"
-  }
-
-  private func refreshLocalizedOptions() {
-    themeModeOptions = Self.localizedThemeModeOptions()
   }
 
   private static func localizedThemeModeOptions() -> [ThemeModeOption] {

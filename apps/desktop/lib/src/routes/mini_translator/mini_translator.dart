@@ -67,8 +67,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   bool _isAllowedScreenCaptureAccess = true;
   bool _isAllowedScreenSelectionAccess = true;
 
-  String _sourceLanguage = kLanguageEN;
-  String _targetLanguage = kLanguageZH;
+  String _sourceLanguage = defaultSourceLanguage;
+  String _targetLanguage = defaultTargetLanguage;
 
   bool _querySubmitted = false;
   String _text = '';
@@ -947,8 +947,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
           await runtime.translation(providerId: providerId).translate(
                 request: TranslateRequest(
                   text: extractedData?.text ?? '',
-                  sourceLanguage: kLanguageZH,
-                  targetLanguage: kLanguageEN,
+                  sourceLanguage: defaultTargetLanguage,
+                  targetLanguage: defaultSourceLanguage,
                 ),
               );
 

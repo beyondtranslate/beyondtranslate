@@ -1,67 +1,65 @@
 import 'package:flutter/material.dart';
 
 import '../i18n/i18n.dart';
+import '../services/runtime.dart' show runtime;
 
-const kLanguageDE = 'de';
-const kLanguageEN = 'en';
-const kLanguageES = 'es';
-const kLanguageFR = 'fr';
-const kLanguageIT = 'it';
-const kLanguageJA = 'ja';
-const kLanguageKO = 'ko';
-const kLanguagePT = 'pt';
-const kLanguageRU = 'ru';
-const kLanguageZH = 'zh';
+List<String>? _appLanguages;
+List<String>? _supportedLanguages;
 
-final List<String> kAppLanguages = [
-  kLanguageEN,
-  kLanguageZH,
-];
+List<String> get appLanguages {
+  _appLanguages ??=
+      runtime.listAppLanguages().map((lang) => lang.code).toList();
+  return _appLanguages!;
+}
 
-final List<String> kSupportedLanguages = [
-  kLanguageDE,
-  kLanguageEN,
-  kLanguageES,
-  kLanguageFR,
-  kLanguageIT,
-  kLanguageJA,
-  kLanguageKO,
-  kLanguagePT,
-  kLanguageRU,
-  kLanguageZH,
-];
+List<String> get supportedLanguages {
+  _supportedLanguages ??=
+      runtime.listLanguages().map((lang) => lang.code).toList();
+  return _supportedLanguages!;
+}
+
+String get defaultSourceLanguage => _preferredLanguage('en');
+
+String get defaultTargetLanguage => _preferredLanguage('zh-Hans');
+
+String _preferredLanguage(String code) {
+  final languages = supportedLanguages;
+  if (languages.contains(code)) return code;
+  return languages.isNotEmpty ? languages.first : code;
+}
+
+/// Native (original) name of each language in its own writing system.
+///
+/// Lazily loaded from the Rust runtime on first access.
+Map<String, String>? _nativeLanguageNames;
+
+Map<String, String> get _nativeNames {
+  _nativeLanguageNames ??= {
+    for (final lang in runtime.listLanguages()) lang.code: lang.localName,
+  };
+  return _nativeLanguageNames!;
+}
 
 String getLanguageName(String language) {
-  switch (language) {
-    case kLanguageDE:
-      return t.common.language.de;
-    case kLanguageEN:
-      return t.common.language.en;
-    case kLanguageES:
-      return t.common.language.es;
-    case kLanguageFR:
-      return t.common.language.fr;
-    case kLanguageIT:
-      return t.common.language.it;
-    case kLanguageJA:
-      return t.common.language.ja;
-    case kLanguageKO:
-      return t.common.language.ko;
-    case kLanguagePT:
-      return t.common.language.pt;
-    case kLanguageRU:
-      return t.common.language.ru;
-    case kLanguageZH:
-      return t.common.language.zh;
-    default:
-      return language;
-  }
+  final translated = _languageNameFromT(language) ?? language;
+  final native = _nativeNames[language] ?? language;
+  if (translated == native) return translated;
+  return '$translated ($native)';
+}
+
+/// Looks up the translated name for a language code via the i18n system.
+String? _languageNameFromT(String language) {
+  final value = t['common.language.${language.replaceAll('-', '_')}'];
+  return value is String ? value : null;
 }
 
 Locale languageToLocale(String language) {
-  if (language.contains('-')) {
-    return Locale(
-        language.substring(0, 1).toUpperCase(), language.substring(1));
+  final parts = language.split('-');
+  if (parts.length >= 2 && parts[1].length == 4) {
+    return Locale.fromSubtags(languageCode: parts[0], scriptCode: parts[1]);
   }
-  return Locale(language);
+  if (parts.length >= 2) {
+    return Locale(parts[0], parts[1]);
+  }
+  return Locale(parts[0]);
 }

@@ -87,7 +87,7 @@ class _TranslationTargetSelectViewState
         }
       });
     });
-    for (final lang in kSupportedLanguages) {
+    for (final lang in supportedLanguages) {
       final item = MenuItem(
         getLanguageName(lang),
         MenuItemType.checkbox,

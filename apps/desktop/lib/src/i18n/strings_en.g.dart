@@ -307,89 +307,26 @@ class TranslationsCommonLanguageEn {
 
   // Translations
 
-  /// en: 'Afrikaans'
-  String get af => 'Afrikaans';
-
-  /// en: 'Amharic'
-  String get am => 'Amharic';
-
   /// en: 'Arabic'
   String get ar => 'Arabic';
-
-  /// en: 'Azerbaijani'
-  String get az => 'Azerbaijani';
-
-  /// en: 'Belarusian'
-  String get be => 'Belarusian';
-
-  /// en: 'Bulgarian'
-  String get bg => 'Bulgarian';
 
   /// en: 'Bengali'
   String get bn => 'Bengali';
 
-  /// en: 'Bosnian'
-  String get bs => 'Bosnian';
-
-  /// en: 'Catalan'
-  String get ca => 'Catalan';
-
-  /// en: 'Cebuano'
-  String get ceb => 'Cebuano';
-
-  /// en: 'Corsican'
-  String get co => 'Corsican';
-
-  /// en: 'Czech'
-  String get cs => 'Czech';
-
-  /// en: 'Welsh'
-  String get cy => 'Welsh';
-
-  /// en: 'Danish'
-  String get da => 'Danish';
-
   /// en: 'German'
   String get de => 'German';
-
-  /// en: 'Greek'
-  String get el => 'Greek';
 
   /// en: 'English'
   String get en => 'English';
 
-  /// en: 'Esperanto'
-  String get eo => 'Esperanto';
-
   /// en: 'Spanish'
   String get es => 'Spanish';
-
-  /// en: 'Estonian'
-  String get et => 'Estonian';
-
-  /// en: 'Basque'
-  String get eu => 'Basque';
 
   /// en: 'Persian'
   String get fa => 'Persian';
 
-  /// en: 'Finnish'
-  String get fi => 'Finnish';
-
   /// en: 'French'
   String get fr => 'French';
-
-  /// en: 'Frisian'
-  String get fy => 'Frisian';
-
-  /// en: 'Irish'
-  String get ga => 'Irish';
-
-  /// en: 'Scots Gaelic'
-  String get gd => 'Scots Gaelic';
-
-  /// en: 'Galician'
-  String get gl => 'Galician';
 
   /// en: 'Gujarati'
   String get gu => 'Gujarati';
@@ -397,101 +334,26 @@ class TranslationsCommonLanguageEn {
   /// en: 'Hausa'
   String get ha => 'Hausa';
 
-  /// en: 'Hawaiian'
-  String get haw => 'Hawaiian';
-
-  /// en: 'Hebrew'
-  String get he => 'Hebrew';
-
   /// en: 'Hindi'
   String get hi => 'Hindi';
-
-  /// en: 'Hmong'
-  String get hmn => 'Hmong';
-
-  /// en: 'Croatian'
-  String get hr => 'Croatian';
-
-  /// en: 'Haitian Creole'
-  String get ht => 'Haitian Creole';
-
-  /// en: 'Hungarian'
-  String get hu => 'Hungarian';
-
-  /// en: 'Armenian'
-  String get hy => 'Armenian';
 
   /// en: 'Indonesian'
   String get id => 'Indonesian';
 
-  /// en: 'Igbo'
-  String get ig => 'Igbo';
-
-  /// en: 'Icelandic'
-  String get kIs => 'Icelandic';
-
   /// en: 'Italian'
   String get it => 'Italian';
-
-  /// en: 'Hebrew'
-  String get iw => 'Hebrew';
 
   /// en: 'Japanese'
   String get ja => 'Japanese';
 
   /// en: 'Javanese'
-  String get jw => 'Javanese';
-
-  /// en: 'Georgian'
-  String get ka => 'Georgian';
-
-  /// en: 'Kazakh'
-  String get kk => 'Kazakh';
-
-  /// en: 'Khmer'
-  String get km => 'Khmer';
-
-  /// en: 'Kannada'
-  String get kn => 'Kannada';
+  String get jv => 'Javanese';
 
   /// en: 'Korean'
   String get ko => 'Korean';
 
-  /// en: 'Kurdish (Kurmanji)'
-  String get ku => 'Kurdish (Kurmanji)';
-
-  /// en: 'Kyrgyz'
-  String get ky => 'Kyrgyz';
-
-  /// en: 'Latin'
-  String get la => 'Latin';
-
-  /// en: 'Luxembourgish'
-  String get lb => 'Luxembourgish';
-
-  /// en: 'Lao'
-  String get lo => 'Lao';
-
-  /// en: 'Lithuanian'
-  String get lt => 'Lithuanian';
-
-  /// en: 'Latvian'
-  String get lv => 'Latvian';
-
-  /// en: 'Malagasy'
-  String get mg => 'Malagasy';
-
-  /// en: 'Maori'
-  String get mi => 'Maori';
-
-  /// en: 'Macedonian'
-  String get mk => 'Macedonian';
-
   /// en: 'Malayalam'
   String get ml => 'Malayalam';
-
-  /// en: 'Mongolian'
-  String get mn => 'Mongolian';
 
   /// en: 'Marathi'
   String get mr => 'Marathi';
@@ -499,35 +361,14 @@ class TranslationsCommonLanguageEn {
   /// en: 'Malay'
   String get ms => 'Malay';
 
-  /// en: 'Maltese'
-  String get mt => 'Maltese';
-
-  /// en: 'Myanmar (Burmese)'
-  String get my => 'Myanmar (Burmese)';
-
-  /// en: 'Nepali'
-  String get ne => 'Nepali';
-
   /// en: 'Dutch'
   String get nl => 'Dutch';
-
-  /// en: 'Norwegian'
-  String get no => 'Norwegian';
-
-  /// en: 'Chichewa'
-  String get ny => 'Chichewa';
-
-  /// en: 'Odia (Oriya)'
-  String get or => 'Odia (Oriya)';
 
   /// en: 'Punjabi'
   String get pa => 'Punjabi';
 
   /// en: 'Polish'
   String get pl => 'Polish';
-
-  /// en: 'Pashto'
-  String get ps => 'Pashto';
 
   /// en: 'Portuguese'
   String get pt => 'Portuguese';
@@ -538,45 +379,6 @@ class TranslationsCommonLanguageEn {
   /// en: 'Russian'
   String get ru => 'Russian';
 
-  /// en: 'Kinyarwanda'
-  String get rw => 'Kinyarwanda';
-
-  /// en: 'Sindhi'
-  String get sd => 'Sindhi';
-
-  /// en: 'Sinhala'
-  String get si => 'Sinhala';
-
-  /// en: 'Slovak'
-  String get sk => 'Slovak';
-
-  /// en: 'Slovenian'
-  String get sl => 'Slovenian';
-
-  /// en: 'Samoan'
-  String get sm => 'Samoan';
-
-  /// en: 'Shona'
-  String get sn => 'Shona';
-
-  /// en: 'Somali'
-  String get so => 'Somali';
-
-  /// en: 'Albanian'
-  String get sq => 'Albanian';
-
-  /// en: 'Serbian'
-  String get sr => 'Serbian';
-
-  /// en: 'Sesotho'
-  String get st => 'Sesotho';
-
-  /// en: 'Sundanese'
-  String get su => 'Sundanese';
-
-  /// en: 'Swedish'
-  String get sv => 'Swedish';
-
   /// en: 'Swahili'
   String get sw => 'Swahili';
 
@@ -586,26 +388,11 @@ class TranslationsCommonLanguageEn {
   /// en: 'Telugu'
   String get te => 'Telugu';
 
-  /// en: 'Tajik'
-  String get tg => 'Tajik';
-
   /// en: 'Thai'
   String get th => 'Thai';
 
-  /// en: 'Turkmen'
-  String get tk => 'Turkmen';
-
-  /// en: 'Filipino'
-  String get tl => 'Filipino';
-
   /// en: 'Turkish'
   String get tr => 'Turkish';
-
-  /// en: 'Tatar'
-  String get tt => 'Tatar';
-
-  /// en: 'Uyghur'
-  String get ug => 'Uyghur';
 
   /// en: 'Ukrainian'
   String get uk => 'Ukrainian';
@@ -613,32 +400,17 @@ class TranslationsCommonLanguageEn {
   /// en: 'Urdu'
   String get ur => 'Urdu';
 
-  /// en: 'Uzbek'
-  String get uz => 'Uzbek';
-
   /// en: 'Vietnamese'
   String get vi => 'Vietnamese';
-
-  /// en: 'Xhosa'
-  String get xh => 'Xhosa';
-
-  /// en: 'Yiddish'
-  String get yi => 'Yiddish';
 
   /// en: 'Yoruba'
   String get yo => 'Yoruba';
 
-  /// en: 'Chinese'
-  String get zh => 'Chinese';
-
-  /// en: 'Chinese'
-  String get zh_CN => 'Chinese';
+  /// en: 'Chinese (Simplified)'
+  String get zh_Hans => 'Chinese (Simplified)';
 
   /// en: 'Chinese (Traditional)'
-  String get zh_TW => 'Chinese (Traditional)';
-
-  /// en: 'Zulu'
-  String get zu => 'Zulu';
+  String get zh_Hant => 'Chinese (Traditional)';
 }
 
 // Path: translation.engine_scope
@@ -1611,117 +1383,41 @@ extension on Translations {
       'common.button.kContinue' => 'Continue',
       'common.feedback.copied' => 'Copied',
       'common.placeholder.choose' => 'Please Choose',
-      'common.language.af' => 'Afrikaans',
-      'common.language.am' => 'Amharic',
       'common.language.ar' => 'Arabic',
-      'common.language.az' => 'Azerbaijani',
-      'common.language.be' => 'Belarusian',
-      'common.language.bg' => 'Bulgarian',
       'common.language.bn' => 'Bengali',
-      'common.language.bs' => 'Bosnian',
-      'common.language.ca' => 'Catalan',
-      'common.language.ceb' => 'Cebuano',
-      'common.language.co' => 'Corsican',
-      'common.language.cs' => 'Czech',
-      'common.language.cy' => 'Welsh',
-      'common.language.da' => 'Danish',
       'common.language.de' => 'German',
-      'common.language.el' => 'Greek',
       'common.language.en' => 'English',
-      'common.language.eo' => 'Esperanto',
       'common.language.es' => 'Spanish',
-      'common.language.et' => 'Estonian',
-      'common.language.eu' => 'Basque',
       'common.language.fa' => 'Persian',
-      'common.language.fi' => 'Finnish',
       'common.language.fr' => 'French',
-      'common.language.fy' => 'Frisian',
-      'common.language.ga' => 'Irish',
-      'common.language.gd' => 'Scots Gaelic',
-      'common.language.gl' => 'Galician',
       'common.language.gu' => 'Gujarati',
       'common.language.ha' => 'Hausa',
-      'common.language.haw' => 'Hawaiian',
-      'common.language.he' => 'Hebrew',
       'common.language.hi' => 'Hindi',
-      'common.language.hmn' => 'Hmong',
-      'common.language.hr' => 'Croatian',
-      'common.language.ht' => 'Haitian Creole',
-      'common.language.hu' => 'Hungarian',
-      'common.language.hy' => 'Armenian',
       'common.language.id' => 'Indonesian',
-      'common.language.ig' => 'Igbo',
-      'common.language.kIs' => 'Icelandic',
       'common.language.it' => 'Italian',
-      'common.language.iw' => 'Hebrew',
       'common.language.ja' => 'Japanese',
-      'common.language.jw' => 'Javanese',
-      'common.language.ka' => 'Georgian',
-      'common.language.kk' => 'Kazakh',
-      'common.language.km' => 'Khmer',
-      'common.language.kn' => 'Kannada',
+      'common.language.jv' => 'Javanese',
       'common.language.ko' => 'Korean',
-      'common.language.ku' => 'Kurdish (Kurmanji)',
-      'common.language.ky' => 'Kyrgyz',
-      'common.language.la' => 'Latin',
-      'common.language.lb' => 'Luxembourgish',
-      'common.language.lo' => 'Lao',
-      'common.language.lt' => 'Lithuanian',
-      'common.language.lv' => 'Latvian',
-      'common.language.mg' => 'Malagasy',
-      'common.language.mi' => 'Maori',
-      'common.language.mk' => 'Macedonian',
       'common.language.ml' => 'Malayalam',
-      'common.language.mn' => 'Mongolian',
       'common.language.mr' => 'Marathi',
       'common.language.ms' => 'Malay',
-      'common.language.mt' => 'Maltese',
-      'common.language.my' => 'Myanmar (Burmese)',
-      'common.language.ne' => 'Nepali',
       'common.language.nl' => 'Dutch',
-      'common.language.no' => 'Norwegian',
-      'common.language.ny' => 'Chichewa',
-      'common.language.or' => 'Odia (Oriya)',
       'common.language.pa' => 'Punjabi',
       'common.language.pl' => 'Polish',
-      'common.language.ps' => 'Pashto',
       'common.language.pt' => 'Portuguese',
       'common.language.ro' => 'Romanian',
       'common.language.ru' => 'Russian',
-      'common.language.rw' => 'Kinyarwanda',
-      'common.language.sd' => 'Sindhi',
-      'common.language.si' => 'Sinhala',
-      'common.language.sk' => 'Slovak',
-      'common.language.sl' => 'Slovenian',
-      'common.language.sm' => 'Samoan',
-      'common.language.sn' => 'Shona',
-      'common.language.so' => 'Somali',
-      'common.language.sq' => 'Albanian',
-      'common.language.sr' => 'Serbian',
-      'common.language.st' => 'Sesotho',
-      'common.language.su' => 'Sundanese',
-      'common.language.sv' => 'Swedish',
       'common.language.sw' => 'Swahili',
       'common.language.ta' => 'Tamil',
       'common.language.te' => 'Telugu',
-      'common.language.tg' => 'Tajik',
       'common.language.th' => 'Thai',
-      'common.language.tk' => 'Turkmen',
-      'common.language.tl' => 'Filipino',
       'common.language.tr' => 'Turkish',
-      'common.language.tt' => 'Tatar',
-      'common.language.ug' => 'Uyghur',
       'common.language.uk' => 'Ukrainian',
       'common.language.ur' => 'Urdu',
-      'common.language.uz' => 'Uzbek',
       'common.language.vi' => 'Vietnamese',
-      'common.language.xh' => 'Xhosa',
-      'common.language.yi' => 'Yiddish',
       'common.language.yo' => 'Yoruba',
-      'common.language.zh' => 'Chinese',
-      'common.language.zh_CN' => 'Chinese',
-      'common.language.zh_TW' => 'Chinese (Traditional)',
-      'common.language.zu' => 'Zulu',
+      'common.language.zh_Hans' => 'Chinese (Simplified)',
+      'common.language.zh_Hant' => 'Chinese (Traditional)',
       'provider.baidu' => 'Baidu',
       'provider.caiyun' => 'Caiyun',
       'provider.deepl' => 'DeepL',

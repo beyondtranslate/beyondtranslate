@@ -45,7 +45,7 @@ class SettingsStore extends ChangeNotifier {
     doubleClickCopyResult: true,
   );
   AppearanceSettings _appearance = AppearanceSettings(
-    language: 'zh',
+    language: 'zh-Hans',
     themeMode: 'system',
   );
   ShortcutSettings _shortcuts = ShortcutSettings(

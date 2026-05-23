@@ -14,8 +14,8 @@ struct AppearanceView: View {
             set: { viewModel.setAppLanguage($0) }
           )
         ) {
-          ForEach(languageOptions, id: \.id) { language in
-            Text(language.title).tag(language.id)
+          ForEach(viewModel.languageOptions, id: \.code) { language in
+            Text(language.localName).tag(language.code)
           }
         }
         .labelsHidden()
@@ -39,12 +39,5 @@ struct AppearanceView: View {
       }
     }
     .environment(\.locale, Locale(identifier: localization.languageCode))
-  }
-
-  private var languageOptions: [(id: String, title: String)] {
-    [
-      ("en", LocaleKeys.settings.appearance.option.english.tr()),
-      ("zh", LocaleKeys.settings.appearance.option.chinese.tr()),
-    ]
   }
 }

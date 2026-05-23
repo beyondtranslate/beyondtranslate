@@ -6,8 +6,9 @@ use std::thread;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, LanguagePair, LookUpRequest, LookUpResponse,
-    RecognizeTextRequest, RecognizeTextResponse, TranslateRequest, TranslateResponse,
+    DetectLanguageRequest, DetectLanguageResponse, LanguageInfo, LanguagePair, LookUpRequest,
+    LookUpResponse, RecognizeTextRequest, RecognizeTextResponse, TranslateRequest,
+    TranslateResponse,
 };
 use struct_patch::Patch as ApplyPatch;
 use tokio::sync::{broadcast, Mutex as AsyncMutex, RwLock};
@@ -227,6 +228,16 @@ impl Runtime {
         port: u16,
     ) -> Result<Arc<RuntimeApiServer>, RuntimeError> {
         RuntimeApiServer::start((*self).clone(), host, port)
+    }
+
+    /// Returns the curated language list supported by the app.
+    pub fn list_languages(&self) -> Vec<LanguageInfo> {
+        beyondtranslate_engine::all_languages()
+    }
+
+    /// Returns languages supported by the app UI.
+    pub fn list_app_languages(&self) -> Vec<LanguageInfo> {
+        beyondtranslate_engine::app_languages()
     }
 }
 
@@ -1103,7 +1114,7 @@ mod tests {
 
                 settings
                     .update_appearance(AppearanceSettingsPatch {
-                        language: Some("zh".to_owned()),
+                        language: Some("zh-Hans".to_owned()),
                         theme_mode: None,
                     })
                     .await
@@ -1141,7 +1152,7 @@ mod tests {
                     .clone()
                     .settings()
                     .update_appearance(AppearanceSettingsPatch {
-                        language: Some("zh".to_owned()),
+                        language: Some("zh-Hans".to_owned()),
                         theme_mode: None,
                     })
                     .await
@@ -1170,7 +1181,7 @@ mod tests {
                     .clone()
                     .settings()
                     .update_appearance(AppearanceSettingsPatch {
-                        language: Some("zh".to_owned()),
+                        language: Some("zh-Hans".to_owned()),
                         theme_mode: None,
                     })
                     .await
@@ -1183,7 +1194,7 @@ mod tests {
                     .await
                     .expect("failed to read appearance via reader");
 
-                assert_eq!(read_back.language, "zh");
+                assert_eq!(read_back.language, "zh-Hans");
             });
     }
 

@@ -11,11 +11,11 @@ import 'package:slang/generated.dart';
 import 'strings.g.dart';
 
 // Path: <root>
-class TranslationsZh extends Translations
+class TranslationsZhHans extends Translations
     with BaseTranslations<AppLocale, Translations> {
   /// You can call this constructor and build your own translation instance of this locale.
   /// Constructing via the enum [AppLocale.build] is preferred.
-  TranslationsZh(
+  TranslationsZhHans(
       {Map<String, Node>? overrides,
       PluralResolver? cardinalResolver,
       PluralResolver? ordinalResolver,
@@ -24,7 +24,7 @@ class TranslationsZh extends Translations
             'Set "translation_overrides: true" in order to enable this feature.'),
         $meta = meta ??
             TranslationMetadata(
-              locale: AppLocale.zh,
+              locale: AppLocale.zhHans,
               overrides: overrides ?? {},
               cardinalResolver: cardinalResolver,
               ordinalResolver: ordinalResolver,
@@ -37,7 +37,7 @@ class TranslationsZh extends Translations
     $meta.setFlatMapFunction(_flatMapFunction);
   }
 
-  /// Metadata for the translations of <zh>.
+  /// Metadata for the translations of <zh-Hans>.
   @override
   final TranslationMetadata<AppLocale, Translations> $meta;
 
@@ -46,71 +46,73 @@ class TranslationsZh extends Translations
   dynamic operator [](String key) =>
       $meta.getTranslation(key) ?? super.$meta.getTranslation(key);
 
-  late final TranslationsZh _root = this; // ignore: unused_field
+  late final TranslationsZhHans _root = this; // ignore: unused_field
 
   @override
-  TranslationsZh $copyWith(
+  TranslationsZhHans $copyWith(
           {TranslationMetadata<AppLocale, Translations>? meta}) =>
-      TranslationsZh(meta: meta ?? this.$meta);
+      TranslationsZhHans(meta: meta ?? this.$meta);
 
   // Translations
   @override
-  late final _TranslationsCommonZh common = _TranslationsCommonZh._(_root);
+  late final _TranslationsCommonZhHans common =
+      _TranslationsCommonZhHans._(_root);
   @override
-  late final _TranslationsProviderZh provider =
-      _TranslationsProviderZh._(_root);
+  late final _TranslationsProviderZhHans provider =
+      _TranslationsProviderZhHans._(_root);
   @override
-  late final _TranslationsTranslationZh translation =
-      _TranslationsTranslationZh._(_root);
+  late final _TranslationsTranslationZhHans translation =
+      _TranslationsTranslationZhHans._(_root);
   @override
-  late final _TranslationsOcrZh ocr = _TranslationsOcrZh._(_root);
+  late final _TranslationsOcrZhHans ocr = _TranslationsOcrZhHans._(_root);
   @override
-  late final _TranslationsThemeZh theme = _TranslationsThemeZh._(_root);
+  late final _TranslationsThemeZhHans theme = _TranslationsThemeZhHans._(_root);
   @override
-  late final _TranslationsTrayZh tray = _TranslationsTrayZh._(_root);
+  late final _TranslationsTrayZhHans tray = _TranslationsTrayZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorZh mini_translator =
-      _TranslationsMiniTranslatorZh._(_root);
+  late final _TranslationsMiniTranslatorZhHans mini_translator =
+      _TranslationsMiniTranslatorZhHans._(_root);
   @override
-  late final _TranslationsSettingsZh settings =
-      _TranslationsSettingsZh._(_root);
+  late final _TranslationsSettingsZhHans settings =
+      _TranslationsSettingsZhHans._(_root);
   @override
-  late final _TranslationsShortcutsZh shortcuts =
-      _TranslationsShortcutsZh._(_root);
+  late final _TranslationsShortcutsZhHans shortcuts =
+      _TranslationsShortcutsZhHans._(_root);
 }
 
 // Path: common
-class _TranslationsCommonZh extends TranslationsCommonEn {
-  _TranslationsCommonZh._(TranslationsZh root)
+class _TranslationsCommonZhHans extends TranslationsCommonEn {
+  _TranslationsCommonZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsCommonAppZh app = _TranslationsCommonAppZh._(_root);
+  late final _TranslationsCommonAppZhHans app =
+      _TranslationsCommonAppZhHans._(_root);
   @override
-  late final _TranslationsCommonButtonZh button =
-      _TranslationsCommonButtonZh._(_root);
+  late final _TranslationsCommonButtonZhHans button =
+      _TranslationsCommonButtonZhHans._(_root);
   @override
-  late final _TranslationsCommonFeedbackZh feedback =
-      _TranslationsCommonFeedbackZh._(_root);
+  late final _TranslationsCommonFeedbackZhHans feedback =
+      _TranslationsCommonFeedbackZhHans._(_root);
   @override
-  late final _TranslationsCommonPlaceholderZh placeholder =
-      _TranslationsCommonPlaceholderZh._(_root);
+  late final _TranslationsCommonPlaceholderZhHans placeholder =
+      _TranslationsCommonPlaceholderZhHans._(_root);
   @override
-  late final _TranslationsCommonLanguageZh language =
-      _TranslationsCommonLanguageZh._(_root);
+  late final _TranslationsCommonLanguageZhHans language =
+      _TranslationsCommonLanguageZhHans._(_root);
 }
 
 // Path: provider
-class _TranslationsProviderZh extends TranslationsProviderEn {
-  _TranslationsProviderZh._(TranslationsZh root)
+class _TranslationsProviderZhHans extends TranslationsProviderEn {
+  _TranslationsProviderZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -134,149 +136,151 @@ class _TranslationsProviderZh extends TranslationsProviderEn {
 }
 
 // Path: translation
-class _TranslationsTranslationZh extends TranslationsTranslationEn {
-  _TranslationsTranslationZh._(TranslationsZh root)
+class _TranslationsTranslationZhHans extends TranslationsTranslationEn {
+  _TranslationsTranslationZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsTranslationEngineScopeZh engine_scope =
-      _TranslationsTranslationEngineScopeZh._(_root);
+  late final _TranslationsTranslationEngineScopeZhHans engine_scope =
+      _TranslationsTranslationEngineScopeZhHans._(_root);
   @override
-  late final _TranslationsTranslationModeZh mode =
-      _TranslationsTranslationModeZh._(_root);
+  late final _TranslationsTranslationModeZhHans mode =
+      _TranslationsTranslationModeZhHans._(_root);
   @override
-  late final _TranslationsTranslationWordPronunciationZh word_pronunciation =
-      _TranslationsTranslationWordPronunciationZh._(_root);
+  late final _TranslationsTranslationWordPronunciationZhHans
+      word_pronunciation =
+      _TranslationsTranslationWordPronunciationZhHans._(_root);
 }
 
 // Path: ocr
-class _TranslationsOcrZh extends TranslationsOcrEn {
-  _TranslationsOcrZh._(TranslationsZh root)
+class _TranslationsOcrZhHans extends TranslationsOcrEn {
+  _TranslationsOcrZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsOcrEngineZh engine =
-      _TranslationsOcrEngineZh._(_root);
+  late final _TranslationsOcrEngineZhHans engine =
+      _TranslationsOcrEngineZhHans._(_root);
 }
 
 // Path: theme
-class _TranslationsThemeZh extends TranslationsThemeEn {
-  _TranslationsThemeZh._(TranslationsZh root)
+class _TranslationsThemeZhHans extends TranslationsThemeEn {
+  _TranslationsThemeZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsThemeModeZh mode = _TranslationsThemeModeZh._(_root);
+  late final _TranslationsThemeModeZhHans mode =
+      _TranslationsThemeModeZhHans._(_root);
 }
 
 // Path: tray
-class _TranslationsTrayZh extends TranslationsTrayEn {
-  _TranslationsTrayZh._(TranslationsZh root)
+class _TranslationsTrayZhHans extends TranslationsTrayEn {
+  _TranslationsTrayZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsTrayContextMenuZh context_menu =
-      _TranslationsTrayContextMenuZh._(_root);
+  late final _TranslationsTrayContextMenuZhHans context_menu =
+      _TranslationsTrayContextMenuZhHans._(_root);
 }
 
 // Path: mini_translator
-class _TranslationsMiniTranslatorZh extends TranslationsMiniTranslatorEn {
-  _TranslationsMiniTranslatorZh._(TranslationsZh root)
+class _TranslationsMiniTranslatorZhHans extends TranslationsMiniTranslatorEn {
+  _TranslationsMiniTranslatorZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsMiniTranslatorUpdateBannerZh update_banner =
-      _TranslationsMiniTranslatorUpdateBannerZh._(_root);
+  late final _TranslationsMiniTranslatorUpdateBannerZhHans update_banner =
+      _TranslationsMiniTranslatorUpdateBannerZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorLimitedBannerZh limited_banner =
-      _TranslationsMiniTranslatorLimitedBannerZh._(_root);
+  late final _TranslationsMiniTranslatorLimitedBannerZhHans limited_banner =
+      _TranslationsMiniTranslatorLimitedBannerZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorInputZh input =
-      _TranslationsMiniTranslatorInputZh._(_root);
+  late final _TranslationsMiniTranslatorInputZhHans input =
+      _TranslationsMiniTranslatorInputZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorToolbarZh toolbar =
-      _TranslationsMiniTranslatorToolbarZh._(_root);
+  late final _TranslationsMiniTranslatorToolbarZhHans toolbar =
+      _TranslationsMiniTranslatorToolbarZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorButtonZh button =
-      _TranslationsMiniTranslatorButtonZh._(_root);
+  late final _TranslationsMiniTranslatorButtonZhHans button =
+      _TranslationsMiniTranslatorButtonZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorMessageZh message =
-      _TranslationsMiniTranslatorMessageZh._(_root);
+  late final _TranslationsMiniTranslatorMessageZhHans message =
+      _TranslationsMiniTranslatorMessageZhHans._(_root);
 }
 
 // Path: settings
-class _TranslationsSettingsZh extends TranslationsSettingsEn {
-  _TranslationsSettingsZh._(TranslationsZh root)
+class _TranslationsSettingsZhHans extends TranslationsSettingsEn {
+  _TranslationsSettingsZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
   String get version => '版本 {} BUILD {}';
   @override
-  late final _TranslationsSettingsGeneralZh general =
-      _TranslationsSettingsGeneralZh._(_root);
+  late final _TranslationsSettingsGeneralZhHans general =
+      _TranslationsSettingsGeneralZhHans._(_root);
   @override
-  late final _TranslationsSettingsAppearanceZh appearance =
-      _TranslationsSettingsAppearanceZh._(_root);
+  late final _TranslationsSettingsAppearanceZhHans appearance =
+      _TranslationsSettingsAppearanceZhHans._(_root);
   @override
-  late final _TranslationsSettingsShortcutsZh shortcuts =
-      _TranslationsSettingsShortcutsZh._(_root);
+  late final _TranslationsSettingsShortcutsZhHans shortcuts =
+      _TranslationsSettingsShortcutsZhHans._(_root);
   @override
-  late final _TranslationsSettingsAdvancedZh advanced =
-      _TranslationsSettingsAdvancedZh._(_root);
+  late final _TranslationsSettingsAdvancedZhHans advanced =
+      _TranslationsSettingsAdvancedZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersZh providers =
-      _TranslationsSettingsProvidersZh._(_root);
+  late final _TranslationsSettingsProvidersZhHans providers =
+      _TranslationsSettingsProvidersZhHans._(_root);
   @override
-  late final _TranslationsSettingsLayoutZh layout =
-      _TranslationsSettingsLayoutZh._(_root);
+  late final _TranslationsSettingsLayoutZhHans layout =
+      _TranslationsSettingsLayoutZhHans._(_root);
   @override
   String get title => '设置';
 }
 
 // Path: shortcuts
-class _TranslationsShortcutsZh extends TranslationsShortcutsEn {
-  _TranslationsShortcutsZh._(TranslationsZh root)
+class _TranslationsShortcutsZhHans extends TranslationsShortcutsEn {
+  _TranslationsShortcutsZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsShortcutsRecordDialogZh record_dialog =
-      _TranslationsShortcutsRecordDialogZh._(_root);
+  late final _TranslationsShortcutsRecordDialogZhHans record_dialog =
+      _TranslationsShortcutsRecordDialogZhHans._(_root);
 }
 
 // Path: common.app
-class _TranslationsCommonAppZh extends TranslationsCommonAppEn {
-  _TranslationsCommonAppZh._(TranslationsZh root)
+class _TranslationsCommonAppZhHans extends TranslationsCommonAppEn {
+  _TranslationsCommonAppZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -284,12 +288,12 @@ class _TranslationsCommonAppZh extends TranslationsCommonAppEn {
 }
 
 // Path: common.button
-class _TranslationsCommonButtonZh extends TranslationsCommonButtonEn {
-  _TranslationsCommonButtonZh._(TranslationsZh root)
+class _TranslationsCommonButtonZhHans extends TranslationsCommonButtonEn {
+  _TranslationsCommonButtonZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -311,12 +315,12 @@ class _TranslationsCommonButtonZh extends TranslationsCommonButtonEn {
 }
 
 // Path: common.feedback
-class _TranslationsCommonFeedbackZh extends TranslationsCommonFeedbackEn {
-  _TranslationsCommonFeedbackZh._(TranslationsZh root)
+class _TranslationsCommonFeedbackZhHans extends TranslationsCommonFeedbackEn {
+  _TranslationsCommonFeedbackZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -324,12 +328,13 @@ class _TranslationsCommonFeedbackZh extends TranslationsCommonFeedbackEn {
 }
 
 // Path: common.placeholder
-class _TranslationsCommonPlaceholderZh extends TranslationsCommonPlaceholderEn {
-  _TranslationsCommonPlaceholderZh._(TranslationsZh root)
+class _TranslationsCommonPlaceholderZhHans
+    extends TranslationsCommonPlaceholderEn {
+  _TranslationsCommonPlaceholderZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -337,162 +342,56 @@ class _TranslationsCommonPlaceholderZh extends TranslationsCommonPlaceholderEn {
 }
 
 // Path: common.language
-class _TranslationsCommonLanguageZh extends TranslationsCommonLanguageEn {
-  _TranslationsCommonLanguageZh._(TranslationsZh root)
+class _TranslationsCommonLanguageZhHans extends TranslationsCommonLanguageEn {
+  _TranslationsCommonLanguageZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  String get af => '布尔语(南非荷兰语)';
-  @override
-  String get am => '阿姆哈拉语';
-  @override
   String get ar => '阿拉伯语';
-  @override
-  String get az => '阿塞拜疆语';
-  @override
-  String get be => '白俄罗斯语';
-  @override
-  String get bg => '保加利亚语';
   @override
   String get bn => '孟加拉语';
   @override
-  String get bs => '波斯尼亚语';
-  @override
-  String get ca => '加泰罗尼亚语';
-  @override
-  String get ceb => '宿务语';
-  @override
-  String get co => '科西嘉语';
-  @override
-  String get cs => '捷克语';
-  @override
-  String get cy => '威尔士语';
-  @override
-  String get da => '丹麦语';
-  @override
   String get de => '德语';
-  @override
-  String get el => '希腊语';
   @override
   String get en => '英语';
   @override
-  String get eo => '世界语';
-  @override
   String get es => '西班牙语';
-  @override
-  String get et => '爱沙尼亚语';
-  @override
-  String get eu => '巴斯克语';
   @override
   String get fa => '波斯语';
   @override
-  String get fi => '芬兰语';
-  @override
   String get fr => '法语';
-  @override
-  String get fy => '弗里西语';
-  @override
-  String get ga => '爱尔兰语';
-  @override
-  String get gd => '苏格兰盖尔语';
-  @override
-  String get gl => '加利西亚语';
   @override
   String get gu => '古吉拉特语';
   @override
   String get ha => '豪萨语';
   @override
-  String get haw => '夏威夷语';
-  @override
-  String get he => '希伯来语';
-  @override
   String get hi => '印地语';
-  @override
-  String get hmn => '苗语';
-  @override
-  String get hr => '克罗地亚语';
-  @override
-  String get ht => '海地克里奥尔语';
-  @override
-  String get hu => '匈牙利语';
-  @override
-  String get hy => '亚美尼亚语';
   @override
   String get id => '印尼语';
   @override
-  String get ig => '伊博语';
-  @override
-  String get kIs => '冰岛语';
-  @override
   String get it => '意大利语';
-  @override
-  String get iw => '希伯来语';
   @override
   String get ja => '日语';
   @override
-  String get jw => '印尼爪哇语';
-  @override
-  String get ka => '格鲁吉亚语';
-  @override
-  String get kk => '哈萨克语';
-  @override
-  String get km => '高棉语';
-  @override
-  String get kn => '卡纳达语';
+  String get jv => '印尼爪哇语';
   @override
   String get ko => '韩语';
   @override
-  String get ku => '库尔德语';
-  @override
-  String get ky => '吉尔吉斯语';
-  @override
-  String get la => '拉丁语';
-  @override
-  String get lb => '卢森堡语';
-  @override
-  String get lo => '老挝语';
-  @override
-  String get lt => '立陶宛语';
-  @override
-  String get lv => '拉脱维亚语';
-  @override
-  String get mg => '马尔加什语';
-  @override
-  String get mi => '毛利语';
-  @override
-  String get mk => '马其顿语';
-  @override
   String get ml => '马拉雅拉姆语';
-  @override
-  String get mn => '蒙古语';
   @override
   String get mr => '马拉地语';
   @override
   String get ms => '马来语';
   @override
-  String get mt => '马耳他语';
-  @override
-  String get my => '缅甸语';
-  @override
-  String get ne => '尼泊尔语';
-  @override
   String get nl => '荷兰语';
-  @override
-  String get no => '挪威语';
-  @override
-  String get ny => '齐切瓦语';
-  @override
-  String get or => '奥利亚语';
   @override
   String get pa => '旁遮普语';
   @override
   String get pl => '波兰语';
-  @override
-  String get ps => '普什图语';
   @override
   String get pt => '葡萄牙语';
   @override
@@ -500,83 +399,37 @@ class _TranslationsCommonLanguageZh extends TranslationsCommonLanguageEn {
   @override
   String get ru => '俄语';
   @override
-  String get rw => '卢旺达语';
-  @override
-  String get sd => '信德语';
-  @override
-  String get si => '僧伽罗语';
-  @override
-  String get sk => '斯洛伐克语';
-  @override
-  String get sl => '斯洛文尼亚语';
-  @override
-  String get sm => '萨摩亚语';
-  @override
-  String get sn => '修纳语';
-  @override
-  String get so => '索马里语';
-  @override
-  String get sq => '阿尔巴尼亚语';
-  @override
-  String get sr => '塞尔维亚语';
-  @override
-  String get st => '塞索托语';
-  @override
-  String get su => '印尼巽他语';
-  @override
-  String get sv => '瑞典语';
-  @override
   String get sw => '斯瓦希里语';
   @override
   String get ta => '泰米尔语';
   @override
   String get te => '泰卢固语';
   @override
-  String get tg => '塔吉克语';
-  @override
   String get th => '泰语';
   @override
-  String get tk => '土库曼语';
-  @override
-  String get tl => '菲律宾语';
-  @override
   String get tr => '土耳其语';
-  @override
-  String get tt => '鞑靼语';
-  @override
-  String get ug => '维吾尔语';
   @override
   String get uk => '乌克兰语';
   @override
   String get ur => '乌尔都语';
   @override
-  String get uz => '乌兹别克语';
-  @override
   String get vi => '越南语';
-  @override
-  String get xh => '南非科萨语';
-  @override
-  String get yi => '意第绪语';
   @override
   String get yo => '约鲁巴语';
   @override
-  String get zh => '中文';
+  String get zh_Hans => '中文（简体）';
   @override
-  String get zh_CN => '中文';
-  @override
-  String get zh_TW => '中文(繁体)';
-  @override
-  String get zu => '南非祖鲁语';
+  String get zh_Hant => '中文（繁体）';
 }
 
 // Path: translation.engine_scope
-class _TranslationsTranslationEngineScopeZh
+class _TranslationsTranslationEngineScopeZhHans
     extends TranslationsTranslationEngineScopeEn {
-  _TranslationsTranslationEngineScopeZh._(TranslationsZh root)
+  _TranslationsTranslationEngineScopeZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -588,12 +441,12 @@ class _TranslationsTranslationEngineScopeZh
 }
 
 // Path: translation.mode
-class _TranslationsTranslationModeZh extends TranslationsTranslationModeEn {
-  _TranslationsTranslationModeZh._(TranslationsZh root)
+class _TranslationsTranslationModeZhHans extends TranslationsTranslationModeEn {
+  _TranslationsTranslationModeZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -603,13 +456,13 @@ class _TranslationsTranslationModeZh extends TranslationsTranslationModeEn {
 }
 
 // Path: translation.word_pronunciation
-class _TranslationsTranslationWordPronunciationZh
+class _TranslationsTranslationWordPronunciationZhHans
     extends TranslationsTranslationWordPronunciationEn {
-  _TranslationsTranslationWordPronunciationZh._(TranslationsZh root)
+  _TranslationsTranslationWordPronunciationZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -619,12 +472,12 @@ class _TranslationsTranslationWordPronunciationZh
 }
 
 // Path: ocr.engine
-class _TranslationsOcrEngineZh extends TranslationsOcrEngineEn {
-  _TranslationsOcrEngineZh._(TranslationsZh root)
+class _TranslationsOcrEngineZhHans extends TranslationsOcrEngineEn {
+  _TranslationsOcrEngineZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -636,12 +489,12 @@ class _TranslationsOcrEngineZh extends TranslationsOcrEngineEn {
 }
 
 // Path: theme.mode
-class _TranslationsThemeModeZh extends TranslationsThemeModeEn {
-  _TranslationsThemeModeZh._(TranslationsZh root)
+class _TranslationsThemeModeZhHans extends TranslationsThemeModeEn {
+  _TranslationsThemeModeZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -653,19 +506,19 @@ class _TranslationsThemeModeZh extends TranslationsThemeModeEn {
 }
 
 // Path: tray.context_menu
-class _TranslationsTrayContextMenuZh extends TranslationsTrayContextMenuEn {
-  _TranslationsTrayContextMenuZh._(TranslationsZh root)
+class _TranslationsTrayContextMenuZhHans extends TranslationsTrayContextMenuEn {
+  _TranslationsTrayContextMenuZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
   String get show_window => '显示窗口';
   @override
-  late final _TranslationsTrayContextMenuDevToolsZh dev_tools =
-      _TranslationsTrayContextMenuDevToolsZh._(_root);
+  late final _TranslationsTrayContextMenuDevToolsZhHans dev_tools =
+      _TranslationsTrayContextMenuDevToolsZhHans._(_root);
   @override
   String get check_for_updates => '检查更新';
   @override
@@ -675,57 +528,59 @@ class _TranslationsTrayContextMenuZh extends TranslationsTrayContextMenuEn {
 }
 
 // Path: mini_translator.update_banner
-class _TranslationsMiniTranslatorUpdateBannerZh
+class _TranslationsMiniTranslatorUpdateBannerZhHans
     extends TranslationsMiniTranslatorUpdateBannerEn {
-  _TranslationsMiniTranslatorUpdateBannerZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorUpdateBannerZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
   String get found_new_version => '发现新版本：{}';
   @override
-  late final _TranslationsMiniTranslatorUpdateBannerButtonZh button =
-      _TranslationsMiniTranslatorUpdateBannerButtonZh._(_root);
+  late final _TranslationsMiniTranslatorUpdateBannerButtonZhHans button =
+      _TranslationsMiniTranslatorUpdateBannerButtonZhHans._(_root);
 }
 
 // Path: mini_translator.limited_banner
-class _TranslationsMiniTranslatorLimitedBannerZh
+class _TranslationsMiniTranslatorLimitedBannerZhHans
     extends TranslationsMiniTranslatorLimitedBannerEn {
-  _TranslationsMiniTranslatorLimitedBannerZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorLimitedBannerZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsMiniTranslatorLimitedBannerPermissionZh permission =
-      _TranslationsMiniTranslatorLimitedBannerPermissionZh._(_root);
+  late final _TranslationsMiniTranslatorLimitedBannerPermissionZhHans
+      permission =
+      _TranslationsMiniTranslatorLimitedBannerPermissionZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorLimitedBannerInstructionZh instruction =
-      _TranslationsMiniTranslatorLimitedBannerInstructionZh._(_root);
+  late final _TranslationsMiniTranslatorLimitedBannerInstructionZhHans
+      instruction =
+      _TranslationsMiniTranslatorLimitedBannerInstructionZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorLimitedBannerActionZh action =
-      _TranslationsMiniTranslatorLimitedBannerActionZh._(_root);
+  late final _TranslationsMiniTranslatorLimitedBannerActionZhHans action =
+      _TranslationsMiniTranslatorLimitedBannerActionZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorLimitedBannerFeedbackZh feedback =
-      _TranslationsMiniTranslatorLimitedBannerFeedbackZh._(_root);
+  late final _TranslationsMiniTranslatorLimitedBannerFeedbackZhHans feedback =
+      _TranslationsMiniTranslatorLimitedBannerFeedbackZhHans._(_root);
   @override
-  late final _TranslationsMiniTranslatorLimitedBannerTooltipZh tooltip =
-      _TranslationsMiniTranslatorLimitedBannerTooltipZh._(_root);
+  late final _TranslationsMiniTranslatorLimitedBannerTooltipZhHans tooltip =
+      _TranslationsMiniTranslatorLimitedBannerTooltipZhHans._(_root);
 }
 
 // Path: mini_translator.input
-class _TranslationsMiniTranslatorInputZh
+class _TranslationsMiniTranslatorInputZhHans
     extends TranslationsMiniTranslatorInputEn {
-  _TranslationsMiniTranslatorInputZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorInputZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -735,28 +590,28 @@ class _TranslationsMiniTranslatorInputZh
 }
 
 // Path: mini_translator.toolbar
-class _TranslationsMiniTranslatorToolbarZh
+class _TranslationsMiniTranslatorToolbarZhHans
     extends TranslationsMiniTranslatorToolbarEn {
-  _TranslationsMiniTranslatorToolbarZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorToolbarZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsMiniTranslatorToolbarTooltipZh tooltip =
-      _TranslationsMiniTranslatorToolbarTooltipZh._(_root);
+  late final _TranslationsMiniTranslatorToolbarTooltipZhHans tooltip =
+      _TranslationsMiniTranslatorToolbarTooltipZhHans._(_root);
 }
 
 // Path: mini_translator.button
-class _TranslationsMiniTranslatorButtonZh
+class _TranslationsMiniTranslatorButtonZhHans
     extends TranslationsMiniTranslatorButtonEn {
-  _TranslationsMiniTranslatorButtonZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorButtonZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -766,13 +621,13 @@ class _TranslationsMiniTranslatorButtonZh
 }
 
 // Path: mini_translator.message
-class _TranslationsMiniTranslatorMessageZh
+class _TranslationsMiniTranslatorMessageZhHans
     extends TranslationsMiniTranslatorMessageEn {
-  _TranslationsMiniTranslatorMessageZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorMessageZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -782,79 +637,81 @@ class _TranslationsMiniTranslatorMessageZh
 }
 
 // Path: settings.general
-class _TranslationsSettingsGeneralZh extends TranslationsSettingsGeneralEn {
-  _TranslationsSettingsGeneralZh._(TranslationsZh root)
+class _TranslationsSettingsGeneralZhHans extends TranslationsSettingsGeneralEn {
+  _TranslationsSettingsGeneralZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
   String get title => '常规';
   @override
-  late final _TranslationsSettingsGeneralSectionZh section =
-      _TranslationsSettingsGeneralSectionZh._(_root);
+  late final _TranslationsSettingsGeneralSectionZhHans section =
+      _TranslationsSettingsGeneralSectionZhHans._(_root);
   @override
-  late final _TranslationsSettingsGeneralRowZh row =
-      _TranslationsSettingsGeneralRowZh._(_root);
+  late final _TranslationsSettingsGeneralRowZhHans row =
+      _TranslationsSettingsGeneralRowZhHans._(_root);
   @override
-  late final _TranslationsSettingsGeneralButtonZh button =
-      _TranslationsSettingsGeneralButtonZh._(_root);
+  late final _TranslationsSettingsGeneralButtonZhHans button =
+      _TranslationsSettingsGeneralButtonZhHans._(_root);
   @override
-  late final _TranslationsSettingsGeneralOptionZh option =
-      _TranslationsSettingsGeneralOptionZh._(_root);
+  late final _TranslationsSettingsGeneralOptionZhHans option =
+      _TranslationsSettingsGeneralOptionZhHans._(_root);
 }
 
 // Path: settings.appearance
-class _TranslationsSettingsAppearanceZh
+class _TranslationsSettingsAppearanceZhHans
     extends TranslationsSettingsAppearanceEn {
-  _TranslationsSettingsAppearanceZh._(TranslationsZh root)
+  _TranslationsSettingsAppearanceZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
   String get title => '外观';
   @override
-  late final _TranslationsSettingsAppearanceSectionZh section =
-      _TranslationsSettingsAppearanceSectionZh._(_root);
+  late final _TranslationsSettingsAppearanceSectionZhHans section =
+      _TranslationsSettingsAppearanceSectionZhHans._(_root);
   @override
-  late final _TranslationsSettingsAppearanceOptionZh option =
-      _TranslationsSettingsAppearanceOptionZh._(_root);
+  late final _TranslationsSettingsAppearanceOptionZhHans option =
+      _TranslationsSettingsAppearanceOptionZhHans._(_root);
 }
 
 // Path: settings.shortcuts
-class _TranslationsSettingsShortcutsZh extends TranslationsSettingsShortcutsEn {
-  _TranslationsSettingsShortcutsZh._(TranslationsZh root)
+class _TranslationsSettingsShortcutsZhHans
+    extends TranslationsSettingsShortcutsEn {
+  _TranslationsSettingsShortcutsZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
   String get title => '快捷键';
   @override
-  late final _TranslationsSettingsShortcutsSectionZh section =
-      _TranslationsSettingsShortcutsSectionZh._(_root);
+  late final _TranslationsSettingsShortcutsSectionZhHans section =
+      _TranslationsSettingsShortcutsSectionZhHans._(_root);
   @override
-  late final _TranslationsSettingsShortcutsRowZh row =
-      _TranslationsSettingsShortcutsRowZh._(_root);
+  late final _TranslationsSettingsShortcutsRowZhHans row =
+      _TranslationsSettingsShortcutsRowZhHans._(_root);
   @override
-  late final _TranslationsSettingsShortcutsDialogZh dialog =
-      _TranslationsSettingsShortcutsDialogZh._(_root);
+  late final _TranslationsSettingsShortcutsDialogZhHans dialog =
+      _TranslationsSettingsShortcutsDialogZhHans._(_root);
 }
 
 // Path: settings.advanced
-class _TranslationsSettingsAdvancedZh extends TranslationsSettingsAdvancedEn {
-  _TranslationsSettingsAdvancedZh._(TranslationsZh root)
+class _TranslationsSettingsAdvancedZhHans
+    extends TranslationsSettingsAdvancedEn {
+  _TranslationsSettingsAdvancedZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -878,72 +735,73 @@ class _TranslationsSettingsAdvancedZh extends TranslationsSettingsAdvancedEn {
 }
 
 // Path: settings.providers
-class _TranslationsSettingsProvidersZh extends TranslationsSettingsProvidersEn {
-  _TranslationsSettingsProvidersZh._(TranslationsZh root)
+class _TranslationsSettingsProvidersZhHans
+    extends TranslationsSettingsProvidersEn {
+  _TranslationsSettingsProvidersZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
   String get title => '提供商';
   @override
-  late final _TranslationsSettingsProvidersSectionZh section =
-      _TranslationsSettingsProvidersSectionZh._(_root);
+  late final _TranslationsSettingsProvidersSectionZhHans section =
+      _TranslationsSettingsProvidersSectionZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersItemZh item =
-      _TranslationsSettingsProvidersItemZh._(_root);
+  late final _TranslationsSettingsProvidersItemZhHans item =
+      _TranslationsSettingsProvidersItemZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersButtonZh button =
-      _TranslationsSettingsProvidersButtonZh._(_root);
+  late final _TranslationsSettingsProvidersButtonZhHans button =
+      _TranslationsSettingsProvidersButtonZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersDialogZh dialog =
-      _TranslationsSettingsProvidersDialogZh._(_root);
+  late final _TranslationsSettingsProvidersDialogZhHans dialog =
+      _TranslationsSettingsProvidersDialogZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersAlertZh alert =
-      _TranslationsSettingsProvidersAlertZh._(_root);
+  late final _TranslationsSettingsProvidersAlertZhHans alert =
+      _TranslationsSettingsProvidersAlertZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersIntroZh intro =
-      _TranslationsSettingsProvidersIntroZh._(_root);
+  late final _TranslationsSettingsProvidersIntroZhHans intro =
+      _TranslationsSettingsProvidersIntroZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersEditorZh editor =
-      _TranslationsSettingsProvidersEditorZh._(_root);
+  late final _TranslationsSettingsProvidersEditorZhHans editor =
+      _TranslationsSettingsProvidersEditorZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersDetailZh detail =
-      _TranslationsSettingsProvidersDetailZh._(_root);
+  late final _TranslationsSettingsProvidersDetailZhHans detail =
+      _TranslationsSettingsProvidersDetailZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersCapabilityZh capability =
-      _TranslationsSettingsProvidersCapabilityZh._(_root);
+  late final _TranslationsSettingsProvidersCapabilityZhHans capability =
+      _TranslationsSettingsProvidersCapabilityZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersDescriptionZh description =
-      _TranslationsSettingsProvidersDescriptionZh._(_root);
+  late final _TranslationsSettingsProvidersDescriptionZhHans description =
+      _TranslationsSettingsProvidersDescriptionZhHans._(_root);
 }
 
 // Path: settings.layout
-class _TranslationsSettingsLayoutZh extends TranslationsSettingsLayoutEn {
-  _TranslationsSettingsLayoutZh._(TranslationsZh root)
+class _TranslationsSettingsLayoutZhHans extends TranslationsSettingsLayoutEn {
+  _TranslationsSettingsLayoutZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
   String get title => '设置';
   @override
-  late final _TranslationsSettingsLayoutEmptyZh empty =
-      _TranslationsSettingsLayoutEmptyZh._(_root);
+  late final _TranslationsSettingsLayoutEmptyZhHans empty =
+      _TranslationsSettingsLayoutEmptyZhHans._(_root);
 }
 
 // Path: shortcuts.record_dialog
-class _TranslationsShortcutsRecordDialogZh
+class _TranslationsShortcutsRecordDialogZhHans
     extends TranslationsShortcutsRecordDialogEn {
-  _TranslationsShortcutsRecordDialogZh._(TranslationsZh root)
+  _TranslationsShortcutsRecordDialogZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -951,13 +809,13 @@ class _TranslationsShortcutsRecordDialogZh
 }
 
 // Path: tray.context_menu.dev_tools
-class _TranslationsTrayContextMenuDevToolsZh
+class _TranslationsTrayContextMenuDevToolsZhHans
     extends TranslationsTrayContextMenuDevToolsEn {
-  _TranslationsTrayContextMenuDevToolsZh._(TranslationsZh root)
+  _TranslationsTrayContextMenuDevToolsZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -969,13 +827,13 @@ class _TranslationsTrayContextMenuDevToolsZh
 }
 
 // Path: mini_translator.update_banner.button
-class _TranslationsMiniTranslatorUpdateBannerButtonZh
+class _TranslationsMiniTranslatorUpdateBannerButtonZhHans
     extends TranslationsMiniTranslatorUpdateBannerButtonEn {
-  _TranslationsMiniTranslatorUpdateBannerButtonZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorUpdateBannerButtonZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -983,13 +841,14 @@ class _TranslationsMiniTranslatorUpdateBannerButtonZh
 }
 
 // Path: mini_translator.limited_banner.permission
-class _TranslationsMiniTranslatorLimitedBannerPermissionZh
+class _TranslationsMiniTranslatorLimitedBannerPermissionZhHans
     extends TranslationsMiniTranslatorLimitedBannerPermissionEn {
-  _TranslationsMiniTranslatorLimitedBannerPermissionZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorLimitedBannerPermissionZhHans._(
+      TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1001,13 +860,14 @@ class _TranslationsMiniTranslatorLimitedBannerPermissionZh
 }
 
 // Path: mini_translator.limited_banner.instruction
-class _TranslationsMiniTranslatorLimitedBannerInstructionZh
+class _TranslationsMiniTranslatorLimitedBannerInstructionZhHans
     extends TranslationsMiniTranslatorLimitedBannerInstructionEn {
-  _TranslationsMiniTranslatorLimitedBannerInstructionZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorLimitedBannerInstructionZhHans._(
+      TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1019,13 +879,14 @@ class _TranslationsMiniTranslatorLimitedBannerInstructionZh
 }
 
 // Path: mini_translator.limited_banner.action
-class _TranslationsMiniTranslatorLimitedBannerActionZh
+class _TranslationsMiniTranslatorLimitedBannerActionZhHans
     extends TranslationsMiniTranslatorLimitedBannerActionEn {
-  _TranslationsMiniTranslatorLimitedBannerActionZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorLimitedBannerActionZhHans._(
+      TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1035,13 +896,14 @@ class _TranslationsMiniTranslatorLimitedBannerActionZh
 }
 
 // Path: mini_translator.limited_banner.feedback
-class _TranslationsMiniTranslatorLimitedBannerFeedbackZh
+class _TranslationsMiniTranslatorLimitedBannerFeedbackZhHans
     extends TranslationsMiniTranslatorLimitedBannerFeedbackEn {
-  _TranslationsMiniTranslatorLimitedBannerFeedbackZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorLimitedBannerFeedbackZhHans._(
+      TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1051,13 +913,14 @@ class _TranslationsMiniTranslatorLimitedBannerFeedbackZh
 }
 
 // Path: mini_translator.limited_banner.tooltip
-class _TranslationsMiniTranslatorLimitedBannerTooltipZh
+class _TranslationsMiniTranslatorLimitedBannerTooltipZhHans
     extends TranslationsMiniTranslatorLimitedBannerTooltipEn {
-  _TranslationsMiniTranslatorLimitedBannerTooltipZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorLimitedBannerTooltipZhHans._(
+      TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1065,13 +928,13 @@ class _TranslationsMiniTranslatorLimitedBannerTooltipZh
 }
 
 // Path: mini_translator.toolbar.tooltip
-class _TranslationsMiniTranslatorToolbarTooltipZh
+class _TranslationsMiniTranslatorToolbarTooltipZhHans
     extends TranslationsMiniTranslatorToolbarTooltipEn {
-  _TranslationsMiniTranslatorToolbarTooltipZh._(TranslationsZh root)
+  _TranslationsMiniTranslatorToolbarTooltipZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1083,13 +946,13 @@ class _TranslationsMiniTranslatorToolbarTooltipZh
 }
 
 // Path: settings.general.section
-class _TranslationsSettingsGeneralSectionZh
+class _TranslationsSettingsGeneralSectionZhHans
     extends TranslationsSettingsGeneralSectionEn {
-  _TranslationsSettingsGeneralSectionZh._(TranslationsZh root)
+  _TranslationsSettingsGeneralSectionZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1107,13 +970,13 @@ class _TranslationsSettingsGeneralSectionZh
 }
 
 // Path: settings.general.row
-class _TranslationsSettingsGeneralRowZh
+class _TranslationsSettingsGeneralRowZhHans
     extends TranslationsSettingsGeneralRowEn {
-  _TranslationsSettingsGeneralRowZh._(TranslationsZh root)
+  _TranslationsSettingsGeneralRowZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1143,13 +1006,13 @@ class _TranslationsSettingsGeneralRowZh
 }
 
 // Path: settings.general.button
-class _TranslationsSettingsGeneralButtonZh
+class _TranslationsSettingsGeneralButtonZhHans
     extends TranslationsSettingsGeneralButtonEn {
-  _TranslationsSettingsGeneralButtonZh._(TranslationsZh root)
+  _TranslationsSettingsGeneralButtonZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1161,13 +1024,13 @@ class _TranslationsSettingsGeneralButtonZh
 }
 
 // Path: settings.general.option
-class _TranslationsSettingsGeneralOptionZh
+class _TranslationsSettingsGeneralOptionZhHans
     extends TranslationsSettingsGeneralOptionEn {
-  _TranslationsSettingsGeneralOptionZh._(TranslationsZh root)
+  _TranslationsSettingsGeneralOptionZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1185,13 +1048,13 @@ class _TranslationsSettingsGeneralOptionZh
 }
 
 // Path: settings.appearance.section
-class _TranslationsSettingsAppearanceSectionZh
+class _TranslationsSettingsAppearanceSectionZhHans
     extends TranslationsSettingsAppearanceSectionEn {
-  _TranslationsSettingsAppearanceSectionZh._(TranslationsZh root)
+  _TranslationsSettingsAppearanceSectionZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1201,29 +1064,29 @@ class _TranslationsSettingsAppearanceSectionZh
 }
 
 // Path: settings.appearance.option
-class _TranslationsSettingsAppearanceOptionZh
+class _TranslationsSettingsAppearanceOptionZhHans
     extends TranslationsSettingsAppearanceOptionEn {
-  _TranslationsSettingsAppearanceOptionZh._(TranslationsZh root)
+  _TranslationsSettingsAppearanceOptionZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  String get english => '英文';
+  String get english => '英语';
   @override
   String get chinese => '中文';
 }
 
 // Path: settings.shortcuts.section
-class _TranslationsSettingsShortcutsSectionZh
+class _TranslationsSettingsShortcutsSectionZhHans
     extends TranslationsSettingsShortcutsSectionEn {
-  _TranslationsSettingsShortcutsSectionZh._(TranslationsZh root)
+  _TranslationsSettingsShortcutsSectionZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1235,13 +1098,13 @@ class _TranslationsSettingsShortcutsSectionZh
 }
 
 // Path: settings.shortcuts.row
-class _TranslationsSettingsShortcutsRowZh
+class _TranslationsSettingsShortcutsRowZhHans
     extends TranslationsSettingsShortcutsRowEn {
-  _TranslationsSettingsShortcutsRowZh._(TranslationsZh root)
+  _TranslationsSettingsShortcutsRowZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1257,13 +1120,13 @@ class _TranslationsSettingsShortcutsRowZh
 }
 
 // Path: settings.shortcuts.dialog
-class _TranslationsSettingsShortcutsDialogZh
+class _TranslationsSettingsShortcutsDialogZhHans
     extends TranslationsSettingsShortcutsDialogEn {
-  _TranslationsSettingsShortcutsDialogZh._(TranslationsZh root)
+  _TranslationsSettingsShortcutsDialogZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1277,13 +1140,13 @@ class _TranslationsSettingsShortcutsDialogZh
 }
 
 // Path: settings.providers.section
-class _TranslationsSettingsProvidersSectionZh
+class _TranslationsSettingsProvidersSectionZhHans
     extends TranslationsSettingsProvidersSectionEn {
-  _TranslationsSettingsProvidersSectionZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersSectionZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1291,13 +1154,13 @@ class _TranslationsSettingsProvidersSectionZh
 }
 
 // Path: settings.providers.item
-class _TranslationsSettingsProvidersItemZh
+class _TranslationsSettingsProvidersItemZhHans
     extends TranslationsSettingsProvidersItemEn {
-  _TranslationsSettingsProvidersItemZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersItemZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1309,13 +1172,13 @@ class _TranslationsSettingsProvidersItemZh
 }
 
 // Path: settings.providers.button
-class _TranslationsSettingsProvidersButtonZh
+class _TranslationsSettingsProvidersButtonZhHans
     extends TranslationsSettingsProvidersButtonEn {
-  _TranslationsSettingsProvidersButtonZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersButtonZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1323,13 +1186,13 @@ class _TranslationsSettingsProvidersButtonZh
 }
 
 // Path: settings.providers.dialog
-class _TranslationsSettingsProvidersDialogZh
+class _TranslationsSettingsProvidersDialogZhHans
     extends TranslationsSettingsProvidersDialogEn {
-  _TranslationsSettingsProvidersDialogZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersDialogZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1341,13 +1204,13 @@ class _TranslationsSettingsProvidersDialogZh
 }
 
 // Path: settings.providers.alert
-class _TranslationsSettingsProvidersAlertZh
+class _TranslationsSettingsProvidersAlertZhHans
     extends TranslationsSettingsProvidersAlertEn {
-  _TranslationsSettingsProvidersAlertZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersAlertZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1355,13 +1218,13 @@ class _TranslationsSettingsProvidersAlertZh
 }
 
 // Path: settings.providers.intro
-class _TranslationsSettingsProvidersIntroZh
+class _TranslationsSettingsProvidersIntroZhHans
     extends TranslationsSettingsProvidersIntroEn {
-  _TranslationsSettingsProvidersIntroZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersIntroZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1371,55 +1234,55 @@ class _TranslationsSettingsProvidersIntroZh
 }
 
 // Path: settings.providers.editor
-class _TranslationsSettingsProvidersEditorZh
+class _TranslationsSettingsProvidersEditorZhHans
     extends TranslationsSettingsProvidersEditorEn {
-  _TranslationsSettingsProvidersEditorZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersEditorZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsSettingsProvidersEditorTitleZh title =
-      _TranslationsSettingsProvidersEditorTitleZh._(_root);
+  late final _TranslationsSettingsProvidersEditorTitleZhHans title =
+      _TranslationsSettingsProvidersEditorTitleZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersEditorRowZh row =
-      _TranslationsSettingsProvidersEditorRowZh._(_root);
+  late final _TranslationsSettingsProvidersEditorRowZhHans row =
+      _TranslationsSettingsProvidersEditorRowZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersEditorPlaceholderZh placeholder =
-      _TranslationsSettingsProvidersEditorPlaceholderZh._(_root);
+  late final _TranslationsSettingsProvidersEditorPlaceholderZhHans placeholder =
+      _TranslationsSettingsProvidersEditorPlaceholderZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersEditorTypePickerZh type_picker =
-      _TranslationsSettingsProvidersEditorTypePickerZh._(_root);
+  late final _TranslationsSettingsProvidersEditorTypePickerZhHans type_picker =
+      _TranslationsSettingsProvidersEditorTypePickerZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersEditorTooltipZh tooltip =
-      _TranslationsSettingsProvidersEditorTooltipZh._(_root);
+  late final _TranslationsSettingsProvidersEditorTooltipZhHans tooltip =
+      _TranslationsSettingsProvidersEditorTooltipZhHans._(_root);
 }
 
 // Path: settings.providers.detail
-class _TranslationsSettingsProvidersDetailZh
+class _TranslationsSettingsProvidersDetailZhHans
     extends TranslationsSettingsProvidersDetailEn {
-  _TranslationsSettingsProvidersDetailZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersDetailZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
-  late final _TranslationsSettingsProvidersDetailTooltipZh tooltip =
-      _TranslationsSettingsProvidersDetailTooltipZh._(_root);
+  late final _TranslationsSettingsProvidersDetailTooltipZhHans tooltip =
+      _TranslationsSettingsProvidersDetailTooltipZhHans._(_root);
 }
 
 // Path: settings.providers.capability
-class _TranslationsSettingsProvidersCapabilityZh
+class _TranslationsSettingsProvidersCapabilityZhHans
     extends TranslationsSettingsProvidersCapabilityEn {
-  _TranslationsSettingsProvidersCapabilityZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersCapabilityZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1431,13 +1294,13 @@ class _TranslationsSettingsProvidersCapabilityZh
 }
 
 // Path: settings.providers.description
-class _TranslationsSettingsProvidersDescriptionZh
+class _TranslationsSettingsProvidersDescriptionZhHans
     extends TranslationsSettingsProvidersDescriptionEn {
-  _TranslationsSettingsProvidersDescriptionZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersDescriptionZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1451,13 +1314,13 @@ class _TranslationsSettingsProvidersDescriptionZh
 }
 
 // Path: settings.layout.empty
-class _TranslationsSettingsLayoutEmptyZh
+class _TranslationsSettingsLayoutEmptyZhHans
     extends TranslationsSettingsLayoutEmptyEn {
-  _TranslationsSettingsLayoutEmptyZh._(TranslationsZh root)
+  _TranslationsSettingsLayoutEmptyZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1467,13 +1330,13 @@ class _TranslationsSettingsLayoutEmptyZh
 }
 
 // Path: settings.providers.editor.title
-class _TranslationsSettingsProvidersEditorTitleZh
+class _TranslationsSettingsProvidersEditorTitleZhHans
     extends TranslationsSettingsProvidersEditorTitleEn {
-  _TranslationsSettingsProvidersEditorTitleZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersEditorTitleZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1483,13 +1346,13 @@ class _TranslationsSettingsProvidersEditorTitleZh
 }
 
 // Path: settings.providers.editor.row
-class _TranslationsSettingsProvidersEditorRowZh
+class _TranslationsSettingsProvidersEditorRowZhHans
     extends TranslationsSettingsProvidersEditorRowEn {
-  _TranslationsSettingsProvidersEditorRowZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersEditorRowZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1499,13 +1362,14 @@ class _TranslationsSettingsProvidersEditorRowZh
 }
 
 // Path: settings.providers.editor.placeholder
-class _TranslationsSettingsProvidersEditorPlaceholderZh
+class _TranslationsSettingsProvidersEditorPlaceholderZhHans
     extends TranslationsSettingsProvidersEditorPlaceholderEn {
-  _TranslationsSettingsProvidersEditorPlaceholderZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersEditorPlaceholderZhHans._(
+      TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1513,13 +1377,14 @@ class _TranslationsSettingsProvidersEditorPlaceholderZh
 }
 
 // Path: settings.providers.editor.type_picker
-class _TranslationsSettingsProvidersEditorTypePickerZh
+class _TranslationsSettingsProvidersEditorTypePickerZhHans
     extends TranslationsSettingsProvidersEditorTypePickerEn {
-  _TranslationsSettingsProvidersEditorTypePickerZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersEditorTypePickerZhHans._(
+      TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1527,13 +1392,13 @@ class _TranslationsSettingsProvidersEditorTypePickerZh
 }
 
 // Path: settings.providers.editor.tooltip
-class _TranslationsSettingsProvidersEditorTooltipZh
+class _TranslationsSettingsProvidersEditorTooltipZhHans
     extends TranslationsSettingsProvidersEditorTooltipEn {
-  _TranslationsSettingsProvidersEditorTooltipZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersEditorTooltipZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
@@ -1541,25 +1406,25 @@ class _TranslationsSettingsProvidersEditorTooltipZh
 }
 
 // Path: settings.providers.detail.tooltip
-class _TranslationsSettingsProvidersDetailTooltipZh
+class _TranslationsSettingsProvidersDetailTooltipZhHans
     extends TranslationsSettingsProvidersDetailTooltipEn {
-  _TranslationsSettingsProvidersDetailTooltipZh._(TranslationsZh root)
+  _TranslationsSettingsProvidersDetailTooltipZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
-  final TranslationsZh _root; // ignore: unused_field
+  final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
   @override
   String get edit => '编辑提供商';
 }
 
-/// The flat map containing all translations for locale <zh>.
+/// The flat map containing all translations for locale <zh-Hans>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
 /// The Dart AOT compiler has issues with very large switch statements,
 /// so the map is split into smaller functions (512 entries each).
-extension on TranslationsZh {
+extension on TranslationsZhHans {
   dynamic _flatMapFunction(String path) {
     return switch (path) {
       'common.app.name' => '比译',
@@ -1573,117 +1438,41 @@ extension on TranslationsZh {
       'common.button.kContinue' => '继续',
       'common.feedback.copied' => '已复制',
       'common.placeholder.choose' => '请选择',
-      'common.language.af' => '布尔语(南非荷兰语)',
-      'common.language.am' => '阿姆哈拉语',
       'common.language.ar' => '阿拉伯语',
-      'common.language.az' => '阿塞拜疆语',
-      'common.language.be' => '白俄罗斯语',
-      'common.language.bg' => '保加利亚语',
       'common.language.bn' => '孟加拉语',
-      'common.language.bs' => '波斯尼亚语',
-      'common.language.ca' => '加泰罗尼亚语',
-      'common.language.ceb' => '宿务语',
-      'common.language.co' => '科西嘉语',
-      'common.language.cs' => '捷克语',
-      'common.language.cy' => '威尔士语',
-      'common.language.da' => '丹麦语',
       'common.language.de' => '德语',
-      'common.language.el' => '希腊语',
       'common.language.en' => '英语',
-      'common.language.eo' => '世界语',
       'common.language.es' => '西班牙语',
-      'common.language.et' => '爱沙尼亚语',
-      'common.language.eu' => '巴斯克语',
       'common.language.fa' => '波斯语',
-      'common.language.fi' => '芬兰语',
       'common.language.fr' => '法语',
-      'common.language.fy' => '弗里西语',
-      'common.language.ga' => '爱尔兰语',
-      'common.language.gd' => '苏格兰盖尔语',
-      'common.language.gl' => '加利西亚语',
       'common.language.gu' => '古吉拉特语',
       'common.language.ha' => '豪萨语',
-      'common.language.haw' => '夏威夷语',
-      'common.language.he' => '希伯来语',
       'common.language.hi' => '印地语',
-      'common.language.hmn' => '苗语',
-      'common.language.hr' => '克罗地亚语',
-      'common.language.ht' => '海地克里奥尔语',
-      'common.language.hu' => '匈牙利语',
-      'common.language.hy' => '亚美尼亚语',
       'common.language.id' => '印尼语',
-      'common.language.ig' => '伊博语',
-      'common.language.kIs' => '冰岛语',
       'common.language.it' => '意大利语',
-      'common.language.iw' => '希伯来语',
       'common.language.ja' => '日语',
-      'common.language.jw' => '印尼爪哇语',
-      'common.language.ka' => '格鲁吉亚语',
-      'common.language.kk' => '哈萨克语',
-      'common.language.km' => '高棉语',
-      'common.language.kn' => '卡纳达语',
+      'common.language.jv' => '印尼爪哇语',
       'common.language.ko' => '韩语',
-      'common.language.ku' => '库尔德语',
-      'common.language.ky' => '吉尔吉斯语',
-      'common.language.la' => '拉丁语',
-      'common.language.lb' => '卢森堡语',
-      'common.language.lo' => '老挝语',
-      'common.language.lt' => '立陶宛语',
-      'common.language.lv' => '拉脱维亚语',
-      'common.language.mg' => '马尔加什语',
-      'common.language.mi' => '毛利语',
-      'common.language.mk' => '马其顿语',
       'common.language.ml' => '马拉雅拉姆语',
-      'common.language.mn' => '蒙古语',
       'common.language.mr' => '马拉地语',
       'common.language.ms' => '马来语',
-      'common.language.mt' => '马耳他语',
-      'common.language.my' => '缅甸语',
-      'common.language.ne' => '尼泊尔语',
       'common.language.nl' => '荷兰语',
-      'common.language.no' => '挪威语',
-      'common.language.ny' => '齐切瓦语',
-      'common.language.or' => '奥利亚语',
       'common.language.pa' => '旁遮普语',
       'common.language.pl' => '波兰语',
-      'common.language.ps' => '普什图语',
       'common.language.pt' => '葡萄牙语',
       'common.language.ro' => '罗马尼亚语',
       'common.language.ru' => '俄语',
-      'common.language.rw' => '卢旺达语',
-      'common.language.sd' => '信德语',
-      'common.language.si' => '僧伽罗语',
-      'common.language.sk' => '斯洛伐克语',
-      'common.language.sl' => '斯洛文尼亚语',
-      'common.language.sm' => '萨摩亚语',
-      'common.language.sn' => '修纳语',
-      'common.language.so' => '索马里语',
-      'common.language.sq' => '阿尔巴尼亚语',
-      'common.language.sr' => '塞尔维亚语',
-      'common.language.st' => '塞索托语',
-      'common.language.su' => '印尼巽他语',
-      'common.language.sv' => '瑞典语',
       'common.language.sw' => '斯瓦希里语',
       'common.language.ta' => '泰米尔语',
       'common.language.te' => '泰卢固语',
-      'common.language.tg' => '塔吉克语',
       'common.language.th' => '泰语',
-      'common.language.tk' => '土库曼语',
-      'common.language.tl' => '菲律宾语',
       'common.language.tr' => '土耳其语',
-      'common.language.tt' => '鞑靼语',
-      'common.language.ug' => '维吾尔语',
       'common.language.uk' => '乌克兰语',
       'common.language.ur' => '乌尔都语',
-      'common.language.uz' => '乌兹别克语',
       'common.language.vi' => '越南语',
-      'common.language.xh' => '南非科萨语',
-      'common.language.yi' => '意第绪语',
       'common.language.yo' => '约鲁巴语',
-      'common.language.zh' => '中文',
-      'common.language.zh_CN' => '中文',
-      'common.language.zh_TW' => '中文(繁体)',
-      'common.language.zu' => '南非祖鲁语',
+      'common.language.zh_Hans' => '中文（简体）',
+      'common.language.zh_Hant' => '中文（繁体）',
       'provider.baidu' => '百度',
       'provider.caiyun' => '彩云小译',
       'provider.deepl' => 'DeepL',
@@ -1774,7 +1563,7 @@ extension on TranslationsZh {
       'settings.appearance.title' => '外观',
       'settings.appearance.section.app_language' => '显示语言',
       'settings.appearance.section.theme_mode' => '主题模式',
-      'settings.appearance.option.english' => '英文',
+      'settings.appearance.option.english' => '英语',
       'settings.appearance.option.chinese' => '中文',
       'settings.shortcuts.title' => '快捷键',
       'settings.shortcuts.section.shortcuts' => '快捷键',

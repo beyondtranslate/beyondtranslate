@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 522 (261 per locale)
+/// Strings: 370 (185 per locale)
 ///
-/// Built on 2026-05-18 at 14:36 UTC
+/// Built on 2026-05-23 at 07:03 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
@@ -18,7 +18,7 @@ import 'package:slang/generated.dart';
 import 'package:slang_flutter/slang_flutter.dart';
 export 'package:slang_flutter/slang_flutter.dart';
 
-import 'strings_zh.g.dart' deferred as l_zh;
+import 'strings_zh_Hans.g.dart' deferred as l_zh_Hans;
 part 'strings_en.g.dart';
 
 /// Supported locales.
@@ -29,7 +29,7 @@ part 'strings_en.g.dart';
 /// - if (LocaleSettings.currentLocale == AppLocale.en) // locale check
 enum AppLocale with BaseAppLocale<AppLocale, Translations> {
   en(languageCode: 'en'),
-  zh(languageCode: 'zh');
+  zhHans(languageCode: 'zh', scriptCode: 'Hans');
 
   const AppLocale({
     required this.languageCode,
@@ -57,9 +57,9 @@ enum AppLocale with BaseAppLocale<AppLocale, Translations> {
           cardinalResolver: cardinalResolver,
           ordinalResolver: ordinalResolver,
         );
-      case AppLocale.zh:
-        await l_zh.loadLibrary();
-        return l_zh.TranslationsZh(
+      case AppLocale.zhHans:
+        await l_zh_Hans.loadLibrary();
+        return l_zh_Hans.TranslationsZhHans(
           overrides: overrides,
           cardinalResolver: cardinalResolver,
           ordinalResolver: ordinalResolver,
@@ -80,8 +80,8 @@ enum AppLocale with BaseAppLocale<AppLocale, Translations> {
           cardinalResolver: cardinalResolver,
           ordinalResolver: ordinalResolver,
         );
-      case AppLocale.zh:
-        return l_zh.TranslationsZh(
+      case AppLocale.zhHans:
+        return l_zh_Hans.TranslationsZhHans(
           overrides: overrides,
           cardinalResolver: cardinalResolver,
           ordinalResolver: ordinalResolver,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../i18n/i18n.dart';
 import '../../services/settings_store.dart';
+import '../../utils/language_util.dart';
 import '../../widgets/settings_page.dart';
 import '../../widgets/ui/preference_list_item.dart';
 import '../../widgets/ui/preference_list_section.dart';
@@ -16,11 +17,6 @@ class AppearanceSettingsPage extends StatefulWidget {
 }
 
 class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
-  static const _languageOptions = <_LanguageOption>[
-    _LanguageOption(code: 'en'),
-    _LanguageOption(code: 'zh'),
-  ];
-
   static const _themeModes = <_ThemeOption>[
     _ThemeOption(value: 'light'),
     _ThemeOption(value: 'dark'),
@@ -55,7 +51,8 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
         PreferenceListSection(
           title: Text(appearanceText.section.app_language),
           children: [
-            for (final option in _languageOptions)
+            for (final option
+                in appLanguages.map((code) => _LanguageOption(code: code)))
               PreferenceListRadioItem<String>(
                 title: Text(option.title),
                 value: option.code,
@@ -94,14 +91,7 @@ class _LanguageOption {
   final String code;
 
   String get title {
-    switch (code) {
-      case 'en':
-        return t.settings.appearance.option.english;
-      case 'zh':
-        return t.settings.appearance.option.chinese;
-      default:
-        return code;
-    }
+    return getLanguageName(code);
   }
 }
 

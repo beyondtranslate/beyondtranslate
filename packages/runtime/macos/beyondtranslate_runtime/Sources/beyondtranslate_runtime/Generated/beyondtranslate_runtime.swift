@@ -552,6 +552,16 @@ public protocol RuntimeProtocol: AnyObject, Sendable {
 
   func dictionary(providerId: String) throws -> RuntimeDictionary
 
+  /**
+   * Returns languages supported by the app UI.
+   */
+  func listAppLanguages() -> [LanguageInfo]
+
+  /**
+   * Returns the curated language list supported by the app.
+   */
+  func listLanguages() -> [LanguageInfo]
+
   func ocr(providerId: String) throws -> RuntimeOcr
 
   func settings() -> RuntimeSettings
@@ -625,6 +635,30 @@ open class Runtime: RuntimeProtocol, @unchecked Sendable {
         uniffi_beyondtranslate_runtime_fn_method_runtime_dictionary(
           self.uniffiCloneHandle(),
           FfiConverterString.lower(providerId), $0
+        )
+      })
+  }
+
+  /**
+   * Returns languages supported by the app UI.
+   */
+  open func listAppLanguages() -> [LanguageInfo] {
+    return try! FfiConverterSequenceTypeLanguageInfo.lift(
+      try! rustCall {
+        uniffi_beyondtranslate_runtime_fn_method_runtime_list_app_languages(
+          self.uniffiCloneHandle(), $0
+        )
+      })
+  }
+
+  /**
+   * Returns the curated language list supported by the app.
+   */
+  open func listLanguages() -> [LanguageInfo] {
+    return try! FfiConverterSequenceTypeLanguageInfo.lift(
+      try! rustCall {
+        uniffi_beyondtranslate_runtime_fn_method_runtime_list_languages(
+          self.uniffiCloneHandle(), $0
         )
       })
   }
@@ -2294,6 +2328,55 @@ public func FfiConverterTypeGeneralSettingsPatch_lift(_ buf: RustBuffer) throws
 public func FfiConverterTypeGeneralSettingsPatch_lower(_ value: GeneralSettingsPatch) -> RustBuffer
 {
   return FfiConverterTypeGeneralSettingsPatch.lower(value)
+}
+
+public struct LanguageInfo: Equatable, Hashable {
+  public var code: String
+  public var localName: String
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(code: String, localName: String) {
+    self.code = code
+    self.localName = localName
+  }
+
+}
+
+#if compiler(>=6)
+  extension LanguageInfo: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeLanguageInfo: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> LanguageInfo {
+    return
+      try LanguageInfo(
+        code: FfiConverterString.read(from: &buf),
+        localName: FfiConverterString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: LanguageInfo, into buf: inout [UInt8]) {
+    FfiConverterString.write(value.code, into: &buf)
+    FfiConverterString.write(value.localName, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLanguageInfo_lift(_ buf: RustBuffer) throws -> LanguageInfo {
+  return try FfiConverterTypeLanguageInfo.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLanguageInfo_lower(_ value: LanguageInfo) -> RustBuffer {
+  return FfiConverterTypeLanguageInfo.lower(value)
 }
 
 public struct LanguagePair: Equatable, Hashable {
@@ -4698,6 +4781,32 @@ private struct FfiConverterSequenceString: FfiConverterRustBuffer {
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
+private struct FfiConverterSequenceTypeLanguageInfo: FfiConverterRustBuffer {
+  typealias SwiftType = [LanguageInfo]
+
+  public static func write(_ value: [LanguageInfo], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterTypeLanguageInfo.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [LanguageInfo]
+  {
+    let len: Int32 = try readInt(&buf)
+    var seq = [LanguageInfo]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterTypeLanguageInfo.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
 private struct FfiConverterSequenceTypeProviderConfigEntry: FfiConverterRustBuffer {
   typealias SwiftType = [ProviderConfigEntry]
 
@@ -5465,6 +5574,12 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_dictionary() != 13965 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtime_list_app_languages() != 62628 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtime_list_languages() != 58600 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr() != 40076 {

@@ -1075,6 +1075,63 @@ class FfiConverterDetectLanguageResponse {
   }
 }
 
+class LanguageInfo {
+  final String code;
+  final String localName;
+  LanguageInfo({
+    required this.code,
+    required this.localName,
+  });
+}
+
+class FfiConverterLanguageInfo {
+  static LanguageInfo lift(RustBuffer buf) {
+    return FfiConverterLanguageInfo.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<LanguageInfo> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final code_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final code = code_lifted.value;
+    new_offset += code_lifted.bytesRead;
+    final localName_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final localName = localName_lifted.value;
+    new_offset += localName_lifted.bytesRead;
+    return LiftRetVal(
+        LanguageInfo(
+          code: code,
+          localName: localName,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(LanguageInfo value) {
+    final total_length = FfiConverterString.allocationSize(value.code) +
+        FfiConverterString.allocationSize(value.localName) +
+        0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(LanguageInfo value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterString.write(
+        value.code, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterString.write(
+        value.localName, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(LanguageInfo value) {
+    return FfiConverterString.allocationSize(value.code) +
+        FfiConverterString.allocationSize(value.localName) +
+        0;
+  }
+}
+
 class LanguagePair {
   final String? sourceLanguage;
   final String? sourceLanguageId;
@@ -2925,6 +2982,8 @@ abstract class RuntimeInterface {
   RuntimeDictionary dictionary({
     required String providerId,
   });
+  List<LanguageInfo> listAppLanguages();
+  List<LanguageInfo> listLanguages();
   RuntimeOcr ocr({
     required String providerId,
   });
@@ -2999,6 +3058,24 @@ class Runtime implements RuntimeInterface {
             uniffiClonePointer(), FfiConverterString.lower(providerId), status),
         RuntimeDictionary.lift,
         runtimeExceptionErrorHandler);
+  }
+
+  List<LanguageInfo> listAppLanguages() {
+    return rustCallWithLifter(
+        (status) =>
+            uniffi_beyondtranslate_runtime_fn_method_runtime_list_app_languages(
+                uniffiClonePointer(), status),
+        FfiConverterSequenceLanguageInfo.lift,
+        null);
+  }
+
+  List<LanguageInfo> listLanguages() {
+    return rustCallWithLifter(
+        (status) =>
+            uniffi_beyondtranslate_runtime_fn_method_runtime_list_languages(
+                uniffiClonePointer(), status),
+        FfiConverterSequenceLanguageInfo.lift,
+        null);
   }
 
   RuntimeOcr ocr({
@@ -5551,6 +5628,48 @@ class FfiConverterUInt64 {
   }
 }
 
+class FfiConverterSequenceLanguageInfo {
+  static List<LanguageInfo> lift(RustBuffer buf) {
+    return FfiConverterSequenceLanguageInfo.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<LanguageInfo>> read(Uint8List buf) {
+    List<LanguageInfo> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterLanguageInfo.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<LanguageInfo> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterLanguageInfo.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<LanguageInfo> value) {
+    return value
+            .map((l) => FfiConverterLanguageInfo.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<LanguageInfo> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
 class FfiConverterSequenceProviderCapability {
   static List<ProviderCapability> lift(RustBuffer buf) {
     return FfiConverterSequenceProviderCapability.read(buf.asUint8List()).value;
@@ -6245,6 +6364,18 @@ external Pointer<Void>
         Pointer<Void> ptr,
         RustBuffer provider_id,
         Pointer<RustCallStatus> uniffiStatus);
+
+@Native<RustBuffer Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external RustBuffer
+    uniffi_beyondtranslate_runtime_fn_method_runtime_list_app_languages(
+        Pointer<Void> ptr, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<RustBuffer Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external RustBuffer
+    uniffi_beyondtranslate_runtime_fn_method_runtime_list_languages(
+        Pointer<Void> ptr, Pointer<RustCallStatus> uniffiStatus);
 
 @Native<
     Pointer<Void> Function(Pointer<Void>, RustBuffer,
@@ -6980,6 +7111,14 @@ external int
     uniffi_beyondtranslate_runtime_checksum_method_runtime_dictionary();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtime_list_app_languages();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtime_list_languages();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -7194,6 +7333,14 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtime_dictionary() !=
       13965) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtime_list_app_languages() !=
+      62628) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtime_list_languages() !=
+      58600) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr() != 40076) {

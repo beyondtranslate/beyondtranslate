@@ -1,0 +1,142 @@
+{
+  "ar": {
+    "local_name": "العربية",
+    "translations": { "en": "Arabic", "zh-Hans": "阿拉伯语" }
+  },
+  "bn": {
+    "local_name": "বাংলা",
+    "translations": { "en": "Bengali", "zh-Hans": "孟加拉语" }
+  },
+  "de": {
+    "local_name": "Deutsch",
+    "translations": { "en": "German", "zh-Hans": "德语" }
+  },
+  "en": {
+    "local_name": "English",
+    "translations": { "en": "English", "zh-Hans": "英语" }
+  },
+  "es": {
+    "local_name": "Español",
+    "translations": { "en": "Spanish", "zh-Hans": "西班牙语" }
+  },
+  "fa": {
+    "local_name": "فارسی",
+    "translations": { "en": "Persian", "zh-Hans": "波斯语" }
+  },
+  "fr": {
+    "local_name": "Français",
+    "translations": { "en": "French", "zh-Hans": "法语" }
+  },
+  "gu": {
+    "local_name": "ગુજરાતી",
+    "translations": { "en": "Gujarati", "zh-Hans": "古吉拉特语" }
+  },
+  "ha": {
+    "local_name": "Hausa",
+    "translations": { "en": "Hausa", "zh-Hans": "豪萨语" }
+  },
+  "hi": {
+    "local_name": "हिन्दी",
+    "translations": { "en": "Hindi", "zh-Hans": "印地语" }
+  },
+  "id": {
+    "local_name": "Bahasa Indonesia",
+    "translations": { "en": "Indonesian", "zh-Hans": "印尼语" }
+  },
+  "it": {
+    "local_name": "Italiano",
+    "translations": { "en": "Italian", "zh-Hans": "意大利语" }
+  },
+  "ja": {
+    "local_name": "日本語",
+    "translations": { "en": "Japanese", "zh-Hans": "日语" }
+  },
+  "jv": {
+    "local_name": "Basa Jawa",
+    "translations": { "en": "Javanese", "zh-Hans": "印尼爪哇语" }
+  },
+  "ko": {
+    "local_name": "한국어",
+    "translations": { "en": "Korean", "zh-Hans": "韩语" }
+  },
+  "ml": {
+    "local_name": "മലയാളം",
+    "translations": { "en": "Malayalam", "zh-Hans": "马拉雅拉姆语" }
+  },
+  "mr": {
+    "local_name": "मराठी",
+    "translations": { "en": "Marathi", "zh-Hans": "马拉地语" }
+  },
+  "ms": {
+    "local_name": "Bahasa Melayu",
+    "translations": { "en": "Malay", "zh-Hans": "马来语" }
+  },
+  "nl": {
+    "local_name": "Nederlands",
+    "translations": { "en": "Dutch", "zh-Hans": "荷兰语" }
+  },
+  "pa": {
+    "local_name": "ਪੰਜਾਬੀ",
+    "translations": { "en": "Punjabi", "zh-Hans": "旁遮普语" }
+  },
+  "pl": {
+    "local_name": "Polski",
+    "translations": { "en": "Polish", "zh-Hans": "波兰语" }
+  },
+  "pt": {
+    "local_name": "Português",
+    "translations": { "en": "Portuguese", "zh-Hans": "葡萄牙语" }
+  },
+  "ro": {
+    "local_name": "Română",
+    "translations": { "en": "Romanian", "zh-Hans": "罗马尼亚语" }
+  },
+  "ru": {
+    "local_name": "Русский",
+    "translations": { "en": "Russian", "zh-Hans": "俄语" }
+  },
+  "sw": {
+    "local_name": "Kiswahili",
+    "translations": { "en": "Swahili", "zh-Hans": "斯瓦希里语" }
+  },
+  "ta": {
+    "local_name": "தமிழ்",
+    "translations": { "en": "Tamil", "zh-Hans": "泰米尔语" }
+  },
+  "te": {
+    "local_name": "తెలుగు",
+    "translations": { "en": "Telugu", "zh-Hans": "泰卢固语" }
+  },
+  "th": {
+    "local_name": "ไทย",
+    "translations": { "en": "Thai", "zh-Hans": "泰语" }
+  },
+  "tr": {
+    "local_name": "Türkçe",
+    "translations": { "en": "Turkish", "zh-Hans": "土耳其语" }
+  },
+  "uk": {
+    "local_name": "Українська",
+    "translations": { "en": "Ukrainian", "zh-Hans": "乌克兰语" }
+  },
+  "ur": {
+    "local_name": "اردو",
+    "translations": { "en": "Urdu", "zh-Hans": "乌尔都语" }
+  },
+  "vi": {
+    "local_name": "Tiếng Việt",
+    "translations": { "en": "Vietnamese", "zh-Hans": "越南语" }
+  },
+  "yo": {
+    "local_name": "Yoruba",
+    "translations": { "en": "Yoruba", "zh-Hans": "约鲁巴语" }
+  },
+  "zh-Hans": {
+    "local_name": "中文（简体）",
+    "translations": { "en": "Chinese (Simplified)", "zh-Hans": "中文（简体）" }
+  },
+  "zh-Hant": {
+    "local_name": "中文（繁體）",
+    "translations": { "en": "Chinese (Traditional)", "zh-Hans": "中文（繁体）" }
+  }
+}

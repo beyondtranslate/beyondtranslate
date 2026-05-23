@@ -139,7 +139,7 @@
 		A1100000000000000000000C /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
 		A11000000000000000000010 /* LocaleKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleKeys.swift; sourceTree = "<group>"; };
 		A11000000000000000000011 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Runner/en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		A11000000000000000000012 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = Runner/zh.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A11000000000000000000012 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "Runner/zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A11000000000000000000013 /* AppLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocale.swift; sourceTree = "<group>"; };
 		A11000000000000000000020 /* RuntimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeProvider.swift; sourceTree = "<group>"; };
 		A11000000000000000000021 /* Settings+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+Extensions.swift"; sourceTree = "<group>"; };
@@ -521,7 +521,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				zh,
+				zh-Hans,
 				Base,
 			);
 			mainGroup = 33CC10E42044A3C60003C045;
@@ -738,7 +738,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				A11000000000000000000011 /* en */,
-				A11000000000000000000012 /* zh */,
+				A11000000000000000000012 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

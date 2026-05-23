@@ -89,7 +89,7 @@ pub struct AppearanceSettings {
 impl Default for AppearanceSettings {
     fn default() -> Self {
         Self {
-            language: "zh".to_owned(),
+            language: "zh-Hans".to_owned(),
             theme_mode: "light".to_owned(),
         }
     }
