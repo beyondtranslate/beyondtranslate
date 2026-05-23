@@ -460,11 +460,13 @@ class _RootBodyView extends StatefulWidget {
 
 class _RootBodyViewState extends State<_RootBodyView> {
   late final TrayIcon _trayIcon;
+  late bool _showInMenuBar;
 
   bool get _useNativeSettings => _devToolsPreferences.useNativeSettings;
 
   @override
   void initState() {
+    _showInMenuBar = settingsStore.general.showInMenuBar;
     settingsStore.addListener(_handleChanged);
     _setupTrayIcon();
     super.initState();
@@ -481,10 +483,20 @@ class _RootBodyViewState extends State<_RootBodyView> {
   }
 
   Future<void> _handleChanged() async {
+    // Handle language change
     final oldLocale = context.locale;
     final newLocale = languageToLocale(settingsStore.appLanguage);
     if (newLocale != oldLocale) {
       await context.setLocale(newLocale);
+      _trayIcon.contextMenu = _buildContextMenu();
+    }
+
+    // Handle show in menu bar toggle
+    final newShowInMenuBar = settingsStore.general.showInMenuBar;
+    if (newShowInMenuBar != _showInMenuBar) {
+      _showInMenuBar = newShowInMenuBar;
+      _trayIcon.isVisible = newShowInMenuBar;
+      _mainTrayIcon = newShowInMenuBar ? _trayIcon : null;
     }
   }
 
@@ -497,7 +509,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
     _mainTrayIcon = _trayIcon;
     final icon = Image.fromAsset('resources/images/tray_icon.png');
     if (icon != null) _trayIcon.icon = icon;
-    _trayIcon.isVisible = true;
+    _trayIcon.isVisible = _showInMenuBar;
     _trayIcon.contextMenu = _buildContextMenu();
     _trayIcon.contextMenuTrigger = ContextMenuTrigger.rightClicked;
     _trayIcon.on<TrayIconClickedEvent>((event) {
