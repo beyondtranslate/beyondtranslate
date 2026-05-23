@@ -140,6 +140,11 @@
 		A11000000000000000000010 /* LocaleKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleKeys.swift; sourceTree = "<group>"; };
 		A11000000000000000000011 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Runner/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A11000000000000000000012 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "Runner/zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A11000000000000000000022 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Runner/es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A11000000000000000000025 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Runner/fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A11000000000000000000031 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = Runner/ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A11000000000000000000023 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = Runner/ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A11000000000000000000024 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "Runner/zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A11000000000000000000013 /* AppLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocale.swift; sourceTree = "<group>"; };
 		A11000000000000000000020 /* RuntimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeProvider.swift; sourceTree = "<group>"; };
 		A11000000000000000000021 /* Settings+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+Extensions.swift"; sourceTree = "<group>"; };
@@ -521,7 +526,12 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				zh-Hans,
+				es,
+				fr,
+				ja,
+				ko,
+				"zh-Hans",
+				"zh-Hant",
 				Base,
 			);
 			mainGroup = 33CC10E42044A3C60003C045;
@@ -738,7 +748,12 @@
 			isa = PBXVariantGroup;
 			children = (
 				A11000000000000000000011 /* en */,
+				A11000000000000000000022 /* es */,
+				A11000000000000000000025 /* fr */,
+				A11000000000000000000031 /* ja */,
+				A11000000000000000000023 /* ko */,
 				A11000000000000000000012 /* zh-Hans */,
+				A11000000000000000000024 /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

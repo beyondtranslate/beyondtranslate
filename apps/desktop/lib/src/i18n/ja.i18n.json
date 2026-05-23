@@ -1,0 +1,278 @@
+{
+  "common": {
+    "ui": {
+      "button": {
+        "ok": "OK",
+        "cancel": "キャンセル",
+        "add": "追加",
+        "delete": "削除",
+        "edit": "編集",
+        "save": "保存",
+        "manage": "管理",
+        "continue": "続行"
+      },
+      "feedback": {
+        "copied": "コピーしました"
+      }
+    },
+    "language": {
+      "ar": "アラビア語",
+      "bn": "ベンガル語",
+      "de": "ドイツ語",
+      "en": "英語",
+      "es": "スペイン語",
+      "fa": "ペルシア語",
+      "fr": "フランス語",
+      "gu": "グジャラート語",
+      "ha": "ハウサ語",
+      "hi": "ヒンディー語",
+      "id": "インドネシア語",
+      "it": "イタリア語",
+      "ja": "日本語",
+      "jv": "ジャワ語",
+      "ko": "韓国語",
+      "ml": "マラヤーラム語",
+      "mr": "マラーティー語",
+      "ms": "マレー語",
+      "nl": "オランダ語",
+      "pa": "パンジャブ語",
+      "pl": "ポーランド語",
+      "pt": "ポルトガル語",
+      "ro": "ルーマニア語",
+      "ru": "ロシア語",
+      "sw": "スワヒリ語",
+      "ta": "タミル語",
+      "te": "テルグ語",
+      "th": "タイ語",
+      "tr": "トルコ語",
+      "uk": "ウクライナ語",
+      "ur": "ウルドゥー語",
+      "vi": "ベトナム語",
+      "yo": "ヨルバ語",
+      "zh_hans": "簡体字中国語",
+      "zh_hant": "繁体字中国語"
+    },
+    "theme_mode": {
+      "light": "ライト",
+      "dark": "ダーク",
+      "system": "システム"
+    },
+    "provider": {
+      "baidu": "Baidu",
+      "caiyun": "Caiyun",
+      "deepl": "DeepL",
+      "google": "Google",
+      "iciba": "Iciba",
+      "sogou": "Sogou",
+      "system": "システム",
+      "tencent": "Tencent",
+      "youdao": "Youda"
+    },
+    "translation_mode": {
+      "auto": "自動",
+      "manual": "手動"
+    },
+    "word_pronunciation": {
+      "us": "米国",
+      "uk": "英国"
+    }
+  },
+  "app": {
+    "tray": {
+      "context_menu": {
+        "show_window": "ウィンドウを表示",
+        "dev_tools": {
+          "title": "開発ツール",
+          "open_data_directory": "データディレクトリを開く",
+          "use_native_settings": "ネイティブ設定ページを使用"
+        },
+        "check_for_updates": "アップデートを確認",
+        "settings": "設定",
+        "quit": "終了"
+      }
+    }
+  },
+  "mini_translator": {
+    "limited_banner": {
+      "permission": {
+        "missing_both": "すべての機能を有効にするには、画面収録とアクセシビリティの許可を付与してください。",
+        "missing_screen_capture": "すべての機能を有効にするには、画面収録の許可を付与してください。",
+        "missing_accessibility": "すべての機能を有効にするには、アクセシビリティの許可を付与してください。"
+      },
+      "instruction": {
+        "app_settings_prefix": "アプリ設定に移動",
+        "follow_guide_prefix": "し、ガイドに従って",
+        "suffix": "をクリックしてください。"
+      },
+      "action": {
+        "app_settings": "アプリ設定",
+        "recheck": "再確認"
+      },
+      "feedback": {
+        "enabled": "画面テキスト抽出が有効です。",
+        "still_missing": "必要な権限がまだ不足しています。\n設定を確認して、もう一度お試しください。"
+      },
+      "tooltip": {
+        "help": "ヘルプを表示"
+      }
+    },
+    "input": {
+      "hint": "ここに単語またはテキストを入力",
+      "extracting_text": "テキストを抽出中..."
+    },
+    "toolbar": {
+      "tooltip": {
+        "translation_mode": "現在の翻訳モード: {}",
+        "extract_text_from_screen_capture": "画面領域をキャプチャしてテキストを認識",
+        "extract_text_from_clipboard": "クリップボードの内容を読み取る"
+      }
+    },
+    "button": {
+      "clear": "クリア",
+      "translate": "翻訳"
+    },
+    "message": {
+      "please_enter_word_or_text": "テキストが入力されていないか、テキストが抽出されていません",
+      "capture_screen_area_canceled": "画面領域のキャプチャがキャンセルされました"
+    }
+  },
+  "settings": {
+    "version": "バージョン {} BUILD {}",
+    "general": {
+      "title": "一般",
+      "section": {
+        "permissions": "権限",
+        "ocr": "テキスト認識",
+        "directory": "辞書",
+        "translation": "翻訳",
+        "translation_target": "翻訳先",
+        "input": "入力設定"
+      },
+      "row": {
+        "launch_at_startup": "ログイン時に起動",
+        "show_in_menu_bar": "メニューバーに表示",
+        "screen_capture_access": "画面収録へのアクセスを許可",
+        "screen_selection_access": "アクセシビリティへのアクセスを許可",
+        "default_ocr_service": "デフォルトのテキスト認識サービス",
+        "auto_copy_detected_text": "検出したテキストを自動コピー",
+        "default_directory_service": "デフォルトの辞書サービス",
+        "default_translation_service": "デフォルトの翻訳サービス",
+        "translation_mode": "翻訳モード",
+        "double_click_copy_result": "ダブルクリックで翻訳結果をコピー",
+        "submit_with_enter": "Enterで送信",
+        "submit_with_meta_enter_mac": "⌘ + Enterで送信"
+      },
+      "button": {
+        "add_provider": "追加...",
+        "add_target": "対象を追加",
+        "grant": "許可"
+      },
+      "option": {
+        "none": "なし",
+        "no_services_available": "利用可能なサービスがありません",
+        "granted": "許可済み",
+        "built_in_ocr": "内蔵OCR",
+        "tesseract": "Tesseract",
+        "youdao_ocr": "Youdao OCR"
+      }
+    },
+    "appearance": {
+      "title": "外観",
+      "section": {
+        "app_language": "表示言語",
+        "theme_mode": "テーマモード"
+      }
+    },
+    "shortcuts": {
+      "title": "ショートカット",
+      "section": {
+        "text_extraction": "テキスト抽出",
+        "input_assist": "入力補助機能"
+      },
+      "row": {
+        "toggle_mini_translator": "ウィンドウの表示/非表示",
+        "extract_text_from_screen_selection": "画面選択からテキストを抽出",
+        "extract_text_from_screen_capture": "画面キャプチャからテキストを抽出",
+        "extract_text_from_clipboard": "クリップボードからテキストを抽出",
+        "translate_input": "入力内容を翻訳"
+      },
+      "reset_dialog": {
+        "title": "ショートカットをリセット",
+        "message": "すべてのショートカットをデフォルト値にリセットしますか？",
+        "confirm": "リセット",
+        "cancel": "キャンセル"
+      }
+    },
+    "advanced": {
+      "title": "詳細設定",
+      "api_server": "ローカルAPIサーバー",
+      "api_server_description": "ローカルインテグレーションのために127.0.0.1で翻訳APIを公開します。",
+      "enable": "有効",
+      "port": "ポート",
+      "running_at": "{url} で実行中",
+      "disabled": "無効"
+    },
+    "providers": {
+      "title": "プロバイダー",
+      "section": {
+        "services": "サービス"
+      },
+      "item": {
+        "empty": "プロバイダーが設定されていません。追加して翻訳サービスを有効にしてください。",
+        "loading": "プロバイダーを読み込み中...",
+        "no_services": "利用可能なサービスがありません。"
+      },
+      "button": {
+        "add": "プロバイダーを追加..."
+      },
+      "alert": {
+        "error": "エラー"
+      },
+      "intro": {
+        "body": "アプリで使用する翻訳および辞書プロバイダーを選択します。",
+        "warning": "追加したプロバイダーは送信したテキストを処理する可能性があるため、信頼できるサービスのみを接続してください。"
+      },
+      "editor": {
+        "row": {
+          "id": "プロバイダーID"
+        },
+        "placeholder": {
+          "id": "例: deepl-main"
+        },
+        "type_picker": {
+          "prompt": "追加するプロバイダーの種類を選択してください："
+        },
+        "tooltip": {
+          "help": "ヘルプ"
+        }
+      },
+      "detail": {
+        "tooltip": {
+          "edit": "プロバイダーを編集"
+        }
+      },
+      "capability": {
+        "translation": "翻訳",
+        "dictionary": "辞書",
+        "ocr": "OCR"
+      },
+      "description": {
+        "all": "辞書検索とテキスト翻訳を提供",
+        "dictionary": "辞書検索と単語定義を提供",
+        "translation": "言語間のテキスト翻訳を提供",
+        "fallback": "翻訳サービスを提供"
+      },
+      "delete_dialog": {
+        "title": "\"{}\" を削除しますか？",
+        "message": "この操作は元に戻せません。"
+      }
+    },
+    "layout": {
+      "title": "設定",
+      "empty": {
+        "title": "カテゴリを選択",
+        "message": "サイドバーから設定セクションを選択してください。"
+      }
+    }
+  }
+}

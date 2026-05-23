@@ -38,7 +38,18 @@ final class AppLocale: ObservableObject {
   private static func normalize(_ languageCode: String) -> String {
     let languageCode = languageCode.lowercased()
     if languageCode.hasPrefix("en") { return "en" }
-    if languageCode.hasPrefix("zh") { return "zh-Hans" }
+    if languageCode.hasPrefix("zh") {
+      if languageCode.contains("hant") || languageCode.contains("tw") || languageCode.contains("hk")
+        || languageCode.contains("mo")
+      {
+        return "zh-Hant"
+      }
+      return "zh-Hans"
+    }
+    if languageCode.hasPrefix("ja") { return "ja" }
+    if languageCode.hasPrefix("es") { return "es" }
+    if languageCode.hasPrefix("ko") { return "ko" }
+    if languageCode.hasPrefix("fr") { return "fr" }
     return languageCode
   }
 }

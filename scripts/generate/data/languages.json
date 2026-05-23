@@ -1,142 +1,422 @@
 {
   "ar": {
     "local_name": "العربية",
-    "translations": { "en": "Arabic", "zh-Hans": "阿拉伯语" }
+    "translations": {
+      "en": "Arabic",
+      "es": "Árabe",
+      "fr": "Arabe",
+      "ja": "アラビア語",
+      "ko": "아랍어",
+      "zh-Hans": "阿拉伯语",
+      "zh-Hant": "阿拉伯語"
+    }
   },
   "bn": {
     "local_name": "বাংলা",
-    "translations": { "en": "Bengali", "zh-Hans": "孟加拉语" }
+    "translations": {
+      "en": "Bengali",
+      "es": "Bengalí",
+      "fr": "Bengali",
+      "ja": "ベンガル語",
+      "ko": "벵골어",
+      "zh-Hans": "孟加拉语",
+      "zh-Hant": "孟加拉語"
+    }
   },
   "de": {
     "local_name": "Deutsch",
-    "translations": { "en": "German", "zh-Hans": "德语" }
+    "translations": {
+      "en": "German",
+      "es": "Alemán",
+      "fr": "Allemand",
+      "ja": "ドイツ語",
+      "ko": "독일어",
+      "zh-Hans": "德语",
+      "zh-Hant": "德語"
+    }
   },
   "en": {
     "local_name": "English",
-    "translations": { "en": "English", "zh-Hans": "英语" }
+    "translations": {
+      "en": "English",
+      "es": "Inglés",
+      "fr": "Anglais",
+      "ja": "英語",
+      "ko": "영어",
+      "zh-Hans": "英语",
+      "zh-Hant": "英語"
+    }
   },
   "es": {
     "local_name": "Español",
-    "translations": { "en": "Spanish", "zh-Hans": "西班牙语" }
+    "translations": {
+      "en": "Spanish",
+      "es": "Español",
+      "fr": "Espagnol",
+      "ja": "スペイン語",
+      "ko": "스페인어",
+      "zh-Hans": "西班牙语",
+      "zh-Hant": "西班牙語"
+    }
   },
   "fa": {
     "local_name": "فارسی",
-    "translations": { "en": "Persian", "zh-Hans": "波斯语" }
+    "translations": {
+      "en": "Persian",
+      "es": "Persa",
+      "fr": "Persan",
+      "ja": "ペルシア語",
+      "ko": "페르시아어",
+      "zh-Hans": "波斯语",
+      "zh-Hant": "波斯語"
+    }
   },
   "fr": {
     "local_name": "Français",
-    "translations": { "en": "French", "zh-Hans": "法语" }
+    "translations": {
+      "en": "French",
+      "es": "Francés",
+      "fr": "Français",
+      "ja": "フランス語",
+      "ko": "프랑스어",
+      "zh-Hans": "法语",
+      "zh-Hant": "法語"
+    }
   },
   "gu": {
     "local_name": "ગુજરાતી",
-    "translations": { "en": "Gujarati", "zh-Hans": "古吉拉特语" }
+    "translations": {
+      "en": "Gujarati",
+      "es": "Guyaratí",
+      "fr": "Gujarati",
+      "ja": "グジャラート語",
+      "ko": "구자라트어",
+      "zh-Hans": "古吉拉特语",
+      "zh-Hant": "古吉拉特語"
+    }
   },
   "ha": {
     "local_name": "Hausa",
-    "translations": { "en": "Hausa", "zh-Hans": "豪萨语" }
+    "translations": {
+      "en": "Hausa",
+      "es": "Hausa",
+      "fr": "Haoussa",
+      "ja": "ハウサ語",
+      "ko": "하우사어",
+      "zh-Hans": "豪萨语",
+      "zh-Hant": "豪薩語"
+    }
   },
   "hi": {
     "local_name": "हिन्दी",
-    "translations": { "en": "Hindi", "zh-Hans": "印地语" }
+    "translations": {
+      "en": "Hindi",
+      "es": "Hindi",
+      "fr": "Hindi",
+      "ja": "ヒンディー語",
+      "ko": "힌디어",
+      "zh-Hans": "印地语",
+      "zh-Hant": "印地語"
+    }
   },
   "id": {
     "local_name": "Bahasa Indonesia",
-    "translations": { "en": "Indonesian", "zh-Hans": "印尼语" }
+    "translations": {
+      "en": "Indonesian",
+      "es": "Indonesio",
+      "fr": "Indonésien",
+      "ja": "インドネシア語",
+      "ko": "인도네시아어",
+      "zh-Hans": "印尼语",
+      "zh-Hant": "印尼語"
+    }
   },
   "it": {
     "local_name": "Italiano",
-    "translations": { "en": "Italian", "zh-Hans": "意大利语" }
+    "translations": {
+      "en": "Italian",
+      "es": "Italiano",
+      "fr": "Italien",
+      "ja": "イタリア語",
+      "ko": "이탈리아어",
+      "zh-Hans": "意大利语",
+      "zh-Hant": "義大利語"
+    }
   },
   "ja": {
     "local_name": "日本語",
-    "translations": { "en": "Japanese", "zh-Hans": "日语" }
+    "translations": {
+      "en": "Japanese",
+      "es": "Japonés",
+      "fr": "Japonais",
+      "ja": "日本語",
+      "ko": "일본어",
+      "zh-Hans": "日语",
+      "zh-Hant": "日語"
+    }
   },
   "jv": {
     "local_name": "Basa Jawa",
-    "translations": { "en": "Javanese", "zh-Hans": "印尼爪哇语" }
+    "translations": {
+      "en": "Javanese",
+      "es": "Javanés",
+      "fr": "Javanais",
+      "ja": "ジャワ語",
+      "ko": "자바어",
+      "zh-Hans": "印尼爪哇语",
+      "zh-Hant": "爪哇語"
+    }
   },
   "ko": {
     "local_name": "한국어",
-    "translations": { "en": "Korean", "zh-Hans": "韩语" }
+    "translations": {
+      "en": "Korean",
+      "es": "Coreano",
+      "fr": "Coréen",
+      "ja": "韓国語",
+      "ko": "한국어",
+      "zh-Hans": "韩语",
+      "zh-Hant": "韓語"
+    }
   },
   "ml": {
     "local_name": "മലയാളം",
-    "translations": { "en": "Malayalam", "zh-Hans": "马拉雅拉姆语" }
+    "translations": {
+      "en": "Malayalam",
+      "es": "Malayalam",
+      "fr": "Malayalam",
+      "ja": "マラヤーラム語",
+      "ko": "말라얄람어",
+      "zh-Hans": "马拉雅拉姆语",
+      "zh-Hant": "馬拉雅拉姆語"
+    }
   },
   "mr": {
     "local_name": "मराठी",
-    "translations": { "en": "Marathi", "zh-Hans": "马拉地语" }
+    "translations": {
+      "en": "Marathi",
+      "es": "Maratí",
+      "fr": "Marathi",
+      "ja": "マラーティー語",
+      "ko": "마라티어",
+      "zh-Hans": "马拉地语",
+      "zh-Hant": "馬拉地語"
+    }
   },
   "ms": {
     "local_name": "Bahasa Melayu",
-    "translations": { "en": "Malay", "zh-Hans": "马来语" }
+    "translations": {
+      "en": "Malay",
+      "es": "Malayo",
+      "fr": "Malais",
+      "ja": "マレー語",
+      "ko": "말레이어",
+      "zh-Hans": "马来语",
+      "zh-Hant": "馬來語"
+    }
   },
   "nl": {
     "local_name": "Nederlands",
-    "translations": { "en": "Dutch", "zh-Hans": "荷兰语" }
+    "translations": {
+      "en": "Dutch",
+      "es": "Neerlandés",
+      "fr": "Néerlandais",
+      "ja": "オランダ語",
+      "ko": "네덜란드어",
+      "zh-Hans": "荷兰语",
+      "zh-Hant": "荷蘭語"
+    }
   },
   "pa": {
     "local_name": "ਪੰਜਾਬੀ",
-    "translations": { "en": "Punjabi", "zh-Hans": "旁遮普语" }
+    "translations": {
+      "en": "Punjabi",
+      "es": "Panyabí",
+      "fr": "Pendjabi",
+      "ja": "パンジャブ語",
+      "ko": "펀자브어",
+      "zh-Hans": "旁遮普语",
+      "zh-Hant": "旁遮普語"
+    }
   },
   "pl": {
     "local_name": "Polski",
-    "translations": { "en": "Polish", "zh-Hans": "波兰语" }
+    "translations": {
+      "en": "Polish",
+      "es": "Polaco",
+      "fr": "Polonais",
+      "ja": "ポーランド語",
+      "ko": "폴란드어",
+      "zh-Hans": "波兰语",
+      "zh-Hant": "波蘭語"
+    }
   },
   "pt": {
     "local_name": "Português",
-    "translations": { "en": "Portuguese", "zh-Hans": "葡萄牙语" }
+    "translations": {
+      "en": "Portuguese",
+      "es": "Portugués",
+      "fr": "Portugais",
+      "ja": "ポルトガル語",
+      "ko": "포르투갈어",
+      "zh-Hans": "葡萄牙语",
+      "zh-Hant": "葡萄牙語"
+    }
   },
   "ro": {
     "local_name": "Română",
-    "translations": { "en": "Romanian", "zh-Hans": "罗马尼亚语" }
+    "translations": {
+      "en": "Romanian",
+      "es": "Rumano",
+      "fr": "Roumain",
+      "ja": "ルーマニア語",
+      "ko": "루마니아어",
+      "zh-Hans": "罗马尼亚语",
+      "zh-Hant": "羅馬尼亞語"
+    }
   },
   "ru": {
     "local_name": "Русский",
-    "translations": { "en": "Russian", "zh-Hans": "俄语" }
+    "translations": {
+      "en": "Russian",
+      "es": "Ruso",
+      "fr": "Russe",
+      "ja": "ロシア語",
+      "ko": "러시아어",
+      "zh-Hans": "俄语",
+      "zh-Hant": "俄語"
+    }
   },
   "sw": {
     "local_name": "Kiswahili",
-    "translations": { "en": "Swahili", "zh-Hans": "斯瓦希里语" }
+    "translations": {
+      "en": "Swahili",
+      "es": "Suajili",
+      "fr": "Swahili",
+      "ja": "スワヒリ語",
+      "ko": "스와힐리어",
+      "zh-Hans": "斯瓦希里语",
+      "zh-Hant": "斯瓦希里語"
+    }
   },
   "ta": {
     "local_name": "தமிழ்",
-    "translations": { "en": "Tamil", "zh-Hans": "泰米尔语" }
+    "translations": {
+      "en": "Tamil",
+      "es": "Tamil",
+      "fr": "Tamoul",
+      "ja": "タミル語",
+      "ko": "타밀어",
+      "zh-Hans": "泰米尔语",
+      "zh-Hant": "泰米爾語"
+    }
   },
   "te": {
     "local_name": "తెలుగు",
-    "translations": { "en": "Telugu", "zh-Hans": "泰卢固语" }
+    "translations": {
+      "en": "Telugu",
+      "es": "Telugú",
+      "fr": "Télougou",
+      "ja": "テルグ語",
+      "ko": "텔루구어",
+      "zh-Hans": "泰卢固语",
+      "zh-Hant": "泰盧固語"
+    }
   },
   "th": {
     "local_name": "ไทย",
-    "translations": { "en": "Thai", "zh-Hans": "泰语" }
+    "translations": {
+      "en": "Thai",
+      "es": "Tailandés",
+      "fr": "Thaï",
+      "ja": "タイ語",
+      "ko": "태국어",
+      "zh-Hans": "泰语",
+      "zh-Hant": "泰語"
+    }
   },
   "tr": {
     "local_name": "Türkçe",
-    "translations": { "en": "Turkish", "zh-Hans": "土耳其语" }
+    "translations": {
+      "en": "Turkish",
+      "es": "Turco",
+      "fr": "Turc",
+      "ja": "トルコ語",
+      "ko": "터키어",
+      "zh-Hans": "土耳其语",
+      "zh-Hant": "土耳其語"
+    }
   },
   "uk": {
     "local_name": "Українська",
-    "translations": { "en": "Ukrainian", "zh-Hans": "乌克兰语" }
+    "translations": {
+      "en": "Ukrainian",
+      "es": "Ucraniano",
+      "fr": "Ukrainien",
+      "ja": "ウクライナ語",
+      "ko": "우크라이나어",
+      "zh-Hans": "乌克兰语",
+      "zh-Hant": "烏克蘭語"
+    }
   },
   "ur": {
     "local_name": "اردو",
-    "translations": { "en": "Urdu", "zh-Hans": "乌尔都语" }
+    "translations": {
+      "en": "Urdu",
+      "es": "Urdu",
+      "fr": "Ourdou",
+      "ja": "ウルドゥー語",
+      "ko": "우르두어",
+      "zh-Hans": "乌尔都语",
+      "zh-Hant": "烏爾都語"
+    }
   },
   "vi": {
     "local_name": "Tiếng Việt",
-    "translations": { "en": "Vietnamese", "zh-Hans": "越南语" }
+    "translations": {
+      "en": "Vietnamese",
+      "es": "Vietnamita",
+      "fr": "Vietnamien",
+      "ja": "ベトナム語",
+      "ko": "베트남어",
+      "zh-Hans": "越南语",
+      "zh-Hant": "越南語"
+    }
   },
   "yo": {
     "local_name": "Yoruba",
-    "translations": { "en": "Yoruba", "zh-Hans": "约鲁巴语" }
+    "translations": {
+      "en": "Yoruba",
+      "es": "Yoruba",
+      "fr": "Yoruba",
+      "ja": "ヨルバ語",
+      "ko": "요루바어",
+      "zh-Hans": "约鲁巴语",
+      "zh-Hant": "約魯巴語"
+    }
   },
   "zh-Hans": {
     "local_name": "中文（简体）",
-    "translations": { "en": "Chinese (Simplified)", "zh-Hans": "中文（简体）" }
+    "translations": {
+      "en": "Chinese (Simplified)",
+      "es": "Chino simplificado",
+      "fr": "Chinois simplifié",
+      "ja": "簡体字中国語",
+      "ko": "중국어(간체)",
+      "zh-Hans": "中文（简体）",
+      "zh-Hant": "中文（簡體）"
+    }
   },
   "zh-Hant": {
     "local_name": "中文（繁體）",
-    "translations": { "en": "Chinese (Traditional)", "zh-Hans": "中文（繁体）" }
+    "translations": {
+      "en": "Chinese (Traditional)",
+      "es": "Chino tradicional",
+      "fr": "Chinois traditionnel",
+      "ja": "繁体字中国語",
+      "ko": "중국어(번체)",
+      "zh-Hans": "中文（繁体）",
+      "zh-Hant": "中文（繁體）"
+    }
   }
 }

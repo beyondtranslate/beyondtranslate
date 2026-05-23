@@ -1,0 +1,278 @@
+{
+  "common": {
+    "ui": {
+      "button": {
+        "ok": "OK",
+        "cancel": "Annuler",
+        "add": "Ajouter",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "save": "Enregistrer",
+        "manage": "Gérer",
+        "continue": "Continuer"
+      },
+      "feedback": {
+        "copied": "Copié"
+      }
+    },
+    "language": {
+      "ar": "Arabe",
+      "bn": "Bengali",
+      "de": "Allemand",
+      "en": "Anglais",
+      "es": "Espagnol",
+      "fa": "Persan",
+      "fr": "Français",
+      "gu": "Gujarati",
+      "ha": "Haoussa",
+      "hi": "Hindi",
+      "id": "Indonésien",
+      "it": "Italien",
+      "ja": "Japonais",
+      "jv": "Javanais",
+      "ko": "Coréen",
+      "ml": "Malayalam",
+      "mr": "Marathi",
+      "ms": "Malais",
+      "nl": "Néerlandais",
+      "pa": "Pendjabi",
+      "pl": "Polonais",
+      "pt": "Portugais",
+      "ro": "Roumain",
+      "ru": "Russe",
+      "sw": "Swahili",
+      "ta": "Tamoul",
+      "te": "Télougou",
+      "th": "Thaï",
+      "tr": "Turc",
+      "uk": "Ukrainien",
+      "ur": "Ourdou",
+      "vi": "Vietnamien",
+      "yo": "Yoruba",
+      "zh_hans": "Chinois simplifié",
+      "zh_hant": "Chinois traditionnel"
+    },
+    "theme_mode": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "provider": {
+      "baidu": "Baidu",
+      "caiyun": "Caiyun",
+      "deepl": "DeepL",
+      "google": "Google",
+      "iciba": "Iciba",
+      "sogou": "Sogou",
+      "system": "Système",
+      "tencent": "Tencent",
+      "youdao": "Youdao"
+    },
+    "translation_mode": {
+      "auto": "Automatique",
+      "manual": "Manuel"
+    },
+    "word_pronunciation": {
+      "us": "ÉU",
+      "uk": "RU"
+    }
+  },
+  "app": {
+    "tray": {
+      "context_menu": {
+        "show_window": "Afficher la fenêtre",
+        "dev_tools": {
+          "title": "Outils de développement",
+          "open_data_directory": "Ouvrir le répertoire de données",
+          "use_native_settings": "Utiliser la page de paramètres native"
+        },
+        "check_for_updates": "Vérifier les mises à jour",
+        "settings": "Paramètres",
+        "quit": "Quitter"
+      }
+    }
+  },
+  "mini_translator": {
+    "limited_banner": {
+      "permission": {
+        "missing_both": "Accordez les autorisations d'enregistrement d'écran et d'accessibilité pour activer toutes les fonctionnalités.",
+        "missing_screen_capture": "Accordez l'autorisation d'enregistrement d'écran pour activer toutes les fonctionnalités.",
+        "missing_accessibility": "Accordez l'autorisation d'accessibilité pour activer toutes les fonctionnalités."
+      },
+      "instruction": {
+        "app_settings_prefix": "Accédez aux ",
+        "follow_guide_prefix": ", suivez le guide, puis cliquez sur ",
+        "suffix": "."
+      },
+      "action": {
+        "app_settings": "Paramètres de l'application",
+        "recheck": "Re-vérifier"
+      },
+      "feedback": {
+        "enabled": "L'extraction de texte d'écran est activée.",
+        "still_missing": "Les autorisations requises sont toujours manquantes.\nVeuillez vérifier vos paramètres et réessayer."
+      },
+      "tooltip": {
+        "help": "Voir l'aide"
+      }
+    },
+    "input": {
+      "hint": "Saisissez le mot ou le texte ici",
+      "extracting_text": "Extraction du texte..."
+    },
+    "toolbar": {
+      "tooltip": {
+        "translation_mode": "Mode de traduction actuel : {}",
+        "extract_text_from_screen_capture": "Capturer une zone de l'écran et reconnaître le texte",
+        "extract_text_from_clipboard": "Lire le contenu du presse-papiers"
+      }
+    },
+    "button": {
+      "clear": "Effacer",
+      "translate": "Traduire"
+    },
+    "message": {
+      "please_enter_word_or_text": "Aucun texte saisi ou texte non extrait",
+      "capture_screen_area_canceled": "La capture de la zone d'écran a été annulée"
+    }
+  },
+  "settings": {
+    "version": "Version {} BUILD {}",
+    "general": {
+      "title": "Général",
+      "section": {
+        "permissions": "Autorisations",
+        "ocr": "Reconnaissance de texte",
+        "directory": "Répertoire",
+        "translation": "Traduction",
+        "translation_target": "Cible de traduction",
+        "input": "Paramètres de saisie"
+      },
+      "row": {
+        "launch_at_startup": "Lancer à l'ouverture de session",
+        "show_in_menu_bar": "Afficher dans la barre de menus",
+        "screen_capture_access": "Accorder l'accès à l'enregistrement d'écran",
+        "screen_selection_access": "Accorder l'accès à l'accessibilité",
+        "default_ocr_service": "Service de reconnaissance de texte par défaut",
+        "auto_copy_detected_text": "Copier automatiquement le texte détecté",
+        "default_directory_service": "Service de répertoire par défaut",
+        "default_translation_service": "Service de traduction par défaut",
+        "translation_mode": "Mode de traduction",
+        "double_click_copy_result": "Double-cliquer pour copier le résultat de la traduction",
+        "submit_with_enter": "Valider avec Entrée",
+        "submit_with_meta_enter_mac": "Valider avec ⌘ + Entrée"
+      },
+      "button": {
+        "add_provider": "Ajouter...",
+        "add_target": "Ajouter une cible",
+        "grant": "Accorder"
+      },
+      "option": {
+        "none": "Aucun",
+        "no_services_available": "Aucun service disponible",
+        "granted": "Accordée",
+        "built_in_ocr": "OCR intégré",
+        "tesseract": "Tesseract",
+        "youdao_ocr": "OCR Youdao"
+      }
+    },
+    "appearance": {
+      "title": "Apparence",
+      "section": {
+        "app_language": "Langue d'affichage",
+        "theme_mode": "Mode du thème"
+      }
+    },
+    "shortcuts": {
+      "title": "Raccourcis",
+      "section": {
+        "text_extraction": "Extraction de texte",
+        "input_assist": "Fonction d'aide à la saisie"
+      },
+      "row": {
+        "toggle_mini_translator": "Afficher/Masquer la fenêtre",
+        "extract_text_from_screen_selection": "Extraire le texte d'une sélection d'écran",
+        "extract_text_from_screen_capture": "Extraire le texte d'une capture d'écran",
+        "extract_text_from_clipboard": "Extraire le texte du presse-papiers",
+        "translate_input": "Traduire le contenu saisi"
+      },
+      "reset_dialog": {
+        "title": "Réinitialiser les raccourcis",
+        "message": "Êtes-vous sûr de vouloir réinitialiser tous les raccourcis à leurs valeurs par défaut ?",
+        "confirm": "Réinitialiser",
+        "cancel": "Annuler"
+      }
+    },
+    "advanced": {
+      "title": "Avancé",
+      "api_server": "Serveur API local",
+      "api_server_description": "Expose l'API de traduction sur 127.0.0.1 pour les intégrations locales.",
+      "enable": "Activer",
+      "port": "Port",
+      "running_at": "En cours d'exécution à {url}",
+      "disabled": "Désactivé"
+    },
+    "providers": {
+      "title": "Fournisseurs",
+      "section": {
+        "services": "Services"
+      },
+      "item": {
+        "empty": "Aucun fournisseur configuré. Ajoutez-en un pour activer les services de traduction.",
+        "loading": "Chargement des fournisseurs...",
+        "no_services": "Aucun service disponible."
+      },
+      "button": {
+        "add": "Ajouter un fournisseur..."
+      },
+      "alert": {
+        "error": "Erreur"
+      },
+      "intro": {
+        "body": "Choisissez les fournisseurs de traduction et de dictionnaire utilisés par l'application.",
+        "warning": "Les fournisseurs que vous ajoutez peuvent traiter le texte que vous envoyez. Ne connectez donc que les services auxquels vous faites confiance."
+      },
+      "editor": {
+        "row": {
+          "id": "Identifiant du fournisseur"
+        },
+        "placeholder": {
+          "id": "p. ex. deepl-main"
+        },
+        "type_picker": {
+          "prompt": "Sélectionnez le type de fournisseur que vous souhaitez ajouter :"
+        },
+        "tooltip": {
+          "help": "Aide"
+        }
+      },
+      "detail": {
+        "tooltip": {
+          "edit": "Modifier le fournisseur"
+        }
+      },
+      "capability": {
+        "translation": "Traduction",
+        "dictionary": "Dictionnaire",
+        "ocr": "OCR"
+      },
+      "description": {
+        "all": "Fournit la recherche dans le dictionnaire et la traduction de texte",
+        "dictionary": "Fournit la recherche dans le dictionnaire et les définitions de mots",
+        "translation": "Fournit la traduction de texte entre les langues",
+        "fallback": "Fournit des services de traduction"
+      },
+      "delete_dialog": {
+        "title": "Supprimer « {} » ?",
+        "message": "Cette action est irréversible."
+      }
+    },
+    "layout": {
+      "title": "Paramètres",
+      "empty": {
+        "title": "Sélectionnez une catégorie",
+        "message": "Choisissez une section de paramètres dans la barre latérale."
+      }
+    }
+  }
+}

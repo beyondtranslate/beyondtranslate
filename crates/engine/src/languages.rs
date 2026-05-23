@@ -10,7 +10,7 @@ pub fn all_languages() -> Vec<LanguageInfo> {
 
 /// Returns languages supported by the app UI.
 pub fn app_languages() -> Vec<LanguageInfo> {
-    let app_language_codes = ["en", "zh-Hans"];
+    let app_language_codes = ["en", "es", "fr", "ja", "ko", "zh-Hans", "zh-Hant"];
     let languages = supported_languages();
     app_language_codes
         .into_iter()

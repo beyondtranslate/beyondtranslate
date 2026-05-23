@@ -1,0 +1,278 @@
+{
+  "common": {
+    "ui": {
+      "button": {
+        "ok": "OK",
+        "cancel": "Cancelar",
+        "add": "Agregar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "save": "Guardar",
+        "manage": "Administrar",
+        "continue": "Continuar"
+      },
+      "feedback": {
+        "copied": "Copiado"
+      }
+    },
+    "language": {
+      "ar": "Árabe",
+      "bn": "Bengalí",
+      "de": "Alemán",
+      "en": "Inglés",
+      "es": "Español",
+      "fa": "Persa",
+      "fr": "Francés",
+      "gu": "Guyaratí",
+      "ha": "Hausa",
+      "hi": "Hindi",
+      "id": "Indonesio",
+      "it": "Italiano",
+      "ja": "Japonés",
+      "jv": "Javanés",
+      "ko": "Coreano",
+      "ml": "Malayalam",
+      "mr": "Maratí",
+      "ms": "Malayo",
+      "nl": "Neerlandés",
+      "pa": "Panyabí",
+      "pl": "Polaco",
+      "pt": "Portugués",
+      "ro": "Rumano",
+      "ru": "Ruso",
+      "sw": "Suajili",
+      "ta": "Tamil",
+      "te": "Telugú",
+      "th": "Tailandés",
+      "tr": "Turco",
+      "uk": "Ucraniano",
+      "ur": "Urdu",
+      "vi": "Vietnamita",
+      "yo": "Yoruba",
+      "zh_hans": "Chino simplificado",
+      "zh_hant": "Chino tradicional"
+    },
+    "theme_mode": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "provider": {
+      "baidu": "Baidu",
+      "caiyun": "Caiyun",
+      "deepl": "DeepL",
+      "google": "Google",
+      "iciba": "Iciba",
+      "sogou": "Sogou",
+      "system": "Sistema",
+      "tencent": "Tencent",
+      "youdao": "Youdao"
+    },
+    "translation_mode": {
+      "auto": "Automático",
+      "manual": "Manual"
+    },
+    "word_pronunciation": {
+      "us": "EE. UU.",
+      "uk": "RU"
+    }
+  },
+  "app": {
+    "tray": {
+      "context_menu": {
+        "show_window": "Mostrar ventana",
+        "dev_tools": {
+          "title": "Herramientas de desarrollo",
+          "open_data_directory": "Abrir directorio de datos",
+          "use_native_settings": "Usar página de configuración nativa"
+        },
+        "check_for_updates": "Buscar actualizaciones",
+        "settings": "Configuración",
+        "quit": "Salir"
+      }
+    }
+  },
+  "mini_translator": {
+    "limited_banner": {
+      "permission": {
+        "missing_both": "Concede los permisos de Grabación de pantalla y Accesibilidad para habilitar todas las funciones.",
+        "missing_screen_capture": "Concede el permiso de Grabación de pantalla para habilitar todas las funciones.",
+        "missing_accessibility": "Concede el permiso de Accesibilidad para habilitar todas las funciones."
+      },
+      "instruction": {
+        "app_settings_prefix": "Ve a ",
+        "follow_guide_prefix": ", sigue la guía y luego haz clic en ",
+        "suffix": "."
+      },
+      "action": {
+        "app_settings": "Configuración de la app",
+        "recheck": "Verificar de nuevo"
+      },
+      "feedback": {
+        "enabled": "La extracción de texto de pantalla está habilitada.",
+        "still_missing": "Los permisos necesarios aún faltan.\nRevisa tu configuración e inténtalo de nuevo."
+      },
+      "tooltip": {
+        "help": "Ver ayuda"
+      }
+    },
+    "input": {
+      "hint": "Escribe la palabra o texto aquí",
+      "extracting_text": "Extrayendo texto..."
+    },
+    "toolbar": {
+      "tooltip": {
+        "translation_mode": "Modo de traducción actual: {}",
+        "extract_text_from_screen_capture": "Capturar área de la pantalla y reconocer texto",
+        "extract_text_from_clipboard": "Leer contenido del portapapeles"
+      }
+    },
+    "button": {
+      "clear": "Limpiar",
+      "translate": "Traducir"
+    },
+    "message": {
+      "please_enter_word_or_text": "No se ingresó texto o no se pudo extraer",
+      "capture_screen_area_canceled": "La captura de área de pantalla ha sido cancelada"
+    }
+  },
+  "settings": {
+    "version": "Versión {} COMPILACIÓN {}",
+    "general": {
+      "title": "General",
+      "section": {
+        "permissions": "Permisos",
+        "ocr": "Reconocimiento de texto",
+        "directory": "Directorio",
+        "translation": "Traducción",
+        "translation_target": "Idioma de destino",
+        "input": "Configuración de entrada"
+      },
+      "row": {
+        "launch_at_startup": "Iniciar al iniciar sesión",
+        "show_in_menu_bar": "Mostrar en la barra de menú",
+        "screen_capture_access": "Conceder acceso de grabación de pantalla",
+        "screen_selection_access": "Conceder acceso de accesibilidad",
+        "default_ocr_service": "Servicio de reconocimiento de texto predeterminado",
+        "auto_copy_detected_text": "Copiar texto detectado automáticamente",
+        "default_directory_service": "Servicio de diccionario predeterminado",
+        "default_translation_service": "Servicio de traducción predeterminado",
+        "translation_mode": "Modo de traducción",
+        "double_click_copy_result": "Doble clic para copiar el resultado de la traducción",
+        "submit_with_enter": "Enviar con Enter",
+        "submit_with_meta_enter_mac": "Enviar con ⌘ + Enter"
+      },
+      "button": {
+        "add_provider": "Agregar...",
+        "add_target": "Agregar destino",
+        "grant": "Conceder"
+      },
+      "option": {
+        "none": "Ninguno",
+        "no_services_available": "No hay servicios disponibles",
+        "granted": "Concedido",
+        "built_in_ocr": "OCR integrado",
+        "tesseract": "Tesseract",
+        "youdao_ocr": "Youdao OCR"
+      }
+    },
+    "appearance": {
+      "title": "Apariencia",
+      "section": {
+        "app_language": "Idioma de la interfaz",
+        "theme_mode": "Modo de tema"
+      }
+    },
+    "shortcuts": {
+      "title": "Atajos",
+      "section": {
+        "text_extraction": "Extracción de texto",
+        "input_assist": "Función de asistencia de entrada"
+      },
+      "row": {
+        "toggle_mini_translator": "Mostrar/Ocultar ventana",
+        "extract_text_from_screen_selection": "Extraer texto de la selección de pantalla",
+        "extract_text_from_screen_capture": "Extraer texto de la captura de pantalla",
+        "extract_text_from_clipboard": "Extraer texto del portapapeles",
+        "translate_input": "Traducir contenido de entrada"
+      },
+      "reset_dialog": {
+        "title": "Restablecer atajos",
+        "message": "¿Estás seguro de que deseas restablecer todos los atajos a sus valores predeterminados?",
+        "confirm": "Restablecer",
+        "cancel": "Cancelar"
+      }
+    },
+    "advanced": {
+      "title": "Avanzado",
+      "api_server": "Servidor de API local",
+      "api_server_description": "Exponer la API de traducción en 127.0.0.1 para integraciones locales.",
+      "enable": "Habilitar",
+      "port": "Puerto",
+      "running_at": "Ejecutándose en {url}",
+      "disabled": "Deshabilitado"
+    },
+    "providers": {
+      "title": "Proveedores",
+      "section": {
+        "services": "Servicios"
+      },
+      "item": {
+        "empty": "No hay proveedores configurados. Agrega uno para habilitar los servicios de traducción.",
+        "loading": "Cargando proveedores...",
+        "no_services": "No hay servicios disponibles."
+      },
+      "button": {
+        "add": "Agregar un proveedor..."
+      },
+      "alert": {
+        "error": "Error"
+      },
+      "intro": {
+        "body": "Elige los proveedores de traducción y diccionario que usará la app.",
+        "warning": "Los proveedores que agregues pueden procesar el texto que envías, así que solo conecta servicios en los que confíes."
+      },
+      "editor": {
+        "row": {
+          "id": "ID del proveedor"
+        },
+        "placeholder": {
+          "id": "ej. deepl-main"
+        },
+        "type_picker": {
+          "prompt": "Selecciona el tipo de proveedor que deseas agregar:"
+        },
+        "tooltip": {
+          "help": "Ayuda"
+        }
+      },
+      "detail": {
+        "tooltip": {
+          "edit": "Editar proveedor"
+        }
+      },
+      "capability": {
+        "translation": "Traducción",
+        "dictionary": "Diccionario",
+        "ocr": "OCR"
+      },
+      "description": {
+        "all": "Proporciona búsqueda en diccionario y traducción de texto",
+        "dictionary": "Proporciona búsqueda en diccionario y definiciones de palabras",
+        "translation": "Proporciona traducción de texto entre idiomas",
+        "fallback": "Proporciona servicios de traducción"
+      },
+      "delete_dialog": {
+        "title": "¿Eliminar \"{}\"?",
+        "message": "Esta acción no se puede deshacer."
+      }
+    },
+    "layout": {
+      "title": "Configuración",
+      "empty": {
+        "title": "Selecciona una categoría",
+        "message": "Elige una sección de configuración de la barra lateral."
+      }
+    }
+  }
+}
