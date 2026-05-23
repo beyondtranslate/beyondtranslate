@@ -940,8 +940,12 @@ class TranslationsSettingsProvidersSectionEn {
 
   // Translations
 
-  /// en: 'Services'
-  String get services => 'Services';
+  /// en: 'Available Services'
+  String get services => 'Available Services';
+
+  /// en: 'View available services from configured providers and switch between service types.'
+  String get services_description =>
+      'View available services from configured providers and switch between service types.';
 }
 
 // Path: settings.providers.item
@@ -995,13 +999,12 @@ class TranslationsSettingsProvidersIntroEn {
 
   // Translations
 
-  /// en: 'Choose the translation and dictionary providers used by the app.'
-  String get body =>
-      'Choose the translation and dictionary providers used by the app.';
+  /// en: 'Manage the service providers used by the app.'
+  String get body => 'Manage the service providers used by the app.';
 
-  /// en: 'Providers you add may process the text you send, so only connect services you trust.'
+  /// en: 'Connected providers may process the text or images you send. Only enable services you trust.'
   String get warning =>
-      'Providers you add may process the text you send, so only connect services you trust.';
+      'Connected providers may process the text or images you send. Only enable services you trust.';
 }
 
 // Path: settings.providers.editor
@@ -1354,7 +1357,9 @@ extension on Translations {
       'settings.advanced.running_at' => 'Running at {url}',
       'settings.advanced.disabled' => 'Disabled',
       'settings.providers.title' => 'Providers',
-      'settings.providers.section.services' => 'Services',
+      'settings.providers.section.services' => 'Available Services',
+      'settings.providers.section.services_description' =>
+        'View available services from configured providers and switch between service types.',
       'settings.providers.item.empty' =>
         'No providers configured. Add one to enable translation services.',
       'settings.providers.item.loading' => 'Loading providers...',
@@ -1362,9 +1367,9 @@ extension on Translations {
       'settings.providers.button.add' => 'Add a Provider...',
       'settings.providers.alert.error' => 'Error',
       'settings.providers.intro.body' =>
-        'Choose the translation and dictionary providers used by the app.',
+        'Manage the service providers used by the app.',
       'settings.providers.intro.warning' =>
-        'Providers you add may process the text you send, so only connect services you trust.',
+        'Connected providers may process the text or images you send. Only enable services you trust.',
       'settings.providers.editor.row.id' => 'Provider ID',
       'settings.providers.editor.placeholder.id' => 'e.g. deepl-main',
       'settings.providers.editor.type_picker.prompt' =>

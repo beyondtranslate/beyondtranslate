@@ -958,7 +958,10 @@ class _TranslationsSettingsProvidersSectionFr
 
   // Translations
   @override
-  String get services => 'Services';
+  String get services => 'Services disponibles';
+  @override
+  String get services_description =>
+      'Consultez les services disponibles des fournisseurs configurés et changez de type de service.';
 }
 
 // Path: settings.providers.item
@@ -1020,10 +1023,10 @@ class _TranslationsSettingsProvidersIntroFr
   // Translations
   @override
   String get body =>
-      'Choisissez les fournisseurs de traduction et de dictionnaire utilisés par l\'application.';
+      'Gérez les fournisseurs de services utilisés par l’application.';
   @override
   String get warning =>
-      'Les fournisseurs que vous ajoutez peuvent traiter le texte que vous envoyez. Ne connectez donc que les services auxquels vous faites confiance.';
+      'Les fournisseurs connectés peuvent traiter le texte ou les images que vous envoyez. Activez uniquement les services de confiance.';
 }
 
 // Path: settings.providers.editor
@@ -1407,7 +1410,9 @@ extension on TranslationsFr {
       'settings.advanced.running_at' => 'En cours d\'exécution à {url}',
       'settings.advanced.disabled' => 'Désactivé',
       'settings.providers.title' => 'Fournisseurs',
-      'settings.providers.section.services' => 'Services',
+      'settings.providers.section.services' => 'Services disponibles',
+      'settings.providers.section.services_description' =>
+        'Consultez les services disponibles des fournisseurs configurés et changez de type de service.',
       'settings.providers.item.empty' =>
         'Aucun fournisseur configuré. Ajoutez-en un pour activer les services de traduction.',
       'settings.providers.item.loading' => 'Chargement des fournisseurs...',
@@ -1415,9 +1420,9 @@ extension on TranslationsFr {
       'settings.providers.button.add' => 'Ajouter un fournisseur...',
       'settings.providers.alert.error' => 'Erreur',
       'settings.providers.intro.body' =>
-        'Choisissez les fournisseurs de traduction et de dictionnaire utilisés par l\'application.',
+        'Gérez les fournisseurs de services utilisés par l’application.',
       'settings.providers.intro.warning' =>
-        'Les fournisseurs que vous ajoutez peuvent traiter le texte que vous envoyez. Ne connectez donc que les services auxquels vous faites confiance.',
+        'Les fournisseurs connectés peuvent traiter le texte ou les images que vous envoyez. Activez uniquement les services de confiance.',
       'settings.providers.editor.row.id' => 'Identifiant du fournisseur',
       'settings.providers.editor.placeholder.id' => 'p. ex. deepl-main',
       'settings.providers.editor.type_picker.prompt' =>

@@ -942,7 +942,10 @@ class _TranslationsSettingsProvidersSectionKo
 
   // Translations
   @override
-  String get services => '서비스';
+  String get services => '사용 가능한 서비스';
+  @override
+  String get services_description =>
+      '구성된 제공업체의 사용 가능한 서비스를 확인하고 서비스 유형별로 전환합니다.';
 }
 
 // Path: settings.providers.item
@@ -1002,10 +1005,10 @@ class _TranslationsSettingsProvidersIntroKo
 
   // Translations
   @override
-  String get body => '앱에서 사용할 번역 및 사전 제공자를 선택하세요.';
+  String get body => '앱에서 사용하는 서비스 제공업체를 관리합니다.';
   @override
   String get warning =>
-      '추가한 제공자는 사용자가 보낸 텍스트를 처리할 수 있으므로, 신뢰할 수 있는 서비스만 연결하세요.';
+      '연결된 제공업체는 사용자가 보낸 텍스트나 이미지를 처리할 수 있습니다. 신뢰할 수 있는 서비스만 활성화하세요.';
 }
 
 // Path: settings.providers.editor
@@ -1365,15 +1368,17 @@ extension on TranslationsKo {
       'settings.advanced.running_at' => '{url}에서 실행 중',
       'settings.advanced.disabled' => '비활성화됨',
       'settings.providers.title' => '제공자',
-      'settings.providers.section.services' => '서비스',
+      'settings.providers.section.services' => '사용 가능한 서비스',
+      'settings.providers.section.services_description' =>
+        '구성된 제공업체의 사용 가능한 서비스를 확인하고 서비스 유형별로 전환합니다.',
       'settings.providers.item.empty' => '구성된 제공자가 없습니다. 추가하여 번역 서비스를 활성화하세요.',
       'settings.providers.item.loading' => '제공자 로딩 중...',
       'settings.providers.item.no_services' => '사용 가능한 서비스가 없습니다.',
       'settings.providers.button.add' => '제공자 추가...',
       'settings.providers.alert.error' => '오류',
-      'settings.providers.intro.body' => '앱에서 사용할 번역 및 사전 제공자를 선택하세요.',
+      'settings.providers.intro.body' => '앱에서 사용하는 서비스 제공업체를 관리합니다.',
       'settings.providers.intro.warning' =>
-        '추가한 제공자는 사용자가 보낸 텍스트를 처리할 수 있으므로, 신뢰할 수 있는 서비스만 연결하세요.',
+        '연결된 제공업체는 사용자가 보낸 텍스트나 이미지를 처리할 수 있습니다. 신뢰할 수 있는 서비스만 활성화하세요.',
       'settings.providers.editor.row.id' => '제공자 ID',
       'settings.providers.editor.placeholder.id' => '예: deepl-main',
       'settings.providers.editor.type_picker.prompt' => '추가할 제공자 유형을 선택하세요:',

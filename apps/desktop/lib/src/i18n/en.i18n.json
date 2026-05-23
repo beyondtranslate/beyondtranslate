@@ -215,7 +215,8 @@
     "providers": {
       "title": "Providers",
       "section": {
-        "services": "Services"
+        "services": "Available Services",
+        "services_description": "View available services from configured providers and switch between service types."
       },
       "item": {
         "empty": "No providers configured. Add one to enable translation services.",
@@ -229,8 +230,8 @@
         "error": "Error"
       },
       "intro": {
-        "body": "Choose the translation and dictionary providers used by the app.",
-        "warning": "Providers you add may process the text you send, so only connect services you trust."
+        "body": "Manage the service providers used by the app.",
+        "warning": "Connected providers may process the text or images you send. Only enable services you trust."
       },
       "editor": {
         "row": {

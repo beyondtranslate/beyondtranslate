@@ -144,12 +144,13 @@
 "settings.providers.editor.row.id" = "Identifiant du fournisseur";
 "settings.providers.editor.tooltip.help" = "Aide";
 "settings.providers.editor.type_picker.prompt" = "Sélectionnez le type de fournisseur que vous souhaitez ajouter :";
-"settings.providers.intro.body" = "Choisissez les fournisseurs de traduction et de dictionnaire utilisés par l'application.";
-"settings.providers.intro.warning" = "Les fournisseurs que vous ajoutez peuvent traiter le texte que vous envoyez. Ne connectez donc que les services auxquels vous faites confiance.";
+"settings.providers.intro.body" = "Gérez les fournisseurs de services utilisés par l’application.";
+"settings.providers.intro.warning" = "Les fournisseurs connectés peuvent traiter le texte ou les images que vous envoyez. Activez uniquement les services de confiance.";
 "settings.providers.item.empty" = "Aucun fournisseur configuré. Ajoutez-en un pour activer les services de traduction.";
 "settings.providers.item.loading" = "Chargement des fournisseurs...";
 "settings.providers.item.no_services" = "Aucun service disponible.";
-"settings.providers.section.services" = "Services";
+"settings.providers.section.services" = "Services disponibles";
+"settings.providers.section.services_description" = "Consultez les services disponibles des fournisseurs configurés et changez de type de service.";
 "settings.providers.title" = "Fournisseurs";
 "settings.shortcuts.reset_dialog.cancel" = "Annuler";
 "settings.shortcuts.reset_dialog.confirm" = "Réinitialiser";

@@ -295,6 +295,8 @@ enum LocaleKeys {
       }
       enum section {
         static let services = LocaleKey("settings.providers.section.services")
+        static let servicesDescription = LocaleKey(
+          "settings.providers.section.services_description")
       }
       static let title = LocaleKey("settings.providers.title")
     }

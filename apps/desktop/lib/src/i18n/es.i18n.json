@@ -215,7 +215,8 @@
     "providers": {
       "title": "Proveedores",
       "section": {
-        "services": "Servicios"
+        "services": "Servicios disponibles",
+        "services_description": "Consulta los servicios disponibles de los proveedores configurados y cambia entre tipos de servicio."
       },
       "item": {
         "empty": "No hay proveedores configurados. Agrega uno para habilitar los servicios de traducción.",
@@ -229,8 +230,8 @@
         "error": "Error"
       },
       "intro": {
-        "body": "Elige los proveedores de traducción y diccionario que usará la app.",
-        "warning": "Los proveedores que agregues pueden procesar el texto que envías, así que solo conecta servicios en los que confíes."
+        "body": "Gestiona los proveedores de servicios que usa la app.",
+        "warning": "Los proveedores conectados pueden procesar el texto o las imágenes que envías. Activa solo servicios en los que confíes."
       },
       "editor": {
         "row": {

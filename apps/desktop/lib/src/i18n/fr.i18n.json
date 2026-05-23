@@ -215,7 +215,8 @@
     "providers": {
       "title": "Fournisseurs",
       "section": {
-        "services": "Services"
+        "services": "Services disponibles",
+        "services_description": "Consultez les services disponibles des fournisseurs configurés et changez de type de service."
       },
       "item": {
         "empty": "Aucun fournisseur configuré. Ajoutez-en un pour activer les services de traduction.",
@@ -229,8 +230,8 @@
         "error": "Erreur"
       },
       "intro": {
-        "body": "Choisissez les fournisseurs de traduction et de dictionnaire utilisés par l'application.",
-        "warning": "Les fournisseurs que vous ajoutez peuvent traiter le texte que vous envoyez. Ne connectez donc que les services auxquels vous faites confiance."
+        "body": "Gérez les fournisseurs de services utilisés par l’application.",
+        "warning": "Les fournisseurs connectés peuvent traiter le texte ou les images que vous envoyez. Activez uniquement les services de confiance."
       },
       "editor": {
         "row": {

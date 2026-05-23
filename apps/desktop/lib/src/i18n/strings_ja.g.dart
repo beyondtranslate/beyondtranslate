@@ -943,7 +943,9 @@ class _TranslationsSettingsProvidersSectionJa
 
   // Translations
   @override
-  String get services => 'サービス';
+  String get services => '利用可能なサービス';
+  @override
+  String get services_description => '設定済みプロバイダーで利用できるサービスを確認し、種類ごとに切り替えます。';
 }
 
 // Path: settings.providers.item
@@ -1003,10 +1005,10 @@ class _TranslationsSettingsProvidersIntroJa
 
   // Translations
   @override
-  String get body => 'アプリで使用する翻訳および辞書プロバイダーを選択します。';
+  String get body => 'アプリで使用するサービスプロバイダーを管理します。';
   @override
   String get warning =>
-      '追加したプロバイダーは送信したテキストを処理する可能性があるため、信頼できるサービスのみを接続してください。';
+      '接続したプロバイダーは送信したテキストや画像を処理する場合があります。信頼できるサービスのみ有効にしてください。';
 }
 
 // Path: settings.providers.editor
@@ -1368,16 +1370,18 @@ extension on TranslationsJa {
       'settings.advanced.running_at' => '{url} で実行中',
       'settings.advanced.disabled' => '無効',
       'settings.providers.title' => 'プロバイダー',
-      'settings.providers.section.services' => 'サービス',
+      'settings.providers.section.services' => '利用可能なサービス',
+      'settings.providers.section.services_description' =>
+        '設定済みプロバイダーで利用できるサービスを確認し、種類ごとに切り替えます。',
       'settings.providers.item.empty' =>
         'プロバイダーが設定されていません。追加して翻訳サービスを有効にしてください。',
       'settings.providers.item.loading' => 'プロバイダーを読み込み中...',
       'settings.providers.item.no_services' => '利用可能なサービスがありません。',
       'settings.providers.button.add' => 'プロバイダーを追加...',
       'settings.providers.alert.error' => 'エラー',
-      'settings.providers.intro.body' => 'アプリで使用する翻訳および辞書プロバイダーを選択します。',
+      'settings.providers.intro.body' => 'アプリで使用するサービスプロバイダーを管理します。',
       'settings.providers.intro.warning' =>
-        '追加したプロバイダーは送信したテキストを処理する可能性があるため、信頼できるサービスのみを接続してください。',
+        '接続したプロバイダーは送信したテキストや画像を処理する場合があります。信頼できるサービスのみ有効にしてください。',
       'settings.providers.editor.row.id' => 'プロバイダーID',
       'settings.providers.editor.placeholder.id' => '例: deepl-main',
       'settings.providers.editor.type_picker.prompt' =>

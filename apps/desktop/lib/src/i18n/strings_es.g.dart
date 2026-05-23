@@ -959,7 +959,10 @@ class _TranslationsSettingsProvidersSectionEs
 
   // Translations
   @override
-  String get services => 'Servicios';
+  String get services => 'Servicios disponibles';
+  @override
+  String get services_description =>
+      'Consulta los servicios disponibles de los proveedores configurados y cambia entre tipos de servicio.';
 }
 
 // Path: settings.providers.item
@@ -1020,11 +1023,10 @@ class _TranslationsSettingsProvidersIntroEs
 
   // Translations
   @override
-  String get body =>
-      'Elige los proveedores de traducción y diccionario que usará la app.';
+  String get body => 'Gestiona los proveedores de servicios que usa la app.';
   @override
   String get warning =>
-      'Los proveedores que agregues pueden procesar el texto que envías, así que solo conecta servicios en los que confíes.';
+      'Los proveedores conectados pueden procesar el texto o las imágenes que envías. Activa solo servicios en los que confíes.';
 }
 
 // Path: settings.providers.editor
@@ -1405,7 +1407,9 @@ extension on TranslationsEs {
       'settings.advanced.running_at' => 'Ejecutándose en {url}',
       'settings.advanced.disabled' => 'Deshabilitado',
       'settings.providers.title' => 'Proveedores',
-      'settings.providers.section.services' => 'Servicios',
+      'settings.providers.section.services' => 'Servicios disponibles',
+      'settings.providers.section.services_description' =>
+        'Consulta los servicios disponibles de los proveedores configurados y cambia entre tipos de servicio.',
       'settings.providers.item.empty' =>
         'No hay proveedores configurados. Agrega uno para habilitar los servicios de traducción.',
       'settings.providers.item.loading' => 'Cargando proveedores...',
@@ -1413,9 +1417,9 @@ extension on TranslationsEs {
       'settings.providers.button.add' => 'Agregar un proveedor...',
       'settings.providers.alert.error' => 'Error',
       'settings.providers.intro.body' =>
-        'Elige los proveedores de traducción y diccionario que usará la app.',
+        'Gestiona los proveedores de servicios que usa la app.',
       'settings.providers.intro.warning' =>
-        'Los proveedores que agregues pueden procesar el texto que envías, así que solo conecta servicios en los que confíes.',
+        'Los proveedores conectados pueden procesar el texto o las imágenes que envías. Activa solo servicios en los que confíes.',
       'settings.providers.editor.row.id' => 'ID del proveedor',
       'settings.providers.editor.placeholder.id' => 'ej. deepl-main',
       'settings.providers.editor.type_picker.prompt' =>

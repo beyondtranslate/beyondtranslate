@@ -956,7 +956,9 @@ class _TranslationsSettingsProvidersSectionZhHant
 
   // Translations
   @override
-  String get services => '服務';
+  String get services => '可用服務';
+  @override
+  String get services_description => '查看已設定提供商的可用服務，並依服務類型切換。';
 }
 
 // Path: settings.providers.item
@@ -1016,9 +1018,9 @@ class _TranslationsSettingsProvidersIntroZhHant
 
   // Translations
   @override
-  String get body => '選擇應用程式使用的翻譯和辭典提供者。';
+  String get body => '管理應用程式使用的服務提供商。';
   @override
-  String get warning => '您新增的提供者可能會處理您傳送的文字，請僅連線您信任的服務。';
+  String get warning => '已連線的提供商可能會處理您傳送的文字或圖片，請僅啟用您信任的服務。';
 }
 
 // Path: settings.providers.editor
@@ -1376,14 +1378,16 @@ extension on TranslationsZhHant {
       'settings.advanced.running_at' => '執行於 {url}',
       'settings.advanced.disabled' => '已關閉',
       'settings.providers.title' => '提供者',
-      'settings.providers.section.services' => '服務',
+      'settings.providers.section.services' => '可用服務',
+      'settings.providers.section.services_description' =>
+        '查看已設定提供商的可用服務，並依服務類型切換。',
       'settings.providers.item.empty' => '尚未設定任何提供者。新增一個提供者以啟用翻譯服務。',
       'settings.providers.item.loading' => '正在載入提供者…',
       'settings.providers.item.no_services' => '暫無可用服務。',
       'settings.providers.button.add' => '新增提供者…',
       'settings.providers.alert.error' => '錯誤',
-      'settings.providers.intro.body' => '選擇應用程式使用的翻譯和辭典提供者。',
-      'settings.providers.intro.warning' => '您新增的提供者可能會處理您傳送的文字，請僅連線您信任的服務。',
+      'settings.providers.intro.body' => '管理應用程式使用的服務提供商。',
+      'settings.providers.intro.warning' => '已連線的提供商可能會處理您傳送的文字或圖片，請僅啟用您信任的服務。',
       'settings.providers.editor.row.id' => '提供者 ID',
       'settings.providers.editor.placeholder.id' => '例如 deepl-main',
       'settings.providers.editor.type_picker.prompt' => '請選擇要新增的提供者類型：',

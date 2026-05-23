@@ -144,12 +144,13 @@
 "settings.providers.editor.row.id" = "ID del proveedor";
 "settings.providers.editor.tooltip.help" = "Ayuda";
 "settings.providers.editor.type_picker.prompt" = "Selecciona el tipo de proveedor que deseas agregar:";
-"settings.providers.intro.body" = "Elige los proveedores de traducción y diccionario que usará la app.";
-"settings.providers.intro.warning" = "Los proveedores que agregues pueden procesar el texto que envías, así que solo conecta servicios en los que confíes.";
+"settings.providers.intro.body" = "Gestiona los proveedores de servicios que usa la app.";
+"settings.providers.intro.warning" = "Los proveedores conectados pueden procesar el texto o las imágenes que envías. Activa solo servicios en los que confíes.";
 "settings.providers.item.empty" = "No hay proveedores configurados. Agrega uno para habilitar los servicios de traducción.";
 "settings.providers.item.loading" = "Cargando proveedores...";
 "settings.providers.item.no_services" = "No hay servicios disponibles.";
-"settings.providers.section.services" = "Servicios";
+"settings.providers.section.services" = "Servicios disponibles";
+"settings.providers.section.services_description" = "Consulta los servicios disponibles de los proveedores configurados y cambia entre tipos de servicio.";
 "settings.providers.title" = "Proveedores";
 "settings.shortcuts.reset_dialog.cancel" = "Cancelar";
 "settings.shortcuts.reset_dialog.confirm" = "Restablecer";
