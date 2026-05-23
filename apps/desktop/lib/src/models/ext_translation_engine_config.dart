@@ -4,21 +4,21 @@ import './translation_engine_config.dart';
 String getTranslationEngineTypeName(String type) {
   switch (type) {
     case 'baidu':
-      return t.provider.baidu;
+      return t.common.provider.baidu;
     case 'caiyun':
-      return t.provider.caiyun;
+      return t.common.provider.caiyun;
     case 'deepl':
-      return t.provider.deepl;
+      return t.common.provider.deepl;
     case 'google':
-      return t.provider.google;
+      return t.common.provider.google;
     case 'iciba':
-      return t.provider.iciba;
+      return t.common.provider.iciba;
     case 'sogou':
-      return t.provider.sogou;
+      return t.common.provider.sogou;
     case 'tencent':
-      return t.provider.tencent;
+      return t.common.provider.tencent;
     case 'youdao':
-      return t.provider.youdao;
+      return t.common.provider.youdao;
     default:
       return type;
   }

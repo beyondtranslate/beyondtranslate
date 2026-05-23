@@ -30,23 +30,24 @@ extension LocaleKey {
 }
 
 enum LocaleKeys {
+  enum app {
+    enum tray {
+      enum contextMenu {
+        static let checkForUpdates = LocaleKey("app.tray.context_menu.check_for_updates")
+        enum devTools {
+          static let openDataDirectory = LocaleKey(
+            "app.tray.context_menu.dev_tools.open_data_directory")
+          static let title = LocaleKey("app.tray.context_menu.dev_tools.title")
+          static let useNativeSettings = LocaleKey(
+            "app.tray.context_menu.dev_tools.use_native_settings")
+        }
+        static let quit = LocaleKey("app.tray.context_menu.quit")
+        static let settings = LocaleKey("app.tray.context_menu.settings")
+        static let showWindow = LocaleKey("app.tray.context_menu.show_window")
+      }
+    }
+  }
   enum common {
-    enum app {
-      static let name = LocaleKey("common.app.name")
-    }
-    enum button {
-      static let add = LocaleKey("common.button.add")
-      static let cancel = LocaleKey("common.button.cancel")
-      static let `continue` = LocaleKey("common.button.continue")
-      static let delete = LocaleKey("common.button.delete")
-      static let edit = LocaleKey("common.button.edit")
-      static let manage = LocaleKey("common.button.manage")
-      static let ok = LocaleKey("common.button.ok")
-      static let save = LocaleKey("common.button.save")
-    }
-    enum feedback {
-      static let copied = LocaleKey("common.feedback.copied")
-    }
     enum language {
       static let ar = LocaleKey("common.language.ar")
       static let bn = LocaleKey("common.language.bn")
@@ -81,11 +82,47 @@ enum LocaleKeys {
       static let ur = LocaleKey("common.language.ur")
       static let vi = LocaleKey("common.language.vi")
       static let yo = LocaleKey("common.language.yo")
-      static let zhHans = LocaleKey("common.language.zh_Hans")
-      static let zhHant = LocaleKey("common.language.zh_Hant")
+      static let zhHans = LocaleKey("common.language.zh_hans")
+      static let zhHant = LocaleKey("common.language.zh_hant")
     }
-    enum placeholder {
-      static let choose = LocaleKey("common.placeholder.choose")
+    enum provider {
+      static let baidu = LocaleKey("common.provider.baidu")
+      static let caiyun = LocaleKey("common.provider.caiyun")
+      static let deepl = LocaleKey("common.provider.deepl")
+      static let google = LocaleKey("common.provider.google")
+      static let iciba = LocaleKey("common.provider.iciba")
+      static let sogou = LocaleKey("common.provider.sogou")
+      static let system = LocaleKey("common.provider.system")
+      static let tencent = LocaleKey("common.provider.tencent")
+      static let youdao = LocaleKey("common.provider.youdao")
+    }
+    enum themeMode {
+      static let dark = LocaleKey("common.theme_mode.dark")
+      static let light = LocaleKey("common.theme_mode.light")
+      static let system = LocaleKey("common.theme_mode.system")
+    }
+    enum translationMode {
+      static let auto = LocaleKey("common.translation_mode.auto")
+      static let manual = LocaleKey("common.translation_mode.manual")
+    }
+    enum ui {
+      enum button {
+        static let add = LocaleKey("common.ui.button.add")
+        static let cancel = LocaleKey("common.ui.button.cancel")
+        static let `continue` = LocaleKey("common.ui.button.continue")
+        static let delete = LocaleKey("common.ui.button.delete")
+        static let edit = LocaleKey("common.ui.button.edit")
+        static let manage = LocaleKey("common.ui.button.manage")
+        static let ok = LocaleKey("common.ui.button.ok")
+        static let save = LocaleKey("common.ui.button.save")
+      }
+      enum feedback {
+        static let copied = LocaleKey("common.ui.feedback.copied")
+      }
+    }
+    enum wordPronunciation {
+      static let uk = LocaleKey("common.word_pronunciation.uk")
+      static let us = LocaleKey("common.word_pronunciation.us")
     }
   }
   enum miniTranslator {
@@ -139,48 +176,18 @@ enum LocaleKeys {
         static let translationMode = LocaleKey("mini_translator.toolbar.tooltip.translation_mode")
       }
     }
-    enum updateBanner {
-      enum button {
-        static let update = LocaleKey("mini_translator.update_banner.button.update")
-      }
-      static let foundNewVersion = LocaleKey("mini_translator.update_banner.found_new_version")
-    }
-  }
-  enum ocr {
-    enum engine {
-      static let builtIn = LocaleKey("ocr.engine.built_in")
-      static let tesseract = LocaleKey("ocr.engine.tesseract")
-      static let youdao = LocaleKey("ocr.engine.youdao")
-    }
-  }
-  enum provider {
-    static let baidu = LocaleKey("provider.baidu")
-    static let caiyun = LocaleKey("provider.caiyun")
-    static let deepl = LocaleKey("provider.deepl")
-    static let google = LocaleKey("provider.google")
-    static let iciba = LocaleKey("provider.iciba")
-    static let sogou = LocaleKey("provider.sogou")
-    static let system = LocaleKey("provider.system")
-    static let tencent = LocaleKey("provider.tencent")
-    static let youdao = LocaleKey("provider.youdao")
   }
   enum settings {
     enum advanced {
-      static let address = LocaleKey("settings.advanced.address")
       static let apiServer = LocaleKey("settings.advanced.api_server")
       static let apiServerDescription = LocaleKey("settings.advanced.api_server_description")
       static let disabled = LocaleKey("settings.advanced.disabled")
       static let enable = LocaleKey("settings.advanced.enable")
-      static let host = LocaleKey("settings.advanced.host")
       static let port = LocaleKey("settings.advanced.port")
       static let runningAt = LocaleKey("settings.advanced.running_at")
       static let title = LocaleKey("settings.advanced.title")
     }
     enum appearance {
-      enum option {
-        static let chinese = LocaleKey("settings.appearance.option.chinese")
-        static let english = LocaleKey("settings.appearance.option.english")
-      }
       enum section {
         static let appLanguage = LocaleKey("settings.appearance.section.app_language")
         static let themeMode = LocaleKey("settings.appearance.section.theme_mode")
@@ -248,6 +255,10 @@ enum LocaleKeys {
         static let ocr = LocaleKey("settings.providers.capability.ocr")
         static let translation = LocaleKey("settings.providers.capability.translation")
       }
+      enum deleteDialog {
+        static let message = LocaleKey("settings.providers.delete_dialog.message")
+        static let title = LocaleKey("settings.providers.delete_dialog.title")
+      }
       enum description {
         static let all = LocaleKey("settings.providers.description.all")
         static let dictionary = LocaleKey("settings.providers.description.dictionary")
@@ -259,22 +270,12 @@ enum LocaleKeys {
           static let edit = LocaleKey("settings.providers.detail.tooltip.edit")
         }
       }
-      enum dialog {
-        static let deleteConfirm = LocaleKey("settings.providers.dialog.delete_confirm")
-        static let deleteMessage = LocaleKey("settings.providers.dialog.delete_message")
-        static let deleteTitle = LocaleKey("settings.providers.dialog.delete_title")
-      }
       enum editor {
         enum placeholder {
           static let id = LocaleKey("settings.providers.editor.placeholder.id")
         }
         enum row {
           static let id = LocaleKey("settings.providers.editor.row.id")
-          static let type = LocaleKey("settings.providers.editor.row.type")
-        }
-        enum title {
-          static let add = LocaleKey("settings.providers.editor.title.add")
-          static let edit = LocaleKey("settings.providers.editor.title.edit")
         }
         enum tooltip {
           static let help = LocaleKey("settings.providers.editor.tooltip.help")
@@ -298,11 +299,11 @@ enum LocaleKeys {
       static let title = LocaleKey("settings.providers.title")
     }
     enum shortcuts {
-      enum dialog {
-        static let resetCancel = LocaleKey("settings.shortcuts.dialog.reset_cancel")
-        static let resetConfirm = LocaleKey("settings.shortcuts.dialog.reset_confirm")
-        static let resetMessage = LocaleKey("settings.shortcuts.dialog.reset_message")
-        static let resetTitle = LocaleKey("settings.shortcuts.dialog.reset_title")
+      enum resetDialog {
+        static let cancel = LocaleKey("settings.shortcuts.reset_dialog.cancel")
+        static let confirm = LocaleKey("settings.shortcuts.reset_dialog.confirm")
+        static let message = LocaleKey("settings.shortcuts.reset_dialog.message")
+        static let title = LocaleKey("settings.shortcuts.reset_dialog.title")
       }
       enum row {
         static let extractTextFromClipboard = LocaleKey(
@@ -316,52 +317,10 @@ enum LocaleKeys {
       }
       enum section {
         static let inputAssist = LocaleKey("settings.shortcuts.section.input_assist")
-        static let shortcuts = LocaleKey("settings.shortcuts.section.shortcuts")
         static let textExtraction = LocaleKey("settings.shortcuts.section.text_extraction")
       }
       static let title = LocaleKey("settings.shortcuts.title")
     }
-    static let title = LocaleKey("settings.title")
     static let version = LocaleKey("settings.version")
-  }
-  enum shortcuts {
-    enum recordDialog {
-      static let title = LocaleKey("shortcuts.record_dialog.title")
-    }
-  }
-  enum theme {
-    enum mode {
-      static let dark = LocaleKey("theme.mode.dark")
-      static let light = LocaleKey("theme.mode.light")
-      static let system = LocaleKey("theme.mode.system")
-    }
-  }
-  enum translation {
-    enum engineScope {
-      static let detectLanguage = LocaleKey("translation.engine_scope.detect_language")
-      static let lookup = LocaleKey("translation.engine_scope.lookup")
-      static let translate = LocaleKey("translation.engine_scope.translate")
-    }
-    enum mode {
-      static let auto = LocaleKey("translation.mode.auto")
-      static let manual = LocaleKey("translation.mode.manual")
-    }
-    enum wordPronunciation {
-      static let uk = LocaleKey("translation.word_pronunciation.uk")
-      static let us = LocaleKey("translation.word_pronunciation.us")
-    }
-  }
-  enum tray {
-    enum contextMenu {
-      static let checkForUpdates = LocaleKey("tray.context_menu.check_for_updates")
-      enum devTools {
-        static let openDataDirectory = LocaleKey("tray.context_menu.dev_tools.open_data_directory")
-        static let title = LocaleKey("tray.context_menu.dev_tools.title")
-        static let useNativeSettings = LocaleKey("tray.context_menu.dev_tools.use_native_settings")
-      }
-      static let quit = LocaleKey("tray.context_menu.quit")
-      static let settings = LocaleKey("tray.context_menu.settings")
-      static let showWindow = LocaleKey("tray.context_menu.show_window")
-    }
   }
 }

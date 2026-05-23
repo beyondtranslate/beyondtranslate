@@ -52,19 +52,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
   // Translations
   late final TranslationsCommonEn common = TranslationsCommonEn.internal(_root);
-  late final TranslationsProviderEn provider =
-      TranslationsProviderEn.internal(_root);
-  late final TranslationsTranslationEn translation =
-      TranslationsTranslationEn.internal(_root);
-  late final TranslationsOcrEn ocr = TranslationsOcrEn.internal(_root);
-  late final TranslationsThemeEn theme = TranslationsThemeEn.internal(_root);
-  late final TranslationsTrayEn tray = TranslationsTrayEn.internal(_root);
+  late final TranslationsAppEn app = TranslationsAppEn.internal(_root);
   late final TranslationsMiniTranslatorEn mini_translator =
       TranslationsMiniTranslatorEn.internal(_root);
   late final TranslationsSettingsEn settings =
       TranslationsSettingsEn.internal(_root);
-  late final TranslationsShortcutsEn shortcuts =
-      TranslationsShortcutsEn.internal(_root);
 }
 
 // Path: common
@@ -74,100 +66,27 @@ class TranslationsCommonEn {
   final Translations _root; // ignore: unused_field
 
   // Translations
-  late final TranslationsCommonAppEn app =
-      TranslationsCommonAppEn.internal(_root);
-  late final TranslationsCommonButtonEn button =
-      TranslationsCommonButtonEn.internal(_root);
-  late final TranslationsCommonFeedbackEn feedback =
-      TranslationsCommonFeedbackEn.internal(_root);
-  late final TranslationsCommonPlaceholderEn placeholder =
-      TranslationsCommonPlaceholderEn.internal(_root);
+  late final TranslationsCommonUiEn ui = TranslationsCommonUiEn.internal(_root);
   late final TranslationsCommonLanguageEn language =
       TranslationsCommonLanguageEn.internal(_root);
+  late final TranslationsCommonThemeModeEn theme_mode =
+      TranslationsCommonThemeModeEn.internal(_root);
+  late final TranslationsCommonProviderEn provider =
+      TranslationsCommonProviderEn.internal(_root);
+  late final TranslationsCommonTranslationModeEn translation_mode =
+      TranslationsCommonTranslationModeEn.internal(_root);
+  late final TranslationsCommonWordPronunciationEn word_pronunciation =
+      TranslationsCommonWordPronunciationEn.internal(_root);
 }
 
-// Path: provider
-class TranslationsProviderEn {
-  TranslationsProviderEn.internal(this._root);
+// Path: app
+class TranslationsAppEn {
+  TranslationsAppEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
-
-  /// en: 'Baidu'
-  String get baidu => 'Baidu';
-
-  /// en: 'Caiyun'
-  String get caiyun => 'Caiyun';
-
-  /// en: 'DeepL'
-  String get deepl => 'DeepL';
-
-  /// en: 'Google'
-  String get google => 'Google';
-
-  /// en: 'Iciba'
-  String get iciba => 'Iciba';
-
-  /// en: 'Sogou'
-  String get sogou => 'Sogou';
-
-  /// en: 'System'
-  String get system => 'System';
-
-  /// en: 'Tencent'
-  String get tencent => 'Tencent';
-
-  /// en: 'Youda'
-  String get youdao => 'Youda';
-}
-
-// Path: translation
-class TranslationsTranslationEn {
-  TranslationsTranslationEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-  late final TranslationsTranslationEngineScopeEn engine_scope =
-      TranslationsTranslationEngineScopeEn.internal(_root);
-  late final TranslationsTranslationModeEn mode =
-      TranslationsTranslationModeEn.internal(_root);
-  late final TranslationsTranslationWordPronunciationEn word_pronunciation =
-      TranslationsTranslationWordPronunciationEn.internal(_root);
-}
-
-// Path: ocr
-class TranslationsOcrEn {
-  TranslationsOcrEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-  late final TranslationsOcrEngineEn engine =
-      TranslationsOcrEngineEn.internal(_root);
-}
-
-// Path: theme
-class TranslationsThemeEn {
-  TranslationsThemeEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-  late final TranslationsThemeModeEn mode =
-      TranslationsThemeModeEn.internal(_root);
-}
-
-// Path: tray
-class TranslationsTrayEn {
-  TranslationsTrayEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-  late final TranslationsTrayContextMenuEn context_menu =
-      TranslationsTrayContextMenuEn.internal(_root);
+  late final TranslationsAppTrayEn tray = TranslationsAppTrayEn.internal(_root);
 }
 
 // Path: mini_translator
@@ -177,8 +96,6 @@ class TranslationsMiniTranslatorEn {
   final Translations _root; // ignore: unused_field
 
   // Translations
-  late final TranslationsMiniTranslatorUpdateBannerEn update_banner =
-      TranslationsMiniTranslatorUpdateBannerEn.internal(_root);
   late final TranslationsMiniTranslatorLimitedBannerEn limited_banner =
       TranslationsMiniTranslatorLimitedBannerEn.internal(_root);
   late final TranslationsMiniTranslatorInputEn input =
@@ -214,89 +131,19 @@ class TranslationsSettingsEn {
       TranslationsSettingsProvidersEn.internal(_root);
   late final TranslationsSettingsLayoutEn layout =
       TranslationsSettingsLayoutEn.internal(_root);
-
-  /// en: 'Settings'
-  String get title => 'Settings';
 }
 
-// Path: shortcuts
-class TranslationsShortcutsEn {
-  TranslationsShortcutsEn.internal(this._root);
+// Path: common.ui
+class TranslationsCommonUiEn {
+  TranslationsCommonUiEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
-  late final TranslationsShortcutsRecordDialogEn record_dialog =
-      TranslationsShortcutsRecordDialogEn.internal(_root);
-}
-
-// Path: common.app
-class TranslationsCommonAppEn {
-  TranslationsCommonAppEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Beyond Translate'
-  String get name => 'Beyond Translate';
-}
-
-// Path: common.button
-class TranslationsCommonButtonEn {
-  TranslationsCommonButtonEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'OK'
-  String get ok => 'OK';
-
-  /// en: 'Cancel'
-  String get cancel => 'Cancel';
-
-  /// en: 'Add'
-  String get add => 'Add';
-
-  /// en: 'Delete'
-  String get delete => 'Delete';
-
-  /// en: 'Edit'
-  String get edit => 'Edit';
-
-  /// en: 'Save'
-  String get save => 'Save';
-
-  /// en: 'Manage'
-  String get manage => 'Manage';
-
-  /// en: 'Continue'
-  String get kContinue => 'Continue';
-}
-
-// Path: common.feedback
-class TranslationsCommonFeedbackEn {
-  TranslationsCommonFeedbackEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Copied'
-  String get copied => 'Copied';
-}
-
-// Path: common.placeholder
-class TranslationsCommonPlaceholderEn {
-  TranslationsCommonPlaceholderEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Please Choose'
-  String get choose => 'Please Choose';
+  late final TranslationsCommonUiButtonEn button =
+      TranslationsCommonUiButtonEn.internal(_root);
+  late final TranslationsCommonUiFeedbackEn feedback =
+      TranslationsCommonUiFeedbackEn.internal(_root);
 }
 
 // Path: common.language
@@ -407,81 +254,15 @@ class TranslationsCommonLanguageEn {
   String get yo => 'Yoruba';
 
   /// en: 'Chinese (Simplified)'
-  String get zh_Hans => 'Chinese (Simplified)';
+  String get zh_hans => 'Chinese (Simplified)';
 
   /// en: 'Chinese (Traditional)'
-  String get zh_Hant => 'Chinese (Traditional)';
+  String get zh_hant => 'Chinese (Traditional)';
 }
 
-// Path: translation.engine_scope
-class TranslationsTranslationEngineScopeEn {
-  TranslationsTranslationEngineScopeEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'detectLanguage'
-  String get detect_language => 'detectLanguage';
-
-  /// en: 'LookUp'
-  String get lookup => 'LookUp';
-
-  /// en: 'Translate'
-  String get translate => 'Translate';
-}
-
-// Path: translation.mode
-class TranslationsTranslationModeEn {
-  TranslationsTranslationModeEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Auto'
-  String get auto => 'Auto';
-
-  /// en: 'Manual'
-  String get manual => 'Manual';
-}
-
-// Path: translation.word_pronunciation
-class TranslationsTranslationWordPronunciationEn {
-  TranslationsTranslationWordPronunciationEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'US'
-  String get us => 'US';
-
-  /// en: 'UK'
-  String get uk => 'UK';
-}
-
-// Path: ocr.engine
-class TranslationsOcrEngineEn {
-  TranslationsOcrEngineEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Built In'
-  String get built_in => 'Built In';
-
-  /// en: 'Tesseract OCR'
-  String get tesseract => 'Tesseract OCR';
-
-  /// en: 'Youdao'
-  String get youdao => 'Youdao';
-}
-
-// Path: theme.mode
-class TranslationsThemeModeEn {
-  TranslationsThemeModeEn.internal(this._root);
+// Path: common.theme_mode
+class TranslationsCommonThemeModeEn {
+  TranslationsCommonThemeModeEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
@@ -497,43 +278,81 @@ class TranslationsThemeModeEn {
   String get system => 'System';
 }
 
-// Path: tray.context_menu
-class TranslationsTrayContextMenuEn {
-  TranslationsTrayContextMenuEn.internal(this._root);
+// Path: common.provider
+class TranslationsCommonProviderEn {
+  TranslationsCommonProviderEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Show Window'
-  String get show_window => 'Show Window';
+  /// en: 'Baidu'
+  String get baidu => 'Baidu';
 
-  late final TranslationsTrayContextMenuDevToolsEn dev_tools =
-      TranslationsTrayContextMenuDevToolsEn.internal(_root);
+  /// en: 'Caiyun'
+  String get caiyun => 'Caiyun';
 
-  /// en: 'Check for Updates'
-  String get check_for_updates => 'Check for Updates';
+  /// en: 'DeepL'
+  String get deepl => 'DeepL';
 
-  /// en: 'Settings'
-  String get settings => 'Settings';
+  /// en: 'Google'
+  String get google => 'Google';
 
-  /// en: 'Quit'
-  String get quit => 'Quit';
+  /// en: 'Iciba'
+  String get iciba => 'Iciba';
+
+  /// en: 'Sogou'
+  String get sogou => 'Sogou';
+
+  /// en: 'System'
+  String get system => 'System';
+
+  /// en: 'Tencent'
+  String get tencent => 'Tencent';
+
+  /// en: 'Youda'
+  String get youdao => 'Youda';
 }
 
-// Path: mini_translator.update_banner
-class TranslationsMiniTranslatorUpdateBannerEn {
-  TranslationsMiniTranslatorUpdateBannerEn.internal(this._root);
+// Path: common.translation_mode
+class TranslationsCommonTranslationModeEn {
+  TranslationsCommonTranslationModeEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'New version found: {}'
-  String get found_new_version => 'New version found: {}';
+  /// en: 'Auto'
+  String get auto => 'Auto';
 
-  late final TranslationsMiniTranslatorUpdateBannerButtonEn button =
-      TranslationsMiniTranslatorUpdateBannerButtonEn.internal(_root);
+  /// en: 'Manual'
+  String get manual => 'Manual';
+}
+
+// Path: common.word_pronunciation
+class TranslationsCommonWordPronunciationEn {
+  TranslationsCommonWordPronunciationEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'US'
+  String get us => 'US';
+
+  /// en: 'UK'
+  String get uk => 'UK';
+}
+
+// Path: app.tray
+class TranslationsAppTrayEn {
+  TranslationsAppTrayEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsAppTrayContextMenuEn context_menu =
+      TranslationsAppTrayContextMenuEn.internal(_root);
 }
 
 // Path: mini_translator.limited_banner
@@ -647,8 +466,6 @@ class TranslationsSettingsAppearanceEn {
 
   late final TranslationsSettingsAppearanceSectionEn section =
       TranslationsSettingsAppearanceSectionEn.internal(_root);
-  late final TranslationsSettingsAppearanceOptionEn option =
-      TranslationsSettingsAppearanceOptionEn.internal(_root);
 }
 
 // Path: settings.shortcuts
@@ -666,8 +483,8 @@ class TranslationsSettingsShortcutsEn {
       TranslationsSettingsShortcutsSectionEn.internal(_root);
   late final TranslationsSettingsShortcutsRowEn row =
       TranslationsSettingsShortcutsRowEn.internal(_root);
-  late final TranslationsSettingsShortcutsDialogEn dialog =
-      TranslationsSettingsShortcutsDialogEn.internal(_root);
+  late final TranslationsSettingsShortcutsResetDialogEn reset_dialog =
+      TranslationsSettingsShortcutsResetDialogEn.internal(_root);
 }
 
 // Path: settings.advanced
@@ -690,12 +507,6 @@ class TranslationsSettingsAdvancedEn {
 
   /// en: 'Enable'
   String get enable => 'Enable';
-
-  /// en: 'Address'
-  String get address => 'Address';
-
-  /// en: 'Host'
-  String get host => 'Host';
 
   /// en: 'Port'
   String get port => 'Port';
@@ -724,8 +535,6 @@ class TranslationsSettingsProvidersEn {
       TranslationsSettingsProvidersItemEn.internal(_root);
   late final TranslationsSettingsProvidersButtonEn button =
       TranslationsSettingsProvidersButtonEn.internal(_root);
-  late final TranslationsSettingsProvidersDialogEn dialog =
-      TranslationsSettingsProvidersDialogEn.internal(_root);
   late final TranslationsSettingsProvidersAlertEn alert =
       TranslationsSettingsProvidersAlertEn.internal(_root);
   late final TranslationsSettingsProvidersIntroEn intro =
@@ -738,6 +547,8 @@ class TranslationsSettingsProvidersEn {
       TranslationsSettingsProvidersCapabilityEn.internal(_root);
   late final TranslationsSettingsProvidersDescriptionEn description =
       TranslationsSettingsProvidersDescriptionEn.internal(_root);
+  late final TranslationsSettingsProvidersDeleteDialogEn delete_dialog =
+      TranslationsSettingsProvidersDeleteDialogEn.internal(_root);
 }
 
 // Path: settings.layout
@@ -755,46 +566,73 @@ class TranslationsSettingsLayoutEn {
       TranslationsSettingsLayoutEmptyEn.internal(_root);
 }
 
-// Path: shortcuts.record_dialog
-class TranslationsShortcutsRecordDialogEn {
-  TranslationsShortcutsRecordDialogEn.internal(this._root);
+// Path: common.ui.button
+class TranslationsCommonUiButtonEn {
+  TranslationsCommonUiButtonEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Customize your shortcut'
-  String get title => 'Customize your shortcut';
+  /// en: 'OK'
+  String get ok => 'OK';
+
+  /// en: 'Cancel'
+  String get cancel => 'Cancel';
+
+  /// en: 'Add'
+  String get add => 'Add';
+
+  /// en: 'Delete'
+  String get delete => 'Delete';
+
+  /// en: 'Edit'
+  String get edit => 'Edit';
+
+  /// en: 'Save'
+  String get save => 'Save';
+
+  /// en: 'Manage'
+  String get manage => 'Manage';
+
+  /// en: 'Continue'
+  String get kContinue => 'Continue';
 }
 
-// Path: tray.context_menu.dev_tools
-class TranslationsTrayContextMenuDevToolsEn {
-  TranslationsTrayContextMenuDevToolsEn.internal(this._root);
+// Path: common.ui.feedback
+class TranslationsCommonUiFeedbackEn {
+  TranslationsCommonUiFeedbackEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Dev Tools'
-  String get title => 'Dev Tools';
-
-  /// en: 'Open Data Directory'
-  String get open_data_directory => 'Open Data Directory';
-
-  /// en: 'Use Native Settings Page'
-  String get use_native_settings => 'Use Native Settings Page';
+  /// en: 'Copied'
+  String get copied => 'Copied';
 }
 
-// Path: mini_translator.update_banner.button
-class TranslationsMiniTranslatorUpdateBannerButtonEn {
-  TranslationsMiniTranslatorUpdateBannerButtonEn.internal(this._root);
+// Path: app.tray.context_menu
+class TranslationsAppTrayContextMenuEn {
+  TranslationsAppTrayContextMenuEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Update'
-  String get update => 'Update';
+  /// en: 'Show Window'
+  String get show_window => 'Show Window';
+
+  late final TranslationsAppTrayContextMenuDevToolsEn dev_tools =
+      TranslationsAppTrayContextMenuDevToolsEn.internal(_root);
+
+  /// en: 'Check for Updates'
+  String get check_for_updates => 'Check for Updates';
+
+  /// en: 'Settings'
+  String get settings => 'Settings';
+
+  /// en: 'Quit'
+  String get quit => 'Quit';
 }
 
 // Path: mini_translator.limited_banner.permission
@@ -1031,21 +869,6 @@ class TranslationsSettingsAppearanceSectionEn {
   String get theme_mode => 'Theme Mode';
 }
 
-// Path: settings.appearance.option
-class TranslationsSettingsAppearanceOptionEn {
-  TranslationsSettingsAppearanceOptionEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'English'
-  String get english => 'English';
-
-  /// en: 'Chinese'
-  String get chinese => 'Chinese';
-}
-
 // Path: settings.shortcuts.section
 class TranslationsSettingsShortcutsSectionEn {
   TranslationsSettingsShortcutsSectionEn.internal(this._root);
@@ -1053,9 +876,6 @@ class TranslationsSettingsShortcutsSectionEn {
   final Translations _root; // ignore: unused_field
 
   // Translations
-
-  /// en: 'Shortcuts'
-  String get shortcuts => 'Shortcuts';
 
   /// en: 'Text Extraction'
   String get text_extraction => 'Text Extraction';
@@ -1090,26 +910,26 @@ class TranslationsSettingsShortcutsRowEn {
   String get translate_input => 'Translate input content';
 }
 
-// Path: settings.shortcuts.dialog
-class TranslationsSettingsShortcutsDialogEn {
-  TranslationsSettingsShortcutsDialogEn.internal(this._root);
+// Path: settings.shortcuts.reset_dialog
+class TranslationsSettingsShortcutsResetDialogEn {
+  TranslationsSettingsShortcutsResetDialogEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
   /// en: 'Reset Shortcuts'
-  String get reset_title => 'Reset Shortcuts';
+  String get title => 'Reset Shortcuts';
 
   /// en: 'Are you sure you want to reset all shortcuts to their default values?'
-  String get reset_message =>
+  String get message =>
       'Are you sure you want to reset all shortcuts to their default values?';
 
   /// en: 'Reset'
-  String get reset_confirm => 'Reset';
+  String get confirm => 'Reset';
 
   /// en: 'Cancel'
-  String get reset_cancel => 'Cancel';
+  String get cancel => 'Cancel';
 }
 
 // Path: settings.providers.section
@@ -1155,24 +975,6 @@ class TranslationsSettingsProvidersButtonEn {
   String get add => 'Add a Provider...';
 }
 
-// Path: settings.providers.dialog
-class TranslationsSettingsProvidersDialogEn {
-  TranslationsSettingsProvidersDialogEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Delete Provider'
-  String get delete_title => 'Delete Provider';
-
-  /// en: 'Delete "{}"?'
-  String get delete_confirm => 'Delete "{}"?';
-
-  /// en: 'This action cannot be undone.'
-  String get delete_message => 'This action cannot be undone.';
-}
-
 // Path: settings.providers.alert
 class TranslationsSettingsProvidersAlertEn {
   TranslationsSettingsProvidersAlertEn.internal(this._root);
@@ -1209,8 +1011,6 @@ class TranslationsSettingsProvidersEditorEn {
   final Translations _root; // ignore: unused_field
 
   // Translations
-  late final TranslationsSettingsProvidersEditorTitleEn title =
-      TranslationsSettingsProvidersEditorTitleEn.internal(_root);
   late final TranslationsSettingsProvidersEditorRowEn row =
       TranslationsSettingsProvidersEditorRowEn.internal(_root);
   late final TranslationsSettingsProvidersEditorPlaceholderEn placeholder =
@@ -1261,14 +1061,29 @@ class TranslationsSettingsProvidersDescriptionEn {
   /// en: 'Provides dictionary lookup and text translation'
   String get all => 'Provides dictionary lookup and text translation';
 
-  /// en: 'Provides text translation between languages'
-  String get translation => 'Provides text translation between languages';
-
   /// en: 'Provides dictionary lookup and word definitions'
   String get dictionary => 'Provides dictionary lookup and word definitions';
 
+  /// en: 'Provides text translation between languages'
+  String get translation => 'Provides text translation between languages';
+
   /// en: 'Provides translation services'
   String get fallback => 'Provides translation services';
+}
+
+// Path: settings.providers.delete_dialog
+class TranslationsSettingsProvidersDeleteDialogEn {
+  TranslationsSettingsProvidersDeleteDialogEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Delete "{}"?'
+  String get title => 'Delete "{}"?';
+
+  /// en: 'This action cannot be undone.'
+  String get message => 'This action cannot be undone.';
 }
 
 // Path: settings.layout.empty
@@ -1286,19 +1101,22 @@ class TranslationsSettingsLayoutEmptyEn {
   String get message => 'Choose a settings section from the sidebar.';
 }
 
-// Path: settings.providers.editor.title
-class TranslationsSettingsProvidersEditorTitleEn {
-  TranslationsSettingsProvidersEditorTitleEn.internal(this._root);
+// Path: app.tray.context_menu.dev_tools
+class TranslationsAppTrayContextMenuDevToolsEn {
+  TranslationsAppTrayContextMenuDevToolsEn.internal(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// en: 'Add Provider'
-  String get add => 'Add Provider';
+  /// en: 'Dev Tools'
+  String get title => 'Dev Tools';
 
-  /// en: 'Edit Provider'
-  String get edit => 'Edit Provider';
+  /// en: 'Open Data Directory'
+  String get open_data_directory => 'Open Data Directory';
+
+  /// en: 'Use Native Settings Page'
+  String get use_native_settings => 'Use Native Settings Page';
 }
 
 // Path: settings.providers.editor.row
@@ -1311,9 +1129,6 @@ class TranslationsSettingsProvidersEditorRowEn {
 
   /// en: 'Provider ID'
   String get id => 'Provider ID';
-
-  /// en: 'Provider Type'
-  String get type => 'Provider Type';
 }
 
 // Path: settings.providers.editor.placeholder
@@ -1372,17 +1187,15 @@ class TranslationsSettingsProvidersDetailTooltipEn {
 extension on Translations {
   dynamic _flatMapFunction(String path) {
     return switch (path) {
-      'common.app.name' => 'Beyond Translate',
-      'common.button.ok' => 'OK',
-      'common.button.cancel' => 'Cancel',
-      'common.button.add' => 'Add',
-      'common.button.delete' => 'Delete',
-      'common.button.edit' => 'Edit',
-      'common.button.save' => 'Save',
-      'common.button.manage' => 'Manage',
-      'common.button.kContinue' => 'Continue',
-      'common.feedback.copied' => 'Copied',
-      'common.placeholder.choose' => 'Please Choose',
+      'common.ui.button.ok' => 'OK',
+      'common.ui.button.cancel' => 'Cancel',
+      'common.ui.button.add' => 'Add',
+      'common.ui.button.delete' => 'Delete',
+      'common.ui.button.edit' => 'Edit',
+      'common.ui.button.save' => 'Save',
+      'common.ui.button.manage' => 'Manage',
+      'common.ui.button.kContinue' => 'Continue',
+      'common.ui.feedback.copied' => 'Copied',
       'common.language.ar' => 'Arabic',
       'common.language.bn' => 'Bengali',
       'common.language.de' => 'German',
@@ -1416,42 +1229,33 @@ extension on Translations {
       'common.language.ur' => 'Urdu',
       'common.language.vi' => 'Vietnamese',
       'common.language.yo' => 'Yoruba',
-      'common.language.zh_Hans' => 'Chinese (Simplified)',
-      'common.language.zh_Hant' => 'Chinese (Traditional)',
-      'provider.baidu' => 'Baidu',
-      'provider.caiyun' => 'Caiyun',
-      'provider.deepl' => 'DeepL',
-      'provider.google' => 'Google',
-      'provider.iciba' => 'Iciba',
-      'provider.sogou' => 'Sogou',
-      'provider.system' => 'System',
-      'provider.tencent' => 'Tencent',
-      'provider.youdao' => 'Youda',
-      'translation.engine_scope.detect_language' => 'detectLanguage',
-      'translation.engine_scope.lookup' => 'LookUp',
-      'translation.engine_scope.translate' => 'Translate',
-      'translation.mode.auto' => 'Auto',
-      'translation.mode.manual' => 'Manual',
-      'translation.word_pronunciation.us' => 'US',
-      'translation.word_pronunciation.uk' => 'UK',
-      'ocr.engine.built_in' => 'Built In',
-      'ocr.engine.tesseract' => 'Tesseract OCR',
-      'ocr.engine.youdao' => 'Youdao',
-      'theme.mode.light' => 'Light',
-      'theme.mode.dark' => 'Dark',
-      'theme.mode.system' => 'System',
-      'tray.context_menu.show_window' => 'Show Window',
-      'tray.context_menu.dev_tools.title' => 'Dev Tools',
-      'tray.context_menu.dev_tools.open_data_directory' =>
+      'common.language.zh_hans' => 'Chinese (Simplified)',
+      'common.language.zh_hant' => 'Chinese (Traditional)',
+      'common.theme_mode.light' => 'Light',
+      'common.theme_mode.dark' => 'Dark',
+      'common.theme_mode.system' => 'System',
+      'common.provider.baidu' => 'Baidu',
+      'common.provider.caiyun' => 'Caiyun',
+      'common.provider.deepl' => 'DeepL',
+      'common.provider.google' => 'Google',
+      'common.provider.iciba' => 'Iciba',
+      'common.provider.sogou' => 'Sogou',
+      'common.provider.system' => 'System',
+      'common.provider.tencent' => 'Tencent',
+      'common.provider.youdao' => 'Youda',
+      'common.translation_mode.auto' => 'Auto',
+      'common.translation_mode.manual' => 'Manual',
+      'common.word_pronunciation.us' => 'US',
+      'common.word_pronunciation.uk' => 'UK',
+      'app.tray.context_menu.show_window' => 'Show Window',
+      'app.tray.context_menu.dev_tools.title' => 'Dev Tools',
+      'app.tray.context_menu.dev_tools.open_data_directory' =>
         'Open Data Directory',
-      'tray.context_menu.dev_tools.use_native_settings' =>
+      'app.tray.context_menu.dev_tools.use_native_settings' =>
         'Use Native Settings Page',
-      'tray.context_menu.check_for_updates' => 'Check for Updates',
-      'tray.context_menu.settings' => 'Settings',
-      'tray.context_menu.quit' => 'Quit',
-      'mini_translator.update_banner.found_new_version' =>
-        'New version found: {}',
-      'mini_translator.update_banner.button.update' => 'Update',
+      'app.tray.context_menu.check_for_updates' => 'Check for Updates',
+      'app.tray.context_menu.settings' => 'Settings',
+      'app.tray.context_menu.quit' => 'Quit',
       'mini_translator.limited_banner.permission.missing_both' =>
         'Grant Screen Recording and Accessibility permissions to enable all features.',
       'mini_translator.limited_banner.permission.missing_screen_capture' =>
@@ -1525,10 +1329,7 @@ extension on Translations {
       'settings.appearance.title' => 'Appearance',
       'settings.appearance.section.app_language' => 'Display Language',
       'settings.appearance.section.theme_mode' => 'Theme Mode',
-      'settings.appearance.option.english' => 'English',
-      'settings.appearance.option.chinese' => 'Chinese',
       'settings.shortcuts.title' => 'Shortcuts',
-      'settings.shortcuts.section.shortcuts' => 'Shortcuts',
       'settings.shortcuts.section.text_extraction' => 'Text Extraction',
       'settings.shortcuts.section.input_assist' => 'Input Assist Function',
       'settings.shortcuts.row.toggle_mini_translator' => 'Show/Hide Window',
@@ -1539,18 +1340,16 @@ extension on Translations {
       'settings.shortcuts.row.extract_text_from_clipboard' =>
         'Extract text from clipboard',
       'settings.shortcuts.row.translate_input' => 'Translate input content',
-      'settings.shortcuts.dialog.reset_title' => 'Reset Shortcuts',
-      'settings.shortcuts.dialog.reset_message' =>
+      'settings.shortcuts.reset_dialog.title' => 'Reset Shortcuts',
+      'settings.shortcuts.reset_dialog.message' =>
         'Are you sure you want to reset all shortcuts to their default values?',
-      'settings.shortcuts.dialog.reset_confirm' => 'Reset',
-      'settings.shortcuts.dialog.reset_cancel' => 'Cancel',
+      'settings.shortcuts.reset_dialog.confirm' => 'Reset',
+      'settings.shortcuts.reset_dialog.cancel' => 'Cancel',
       'settings.advanced.title' => 'Advanced',
       'settings.advanced.api_server' => 'Local API server',
       'settings.advanced.api_server_description' =>
         'Expose the translation API on 127.0.0.1 for local integrations.',
       'settings.advanced.enable' => 'Enable',
-      'settings.advanced.address' => 'Address',
-      'settings.advanced.host' => 'Host',
       'settings.advanced.port' => 'Port',
       'settings.advanced.running_at' => 'Running at {url}',
       'settings.advanced.disabled' => 'Disabled',
@@ -1561,19 +1360,12 @@ extension on Translations {
       'settings.providers.item.loading' => 'Loading providers...',
       'settings.providers.item.no_services' => 'No services available.',
       'settings.providers.button.add' => 'Add a Provider...',
-      'settings.providers.dialog.delete_title' => 'Delete Provider',
-      'settings.providers.dialog.delete_confirm' => 'Delete "{}"?',
-      'settings.providers.dialog.delete_message' =>
-        'This action cannot be undone.',
       'settings.providers.alert.error' => 'Error',
       'settings.providers.intro.body' =>
         'Choose the translation and dictionary providers used by the app.',
       'settings.providers.intro.warning' =>
         'Providers you add may process the text you send, so only connect services you trust.',
-      'settings.providers.editor.title.add' => 'Add Provider',
-      'settings.providers.editor.title.edit' => 'Edit Provider',
       'settings.providers.editor.row.id' => 'Provider ID',
-      'settings.providers.editor.row.type' => 'Provider Type',
       'settings.providers.editor.placeholder.id' => 'e.g. deepl-main',
       'settings.providers.editor.type_picker.prompt' =>
         'Select the type of provider you would like to add:',
@@ -1584,18 +1376,19 @@ extension on Translations {
       'settings.providers.capability.ocr' => 'OCR',
       'settings.providers.description.all' =>
         'Provides dictionary lookup and text translation',
-      'settings.providers.description.translation' =>
-        'Provides text translation between languages',
       'settings.providers.description.dictionary' =>
         'Provides dictionary lookup and word definitions',
+      'settings.providers.description.translation' =>
+        'Provides text translation between languages',
       'settings.providers.description.fallback' =>
         'Provides translation services',
+      'settings.providers.delete_dialog.title' => 'Delete "{}"?',
+      'settings.providers.delete_dialog.message' =>
+        'This action cannot be undone.',
       'settings.layout.title' => 'Settings',
       'settings.layout.empty.title' => 'Select a Category',
       'settings.layout.empty.message' =>
         'Choose a settings section from the sidebar.',
-      'settings.title' => 'Settings',
-      'shortcuts.record_dialog.title' => 'Customize your shortcut',
       _ => null,
     };
   }

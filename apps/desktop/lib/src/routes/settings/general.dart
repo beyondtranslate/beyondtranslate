@@ -230,7 +230,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                   ),
                   detailText: TextButton(
                     onPressed: () {},
-                    child: Text(t.common.button.edit),
+                    child: Text(t.common.ui.button.edit),
                   ),
                 ),
               if (_general.translationTargets.isEmpty)
@@ -282,9 +282,9 @@ String _providerId(String serviceId) {
 String _translationModeTitle(BuildContext context, TranslationMode mode) {
   switch (mode) {
     case TranslationMode.auto:
-      return t.translation.mode.auto;
+      return t.common.translation_mode.auto;
     case TranslationMode.manual:
-      return t.translation.mode.manual;
+      return t.common.translation_mode.manual;
   }
 }
 

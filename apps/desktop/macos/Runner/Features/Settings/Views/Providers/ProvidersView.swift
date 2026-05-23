@@ -78,7 +78,7 @@ struct ProvidersView: View {
         set: { if !$0 { viewModel.errorMessage = nil } }
       )
     ) {
-      Button(LocaleKeys.common.button.ok.tr()) { viewModel.errorMessage = nil }
+      Button(LocaleKeys.common.ui.button.ok.tr()) { viewModel.errorMessage = nil }
     } message: {
       if let msg = viewModel.errorMessage {
         Text(msg)
@@ -145,24 +145,24 @@ private struct ProviderRow: View {
       .padding(.vertical, 2)
     }
     .contextMenu {
-      Button(LocaleKeys.common.button.edit.tr(), action: onEdit)
+      Button(LocaleKeys.common.ui.button.edit.tr(), action: onEdit)
 
       Divider()
 
-      Button(LocaleKeys.common.button.delete.tr(), role: .destructive) {
+      Button(LocaleKeys.common.ui.button.delete.tr(), role: .destructive) {
         showDeleteConfirm = true
       }
     }
     .confirmationDialog(
-      LocaleKeys.settings.providers.dialog.deleteConfirm.tr(provider.name),
+      LocaleKeys.settings.providers.deleteDialog.title.tr(provider.name),
       isPresented: $showDeleteConfirm,
       titleVisibility: .visible
     ) {
       Button(
-        LocaleKeys.common.button.delete.tr(), role: .destructive, action: onDelete)
-      Button(LocaleKeys.common.button.cancel.tr(), role: .cancel) {}
+        LocaleKeys.common.ui.button.delete.tr(), role: .destructive, action: onDelete)
+      Button(LocaleKeys.common.ui.button.cancel.tr(), role: .cancel) {}
     } message: {
-      Text(LocaleKeys.settings.providers.dialog.deleteMessage.tr())
+      Text(LocaleKeys.settings.providers.deleteDialog.message.tr())
     }
   }
 }

@@ -84,22 +84,22 @@ class _ProvidersSettingsPageState extends State<ProvidersSettingsPage> {
       builder: (ctx) => AlertDialog(
         title: Text(
           formatTranslation(
-            t.settings.providers.dialog.delete_confirm,
+            t.settings.providers.delete_dialog.title,
             args: [entry.id],
           ),
         ),
-        content: Text(t.settings.providers.dialog.delete_message),
+        content: Text(t.settings.providers.delete_dialog.message),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(t.common.button.cancel),
+            child: Text(t.common.ui.button.cancel),
           ),
           FilledButton.tonal(
             style: FilledButton.styleFrom(
               foregroundColor: Theme.of(ctx).colorScheme.error,
             ),
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(t.common.button.delete),
+            child: Text(t.common.ui.button.delete),
           ),
         ],
       ),
@@ -246,12 +246,12 @@ class _ProviderRow extends StatelessWidget {
         itemBuilder: (_) => [
           PopupMenuItem<String>(
             value: 'edit',
-            child: Text(t.common.button.edit),
+            child: Text(t.common.ui.button.edit),
           ),
           const PopupMenuDivider(),
           PopupMenuItem<String>(
             value: 'delete',
-            child: Text(t.common.button.delete),
+            child: Text(t.common.ui.button.delete),
           ),
         ],
       ),

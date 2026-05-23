@@ -58,26 +58,13 @@ class TranslationsZhHans extends Translations
   late final _TranslationsCommonZhHans common =
       _TranslationsCommonZhHans._(_root);
   @override
-  late final _TranslationsProviderZhHans provider =
-      _TranslationsProviderZhHans._(_root);
-  @override
-  late final _TranslationsTranslationZhHans translation =
-      _TranslationsTranslationZhHans._(_root);
-  @override
-  late final _TranslationsOcrZhHans ocr = _TranslationsOcrZhHans._(_root);
-  @override
-  late final _TranslationsThemeZhHans theme = _TranslationsThemeZhHans._(_root);
-  @override
-  late final _TranslationsTrayZhHans tray = _TranslationsTrayZhHans._(_root);
+  late final _TranslationsAppZhHans app = _TranslationsAppZhHans._(_root);
   @override
   late final _TranslationsMiniTranslatorZhHans mini_translator =
       _TranslationsMiniTranslatorZhHans._(_root);
   @override
   late final _TranslationsSettingsZhHans settings =
       _TranslationsSettingsZhHans._(_root);
-  @override
-  late final _TranslationsShortcutsZhHans shortcuts =
-      _TranslationsShortcutsZhHans._(_root);
 }
 
 // Path: common
@@ -90,25 +77,28 @@ class _TranslationsCommonZhHans extends TranslationsCommonEn {
 
   // Translations
   @override
-  late final _TranslationsCommonAppZhHans app =
-      _TranslationsCommonAppZhHans._(_root);
-  @override
-  late final _TranslationsCommonButtonZhHans button =
-      _TranslationsCommonButtonZhHans._(_root);
-  @override
-  late final _TranslationsCommonFeedbackZhHans feedback =
-      _TranslationsCommonFeedbackZhHans._(_root);
-  @override
-  late final _TranslationsCommonPlaceholderZhHans placeholder =
-      _TranslationsCommonPlaceholderZhHans._(_root);
+  late final _TranslationsCommonUiZhHans ui =
+      _TranslationsCommonUiZhHans._(_root);
   @override
   late final _TranslationsCommonLanguageZhHans language =
       _TranslationsCommonLanguageZhHans._(_root);
+  @override
+  late final _TranslationsCommonThemeModeZhHans theme_mode =
+      _TranslationsCommonThemeModeZhHans._(_root);
+  @override
+  late final _TranslationsCommonProviderZhHans provider =
+      _TranslationsCommonProviderZhHans._(_root);
+  @override
+  late final _TranslationsCommonTranslationModeZhHans translation_mode =
+      _TranslationsCommonTranslationModeZhHans._(_root);
+  @override
+  late final _TranslationsCommonWordPronunciationZhHans word_pronunciation =
+      _TranslationsCommonWordPronunciationZhHans._(_root);
 }
 
-// Path: provider
-class _TranslationsProviderZhHans extends TranslationsProviderEn {
-  _TranslationsProviderZhHans._(TranslationsZhHans root)
+// Path: app
+class _TranslationsAppZhHans extends TranslationsAppEn {
+  _TranslationsAppZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -116,86 +106,8 @@ class _TranslationsProviderZhHans extends TranslationsProviderEn {
 
   // Translations
   @override
-  String get baidu => '百度';
-  @override
-  String get caiyun => '彩云小译';
-  @override
-  String get deepl => 'DeepL';
-  @override
-  String get google => '谷歌';
-  @override
-  String get iciba => '爱词霸';
-  @override
-  String get sogou => '搜狗';
-  @override
-  String get system => '系统';
-  @override
-  String get tencent => '腾讯';
-  @override
-  String get youdao => '有道';
-}
-
-// Path: translation
-class _TranslationsTranslationZhHans extends TranslationsTranslationEn {
-  _TranslationsTranslationZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  late final _TranslationsTranslationEngineScopeZhHans engine_scope =
-      _TranslationsTranslationEngineScopeZhHans._(_root);
-  @override
-  late final _TranslationsTranslationModeZhHans mode =
-      _TranslationsTranslationModeZhHans._(_root);
-  @override
-  late final _TranslationsTranslationWordPronunciationZhHans
-      word_pronunciation =
-      _TranslationsTranslationWordPronunciationZhHans._(_root);
-}
-
-// Path: ocr
-class _TranslationsOcrZhHans extends TranslationsOcrEn {
-  _TranslationsOcrZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  late final _TranslationsOcrEngineZhHans engine =
-      _TranslationsOcrEngineZhHans._(_root);
-}
-
-// Path: theme
-class _TranslationsThemeZhHans extends TranslationsThemeEn {
-  _TranslationsThemeZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  late final _TranslationsThemeModeZhHans mode =
-      _TranslationsThemeModeZhHans._(_root);
-}
-
-// Path: tray
-class _TranslationsTrayZhHans extends TranslationsTrayEn {
-  _TranslationsTrayZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  late final _TranslationsTrayContextMenuZhHans context_menu =
-      _TranslationsTrayContextMenuZhHans._(_root);
+  late final _TranslationsAppTrayZhHans tray =
+      _TranslationsAppTrayZhHans._(_root);
 }
 
 // Path: mini_translator
@@ -207,9 +119,6 @@ class _TranslationsMiniTranslatorZhHans extends TranslationsMiniTranslatorEn {
   final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
-  @override
-  late final _TranslationsMiniTranslatorUpdateBannerZhHans update_banner =
-      _TranslationsMiniTranslatorUpdateBannerZhHans._(_root);
   @override
   late final _TranslationsMiniTranslatorLimitedBannerZhHans limited_banner =
       _TranslationsMiniTranslatorLimitedBannerZhHans._(_root);
@@ -256,13 +165,11 @@ class _TranslationsSettingsZhHans extends TranslationsSettingsEn {
   @override
   late final _TranslationsSettingsLayoutZhHans layout =
       _TranslationsSettingsLayoutZhHans._(_root);
-  @override
-  String get title => '设置';
 }
 
-// Path: shortcuts
-class _TranslationsShortcutsZhHans extends TranslationsShortcutsEn {
-  _TranslationsShortcutsZhHans._(TranslationsZhHans root)
+// Path: common.ui
+class _TranslationsCommonUiZhHans extends TranslationsCommonUiEn {
+  _TranslationsCommonUiZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -270,75 +177,11 @@ class _TranslationsShortcutsZhHans extends TranslationsShortcutsEn {
 
   // Translations
   @override
-  late final _TranslationsShortcutsRecordDialogZhHans record_dialog =
-      _TranslationsShortcutsRecordDialogZhHans._(_root);
-}
-
-// Path: common.app
-class _TranslationsCommonAppZhHans extends TranslationsCommonAppEn {
-  _TranslationsCommonAppZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
+  late final _TranslationsCommonUiButtonZhHans button =
+      _TranslationsCommonUiButtonZhHans._(_root);
   @override
-  String get name => '比译';
-}
-
-// Path: common.button
-class _TranslationsCommonButtonZhHans extends TranslationsCommonButtonEn {
-  _TranslationsCommonButtonZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get ok => '确定';
-  @override
-  String get cancel => '取消';
-  @override
-  String get add => '添加';
-  @override
-  String get delete => '删除';
-  @override
-  String get edit => '编辑';
-  @override
-  String get save => '保存';
-  @override
-  String get manage => '管理';
-  @override
-  String get kContinue => '继续';
-}
-
-// Path: common.feedback
-class _TranslationsCommonFeedbackZhHans extends TranslationsCommonFeedbackEn {
-  _TranslationsCommonFeedbackZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get copied => '已复制';
-}
-
-// Path: common.placeholder
-class _TranslationsCommonPlaceholderZhHans
-    extends TranslationsCommonPlaceholderEn {
-  _TranslationsCommonPlaceholderZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get choose => '请选择';
+  late final _TranslationsCommonUiFeedbackZhHans feedback =
+      _TranslationsCommonUiFeedbackZhHans._(_root);
 }
 
 // Path: common.language
@@ -417,80 +260,14 @@ class _TranslationsCommonLanguageZhHans extends TranslationsCommonLanguageEn {
   @override
   String get yo => '约鲁巴语';
   @override
-  String get zh_Hans => '中文（简体）';
+  String get zh_hans => '中文（简体）';
   @override
-  String get zh_Hant => '中文（繁体）';
+  String get zh_hant => '中文（繁体）';
 }
 
-// Path: translation.engine_scope
-class _TranslationsTranslationEngineScopeZhHans
-    extends TranslationsTranslationEngineScopeEn {
-  _TranslationsTranslationEngineScopeZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get detect_language => '语种识别';
-  @override
-  String get lookup => '查词';
-  @override
-  String get translate => '翻译';
-}
-
-// Path: translation.mode
-class _TranslationsTranslationModeZhHans extends TranslationsTranslationModeEn {
-  _TranslationsTranslationModeZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get auto => '自动';
-  @override
-  String get manual => '手动';
-}
-
-// Path: translation.word_pronunciation
-class _TranslationsTranslationWordPronunciationZhHans
-    extends TranslationsTranslationWordPronunciationEn {
-  _TranslationsTranslationWordPronunciationZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get us => '美';
-  @override
-  String get uk => '英';
-}
-
-// Path: ocr.engine
-class _TranslationsOcrEngineZhHans extends TranslationsOcrEngineEn {
-  _TranslationsOcrEngineZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get built_in => '内置';
-  @override
-  String get tesseract => 'Tesseract OCR';
-  @override
-  String get youdao => '有道通用文字识别';
-}
-
-// Path: theme.mode
-class _TranslationsThemeModeZhHans extends TranslationsThemeModeEn {
-  _TranslationsThemeModeZhHans._(TranslationsZhHans root)
+// Path: common.theme_mode
+class _TranslationsCommonThemeModeZhHans extends TranslationsCommonThemeModeEn {
+  _TranslationsCommonThemeModeZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -505,9 +282,9 @@ class _TranslationsThemeModeZhHans extends TranslationsThemeModeEn {
   String get system => '跟随系统';
 }
 
-// Path: tray.context_menu
-class _TranslationsTrayContextMenuZhHans extends TranslationsTrayContextMenuEn {
-  _TranslationsTrayContextMenuZhHans._(TranslationsZhHans root)
+// Path: common.provider
+class _TranslationsCommonProviderZhHans extends TranslationsCommonProviderEn {
+  _TranslationsCommonProviderZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -515,22 +292,29 @@ class _TranslationsTrayContextMenuZhHans extends TranslationsTrayContextMenuEn {
 
   // Translations
   @override
-  String get show_window => '显示窗口';
+  String get baidu => '百度';
   @override
-  late final _TranslationsTrayContextMenuDevToolsZhHans dev_tools =
-      _TranslationsTrayContextMenuDevToolsZhHans._(_root);
+  String get caiyun => '彩云小译';
   @override
-  String get check_for_updates => '检查更新';
+  String get deepl => 'DeepL';
   @override
-  String get settings => '设置';
+  String get google => '谷歌';
   @override
-  String get quit => '退出';
+  String get iciba => '爱词霸';
+  @override
+  String get sogou => '搜狗';
+  @override
+  String get system => '系统';
+  @override
+  String get tencent => '腾讯';
+  @override
+  String get youdao => '有道';
 }
 
-// Path: mini_translator.update_banner
-class _TranslationsMiniTranslatorUpdateBannerZhHans
-    extends TranslationsMiniTranslatorUpdateBannerEn {
-  _TranslationsMiniTranslatorUpdateBannerZhHans._(TranslationsZhHans root)
+// Path: common.translation_mode
+class _TranslationsCommonTranslationModeZhHans
+    extends TranslationsCommonTranslationModeEn {
+  _TranslationsCommonTranslationModeZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -538,10 +322,39 @@ class _TranslationsMiniTranslatorUpdateBannerZhHans
 
   // Translations
   @override
-  String get found_new_version => '发现新版本：{}';
+  String get auto => '自动';
   @override
-  late final _TranslationsMiniTranslatorUpdateBannerButtonZhHans button =
-      _TranslationsMiniTranslatorUpdateBannerButtonZhHans._(_root);
+  String get manual => '手动';
+}
+
+// Path: common.word_pronunciation
+class _TranslationsCommonWordPronunciationZhHans
+    extends TranslationsCommonWordPronunciationEn {
+  _TranslationsCommonWordPronunciationZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get us => '美';
+  @override
+  String get uk => '英';
+}
+
+// Path: app.tray
+class _TranslationsAppTrayZhHans extends TranslationsAppTrayEn {
+  _TranslationsAppTrayZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final _TranslationsAppTrayContextMenuZhHans context_menu =
+      _TranslationsAppTrayContextMenuZhHans._(_root);
 }
 
 // Path: mini_translator.limited_banner
@@ -676,9 +489,6 @@ class _TranslationsSettingsAppearanceZhHans
   @override
   late final _TranslationsSettingsAppearanceSectionZhHans section =
       _TranslationsSettingsAppearanceSectionZhHans._(_root);
-  @override
-  late final _TranslationsSettingsAppearanceOptionZhHans option =
-      _TranslationsSettingsAppearanceOptionZhHans._(_root);
 }
 
 // Path: settings.shortcuts
@@ -700,8 +510,8 @@ class _TranslationsSettingsShortcutsZhHans
   late final _TranslationsSettingsShortcutsRowZhHans row =
       _TranslationsSettingsShortcutsRowZhHans._(_root);
   @override
-  late final _TranslationsSettingsShortcutsDialogZhHans dialog =
-      _TranslationsSettingsShortcutsDialogZhHans._(_root);
+  late final _TranslationsSettingsShortcutsResetDialogZhHans reset_dialog =
+      _TranslationsSettingsShortcutsResetDialogZhHans._(_root);
 }
 
 // Path: settings.advanced
@@ -722,10 +532,6 @@ class _TranslationsSettingsAdvancedZhHans
   String get api_server_description => '在 127.0.0.1 上开放翻译 API，供本机集成使用。';
   @override
   String get enable => '启用';
-  @override
-  String get address => '地址';
-  @override
-  String get host => '主机';
   @override
   String get port => '端口';
   @override
@@ -756,9 +562,6 @@ class _TranslationsSettingsProvidersZhHans
   late final _TranslationsSettingsProvidersButtonZhHans button =
       _TranslationsSettingsProvidersButtonZhHans._(_root);
   @override
-  late final _TranslationsSettingsProvidersDialogZhHans dialog =
-      _TranslationsSettingsProvidersDialogZhHans._(_root);
-  @override
   late final _TranslationsSettingsProvidersAlertZhHans alert =
       _TranslationsSettingsProvidersAlertZhHans._(_root);
   @override
@@ -776,6 +579,9 @@ class _TranslationsSettingsProvidersZhHans
   @override
   late final _TranslationsSettingsProvidersDescriptionZhHans description =
       _TranslationsSettingsProvidersDescriptionZhHans._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDeleteDialogZhHans delete_dialog =
+      _TranslationsSettingsProvidersDeleteDialogZhHans._(_root);
 }
 
 // Path: settings.layout
@@ -794,10 +600,9 @@ class _TranslationsSettingsLayoutZhHans extends TranslationsSettingsLayoutEn {
       _TranslationsSettingsLayoutEmptyZhHans._(_root);
 }
 
-// Path: shortcuts.record_dialog
-class _TranslationsShortcutsRecordDialogZhHans
-    extends TranslationsShortcutsRecordDialogEn {
-  _TranslationsShortcutsRecordDialogZhHans._(TranslationsZhHans root)
+// Path: common.ui.button
+class _TranslationsCommonUiButtonZhHans extends TranslationsCommonUiButtonEn {
+  _TranslationsCommonUiButtonZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -805,13 +610,27 @@ class _TranslationsShortcutsRecordDialogZhHans
 
   // Translations
   @override
-  String get title => '自定义快捷键';
+  String get ok => '确定';
+  @override
+  String get cancel => '取消';
+  @override
+  String get add => '添加';
+  @override
+  String get delete => '删除';
+  @override
+  String get edit => '编辑';
+  @override
+  String get save => '保存';
+  @override
+  String get manage => '管理';
+  @override
+  String get kContinue => '继续';
 }
 
-// Path: tray.context_menu.dev_tools
-class _TranslationsTrayContextMenuDevToolsZhHans
-    extends TranslationsTrayContextMenuDevToolsEn {
-  _TranslationsTrayContextMenuDevToolsZhHans._(TranslationsZhHans root)
+// Path: common.ui.feedback
+class _TranslationsCommonUiFeedbackZhHans
+    extends TranslationsCommonUiFeedbackEn {
+  _TranslationsCommonUiFeedbackZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -819,17 +638,13 @@ class _TranslationsTrayContextMenuDevToolsZhHans
 
   // Translations
   @override
-  String get title => '开发工具';
-  @override
-  String get open_data_directory => '打开数据目录';
-  @override
-  String get use_native_settings => '使用原生设置页面';
+  String get copied => '已复制';
 }
 
-// Path: mini_translator.update_banner.button
-class _TranslationsMiniTranslatorUpdateBannerButtonZhHans
-    extends TranslationsMiniTranslatorUpdateBannerButtonEn {
-  _TranslationsMiniTranslatorUpdateBannerButtonZhHans._(TranslationsZhHans root)
+// Path: app.tray.context_menu
+class _TranslationsAppTrayContextMenuZhHans
+    extends TranslationsAppTrayContextMenuEn {
+  _TranslationsAppTrayContextMenuZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -837,7 +652,16 @@ class _TranslationsMiniTranslatorUpdateBannerButtonZhHans
 
   // Translations
   @override
-  String get update => '立即更新';
+  String get show_window => '显示窗口';
+  @override
+  late final _TranslationsAppTrayContextMenuDevToolsZhHans dev_tools =
+      _TranslationsAppTrayContextMenuDevToolsZhHans._(_root);
+  @override
+  String get check_for_updates => '检查更新';
+  @override
+  String get settings => '设置';
+  @override
+  String get quit => '退出';
 }
 
 // Path: mini_translator.limited_banner.permission
@@ -1063,22 +887,6 @@ class _TranslationsSettingsAppearanceSectionZhHans
   String get theme_mode => '主题模式';
 }
 
-// Path: settings.appearance.option
-class _TranslationsSettingsAppearanceOptionZhHans
-    extends TranslationsSettingsAppearanceOptionEn {
-  _TranslationsSettingsAppearanceOptionZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get english => '英语';
-  @override
-  String get chinese => '中文';
-}
-
 // Path: settings.shortcuts.section
 class _TranslationsSettingsShortcutsSectionZhHans
     extends TranslationsSettingsShortcutsSectionEn {
@@ -1089,8 +897,6 @@ class _TranslationsSettingsShortcutsSectionZhHans
   final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
-  @override
-  String get shortcuts => '快捷键';
   @override
   String get text_extraction => '文字提取';
   @override
@@ -1119,10 +925,10 @@ class _TranslationsSettingsShortcutsRowZhHans
   String get translate_input => '翻译输入内容';
 }
 
-// Path: settings.shortcuts.dialog
-class _TranslationsSettingsShortcutsDialogZhHans
-    extends TranslationsSettingsShortcutsDialogEn {
-  _TranslationsSettingsShortcutsDialogZhHans._(TranslationsZhHans root)
+// Path: settings.shortcuts.reset_dialog
+class _TranslationsSettingsShortcutsResetDialogZhHans
+    extends TranslationsSettingsShortcutsResetDialogEn {
+  _TranslationsSettingsShortcutsResetDialogZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -1130,13 +936,13 @@ class _TranslationsSettingsShortcutsDialogZhHans
 
   // Translations
   @override
-  String get reset_title => '重置快捷键';
+  String get title => '重置快捷键';
   @override
-  String get reset_message => '确定要重置所有快捷键为默认值吗？';
+  String get message => '确定要重置所有快捷键为默认值吗？';
   @override
-  String get reset_confirm => '重置';
+  String get confirm => '重置';
   @override
-  String get reset_cancel => '取消';
+  String get cancel => '取消';
 }
 
 // Path: settings.providers.section
@@ -1185,24 +991,6 @@ class _TranslationsSettingsProvidersButtonZhHans
   String get add => '添加提供商...';
 }
 
-// Path: settings.providers.dialog
-class _TranslationsSettingsProvidersDialogZhHans
-    extends TranslationsSettingsProvidersDialogEn {
-  _TranslationsSettingsProvidersDialogZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get delete_title => '删除提供商';
-  @override
-  String get delete_confirm => '删除「{}」？';
-  @override
-  String get delete_message => '此操作无法撤销。';
-}
-
 // Path: settings.providers.alert
 class _TranslationsSettingsProvidersAlertZhHans
     extends TranslationsSettingsProvidersAlertEn {
@@ -1243,9 +1031,6 @@ class _TranslationsSettingsProvidersEditorZhHans
   final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
-  @override
-  late final _TranslationsSettingsProvidersEditorTitleZhHans title =
-      _TranslationsSettingsProvidersEditorTitleZhHans._(_root);
   @override
   late final _TranslationsSettingsProvidersEditorRowZhHans row =
       _TranslationsSettingsProvidersEditorRowZhHans._(_root);
@@ -1313,6 +1098,22 @@ class _TranslationsSettingsProvidersDescriptionZhHans
   String get fallback => '提供翻译服务';
 }
 
+// Path: settings.providers.delete_dialog
+class _TranslationsSettingsProvidersDeleteDialogZhHans
+    extends TranslationsSettingsProvidersDeleteDialogEn {
+  _TranslationsSettingsProvidersDeleteDialogZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '删除「{}」？';
+  @override
+  String get message => '此操作无法撤销。';
+}
+
 // Path: settings.layout.empty
 class _TranslationsSettingsLayoutEmptyZhHans
     extends TranslationsSettingsLayoutEmptyEn {
@@ -1329,10 +1130,10 @@ class _TranslationsSettingsLayoutEmptyZhHans
   String get message => '从侧边栏选择一个设置分类。';
 }
 
-// Path: settings.providers.editor.title
-class _TranslationsSettingsProvidersEditorTitleZhHans
-    extends TranslationsSettingsProvidersEditorTitleEn {
-  _TranslationsSettingsProvidersEditorTitleZhHans._(TranslationsZhHans root)
+// Path: app.tray.context_menu.dev_tools
+class _TranslationsAppTrayContextMenuDevToolsZhHans
+    extends TranslationsAppTrayContextMenuDevToolsEn {
+  _TranslationsAppTrayContextMenuDevToolsZhHans._(TranslationsZhHans root)
       : this._root = root,
         super.internal(root);
 
@@ -1340,9 +1141,11 @@ class _TranslationsSettingsProvidersEditorTitleZhHans
 
   // Translations
   @override
-  String get add => '添加提供商';
+  String get title => '开发工具';
   @override
-  String get edit => '编辑提供商';
+  String get open_data_directory => '打开数据目录';
+  @override
+  String get use_native_settings => '使用原生设置页面';
 }
 
 // Path: settings.providers.editor.row
@@ -1357,8 +1160,6 @@ class _TranslationsSettingsProvidersEditorRowZhHans
   // Translations
   @override
   String get id => '提供商 ID';
-  @override
-  String get type => '提供商类型';
 }
 
 // Path: settings.providers.editor.placeholder
@@ -1427,17 +1228,15 @@ class _TranslationsSettingsProvidersDetailTooltipZhHans
 extension on TranslationsZhHans {
   dynamic _flatMapFunction(String path) {
     return switch (path) {
-      'common.app.name' => '比译',
-      'common.button.ok' => '确定',
-      'common.button.cancel' => '取消',
-      'common.button.add' => '添加',
-      'common.button.delete' => '删除',
-      'common.button.edit' => '编辑',
-      'common.button.save' => '保存',
-      'common.button.manage' => '管理',
-      'common.button.kContinue' => '继续',
-      'common.feedback.copied' => '已复制',
-      'common.placeholder.choose' => '请选择',
+      'common.ui.button.ok' => '确定',
+      'common.ui.button.cancel' => '取消',
+      'common.ui.button.add' => '添加',
+      'common.ui.button.delete' => '删除',
+      'common.ui.button.edit' => '编辑',
+      'common.ui.button.save' => '保存',
+      'common.ui.button.manage' => '管理',
+      'common.ui.button.kContinue' => '继续',
+      'common.ui.feedback.copied' => '已复制',
       'common.language.ar' => '阿拉伯语',
       'common.language.bn' => '孟加拉语',
       'common.language.de' => '德语',
@@ -1471,39 +1270,31 @@ extension on TranslationsZhHans {
       'common.language.ur' => '乌尔都语',
       'common.language.vi' => '越南语',
       'common.language.yo' => '约鲁巴语',
-      'common.language.zh_Hans' => '中文（简体）',
-      'common.language.zh_Hant' => '中文（繁体）',
-      'provider.baidu' => '百度',
-      'provider.caiyun' => '彩云小译',
-      'provider.deepl' => 'DeepL',
-      'provider.google' => '谷歌',
-      'provider.iciba' => '爱词霸',
-      'provider.sogou' => '搜狗',
-      'provider.system' => '系统',
-      'provider.tencent' => '腾讯',
-      'provider.youdao' => '有道',
-      'translation.engine_scope.detect_language' => '语种识别',
-      'translation.engine_scope.lookup' => '查词',
-      'translation.engine_scope.translate' => '翻译',
-      'translation.mode.auto' => '自动',
-      'translation.mode.manual' => '手动',
-      'translation.word_pronunciation.us' => '美',
-      'translation.word_pronunciation.uk' => '英',
-      'ocr.engine.built_in' => '内置',
-      'ocr.engine.tesseract' => 'Tesseract OCR',
-      'ocr.engine.youdao' => '有道通用文字识别',
-      'theme.mode.light' => '浅色',
-      'theme.mode.dark' => '深色',
-      'theme.mode.system' => '跟随系统',
-      'tray.context_menu.show_window' => '显示窗口',
-      'tray.context_menu.dev_tools.title' => '开发工具',
-      'tray.context_menu.dev_tools.open_data_directory' => '打开数据目录',
-      'tray.context_menu.dev_tools.use_native_settings' => '使用原生设置页面',
-      'tray.context_menu.check_for_updates' => '检查更新',
-      'tray.context_menu.settings' => '设置',
-      'tray.context_menu.quit' => '退出',
-      'mini_translator.update_banner.found_new_version' => '发现新版本：{}',
-      'mini_translator.update_banner.button.update' => '立即更新',
+      'common.language.zh_hans' => '中文（简体）',
+      'common.language.zh_hant' => '中文（繁体）',
+      'common.theme_mode.light' => '浅色',
+      'common.theme_mode.dark' => '深色',
+      'common.theme_mode.system' => '跟随系统',
+      'common.provider.baidu' => '百度',
+      'common.provider.caiyun' => '彩云小译',
+      'common.provider.deepl' => 'DeepL',
+      'common.provider.google' => '谷歌',
+      'common.provider.iciba' => '爱词霸',
+      'common.provider.sogou' => '搜狗',
+      'common.provider.system' => '系统',
+      'common.provider.tencent' => '腾讯',
+      'common.provider.youdao' => '有道',
+      'common.translation_mode.auto' => '自动',
+      'common.translation_mode.manual' => '手动',
+      'common.word_pronunciation.us' => '美',
+      'common.word_pronunciation.uk' => '英',
+      'app.tray.context_menu.show_window' => '显示窗口',
+      'app.tray.context_menu.dev_tools.title' => '开发工具',
+      'app.tray.context_menu.dev_tools.open_data_directory' => '打开数据目录',
+      'app.tray.context_menu.dev_tools.use_native_settings' => '使用原生设置页面',
+      'app.tray.context_menu.check_for_updates' => '检查更新',
+      'app.tray.context_menu.settings' => '设置',
+      'app.tray.context_menu.quit' => '退出',
       'mini_translator.limited_banner.permission.missing_both' =>
         '请授予屏幕录制和辅助功能权限以启用完整功能。',
       'mini_translator.limited_banner.permission.missing_screen_capture' =>
@@ -1563,10 +1354,7 @@ extension on TranslationsZhHans {
       'settings.appearance.title' => '外观',
       'settings.appearance.section.app_language' => '显示语言',
       'settings.appearance.section.theme_mode' => '主题模式',
-      'settings.appearance.option.english' => '英语',
-      'settings.appearance.option.chinese' => '中文',
       'settings.shortcuts.title' => '快捷键',
-      'settings.shortcuts.section.shortcuts' => '快捷键',
       'settings.shortcuts.section.text_extraction' => '文字提取',
       'settings.shortcuts.section.input_assist' => '输入辅助功能',
       'settings.shortcuts.row.toggle_mini_translator' => '显示/隐藏窗口',
@@ -1575,17 +1363,15 @@ extension on TranslationsZhHans {
       'settings.shortcuts.row.extract_text_from_screen_capture' => '从屏幕截图提取文字',
       'settings.shortcuts.row.extract_text_from_clipboard' => '从剪贴板提取文字',
       'settings.shortcuts.row.translate_input' => '翻译输入内容',
-      'settings.shortcuts.dialog.reset_title' => '重置快捷键',
-      'settings.shortcuts.dialog.reset_message' => '确定要重置所有快捷键为默认值吗？',
-      'settings.shortcuts.dialog.reset_confirm' => '重置',
-      'settings.shortcuts.dialog.reset_cancel' => '取消',
+      'settings.shortcuts.reset_dialog.title' => '重置快捷键',
+      'settings.shortcuts.reset_dialog.message' => '确定要重置所有快捷键为默认值吗？',
+      'settings.shortcuts.reset_dialog.confirm' => '重置',
+      'settings.shortcuts.reset_dialog.cancel' => '取消',
       'settings.advanced.title' => '高级',
       'settings.advanced.api_server' => '本地 API 服务',
       'settings.advanced.api_server_description' =>
         '在 127.0.0.1 上开放翻译 API，供本机集成使用。',
       'settings.advanced.enable' => '启用',
-      'settings.advanced.address' => '地址',
-      'settings.advanced.host' => '主机',
       'settings.advanced.port' => '端口',
       'settings.advanced.running_at' => '运行于 {url}',
       'settings.advanced.disabled' => '已关闭',
@@ -1595,16 +1381,10 @@ extension on TranslationsZhHans {
       'settings.providers.item.loading' => '正在加载提供商...',
       'settings.providers.item.no_services' => '暂无可用服务。',
       'settings.providers.button.add' => '添加提供商...',
-      'settings.providers.dialog.delete_title' => '删除提供商',
-      'settings.providers.dialog.delete_confirm' => '删除「{}」？',
-      'settings.providers.dialog.delete_message' => '此操作无法撤销。',
       'settings.providers.alert.error' => '错误',
       'settings.providers.intro.body' => '选择应用使用的翻译和词典提供商。',
       'settings.providers.intro.warning' => '你添加的提供商可能会处理你发送的文本，请只连接你信任的服务。',
-      'settings.providers.editor.title.add' => '添加提供商',
-      'settings.providers.editor.title.edit' => '编辑提供商',
       'settings.providers.editor.row.id' => '提供商 ID',
-      'settings.providers.editor.row.type' => '提供商类型',
       'settings.providers.editor.placeholder.id' => '例如 deepl-main',
       'settings.providers.editor.type_picker.prompt' => '请选择要添加的提供商类型：',
       'settings.providers.editor.tooltip.help' => '帮助',
@@ -1616,11 +1396,11 @@ extension on TranslationsZhHans {
       'settings.providers.description.translation' => '提供语言间文本翻译',
       'settings.providers.description.dictionary' => '提供词典查询和单词释义',
       'settings.providers.description.fallback' => '提供翻译服务',
+      'settings.providers.delete_dialog.title' => '删除「{}」？',
+      'settings.providers.delete_dialog.message' => '此操作无法撤销。',
       'settings.layout.title' => '设置',
       'settings.layout.empty.title' => '选择一个分类',
       'settings.layout.empty.message' => '从侧边栏选择一个设置分类。',
-      'settings.title' => '设置',
-      'shortcuts.record_dialog.title' => '自定义快捷键',
       _ => null,
     };
   }

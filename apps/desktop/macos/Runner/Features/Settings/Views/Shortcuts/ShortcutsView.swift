@@ -61,14 +61,14 @@ struct ShortcutsView: View {
       }
     }
     .alert(
-      LocaleKeys.settings.shortcuts.dialog.resetTitle.tr(), isPresented: $showResetConfirmation
+      LocaleKeys.settings.shortcuts.resetDialog.title.tr(), isPresented: $showResetConfirmation
     ) {
-      Button(LocaleKeys.settings.shortcuts.dialog.resetCancel.tr(), role: .cancel) {}
-      Button(LocaleKeys.settings.shortcuts.dialog.resetConfirm.tr(), role: .destructive) {
+      Button(LocaleKeys.settings.shortcuts.resetDialog.cancel.tr(), role: .cancel) {}
+      Button(LocaleKeys.settings.shortcuts.resetDialog.confirm.tr(), role: .destructive) {
         viewModel.resetToDefaultShortcuts()
       }
     } message: {
-      Text(LocaleKeys.settings.shortcuts.dialog.resetMessage.tr())
+      Text(LocaleKeys.settings.shortcuts.resetDialog.message.tr())
     }
   }
 }

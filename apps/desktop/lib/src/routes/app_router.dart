@@ -510,7 +510,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
 
     // ── 显示窗口 ──
     menu.addItem(
-      MenuItem(t.tray.context_menu.show_window)
+      MenuItem(t.app.tray.context_menu.show_window)
         ..on<MenuItemClickedEvent>((_) {
           showMiniTranslatorWindow(belowTray: kIsMacOS);
         }),
@@ -524,7 +524,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
 
       // 打开数据目录
       devToolsSubmenu.addItem(
-        MenuItem(t.tray.context_menu.dev_tools.open_data_directory)
+        MenuItem(t.app.tray.context_menu.dev_tools.open_data_directory)
           ..on<MenuItemClickedEvent>((_) async {
             final dir = await getApplicationSupportDirectory();
             UrlOpener.instance.open('file://${dir.path}');
@@ -533,7 +533,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
 
       // ☑ 使用原生设置页面 (checkbox, 仅 macOS 可用)
       final nativeSettingsItem = MenuItem(
-        t.tray.context_menu.dev_tools.use_native_settings,
+        t.app.tray.context_menu.dev_tools.use_native_settings,
         MenuItemType.checkbox,
       );
       void updateNativeSettingsItemState() {
@@ -552,7 +552,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
       devToolsSubmenu.addItem(nativeSettingsItem);
 
       final devToolsItem = MenuItem(
-        t.tray.context_menu.dev_tools.title,
+        t.app.tray.context_menu.dev_tools.title,
         MenuItemType.submenu,
       );
       devToolsItem.submenu = devToolsSubmenu;
@@ -561,12 +561,12 @@ class _RootBodyViewState extends State<_RootBodyView> {
 
     // ── Check for updates (暂不实现) ──
     menu.addItem(
-      MenuItem(t.tray.context_menu.check_for_updates),
+      MenuItem(t.app.tray.context_menu.check_for_updates),
     );
 
     // ── 设置 ──
     menu.addItem(
-      MenuItem(t.tray.context_menu.settings)
+      MenuItem(t.app.tray.context_menu.settings)
         ..on<MenuItemClickedEvent>((_) {
           showSettingsWindow();
         }),
@@ -576,7 +576,7 @@ class _RootBodyViewState extends State<_RootBodyView> {
 
     // ── 退出 ──
     menu.addItem(
-      MenuItem(t.tray.context_menu.quit)
+      MenuItem(t.app.tray.context_menu.quit)
         ..on<MenuItemClickedEvent>((_) {
           exit(0);
         }),

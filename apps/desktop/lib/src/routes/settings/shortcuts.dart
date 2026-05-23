@@ -42,16 +42,16 @@ class _ShortcutsSettingsPageState extends State<ShortcutsSettingsPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(t.settings.shortcuts.dialog.reset_title),
-        content: Text(t.settings.shortcuts.dialog.reset_message),
+        title: Text(t.settings.shortcuts.reset_dialog.title),
+        content: Text(t.settings.shortcuts.reset_dialog.message),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(t.settings.shortcuts.dialog.reset_cancel),
+            child: Text(t.settings.shortcuts.reset_dialog.cancel),
           ),
           FilledButton.tonal(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(t.settings.shortcuts.dialog.reset_confirm),
+            child: Text(t.settings.shortcuts.reset_dialog.confirm),
           ),
         ],
       ),
@@ -70,7 +70,7 @@ class _ShortcutsSettingsPageState extends State<ShortcutsSettingsPage> {
       title: shortcutsText.title,
       actions: [
         IconButton(
-          tooltip: shortcutsText.dialog.reset_title,
+          tooltip: shortcutsText.reset_dialog.title,
           onPressed: _resetToDefaults,
           icon: const Icon(FluentIcons.arrow_counterclockwise_20_regular),
         ),

@@ -292,9 +292,9 @@ class TranslationInputView extends StatelessWidget {
   String _translationModeText() {
     switch (translationMode) {
       case TranslationMode.auto:
-        return t.translation.mode.auto;
+        return t.common.translation_mode.auto;
       case TranslationMode.manual:
-        return t.translation.mode.manual;
+        return t.common.translation_mode.manual;
     }
   }
 }

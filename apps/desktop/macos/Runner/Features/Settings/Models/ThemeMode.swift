@@ -9,9 +9,9 @@ enum ThemeMode: String, CaseIterable, Identifiable {
 
   var title: String {
     switch self {
-    case .light: return LocaleKeys.theme.mode.light.tr()
-    case .dark: return LocaleKeys.theme.mode.dark.tr()
-    case .system: return LocaleKeys.theme.mode.system.tr()
+    case .light: return LocaleKeys.common.themeMode.light.tr()
+    case .dark: return LocaleKeys.common.themeMode.dark.tr()
+    case .system: return LocaleKeys.common.themeMode.system.tr()
     }
   }
 

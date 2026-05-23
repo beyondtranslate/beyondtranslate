@@ -14,8 +14,8 @@ extension TranslationMode: Identifiable, CaseIterable {
 
   var title: String {
     switch self {
-    case .auto: return LocaleKeys.translation.mode.auto.tr()
-    case .manual: return LocaleKeys.translation.mode.manual.tr()
+    case .auto: return LocaleKeys.common.translationMode.auto.tr()
+    case .manual: return LocaleKeys.common.translationMode.manual.tr()
     }
   }
 }

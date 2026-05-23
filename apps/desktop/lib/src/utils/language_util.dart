@@ -59,7 +59,8 @@ String getLanguageName(String language, {bool showNative = false}) {
 
 /// Looks up the translated name for a language code via the i18n system.
 String? _languageNameFromT(String language) {
-  final value = t['common.language.${language.replaceAll('-', '_')}'];
+  final value =
+      t['common.language.${language.toLowerCase().replaceAll('-', '_')}'];
   return value is String ? value : null;
 }
 

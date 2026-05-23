@@ -1,23 +1,19 @@
 {
   "common": {
-    "app": {
-      "name": "Beyond Translate"
-    },
-    "button": {
-      "ok": "OK",
-      "cancel": "Cancel",
-      "add": "Add",
-      "delete": "Delete",
-      "edit": "Edit",
-      "save": "Save",
-      "manage": "Manage",
-      "continue": "Continue"
-    },
-    "feedback": {
-      "copied": "Copied"
-    },
-    "placeholder": {
-      "choose": "Please Choose"
+    "ui": {
+      "button": {
+        "ok": "OK",
+        "cancel": "Cancel",
+        "add": "Add",
+        "delete": "Delete",
+        "edit": "Edit",
+        "save": "Save",
+        "manage": "Manage",
+        "continue": "Continue"
+      },
+      "feedback": {
+        "copied": "Copied"
+      }
     },
     "language": {
       "ar": "Arabic",
@@ -53,28 +49,26 @@
       "ur": "Urdu",
       "vi": "Vietnamese",
       "yo": "Yoruba",
-      "zh_Hans": "Chinese (Simplified)",
-      "zh_Hant": "Chinese (Traditional)"
-    }
-  },
-  "provider": {
-    "baidu": "Baidu",
-    "caiyun": "Caiyun",
-    "deepl": "DeepL",
-    "google": "Google",
-    "iciba": "Iciba",
-    "sogou": "Sogou",
-    "system": "System",
-    "tencent": "Tencent",
-    "youdao": "Youda"
-  },
-  "translation": {
-    "engine_scope": {
-      "detect_language": "detectLanguage",
-      "lookup": "LookUp",
-      "translate": "Translate"
+      "zh_hans": "Chinese (Simplified)",
+      "zh_hant": "Chinese (Traditional)"
     },
-    "mode": {
+    "theme_mode": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "provider": {
+      "baidu": "Baidu",
+      "caiyun": "Caiyun",
+      "deepl": "DeepL",
+      "google": "Google",
+      "iciba": "Iciba",
+      "sogou": "Sogou",
+      "system": "System",
+      "tencent": "Tencent",
+      "youdao": "Youda"
+    },
+    "translation_mode": {
       "auto": "Auto",
       "manual": "Manual"
     },
@@ -83,40 +77,22 @@
       "uk": "UK"
     }
   },
-  "ocr": {
-    "engine": {
-      "built_in": "Built In",
-      "tesseract": "Tesseract OCR",
-      "youdao": "Youdao"
-    }
-  },
-  "theme": {
-    "mode": {
-      "light": "Light",
-      "dark": "Dark",
-      "system": "System"
-    }
-  },
-  "tray": {
-    "context_menu": {
-      "show_window": "Show Window",
-      "dev_tools": {
-        "title": "Dev Tools",
-        "open_data_directory": "Open Data Directory",
-        "use_native_settings": "Use Native Settings Page"
-      },
-      "check_for_updates": "Check for Updates",
-      "settings": "Settings",
-      "quit": "Quit"
+  "app": {
+    "tray": {
+      "context_menu": {
+        "show_window": "Show Window",
+        "dev_tools": {
+          "title": "Dev Tools",
+          "open_data_directory": "Open Data Directory",
+          "use_native_settings": "Use Native Settings Page"
+        },
+        "check_for_updates": "Check for Updates",
+        "settings": "Settings",
+        "quit": "Quit"
+      }
     }
   },
   "mini_translator": {
-    "update_banner": {
-      "found_new_version": "New version found: {}",
-      "button": {
-        "update": "Update"
-      }
-    },
     "limited_banner": {
       "permission": {
         "missing_both": "Grant Screen Recording and Accessibility permissions to enable all features.",
@@ -205,16 +181,11 @@
       "section": {
         "app_language": "Display Language",
         "theme_mode": "Theme Mode"
-      },
-      "option": {
-        "english": "English",
-        "chinese": "Chinese"
       }
     },
     "shortcuts": {
       "title": "Shortcuts",
       "section": {
-        "shortcuts": "Shortcuts",
         "text_extraction": "Text Extraction",
         "input_assist": "Input Assist Function"
       },
@@ -225,11 +196,11 @@
         "extract_text_from_clipboard": "Extract text from clipboard",
         "translate_input": "Translate input content"
       },
-      "dialog": {
-        "reset_title": "Reset Shortcuts",
-        "reset_message": "Are you sure you want to reset all shortcuts to their default values?",
-        "reset_confirm": "Reset",
-        "reset_cancel": "Cancel"
+      "reset_dialog": {
+        "title": "Reset Shortcuts",
+        "message": "Are you sure you want to reset all shortcuts to their default values?",
+        "confirm": "Reset",
+        "cancel": "Cancel"
       }
     },
     "advanced": {
@@ -237,8 +208,6 @@
       "api_server": "Local API server",
       "api_server_description": "Expose the translation API on 127.0.0.1 for local integrations.",
       "enable": "Enable",
-      "address": "Address",
-      "host": "Host",
       "port": "Port",
       "running_at": "Running at {url}",
       "disabled": "Disabled"
@@ -256,11 +225,6 @@
       "button": {
         "add": "Add a Provider..."
       },
-      "dialog": {
-        "delete_title": "Delete Provider",
-        "delete_confirm": "Delete \"{}\"?",
-        "delete_message": "This action cannot be undone."
-      },
       "alert": {
         "error": "Error"
       },
@@ -269,13 +233,8 @@
         "warning": "Providers you add may process the text you send, so only connect services you trust."
       },
       "editor": {
-        "title": {
-          "add": "Add Provider",
-          "edit": "Edit Provider"
-        },
         "row": {
-          "id": "Provider ID",
-          "type": "Provider Type"
+          "id": "Provider ID"
         },
         "placeholder": {
           "id": "e.g. deepl-main"
@@ -299,9 +258,13 @@
       },
       "description": {
         "all": "Provides dictionary lookup and text translation",
-        "translation": "Provides text translation between languages",
         "dictionary": "Provides dictionary lookup and word definitions",
+        "translation": "Provides text translation between languages",
         "fallback": "Provides translation services"
+      },
+      "delete_dialog": {
+        "title": "Delete \"{}\"?",
+        "message": "This action cannot be undone."
       }
     },
     "layout": {
@@ -310,12 +273,6 @@
         "title": "Select a Category",
         "message": "Choose a settings section from the sidebar."
       }
-    },
-    "title": "Settings"
-  },
-  "shortcuts": {
-    "record_dialog": {
-      "title": "Customize your shortcut"
     }
   }
 }

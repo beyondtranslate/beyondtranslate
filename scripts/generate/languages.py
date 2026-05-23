@@ -256,7 +256,7 @@ def escape_rust_string(value: str) -> str:
 
 
 def i18n_language_key(code: str) -> str:
-    return code.replace("-", "_")
+    return code.lower().replace("-", "_")
 
 
 if __name__ == "__main__":

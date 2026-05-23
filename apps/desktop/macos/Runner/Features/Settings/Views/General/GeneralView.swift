@@ -162,7 +162,7 @@ struct GeneralView: View {
                   .foregroundStyle(.secondary)
                 Text(item.target)
                 Spacer()
-                Button(LocaleKeys.common.button.edit.tr()) {}
+                Button(LocaleKeys.common.ui.button.edit.tr()) {}
               }
             }
 

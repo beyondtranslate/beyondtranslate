@@ -102,11 +102,11 @@ class _ThemeOption {
   String get title {
     switch (value) {
       case 'light':
-        return t.theme.mode.light;
+        return t.common.theme_mode.light;
       case 'dark':
-        return t.theme.mode.dark;
+        return t.common.theme_mode.dark;
       case 'system':
-        return t.theme.mode.system;
+        return t.common.theme_mode.system;
       default:
         return value;
     }

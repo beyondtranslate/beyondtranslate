@@ -101,12 +101,12 @@ struct ProviderTypePicker: View {
       HStack(spacing: 8) {
         Spacer()
 
-        Button(LocaleKeys.common.button.cancel.tr()) {
+        Button(LocaleKeys.common.ui.button.cancel.tr()) {
           onCancel()
         }
         .keyboardShortcut(.cancelAction)
 
-        Button(LocaleKeys.common.button.continue.tr()) {
+        Button(LocaleKeys.common.ui.button.continue.tr()) {
           guard let id = localSelection,
             let type = ProviderType.allCases.first(where: { $0.id == id })
           else { return }
@@ -221,7 +221,7 @@ struct ProviderConfigEditor: View {
           Button(role: .destructive) {
             onDelete(draft.id)
           } label: {
-            Text(LocaleKeys.settings.providers.dialog.deleteTitle.tr())
+            Text(LocaleKeys.settings.providers.deleteDialog.title.tr())
           }
           .buttonStyle(.bordered)
           .tint(.red)
@@ -229,15 +229,15 @@ struct ProviderConfigEditor: View {
 
         Spacer()
 
-        Button(LocaleKeys.common.button.cancel.tr()) {
+        Button(LocaleKeys.common.ui.button.cancel.tr()) {
           onCancel()
         }
         .keyboardShortcut(.cancelAction)
 
         Button(
           isCreating
-            ? LocaleKeys.common.button.add.tr()
-            : LocaleKeys.common.button.save.tr()
+            ? LocaleKeys.common.ui.button.add.tr()
+            : LocaleKeys.common.ui.button.save.tr()
         ) {
           onSave()
         }
@@ -349,14 +349,14 @@ extension ProviderType {
 
   var displayName: String {
     switch self {
-    case .baidu: return LocaleKeys.provider.baidu.tr()
-    case .caiyun: return LocaleKeys.provider.caiyun.tr()
-    case .deepL: return LocaleKeys.provider.deepl.tr()
-    case .google: return LocaleKeys.provider.google.tr()
-    case .iciba: return LocaleKeys.provider.iciba.tr()
-    case .tencent: return LocaleKeys.provider.tencent.tr()
-    case .system: return LocaleKeys.provider.system.tr()
-    case .youdao: return LocaleKeys.provider.youdao.tr()
+    case .baidu: return LocaleKeys.common.provider.baidu.tr()
+    case .caiyun: return LocaleKeys.common.provider.caiyun.tr()
+    case .deepL: return LocaleKeys.common.provider.deepl.tr()
+    case .google: return LocaleKeys.common.provider.google.tr()
+    case .iciba: return LocaleKeys.common.provider.iciba.tr()
+    case .tencent: return LocaleKeys.common.provider.tencent.tr()
+    case .system: return LocaleKeys.common.provider.system.tr()
+    case .youdao: return LocaleKeys.common.provider.youdao.tr()
     }
   }
 
