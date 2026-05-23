@@ -3,7 +3,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart' hide Card;
 
 import '../../models/translation_result.dart';
-import '../ui/button.dart';
 import '../ui/card.dart';
 
 class TranslationResultView extends StatelessWidget {

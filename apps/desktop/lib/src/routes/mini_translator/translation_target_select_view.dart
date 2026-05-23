@@ -89,7 +89,7 @@ class _TranslationTargetSelectViewState
     });
     for (final lang in supportedLanguages) {
       final item = MenuItem(
-        getLanguageName(lang),
+        getLanguageName(lang, showNative: true),
         MenuItemType.checkbox,
       );
       item.state = lang == currentLanguage

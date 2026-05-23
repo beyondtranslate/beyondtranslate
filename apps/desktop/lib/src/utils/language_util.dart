@@ -40,8 +40,18 @@ Map<String, String> get _nativeNames {
   return _nativeLanguageNames!;
 }
 
-String getLanguageName(String language) {
+/// Returns the language name in the app's current locale.
+///
+/// When [showNative] is true and the native name differs from the translated
+/// name, the native name is appended in parentheses.
+///
+/// Examples with a Chinese app locale:
+///   - `getLanguageName("en")`           → "英语"
+///   - `getLanguageName("en", showNative: true)` → "英语 (English)"
+///   - `getLanguageName("zh-Hans")`      → "中文（简体）"
+String getLanguageName(String language, {bool showNative = false}) {
   final translated = _languageNameFromT(language) ?? language;
+  if (!showNative) return translated;
   final native = _nativeNames[language] ?? language;
   if (translated == native) return translated;
   return '$translated ($native)';
