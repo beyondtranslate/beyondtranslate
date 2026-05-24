@@ -129,7 +129,11 @@
     "language": {
       "auto_detect": "自動検出",
       "auto_match": "自動一致",
-      "switch_config": "ターゲット切替"
+      "switch_config": "ターゲット切替",
+      "more_languages": "その他の言語...",
+      "manage_common_languages": "よく使う言語を管理...",
+      "manage_targets": "翻訳ターゲットを管理...",
+      "add_target": "翻訳ターゲットを追加..."
     },
     "message": {
       "please_enter_word_or_text": "テキストが入力されていないか、テキストが抽出されていません",
@@ -146,6 +150,7 @@
         "directory": "辞書",
         "translation": "翻訳",
         "translation_target": "翻訳先",
+        "languages": "言語",
         "input": "入力設定"
       },
       "row": {
@@ -157,6 +162,10 @@
         "auto_copy_detected_text": "検出したテキストを自動コピー",
         "default_directory_service": "デフォルトの辞書サービス",
         "default_translation_service": "デフォルトの翻訳サービス",
+        "common_languages": "よく使う言語",
+        "common_languages_hint": "言語セレクターの上部に表示する言語を選択してください。",
+        "common_languages_reset": "デフォルトにリセット",
+        "common_languages_reset_help": "デフォルトのよく使う言語セットにリセット",
         "double_click_copy_result": "ダブルクリックで翻訳結果をコピー",
         "submit_with_enter": "Enterで送信",
         "submit_with_meta_enter_mac": "⌘ + Enterで送信"

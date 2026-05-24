@@ -69,8 +69,12 @@
 "mini_translator.button.translate" = "Translate";
 "mini_translator.input.extracting_text" = "Extracting text...";
 "mini_translator.input.hint" = "Enter the word or text here";
+"mini_translator.language.add_target" = "Add Translation Target...";
 "mini_translator.language.auto_detect" = "Auto Detect";
 "mini_translator.language.auto_match" = "Auto Match";
+"mini_translator.language.manage_common_languages" = "Manage Common Languages...";
+"mini_translator.language.manage_targets" = "Manage Translation Targets...";
+"mini_translator.language.more_languages" = "More languages...";
 "mini_translator.language.switch_config" = "Switch Target";
 "mini_translator.limited_banner.action.app_settings" = "App Settings";
 "mini_translator.limited_banner.action.recheck" = "Recheck";
@@ -110,6 +114,10 @@
 "settings.general.option.tesseract" = "Tesseract";
 "settings.general.option.youdao_ocr" = "Youdao OCR";
 "settings.general.row.auto_copy_detected_text" = "Auto copy detected text";
+"settings.general.row.common_languages" = "Common Languages";
+"settings.general.row.common_languages_hint" = "Select languages to show at the top of language pickers.";
+"settings.general.row.common_languages_reset" = "Reset to Defaults";
+"settings.general.row.common_languages_reset_help" = "Reset to the default set of common languages";
 "settings.general.row.default_directory_service" = "Default directory service";
 "settings.general.row.default_ocr_service" = "Default text recognition service";
 "settings.general.row.default_translation_service" = "Default translation service";
@@ -122,6 +130,7 @@
 "settings.general.row.submit_with_meta_enter_mac" = "Submit with ⌘ + Enter";
 "settings.general.section.directory" = "Directory";
 "settings.general.section.input" = "Input Settings";
+"settings.general.section.languages" = "Languages";
 "settings.general.section.ocr" = "Text Recognition";
 "settings.general.section.permissions" = "Permissions";
 "settings.general.section.translation" = "Translation";

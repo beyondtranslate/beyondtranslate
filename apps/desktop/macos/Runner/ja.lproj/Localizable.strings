@@ -69,8 +69,12 @@
 "mini_translator.button.translate" = "翻訳";
 "mini_translator.input.extracting_text" = "テキストを抽出中...";
 "mini_translator.input.hint" = "ここに単語またはテキストを入力";
+"mini_translator.language.add_target" = "翻訳ターゲットを追加...";
 "mini_translator.language.auto_detect" = "自動検出";
 "mini_translator.language.auto_match" = "自動一致";
+"mini_translator.language.manage_common_languages" = "よく使う言語を管理...";
+"mini_translator.language.manage_targets" = "翻訳ターゲットを管理...";
+"mini_translator.language.more_languages" = "その他の言語...";
 "mini_translator.language.switch_config" = "ターゲット切替";
 "mini_translator.limited_banner.action.app_settings" = "アプリ設定";
 "mini_translator.limited_banner.action.recheck" = "再確認";
@@ -110,6 +114,10 @@
 "settings.general.option.tesseract" = "Tesseract";
 "settings.general.option.youdao_ocr" = "Youdao OCR";
 "settings.general.row.auto_copy_detected_text" = "検出したテキストを自動コピー";
+"settings.general.row.common_languages" = "よく使う言語";
+"settings.general.row.common_languages_hint" = "言語セレクターの上部に表示する言語を選択してください。";
+"settings.general.row.common_languages_reset" = "デフォルトにリセット";
+"settings.general.row.common_languages_reset_help" = "デフォルトのよく使う言語セットにリセット";
 "settings.general.row.default_directory_service" = "デフォルトの辞書サービス";
 "settings.general.row.default_ocr_service" = "デフォルトのテキスト認識サービス";
 "settings.general.row.default_translation_service" = "デフォルトの翻訳サービス";
@@ -122,6 +130,7 @@
 "settings.general.row.submit_with_meta_enter_mac" = "⌘ + Enterで送信";
 "settings.general.section.directory" = "辞書";
 "settings.general.section.input" = "入力設定";
+"settings.general.section.languages" = "言語";
 "settings.general.section.ocr" = "テキスト認識";
 "settings.general.section.permissions" = "権限";
 "settings.general.section.translation" = "翻訳";

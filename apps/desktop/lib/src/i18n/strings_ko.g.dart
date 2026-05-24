@@ -428,6 +428,14 @@ class _TranslationsMiniTranslatorLanguageKo
   String get auto_match => '자동 일치';
   @override
   String get switch_config => '대상 전환';
+  @override
+  String get more_languages => '더 많은 언어...';
+  @override
+  String get manage_common_languages => '자주 사용하는 언어 관리...';
+  @override
+  String get manage_targets => '번역 대상 관리...';
+  @override
+  String get add_target => '번역 대상 추가...';
 }
 
 // Path: mini_translator.message
@@ -779,6 +787,8 @@ class _TranslationsSettingsGeneralSectionKo
   @override
   String get translation_target => '번역 대상';
   @override
+  String get languages => '언어';
+  @override
   String get input => '입력 설정';
 }
 
@@ -793,11 +803,11 @@ class _TranslationsSettingsGeneralRowKo
 
   // Translations
   @override
-  String get launch_at_startup => '로그인 시 실행';
+  String get launch_at_startup => '로그인할 때 시작';
   @override
   String get show_in_menu_bar => '메뉴 막대에 표시';
   @override
-  String get screen_capture_access => '화면 녹화 접근 권한 부여';
+  String get screen_capture_access => '화면 기록 접근 권한 부여';
   @override
   String get screen_selection_access => '손쉬운 사용 접근 권한 부여';
   @override
@@ -809,11 +819,19 @@ class _TranslationsSettingsGeneralRowKo
   @override
   String get default_translation_service => '기본 번역 서비스';
   @override
+  String get common_languages => '자주 사용하는 언어';
+  @override
+  String get common_languages_hint => '언어 선택기 상단에 표시할 언어를 선택하세요.';
+  @override
+  String get common_languages_reset => '기본값으로 재설정';
+  @override
+  String get common_languages_reset_help => '기본 공용 언어 세트로 재설정';
+  @override
   String get double_click_copy_result => '더블 클릭으로 번역 결과 복사';
   @override
-  String get submit_with_enter => 'Enter 키로 전송';
+  String get submit_with_enter => 'Enter로 제출';
   @override
-  String get submit_with_meta_enter_mac => '⌘ + Enter 키로 전송';
+  String get submit_with_meta_enter_mac => '⌘ + Enter로 제출';
 }
 
 // Path: settings.general.button
@@ -1343,6 +1361,10 @@ extension on TranslationsKo {
       'mini_translator.language.auto_detect' => '자동 감지',
       'mini_translator.language.auto_match' => '자동 일치',
       'mini_translator.language.switch_config' => '대상 전환',
+      'mini_translator.language.more_languages' => '더 많은 언어...',
+      'mini_translator.language.manage_common_languages' => '자주 사용하는 언어 관리...',
+      'mini_translator.language.manage_targets' => '번역 대상 관리...',
+      'mini_translator.language.add_target' => '번역 대상 추가...',
       'mini_translator.message.please_enter_word_or_text' =>
         '입력된 텍스트가 없거나 텍스트를 추출하지 못했습니다',
       'mini_translator.message.capture_screen_area_canceled' =>
@@ -1354,18 +1376,24 @@ extension on TranslationsKo {
       'settings.general.section.directory' => '사전',
       'settings.general.section.translation' => '번역',
       'settings.general.section.translation_target' => '번역 대상',
+      'settings.general.section.languages' => '언어',
       'settings.general.section.input' => '입력 설정',
-      'settings.general.row.launch_at_startup' => '로그인 시 실행',
+      'settings.general.row.launch_at_startup' => '로그인할 때 시작',
       'settings.general.row.show_in_menu_bar' => '메뉴 막대에 표시',
-      'settings.general.row.screen_capture_access' => '화면 녹화 접근 권한 부여',
+      'settings.general.row.screen_capture_access' => '화면 기록 접근 권한 부여',
       'settings.general.row.screen_selection_access' => '손쉬운 사용 접근 권한 부여',
       'settings.general.row.default_ocr_service' => '기본 텍스트 인식 서비스',
       'settings.general.row.auto_copy_detected_text' => '감지된 텍스트 자동 복사',
       'settings.general.row.default_directory_service' => '기본 사전 서비스',
       'settings.general.row.default_translation_service' => '기본 번역 서비스',
+      'settings.general.row.common_languages' => '자주 사용하는 언어',
+      'settings.general.row.common_languages_hint' =>
+        '언어 선택기 상단에 표시할 언어를 선택하세요.',
+      'settings.general.row.common_languages_reset' => '기본값으로 재설정',
+      'settings.general.row.common_languages_reset_help' => '기본 공용 언어 세트로 재설정',
       'settings.general.row.double_click_copy_result' => '더블 클릭으로 번역 결과 복사',
-      'settings.general.row.submit_with_enter' => 'Enter 키로 전송',
-      'settings.general.row.submit_with_meta_enter_mac' => '⌘ + Enter 키로 전송',
+      'settings.general.row.submit_with_enter' => 'Enter로 제출',
+      'settings.general.row.submit_with_meta_enter_mac' => '⌘ + Enter로 제출',
       'settings.general.button.add_provider' => '추가...',
       'settings.general.button.add_target' => '대상 추가',
       'settings.general.button.manage_targets' => '번역 대상 관리...',

@@ -44,6 +44,7 @@ class SettingsStore extends ChangeNotifier {
     translationTargets: [],
     inputSubmitMode: InputSubmitMode.enter,
     doubleClickCopyResult: true,
+    commonLanguages: defaultCommonLanguages(),
   );
   AppearanceSettings _appearance = AppearanceSettings(
     language: 'zh-Hans',

@@ -20,6 +20,7 @@ final class GeneralViewModel: ObservableObject {
   @Published var translationTargets: [TranslationTarget]
   @Published var inputSubmitMode: InputSubmitMode
   @Published var doubleClickCopyResult: Bool
+  @Published var commonLanguages: [String]
   @Published var screenCaptureAllowed = false
   @Published var accessibilityAllowed = false
 
@@ -33,6 +34,21 @@ final class GeneralViewModel: ObservableObject {
   // Supported languages
   var supportedLanguages: [LanguageInfo] {
     RuntimeProvider.shared.listLanguages()
+  }
+
+  /// Language codes that are marked as "common" (shown at top level).
+  /// The order is preserved from settings; unsupported codes are dropped.
+  var commonLanguageInfos: [LanguageInfo] {
+    let all = supportedLanguages
+    let codeSet = Set(commonLanguages)
+    return all.filter { codeSet.contains($0.code) }
+  }
+
+  /// Language codes NOT marked as common (shown in the "More..." section).
+  var otherLanguageInfos: [LanguageInfo] {
+    let all = supportedLanguages
+    let codeSet = Set(commonLanguages)
+    return all.filter { !codeSet.contains($0.code) }
   }
 
   var showEditTargetSheet: Binding<Bool> {
@@ -54,6 +70,7 @@ final class GeneralViewModel: ObservableObject {
     translationTargets = []
     inputSubmitMode = .enter
     doubleClickCopyResult = true
+    commonLanguages = []
     self.repository = repository
   }
 
@@ -176,6 +193,11 @@ final class GeneralViewModel: ObservableObject {
     Task { await persist(.diff(translationTargets: translationTargets)) }
   }
 
+  func setCommonLanguages(_ languages: [String]) {
+    commonLanguages = languages
+    Task { await persist(.diff(commonLanguages: languages)) }
+  }
+
   func refreshPermissions() {
     screenCaptureAllowed = CGPreflightScreenCaptureAccess()
     accessibilityAllowed = AXIsProcessTrusted()
@@ -216,6 +238,7 @@ final class GeneralViewModel: ObservableObject {
     translationTargets = settings.translationTargets
     inputSubmitMode = settings.inputSubmitMode
     doubleClickCopyResult = settings.doubleClickCopyResult
+    commonLanguages = settings.commonLanguages
   }
 
   private static func providerID(fromServiceID serviceID: String) -> String {

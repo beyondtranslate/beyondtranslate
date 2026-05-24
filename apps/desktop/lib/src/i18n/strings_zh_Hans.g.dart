@@ -433,6 +433,14 @@ class _TranslationsMiniTranslatorLanguageZhHans
   String get auto_match => '自动匹配';
   @override
   String get switch_config => '切换目标';
+  @override
+  String get more_languages => '更多语言...';
+  @override
+  String get manage_common_languages => '管理常用语言...';
+  @override
+  String get manage_targets => '管理翻译目标...';
+  @override
+  String get add_target => '添加翻译目标...';
 }
 
 // Path: mini_translator.message
@@ -793,6 +801,8 @@ class _TranslationsSettingsGeneralSectionZhHans
   @override
   String get translation_target => '翻译目标';
   @override
+  String get languages => '语言';
+  @override
   String get input => '输入设置';
 }
 
@@ -817,17 +827,25 @@ class _TranslationsSettingsGeneralRowZhHans
   @override
   String get default_ocr_service => '默认文字识别服务';
   @override
-  String get auto_copy_detected_text => '自动复制识别文本';
+  String get auto_copy_detected_text => '自动复制检测到的文本';
   @override
   String get default_directory_service => '默认词典服务';
   @override
   String get default_translation_service => '默认翻译服务';
   @override
+  String get common_languages => '常用语言';
+  @override
+  String get common_languages_hint => '选择要在语言选择器顶部显示的常用语言。';
+  @override
+  String get common_languages_reset => '恢复默认';
+  @override
+  String get common_languages_reset_help => '恢复为默认的常用语言集合';
+  @override
   String get double_click_copy_result => '双击复制翻译结果';
   @override
-  String get submit_with_enter => '用 Enter 提交';
+  String get submit_with_enter => '按 Enter 提交';
   @override
-  String get submit_with_meta_enter_mac => '用 ⌘ + Enter 提交';
+  String get submit_with_meta_enter_mac => '按 ⌘ + Enter 提交';
 }
 
 // Path: settings.general.button
@@ -1356,6 +1374,10 @@ extension on TranslationsZhHans {
       'mini_translator.language.auto_detect' => '自动检测',
       'mini_translator.language.auto_match' => '自动匹配',
       'mini_translator.language.switch_config' => '切换目标',
+      'mini_translator.language.more_languages' => '更多语言...',
+      'mini_translator.language.manage_common_languages' => '管理常用语言...',
+      'mini_translator.language.manage_targets' => '管理翻译目标...',
+      'mini_translator.language.add_target' => '添加翻译目标...',
       'mini_translator.message.please_enter_word_or_text' => '未输入或未提取到文本',
       'mini_translator.message.capture_screen_area_canceled' => '截取屏幕区域已取消',
       'settings.version' => '版本 {} BUILD {}',
@@ -1365,18 +1387,23 @@ extension on TranslationsZhHans {
       'settings.general.section.directory' => '词典',
       'settings.general.section.translation' => '翻译',
       'settings.general.section.translation_target' => '翻译目标',
+      'settings.general.section.languages' => '语言',
       'settings.general.section.input' => '输入设置',
       'settings.general.row.launch_at_startup' => '登录时启动',
       'settings.general.row.show_in_menu_bar' => '在菜单栏中显示',
       'settings.general.row.screen_capture_access' => '授予屏幕录制权限',
       'settings.general.row.screen_selection_access' => '授予辅助功能权限',
       'settings.general.row.default_ocr_service' => '默认文字识别服务',
-      'settings.general.row.auto_copy_detected_text' => '自动复制识别文本',
+      'settings.general.row.auto_copy_detected_text' => '自动复制检测到的文本',
       'settings.general.row.default_directory_service' => '默认词典服务',
       'settings.general.row.default_translation_service' => '默认翻译服务',
+      'settings.general.row.common_languages' => '常用语言',
+      'settings.general.row.common_languages_hint' => '选择要在语言选择器顶部显示的常用语言。',
+      'settings.general.row.common_languages_reset' => '恢复默认',
+      'settings.general.row.common_languages_reset_help' => '恢复为默认的常用语言集合',
       'settings.general.row.double_click_copy_result' => '双击复制翻译结果',
-      'settings.general.row.submit_with_enter' => '用 Enter 提交',
-      'settings.general.row.submit_with_meta_enter_mac' => '用 ⌘ + Enter 提交',
+      'settings.general.row.submit_with_enter' => '按 Enter 提交',
+      'settings.general.row.submit_with_meta_enter_mac' => '按 ⌘ + Enter 提交',
       'settings.general.button.add_provider' => '添加...',
       'settings.general.button.add_target' => '添加目标',
       'settings.general.button.manage_targets' => '管理翻译目标...',

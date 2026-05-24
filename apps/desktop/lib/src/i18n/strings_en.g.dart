@@ -416,6 +416,18 @@ class TranslationsMiniTranslatorLanguageEn {
 
   /// en: 'Switch Target'
   String get switch_config => 'Switch Target';
+
+  /// en: 'More languages...'
+  String get more_languages => 'More languages...';
+
+  /// en: 'Manage Common Languages...'
+  String get manage_common_languages => 'Manage Common Languages...';
+
+  /// en: 'Manage Translation Targets...'
+  String get manage_targets => 'Manage Translation Targets...';
+
+  /// en: 'Add Translation Target...'
+  String get add_target => 'Add Translation Target...';
 }
 
 // Path: mini_translator.message
@@ -761,6 +773,9 @@ class TranslationsSettingsGeneralSectionEn {
   /// en: 'Translation Target'
   String get translation_target => 'Translation Target';
 
+  /// en: 'Languages'
+  String get languages => 'Languages';
+
   /// en: 'Input Settings'
   String get input => 'Input Settings';
 }
@@ -797,9 +812,23 @@ class TranslationsSettingsGeneralRowEn {
   /// en: 'Default translation service'
   String get default_translation_service => 'Default translation service';
 
+  /// en: 'Common Languages'
+  String get common_languages => 'Common Languages';
+
+  /// en: 'Select languages to show at the top of language pickers.'
+  String get common_languages_hint =>
+      'Select languages to show at the top of language pickers.';
+
   /// en: 'Double click to copy translation result'
   String get double_click_copy_result =>
       'Double click to copy translation result';
+
+  /// en: 'Reset to Defaults'
+  String get common_languages_reset => 'Reset to Defaults';
+
+  /// en: 'Reset to the default set of common languages'
+  String get common_languages_reset_help =>
+      'Reset to the default set of common languages';
 
   /// en: 'Submit with Enter'
   String get submit_with_enter => 'Submit with Enter';
@@ -1314,6 +1343,12 @@ extension on Translations {
       'mini_translator.language.auto_detect' => 'Auto Detect',
       'mini_translator.language.auto_match' => 'Auto Match',
       'mini_translator.language.switch_config' => 'Switch Target',
+      'mini_translator.language.more_languages' => 'More languages...',
+      'mini_translator.language.manage_common_languages' =>
+        'Manage Common Languages...',
+      'mini_translator.language.manage_targets' =>
+        'Manage Translation Targets...',
+      'mini_translator.language.add_target' => 'Add Translation Target...',
       'mini_translator.message.please_enter_word_or_text' =>
         'No text entered or text not extracted',
       'mini_translator.message.capture_screen_area_canceled' =>
@@ -1325,6 +1360,7 @@ extension on Translations {
       'settings.general.section.directory' => 'Directory',
       'settings.general.section.translation' => 'Translation',
       'settings.general.section.translation_target' => 'Translation Target',
+      'settings.general.section.languages' => 'Languages',
       'settings.general.section.input' => 'Input Settings',
       'settings.general.row.launch_at_startup' => 'Launch when you log in',
       'settings.general.row.show_in_menu_bar' => 'Show in menu bar',
@@ -1340,8 +1376,14 @@ extension on Translations {
         'Default directory service',
       'settings.general.row.default_translation_service' =>
         'Default translation service',
+      'settings.general.row.common_languages' => 'Common Languages',
+      'settings.general.row.common_languages_hint' =>
+        'Select languages to show at the top of language pickers.',
       'settings.general.row.double_click_copy_result' =>
         'Double click to copy translation result',
+      'settings.general.row.common_languages_reset' => 'Reset to Defaults',
+      'settings.general.row.common_languages_reset_help' =>
+        'Reset to the default set of common languages',
       'settings.general.row.submit_with_enter' => 'Submit with Enter',
       'settings.general.row.submit_with_meta_enter_mac' =>
         'Submit with ⌘ + Enter',

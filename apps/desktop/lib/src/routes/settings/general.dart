@@ -16,6 +16,16 @@ import '../../widgets/ui/preference_list_section.dart';
 class GeneralSettingsPage extends StatefulWidget {
   const GeneralSettingsPage({super.key});
 
+  /// When set to true before the page is opened, the common languages
+  /// dialog will auto-open once the page is built. Set by
+  /// [MiniTranslatorPageState._handleManageCommonLanguages].
+  static bool pendingOpenCommonLanguages = false;
+
+  /// When set to true before the page is opened, the add target dialog
+  /// will auto-open once the page is built. Set by
+  /// [MiniTranslatorPageState._handleAddTarget].
+  static bool pendingOpenAddTarget = false;
+
   @override
   State<GeneralSettingsPage> createState() => _GeneralSettingsPageState();
 }
@@ -28,6 +38,25 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
     // Refresh when entering the page.
     settingsStore.reloadGeneral();
     settingsStore.reloadProviders();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (GeneralSettingsPage.pendingOpenCommonLanguages) {
+      GeneralSettingsPage.pendingOpenCommonLanguages = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showCommonLanguagesDialog(context);
+      });
+    }
+
+    if (GeneralSettingsPage.pendingOpenAddTarget) {
+      GeneralSettingsPage.pendingOpenAddTarget = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showAddTargetDialog(context);
+      });
+    }
   }
 
   @override
@@ -186,6 +215,19 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 );
               },
             ),
+            PreferenceListItem(
+              title: Text(general.row.common_languages),
+              summary: Text(
+                '${_general.commonLanguages.length} / ${supportedLanguages.length}',
+              ),
+              onTap: () => _showCommonLanguagesDialog(context),
+              detailText: Text(
+                t.common.ui.button.edit,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
           ],
         ),
         if (hasTranslationServices)
@@ -263,17 +305,11 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     initialValue: source,
                     decoration:
                         const InputDecoration(labelText: 'Source Language'),
-                    items: [
-                      DropdownMenuItem(
-                        value: kAutoSource,
-                        child: Text(t.mini_translator.language.auto_detect),
-                      ),
-                      for (final lang in supportedLanguages)
-                        DropdownMenuItem(
-                          value: lang,
-                          child: Text(getLanguageName(lang, showNative: true)),
-                        ),
-                    ],
+                    items: buildLanguageDropdownItems(
+                      commonLanguageCodes: _general.commonLanguages,
+                      showAutoDetect: true,
+                      showNative: true,
+                    ),
                     onChanged: (v) {
                       if (v != null) setDialogState(() => source = v);
                     },
@@ -283,12 +319,10 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     initialValue: target,
                     decoration:
                         const InputDecoration(labelText: 'Target Language'),
-                    items: supportedLanguages.map((lang) {
-                      return DropdownMenuItem(
-                        value: lang,
-                        child: Text(getLanguageName(lang, showNative: true)),
-                      );
-                    }).toList(),
+                    items: buildLanguageDropdownItems(
+                      commonLanguageCodes: _general.commonLanguages,
+                      showNative: true,
+                    ),
                     onChanged: (v) {
                       if (v != null) setDialogState(() => target = v);
                     },
@@ -347,17 +381,11 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     initialValue: source,
                     decoration:
                         const InputDecoration(labelText: 'Source Language'),
-                    items: [
-                      DropdownMenuItem(
-                        value: kAutoSource,
-                        child: Text(t.mini_translator.language.auto_detect),
-                      ),
-                      for (final lang in supportedLanguages)
-                        DropdownMenuItem(
-                          value: lang,
-                          child: Text(getLanguageName(lang, showNative: true)),
-                        ),
-                    ],
+                    items: buildLanguageDropdownItems(
+                      commonLanguageCodes: _general.commonLanguages,
+                      showAutoDetect: true,
+                      showNative: true,
+                    ),
                     onChanged: (v) {
                       if (v != null) setDialogState(() => source = v);
                     },
@@ -367,12 +395,10 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                     initialValue: targetLang,
                     decoration:
                         const InputDecoration(labelText: 'Target Language'),
-                    items: supportedLanguages.map((lang) {
-                      return DropdownMenuItem(
-                        value: lang,
-                        child: Text(getLanguageName(lang, showNative: true)),
-                      );
-                    }).toList(),
+                    items: buildLanguageDropdownItems(
+                      commonLanguageCodes: _general.commonLanguages,
+                      showNative: true,
+                    ),
                     onChanged: (v) {
                       if (v != null) setDialogState(() => targetLang = v);
                     },
@@ -416,6 +442,78 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
       );
       await settingsStore.updateGeneral(
         GeneralSettingsPatch(translationTargets: newTargets),
+      );
+    }
+  }
+
+  Future<void> _showCommonLanguagesDialog(BuildContext context) async {
+    final selected = Set<String>.from(_general.commonLanguages);
+    final available = supportedLanguages;
+
+    final result = await showDialog<List<String>>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text(t.settings.general.row.common_languages),
+              content: SizedBox(
+                width: 320,
+                height: 400,
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        t.settings.general.row.common_languages_hint,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.color
+                                  ?.withValues(alpha: 0.6),
+                            ),
+                      ),
+                    ),
+                    ...available.map((lang) {
+                      return CheckboxListTile(
+                        dense: true,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value: selected.contains(lang),
+                        title: Text(getLanguageName(lang, showNative: true)),
+                        onChanged: (checked) {
+                          setDialogState(() {
+                            if (checked == true) {
+                              selected.add(lang);
+                            } else {
+                              selected.remove(lang);
+                            }
+                          });
+                        },
+                      );
+                    }),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(t.common.ui.button.cancel),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, selected.toList()),
+                  child: Text(t.common.ui.button.save),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (result != null) {
+      await settingsStore.updateGeneral(
+        GeneralSettingsPatch(commonLanguages: result),
       );
     }
   }

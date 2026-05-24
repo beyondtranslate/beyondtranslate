@@ -8,6 +8,7 @@ struct GeneralView: View {
   @ObservedObject private var highlightCoordinator = SettingsHighlightCoordinator.shared
   @State private var isPermissionsHighlighted = false
   @State private var permissionsHighlightGeneration = 0
+  @State private var showCommonLanguagesSheet = false
 
   var body: some View {
     let hasDirectoryServices = !viewModel.dictionaryServiceOptions.isEmpty
@@ -136,6 +137,12 @@ struct GeneralView: View {
           isOn: $viewModel.doubleClickCopyResult
         )
         .disabled(!hasTranslationServices)
+
+        CommonLanguagesRow(
+          count: viewModel.commonLanguages.count,
+          total: viewModel.supportedLanguages.count,
+          onEdit: { showCommonLanguagesSheet = true }
+        )
       }
 
       translationTargetsSection
@@ -163,12 +170,19 @@ struct GeneralView: View {
     .onChange(of: highlightCoordinator.pendingHighlightPermissionsSectionID) { newValue in
       handlePermissionsHighlight(newValue)
     }
+    .onChange(of: highlightCoordinator.pendingShowCommonLanguages) { newValue in
+      handleShowCommonLanguages(newValue)
+    }
+    .onChange(of: highlightCoordinator.pendingShowAddTarget) { newValue in
+      handleShowAddTarget(newValue)
+    }
     .sheet(isPresented: $viewModel.showAddTargetSheet) {
       TranslationTargetEditorSheet(
         title: LocaleKeys.settings.general.button.addTarget.tr(),
         source: "auto",
         target: "zh-Hans",
         supportedLanguages: viewModel.supportedLanguages,
+        commonLanguages: viewModel.commonLanguages,
         onSave: { source, target in
           viewModel.addTranslationTarget(source: source, target: target)
           viewModel.showAddTargetSheet = false
@@ -183,6 +197,7 @@ struct GeneralView: View {
           source: target.source,
           target: target.target,
           supportedLanguages: viewModel.supportedLanguages,
+          commonLanguages: viewModel.commonLanguages,
           showDelete: true,
           onSave: { source, targetLang in
             if let idx = viewModel.translationTargets.firstIndex(where: { $0.id == target.id }) {
@@ -201,6 +216,27 @@ struct GeneralView: View {
         )
       }
     }
+    .sheet(isPresented: $showCommonLanguagesSheet) {
+      CommonLanguagesEditorSheet(
+        allLanguages: viewModel.supportedLanguages,
+        commonLanguages: $viewModel.commonLanguages,
+        onSave: { languages in
+          viewModel.setCommonLanguages(languages)
+          showCommonLanguagesSheet = false
+        },
+        onCancel: { showCommonLanguagesSheet = false }
+      )
+    }
+  }
+
+  private func handleShowCommonLanguages(_ id: Int?) {
+    guard let id, highlightCoordinator.consumeShowCommonLanguages(id) else { return }
+    showCommonLanguagesSheet = true
+  }
+
+  private func handleShowAddTarget(_ id: Int?) {
+    guard let id, highlightCoordinator.consumeShowAddTarget(id) else { return }
+    viewModel.showAddTargetSheet = true
   }
 
   @ViewBuilder
@@ -262,6 +298,30 @@ private struct ServiceUnavailableSettingRow: View {
         .foregroundStyle(.secondary)
       Button(LocaleKeys.settings.general.button.addProvider.tr(), action: onAddProvider)
     }
+  }
+}
+
+private struct CommonLanguagesRow: View {
+  let count: Int
+  let total: Int
+  let onEdit: () -> Void
+
+  var body: some View {
+    HStack {
+      VStack(alignment: .leading) {
+        Text(LocaleKeys.settings.general.row.commonLanguages.tr())
+          .font(.system(size: 13))
+        Text("\(count) / \(total)")
+          .font(.system(size: 11))
+          .foregroundStyle(.secondary)
+      }
+      Spacer()
+      Button(LocaleKeys.common.ui.button.edit.tr()) {
+        onEdit()
+      }
+      .buttonStyle(.link)
+    }
+    .padding(.vertical, 2)
   }
 }
 

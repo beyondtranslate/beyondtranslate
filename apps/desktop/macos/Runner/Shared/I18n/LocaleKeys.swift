@@ -131,8 +131,13 @@ enum LocaleKeys {
       static let hint = LocaleKey("mini_translator.input.hint")
     }
     enum language {
+      static let addTarget = LocaleKey("mini_translator.language.add_target")
       static let autoDetect = LocaleKey("mini_translator.language.auto_detect")
       static let autoMatch = LocaleKey("mini_translator.language.auto_match")
+      static let manageCommonLanguages = LocaleKey(
+        "mini_translator.language.manage_common_languages")
+      static let manageTargets = LocaleKey("mini_translator.language.manage_targets")
+      static let moreLanguages = LocaleKey("mini_translator.language.more_languages")
       static let switchConfig = LocaleKey("mini_translator.language.switch_config")
     }
     enum limitedBanner {
@@ -217,6 +222,11 @@ enum LocaleKeys {
       }
       enum row {
         static let autoCopyDetectedText = LocaleKey("settings.general.row.auto_copy_detected_text")
+        static let commonLanguages = LocaleKey("settings.general.row.common_languages")
+        static let commonLanguagesHint = LocaleKey("settings.general.row.common_languages_hint")
+        static let commonLanguagesReset = LocaleKey("settings.general.row.common_languages_reset")
+        static let commonLanguagesResetHelp = LocaleKey(
+          "settings.general.row.common_languages_reset_help")
         static let defaultDirectoryService = LocaleKey(
           "settings.general.row.default_directory_service")
         static let defaultOcrService = LocaleKey("settings.general.row.default_ocr_service")
@@ -235,6 +245,7 @@ enum LocaleKeys {
       enum section {
         static let directory = LocaleKey("settings.general.section.directory")
         static let input = LocaleKey("settings.general.section.input")
+        static let languages = LocaleKey("settings.general.section.languages")
         static let ocr = LocaleKey("settings.general.section.ocr")
         static let permissions = LocaleKey("settings.general.section.permissions")
         static let translation = LocaleKey("settings.general.section.translation")

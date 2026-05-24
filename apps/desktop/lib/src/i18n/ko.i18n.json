@@ -129,7 +129,11 @@
     "language": {
       "auto_detect": "자동 감지",
       "auto_match": "자동 일치",
-      "switch_config": "대상 전환"
+      "switch_config": "대상 전환",
+      "more_languages": "더 많은 언어...",
+      "manage_common_languages": "자주 사용하는 언어 관리...",
+      "manage_targets": "번역 대상 관리...",
+      "add_target": "번역 대상 추가..."
     },
     "message": {
       "please_enter_word_or_text": "입력된 텍스트가 없거나 텍스트를 추출하지 못했습니다",
@@ -146,20 +150,25 @@
         "directory": "사전",
         "translation": "번역",
         "translation_target": "번역 대상",
+        "languages": "언어",
         "input": "입력 설정"
       },
       "row": {
-        "launch_at_startup": "로그인 시 실행",
+        "launch_at_startup": "로그인할 때 시작",
         "show_in_menu_bar": "메뉴 막대에 표시",
-        "screen_capture_access": "화면 녹화 접근 권한 부여",
+        "screen_capture_access": "화면 기록 접근 권한 부여",
         "screen_selection_access": "손쉬운 사용 접근 권한 부여",
         "default_ocr_service": "기본 텍스트 인식 서비스",
         "auto_copy_detected_text": "감지된 텍스트 자동 복사",
         "default_directory_service": "기본 사전 서비스",
         "default_translation_service": "기본 번역 서비스",
+        "common_languages": "자주 사용하는 언어",
+        "common_languages_hint": "언어 선택기 상단에 표시할 언어를 선택하세요.",
+        "common_languages_reset": "기본값으로 재설정",
+        "common_languages_reset_help": "기본 공용 언어 세트로 재설정",
         "double_click_copy_result": "더블 클릭으로 번역 결과 복사",
-        "submit_with_enter": "Enter 키로 전송",
-        "submit_with_meta_enter_mac": "⌘ + Enter 키로 전송"
+        "submit_with_enter": "Enter로 제출",
+        "submit_with_meta_enter_mac": "⌘ + Enter로 제출"
       },
       "button": {
         "add_provider": "추가...",

@@ -6,6 +6,8 @@ final class SettingsHighlightCoordinator: ObservableObject {
   static let shared = SettingsHighlightCoordinator()
 
   @Published private(set) var pendingHighlightPermissionsSectionID: Int? = nil
+  @Published private(set) var pendingShowCommonLanguages: Int? = nil
+  @Published private(set) var pendingShowAddTarget: Int? = nil
 
   private init() {}
 
@@ -16,6 +18,26 @@ final class SettingsHighlightCoordinator: ObservableObject {
   func consumeHighlightPermissionsSection(_ id: Int) -> Bool {
     guard pendingHighlightPermissionsSectionID == id else { return false }
     pendingHighlightPermissionsSectionID = nil
+    return true
+  }
+
+  func requestShowCommonLanguages() {
+    pendingShowCommonLanguages = (pendingShowCommonLanguages ?? 0) + 1
+  }
+
+  func consumeShowCommonLanguages(_ id: Int) -> Bool {
+    guard pendingShowCommonLanguages == id else { return false }
+    pendingShowCommonLanguages = nil
+    return true
+  }
+
+  func requestShowAddTarget() {
+    pendingShowAddTarget = (pendingShowAddTarget ?? 0) + 1
+  }
+
+  func consumeShowAddTarget(_ id: Int) -> Bool {
+    guard pendingShowAddTarget == id else { return false }
+    pendingShowAddTarget = nil
     return true
   }
 }

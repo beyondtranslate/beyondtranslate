@@ -2219,6 +2219,12 @@ public struct GeneralSettings: Equatable, Hashable {
   public var translationTargets: [TranslationTarget]
   public var inputSubmitMode: InputSubmitMode
   public var doubleClickCopyResult: Bool
+  /**
+   * Language codes that the user has marked as "common" / frequently used.
+   * These languages appear first in language selection menus, with the
+   * remaining languages collapsed into a secondary "More languages..." menu.
+   */
+  public var commonLanguages: [String]
 
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
@@ -2226,7 +2232,13 @@ public struct GeneralSettings: Equatable, Hashable {
     launchAtLogin: Bool, showInMenuBar: Bool, defaultOcrService: String, autoCopyDetectedText: Bool,
     defaultDirectoryService: String, defaultTranslationService: String,
     translationTargets: [TranslationTarget], inputSubmitMode: InputSubmitMode,
-    doubleClickCopyResult: Bool
+    doubleClickCopyResult: Bool,
+    /**
+     * Language codes that the user has marked as "common" / frequently used.
+     * These languages appear first in language selection menus, with the
+     * remaining languages collapsed into a secondary "More languages..." menu.
+     */
+    commonLanguages: [String]
   ) {
     self.launchAtLogin = launchAtLogin
     self.showInMenuBar = showInMenuBar
@@ -2237,6 +2249,7 @@ public struct GeneralSettings: Equatable, Hashable {
     self.translationTargets = translationTargets
     self.inputSubmitMode = inputSubmitMode
     self.doubleClickCopyResult = doubleClickCopyResult
+    self.commonLanguages = commonLanguages
   }
 
 }
@@ -2262,7 +2275,8 @@ public struct FfiConverterTypeGeneralSettings: FfiConverterRustBuffer {
         defaultTranslationService: FfiConverterString.read(from: &buf),
         translationTargets: FfiConverterSequenceTypeTranslationTarget.read(from: &buf),
         inputSubmitMode: FfiConverterTypeInputSubmitMode.read(from: &buf),
-        doubleClickCopyResult: FfiConverterBool.read(from: &buf)
+        doubleClickCopyResult: FfiConverterBool.read(from: &buf),
+        commonLanguages: FfiConverterSequenceString.read(from: &buf)
       )
   }
 
@@ -2276,6 +2290,7 @@ public struct FfiConverterTypeGeneralSettings: FfiConverterRustBuffer {
     FfiConverterSequenceTypeTranslationTarget.write(value.translationTargets, into: &buf)
     FfiConverterTypeInputSubmitMode.write(value.inputSubmitMode, into: &buf)
     FfiConverterBool.write(value.doubleClickCopyResult, into: &buf)
+    FfiConverterSequenceString.write(value.commonLanguages, into: &buf)
   }
 }
 
@@ -2303,6 +2318,7 @@ public struct GeneralSettingsPatch: Equatable, Hashable {
   public var translationTargets: [TranslationTarget]?
   public var inputSubmitMode: InputSubmitMode?
   public var doubleClickCopyResult: Bool?
+  public var commonLanguages: [String]?
 
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
@@ -2310,7 +2326,7 @@ public struct GeneralSettingsPatch: Equatable, Hashable {
     launchAtLogin: Bool?, showInMenuBar: Bool?, defaultOcrService: String?,
     autoCopyDetectedText: Bool?, defaultDirectoryService: String?,
     defaultTranslationService: String?, translationTargets: [TranslationTarget]?,
-    inputSubmitMode: InputSubmitMode?, doubleClickCopyResult: Bool?
+    inputSubmitMode: InputSubmitMode?, doubleClickCopyResult: Bool?, commonLanguages: [String]?
   ) {
     self.launchAtLogin = launchAtLogin
     self.showInMenuBar = showInMenuBar
@@ -2321,6 +2337,7 @@ public struct GeneralSettingsPatch: Equatable, Hashable {
     self.translationTargets = translationTargets
     self.inputSubmitMode = inputSubmitMode
     self.doubleClickCopyResult = doubleClickCopyResult
+    self.commonLanguages = commonLanguages
   }
 
 }
@@ -2346,7 +2363,8 @@ public struct FfiConverterTypeGeneralSettingsPatch: FfiConverterRustBuffer {
         defaultTranslationService: FfiConverterOptionString.read(from: &buf),
         translationTargets: FfiConverterOptionSequenceTypeTranslationTarget.read(from: &buf),
         inputSubmitMode: FfiConverterOptionTypeInputSubmitMode.read(from: &buf),
-        doubleClickCopyResult: FfiConverterOptionBool.read(from: &buf)
+        doubleClickCopyResult: FfiConverterOptionBool.read(from: &buf),
+        commonLanguages: FfiConverterOptionSequenceString.read(from: &buf)
       )
   }
 
@@ -2360,6 +2378,7 @@ public struct FfiConverterTypeGeneralSettingsPatch: FfiConverterRustBuffer {
     FfiConverterOptionSequenceTypeTranslationTarget.write(value.translationTargets, into: &buf)
     FfiConverterOptionTypeInputSubmitMode.write(value.inputSubmitMode, into: &buf)
     FfiConverterOptionBool.write(value.doubleClickCopyResult, into: &buf)
+    FfiConverterOptionSequenceString.write(value.commonLanguages, into: &buf)
   }
 }
 

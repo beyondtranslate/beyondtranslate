@@ -20,6 +20,9 @@ class TranslationTargetSelectView extends StatefulWidget {
     this.selectedTargetLanguage,
     this.activeConfigIndex = -1,
     this.persistentTargets = const [],
+    this.commonLanguageCodes,
+    this.onManageCommonLanguages,
+    this.onAddTarget,
     required this.onSourceChanged,
     required this.onTargetLanguageChanged,
     required this.onConfigTargetSelected,
@@ -30,6 +33,12 @@ class TranslationTargetSelectView extends StatefulWidget {
   final String? selectedTargetLanguage;
   final int activeConfigIndex;
   final List<TranslationTarget> persistentTargets;
+
+  /// Language codes to show at the top level. When null, a sensible default
+  /// based on the app locale is used.
+  final List<String>? commonLanguageCodes;
+  final VoidCallback? onManageCommonLanguages;
+  final VoidCallback? onAddTarget;
   final ValueChanged<String> onSourceChanged;
   final ValueChanged<String?> onTargetLanguageChanged;
   final ValueChanged<int> onConfigTargetSelected;
@@ -85,6 +94,77 @@ class _TranslationTargetSelectViewState
     });
   }
 
+  /// Common language codes used by this widget.
+  List<String> get _commonLanguageCodes {
+    // Use the widget's provided common languages or fall back to defaults.
+    // In practice these come from settingsStore.general.commonLanguages.
+    return widget.commonLanguageCodes ?? defaultCommonLanguages();
+  }
+
+  void _populateLanguageMenu(
+    Menu menu,
+    String? selectedLanguage, {
+    required String Function(String) displayName,
+    required void Function(String) onSelected,
+  }) {
+    final commonCodes = _commonLanguageCodes;
+    final common = getCommonLanguages(commonCodes);
+    final other = getOtherLanguages(commonCodes);
+
+    // Common languages at top level
+    for (final lang in common) {
+      final item = MenuItem(
+        displayName(lang),
+        MenuItemType.checkbox,
+      );
+      item.state = lang == selectedLanguage
+          ? MenuItemState.checked
+          : MenuItemState.unchecked;
+      item.on<MenuItemClickedEvent>((_) {
+        onSelected(lang);
+      });
+      menu.addItem(item);
+    }
+
+    // Separator + "More languages" submenu for the rest
+    if (other.isNotEmpty) {
+      menu.addItem(MenuItem('', MenuItemType.separator));
+
+      final moreMenu = Menu();
+      for (final lang in other) {
+        final item = MenuItem(
+          displayName(lang),
+          MenuItemType.checkbox,
+        );
+        item.state = lang == selectedLanguage
+            ? MenuItemState.checked
+            : MenuItemState.unchecked;
+        item.on<MenuItemClickedEvent>((_) {
+          onSelected(lang);
+        });
+        moreMenu.addItem(item);
+      }
+
+      final moreItem = MenuItem(
+        t.mini_translator.language.more_languages,
+        MenuItemType.submenu,
+      );
+      moreItem.submenu = moreMenu;
+      menu.addItem(moreItem);
+    }
+
+    // "Manage common languages..." item at the bottom
+    menu.addItem(MenuItem('', MenuItemType.separator));
+    final manageItem = MenuItem(
+      t.mini_translator.language.manage_common_languages,
+      MenuItemType.normal,
+    );
+    manageItem.on<MenuItemClickedEvent>((_) {
+      widget.onManageCommonLanguages?.call();
+    });
+    menu.addItem(manageItem);
+  }
+
   void _showSourceMenu() {
     final menu = Menu();
     _trackMenu(menu, (value) => _isSourceMenuOpen = value);
@@ -102,19 +182,12 @@ class _TranslationTargetSelectViewState
     menu.addItem(autoItem);
     menu.addItem(MenuItem('', MenuItemType.separator));
 
-    for (final lang in supportedLanguages) {
-      final item = MenuItem(
-        getLanguageName(lang, showNative: true),
-        MenuItemType.checkbox,
-      );
-      item.state = lang == widget.sourceLanguage
-          ? MenuItemState.checked
-          : MenuItemState.unchecked;
-      item.on<MenuItemClickedEvent>((_) {
-        widget.onSourceChanged(lang);
-      });
-      menu.addItem(item);
-    }
+    _populateLanguageMenu(
+      menu,
+      widget.sourceLanguage,
+      displayName: (lang) => getLanguageName(lang, showNative: true),
+      onSelected: widget.onSourceChanged,
+    );
     _openMenu(_sourceButtonKey, menu);
   }
 
@@ -135,19 +208,12 @@ class _TranslationTargetSelectViewState
     menu.addItem(autoItem);
     menu.addItem(MenuItem('', MenuItemType.separator));
 
-    for (final lang in supportedLanguages) {
-      final item = MenuItem(
-        getLanguageName(lang, showNative: true),
-        MenuItemType.checkbox,
-      );
-      item.state = widget.selectedTargetLanguage == lang
-          ? MenuItemState.checked
-          : MenuItemState.unchecked;
-      item.on<MenuItemClickedEvent>((_) {
-        widget.onTargetLanguageChanged(lang);
-      });
-      menu.addItem(item);
-    }
+    _populateLanguageMenu(
+      menu,
+      widget.selectedTargetLanguage,
+      displayName: (lang) => getLanguageName(lang, showNative: true),
+      onSelected: widget.onTargetLanguageChanged,
+    );
     _openMenu(_targetButtonKey, menu);
   }
 
@@ -184,12 +250,17 @@ class _TranslationTargetSelectViewState
       menu.addItem(item);
     }
 
-    if (widget.persistentTargets.isNotEmpty) {
-      menu.addItem(MenuItem('', MenuItemType.separator));
-    }
+    menu.addItem(MenuItem('', MenuItemType.separator));
+
+    final addItem = MenuItem(
+      t.mini_translator.language.add_target,
+      MenuItemType.normal,
+    );
+    addItem.on<MenuItemClickedEvent>((_) => widget.onAddTarget?.call());
+    menu.addItem(addItem);
 
     final manageItem = MenuItem(
-      t.settings.general.button.manage_targets,
+      t.mini_translator.language.manage_targets,
       MenuItemType.normal,
     );
     manageItem.on<MenuItemClickedEvent>((_) => widget.onManageTargets?.call());

@@ -69,8 +69,12 @@
 "mini_translator.button.translate" = "Traduire";
 "mini_translator.input.extracting_text" = "Extraction du texte...";
 "mini_translator.input.hint" = "Saisissez le mot ou le texte ici";
+"mini_translator.language.add_target" = "Ajouter une cible de traduction...";
 "mini_translator.language.auto_detect" = "Détection automatique";
 "mini_translator.language.auto_match" = "Correspondance auto";
+"mini_translator.language.manage_common_languages" = "Gérer les langues courantes...";
+"mini_translator.language.manage_targets" = "Gérer les cibles de traduction...";
+"mini_translator.language.more_languages" = "Plus de langues...";
 "mini_translator.language.switch_config" = "Changer de cible";
 "mini_translator.limited_banner.action.app_settings" = "Paramètres de l'application";
 "mini_translator.limited_banner.action.recheck" = "Re-vérifier";
@@ -110,6 +114,10 @@
 "settings.general.option.tesseract" = "Tesseract";
 "settings.general.option.youdao_ocr" = "OCR Youdao";
 "settings.general.row.auto_copy_detected_text" = "Copier automatiquement le texte détecté";
+"settings.general.row.common_languages" = "Langues courantes";
+"settings.general.row.common_languages_hint" = "Sélectionnez les langues à afficher en haut des sélecteurs de langue.";
+"settings.general.row.common_languages_reset" = "Réinitialiser";
+"settings.general.row.common_languages_reset_help" = "Rétablir l'ensemble par défaut des langues courantes";
 "settings.general.row.default_directory_service" = "Service de répertoire par défaut";
 "settings.general.row.default_ocr_service" = "Service de reconnaissance de texte par défaut";
 "settings.general.row.default_translation_service" = "Service de traduction par défaut";
@@ -122,6 +130,7 @@
 "settings.general.row.submit_with_meta_enter_mac" = "Valider avec ⌘ + Entrée";
 "settings.general.section.directory" = "Répertoire";
 "settings.general.section.input" = "Paramètres de saisie";
+"settings.general.section.languages" = "Langues";
 "settings.general.section.ocr" = "Reconnaissance de texte";
 "settings.general.section.permissions" = "Autorisations";
 "settings.general.section.translation" = "Traduction";

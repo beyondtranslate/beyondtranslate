@@ -428,6 +428,14 @@ class _TranslationsMiniTranslatorLanguageJa
   String get auto_match => '自動一致';
   @override
   String get switch_config => 'ターゲット切替';
+  @override
+  String get more_languages => 'その他の言語...';
+  @override
+  String get manage_common_languages => 'よく使う言語を管理...';
+  @override
+  String get manage_targets => '翻訳ターゲットを管理...';
+  @override
+  String get add_target => '翻訳ターゲットを追加...';
 }
 
 // Path: mini_translator.message
@@ -780,6 +788,8 @@ class _TranslationsSettingsGeneralSectionJa
   @override
   String get translation_target => '翻訳先';
   @override
+  String get languages => '言語';
+  @override
   String get input => '入力設定';
 }
 
@@ -809,6 +819,14 @@ class _TranslationsSettingsGeneralRowJa
   String get default_directory_service => 'デフォルトの辞書サービス';
   @override
   String get default_translation_service => 'デフォルトの翻訳サービス';
+  @override
+  String get common_languages => 'よく使う言語';
+  @override
+  String get common_languages_hint => '言語セレクターの上部に表示する言語を選択してください。';
+  @override
+  String get common_languages_reset => 'デフォルトにリセット';
+  @override
+  String get common_languages_reset_help => 'デフォルトのよく使う言語セットにリセット';
   @override
   String get double_click_copy_result => 'ダブルクリックで翻訳結果をコピー';
   @override
@@ -1343,6 +1361,10 @@ extension on TranslationsJa {
       'mini_translator.language.auto_detect' => '自動検出',
       'mini_translator.language.auto_match' => '自動一致',
       'mini_translator.language.switch_config' => 'ターゲット切替',
+      'mini_translator.language.more_languages' => 'その他の言語...',
+      'mini_translator.language.manage_common_languages' => 'よく使う言語を管理...',
+      'mini_translator.language.manage_targets' => '翻訳ターゲットを管理...',
+      'mini_translator.language.add_target' => '翻訳ターゲットを追加...',
       'mini_translator.message.please_enter_word_or_text' =>
         'テキストが入力されていないか、テキストが抽出されていません',
       'mini_translator.message.capture_screen_area_canceled' =>
@@ -1354,6 +1376,7 @@ extension on TranslationsJa {
       'settings.general.section.directory' => '辞書',
       'settings.general.section.translation' => '翻訳',
       'settings.general.section.translation_target' => '翻訳先',
+      'settings.general.section.languages' => '言語',
       'settings.general.section.input' => '入力設定',
       'settings.general.row.launch_at_startup' => 'ログイン時に起動',
       'settings.general.row.show_in_menu_bar' => 'メニューバーに表示',
@@ -1363,6 +1386,12 @@ extension on TranslationsJa {
       'settings.general.row.auto_copy_detected_text' => '検出したテキストを自動コピー',
       'settings.general.row.default_directory_service' => 'デフォルトの辞書サービス',
       'settings.general.row.default_translation_service' => 'デフォルトの翻訳サービス',
+      'settings.general.row.common_languages' => 'よく使う言語',
+      'settings.general.row.common_languages_hint' =>
+        '言語セレクターの上部に表示する言語を選択してください。',
+      'settings.general.row.common_languages_reset' => 'デフォルトにリセット',
+      'settings.general.row.common_languages_reset_help' =>
+        'デフォルトのよく使う言語セットにリセット',
       'settings.general.row.double_click_copy_result' => 'ダブルクリックで翻訳結果をコピー',
       'settings.general.row.submit_with_enter' => 'Enterで送信',
       'settings.general.row.submit_with_meta_enter_mac' => '⌘ + Enterで送信',

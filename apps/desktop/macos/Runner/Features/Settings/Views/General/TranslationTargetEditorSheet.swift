@@ -8,26 +8,32 @@ struct TranslationTargetEditorSheet: View {
   @State var source: String
   @State var target: String
   let supportedLanguages: [LanguageInfo]
+  let commonLanguages: [String]
   var showDelete = false
   let onSave: (String, String) -> Void
   var onDelete: (() -> Void)? = nil
   let onCancel: () -> Void
 
+  /// Language infos whose codes are in the `commonLanguages` set.
+  private var commonLanguageInfos: [LanguageInfo] {
+    let codeSet = Set(commonLanguages)
+    return supportedLanguages.filter { codeSet.contains($0.code) }
+  }
+
+  /// Language infos whose codes are NOT in the `commonLanguages` set.
+  private var otherLanguageInfos: [LanguageInfo] {
+    let codeSet = Set(commonLanguages)
+    return supportedLanguages.filter { !codeSet.contains($0.code) }
+  }
+
   var body: some View {
     VStack(spacing: 0) {
-      // Header
-      HStack {
-        Text(title)
-          .font(.system(size: 16, weight: .semibold))
-        Spacer()
-      }
-      .padding(.horizontal, 20)
-      .padding(.top, 20)
-      .padding(.bottom, 12)
+      Text(title)
+        .foregroundStyle(.primary)
+        .multilineTextAlignment(.center)
+        .padding(.top, 20)
+        .padding(.bottom, 12)
 
-      Divider()
-
-      // Form
       Form {
         Section {
           languagePicker(
@@ -45,9 +51,6 @@ struct TranslationTargetEditorSheet: View {
       .formStyle(.grouped)
       .fixedSize(horizontal: false, vertical: true)
 
-      Divider()
-
-      // Bottom bar
       HStack(spacing: 8) {
         if showDelete, let onDelete {
           Button(role: .destructive) {
@@ -55,6 +58,8 @@ struct TranslationTargetEditorSheet: View {
           } label: {
             Text(LocaleKeys.common.ui.button.delete.tr())
           }
+          .buttonStyle(.bordered)
+          .tint(.red)
         }
 
         Spacer()
@@ -71,7 +76,8 @@ struct TranslationTargetEditorSheet: View {
         .disabled(source == target)
       }
       .padding(.horizontal, 20)
-      .padding(.vertical, 16)
+      .padding(.top, 12)
+      .padding(.bottom, 16)
     }
     .frame(width: 420)
     .fixedSize(horizontal: false, vertical: true)
@@ -86,16 +92,35 @@ struct TranslationTargetEditorSheet: View {
         Text(LocaleKeys.miniTranslator.language.autoDetect.tr())
           .tag("auto")
       }
-      ForEach(supportedLanguages, id: \.code) { lang in
-        HStack(spacing: 8) {
-          Text(lang.localName)
-            .font(.system(size: 13))
-          Text(lang.code)
-            .font(.system(size: 11, design: .monospaced))
-            .foregroundStyle(.secondary)
+
+      // Common languages (no section header — shown first by default)
+      if !commonLanguageInfos.isEmpty {
+        ForEach(commonLanguageInfos, id: \.code) { lang in
+          LanguageRow(lang: lang)
+            .tag(lang.code)
         }
-        .tag(lang.code)
       }
+
+      // Other languages grouped under "More languages..."
+      if !otherLanguageInfos.isEmpty {
+        Section(LocaleKeys.miniTranslator.language.moreLanguages.tr()) {
+          ForEach(otherLanguageInfos, id: \.code) { lang in
+            LanguageRow(lang: lang)
+              .tag(lang.code)
+          }
+        }
+      }
+    }
+  }
+
+  @ViewBuilder
+  private func LanguageRow(lang: LanguageInfo) -> some View {
+    HStack(spacing: 8) {
+      Text(lang.localName)
+        .font(.system(size: 13))
+      Text(lang.code)
+        .font(.system(size: 11, design: .monospaced))
+        .foregroundStyle(.secondary)
     }
   }
 }

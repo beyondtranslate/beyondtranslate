@@ -339,6 +339,7 @@ class GeneralSettings {
   final List<TranslationTarget> translationTargets;
   final InputSubmitMode inputSubmitMode;
   final bool doubleClickCopyResult;
+  final List<String> commonLanguages;
   GeneralSettings({
     required this.launchAtLogin,
     required this.showInMenuBar,
@@ -349,6 +350,7 @@ class GeneralSettings {
     required this.translationTargets,
     required this.inputSubmitMode,
     required this.doubleClickCopyResult,
+    required this.commonLanguages,
   });
 }
 
@@ -396,6 +398,10 @@ class FfiConverterGeneralSettings {
         FfiConverterBool.read(Uint8List.view(buf.buffer, new_offset));
     final doubleClickCopyResult = doubleClickCopyResult_lifted.value;
     new_offset += doubleClickCopyResult_lifted.bytesRead;
+    final commonLanguages_lifted =
+        FfiConverterSequenceString.read(Uint8List.view(buf.buffer, new_offset));
+    final commonLanguages = commonLanguages_lifted.value;
+    new_offset += commonLanguages_lifted.bytesRead;
     return LiftRetVal(
         GeneralSettings(
           launchAtLogin: launchAtLogin,
@@ -407,6 +413,7 @@ class FfiConverterGeneralSettings {
           translationTargets: translationTargets,
           inputSubmitMode: inputSubmitMode,
           doubleClickCopyResult: doubleClickCopyResult,
+          commonLanguages: commonLanguages,
         ),
         new_offset - buf.offsetInBytes);
   }
@@ -422,6 +429,7 @@ class FfiConverterGeneralSettings {
             value.translationTargets) +
         FfiConverterInputSubmitMode.allocationSize(value.inputSubmitMode) +
         FfiConverterBool.allocationSize(value.doubleClickCopyResult) +
+        FfiConverterSequenceString.allocationSize(value.commonLanguages) +
         0;
     final buf = Uint8List(total_length);
     write(value, buf);
@@ -448,6 +456,8 @@ class FfiConverterGeneralSettings {
         value.inputSubmitMode, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterBool.write(
         value.doubleClickCopyResult, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterSequenceString.write(
+        value.commonLanguages, Uint8List.view(buf.buffer, new_offset));
     return new_offset - buf.offsetInBytes;
   }
 
@@ -462,6 +472,7 @@ class FfiConverterGeneralSettings {
             value.translationTargets) +
         FfiConverterInputSubmitMode.allocationSize(value.inputSubmitMode) +
         FfiConverterBool.allocationSize(value.doubleClickCopyResult) +
+        FfiConverterSequenceString.allocationSize(value.commonLanguages) +
         0;
   }
 }
@@ -476,6 +487,7 @@ class GeneralSettingsPatch {
   final List<TranslationTarget>? translationTargets;
   final InputSubmitMode? inputSubmitMode;
   final bool? doubleClickCopyResult;
+  final List<String>? commonLanguages;
   GeneralSettingsPatch({
     this.launchAtLogin,
     this.showInMenuBar,
@@ -486,6 +498,7 @@ class GeneralSettingsPatch {
     this.translationTargets,
     this.inputSubmitMode,
     this.doubleClickCopyResult,
+    this.commonLanguages,
   });
 }
 
@@ -533,6 +546,10 @@ class FfiConverterGeneralSettingsPatch {
         FfiConverterOptionalBool.read(Uint8List.view(buf.buffer, new_offset));
     final doubleClickCopyResult = doubleClickCopyResult_lifted.value;
     new_offset += doubleClickCopyResult_lifted.bytesRead;
+    final commonLanguages_lifted = FfiConverterOptionalSequenceString.read(
+        Uint8List.view(buf.buffer, new_offset));
+    final commonLanguages = commonLanguages_lifted.value;
+    new_offset += commonLanguages_lifted.bytesRead;
     return LiftRetVal(
         GeneralSettingsPatch(
           launchAtLogin: launchAtLogin,
@@ -544,6 +561,7 @@ class FfiConverterGeneralSettingsPatch {
           translationTargets: translationTargets,
           inputSubmitMode: inputSubmitMode,
           doubleClickCopyResult: doubleClickCopyResult,
+          commonLanguages: commonLanguages,
         ),
         new_offset - buf.offsetInBytes);
   }
@@ -563,6 +581,8 @@ class FfiConverterGeneralSettingsPatch {
         FfiConverterOptionalInputSubmitMode.allocationSize(
             value.inputSubmitMode) +
         FfiConverterOptionalBool.allocationSize(value.doubleClickCopyResult) +
+        FfiConverterOptionalSequenceString.allocationSize(
+            value.commonLanguages) +
         0;
     final buf = Uint8List(total_length);
     write(value, buf);
@@ -590,6 +610,8 @@ class FfiConverterGeneralSettingsPatch {
         value.inputSubmitMode, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterOptionalBool.write(
         value.doubleClickCopyResult, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalSequenceString.write(
+        value.commonLanguages, Uint8List.view(buf.buffer, new_offset));
     return new_offset - buf.offsetInBytes;
   }
 
@@ -607,6 +629,8 @@ class FfiConverterGeneralSettingsPatch {
         FfiConverterOptionalInputSubmitMode.allocationSize(
             value.inputSubmitMode) +
         FfiConverterOptionalBool.allocationSize(value.doubleClickCopyResult) +
+        FfiConverterOptionalSequenceString.allocationSize(
+            value.commonLanguages) +
         0;
   }
 }

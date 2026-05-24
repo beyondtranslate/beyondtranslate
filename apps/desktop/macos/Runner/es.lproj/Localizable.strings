@@ -69,8 +69,12 @@
 "mini_translator.button.translate" = "Traducir";
 "mini_translator.input.extracting_text" = "Extrayendo texto...";
 "mini_translator.input.hint" = "Escribe la palabra o texto aquí";
+"mini_translator.language.add_target" = "Agregar destino de traducción...";
 "mini_translator.language.auto_detect" = "Detección automática";
 "mini_translator.language.auto_match" = "Coincidencia auto";
+"mini_translator.language.manage_common_languages" = "Administrar idiomas comunes...";
+"mini_translator.language.manage_targets" = "Administrar destinos de traducción...";
+"mini_translator.language.more_languages" = "Más idiomas...";
 "mini_translator.language.switch_config" = "Cambiar destino";
 "mini_translator.limited_banner.action.app_settings" = "Configuración de la app";
 "mini_translator.limited_banner.action.recheck" = "Verificar de nuevo";
@@ -110,6 +114,10 @@
 "settings.general.option.tesseract" = "Tesseract";
 "settings.general.option.youdao_ocr" = "Youdao OCR";
 "settings.general.row.auto_copy_detected_text" = "Copiar texto detectado automáticamente";
+"settings.general.row.common_languages" = "Idiomas comunes";
+"settings.general.row.common_languages_hint" = "Selecciona los idiomas que se mostrarán al inicio de los selectores de idioma.";
+"settings.general.row.common_languages_reset" = "Restablecer valores predeterminados";
+"settings.general.row.common_languages_reset_help" = "Restablecer el conjunto predeterminado de idiomas comunes";
 "settings.general.row.default_directory_service" = "Servicio de diccionario predeterminado";
 "settings.general.row.default_ocr_service" = "Servicio de reconocimiento de texto predeterminado";
 "settings.general.row.default_translation_service" = "Servicio de traducción predeterminado";
@@ -122,6 +130,7 @@
 "settings.general.row.submit_with_meta_enter_mac" = "Enviar con ⌘ + Enter";
 "settings.general.section.directory" = "Directorio";
 "settings.general.section.input" = "Configuración de entrada";
+"settings.general.section.languages" = "Idiomas";
 "settings.general.section.ocr" = "Reconocimiento de texto";
 "settings.general.section.permissions" = "Permisos";
 "settings.general.section.translation" = "Traducción";

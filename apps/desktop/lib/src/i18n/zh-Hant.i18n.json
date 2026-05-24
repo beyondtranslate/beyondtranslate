@@ -129,7 +129,11 @@
     "language": {
       "auto_detect": "自動偵測",
       "auto_match": "自動匹配",
-      "switch_config": "切換目標"
+      "switch_config": "切換目標",
+      "more_languages": "更多語言...",
+      "manage_common_languages": "管理常用語言...",
+      "manage_targets": "管理翻譯目標...",
+      "add_target": "添加翻譯目標..."
     },
     "message": {
       "please_enter_word_or_text": "未輸入或未擷取到文字",
@@ -146,6 +150,7 @@
         "directory": "辭典",
         "translation": "翻譯",
         "translation_target": "翻譯目標",
+        "languages": "語言",
         "input": "輸入設定"
       },
       "row": {
@@ -154,12 +159,16 @@
         "screen_capture_access": "授予螢幕錄製權限",
         "screen_selection_access": "授予輔助功能權限",
         "default_ocr_service": "預設文字辨識服務",
-        "auto_copy_detected_text": "自動複製辨識文字",
+        "auto_copy_detected_text": "自動複製偵測到的文字",
         "default_directory_service": "預設辭典服務",
         "default_translation_service": "預設翻譯服務",
+        "common_languages": "常用語言",
+        "common_languages_hint": "選擇要在語言選擇器頂部顯示的常用語言。",
+        "common_languages_reset": "恢復預設",
+        "common_languages_reset_help": "恢復為預設的常用語言集合",
         "double_click_copy_result": "雙擊複製翻譯結果",
-        "submit_with_enter": "用 Enter 提交",
-        "submit_with_meta_enter_mac": "用 ⌘ + Enter 提交"
+        "submit_with_enter": "按 Enter 提交",
+        "submit_with_meta_enter_mac": "按 ⌘ + Enter 提交"
       },
       "button": {
         "add_provider": "新增…",

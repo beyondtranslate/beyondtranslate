@@ -23,6 +23,16 @@ final class MacSettingsPlugin: NSObject, FlutterPlugin {
         SettingsHighlightCoordinator.shared.requestHighlightPermissionsSection()
         result(nil)
       }
+    case "showCommonLanguages":
+      Task { @MainActor in
+        SettingsHighlightCoordinator.shared.requestShowCommonLanguages()
+        result(nil)
+      }
+    case "showAddTarget":
+      Task { @MainActor in
+        SettingsHighlightCoordinator.shared.requestShowAddTarget()
+        result(nil)
+      }
     default:
       result(FlutterMethodNotImplemented)
     }

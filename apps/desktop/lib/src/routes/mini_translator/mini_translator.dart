@@ -19,6 +19,8 @@ import '../../extensions/window_controller.dart';
 import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
+import '../../routes/settings/general.dart' show GeneralSettingsPage;
+import '../../services/mac_settings.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
 import '../../services/shortcut_service/shortcut_service.dart';
@@ -604,6 +606,24 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     showSettingsWindow();
   }
 
+  void _handleManageCommonLanguages() {
+    if (kIsMacOS) {
+      MacSettings.showAndOpenCommonLanguages();
+    } else {
+      showSettingsWindow();
+      GeneralSettingsPage.pendingOpenCommonLanguages = true;
+    }
+  }
+
+  void _handleAddTarget() {
+    if (kIsMacOS) {
+      MacSettings.showAndOpenAddTarget();
+    } else {
+      showSettingsWindow();
+      GeneralSettingsPage.pendingOpenAddTarget = true;
+    }
+  }
+
   void _handleTextChanged(
     String? newValue, {
     bool isRequery = false,
@@ -792,10 +812,13 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             selectedTargetLanguage: _selectedTargetLanguage,
             activeConfigIndex: _activeConfigIndex,
             persistentTargets: settingsStore.general.translationTargets,
+            commonLanguageCodes: settingsStore.general.commonLanguages,
             onSourceChanged: _handleSourceChanged,
             onTargetLanguageChanged: _handleTargetLanguageChanged,
             onConfigTargetSelected: _handleConfigTargetSelected,
             onManageTargets: _handleManageTargets,
+            onManageCommonLanguages: _handleManageCommonLanguages,
+            onAddTarget: _handleAddTarget,
           ),
         ],
       ),

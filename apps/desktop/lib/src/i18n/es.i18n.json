@@ -129,7 +129,11 @@
     "language": {
       "auto_detect": "Detección automática",
       "auto_match": "Coincidencia auto",
-      "switch_config": "Cambiar destino"
+      "switch_config": "Cambiar destino",
+      "more_languages": "Más idiomas...",
+      "manage_common_languages": "Administrar idiomas comunes...",
+      "manage_targets": "Administrar destinos de traducción...",
+      "add_target": "Agregar destino de traducción..."
     },
     "message": {
       "please_enter_word_or_text": "No se ingresó texto o no se pudo extraer",
@@ -146,6 +150,7 @@
         "directory": "Directorio",
         "translation": "Traducción",
         "translation_target": "Idioma de destino",
+        "languages": "Idiomas",
         "input": "Configuración de entrada"
       },
       "row": {
@@ -157,6 +162,10 @@
         "auto_copy_detected_text": "Copiar texto detectado automáticamente",
         "default_directory_service": "Servicio de diccionario predeterminado",
         "default_translation_service": "Servicio de traducción predeterminado",
+        "common_languages": "Idiomas comunes",
+        "common_languages_hint": "Selecciona los idiomas que se mostrarán al inicio de los selectores de idioma.",
+        "common_languages_reset": "Restablecer valores predeterminados",
+        "common_languages_reset_help": "Restablecer el conjunto predeterminado de idiomas comunes",
         "double_click_copy_result": "Doble clic para copiar el resultado de la traducción",
         "submit_with_enter": "Enviar con Enter",
         "submit_with_meta_enter_mac": "Enviar con ⌘ + Enter"

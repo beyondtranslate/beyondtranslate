@@ -128,6 +128,11 @@ pub struct GeneralSettings {
     pub input_submit_mode: InputSubmitMode,
     #[serde(rename = "doubleClickCopyResult")]
     pub double_click_copy_result: bool,
+    /// Language codes that the user has marked as "common" / frequently used.
+    /// These languages appear first in language selection menus, with the
+    /// remaining languages collapsed into a secondary "More languages..." menu.
+    #[serde(rename = "commonLanguages")]
+    pub common_languages: Vec<String>,
 }
 
 impl Default for GeneralSettings {
@@ -142,6 +147,7 @@ impl Default for GeneralSettings {
             translation_targets: Vec::new(),
             input_submit_mode: InputSubmitMode::default(),
             double_click_copy_result: true,
+            common_languages: Vec::new(),
         }
     }
 }

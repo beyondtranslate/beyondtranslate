@@ -37,7 +37,8 @@ extension GeneralSettingsPatch {
     defaultTranslationService: String? = nil,
     translationTargets: [TranslationTarget]? = nil,
     inputSubmitMode: InputSubmitMode? = nil,
-    doubleClickCopyResult: Bool? = nil
+    doubleClickCopyResult: Bool? = nil,
+    commonLanguages: [String]? = nil
   ) -> GeneralSettingsPatch {
     GeneralSettingsPatch(
       launchAtLogin: launchAtLogin,
@@ -48,7 +49,8 @@ extension GeneralSettingsPatch {
       defaultTranslationService: defaultTranslationService,
       translationTargets: translationTargets,
       inputSubmitMode: inputSubmitMode,
-      doubleClickCopyResult: doubleClickCopyResult
+      doubleClickCopyResult: doubleClickCopyResult,
+      commonLanguages: commonLanguages
     )
   }
 }

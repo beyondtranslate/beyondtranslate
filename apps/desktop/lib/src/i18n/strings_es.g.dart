@@ -428,6 +428,14 @@ class _TranslationsMiniTranslatorLanguageEs
   String get auto_match => 'Coincidencia auto';
   @override
   String get switch_config => 'Cambiar destino';
+  @override
+  String get more_languages => 'Más idiomas...';
+  @override
+  String get manage_common_languages => 'Administrar idiomas comunes...';
+  @override
+  String get manage_targets => 'Administrar destinos de traducción...';
+  @override
+  String get add_target => 'Agregar destino de traducción...';
 }
 
 // Path: mini_translator.message
@@ -787,6 +795,8 @@ class _TranslationsSettingsGeneralSectionEs
   @override
   String get translation_target => 'Idioma de destino';
   @override
+  String get languages => 'Idiomas';
+  @override
   String get input => 'Configuración de entrada';
 }
 
@@ -821,6 +831,16 @@ class _TranslationsSettingsGeneralRowEs
   @override
   String get default_translation_service =>
       'Servicio de traducción predeterminado';
+  @override
+  String get common_languages => 'Idiomas comunes';
+  @override
+  String get common_languages_hint =>
+      'Selecciona los idiomas que se mostrarán al inicio de los selectores de idioma.';
+  @override
+  String get common_languages_reset => 'Restablecer valores predeterminados';
+  @override
+  String get common_languages_reset_help =>
+      'Restablecer el conjunto predeterminado de idiomas comunes';
   @override
   String get double_click_copy_result =>
       'Doble clic para copiar el resultado de la traducción';
@@ -1367,6 +1387,13 @@ extension on TranslationsEs {
       'mini_translator.language.auto_detect' => 'Detección automática',
       'mini_translator.language.auto_match' => 'Coincidencia auto',
       'mini_translator.language.switch_config' => 'Cambiar destino',
+      'mini_translator.language.more_languages' => 'Más idiomas...',
+      'mini_translator.language.manage_common_languages' =>
+        'Administrar idiomas comunes...',
+      'mini_translator.language.manage_targets' =>
+        'Administrar destinos de traducción...',
+      'mini_translator.language.add_target' =>
+        'Agregar destino de traducción...',
       'mini_translator.message.please_enter_word_or_text' =>
         'No se ingresó texto o no se pudo extraer',
       'mini_translator.message.capture_screen_area_canceled' =>
@@ -1378,6 +1405,7 @@ extension on TranslationsEs {
       'settings.general.section.directory' => 'Directorio',
       'settings.general.section.translation' => 'Traducción',
       'settings.general.section.translation_target' => 'Idioma de destino',
+      'settings.general.section.languages' => 'Idiomas',
       'settings.general.section.input' => 'Configuración de entrada',
       'settings.general.row.launch_at_startup' => 'Iniciar al iniciar sesión',
       'settings.general.row.show_in_menu_bar' => 'Mostrar en la barra de menú',
@@ -1393,6 +1421,13 @@ extension on TranslationsEs {
         'Servicio de diccionario predeterminado',
       'settings.general.row.default_translation_service' =>
         'Servicio de traducción predeterminado',
+      'settings.general.row.common_languages' => 'Idiomas comunes',
+      'settings.general.row.common_languages_hint' =>
+        'Selecciona los idiomas que se mostrarán al inicio de los selectores de idioma.',
+      'settings.general.row.common_languages_reset' =>
+        'Restablecer valores predeterminados',
+      'settings.general.row.common_languages_reset_help' =>
+        'Restablecer el conjunto predeterminado de idiomas comunes',
       'settings.general.row.double_click_copy_result' =>
         'Doble clic para copiar el resultado de la traducción',
       'settings.general.row.submit_with_enter' => 'Enviar con Enter',

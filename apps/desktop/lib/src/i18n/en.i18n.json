@@ -129,7 +129,11 @@
     "language": {
       "auto_detect": "Auto Detect",
       "auto_match": "Auto Match",
-      "switch_config": "Switch Target"
+      "switch_config": "Switch Target",
+      "more_languages": "More languages...",
+      "manage_common_languages": "Manage Common Languages...",
+      "manage_targets": "Manage Translation Targets...",
+      "add_target": "Add Translation Target..."
     },
     "message": {
       "please_enter_word_or_text": "No text entered or text not extracted",
@@ -146,6 +150,7 @@
         "directory": "Directory",
         "translation": "Translation",
         "translation_target": "Translation Target",
+        "languages": "Languages",
         "input": "Input Settings"
       },
       "row": {
@@ -157,7 +162,11 @@
         "auto_copy_detected_text": "Auto copy detected text",
         "default_directory_service": "Default directory service",
         "default_translation_service": "Default translation service",
+        "common_languages": "Common Languages",
+        "common_languages_hint": "Select languages to show at the top of language pickers.",
         "double_click_copy_result": "Double click to copy translation result",
+        "common_languages_reset": "Reset to Defaults",
+        "common_languages_reset_help": "Reset to the default set of common languages",
         "submit_with_enter": "Submit with Enter",
         "submit_with_meta_enter_mac": "Submit with ⌘ + Enter"
       },

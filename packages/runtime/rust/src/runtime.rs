@@ -1127,6 +1127,7 @@ mod tests {
                         translation_targets: None,
                         input_submit_mode: None,
                         double_click_copy_result: None,
+                        common_languages: None,
                     })
                     .await
                     .expect("update_general failed");

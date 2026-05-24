@@ -31,4 +31,18 @@ class MacSettings {
     await show();
     await highlightPermissions();
   }
+
+  static Future<void> showAndOpenCommonLanguages() async {
+    if (!Platform.isMacOS) return;
+
+    await show();
+    await _channel.invokeMethod<void>('showCommonLanguages');
+  }
+
+  static Future<void> showAndOpenAddTarget() async {
+    if (!Platform.isMacOS) return;
+
+    await show();
+    await _channel.invokeMethod<void>('showAddTarget');
+  }
 }

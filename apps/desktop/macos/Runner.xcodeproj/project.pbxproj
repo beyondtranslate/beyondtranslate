@@ -55,6 +55,7 @@
 		A100000000000000000000F /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110000000000000000000F /* ProviderDetailView.swift */; };
 		B6867768A75CBFFF8FFDC94A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74461F6C52F3E25BADFFDC82 /* Pods_Runner.framework */; };
 		F5ACAED92FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5ACAED82FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift */; };
+		F5ACAEDB2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5ACAEDA2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift */; };
 		F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */; };
 		F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */; };
 		F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */; };
@@ -152,6 +153,7 @@
 		A110000000000000000000F /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
 		AB98A8540C162D94896470E6 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		F5ACAED82FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTargetEditorSheet.swift; sourceTree = "<group>"; };
+		F5ACAEDA2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonLanguagesEditorSheet.swift; sourceTree = "<group>"; };
 		F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode.swift; sourceTree = "<group>"; };
 		F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeAppearanceController.swift; sourceTree = "<group>"; };
 		F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderEditorSheet.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 		A20000000000000000000002 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				F5ACAEDA2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift */,
 				F5ACAED82FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift */,
 				A11000000000000000000002 /* GeneralView.swift */,
 			);
@@ -707,6 +710,7 @@
 				A100000000000000000000F /* ProviderDetailView.swift in Sources */,
 				A10000000000000000000006 /* AdvancedView.swift in Sources */,
 				A10000000000000000000007 /* GeneralViewModel.swift in Sources */,
+				F5ACAEDB2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift in Sources */,
 				A10000000000000000000008 /* AppearanceViewModel.swift in Sources */,
 				A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */,
 				A1000000000000000000000A /* ProvidersViewModel.swift in Sources */,
