@@ -102,7 +102,7 @@
 "settings.appearance.section.theme_mode" = "테마 모드";
 "settings.appearance.title" = "외관";
 "settings.general.button.add_provider" = "추가...";
-"settings.general.button.add_target" = "대상 추가";
+"settings.general.button.add_target" = "대상 추가...";
 "settings.general.button.grant" = "허용";
 "settings.general.button.manage_targets" = "번역 대상 관리...";
 "settings.general.editor.row.source_language" = "소스 언어";
@@ -115,7 +115,7 @@
 "settings.general.option.youdao_ocr" = "Youdao OCR";
 "settings.general.row.auto_copy_detected_text" = "감지된 텍스트 자동 복사";
 "settings.general.row.common_languages" = "자주 사용하는 언어";
-"settings.general.row.common_languages_hint" = "언어 선택기 상단에 표시할 언어를 선택하세요.";
+"settings.general.row.common_languages_hint" = "자주 사용하는 언어를 선택하세요:";
 "settings.general.row.common_languages_reset" = "기본값으로 재설정";
 "settings.general.row.common_languages_reset_help" = "기본 공용 언어 세트로 재설정";
 "settings.general.row.default_directory_service" = "기본 사전 서비스";
@@ -128,6 +128,7 @@
 "settings.general.row.show_in_menu_bar" = "메뉴 막대에 표시";
 "settings.general.row.submit_with_enter" = "Enter로 제출";
 "settings.general.row.submit_with_meta_enter_mac" = "⌘ + Enter로 제출";
+"settings.general.row.translation_target_hint" = "번역기에 사용할 언어 쌍을 설정합니다.";
 "settings.general.section.directory" = "사전";
 "settings.general.section.input" = "입력 설정";
 "settings.general.section.languages" = "언어";

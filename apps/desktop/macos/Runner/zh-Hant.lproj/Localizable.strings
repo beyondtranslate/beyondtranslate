@@ -102,7 +102,7 @@
 "settings.appearance.section.theme_mode" = "主題模式";
 "settings.appearance.title" = "外觀";
 "settings.general.button.add_provider" = "新增…";
-"settings.general.button.add_target" = "新增目標";
+"settings.general.button.add_target" = "新增目標...";
 "settings.general.button.grant" = "授權";
 "settings.general.button.manage_targets" = "管理翻譯目標...";
 "settings.general.editor.row.source_language" = "源語言";
@@ -115,7 +115,7 @@
 "settings.general.option.youdao_ocr" = "有道 OCR";
 "settings.general.row.auto_copy_detected_text" = "自動複製偵測到的文字";
 "settings.general.row.common_languages" = "常用語言";
-"settings.general.row.common_languages_hint" = "選擇要在語言選擇器頂部顯示的常用語言。";
+"settings.general.row.common_languages_hint" = "選擇你常用的語言：";
 "settings.general.row.common_languages_reset" = "恢復預設";
 "settings.general.row.common_languages_reset_help" = "恢復為預設的常用語言集合";
 "settings.general.row.default_directory_service" = "預設辭典服務";
@@ -128,6 +128,7 @@
 "settings.general.row.show_in_menu_bar" = "在選單列中顯示";
 "settings.general.row.submit_with_enter" = "按 Enter 提交";
 "settings.general.row.submit_with_meta_enter_mac" = "按 ⌘ + Enter 提交";
+"settings.general.row.translation_target_hint" = "設定翻譯器使用的語言目標。";
 "settings.general.section.directory" = "辭典";
 "settings.general.section.input" = "輸入設定";
 "settings.general.section.languages" = "語言";

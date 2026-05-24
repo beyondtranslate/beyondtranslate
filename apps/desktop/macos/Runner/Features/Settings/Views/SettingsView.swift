@@ -63,7 +63,7 @@ struct SettingsView: View {
     .environment(\.locale, Locale(identifier: localization.languageCode))
     .onReceive(highlightCoordinator.$pendingHighlightPermissionsSectionID) { id in
       guard id != nil else { return }
-      selectedSection = .general
+      selectedSection = .advanced
     }
   }
 }

@@ -1,5 +1,3 @@
-import AppKit
-import ApplicationServices
 import SwiftUI
 import beyondtranslate_runtime
 
@@ -21,8 +19,6 @@ final class GeneralViewModel: ObservableObject {
   @Published var inputSubmitMode: InputSubmitMode
   @Published var doubleClickCopyResult: Bool
   @Published var commonLanguages: [String]
-  @Published var screenCaptureAllowed = false
-  @Published var accessibilityAllowed = false
 
   // Runtime providers
   @Published var providers: [ProviderConfigEntry] = []
@@ -75,8 +71,6 @@ final class GeneralViewModel: ObservableObject {
   }
 
   func load() async {
-    refreshPermissions()
-
     do {
       apply(try await repository.getGeneral())
     } catch {
@@ -198,28 +192,6 @@ final class GeneralViewModel: ObservableObject {
     Task { await persist(.diff(commonLanguages: languages)) }
   }
 
-  func refreshPermissions() {
-    screenCaptureAllowed = CGPreflightScreenCaptureAccess()
-    accessibilityAllowed = AXIsProcessTrusted()
-  }
-
-  func requestScreenCaptureAccess() {
-    if !CGPreflightScreenCaptureAccess() {
-      CGRequestScreenCaptureAccess()
-    }
-    openPrivacyPane("Privacy_ScreenCapture")
-    refreshPermissions()
-  }
-
-  func requestAccessibilityAccess() {
-    if !AXIsProcessTrusted() {
-      let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
-      AXIsProcessTrustedWithOptions(options as CFDictionary)
-    }
-    openPrivacyPane("Privacy_Accessibility")
-    refreshPermissions()
-  }
-
   private func persist(_ patch: GeneralSettingsPatch) async {
     do {
       apply(try await repository.updateGeneral(patch))
@@ -248,16 +220,5 @@ final class GeneralViewModel: ObservableObject {
       }
     }
     return serviceID
-  }
-
-  private func openPrivacyPane(_ anchor: String) {
-    guard
-      let url = URL(
-        string: "x-apple.systempreferences:com.apple.preference.security?\(anchor)"
-      )
-    else {
-      return
-    }
-    NSWorkspace.shared.open(url)
   }
 }

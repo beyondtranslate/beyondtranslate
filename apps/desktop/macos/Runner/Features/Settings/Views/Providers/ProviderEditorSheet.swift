@@ -81,7 +81,9 @@ struct ProviderTypePicker: View {
     VStack(spacing: 0) {
       Text(LocaleKeys.settings.providers.editor.typePicker.prompt.tr())
         .foregroundStyle(.primary)
-        .multilineTextAlignment(.center)
+        .multilineTextAlignment(.leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 20)
         .padding(.top, 20)
         .padding(.bottom, 12)
 

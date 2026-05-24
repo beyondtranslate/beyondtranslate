@@ -162,8 +162,9 @@
         "auto_copy_detected_text": "Auto copy detected text",
         "default_directory_service": "Default directory service",
         "default_translation_service": "Default translation service",
+        "translation_target_hint": "Configure language pairs used by the translator.",
         "common_languages": "Common Languages",
-        "common_languages_hint": "Select languages to show at the top of language pickers.",
+        "common_languages_hint": "Select your common languages:",
         "double_click_copy_result": "Double click to copy translation result",
         "common_languages_reset": "Reset to Defaults",
         "common_languages_reset_help": "Reset to the default set of common languages",
@@ -172,7 +173,7 @@
       },
       "button": {
         "add_provider": "Add...",
-        "add_target": "Add Target",
+        "add_target": "Add Target...",
         "manage_targets": "Manage Translation Targets...",
         "grant": "Grant"
       },

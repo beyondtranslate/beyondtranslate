@@ -162,8 +162,9 @@
         "auto_copy_detected_text": "Copiar texto detectado automáticamente",
         "default_directory_service": "Servicio de diccionario predeterminado",
         "default_translation_service": "Servicio de traducción predeterminado",
+        "translation_target_hint": "Configura los pares de idiomas usados por el traductor.",
         "common_languages": "Idiomas comunes",
-        "common_languages_hint": "Selecciona los idiomas que se mostrarán al inicio de los selectores de idioma.",
+        "common_languages_hint": "Selecciona tus idiomas comunes:",
         "common_languages_reset": "Restablecer valores predeterminados",
         "common_languages_reset_help": "Restablecer el conjunto predeterminado de idiomas comunes",
         "double_click_copy_result": "Doble clic para copiar el resultado de la traducción",
@@ -172,7 +173,7 @@
       },
       "button": {
         "add_provider": "Agregar...",
-        "add_target": "Agregar destino",
+        "add_target": "Agregar destino...",
         "manage_targets": "Gestionar destinos de traducción...",
         "grant": "Conceder"
       },

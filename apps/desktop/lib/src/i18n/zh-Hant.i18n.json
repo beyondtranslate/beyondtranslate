@@ -162,8 +162,9 @@
         "auto_copy_detected_text": "自動複製偵測到的文字",
         "default_directory_service": "預設辭典服務",
         "default_translation_service": "預設翻譯服務",
+        "translation_target_hint": "設定翻譯器使用的語言目標。",
         "common_languages": "常用語言",
-        "common_languages_hint": "選擇要在語言選擇器頂部顯示的常用語言。",
+        "common_languages_hint": "選擇你常用的語言：",
         "common_languages_reset": "恢復預設",
         "common_languages_reset_help": "恢復為預設的常用語言集合",
         "double_click_copy_result": "雙擊複製翻譯結果",
@@ -172,7 +173,7 @@
       },
       "button": {
         "add_provider": "新增…",
-        "add_target": "新增目標",
+        "add_target": "新增目標...",
         "manage_targets": "管理翻譯目標...",
         "grant": "授權"
       },

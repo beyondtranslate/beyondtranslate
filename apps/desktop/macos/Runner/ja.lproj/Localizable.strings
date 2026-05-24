@@ -102,7 +102,7 @@
 "settings.appearance.section.theme_mode" = "テーマモード";
 "settings.appearance.title" = "外観";
 "settings.general.button.add_provider" = "追加...";
-"settings.general.button.add_target" = "対象を追加";
+"settings.general.button.add_target" = "対象を追加...";
 "settings.general.button.grant" = "許可";
 "settings.general.button.manage_targets" = "翻訳ターゲットを管理...";
 "settings.general.editor.row.source_language" = "ソース言語";
@@ -115,7 +115,7 @@
 "settings.general.option.youdao_ocr" = "Youdao OCR";
 "settings.general.row.auto_copy_detected_text" = "検出したテキストを自動コピー";
 "settings.general.row.common_languages" = "よく使う言語";
-"settings.general.row.common_languages_hint" = "言語セレクターの上部に表示する言語を選択してください。";
+"settings.general.row.common_languages_hint" = "よく使う言語を選択してください：";
 "settings.general.row.common_languages_reset" = "デフォルトにリセット";
 "settings.general.row.common_languages_reset_help" = "デフォルトのよく使う言語セットにリセット";
 "settings.general.row.default_directory_service" = "デフォルトの辞書サービス";
@@ -128,6 +128,7 @@
 "settings.general.row.show_in_menu_bar" = "メニューバーに表示";
 "settings.general.row.submit_with_enter" = "Enterで送信";
 "settings.general.row.submit_with_meta_enter_mac" = "⌘ + Enterで送信";
+"settings.general.row.translation_target_hint" = "翻訳で使用する言語ペアを設定します。";
 "settings.general.section.directory" = "辞書";
 "settings.general.section.input" = "入力設定";
 "settings.general.section.languages" = "言語";

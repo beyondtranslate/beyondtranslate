@@ -1,3 +1,5 @@
+import AppKit
+import ApplicationServices
 import SwiftUI
 import beyondtranslate_runtime
 
@@ -6,6 +8,8 @@ final class AdvancedViewModel: ObservableObject {
   @Published var apiServerEnabled: Bool
   @Published var apiServerHost: String
   @Published var apiServerPort: UInt16
+  @Published var screenCaptureAllowed = false
+  @Published var accessibilityAllowed = false
 
   private let repository: SettingsRepository
 
@@ -17,11 +21,46 @@ final class AdvancedViewModel: ObservableObject {
   }
 
   func load() async {
+    refreshPermissions()
+
     do {
       apply(try await repository.getAdvanced())
     } catch {
       // Keep defaults when the Rust-backed settings cannot be loaded.
     }
+  }
+
+  func refreshPermissions() {
+    screenCaptureAllowed = CGPreflightScreenCaptureAccess()
+    accessibilityAllowed = AXIsProcessTrusted()
+  }
+
+  func requestScreenCaptureAccess() {
+    if !CGPreflightScreenCaptureAccess() {
+      CGRequestScreenCaptureAccess()
+    }
+    openPrivacyPane("Privacy_ScreenCapture")
+    refreshPermissions()
+  }
+
+  func requestAccessibilityAccess() {
+    if !AXIsProcessTrusted() {
+      let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
+      AXIsProcessTrustedWithOptions(options as CFDictionary)
+    }
+    openPrivacyPane("Privacy_Accessibility")
+    refreshPermissions()
+  }
+
+  private func openPrivacyPane(_ anchor: String) {
+    guard
+      let url = URL(
+        string: "x-apple.systempreferences:com.apple.preference.security?\(anchor)"
+      )
+    else {
+      return
+    }
+    NSWorkspace.shared.open(url)
   }
 
   func setApiServerEnabled(_ value: Bool) {

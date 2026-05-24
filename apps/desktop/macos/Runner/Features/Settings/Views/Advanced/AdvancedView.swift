@@ -1,10 +1,42 @@
+import AppKit
 import SwiftUI
 
 struct AdvancedView: View {
   @ObservedObject var viewModel: AdvancedViewModel
+  @ObservedObject private var highlightCoordinator = SettingsHighlightCoordinator.shared
+  @State private var isPermissionsHighlighted = false
+  @State private var permissionsHighlightGeneration = 0
 
   var body: some View {
     SettingsPage(title: LocaleKeys.settings.advanced.title.tr()) {
+      Section(LocaleKeys.settings.general.section.permissions.tr()) {
+        PermissionAccessRow(
+          title: LocaleKeys.settings.general.row.screenCaptureAccess.tr(),
+          isAllowed: viewModel.screenCaptureAllowed,
+          onRequest: viewModel.requestScreenCaptureAccess
+        )
+        PermissionAccessRow(
+          title: LocaleKeys.settings.general.row.screenSelectionAccess.tr(),
+          isAllowed: viewModel.accessibilityAllowed,
+          onRequest: viewModel.requestAccessibilityAccess
+        )
+      }
+      .background(
+        RoundedRectangle(cornerRadius: 6)
+          .fill(isPermissionsHighlighted ? Color.accentColor.opacity(0.16) : Color.clear)
+          .padding(.horizontal, -6)
+          .padding(.vertical, -4)
+      )
+      .overlay(
+        RoundedRectangle(cornerRadius: 6)
+          .stroke(
+            isPermissionsHighlighted ? Color.accentColor.opacity(0.55) : Color.clear,
+            lineWidth: 1
+          )
+          .padding(.horizontal, -6)
+          .padding(.vertical, -4)
+      )
+
       Section {
         SettingToggle(
           LocaleKeys.settings.advanced.enable.tr(),
@@ -36,6 +68,38 @@ struct AdvancedView: View {
         footer
       }
     }
+    .task {
+      await viewModel.load()
+    }
+    .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification))
+    { _ in
+      viewModel.refreshPermissions()
+    }
+    .onAppear {
+      handlePermissionsHighlight(highlightCoordinator.pendingHighlightPermissionsSectionID)
+    }
+    .onChange(of: highlightCoordinator.pendingHighlightPermissionsSectionID) { newValue in
+      handlePermissionsHighlight(newValue)
+    }
+  }
+
+  private func handlePermissionsHighlight(_ id: Int?) {
+    guard let id, highlightCoordinator.consumeHighlightPermissionsSection(id) else { return }
+
+    permissionsHighlightGeneration += 1
+    let generation = permissionsHighlightGeneration
+
+    withAnimation(.easeInOut(duration: 0.16)) {
+      isPermissionsHighlighted = true
+    }
+
+    Task {
+      try? await Task.sleep(nanoseconds: 1_600_000_000)
+      guard generation == permissionsHighlightGeneration else { return }
+      withAnimation(.easeInOut(duration: 0.24)) {
+        isPermissionsHighlighted = false
+      }
+    }
   }
 
   @ViewBuilder
@@ -57,5 +121,34 @@ struct AdvancedView: View {
   private var runningAtPrefix: String {
     let template = LocaleKeys.settings.advanced.runningAt.tr()
     return template.components(separatedBy: "{url}").first ?? ""
+  }
+}
+
+private struct PermissionAccessRow: View {
+  let title: String
+  let isAllowed: Bool
+  let onRequest: () -> Void
+
+  var body: some View {
+    HStack(alignment: .center) {
+      Text(title)
+      Spacer()
+
+      ZStack(alignment: .trailing) {
+        Button(action: {}) {
+          Text(" ")
+        }
+        .opacity(0)
+        .accessibilityHidden(true)
+        .allowsHitTesting(false)
+
+        if isAllowed {
+          Text(LocaleKeys.settings.general.option.granted.tr())
+            .foregroundStyle(.secondary)
+        } else {
+          Button(LocaleKeys.settings.general.button.grant.tr(), action: onRequest)
+        }
+      }
+    }
   }
 }

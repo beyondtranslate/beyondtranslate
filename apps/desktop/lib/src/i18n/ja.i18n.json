@@ -162,8 +162,9 @@
         "auto_copy_detected_text": "検出したテキストを自動コピー",
         "default_directory_service": "デフォルトの辞書サービス",
         "default_translation_service": "デフォルトの翻訳サービス",
+        "translation_target_hint": "翻訳で使用する言語ペアを設定します。",
         "common_languages": "よく使う言語",
-        "common_languages_hint": "言語セレクターの上部に表示する言語を選択してください。",
+        "common_languages_hint": "よく使う言語を選択してください：",
         "common_languages_reset": "デフォルトにリセット",
         "common_languages_reset_help": "デフォルトのよく使う言語セットにリセット",
         "double_click_copy_result": "ダブルクリックで翻訳結果をコピー",
@@ -172,7 +173,7 @@
       },
       "button": {
         "add_provider": "追加...",
-        "add_target": "対象を追加",
+        "add_target": "対象を追加...",
         "manage_targets": "翻訳ターゲットを管理...",
         "grant": "許可"
       },

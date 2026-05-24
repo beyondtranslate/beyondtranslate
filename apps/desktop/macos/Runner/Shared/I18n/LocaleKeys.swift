@@ -241,6 +241,7 @@ enum LocaleKeys {
         static let submitWithEnter = LocaleKey("settings.general.row.submit_with_enter")
         static let submitWithMetaEnterMac = LocaleKey(
           "settings.general.row.submit_with_meta_enter_mac")
+        static let translationTargetHint = LocaleKey("settings.general.row.translation_target_hint")
       }
       enum section {
         static let directory = LocaleKey("settings.general.section.directory")

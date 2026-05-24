@@ -102,7 +102,7 @@
 "settings.appearance.section.theme_mode" = "Mode du thème";
 "settings.appearance.title" = "Apparence";
 "settings.general.button.add_provider" = "Ajouter...";
-"settings.general.button.add_target" = "Ajouter une cible";
+"settings.general.button.add_target" = "Ajouter une cible...";
 "settings.general.button.grant" = "Accorder";
 "settings.general.button.manage_targets" = "Gérer les cibles de traduction...";
 "settings.general.editor.row.source_language" = "Langue source";
@@ -115,7 +115,7 @@
 "settings.general.option.youdao_ocr" = "OCR Youdao";
 "settings.general.row.auto_copy_detected_text" = "Copier automatiquement le texte détecté";
 "settings.general.row.common_languages" = "Langues courantes";
-"settings.general.row.common_languages_hint" = "Sélectionnez les langues à afficher en haut des sélecteurs de langue.";
+"settings.general.row.common_languages_hint" = "Sélectionnez vos langues courantes:";
 "settings.general.row.common_languages_reset" = "Réinitialiser";
 "settings.general.row.common_languages_reset_help" = "Rétablir l'ensemble par défaut des langues courantes";
 "settings.general.row.default_directory_service" = "Service de répertoire par défaut";
@@ -128,6 +128,7 @@
 "settings.general.row.show_in_menu_bar" = "Afficher dans la barre de menus";
 "settings.general.row.submit_with_enter" = "Valider avec Entrée";
 "settings.general.row.submit_with_meta_enter_mac" = "Valider avec ⌘ + Entrée";
+"settings.general.row.translation_target_hint" = "Configurez les paires de langues utilisées par le traducteur.";
 "settings.general.section.directory" = "Répertoire";
 "settings.general.section.input" = "Paramètres de saisie";
 "settings.general.section.languages" = "Langues";
