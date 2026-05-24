@@ -87,9 +87,6 @@ class _TranslationsCommonKo extends TranslationsCommonEn {
   late final _TranslationsCommonProviderKo provider =
       _TranslationsCommonProviderKo._(_root);
   @override
-  late final _TranslationsCommonTranslationModeKo translation_mode =
-      _TranslationsCommonTranslationModeKo._(_root);
-  @override
   late final _TranslationsCommonWordPronunciationKo word_pronunciation =
       _TranslationsCommonWordPronunciationKo._(_root);
 }
@@ -128,6 +125,9 @@ class _TranslationsMiniTranslatorKo extends TranslationsMiniTranslatorEn {
   @override
   late final _TranslationsMiniTranslatorButtonKo button =
       _TranslationsMiniTranslatorButtonKo._(_root);
+  @override
+  late final _TranslationsMiniTranslatorLanguageKo language =
+      _TranslationsMiniTranslatorLanguageKo._(_root);
   @override
   late final _TranslationsMiniTranslatorMessageKo message =
       _TranslationsMiniTranslatorMessageKo._(_root);
@@ -308,22 +308,6 @@ class _TranslationsCommonProviderKo extends TranslationsCommonProviderEn {
   String get youdao => 'Youdao';
 }
 
-// Path: common.translation_mode
-class _TranslationsCommonTranslationModeKo
-    extends TranslationsCommonTranslationModeEn {
-  _TranslationsCommonTranslationModeKo._(TranslationsKo root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsKo _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get auto => '자동';
-  @override
-  String get manual => '수동';
-}
-
 // Path: common.word_pronunciation
 class _TranslationsCommonWordPronunciationKo
     extends TranslationsCommonWordPronunciationEn {
@@ -428,6 +412,24 @@ class _TranslationsMiniTranslatorButtonKo
   String get translate => '번역';
 }
 
+// Path: mini_translator.language
+class _TranslationsMiniTranslatorLanguageKo
+    extends TranslationsMiniTranslatorLanguageEn {
+  _TranslationsMiniTranslatorLanguageKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get auto_detect => '자동 감지';
+  @override
+  String get auto_match => '자동 일치';
+  @override
+  String get switch_config => '대상 전환';
+}
+
 // Path: mini_translator.message
 class _TranslationsMiniTranslatorMessageKo
     extends TranslationsMiniTranslatorMessageEn {
@@ -467,6 +469,9 @@ class _TranslationsSettingsGeneralKo extends TranslationsSettingsGeneralEn {
   @override
   late final _TranslationsSettingsGeneralOptionKo option =
       _TranslationsSettingsGeneralOptionKo._(_root);
+  @override
+  late final _TranslationsSettingsGeneralEditorKo editor =
+      _TranslationsSettingsGeneralEditorKo._(_root);
 }
 
 // Path: settings.appearance
@@ -748,8 +753,6 @@ class _TranslationsMiniTranslatorToolbarTooltipKo
 
   // Translations
   @override
-  String get translation_mode => '현재 번역 모드: {}';
-  @override
   String get extract_text_from_screen_capture => '화면 영역을 캡처하여 텍스트 인식';
   @override
   String get extract_text_from_clipboard => '클립보드 내용 읽기';
@@ -806,8 +809,6 @@ class _TranslationsSettingsGeneralRowKo
   @override
   String get default_translation_service => '기본 번역 서비스';
   @override
-  String get translation_mode => '번역 모드';
-  @override
   String get double_click_copy_result => '더블 클릭으로 번역 결과 복사';
   @override
   String get submit_with_enter => 'Enter 키로 전송';
@@ -829,6 +830,8 @@ class _TranslationsSettingsGeneralButtonKo
   String get add_provider => '추가...';
   @override
   String get add_target => '대상 추가';
+  @override
+  String get manage_targets => '번역 대상 관리...';
   @override
   String get grant => '허용';
 }
@@ -855,6 +858,21 @@ class _TranslationsSettingsGeneralOptionKo
   String get tesseract => 'Tesseract';
   @override
   String get youdao_ocr => 'Youdao OCR';
+}
+
+// Path: settings.general.editor
+class _TranslationsSettingsGeneralEditorKo
+    extends TranslationsSettingsGeneralEditorEn {
+  _TranslationsSettingsGeneralEditorKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final _TranslationsSettingsGeneralEditorRowKo row =
+      _TranslationsSettingsGeneralEditorRowKo._(_root);
 }
 
 // Path: settings.appearance.section
@@ -1138,6 +1156,22 @@ class _TranslationsAppTrayContextMenuDevToolsKo
   String get use_native_settings => '네이티브 설정 페이지 사용';
 }
 
+// Path: settings.general.editor.row
+class _TranslationsSettingsGeneralEditorRowKo
+    extends TranslationsSettingsGeneralEditorRowEn {
+  _TranslationsSettingsGeneralEditorRowKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get source_language => '소스 언어';
+  @override
+  String get target_language => '대상 언어';
+}
+
 // Path: settings.providers.editor.row
 class _TranslationsSettingsProvidersEditorRowKo
     extends TranslationsSettingsProvidersEditorRowEn {
@@ -1272,8 +1306,6 @@ extension on TranslationsKo {
       'common.provider.system' => '시스템',
       'common.provider.tencent' => 'Tencent',
       'common.provider.youdao' => 'Youdao',
-      'common.translation_mode.auto' => '자동',
-      'common.translation_mode.manual' => '수동',
       'common.word_pronunciation.us' => '미국',
       'common.word_pronunciation.uk' => '영국',
       'app.tray.context_menu.show_window' => '창 보기',
@@ -1302,13 +1334,15 @@ extension on TranslationsKo {
       'mini_translator.limited_banner.tooltip.help' => '도움말 보기',
       'mini_translator.input.hint' => '단어나 텍스트를 입력하세요',
       'mini_translator.input.extracting_text' => '텍스트 추출 중...',
-      'mini_translator.toolbar.tooltip.translation_mode' => '현재 번역 모드: {}',
       'mini_translator.toolbar.tooltip.extract_text_from_screen_capture' =>
         '화면 영역을 캡처하여 텍스트 인식',
       'mini_translator.toolbar.tooltip.extract_text_from_clipboard' =>
         '클립보드 내용 읽기',
       'mini_translator.button.clear' => '지우기',
       'mini_translator.button.translate' => '번역',
+      'mini_translator.language.auto_detect' => '자동 감지',
+      'mini_translator.language.auto_match' => '자동 일치',
+      'mini_translator.language.switch_config' => '대상 전환',
       'mini_translator.message.please_enter_word_or_text' =>
         '입력된 텍스트가 없거나 텍스트를 추출하지 못했습니다',
       'mini_translator.message.capture_screen_area_canceled' =>
@@ -1329,12 +1363,12 @@ extension on TranslationsKo {
       'settings.general.row.auto_copy_detected_text' => '감지된 텍스트 자동 복사',
       'settings.general.row.default_directory_service' => '기본 사전 서비스',
       'settings.general.row.default_translation_service' => '기본 번역 서비스',
-      'settings.general.row.translation_mode' => '번역 모드',
       'settings.general.row.double_click_copy_result' => '더블 클릭으로 번역 결과 복사',
       'settings.general.row.submit_with_enter' => 'Enter 키로 전송',
       'settings.general.row.submit_with_meta_enter_mac' => '⌘ + Enter 키로 전송',
       'settings.general.button.add_provider' => '추가...',
       'settings.general.button.add_target' => '대상 추가',
+      'settings.general.button.manage_targets' => '번역 대상 관리...',
       'settings.general.button.grant' => '허용',
       'settings.general.option.none' => '없음',
       'settings.general.option.no_services_available' => '사용 가능한 서비스가 없습니다',
@@ -1342,6 +1376,8 @@ extension on TranslationsKo {
       'settings.general.option.built_in_ocr' => '내장 OCR',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => 'Youdao OCR',
+      'settings.general.editor.row.source_language' => '소스 언어',
+      'settings.general.editor.row.target_language' => '대상 언어',
       'settings.appearance.title' => '외관',
       'settings.appearance.section.app_language' => '표시 언어',
       'settings.appearance.section.theme_mode' => '테마 모드',

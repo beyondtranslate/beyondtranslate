@@ -17,7 +17,6 @@ final class GeneralViewModel: ObservableObject {
   @Published var autoCopyDetectedText: Bool
   @Published var defaultDirectoryService: String
   @Published var defaultTranslationService: String
-  @Published var translationMode: TranslationMode
   @Published var translationTargets: [TranslationTarget]
   @Published var inputSubmitMode: InputSubmitMode
   @Published var doubleClickCopyResult: Bool
@@ -26,6 +25,22 @@ final class GeneralViewModel: ObservableObject {
 
   // Runtime providers
   @Published var providers: [ProviderConfigEntry] = []
+
+  // Sheet state
+  @Published var showAddTargetSheet = false
+  @Published var editingTarget: TranslationTarget? = nil
+
+  // Supported languages
+  var supportedLanguages: [LanguageInfo] {
+    RuntimeProvider.shared.listLanguages()
+  }
+
+  var showEditTargetSheet: Binding<Bool> {
+    Binding(
+      get: { self.editingTarget != nil },
+      set: { if !$0 { self.editingTarget = nil } }
+    )
+  }
 
   private let repository: SettingsRepository
 
@@ -36,7 +51,6 @@ final class GeneralViewModel: ObservableObject {
     autoCopyDetectedText = true
     defaultDirectoryService = ""
     defaultTranslationService = ""
-    translationMode = .auto
     translationTargets = []
     inputSubmitMode = .enter
     doubleClickCopyResult = true
@@ -140,11 +154,6 @@ final class GeneralViewModel: ObservableObject {
     Task { await persist(.diff(defaultTranslationService: providerID)) }
   }
 
-  func setTranslationMode(_ value: TranslationMode) {
-    translationMode = value
-    Task { await persist(.diff(translationMode: value)) }
-  }
-
   func setInputSubmitMode(_ value: InputSubmitMode) {
     inputSubmitMode = value
     Task { await persist(.diff(inputSubmitMode: value)) }
@@ -153,6 +162,18 @@ final class GeneralViewModel: ObservableObject {
   func setDoubleClickCopyResult(_ value: Bool) {
     doubleClickCopyResult = value
     Task { await persist(.diff(doubleClickCopyResult: value)) }
+  }
+
+  func addTranslationTarget(source: String, target: String) {
+    let newTarget = TranslationTarget(source: source, target: target)
+    translationTargets.append(newTarget)
+    Task { await persist(.diff(translationTargets: translationTargets)) }
+  }
+
+  func removeTranslationTarget(at index: Int) {
+    guard translationTargets.indices.contains(index) else { return }
+    translationTargets.remove(at: index)
+    Task { await persist(.diff(translationTargets: translationTargets)) }
   }
 
   func refreshPermissions() {
@@ -192,7 +213,6 @@ final class GeneralViewModel: ObservableObject {
     autoCopyDetectedText = settings.autoCopyDetectedText
     defaultDirectoryService = Self.providerID(fromServiceID: settings.defaultDirectoryService)
     defaultTranslationService = Self.providerID(fromServiceID: settings.defaultTranslationService)
-    translationMode = settings.translationMode
     translationTargets = settings.translationTargets
     inputSubmitMode = settings.inputSubmitMode
     doubleClickCopyResult = settings.doubleClickCopyResult

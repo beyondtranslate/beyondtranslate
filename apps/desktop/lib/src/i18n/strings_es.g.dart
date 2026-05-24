@@ -87,9 +87,6 @@ class _TranslationsCommonEs extends TranslationsCommonEn {
   late final _TranslationsCommonProviderEs provider =
       _TranslationsCommonProviderEs._(_root);
   @override
-  late final _TranslationsCommonTranslationModeEs translation_mode =
-      _TranslationsCommonTranslationModeEs._(_root);
-  @override
   late final _TranslationsCommonWordPronunciationEs word_pronunciation =
       _TranslationsCommonWordPronunciationEs._(_root);
 }
@@ -128,6 +125,9 @@ class _TranslationsMiniTranslatorEs extends TranslationsMiniTranslatorEn {
   @override
   late final _TranslationsMiniTranslatorButtonEs button =
       _TranslationsMiniTranslatorButtonEs._(_root);
+  @override
+  late final _TranslationsMiniTranslatorLanguageEs language =
+      _TranslationsMiniTranslatorLanguageEs._(_root);
   @override
   late final _TranslationsMiniTranslatorMessageEs message =
       _TranslationsMiniTranslatorMessageEs._(_root);
@@ -308,22 +308,6 @@ class _TranslationsCommonProviderEs extends TranslationsCommonProviderEn {
   String get youdao => 'Youdao';
 }
 
-// Path: common.translation_mode
-class _TranslationsCommonTranslationModeEs
-    extends TranslationsCommonTranslationModeEn {
-  _TranslationsCommonTranslationModeEs._(TranslationsEs root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsEs _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get auto => 'Automático';
-  @override
-  String get manual => 'Manual';
-}
-
 // Path: common.word_pronunciation
 class _TranslationsCommonWordPronunciationEs
     extends TranslationsCommonWordPronunciationEn {
@@ -428,6 +412,24 @@ class _TranslationsMiniTranslatorButtonEs
   String get translate => 'Traducir';
 }
 
+// Path: mini_translator.language
+class _TranslationsMiniTranslatorLanguageEs
+    extends TranslationsMiniTranslatorLanguageEn {
+  _TranslationsMiniTranslatorLanguageEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get auto_detect => 'Detección automática';
+  @override
+  String get auto_match => 'Coincidencia auto';
+  @override
+  String get switch_config => 'Cambiar destino';
+}
+
 // Path: mini_translator.message
 class _TranslationsMiniTranslatorMessageEs
     extends TranslationsMiniTranslatorMessageEn {
@@ -469,6 +471,9 @@ class _TranslationsSettingsGeneralEs extends TranslationsSettingsGeneralEn {
   @override
   late final _TranslationsSettingsGeneralOptionEs option =
       _TranslationsSettingsGeneralOptionEs._(_root);
+  @override
+  late final _TranslationsSettingsGeneralEditorEs editor =
+      _TranslationsSettingsGeneralEditorEs._(_root);
 }
 
 // Path: settings.appearance
@@ -755,8 +760,6 @@ class _TranslationsMiniTranslatorToolbarTooltipEs
 
   // Translations
   @override
-  String get translation_mode => 'Modo de traducción actual: {}';
-  @override
   String get extract_text_from_screen_capture =>
       'Capturar área de la pantalla y reconocer texto';
   @override
@@ -819,8 +822,6 @@ class _TranslationsSettingsGeneralRowEs
   String get default_translation_service =>
       'Servicio de traducción predeterminado';
   @override
-  String get translation_mode => 'Modo de traducción';
-  @override
   String get double_click_copy_result =>
       'Doble clic para copiar el resultado de la traducción';
   @override
@@ -843,6 +844,8 @@ class _TranslationsSettingsGeneralButtonEs
   String get add_provider => 'Agregar...';
   @override
   String get add_target => 'Agregar destino';
+  @override
+  String get manage_targets => 'Gestionar destinos de traducción...';
   @override
   String get grant => 'Conceder';
 }
@@ -869,6 +872,21 @@ class _TranslationsSettingsGeneralOptionEs
   String get tesseract => 'Tesseract';
   @override
   String get youdao_ocr => 'Youdao OCR';
+}
+
+// Path: settings.general.editor
+class _TranslationsSettingsGeneralEditorEs
+    extends TranslationsSettingsGeneralEditorEn {
+  _TranslationsSettingsGeneralEditorEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final _TranslationsSettingsGeneralEditorRowEs row =
+      _TranslationsSettingsGeneralEditorRowEs._(_root);
 }
 
 // Path: settings.appearance.section
@@ -1158,6 +1176,22 @@ class _TranslationsAppTrayContextMenuDevToolsEs
   String get use_native_settings => 'Usar página de configuración nativa';
 }
 
+// Path: settings.general.editor.row
+class _TranslationsSettingsGeneralEditorRowEs
+    extends TranslationsSettingsGeneralEditorRowEn {
+  _TranslationsSettingsGeneralEditorRowEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get source_language => 'Idioma de origen';
+  @override
+  String get target_language => 'Idioma de destino';
+}
+
 // Path: settings.providers.editor.row
 class _TranslationsSettingsProvidersEditorRowEs
     extends TranslationsSettingsProvidersEditorRowEn {
@@ -1292,8 +1326,6 @@ extension on TranslationsEs {
       'common.provider.system' => 'Sistema',
       'common.provider.tencent' => 'Tencent',
       'common.provider.youdao' => 'Youdao',
-      'common.translation_mode.auto' => 'Automático',
-      'common.translation_mode.manual' => 'Manual',
       'common.word_pronunciation.us' => 'EE. UU.',
       'common.word_pronunciation.uk' => 'RU',
       'app.tray.context_menu.show_window' => 'Mostrar ventana',
@@ -1326,14 +1358,15 @@ extension on TranslationsEs {
       'mini_translator.limited_banner.tooltip.help' => 'Ver ayuda',
       'mini_translator.input.hint' => 'Escribe la palabra o texto aquí',
       'mini_translator.input.extracting_text' => 'Extrayendo texto...',
-      'mini_translator.toolbar.tooltip.translation_mode' =>
-        'Modo de traducción actual: {}',
       'mini_translator.toolbar.tooltip.extract_text_from_screen_capture' =>
         'Capturar área de la pantalla y reconocer texto',
       'mini_translator.toolbar.tooltip.extract_text_from_clipboard' =>
         'Leer contenido del portapapeles',
       'mini_translator.button.clear' => 'Limpiar',
       'mini_translator.button.translate' => 'Traducir',
+      'mini_translator.language.auto_detect' => 'Detección automática',
+      'mini_translator.language.auto_match' => 'Coincidencia auto',
+      'mini_translator.language.switch_config' => 'Cambiar destino',
       'mini_translator.message.please_enter_word_or_text' =>
         'No se ingresó texto o no se pudo extraer',
       'mini_translator.message.capture_screen_area_canceled' =>
@@ -1360,7 +1393,6 @@ extension on TranslationsEs {
         'Servicio de diccionario predeterminado',
       'settings.general.row.default_translation_service' =>
         'Servicio de traducción predeterminado',
-      'settings.general.row.translation_mode' => 'Modo de traducción',
       'settings.general.row.double_click_copy_result' =>
         'Doble clic para copiar el resultado de la traducción',
       'settings.general.row.submit_with_enter' => 'Enviar con Enter',
@@ -1368,6 +1400,8 @@ extension on TranslationsEs {
         'Enviar con ⌘ + Enter',
       'settings.general.button.add_provider' => 'Agregar...',
       'settings.general.button.add_target' => 'Agregar destino',
+      'settings.general.button.manage_targets' =>
+        'Gestionar destinos de traducción...',
       'settings.general.button.grant' => 'Conceder',
       'settings.general.option.none' => 'Ninguno',
       'settings.general.option.no_services_available' =>
@@ -1376,6 +1410,8 @@ extension on TranslationsEs {
       'settings.general.option.built_in_ocr' => 'OCR integrado',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => 'Youdao OCR',
+      'settings.general.editor.row.source_language' => 'Idioma de origen',
+      'settings.general.editor.row.target_language' => 'Idioma de destino',
       'settings.appearance.title' => 'Apariencia',
       'settings.appearance.section.app_language' => 'Idioma de la interfaz',
       'settings.appearance.section.theme_mode' => 'Modo de tema',

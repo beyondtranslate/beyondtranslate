@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../i18n/i18n.dart';
 import '../../services/mac_settings.dart';
 import '../../services/settings_store.dart';
+import '../../utils/language_util.dart';
 import '../../utils/platform_util.dart';
 import '../../widgets/settings_page.dart';
 import '../../widgets/ui/button.dart';
@@ -175,30 +176,6 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 title: general.row.default_translation_service,
                 onAddProvider: () => context.go('/settings/providers'),
               ),
-            PreferenceListItem(
-              title: Text(general.row.translation_mode),
-              disabled: !hasTranslationServices,
-              detailText: DropdownButton<TranslationMode>(
-                value: _general.translationMode,
-                underline: const SizedBox.shrink(),
-                items: TranslationMode.values
-                    .map(
-                      (mode) => DropdownMenuItem<TranslationMode>(
-                        value: mode,
-                        child: Text(_translationModeTitle(context, mode)),
-                      ),
-                    )
-                    .toList(),
-                onChanged: hasTranslationServices
-                    ? (mode) async {
-                        if (mode == null) return;
-                        await settingsStore.updateGeneral(
-                          GeneralSettingsPatch(translationMode: mode),
-                        );
-                      }
-                    : null,
-              ),
-            ),
             PreferenceListSwitchItem(
               title: Text(general.row.double_click_copy_result),
               value: _general.doubleClickCopyResult,
@@ -211,8 +188,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
             ),
           ],
         ),
-        if (hasTranslationServices &&
-            _general.translationMode == TranslationMode.auto)
+        if (hasTranslationServices)
           PreferenceListSection(
             title: Text(general.section.translation_target),
             children: [
@@ -220,16 +196,16 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 PreferenceListItem(
                   title: Row(
                     children: [
-                      Text(target.source),
+                      Text(getSourceDisplayName(target.source)),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8),
                         child: Icon(Icons.arrow_forward, size: 16),
                       ),
-                      Text(target.target),
+                      Text(getLanguageName(target.target)),
                     ],
                   ),
                   detailText: TextButton(
-                    onPressed: () {},
+                    onPressed: () => _showEditTargetDialog(context, target),
                     child: Text(t.common.ui.button.edit),
                   ),
                 ),
@@ -242,7 +218,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                 ),
               PreferenceListItem(
                 title: TextButton(
-                  onPressed: () {},
+                  onPressed: () => _showAddTargetDialog(context),
                   child: Text(general.button.add_target),
                 ),
                 accessoryView: const SizedBox.shrink(),
@@ -268,6 +244,181 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
       ],
     );
   }
+
+  Future<void> _showAddTargetDialog(BuildContext context) async {
+    String source = kAutoSource;
+    String target = defaultTargetLanguage;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text(t.settings.general.button.add_target),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButtonFormField<String>(
+                    initialValue: source,
+                    decoration:
+                        const InputDecoration(labelText: 'Source Language'),
+                    items: [
+                      DropdownMenuItem(
+                        value: kAutoSource,
+                        child: Text(t.mini_translator.language.auto_detect),
+                      ),
+                      for (final lang in supportedLanguages)
+                        DropdownMenuItem(
+                          value: lang,
+                          child: Text(getLanguageName(lang, showNative: true)),
+                        ),
+                    ],
+                    onChanged: (v) {
+                      if (v != null) setDialogState(() => source = v);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    initialValue: target,
+                    decoration:
+                        const InputDecoration(labelText: 'Target Language'),
+                    items: supportedLanguages.map((lang) {
+                      return DropdownMenuItem(
+                        value: lang,
+                        child: Text(getLanguageName(lang, showNative: true)),
+                      );
+                    }).toList(),
+                    onChanged: (v) {
+                      if (v != null) setDialogState(() => target = v);
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text(t.common.ui.button.cancel),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(t.common.ui.button.ok),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (result == true) {
+      final newTargets = [
+        ..._general.translationTargets,
+        TranslationTarget(
+          source: source,
+          target: target,
+        ),
+      ];
+      await settingsStore.updateGeneral(
+        GeneralSettingsPatch(translationTargets: newTargets),
+      );
+    }
+  }
+
+  Future<void> _showEditTargetDialog(
+      BuildContext context, TranslationTarget target) async {
+    final index = _general.translationTargets.indexOf(target);
+    if (index < 0) return;
+
+    String source = target.source;
+    String targetLang = target.target;
+
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text(t.common.ui.button.edit),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButtonFormField<String>(
+                    initialValue: source,
+                    decoration:
+                        const InputDecoration(labelText: 'Source Language'),
+                    items: [
+                      DropdownMenuItem(
+                        value: kAutoSource,
+                        child: Text(t.mini_translator.language.auto_detect),
+                      ),
+                      for (final lang in supportedLanguages)
+                        DropdownMenuItem(
+                          value: lang,
+                          child: Text(getLanguageName(lang, showNative: true)),
+                        ),
+                    ],
+                    onChanged: (v) {
+                      if (v != null) setDialogState(() => source = v);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    initialValue: targetLang,
+                    decoration:
+                        const InputDecoration(labelText: 'Target Language'),
+                    items: supportedLanguages.map((lang) {
+                      return DropdownMenuItem(
+                        value: lang,
+                        child: Text(getLanguageName(lang, showNative: true)),
+                      );
+                    }).toList(),
+                    onChanged: (v) {
+                      if (v != null) setDialogState(() => targetLang = v);
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    final newTargets = [..._general.translationTargets];
+                    newTargets.removeAt(index);
+                    await settingsStore.updateGeneral(
+                      GeneralSettingsPatch(translationTargets: newTargets),
+                    );
+                    if (context.mounted) Navigator.pop(context);
+                  },
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
+                  child: Text(t.common.ui.button.delete),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(t.common.ui.button.cancel),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'save'),
+                  child: Text(t.common.ui.button.save),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (result == 'save') {
+      final newTargets = [..._general.translationTargets];
+      newTargets[index] = TranslationTarget(
+        source: source,
+        target: targetLang,
+      );
+      await settingsStore.updateGeneral(
+        GeneralSettingsPatch(translationTargets: newTargets),
+      );
+    }
+  }
 }
 
 String _providerId(String serviceId) {
@@ -277,15 +428,6 @@ String _providerId(String serviceId) {
     }
   }
   return serviceId;
-}
-
-String _translationModeTitle(BuildContext context, TranslationMode mode) {
-  switch (mode) {
-    case TranslationMode.auto:
-      return t.common.translation_mode.auto;
-    case TranslationMode.manual:
-      return t.common.translation_mode.manual;
-  }
 }
 
 String _inputSubmitModeTitle(BuildContext context, InputSubmitMode mode) {

@@ -1,4 +1,3 @@
-import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:sticky_headers/sticky_headers.dart';
 
@@ -13,7 +12,6 @@ class TranslationResultsView extends StatelessWidget {
     Key? key,
     required this.viewKey,
     required this.controller,
-    required this.translationMode,
     required this.querySubmitted,
     required this.text,
     required this.textDetectedLanguage,
@@ -23,7 +21,6 @@ class TranslationResultsView extends StatelessWidget {
 
   final Key viewKey;
   final ScrollController controller;
-  final TranslationMode translationMode;
   final bool querySubmitted;
   final String text;
   final String? textDetectedLanguage;
@@ -68,7 +65,6 @@ class TranslationResultsView extends StatelessWidget {
     final List<Widget> items = [];
 
     if (querySubmitted &&
-        translationMode == TranslationMode.auto &&
         translationResultList.isEmpty &&
         textDetectedLanguage != null) {
       items.add(const SizedBox(height: _kSectionGap));
@@ -88,9 +84,7 @@ class TranslationResultsView extends StatelessWidget {
         SizedBox(
           width: viewWidth,
           child: StickyHeader(
-            header: translationMode == TranslationMode.auto
-                ? TranslationResultView(result)
-                : const SizedBox.shrink(),
+            header: TranslationResultView(result),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

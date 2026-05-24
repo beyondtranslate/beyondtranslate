@@ -2,23 +2,6 @@ import Foundation
 import beyondtranslate_runtime
 
 // MARK: - Identifiable / CaseIterable conformance for runtime enums
-//
-// The uniffi-generated `TranslationMode` and `InputSubmitMode` are plain
-// `case` enums (not `String`-backed). SwiftUI's `ForEach`/`Picker` need
-// `Identifiable`, so we add it via extensions; `CaseIterable` lets us
-// drive the picker from a static list.
-
-extension TranslationMode: Identifiable, CaseIterable {
-  public static var allCases: [TranslationMode] { [.auto, .manual] }
-  public var id: String { String(describing: self) }
-
-  var title: String {
-    switch self {
-    case .auto: return LocaleKeys.common.translationMode.auto.tr()
-    case .manual: return LocaleKeys.common.translationMode.manual.tr()
-    }
-  }
-}
 
 extension InputSubmitMode: Identifiable, CaseIterable {
   public static var allCases: [InputSubmitMode] { [.enter, .commandEnter] }
@@ -52,7 +35,6 @@ extension GeneralSettingsPatch {
     autoCopyDetectedText: Bool? = nil,
     defaultDirectoryService: String? = nil,
     defaultTranslationService: String? = nil,
-    translationMode: TranslationMode? = nil,
     translationTargets: [TranslationTarget]? = nil,
     inputSubmitMode: InputSubmitMode? = nil,
     doubleClickCopyResult: Bool? = nil
@@ -64,7 +46,6 @@ extension GeneralSettingsPatch {
       autoCopyDetectedText: autoCopyDetectedText,
       defaultDirectoryService: defaultDirectoryService,
       defaultTranslationService: defaultTranslationService,
-      translationMode: translationMode,
       translationTargets: translationTargets,
       inputSubmitMode: inputSubmitMode,
       doubleClickCopyResult: doubleClickCopyResult

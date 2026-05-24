@@ -89,9 +89,6 @@ class _TranslationsCommonZhHans extends TranslationsCommonEn {
   late final _TranslationsCommonProviderZhHans provider =
       _TranslationsCommonProviderZhHans._(_root);
   @override
-  late final _TranslationsCommonTranslationModeZhHans translation_mode =
-      _TranslationsCommonTranslationModeZhHans._(_root);
-  @override
   late final _TranslationsCommonWordPronunciationZhHans word_pronunciation =
       _TranslationsCommonWordPronunciationZhHans._(_root);
 }
@@ -131,6 +128,9 @@ class _TranslationsMiniTranslatorZhHans extends TranslationsMiniTranslatorEn {
   @override
   late final _TranslationsMiniTranslatorButtonZhHans button =
       _TranslationsMiniTranslatorButtonZhHans._(_root);
+  @override
+  late final _TranslationsMiniTranslatorLanguageZhHans language =
+      _TranslationsMiniTranslatorLanguageZhHans._(_root);
   @override
   late final _TranslationsMiniTranslatorMessageZhHans message =
       _TranslationsMiniTranslatorMessageZhHans._(_root);
@@ -311,22 +311,6 @@ class _TranslationsCommonProviderZhHans extends TranslationsCommonProviderEn {
   String get youdao => '有道';
 }
 
-// Path: common.translation_mode
-class _TranslationsCommonTranslationModeZhHans
-    extends TranslationsCommonTranslationModeEn {
-  _TranslationsCommonTranslationModeZhHans._(TranslationsZhHans root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhHans _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get auto => '自动';
-  @override
-  String get manual => '手动';
-}
-
 // Path: common.word_pronunciation
 class _TranslationsCommonWordPronunciationZhHans
     extends TranslationsCommonWordPronunciationEn {
@@ -433,6 +417,24 @@ class _TranslationsMiniTranslatorButtonZhHans
   String get translate => '翻译';
 }
 
+// Path: mini_translator.language
+class _TranslationsMiniTranslatorLanguageZhHans
+    extends TranslationsMiniTranslatorLanguageEn {
+  _TranslationsMiniTranslatorLanguageZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get auto_detect => '自动检测';
+  @override
+  String get auto_match => '自动匹配';
+  @override
+  String get switch_config => '切换目标';
+}
+
 // Path: mini_translator.message
 class _TranslationsMiniTranslatorMessageZhHans
     extends TranslationsMiniTranslatorMessageEn {
@@ -472,6 +474,9 @@ class _TranslationsSettingsGeneralZhHans extends TranslationsSettingsGeneralEn {
   @override
   late final _TranslationsSettingsGeneralOptionZhHans option =
       _TranslationsSettingsGeneralOptionZhHans._(_root);
+  @override
+  late final _TranslationsSettingsGeneralEditorZhHans editor =
+      _TranslationsSettingsGeneralEditorZhHans._(_root);
 }
 
 // Path: settings.appearance
@@ -762,8 +767,6 @@ class _TranslationsMiniTranslatorToolbarTooltipZhHans
 
   // Translations
   @override
-  String get translation_mode => '当前翻译模式：{}';
-  @override
   String get extract_text_from_screen_capture => '截取屏幕区域并识别文字';
   @override
   String get extract_text_from_clipboard => '读取剪切板内容';
@@ -820,8 +823,6 @@ class _TranslationsSettingsGeneralRowZhHans
   @override
   String get default_translation_service => '默认翻译服务';
   @override
-  String get translation_mode => '翻译模式';
-  @override
   String get double_click_copy_result => '双击复制翻译结果';
   @override
   String get submit_with_enter => '用 Enter 提交';
@@ -843,6 +844,8 @@ class _TranslationsSettingsGeneralButtonZhHans
   String get add_provider => '添加...';
   @override
   String get add_target => '添加目标';
+  @override
+  String get manage_targets => '管理翻译目标...';
   @override
   String get grant => '授权';
 }
@@ -869,6 +872,21 @@ class _TranslationsSettingsGeneralOptionZhHans
   String get tesseract => 'Tesseract';
   @override
   String get youdao_ocr => '有道 OCR';
+}
+
+// Path: settings.general.editor
+class _TranslationsSettingsGeneralEditorZhHans
+    extends TranslationsSettingsGeneralEditorEn {
+  _TranslationsSettingsGeneralEditorZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final _TranslationsSettingsGeneralEditorRowZhHans row =
+      _TranslationsSettingsGeneralEditorRowZhHans._(_root);
 }
 
 // Path: settings.appearance.section
@@ -1150,6 +1168,22 @@ class _TranslationsAppTrayContextMenuDevToolsZhHans
   String get use_native_settings => '使用原生设置页面';
 }
 
+// Path: settings.general.editor.row
+class _TranslationsSettingsGeneralEditorRowZhHans
+    extends TranslationsSettingsGeneralEditorRowEn {
+  _TranslationsSettingsGeneralEditorRowZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get source_language => '源语言';
+  @override
+  String get target_language => '目标语言';
+}
+
 // Path: settings.providers.editor.row
 class _TranslationsSettingsProvidersEditorRowZhHans
     extends TranslationsSettingsProvidersEditorRowEn {
@@ -1286,8 +1320,6 @@ extension on TranslationsZhHans {
       'common.provider.system' => '系统',
       'common.provider.tencent' => '腾讯',
       'common.provider.youdao' => '有道',
-      'common.translation_mode.auto' => '自动',
-      'common.translation_mode.manual' => '手动',
       'common.word_pronunciation.us' => '美',
       'common.word_pronunciation.uk' => '英',
       'app.tray.context_menu.show_window' => '显示窗口',
@@ -1315,13 +1347,15 @@ extension on TranslationsZhHans {
       'mini_translator.limited_banner.tooltip.help' => '查看帮助文档',
       'mini_translator.input.hint' => '在此处输入单词或文本',
       'mini_translator.input.extracting_text' => '正在提取文字...',
-      'mini_translator.toolbar.tooltip.translation_mode' => '当前翻译模式：{}',
       'mini_translator.toolbar.tooltip.extract_text_from_screen_capture' =>
         '截取屏幕区域并识别文字',
       'mini_translator.toolbar.tooltip.extract_text_from_clipboard' =>
         '读取剪切板内容',
       'mini_translator.button.clear' => '清空',
       'mini_translator.button.translate' => '翻译',
+      'mini_translator.language.auto_detect' => '自动检测',
+      'mini_translator.language.auto_match' => '自动匹配',
+      'mini_translator.language.switch_config' => '切换目标',
       'mini_translator.message.please_enter_word_or_text' => '未输入或未提取到文本',
       'mini_translator.message.capture_screen_area_canceled' => '截取屏幕区域已取消',
       'settings.version' => '版本 {} BUILD {}',
@@ -1340,12 +1374,12 @@ extension on TranslationsZhHans {
       'settings.general.row.auto_copy_detected_text' => '自动复制识别文本',
       'settings.general.row.default_directory_service' => '默认词典服务',
       'settings.general.row.default_translation_service' => '默认翻译服务',
-      'settings.general.row.translation_mode' => '翻译模式',
       'settings.general.row.double_click_copy_result' => '双击复制翻译结果',
       'settings.general.row.submit_with_enter' => '用 Enter 提交',
       'settings.general.row.submit_with_meta_enter_mac' => '用 ⌘ + Enter 提交',
       'settings.general.button.add_provider' => '添加...',
       'settings.general.button.add_target' => '添加目标',
+      'settings.general.button.manage_targets' => '管理翻译目标...',
       'settings.general.button.grant' => '授权',
       'settings.general.option.none' => '无',
       'settings.general.option.no_services_available' => '暂无可用服务',
@@ -1353,6 +1387,8 @@ extension on TranslationsZhHans {
       'settings.general.option.built_in_ocr' => '内置 OCR',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => '有道 OCR',
+      'settings.general.editor.row.source_language' => '源语言',
+      'settings.general.editor.row.target_language' => '目标语言',
       'settings.appearance.title' => '外观',
       'settings.appearance.section.app_language' => '显示语言',
       'settings.appearance.section.theme_mode' => '主题模式',

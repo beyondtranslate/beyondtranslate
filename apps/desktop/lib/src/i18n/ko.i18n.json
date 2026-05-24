@@ -68,10 +68,6 @@
       "tencent": "Tencent",
       "youdao": "Youdao"
     },
-    "translation_mode": {
-      "auto": "자동",
-      "manual": "수동"
-    },
     "word_pronunciation": {
       "us": "미국",
       "uk": "영국"
@@ -122,7 +118,6 @@
     },
     "toolbar": {
       "tooltip": {
-        "translation_mode": "현재 번역 모드: {}",
         "extract_text_from_screen_capture": "화면 영역을 캡처하여 텍스트 인식",
         "extract_text_from_clipboard": "클립보드 내용 읽기"
       }
@@ -130,6 +125,11 @@
     "button": {
       "clear": "지우기",
       "translate": "번역"
+    },
+    "language": {
+      "auto_detect": "자동 감지",
+      "auto_match": "자동 일치",
+      "switch_config": "대상 전환"
     },
     "message": {
       "please_enter_word_or_text": "입력된 텍스트가 없거나 텍스트를 추출하지 못했습니다",
@@ -157,7 +157,6 @@
         "auto_copy_detected_text": "감지된 텍스트 자동 복사",
         "default_directory_service": "기본 사전 서비스",
         "default_translation_service": "기본 번역 서비스",
-        "translation_mode": "번역 모드",
         "double_click_copy_result": "더블 클릭으로 번역 결과 복사",
         "submit_with_enter": "Enter 키로 전송",
         "submit_with_meta_enter_mac": "⌘ + Enter 키로 전송"
@@ -165,6 +164,7 @@
       "button": {
         "add_provider": "추가...",
         "add_target": "대상 추가",
+        "manage_targets": "번역 대상 관리...",
         "grant": "허용"
       },
       "option": {
@@ -174,6 +174,12 @@
         "built_in_ocr": "내장 OCR",
         "tesseract": "Tesseract",
         "youdao_ocr": "Youdao OCR"
+      },
+      "editor": {
+        "row": {
+          "source_language": "소스 언어",
+          "target_language": "대상 언어"
+        }
       }
     },
     "appearance": {

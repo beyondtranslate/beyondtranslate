@@ -17,9 +17,10 @@ export 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
         ProviderConfigEntry,
         ShortcutSettings,
         ShortcutSettingsPatch,
-        TranslationMode,
         TranslationTarget,
         // Translation / look-up types
+        DetectLanguageRequest,
+        DetectLanguageResponse,
         LookUpRequest,
         LookUpResponse,
         TextTranslation,

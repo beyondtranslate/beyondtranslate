@@ -73,8 +73,6 @@ class TranslationsCommonEn {
       TranslationsCommonThemeModeEn.internal(_root);
   late final TranslationsCommonProviderEn provider =
       TranslationsCommonProviderEn.internal(_root);
-  late final TranslationsCommonTranslationModeEn translation_mode =
-      TranslationsCommonTranslationModeEn.internal(_root);
   late final TranslationsCommonWordPronunciationEn word_pronunciation =
       TranslationsCommonWordPronunciationEn.internal(_root);
 }
@@ -104,6 +102,8 @@ class TranslationsMiniTranslatorEn {
       TranslationsMiniTranslatorToolbarEn.internal(_root);
   late final TranslationsMiniTranslatorButtonEn button =
       TranslationsMiniTranslatorButtonEn.internal(_root);
+  late final TranslationsMiniTranslatorLanguageEn language =
+      TranslationsMiniTranslatorLanguageEn.internal(_root);
   late final TranslationsMiniTranslatorMessageEn message =
       TranslationsMiniTranslatorMessageEn.internal(_root);
 }
@@ -314,21 +314,6 @@ class TranslationsCommonProviderEn {
   String get youdao => 'Youda';
 }
 
-// Path: common.translation_mode
-class TranslationsCommonTranslationModeEn {
-  TranslationsCommonTranslationModeEn.internal(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// en: 'Auto'
-  String get auto => 'Auto';
-
-  /// en: 'Manual'
-  String get manual => 'Manual';
-}
-
 // Path: common.word_pronunciation
 class TranslationsCommonWordPronunciationEn {
   TranslationsCommonWordPronunciationEn.internal(this._root);
@@ -415,6 +400,24 @@ class TranslationsMiniTranslatorButtonEn {
   String get translate => 'Translate';
 }
 
+// Path: mini_translator.language
+class TranslationsMiniTranslatorLanguageEn {
+  TranslationsMiniTranslatorLanguageEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Auto Detect'
+  String get auto_detect => 'Auto Detect';
+
+  /// en: 'Auto Match'
+  String get auto_match => 'Auto Match';
+
+  /// en: 'Switch Target'
+  String get switch_config => 'Switch Target';
+}
+
 // Path: mini_translator.message
 class TranslationsMiniTranslatorMessageEn {
   TranslationsMiniTranslatorMessageEn.internal(this._root);
@@ -451,6 +454,8 @@ class TranslationsSettingsGeneralEn {
       TranslationsSettingsGeneralButtonEn.internal(_root);
   late final TranslationsSettingsGeneralOptionEn option =
       TranslationsSettingsGeneralOptionEn.internal(_root);
+  late final TranslationsSettingsGeneralEditorEn editor =
+      TranslationsSettingsGeneralEditorEn.internal(_root);
 }
 
 // Path: settings.appearance
@@ -725,9 +730,6 @@ class TranslationsMiniTranslatorToolbarTooltipEn {
 
   // Translations
 
-  /// en: 'Current translation mode: {}'
-  String get translation_mode => 'Current translation mode: {}';
-
   /// en: 'Capture screen area and recognize text'
   String get extract_text_from_screen_capture =>
       'Capture screen area and recognize text';
@@ -795,9 +797,6 @@ class TranslationsSettingsGeneralRowEn {
   /// en: 'Default translation service'
   String get default_translation_service => 'Default translation service';
 
-  /// en: 'Translation mode'
-  String get translation_mode => 'Translation mode';
-
   /// en: 'Double click to copy translation result'
   String get double_click_copy_result =>
       'Double click to copy translation result';
@@ -822,6 +821,9 @@ class TranslationsSettingsGeneralButtonEn {
 
   /// en: 'Add Target'
   String get add_target => 'Add Target';
+
+  /// en: 'Manage Translation Targets...'
+  String get manage_targets => 'Manage Translation Targets...';
 
   /// en: 'Grant'
   String get grant => 'Grant';
@@ -852,6 +854,17 @@ class TranslationsSettingsGeneralOptionEn {
 
   /// en: 'Youdao OCR'
   String get youdao_ocr => 'Youdao OCR';
+}
+
+// Path: settings.general.editor
+class TranslationsSettingsGeneralEditorEn {
+  TranslationsSettingsGeneralEditorEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  late final TranslationsSettingsGeneralEditorRowEn row =
+      TranslationsSettingsGeneralEditorRowEn.internal(_root);
 }
 
 // Path: settings.appearance.section
@@ -1122,6 +1135,21 @@ class TranslationsAppTrayContextMenuDevToolsEn {
   String get use_native_settings => 'Use Native Settings Page';
 }
 
+// Path: settings.general.editor.row
+class TranslationsSettingsGeneralEditorRowEn {
+  TranslationsSettingsGeneralEditorRowEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Source Language'
+  String get source_language => 'Source Language';
+
+  /// en: 'Target Language'
+  String get target_language => 'Target Language';
+}
+
 // Path: settings.providers.editor.row
 class TranslationsSettingsProvidersEditorRowEn {
   TranslationsSettingsProvidersEditorRowEn.internal(this._root);
@@ -1246,8 +1274,6 @@ extension on Translations {
       'common.provider.system' => 'System',
       'common.provider.tencent' => 'Tencent',
       'common.provider.youdao' => 'Youda',
-      'common.translation_mode.auto' => 'Auto',
-      'common.translation_mode.manual' => 'Manual',
       'common.word_pronunciation.us' => 'US',
       'common.word_pronunciation.uk' => 'UK',
       'app.tray.context_menu.show_window' => 'Show Window',
@@ -1279,14 +1305,15 @@ extension on Translations {
       'mini_translator.limited_banner.tooltip.help' => 'View help',
       'mini_translator.input.hint' => 'Enter the word or text here',
       'mini_translator.input.extracting_text' => 'Extracting text...',
-      'mini_translator.toolbar.tooltip.translation_mode' =>
-        'Current translation mode: {}',
       'mini_translator.toolbar.tooltip.extract_text_from_screen_capture' =>
         'Capture screen area and recognize text',
       'mini_translator.toolbar.tooltip.extract_text_from_clipboard' =>
         'Read clipboard content',
       'mini_translator.button.clear' => 'Clear',
       'mini_translator.button.translate' => 'Translate',
+      'mini_translator.language.auto_detect' => 'Auto Detect',
+      'mini_translator.language.auto_match' => 'Auto Match',
+      'mini_translator.language.switch_config' => 'Switch Target',
       'mini_translator.message.please_enter_word_or_text' =>
         'No text entered or text not extracted',
       'mini_translator.message.capture_screen_area_canceled' =>
@@ -1313,7 +1340,6 @@ extension on Translations {
         'Default directory service',
       'settings.general.row.default_translation_service' =>
         'Default translation service',
-      'settings.general.row.translation_mode' => 'Translation mode',
       'settings.general.row.double_click_copy_result' =>
         'Double click to copy translation result',
       'settings.general.row.submit_with_enter' => 'Submit with Enter',
@@ -1321,6 +1347,8 @@ extension on Translations {
         'Submit with ⌘ + Enter',
       'settings.general.button.add_provider' => 'Add...',
       'settings.general.button.add_target' => 'Add Target',
+      'settings.general.button.manage_targets' =>
+        'Manage Translation Targets...',
       'settings.general.button.grant' => 'Grant',
       'settings.general.option.none' => 'None',
       'settings.general.option.no_services_available' =>
@@ -1329,6 +1357,8 @@ extension on Translations {
       'settings.general.option.built_in_ocr' => 'Built-in OCR',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => 'Youdao OCR',
+      'settings.general.editor.row.source_language' => 'Source Language',
+      'settings.general.editor.row.target_language' => 'Target Language',
       'settings.appearance.title' => 'Appearance',
       'settings.appearance.section.app_language' => 'Display Language',
       'settings.appearance.section.theme_mode' => 'Theme Mode',

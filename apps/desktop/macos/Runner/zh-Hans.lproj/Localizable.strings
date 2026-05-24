@@ -54,8 +54,6 @@
 "common.theme_mode.dark" = "深色";
 "common.theme_mode.light" = "浅色";
 "common.theme_mode.system" = "跟随系统";
-"common.translation_mode.auto" = "自动";
-"common.translation_mode.manual" = "手动";
 "common.ui.button.add" = "添加";
 "common.ui.button.cancel" = "取消";
 "common.ui.button.continue" = "继续";
@@ -71,6 +69,9 @@
 "mini_translator.button.translate" = "翻译";
 "mini_translator.input.extracting_text" = "正在提取文字...";
 "mini_translator.input.hint" = "在此处输入单词或文本";
+"mini_translator.language.auto_detect" = "自动检测";
+"mini_translator.language.auto_match" = "自动匹配";
+"mini_translator.language.switch_config" = "切换目标";
 "mini_translator.limited_banner.action.app_settings" = "应用设置";
 "mini_translator.limited_banner.action.recheck" = "重新检查";
 "mini_translator.limited_banner.feedback.enabled" = "屏幕取词功能已启用";
@@ -86,7 +87,6 @@
 "mini_translator.message.please_enter_word_or_text" = "未输入或未提取到文本";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "读取剪切板内容";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "截取屏幕区域并识别文字";
-"mini_translator.toolbar.tooltip.translation_mode" = "当前翻译模式：{}";
 "settings.advanced.api_server" = "本地 API 服务";
 "settings.advanced.api_server_description" = "在 127.0.0.1 上开放翻译 API，供本机集成使用。";
 "settings.advanced.disabled" = "已关闭";
@@ -100,6 +100,9 @@
 "settings.general.button.add_provider" = "添加...";
 "settings.general.button.add_target" = "添加目标";
 "settings.general.button.grant" = "授权";
+"settings.general.button.manage_targets" = "管理翻译目标...";
+"settings.general.editor.row.source_language" = "源语言";
+"settings.general.editor.row.target_language" = "目标语言";
 "settings.general.option.built_in_ocr" = "内置 OCR";
 "settings.general.option.granted" = "已授权";
 "settings.general.option.no_services_available" = "暂无可用服务";
@@ -117,7 +120,6 @@
 "settings.general.row.show_in_menu_bar" = "在菜单栏中显示";
 "settings.general.row.submit_with_enter" = "用 Enter 提交";
 "settings.general.row.submit_with_meta_enter_mac" = "用 ⌘ + Enter 提交";
-"settings.general.row.translation_mode" = "翻译模式";
 "settings.general.section.directory" = "词典";
 "settings.general.section.input" = "输入设置";
 "settings.general.section.ocr" = "文字识别";

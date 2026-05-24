@@ -54,8 +54,6 @@
 "common.theme_mode.dark" = "다크";
 "common.theme_mode.light" = "라이트";
 "common.theme_mode.system" = "시스템";
-"common.translation_mode.auto" = "자동";
-"common.translation_mode.manual" = "수동";
 "common.ui.button.add" = "추가";
 "common.ui.button.cancel" = "취소";
 "common.ui.button.continue" = "계속";
@@ -71,6 +69,9 @@
 "mini_translator.button.translate" = "번역";
 "mini_translator.input.extracting_text" = "텍스트 추출 중...";
 "mini_translator.input.hint" = "단어나 텍스트를 입력하세요";
+"mini_translator.language.auto_detect" = "자동 감지";
+"mini_translator.language.auto_match" = "자동 일치";
+"mini_translator.language.switch_config" = "대상 전환";
 "mini_translator.limited_banner.action.app_settings" = "앱 설정";
 "mini_translator.limited_banner.action.recheck" = "재확인";
 "mini_translator.limited_banner.feedback.enabled" = "화면 텍스트 추출이 활성화되었습니다.";
@@ -86,7 +87,6 @@
 "mini_translator.message.please_enter_word_or_text" = "입력된 텍스트가 없거나 텍스트를 추출하지 못했습니다";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "클립보드 내용 읽기";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "화면 영역을 캡처하여 텍스트 인식";
-"mini_translator.toolbar.tooltip.translation_mode" = "현재 번역 모드: {}";
 "settings.advanced.api_server" = "로컬 API 서버";
 "settings.advanced.api_server_description" = "로컬 통합을 위해 127.0.0.1에서 번역 API를 노출합니다.";
 "settings.advanced.disabled" = "비활성화됨";
@@ -100,6 +100,9 @@
 "settings.general.button.add_provider" = "추가...";
 "settings.general.button.add_target" = "대상 추가";
 "settings.general.button.grant" = "허용";
+"settings.general.button.manage_targets" = "번역 대상 관리...";
+"settings.general.editor.row.source_language" = "소스 언어";
+"settings.general.editor.row.target_language" = "대상 언어";
 "settings.general.option.built_in_ocr" = "내장 OCR";
 "settings.general.option.granted" = "허용됨";
 "settings.general.option.no_services_available" = "사용 가능한 서비스가 없습니다";
@@ -117,7 +120,6 @@
 "settings.general.row.show_in_menu_bar" = "메뉴 막대에 표시";
 "settings.general.row.submit_with_enter" = "Enter 키로 전송";
 "settings.general.row.submit_with_meta_enter_mac" = "⌘ + Enter 키로 전송";
-"settings.general.row.translation_mode" = "번역 모드";
 "settings.general.section.directory" = "사전";
 "settings.general.section.input" = "입력 설정";
 "settings.general.section.ocr" = "텍스트 인식";

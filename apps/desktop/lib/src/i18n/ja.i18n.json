@@ -68,10 +68,6 @@
       "tencent": "Tencent",
       "youdao": "Youda"
     },
-    "translation_mode": {
-      "auto": "自動",
-      "manual": "手動"
-    },
     "word_pronunciation": {
       "us": "米国",
       "uk": "英国"
@@ -122,7 +118,6 @@
     },
     "toolbar": {
       "tooltip": {
-        "translation_mode": "現在の翻訳モード: {}",
         "extract_text_from_screen_capture": "画面領域をキャプチャしてテキストを認識",
         "extract_text_from_clipboard": "クリップボードの内容を読み取る"
       }
@@ -130,6 +125,11 @@
     "button": {
       "clear": "クリア",
       "translate": "翻訳"
+    },
+    "language": {
+      "auto_detect": "自動検出",
+      "auto_match": "自動一致",
+      "switch_config": "ターゲット切替"
     },
     "message": {
       "please_enter_word_or_text": "テキストが入力されていないか、テキストが抽出されていません",
@@ -157,7 +157,6 @@
         "auto_copy_detected_text": "検出したテキストを自動コピー",
         "default_directory_service": "デフォルトの辞書サービス",
         "default_translation_service": "デフォルトの翻訳サービス",
-        "translation_mode": "翻訳モード",
         "double_click_copy_result": "ダブルクリックで翻訳結果をコピー",
         "submit_with_enter": "Enterで送信",
         "submit_with_meta_enter_mac": "⌘ + Enterで送信"
@@ -165,6 +164,7 @@
       "button": {
         "add_provider": "追加...",
         "add_target": "対象を追加",
+        "manage_targets": "翻訳ターゲットを管理...",
         "grant": "許可"
       },
       "option": {
@@ -174,6 +174,12 @@
         "built_in_ocr": "内蔵OCR",
         "tesseract": "Tesseract",
         "youdao_ocr": "Youdao OCR"
+      },
+      "editor": {
+        "row": {
+          "source_language": "ソース言語",
+          "target_language": "ターゲット言語"
+        }
       }
     },
     "appearance": {

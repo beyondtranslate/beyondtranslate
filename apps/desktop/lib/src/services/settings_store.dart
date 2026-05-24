@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:launch_at_startup/launch_at_startup.dart';
 
+import '../utils/language_util.dart';
 import '../utils/platform_util.dart';
 import 'runtime.dart' as runtime_service;
 
@@ -31,6 +32,7 @@ class SettingsStore extends ChangeNotifier {
   /// persisted state.
   SettingsSubscription? _subscription;
   bool _disposed = false;
+  bool _didEnsureDefaultTranslationTarget = false;
 
   GeneralSettings _general = GeneralSettings(
     launchAtLogin: false,
@@ -39,7 +41,6 @@ class SettingsStore extends ChangeNotifier {
     autoCopyDetectedText: true,
     defaultDirectoryService: '',
     defaultTranslationService: '',
-    translationMode: TranslationMode.auto,
     translationTargets: [],
     inputSubmitMode: InputSubmitMode.enter,
     doubleClickCopyResult: true,
@@ -80,7 +81,6 @@ class SettingsStore extends ChangeNotifier {
     }
   }
 
-  TranslationMode get translationMode => _general.translationMode;
   InputSubmitMode get inputSubmitMode => _general.inputSubmitMode;
   bool get autoCopyDetectedText => _general.autoCopyDetectedText;
   bool get doubleClickCopyResult => _general.doubleClickCopyResult;
@@ -143,6 +143,22 @@ class SettingsStore extends ChangeNotifier {
     final settings = runtime_service.runtime.settings();
     try {
       _general = await settings.getGeneral();
+      if (!_didEnsureDefaultTranslationTarget &&
+          _general.translationTargets.isEmpty) {
+        _didEnsureDefaultTranslationTarget = true;
+        _general = await settings.updateGeneral(
+          patch: GeneralSettingsPatch(
+            translationTargets: [
+              TranslationTarget(
+                source: kAutoSource,
+                target: defaultTargetLanguage,
+              ),
+            ],
+          ),
+        );
+      } else {
+        _didEnsureDefaultTranslationTarget = true;
+      }
       notifyListeners();
     } catch (_) {
       // keep cached defaults

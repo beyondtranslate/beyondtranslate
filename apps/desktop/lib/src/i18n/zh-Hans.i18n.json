@@ -68,10 +68,6 @@
       "tencent": "腾讯",
       "youdao": "有道"
     },
-    "translation_mode": {
-      "auto": "自动",
-      "manual": "手动"
-    },
     "word_pronunciation": {
       "us": "美",
       "uk": "英"
@@ -122,7 +118,6 @@
     },
     "toolbar": {
       "tooltip": {
-        "translation_mode": "当前翻译模式：{}",
         "extract_text_from_screen_capture": "截取屏幕区域并识别文字",
         "extract_text_from_clipboard": "读取剪切板内容"
       }
@@ -130,6 +125,11 @@
     "button": {
       "clear": "清空",
       "translate": "翻译"
+    },
+    "language": {
+      "auto_detect": "自动检测",
+      "auto_match": "自动匹配",
+      "switch_config": "切换目标"
     },
     "message": {
       "please_enter_word_or_text": "未输入或未提取到文本",
@@ -157,7 +157,6 @@
         "auto_copy_detected_text": "自动复制识别文本",
         "default_directory_service": "默认词典服务",
         "default_translation_service": "默认翻译服务",
-        "translation_mode": "翻译模式",
         "double_click_copy_result": "双击复制翻译结果",
         "submit_with_enter": "用 Enter 提交",
         "submit_with_meta_enter_mac": "用 ⌘ + Enter 提交"
@@ -165,6 +164,7 @@
       "button": {
         "add_provider": "添加...",
         "add_target": "添加目标",
+        "manage_targets": "管理翻译目标...",
         "grant": "授权"
       },
       "option": {
@@ -174,6 +174,12 @@
         "built_in_ocr": "内置 OCR",
         "tesseract": "Tesseract",
         "youdao_ocr": "有道 OCR"
+      },
+      "editor": {
+        "row": {
+          "source_language": "源语言",
+          "target_language": "目标语言"
+        }
       }
     },
     "appearance": {

@@ -336,7 +336,6 @@ class GeneralSettings {
   final bool autoCopyDetectedText;
   final String defaultDirectoryService;
   final String defaultTranslationService;
-  final TranslationMode translationMode;
   final List<TranslationTarget> translationTargets;
   final InputSubmitMode inputSubmitMode;
   final bool doubleClickCopyResult;
@@ -347,7 +346,6 @@ class GeneralSettings {
     required this.autoCopyDetectedText,
     required this.defaultDirectoryService,
     required this.defaultTranslationService,
-    required this.translationMode,
     required this.translationTargets,
     required this.inputSubmitMode,
     required this.doubleClickCopyResult,
@@ -385,10 +383,6 @@ class FfiConverterGeneralSettings {
         FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
     final defaultTranslationService = defaultTranslationService_lifted.value;
     new_offset += defaultTranslationService_lifted.bytesRead;
-    final translationMode_lifted = FfiConverterTranslationMode.read(
-        Uint8List.view(buf.buffer, new_offset));
-    final translationMode = translationMode_lifted.value;
-    new_offset += translationMode_lifted.bytesRead;
     final translationTargets_lifted =
         FfiConverterSequenceTranslationTarget.read(
             Uint8List.view(buf.buffer, new_offset));
@@ -410,7 +404,6 @@ class FfiConverterGeneralSettings {
           autoCopyDetectedText: autoCopyDetectedText,
           defaultDirectoryService: defaultDirectoryService,
           defaultTranslationService: defaultTranslationService,
-          translationMode: translationMode,
           translationTargets: translationTargets,
           inputSubmitMode: inputSubmitMode,
           doubleClickCopyResult: doubleClickCopyResult,
@@ -425,7 +418,6 @@ class FfiConverterGeneralSettings {
         FfiConverterBool.allocationSize(value.autoCopyDetectedText) +
         FfiConverterString.allocationSize(value.defaultDirectoryService) +
         FfiConverterString.allocationSize(value.defaultTranslationService) +
-        FfiConverterTranslationMode.allocationSize(value.translationMode) +
         FfiConverterSequenceTranslationTarget.allocationSize(
             value.translationTargets) +
         FfiConverterInputSubmitMode.allocationSize(value.inputSubmitMode) +
@@ -450,8 +442,6 @@ class FfiConverterGeneralSettings {
         value.defaultDirectoryService, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterString.write(value.defaultTranslationService,
         Uint8List.view(buf.buffer, new_offset));
-    new_offset += FfiConverterTranslationMode.write(
-        value.translationMode, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterSequenceTranslationTarget.write(
         value.translationTargets, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterInputSubmitMode.write(
@@ -468,7 +458,6 @@ class FfiConverterGeneralSettings {
         FfiConverterBool.allocationSize(value.autoCopyDetectedText) +
         FfiConverterString.allocationSize(value.defaultDirectoryService) +
         FfiConverterString.allocationSize(value.defaultTranslationService) +
-        FfiConverterTranslationMode.allocationSize(value.translationMode) +
         FfiConverterSequenceTranslationTarget.allocationSize(
             value.translationTargets) +
         FfiConverterInputSubmitMode.allocationSize(value.inputSubmitMode) +
@@ -484,7 +473,6 @@ class GeneralSettingsPatch {
   final bool? autoCopyDetectedText;
   final String? defaultDirectoryService;
   final String? defaultTranslationService;
-  final TranslationMode? translationMode;
   final List<TranslationTarget>? translationTargets;
   final InputSubmitMode? inputSubmitMode;
   final bool? doubleClickCopyResult;
@@ -495,7 +483,6 @@ class GeneralSettingsPatch {
     this.autoCopyDetectedText,
     this.defaultDirectoryService,
     this.defaultTranslationService,
-    this.translationMode,
     this.translationTargets,
     this.inputSubmitMode,
     this.doubleClickCopyResult,
@@ -533,10 +520,6 @@ class FfiConverterGeneralSettingsPatch {
         FfiConverterOptionalString.read(Uint8List.view(buf.buffer, new_offset));
     final defaultTranslationService = defaultTranslationService_lifted.value;
     new_offset += defaultTranslationService_lifted.bytesRead;
-    final translationMode_lifted = FfiConverterOptionalTranslationMode.read(
-        Uint8List.view(buf.buffer, new_offset));
-    final translationMode = translationMode_lifted.value;
-    new_offset += translationMode_lifted.bytesRead;
     final translationTargets_lifted =
         FfiConverterOptionalSequenceTranslationTarget.read(
             Uint8List.view(buf.buffer, new_offset));
@@ -558,7 +541,6 @@ class FfiConverterGeneralSettingsPatch {
           autoCopyDetectedText: autoCopyDetectedText,
           defaultDirectoryService: defaultDirectoryService,
           defaultTranslationService: defaultTranslationService,
-          translationMode: translationMode,
           translationTargets: translationTargets,
           inputSubmitMode: inputSubmitMode,
           doubleClickCopyResult: doubleClickCopyResult,
@@ -576,8 +558,6 @@ class FfiConverterGeneralSettingsPatch {
             value.defaultDirectoryService) +
         FfiConverterOptionalString.allocationSize(
             value.defaultTranslationService) +
-        FfiConverterOptionalTranslationMode.allocationSize(
-            value.translationMode) +
         FfiConverterOptionalSequenceTranslationTarget.allocationSize(
             value.translationTargets) +
         FfiConverterOptionalInputSubmitMode.allocationSize(
@@ -604,8 +584,6 @@ class FfiConverterGeneralSettingsPatch {
     new_offset += FfiConverterOptionalString.write(
         value.defaultTranslationService,
         Uint8List.view(buf.buffer, new_offset));
-    new_offset += FfiConverterOptionalTranslationMode.write(
-        value.translationMode, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterOptionalSequenceTranslationTarget.write(
         value.translationTargets, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterOptionalInputSubmitMode.write(
@@ -624,8 +602,6 @@ class FfiConverterGeneralSettingsPatch {
             value.defaultDirectoryService) +
         FfiConverterOptionalString.allocationSize(
             value.defaultTranslationService) +
-        FfiConverterOptionalTranslationMode.allocationSize(
-            value.translationMode) +
         FfiConverterOptionalSequenceTranslationTarget.allocationSize(
             value.translationTargets) +
         FfiConverterOptionalInputSubmitMode.allocationSize(
@@ -920,63 +896,6 @@ class FfiConverterShortcutSettingsPatch {
         FfiConverterOptionalString.allocationSize(
             value.extractTextFromClipboard) +
         FfiConverterOptionalString.allocationSize(value.translateInputContent) +
-        0;
-  }
-}
-
-class TranslationTarget {
-  final String source;
-  final String target;
-  TranslationTarget({
-    required this.source,
-    required this.target,
-  });
-}
-
-class FfiConverterTranslationTarget {
-  static TranslationTarget lift(RustBuffer buf) {
-    return FfiConverterTranslationTarget.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<TranslationTarget> read(Uint8List buf) {
-    int new_offset = buf.offsetInBytes;
-    final source_lifted =
-        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
-    final source = source_lifted.value;
-    new_offset += source_lifted.bytesRead;
-    final target_lifted =
-        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
-    final target = target_lifted.value;
-    new_offset += target_lifted.bytesRead;
-    return LiftRetVal(
-        TranslationTarget(
-          source: source,
-          target: target,
-        ),
-        new_offset - buf.offsetInBytes);
-  }
-
-  static RustBuffer lower(TranslationTarget value) {
-    final total_length = FfiConverterString.allocationSize(value.source) +
-        FfiConverterString.allocationSize(value.target) +
-        0;
-    final buf = Uint8List(total_length);
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-
-  static int write(TranslationTarget value, Uint8List buf) {
-    int new_offset = buf.offsetInBytes;
-    new_offset += FfiConverterString.write(
-        value.source, Uint8List.view(buf.buffer, new_offset));
-    new_offset += FfiConverterString.write(
-        value.target, Uint8List.view(buf.buffer, new_offset));
-    return new_offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(TranslationTarget value) {
-    return FfiConverterString.allocationSize(value.source) +
-        FfiConverterString.allocationSize(value.target) +
         0;
   }
 }
@@ -2004,6 +1923,63 @@ class FfiConverterTranslateResponse {
   }
 }
 
+class TranslationTarget {
+  final String source;
+  final String target;
+  TranslationTarget({
+    required this.source,
+    required this.target,
+  });
+}
+
+class FfiConverterTranslationTarget {
+  static TranslationTarget lift(RustBuffer buf) {
+    return FfiConverterTranslationTarget.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<TranslationTarget> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final source_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final source = source_lifted.value;
+    new_offset += source_lifted.bytesRead;
+    final target_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final target = target_lifted.value;
+    new_offset += target_lifted.bytesRead;
+    return LiftRetVal(
+        TranslationTarget(
+          source: source,
+          target: target,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(TranslationTarget value) {
+    final total_length = FfiConverterString.allocationSize(value.source) +
+        FfiConverterString.allocationSize(value.target) +
+        0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(TranslationTarget value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterString.write(
+        value.source, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterString.write(
+        value.target, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(TranslationTarget value) {
+    return FfiConverterString.allocationSize(value.source) +
+        FfiConverterString.allocationSize(value.target) +
+        0;
+  }
+}
+
 class WordDefinition {
   final String? type;
   final String? name;
@@ -2575,50 +2551,6 @@ class FfiConverterInputSubmitMode {
   }
 
   static int write(InputSubmitMode value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.index + 1);
-    return 4;
-  }
-}
-
-enum TranslationMode {
-  auto,
-  manual,
-  ;
-}
-
-class FfiConverterTranslationMode {
-  static LiftRetVal<TranslationMode> read(Uint8List buf) {
-    final index = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    switch (index) {
-      case 1:
-        return LiftRetVal(
-          TranslationMode.auto,
-          4,
-        );
-      case 2:
-        return LiftRetVal(
-          TranslationMode.manual,
-          4,
-        );
-      default:
-        throw UniffiInternalError(UniffiInternalError.unexpectedEnumCase,
-            "Unable to determine enum variant");
-    }
-  }
-
-  static TranslationMode lift(RustBuffer buffer) {
-    return FfiConverterTranslationMode.read(buffer.asUint8List()).value;
-  }
-
-  static RustBuffer lower(TranslationMode input) {
-    return toRustBuffer(createUint8ListFromInt(input.index + 1));
-  }
-
-  static int allocationSize(TranslationMode _value) {
-    return 4;
-  }
-
-  static int write(TranslationMode value, Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.index + 1);
     return 4;
   }
@@ -3267,6 +3199,10 @@ abstract class RuntimeSettingsInterface {
   Future<String> generateProviderId({
     required String providerType,
   });
+  Future<List<TranslationTarget>> getActiveTranslationTargets({
+    required List<TranslationTarget> targets,
+    required String? detectedLanguage,
+  });
   Future<AdvancedSettings> getAdvanced();
   Future<AppearanceSettings> getAppearance();
   Future<GeneralSettings> getGeneral();
@@ -3372,6 +3308,25 @@ class RuntimeSettings implements RuntimeSettingsInterface {
       ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
       FfiConverterString.lift,
       runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<List<TranslationTarget>> getActiveTranslationTargets({
+    required List<TranslationTarget> targets,
+    required String? detectedLanguage,
+  }) {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_active_translation_targets(
+        uniffiClonePointer(),
+        FfiConverterSequenceTranslationTarget.lower(targets),
+        FfiConverterOptionalString.lower(detectedLanguage),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterSequenceTranslationTarget.lift,
+      null,
     );
   }
 
@@ -3589,6 +3544,9 @@ class RuntimeSettings implements RuntimeSettingsInterface {
 }
 
 abstract class RuntimeTranslationInterface {
+  Future<DetectLanguageResponse> detectLanguage({
+    required DetectLanguageRequest request,
+  });
   Future<TranslateResponse> translate({
     required TranslateRequest request,
   });
@@ -3638,6 +3596,23 @@ class RuntimeTranslation implements RuntimeTranslationInterface {
     rustCall((status) =>
         uniffi_beyondtranslate_runtime_fn_free_runtimetranslation(
             _ptr, status));
+  }
+
+  Future<DetectLanguageResponse> detectLanguage({
+    required DetectLanguageRequest request,
+  }) {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimetranslation_detect_language(
+        uniffiClonePointer(),
+        FfiConverterDetectLanguageRequest.lower(request),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterDetectLanguageResponse.lift,
+      runtimeExceptionErrorHandler,
+    );
   }
 
   Future<TranslateResponse> translate({
@@ -5464,53 +5439,6 @@ class FfiConverterOptionalString {
   }
 }
 
-class FfiConverterOptionalTranslationMode {
-  static TranslationMode? lift(RustBuffer buf) {
-    return FfiConverterOptionalTranslationMode.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<TranslationMode?> read(Uint8List buf) {
-    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
-      return LiftRetVal(null, 1);
-    }
-    final result = FfiConverterTranslationMode.read(
-        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
-    return LiftRetVal<TranslationMode?>(result.value, result.bytesRead + 1);
-  }
-
-  static int allocationSize([TranslationMode? value]) {
-    if (value == null) {
-      return 1;
-    }
-    return FfiConverterTranslationMode.allocationSize(value) + 1;
-  }
-
-  static RustBuffer lower(TranslationMode? value) {
-    if (value == null) {
-      return toRustBuffer(Uint8List.fromList([0]));
-    }
-    final length = FfiConverterOptionalTranslationMode.allocationSize(value);
-    final Pointer<Uint8> frameData = calloc<Uint8>(length);
-    final buf = frameData.asTypedList(length);
-    FfiConverterOptionalTranslationMode.write(value, buf);
-    final bytes = calloc<ForeignBytes>();
-    bytes.ref.len = length;
-    bytes.ref.data = frameData;
-    return RustBuffer.fromBytes(bytes.ref);
-  }
-
-  static int write(TranslationMode? value, Uint8List buf) {
-    if (value == null) {
-      buf[0] = 0;
-      return 1;
-    }
-    buf[0] = 1;
-    return FfiConverterTranslationMode.write(
-            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
-        1;
-  }
-}
-
 class FfiConverterOptionalUInt16 {
   static int? lift(RustBuffer buf) {
     return FfiConverterOptionalUInt16.read(buf.asUint8List()).value;
@@ -6465,6 +6393,12 @@ external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimesettings_generate_provider_id(
         Pointer<Void> ptr, RustBuffer provider_type);
 
+@Native<Pointer<Void> Function(Pointer<Void>, RustBuffer, RustBuffer)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_active_translation_targets(
+        Pointer<Void> ptr, RustBuffer targets, RustBuffer detected_language);
+
 @Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
 external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_advanced(
@@ -6556,6 +6490,12 @@ external Pointer<Void>
     assetId: _uniffiAssetId)
 external void uniffi_beyondtranslate_runtime_fn_free_runtimetranslation(
     Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Pointer<Void> Function(Pointer<Void>, RustBuffer)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimetranslation_detect_language(
+        Pointer<Void> ptr, RustBuffer request);
 
 @Native<Pointer<Void> Function(Pointer<Void>, RustBuffer)>(
     assetId: _uniffiAssetId)
@@ -7150,6 +7090,10 @@ external int
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_active_translation_targets();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_advanced();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -7203,6 +7147,10 @@ external int
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_shortcuts();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_detect_language();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
@@ -7374,6 +7322,10 @@ void _checkApiChecksums() {
       9759) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_active_translation_targets() !=
+      22616) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_advanced() !=
       3214) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
@@ -7428,6 +7380,10 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_shortcuts() !=
       11504) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_detect_language() !=
+      29752) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_translate() !=

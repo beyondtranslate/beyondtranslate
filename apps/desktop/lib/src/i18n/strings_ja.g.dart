@@ -87,9 +87,6 @@ class _TranslationsCommonJa extends TranslationsCommonEn {
   late final _TranslationsCommonProviderJa provider =
       _TranslationsCommonProviderJa._(_root);
   @override
-  late final _TranslationsCommonTranslationModeJa translation_mode =
-      _TranslationsCommonTranslationModeJa._(_root);
-  @override
   late final _TranslationsCommonWordPronunciationJa word_pronunciation =
       _TranslationsCommonWordPronunciationJa._(_root);
 }
@@ -128,6 +125,9 @@ class _TranslationsMiniTranslatorJa extends TranslationsMiniTranslatorEn {
   @override
   late final _TranslationsMiniTranslatorButtonJa button =
       _TranslationsMiniTranslatorButtonJa._(_root);
+  @override
+  late final _TranslationsMiniTranslatorLanguageJa language =
+      _TranslationsMiniTranslatorLanguageJa._(_root);
   @override
   late final _TranslationsMiniTranslatorMessageJa message =
       _TranslationsMiniTranslatorMessageJa._(_root);
@@ -308,22 +308,6 @@ class _TranslationsCommonProviderJa extends TranslationsCommonProviderEn {
   String get youdao => 'Youda';
 }
 
-// Path: common.translation_mode
-class _TranslationsCommonTranslationModeJa
-    extends TranslationsCommonTranslationModeEn {
-  _TranslationsCommonTranslationModeJa._(TranslationsJa root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsJa _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get auto => '自動';
-  @override
-  String get manual => '手動';
-}
-
 // Path: common.word_pronunciation
 class _TranslationsCommonWordPronunciationJa
     extends TranslationsCommonWordPronunciationEn {
@@ -428,6 +412,24 @@ class _TranslationsMiniTranslatorButtonJa
   String get translate => '翻訳';
 }
 
+// Path: mini_translator.language
+class _TranslationsMiniTranslatorLanguageJa
+    extends TranslationsMiniTranslatorLanguageEn {
+  _TranslationsMiniTranslatorLanguageJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get auto_detect => '自動検出';
+  @override
+  String get auto_match => '自動一致';
+  @override
+  String get switch_config => 'ターゲット切替';
+}
+
 // Path: mini_translator.message
 class _TranslationsMiniTranslatorMessageJa
     extends TranslationsMiniTranslatorMessageEn {
@@ -467,6 +469,9 @@ class _TranslationsSettingsGeneralJa extends TranslationsSettingsGeneralEn {
   @override
   late final _TranslationsSettingsGeneralOptionJa option =
       _TranslationsSettingsGeneralOptionJa._(_root);
+  @override
+  late final _TranslationsSettingsGeneralEditorJa editor =
+      _TranslationsSettingsGeneralEditorJa._(_root);
 }
 
 // Path: settings.appearance
@@ -749,8 +754,6 @@ class _TranslationsMiniTranslatorToolbarTooltipJa
 
   // Translations
   @override
-  String get translation_mode => '現在の翻訳モード: {}';
-  @override
   String get extract_text_from_screen_capture => '画面領域をキャプチャしてテキストを認識';
   @override
   String get extract_text_from_clipboard => 'クリップボードの内容を読み取る';
@@ -807,8 +810,6 @@ class _TranslationsSettingsGeneralRowJa
   @override
   String get default_translation_service => 'デフォルトの翻訳サービス';
   @override
-  String get translation_mode => '翻訳モード';
-  @override
   String get double_click_copy_result => 'ダブルクリックで翻訳結果をコピー';
   @override
   String get submit_with_enter => 'Enterで送信';
@@ -830,6 +831,8 @@ class _TranslationsSettingsGeneralButtonJa
   String get add_provider => '追加...';
   @override
   String get add_target => '対象を追加';
+  @override
+  String get manage_targets => '翻訳ターゲットを管理...';
   @override
   String get grant => '許可';
 }
@@ -856,6 +859,21 @@ class _TranslationsSettingsGeneralOptionJa
   String get tesseract => 'Tesseract';
   @override
   String get youdao_ocr => 'Youdao OCR';
+}
+
+// Path: settings.general.editor
+class _TranslationsSettingsGeneralEditorJa
+    extends TranslationsSettingsGeneralEditorEn {
+  _TranslationsSettingsGeneralEditorJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  late final _TranslationsSettingsGeneralEditorRowJa row =
+      _TranslationsSettingsGeneralEditorRowJa._(_root);
 }
 
 // Path: settings.appearance.section
@@ -1138,6 +1156,22 @@ class _TranslationsAppTrayContextMenuDevToolsJa
   String get use_native_settings => 'ネイティブ設定ページを使用';
 }
 
+// Path: settings.general.editor.row
+class _TranslationsSettingsGeneralEditorRowJa
+    extends TranslationsSettingsGeneralEditorRowEn {
+  _TranslationsSettingsGeneralEditorRowJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get source_language => 'ソース言語';
+  @override
+  String get target_language => 'ターゲット言語';
+}
+
 // Path: settings.providers.editor.row
 class _TranslationsSettingsProvidersEditorRowJa
     extends TranslationsSettingsProvidersEditorRowEn {
@@ -1272,8 +1306,6 @@ extension on TranslationsJa {
       'common.provider.system' => 'システム',
       'common.provider.tencent' => 'Tencent',
       'common.provider.youdao' => 'Youda',
-      'common.translation_mode.auto' => '自動',
-      'common.translation_mode.manual' => '手動',
       'common.word_pronunciation.us' => '米国',
       'common.word_pronunciation.uk' => '英国',
       'app.tray.context_menu.show_window' => 'ウィンドウを表示',
@@ -1302,13 +1334,15 @@ extension on TranslationsJa {
       'mini_translator.limited_banner.tooltip.help' => 'ヘルプを表示',
       'mini_translator.input.hint' => 'ここに単語またはテキストを入力',
       'mini_translator.input.extracting_text' => 'テキストを抽出中...',
-      'mini_translator.toolbar.tooltip.translation_mode' => '現在の翻訳モード: {}',
       'mini_translator.toolbar.tooltip.extract_text_from_screen_capture' =>
         '画面領域をキャプチャしてテキストを認識',
       'mini_translator.toolbar.tooltip.extract_text_from_clipboard' =>
         'クリップボードの内容を読み取る',
       'mini_translator.button.clear' => 'クリア',
       'mini_translator.button.translate' => '翻訳',
+      'mini_translator.language.auto_detect' => '自動検出',
+      'mini_translator.language.auto_match' => '自動一致',
+      'mini_translator.language.switch_config' => 'ターゲット切替',
       'mini_translator.message.please_enter_word_or_text' =>
         'テキストが入力されていないか、テキストが抽出されていません',
       'mini_translator.message.capture_screen_area_canceled' =>
@@ -1329,12 +1363,12 @@ extension on TranslationsJa {
       'settings.general.row.auto_copy_detected_text' => '検出したテキストを自動コピー',
       'settings.general.row.default_directory_service' => 'デフォルトの辞書サービス',
       'settings.general.row.default_translation_service' => 'デフォルトの翻訳サービス',
-      'settings.general.row.translation_mode' => '翻訳モード',
       'settings.general.row.double_click_copy_result' => 'ダブルクリックで翻訳結果をコピー',
       'settings.general.row.submit_with_enter' => 'Enterで送信',
       'settings.general.row.submit_with_meta_enter_mac' => '⌘ + Enterで送信',
       'settings.general.button.add_provider' => '追加...',
       'settings.general.button.add_target' => '対象を追加',
+      'settings.general.button.manage_targets' => '翻訳ターゲットを管理...',
       'settings.general.button.grant' => '許可',
       'settings.general.option.none' => 'なし',
       'settings.general.option.no_services_available' => '利用可能なサービスがありません',
@@ -1342,6 +1376,8 @@ extension on TranslationsJa {
       'settings.general.option.built_in_ocr' => '内蔵OCR',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => 'Youdao OCR',
+      'settings.general.editor.row.source_language' => 'ソース言語',
+      'settings.general.editor.row.target_language' => 'ターゲット言語',
       'settings.appearance.title' => '外観',
       'settings.appearance.section.app_language' => '表示言語',
       'settings.appearance.section.theme_mode' => 'テーマモード',

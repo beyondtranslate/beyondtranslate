@@ -54,8 +54,6 @@
 "common.theme_mode.dark" = "Dark";
 "common.theme_mode.light" = "Light";
 "common.theme_mode.system" = "System";
-"common.translation_mode.auto" = "Auto";
-"common.translation_mode.manual" = "Manual";
 "common.ui.button.add" = "Add";
 "common.ui.button.cancel" = "Cancel";
 "common.ui.button.continue" = "Continue";
@@ -71,6 +69,9 @@
 "mini_translator.button.translate" = "Translate";
 "mini_translator.input.extracting_text" = "Extracting text...";
 "mini_translator.input.hint" = "Enter the word or text here";
+"mini_translator.language.auto_detect" = "Auto Detect";
+"mini_translator.language.auto_match" = "Auto Match";
+"mini_translator.language.switch_config" = "Switch Target";
 "mini_translator.limited_banner.action.app_settings" = "App Settings";
 "mini_translator.limited_banner.action.recheck" = "Recheck";
 "mini_translator.limited_banner.feedback.enabled" = "Screen text extraction is enabled.";
@@ -86,7 +87,6 @@
 "mini_translator.message.please_enter_word_or_text" = "No text entered or text not extracted";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "Read clipboard content";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "Capture screen area and recognize text";
-"mini_translator.toolbar.tooltip.translation_mode" = "Current translation mode: {}";
 "settings.advanced.api_server" = "Local API server";
 "settings.advanced.api_server_description" = "Expose the translation API on 127.0.0.1 for local integrations.";
 "settings.advanced.disabled" = "Disabled";
@@ -100,6 +100,9 @@
 "settings.general.button.add_provider" = "Add...";
 "settings.general.button.add_target" = "Add Target";
 "settings.general.button.grant" = "Grant";
+"settings.general.button.manage_targets" = "Manage Translation Targets...";
+"settings.general.editor.row.source_language" = "Source Language";
+"settings.general.editor.row.target_language" = "Target Language";
 "settings.general.option.built_in_ocr" = "Built-in OCR";
 "settings.general.option.granted" = "Granted";
 "settings.general.option.no_services_available" = "No services available";
@@ -117,7 +120,6 @@
 "settings.general.row.show_in_menu_bar" = "Show in menu bar";
 "settings.general.row.submit_with_enter" = "Submit with Enter";
 "settings.general.row.submit_with_meta_enter_mac" = "Submit with ⌘ + Enter";
-"settings.general.row.translation_mode" = "Translation mode";
 "settings.general.section.directory" = "Directory";
 "settings.general.section.input" = "Input Settings";
 "settings.general.section.ocr" = "Text Recognition";

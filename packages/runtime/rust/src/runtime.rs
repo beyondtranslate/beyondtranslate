@@ -20,6 +20,7 @@ use crate::domain::settings::{
     ShortcutSettings, ShortcutSettingsPatch,
 };
 use crate::RuntimeApiServer;
+use beyondtranslate_core::TranslationTarget;
 
 /// Error type returned by all uniffi-exported Runtime methods.
 #[derive(Debug, thiserror::Error, uniffi::Error)]
@@ -370,6 +371,20 @@ impl RuntimeSettings {
 
 #[uniffi::export(async_runtime = "tokio")]
 impl RuntimeSettings {
+    /// Returns the active subset of translation targets based on the
+    /// detected source language.
+    ///
+    /// * `Always` targets are always included.
+    /// * `AutoDetect` targets are included only when their source matches
+    ///   the detected language (or when no detected language is available).
+    pub async fn get_active_translation_targets(
+        &self,
+        targets: Vec<TranslationTarget>,
+        detected_language: Option<String>,
+    ) -> Vec<TranslationTarget> {
+        TranslationTarget::filter_active(&targets, detected_language.as_deref())
+    }
+
     pub async fn get_json(&self) -> Result<String, RuntimeError> {
         self.get_json_impl().await.map_err(Into::into)
     }
@@ -612,6 +627,38 @@ impl RuntimeTranslation {
     }
 }
 
+impl RuntimeTranslation {
+    async fn detect_language_impl(
+        &self,
+        request: DetectLanguageRequest,
+    ) -> Result<DetectLanguageResponse, String> {
+        let provider_id = self.provider_id.clone();
+        let runtime = self.runtime.clone();
+        run_on_worker_thread(move || async move {
+            let texts = request
+                .texts
+                .into_iter()
+                .map(|text| text.trim().to_string())
+                .filter(|text| !text.is_empty())
+                .collect::<Vec<_>>();
+            if texts.is_empty() {
+                return Err("texts must not be empty".to_owned());
+            }
+            let state = runtime.inner.state.read().await;
+            let translation_service = state
+                .engine
+                .translation(&provider_id)
+                .map_err(|error| error.to_string())?;
+
+            translation_service
+                .detect_language(DetectLanguageRequest { texts })
+                .await
+                .map_err(|error| error.to_string())
+        })
+        .await
+    }
+}
+
 impl RuntimeDictionary {
     async fn lookup_impl(&self, request: LookUpRequest) -> Result<LookUpResponse, String> {
         let provider_id = self.provider_id.clone();
@@ -646,6 +693,13 @@ impl RuntimeTranslation {
         request: TranslateRequest,
     ) -> Result<TranslateResponse, RuntimeError> {
         self.translate_impl(request).await.map_err(Into::into)
+    }
+
+    pub async fn detect_language(
+        &self,
+        request: DetectLanguageRequest,
+    ) -> Result<DetectLanguageResponse, RuntimeError> {
+        self.detect_language_impl(request).await.map_err(Into::into)
     }
 }
 
@@ -1070,7 +1124,6 @@ mod tests {
                         auto_copy_detected_text: None,
                         default_directory_service: None,
                         default_translation_service: None,
-                        translation_mode: None,
                         translation_targets: None,
                         input_submit_mode: None,
                         double_click_copy_result: None,

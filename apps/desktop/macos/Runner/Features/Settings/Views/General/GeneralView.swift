@@ -131,20 +131,6 @@ struct GeneralView: View {
           )
         }
 
-        SettingPicker(
-          LocaleKeys.settings.general.row.translationMode.tr(),
-          selection: Binding(
-            get: { viewModel.translationMode },
-            set: { viewModel.setTranslationMode($0) }
-          )
-        ) {
-          ForEach(TranslationMode.allCases) { mode in
-            Text(mode.title).tag(mode)
-          }
-        }
-        .pickerStyle(.menu)
-        .disabled(!hasTranslationServices)
-
         SettingToggle(
           LocaleKeys.settings.general.row.doubleClickCopyResult.tr(),
           isOn: $viewModel.doubleClickCopyResult
@@ -152,24 +138,7 @@ struct GeneralView: View {
         .disabled(!hasTranslationServices)
       }
 
-      if hasTranslationServices && viewModel.translationMode == .auto {
-        Section(LocaleKeys.settings.general.section.translationTarget.tr()) {
-          VStack(alignment: .leading, spacing: 10) {
-            ForEach(viewModel.translationTargets) { item in
-              HStack {
-                Text(item.source)
-                Image(systemName: "arrow.right")
-                  .foregroundStyle(.secondary)
-                Text(item.target)
-                Spacer()
-                Button(LocaleKeys.common.ui.button.edit.tr()) {}
-              }
-            }
-
-            Button(LocaleKeys.settings.general.button.addTarget.tr()) {}
-          }
-        }
-      }
+      translationTargetsSection
 
       Section(LocaleKeys.settings.general.section.input.tr()) {
         SettingPicker("", selection: $viewModel.inputSubmitMode) {
@@ -193,6 +162,71 @@ struct GeneralView: View {
     }
     .onChange(of: highlightCoordinator.pendingHighlightPermissionsSectionID) { newValue in
       handlePermissionsHighlight(newValue)
+    }
+    .sheet(isPresented: $viewModel.showAddTargetSheet) {
+      TranslationTargetEditorSheet(
+        title: LocaleKeys.settings.general.button.addTarget.tr(),
+        source: "auto",
+        target: "zh-Hans",
+        supportedLanguages: viewModel.supportedLanguages,
+        onSave: { source, target in
+          viewModel.addTranslationTarget(source: source, target: target)
+          viewModel.showAddTargetSheet = false
+        },
+        onCancel: { viewModel.showAddTargetSheet = false }
+      )
+    }
+    .sheet(isPresented: viewModel.showEditTargetSheet) {
+      if let target = viewModel.editingTarget {
+        TranslationTargetEditorSheet(
+          title: LocaleKeys.common.ui.button.edit.tr(),
+          source: target.source,
+          target: target.target,
+          supportedLanguages: viewModel.supportedLanguages,
+          showDelete: true,
+          onSave: { source, targetLang in
+            if let idx = viewModel.translationTargets.firstIndex(where: { $0.id == target.id }) {
+              viewModel.removeTranslationTarget(at: idx)
+              viewModel.addTranslationTarget(source: source, target: targetLang)
+            }
+            viewModel.editingTarget = nil
+          },
+          onDelete: {
+            if let idx = viewModel.translationTargets.firstIndex(where: { $0.id == target.id }) {
+              viewModel.removeTranslationTarget(at: idx)
+            }
+            viewModel.editingTarget = nil
+          },
+          onCancel: { viewModel.editingTarget = nil }
+        )
+      }
+    }
+  }
+
+  @ViewBuilder
+  private var translationTargetsSection: some View {
+    if !viewModel.translationServiceOptions.isEmpty {
+      Section(LocaleKeys.settings.general.section.translationTarget.tr()) {
+        VStack(alignment: .leading, spacing: 10) {
+          ForEach(viewModel.translationTargets) { item in
+            HStack {
+              Text(
+                item.source == "auto"
+                  ? LocaleKeys.miniTranslator.language.autoDetect.tr()
+                  : localizedLanguageName(item.source))
+              Image(systemName: "arrow.right")
+                .foregroundStyle(.secondary)
+              Text(localizedLanguageName(item.target))
+              Spacer()
+              Button(LocaleKeys.common.ui.button.edit.tr()) { viewModel.editingTarget = item }
+            }
+          }
+
+          Button(LocaleKeys.settings.general.button.addTarget.tr()) {
+            viewModel.showAddTargetSheet = true
+          }
+        }
+      }
     }
   }
 
@@ -229,6 +263,13 @@ private struct ServiceUnavailableSettingRow: View {
       Button(LocaleKeys.settings.general.button.addProvider.tr(), action: onAddProvider)
     }
   }
+}
+
+private func localizedLanguageName(_ code: String) -> String {
+  let key =
+    "common.language."
+    + code.lowercased().replacingOccurrences(of: "-", with: "_")
+  return LocaleKey(key).tr()
 }
 
 private struct PermissionAccessRow: View {

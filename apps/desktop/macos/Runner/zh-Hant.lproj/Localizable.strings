@@ -54,8 +54,6 @@
 "common.theme_mode.dark" = "深色";
 "common.theme_mode.light" = "淺色";
 "common.theme_mode.system" = "跟隨系統";
-"common.translation_mode.auto" = "自動";
-"common.translation_mode.manual" = "手動";
 "common.ui.button.add" = "新增";
 "common.ui.button.cancel" = "取消";
 "common.ui.button.continue" = "繼續";
@@ -71,6 +69,9 @@
 "mini_translator.button.translate" = "翻譯";
 "mini_translator.input.extracting_text" = "正在辨識文字…";
 "mini_translator.input.hint" = "在此輸入單字或文字";
+"mini_translator.language.auto_detect" = "自動偵測";
+"mini_translator.language.auto_match" = "自動匹配";
+"mini_translator.language.switch_config" = "切換目標";
 "mini_translator.limited_banner.action.app_settings" = "應用程式設定";
 "mini_translator.limited_banner.action.recheck" = "重新檢查";
 "mini_translator.limited_banner.feedback.enabled" = "螢幕取詞功能已啟用。";
@@ -86,7 +87,6 @@
 "mini_translator.message.please_enter_word_or_text" = "未輸入或未擷取到文字";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "讀取剪貼簿內容";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "擷取螢幕區域並辨識文字";
-"mini_translator.toolbar.tooltip.translation_mode" = "目前翻譯模式：{}";
 "settings.advanced.api_server" = "本機 API 服務";
 "settings.advanced.api_server_description" = "在 127.0.0.1 上開放翻譯 API，供本機整合使用。";
 "settings.advanced.disabled" = "已關閉";
@@ -100,6 +100,9 @@
 "settings.general.button.add_provider" = "新增…";
 "settings.general.button.add_target" = "新增目標";
 "settings.general.button.grant" = "授權";
+"settings.general.button.manage_targets" = "管理翻譯目標...";
+"settings.general.editor.row.source_language" = "源語言";
+"settings.general.editor.row.target_language" = "目標語言";
 "settings.general.option.built_in_ocr" = "內建 OCR";
 "settings.general.option.granted" = "已授權";
 "settings.general.option.no_services_available" = "暫無可用服務";
@@ -117,7 +120,6 @@
 "settings.general.row.show_in_menu_bar" = "在選單列中顯示";
 "settings.general.row.submit_with_enter" = "用 Enter 提交";
 "settings.general.row.submit_with_meta_enter_mac" = "用 ⌘ + Enter 提交";
-"settings.general.row.translation_mode" = "翻譯模式";
 "settings.general.section.directory" = "辭典";
 "settings.general.section.input" = "輸入設定";
 "settings.general.section.ocr" = "文字辨識";

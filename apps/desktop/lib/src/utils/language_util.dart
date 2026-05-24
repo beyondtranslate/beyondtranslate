@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../i18n/i18n.dart';
 import '../services/runtime.dart' show runtime;
 
+/// Sentinel value for auto-detected source language.
+const kAutoSource = 'auto';
+
 List<String>? _appLanguages;
 List<String>? _supportedLanguages;
 
@@ -20,12 +23,30 @@ List<String> get supportedLanguages {
 
 String get defaultSourceLanguage => _preferredLanguage('en');
 
-String get defaultTargetLanguage => _preferredLanguage('zh-Hans');
+String get defaultTargetLanguage {
+  final appLang = LocaleSettings.currentLocale;
+  final code = switch (appLang) {
+    AppLocale.en => 'en',
+    AppLocale.ja => 'ja',
+    AppLocale.ko => 'ko',
+    AppLocale.zhHans => 'zh-Hans',
+    AppLocale.zhHant => 'zh-Hant',
+    _ => 'zh-Hans',
+  };
+  return _preferredLanguage(code);
+}
 
 String _preferredLanguage(String code) {
   final languages = supportedLanguages;
   if (languages.contains(code)) return code;
   return languages.isNotEmpty ? languages.first : code;
+}
+
+bool isAutoSource(String source) => source == kAutoSource;
+
+String getSourceDisplayName(String source, {bool showNative = false}) {
+  if (isAutoSource(source)) return t.mini_translator.language.auto_detect;
+  return getLanguageName(source, showNative: showNative);
 }
 
 /// Native (original) name of each language in its own writing system.

@@ -101,10 +101,6 @@ enum LocaleKeys {
       static let light = LocaleKey("common.theme_mode.light")
       static let system = LocaleKey("common.theme_mode.system")
     }
-    enum translationMode {
-      static let auto = LocaleKey("common.translation_mode.auto")
-      static let manual = LocaleKey("common.translation_mode.manual")
-    }
     enum ui {
       enum button {
         static let add = LocaleKey("common.ui.button.add")
@@ -133,6 +129,11 @@ enum LocaleKeys {
     enum input {
       static let extractingText = LocaleKey("mini_translator.input.extracting_text")
       static let hint = LocaleKey("mini_translator.input.hint")
+    }
+    enum language {
+      static let autoDetect = LocaleKey("mini_translator.language.auto_detect")
+      static let autoMatch = LocaleKey("mini_translator.language.auto_match")
+      static let switchConfig = LocaleKey("mini_translator.language.switch_config")
     }
     enum limitedBanner {
       enum action {
@@ -173,7 +174,6 @@ enum LocaleKeys {
           "mini_translator.toolbar.tooltip.extract_text_from_clipboard")
         static let extractTextFromScreenCapture = LocaleKey(
           "mini_translator.toolbar.tooltip.extract_text_from_screen_capture")
-        static let translationMode = LocaleKey("mini_translator.toolbar.tooltip.translation_mode")
       }
     }
   }
@@ -199,6 +199,13 @@ enum LocaleKeys {
         static let addProvider = LocaleKey("settings.general.button.add_provider")
         static let addTarget = LocaleKey("settings.general.button.add_target")
         static let grant = LocaleKey("settings.general.button.grant")
+        static let manageTargets = LocaleKey("settings.general.button.manage_targets")
+      }
+      enum editor {
+        enum row {
+          static let sourceLanguage = LocaleKey("settings.general.editor.row.source_language")
+          static let targetLanguage = LocaleKey("settings.general.editor.row.target_language")
+        }
       }
       enum option {
         static let builtInOcr = LocaleKey("settings.general.option.built_in_ocr")
@@ -224,7 +231,6 @@ enum LocaleKeys {
         static let submitWithEnter = LocaleKey("settings.general.row.submit_with_enter")
         static let submitWithMetaEnterMac = LocaleKey(
           "settings.general.row.submit_with_meta_enter_mac")
-        static let translationMode = LocaleKey("settings.general.row.translation_mode")
       }
       enum section {
         static let directory = LocaleKey("settings.general.section.directory")

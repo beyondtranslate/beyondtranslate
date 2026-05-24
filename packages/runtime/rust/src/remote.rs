@@ -24,6 +24,13 @@
 use beyondtranslate_core as core;
 use beyondtranslate_engine as engine;
 
+type TranslationTarget = core::TranslationTarget;
+#[uniffi::remote(Record)]
+pub struct TranslationTarget {
+    pub source: String,
+    pub target: String,
+}
+
 type ProviderCapability = core::ProviderCapability;
 #[uniffi::remote(Enum)]
 pub enum ProviderCapability {

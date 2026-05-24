@@ -67,12 +67,14 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   bool _isAllowedScreenCaptureAccess = true;
   bool _isAllowedScreenSelectionAccess = true;
 
-  String _sourceLanguage = defaultSourceLanguage;
-  String _targetLanguage = defaultTargetLanguage;
+  String _sourceLanguage = kAutoSource;
+  String? _selectedTargetLanguage;
+  int _activeConfigIndex = -1;
+  List<TranslationTarget> _fastTargets = [];
 
   bool _querySubmitted = false;
   String _text = '';
-  String? _textDetectedLanguage;
+  String? _detectedLanguage;
   CapturedData? _capturedData;
   bool _isTextDetecting = false;
   List<TranslationResult> _translationResultList = [];
@@ -367,14 +369,39 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   Future<void> _queryData() async {
     setState(() {
       _querySubmitted = true;
-      _textDetectedLanguage = null;
+      _detectedLanguage = null;
       _translationResultList = [];
     });
 
     final settings = runtime.settings();
     final providers = await settings.listProviders();
     final generalSettings = await settings.getGeneral();
-    final activeTargets = _activeTranslationTargets(generalSettings);
+
+    // Detect source language for translation target matching.
+    if (_text.isNotEmpty) {
+      try {
+        final translationProvider = providers.firstWhere(
+          (p) => p.capabilities.contains(ProviderCapability.translation),
+        );
+        final detectResponse = await runtime
+            .translation(providerId: translationProvider.id)
+            .detectLanguage(
+              request: DetectLanguageRequest(texts: [_text]),
+            );
+        final detections = detectResponse.detections;
+        if (detections != null && detections.isNotEmpty) {
+          _detectedLanguage = detections.first.detectedLanguage;
+          if (mounted) {
+            _setStateAndScheduleWindowResize(() {});
+          }
+        }
+      } catch (e) {
+        // Detection failed silently; continue without detected language
+        debugPrint('Language detection failed: $e');
+      }
+    }
+
+    final activeTargets = await _activeTranslationTargets(generalSettings);
     final nextTranslationResultList =
         _createPendingTranslationResults(activeTargets, providers);
 
@@ -488,19 +515,93 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     return true;
   }
 
-  List<TranslationTarget> _activeTranslationTargets(
+  Future<List<TranslationTarget>> _activeTranslationTargets(
     GeneralSettings generalSettings,
-  ) {
-    if (generalSettings.translationMode == TranslationMode.manual) {
-      return [
-        TranslationTarget(
-          source: _sourceLanguage,
-          target: _targetLanguage,
-        ),
-      ];
+  ) async {
+    final persistentTargets = generalSettings.translationTargets;
+
+    if (_activeConfigIndex >= 0 &&
+        _activeConfigIndex < persistentTargets.length) {
+      return [persistentTargets[_activeConfigIndex]];
     }
 
-    return generalSettings.translationTargets.toList();
+    if (_selectedTargetLanguage != null) {
+      return _fastTargets.isNotEmpty
+          ? _fastTargets
+          : [
+              TranslationTarget(
+                source: _sourceLanguage,
+                target: _selectedTargetLanguage!,
+              ),
+            ];
+    }
+
+    if (persistentTargets.isNotEmpty) {
+      final settings = runtime.settings();
+      return await settings.getActiveTranslationTargets(
+        targets: persistentTargets,
+        detectedLanguage: _detectedLanguage,
+      );
+    }
+
+    return [
+      TranslationTarget(
+        source: _sourceLanguage,
+        target: defaultTargetLanguage,
+      ),
+    ];
+  }
+
+  void _handleSourceChanged(String newSource) {
+    _setStateAndScheduleWindowResize(() {
+      _sourceLanguage = newSource;
+      _activeConfigIndex = -1;
+      if (_selectedTargetLanguage != null) {
+        _fastTargets = [
+          TranslationTarget(
+              source: newSource, target: _selectedTargetLanguage!),
+        ];
+      }
+    });
+    if (_text.isNotEmpty) _handleButtonTappedTrans();
+  }
+
+  void _handleTargetLanguageChanged(String? targetCode) {
+    _setStateAndScheduleWindowResize(() {
+      _selectedTargetLanguage = targetCode;
+      _activeConfigIndex = -1;
+      _fastTargets = targetCode == null
+          ? []
+          : [
+              TranslationTarget(source: _sourceLanguage, target: targetCode),
+            ];
+    });
+    if (_text.isNotEmpty) _handleButtonTappedTrans();
+  }
+
+  void _handleConfigTargetSelected(int index) {
+    if (index == -1) {
+      _setStateAndScheduleWindowResize(() {
+        _activeConfigIndex = -1;
+        _sourceLanguage = kAutoSource;
+        _selectedTargetLanguage = null;
+        _fastTargets = [];
+      });
+      if (_text.isNotEmpty) _handleButtonTappedTrans();
+      return;
+    }
+    final target = settingsStore.general.translationTargets[index];
+    _setStateAndScheduleWindowResize(() {
+      _activeConfigIndex = index;
+      _sourceLanguage = target.source;
+      _selectedTargetLanguage = target.target;
+      _fastTargets = [];
+    });
+    if (_text.isNotEmpty) _handleButtonTappedTrans();
+  }
+
+  void _handleManageTargets() {
+    showSettingsWindow();
   }
 
   void _handleTextChanged(
@@ -538,7 +639,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     _setStateAndScheduleWindowResize(() {
       _querySubmitted = false;
       _text = '';
-      _textDetectedLanguage = null;
+      _detectedLanguage = null;
       _capturedData = null;
       _isTextDetecting = false;
       _translationResultList = [];
@@ -599,7 +700,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     _setStateAndScheduleWindowResize(() {
       _querySubmitted = false;
       _text = '';
-      _textDetectedLanguage = null;
+      _detectedLanguage = null;
       _capturedData = null;
       _isTextDetecting = false;
       _translationResultList = [];
@@ -666,9 +767,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   Widget _buildInputView(BuildContext context) {
-    final isTranslationTargetSelectorVisible =
-        settingsStore.translationMode != TranslationMode.auto;
-
     return SizedBox(
       key: _inputViewKey,
       width: double.infinity,
@@ -681,10 +779,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             onChanged: (newValue) => _handleTextChanged(newValue),
             capturedData: _capturedData,
             isTextDetecting: _isTextDetecting,
-            translationMode: settingsStore.translationMode,
-            onTranslationModeChanged: (_) {
-              // Persisted by SettingsStore; rebuild on notify.
-            },
             inputSubmitMode: settingsStore.inputSubmitMode,
             onClickExtractTextFromScreenCapture:
                 _handleExtractTextFromScreenCapture,
@@ -692,23 +786,17 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             onButtonTappedClear: _handleButtonTappedClear,
             onButtonTappedTrans: _handleButtonTappedTrans,
           ),
-          if (isTranslationTargetSelectorVisible) ...[
-            const SizedBox(height: 8),
-            TranslationTargetSelectView(
-              translationMode: settingsStore.translationMode,
-              sourceLanguage: _sourceLanguage,
-              targetLanguage: _targetLanguage,
-              onChanged: (newSourceLanguage, newTargetLanguage) {
-                _setStateAndScheduleWindowResize(() {
-                  _sourceLanguage = newSourceLanguage;
-                  _targetLanguage = newTargetLanguage;
-                });
-                if (_text.isNotEmpty) {
-                  _handleButtonTappedTrans();
-                }
-              },
-            ),
-          ],
+          const SizedBox(height: 8),
+          TranslationTargetSelectView(
+            sourceLanguage: _sourceLanguage,
+            selectedTargetLanguage: _selectedTargetLanguage,
+            activeConfigIndex: _activeConfigIndex,
+            persistentTargets: settingsStore.general.translationTargets,
+            onSourceChanged: _handleSourceChanged,
+            onTargetLanguageChanged: _handleTargetLanguageChanged,
+            onConfigTargetSelected: _handleConfigTargetSelected,
+            onManageTargets: _handleManageTargets,
+          ),
         ],
       ),
     );
@@ -718,10 +806,9 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     return TranslationResultsView(
       viewKey: _resultsViewKey,
       controller: _scrollController,
-      translationMode: settingsStore.translationMode,
       querySubmitted: _querySubmitted,
       text: _text,
-      textDetectedLanguage: _textDetectedLanguage,
+      textDetectedLanguage: _detectedLanguage,
       translationResultList: _translationResultList,
       onTextTapped: (word) {
         _handleTextChanged(word, isRequery: true);

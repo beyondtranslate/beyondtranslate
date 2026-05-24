@@ -6,7 +6,6 @@ import 'package:flutter/material.dart' hide Card, TextField;
 import 'package:screen_capturer/screen_capturer.dart';
 
 import '../../i18n/i18n.dart';
-import '../../services/settings_store.dart';
 import '../../widgets/ui/button.dart';
 import '../../widgets/ui/card.dart';
 import '../../widgets/ui/loading_indicator.dart';
@@ -20,8 +19,6 @@ class TranslationInputView extends StatelessWidget {
     required this.onChanged,
     this.capturedData,
     required this.isTextDetecting,
-    required this.translationMode,
-    required this.onTranslationModeChanged,
     required this.inputSubmitMode,
     required this.onClickExtractTextFromScreenCapture,
     required this.onClickExtractTextFromClipboard,
@@ -36,8 +33,6 @@ class TranslationInputView extends StatelessWidget {
   final CapturedData? capturedData;
   final bool isTextDetecting;
 
-  final TranslationMode translationMode;
-  final ValueChanged<TranslationMode> onTranslationModeChanged;
   final InputSubmitMode inputSubmitMode;
 
   final VoidCallback onClickExtractTextFromScreenCapture;
@@ -54,67 +49,6 @@ class TranslationInputView extends StatelessWidget {
     final theme = Theme.of(context);
     return Row(
       children: [
-        Tooltip(
-          message: formatTranslation(
-            t.mini_translator.toolbar.tooltip.translation_mode,
-            args: [_translationModeText()],
-          ),
-          child: Button(
-            minSize: 0,
-            padding: const EdgeInsets.all(4),
-            child: SizedBox(
-              width: 28,
-              height: 28,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Icon(
-                    FluentIcons.target_20_regular,
-                    size: 20,
-                    color: translationMode == TranslationMode.auto
-                        ? Theme.of(context).primaryColor
-                        : theme.iconTheme.color?.withValues(alpha: 0.7),
-                  ),
-                  if (translationMode == TranslationMode.auto)
-                    Positioned(
-                      bottom: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .primaryColor
-                              .withValues(alpha: 0.9),
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 2.5,
-                          vertical: 1,
-                        ),
-                        child: const Text(
-                          'AUTO',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 6.5,
-                            fontWeight: FontWeight.w600,
-                            height: 1,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            onPressed: () async {
-              final newTranslationMode = translationMode == TranslationMode.auto
-                  ? TranslationMode.manual
-                  : TranslationMode.auto;
-              await settingsStore.updateGeneral(
-                GeneralSettingsPatch(translationMode: newTranslationMode),
-              );
-              onTranslationModeChanged(newTranslationMode);
-            },
-          ),
-        ),
-        const SizedBox(width: 2),
         Tooltip(
           message: t
               .mini_translator.toolbar.tooltip.extract_text_from_screen_capture,
@@ -287,14 +221,5 @@ class TranslationInputView extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _translationModeText() {
-    switch (translationMode) {
-      case TranslationMode.auto:
-        return t.common.translation_mode.auto;
-      case TranslationMode.manual:
-        return t.common.translation_mode.manual;
-    }
   }
 }

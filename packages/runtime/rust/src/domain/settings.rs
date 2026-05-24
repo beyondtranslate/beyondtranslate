@@ -3,7 +3,7 @@ use std::fs;
 use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use beyondtranslate_core::ProviderCapability;
+use beyondtranslate_core::{ProviderCapability, TranslationTarget};
 use beyondtranslate_engine::{ProviderConfig, ProviderType};
 use serde::de::Error as DeError;
 use serde::ser::SerializeMap;
@@ -97,25 +97,10 @@ impl Default for AppearanceSettings {
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize, uniffi::Enum)]
 #[serde(rename_all = "camelCase")]
-pub enum TranslationMode {
-    #[default]
-    Auto,
-    Manual,
-}
-
-#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize, uniffi::Enum)]
-#[serde(rename_all = "camelCase")]
 pub enum InputSubmitMode {
     #[default]
     Enter,
     CommandEnter,
-}
-
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize, uniffi::Record)]
-#[serde(default)]
-pub struct TranslationTarget {
-    pub source: String,
-    pub target: String,
 }
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize, Patch, uniffi::Record)]
@@ -137,8 +122,6 @@ pub struct GeneralSettings {
     // Translation
     #[serde(rename = "defaultTranslationService")]
     pub default_translation_service: String,
-    #[serde(rename = "translationMode")]
-    pub translation_mode: TranslationMode,
     #[serde(rename = "translationTargets")]
     pub translation_targets: Vec<TranslationTarget>,
     #[serde(rename = "inputSubmitMode")]
@@ -156,7 +139,6 @@ impl Default for GeneralSettings {
             auto_copy_detected_text: true,
             default_directory_service: String::new(),
             default_translation_service: String::new(),
-            translation_mode: TranslationMode::default(),
             translation_targets: Vec::new(),
             input_submit_mode: InputSubmitMode::default(),
             double_click_copy_result: true,

@@ -1099,6 +1099,17 @@ public protocol RuntimeSettingsProtocol: AnyObject, Sendable {
 
   func generateProviderId(providerType: String) async throws -> String
 
+  /**
+   * Returns the active subset of translation targets based on the
+   * detected source language.
+   *
+   * * `Always` targets are always included.
+   * * `AutoDetect` targets are included only when their source matches
+   * the detected language (or when no detected language is available).
+   */
+  func getActiveTranslationTargets(targets: [TranslationTarget], detectedLanguage: String?) async
+    -> [TranslationTarget]
+
   func getAdvanced() async throws -> AdvancedSettings
 
   func getAppearance() async throws -> AppearanceSettings
@@ -1218,6 +1229,35 @@ open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
         freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
         liftFunc: FfiConverterString.lift,
         errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  /**
+   * Returns the active subset of translation targets based on the
+   * detected source language.
+   *
+   * * `Always` targets are always included.
+   * * `AutoDetect` targets are included only when their source matches
+   * the detected language (or when no detected language is available).
+   */
+  open func getActiveTranslationTargets(targets: [TranslationTarget], detectedLanguage: String?)
+    async -> [TranslationTarget]
+  {
+    return
+      try! await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_active_translation_targets(
+            self.uniffiCloneHandle(),
+            FfiConverterSequenceTypeTranslationTarget.lower(targets),
+            FfiConverterOptionString.lower(detectedLanguage)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterSequenceTypeTranslationTarget.lift,
+        errorHandler: nil
+
       )
   }
 
@@ -1505,6 +1545,8 @@ public func FfiConverterTypeRuntimeSettings_lower(_ value: RuntimeSettings) -> U
 
 public protocol RuntimeTranslationProtocol: AnyObject, Sendable {
 
+  func detectLanguage(request: DetectLanguageRequest) async throws -> DetectLanguageResponse
+
   func translate(request: TranslateRequest) async throws -> TranslateResponse
 
 }
@@ -1558,6 +1600,23 @@ open class RuntimeTranslation: RuntimeTranslationProtocol, @unchecked Sendable {
     }
 
     try! rustCall { uniffi_beyondtranslate_runtime_fn_free_runtimetranslation(handle, $0) }
+  }
+
+  open func detectLanguage(request: DetectLanguageRequest) async throws -> DetectLanguageResponse {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimetranslation_detect_language(
+            self.uniffiCloneHandle(),
+            FfiConverterTypeDetectLanguageRequest_lower(request)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeDetectLanguageResponse_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
   }
 
   open func translate(request: TranslateRequest) async throws -> TranslateResponse {
@@ -2157,7 +2216,6 @@ public struct GeneralSettings: Equatable, Hashable {
   public var autoCopyDetectedText: Bool
   public var defaultDirectoryService: String
   public var defaultTranslationService: String
-  public var translationMode: TranslationMode
   public var translationTargets: [TranslationTarget]
   public var inputSubmitMode: InputSubmitMode
   public var doubleClickCopyResult: Bool
@@ -2167,8 +2225,8 @@ public struct GeneralSettings: Equatable, Hashable {
   public init(
     launchAtLogin: Bool, showInMenuBar: Bool, defaultOcrService: String, autoCopyDetectedText: Bool,
     defaultDirectoryService: String, defaultTranslationService: String,
-    translationMode: TranslationMode, translationTargets: [TranslationTarget],
-    inputSubmitMode: InputSubmitMode, doubleClickCopyResult: Bool
+    translationTargets: [TranslationTarget], inputSubmitMode: InputSubmitMode,
+    doubleClickCopyResult: Bool
   ) {
     self.launchAtLogin = launchAtLogin
     self.showInMenuBar = showInMenuBar
@@ -2176,7 +2234,6 @@ public struct GeneralSettings: Equatable, Hashable {
     self.autoCopyDetectedText = autoCopyDetectedText
     self.defaultDirectoryService = defaultDirectoryService
     self.defaultTranslationService = defaultTranslationService
-    self.translationMode = translationMode
     self.translationTargets = translationTargets
     self.inputSubmitMode = inputSubmitMode
     self.doubleClickCopyResult = doubleClickCopyResult
@@ -2203,7 +2260,6 @@ public struct FfiConverterTypeGeneralSettings: FfiConverterRustBuffer {
         autoCopyDetectedText: FfiConverterBool.read(from: &buf),
         defaultDirectoryService: FfiConverterString.read(from: &buf),
         defaultTranslationService: FfiConverterString.read(from: &buf),
-        translationMode: FfiConverterTypeTranslationMode.read(from: &buf),
         translationTargets: FfiConverterSequenceTypeTranslationTarget.read(from: &buf),
         inputSubmitMode: FfiConverterTypeInputSubmitMode.read(from: &buf),
         doubleClickCopyResult: FfiConverterBool.read(from: &buf)
@@ -2217,7 +2273,6 @@ public struct FfiConverterTypeGeneralSettings: FfiConverterRustBuffer {
     FfiConverterBool.write(value.autoCopyDetectedText, into: &buf)
     FfiConverterString.write(value.defaultDirectoryService, into: &buf)
     FfiConverterString.write(value.defaultTranslationService, into: &buf)
-    FfiConverterTypeTranslationMode.write(value.translationMode, into: &buf)
     FfiConverterSequenceTypeTranslationTarget.write(value.translationTargets, into: &buf)
     FfiConverterTypeInputSubmitMode.write(value.inputSubmitMode, into: &buf)
     FfiConverterBool.write(value.doubleClickCopyResult, into: &buf)
@@ -2245,7 +2300,6 @@ public struct GeneralSettingsPatch: Equatable, Hashable {
   public var autoCopyDetectedText: Bool?
   public var defaultDirectoryService: String?
   public var defaultTranslationService: String?
-  public var translationMode: TranslationMode?
   public var translationTargets: [TranslationTarget]?
   public var inputSubmitMode: InputSubmitMode?
   public var doubleClickCopyResult: Bool?
@@ -2255,9 +2309,8 @@ public struct GeneralSettingsPatch: Equatable, Hashable {
   public init(
     launchAtLogin: Bool?, showInMenuBar: Bool?, defaultOcrService: String?,
     autoCopyDetectedText: Bool?, defaultDirectoryService: String?,
-    defaultTranslationService: String?, translationMode: TranslationMode?,
-    translationTargets: [TranslationTarget]?, inputSubmitMode: InputSubmitMode?,
-    doubleClickCopyResult: Bool?
+    defaultTranslationService: String?, translationTargets: [TranslationTarget]?,
+    inputSubmitMode: InputSubmitMode?, doubleClickCopyResult: Bool?
   ) {
     self.launchAtLogin = launchAtLogin
     self.showInMenuBar = showInMenuBar
@@ -2265,7 +2318,6 @@ public struct GeneralSettingsPatch: Equatable, Hashable {
     self.autoCopyDetectedText = autoCopyDetectedText
     self.defaultDirectoryService = defaultDirectoryService
     self.defaultTranslationService = defaultTranslationService
-    self.translationMode = translationMode
     self.translationTargets = translationTargets
     self.inputSubmitMode = inputSubmitMode
     self.doubleClickCopyResult = doubleClickCopyResult
@@ -2292,7 +2344,6 @@ public struct FfiConverterTypeGeneralSettingsPatch: FfiConverterRustBuffer {
         autoCopyDetectedText: FfiConverterOptionBool.read(from: &buf),
         defaultDirectoryService: FfiConverterOptionString.read(from: &buf),
         defaultTranslationService: FfiConverterOptionString.read(from: &buf),
-        translationMode: FfiConverterOptionTypeTranslationMode.read(from: &buf),
         translationTargets: FfiConverterOptionSequenceTypeTranslationTarget.read(from: &buf),
         inputSubmitMode: FfiConverterOptionTypeInputSubmitMode.read(from: &buf),
         doubleClickCopyResult: FfiConverterOptionBool.read(from: &buf)
@@ -2306,7 +2357,6 @@ public struct FfiConverterTypeGeneralSettingsPatch: FfiConverterRustBuffer {
     FfiConverterOptionBool.write(value.autoCopyDetectedText, into: &buf)
     FfiConverterOptionString.write(value.defaultDirectoryService, into: &buf)
     FfiConverterOptionString.write(value.defaultTranslationService, into: &buf)
-    FfiConverterOptionTypeTranslationMode.write(value.translationMode, into: &buf)
     FfiConverterOptionSequenceTypeTranslationTarget.write(value.translationTargets, into: &buf)
     FfiConverterOptionTypeInputSubmitMode.write(value.inputSubmitMode, into: &buf)
     FfiConverterOptionBool.write(value.doubleClickCopyResult, into: &buf)
@@ -4140,67 +4190,6 @@ public func FfiConverterTypeSettingsChange_lower(_ value: SettingsChange) -> Rus
   return FfiConverterTypeSettingsChange.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-
-public enum TranslationMode: Equatable, Hashable {
-
-  case auto
-  case manual
-
-}
-
-#if compiler(>=6)
-  extension TranslationMode: Sendable {}
-#endif
-
-#if swift(>=5.8)
-  @_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeTranslationMode: FfiConverterRustBuffer {
-  typealias SwiftType = TranslationMode
-
-  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
-    -> TranslationMode
-  {
-    let variant: Int32 = try readInt(&buf)
-    switch variant {
-
-    case 1: return .auto
-
-    case 2: return .manual
-
-    default: throw UniffiInternalError.unexpectedEnumCase
-    }
-  }
-
-  public static func write(_ value: TranslationMode, into buf: inout [UInt8]) {
-    switch value {
-
-    case .auto:
-      writeInt(&buf, Int32(1))
-
-    case .manual:
-      writeInt(&buf, Int32(2))
-
-    }
-  }
-}
-
-#if swift(>=5.8)
-  @_documentation(visibility: private)
-#endif
-public func FfiConverterTypeTranslationMode_lift(_ buf: RustBuffer) throws -> TranslationMode {
-  return try FfiConverterTypeTranslationMode.lift(buf)
-}
-
-#if swift(>=5.8)
-  @_documentation(visibility: private)
-#endif
-public func FfiConverterTypeTranslationMode_lower(_ value: TranslationMode) -> RustBuffer {
-  return FfiConverterTypeTranslationMode.lower(value)
-}
-
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
@@ -4412,30 +4401,6 @@ private struct FfiConverterOptionTypeSettingsChange: FfiConverterRustBuffer {
     switch try readInt(&buf) as Int8 {
     case 0: return nil
     case 1: return try FfiConverterTypeSettingsChange.read(from: &buf)
-    default: throw UniffiInternalError.unexpectedOptionalTag
-    }
-  }
-}
-
-#if swift(>=5.8)
-  @_documentation(visibility: private)
-#endif
-private struct FfiConverterOptionTypeTranslationMode: FfiConverterRustBuffer {
-  typealias SwiftType = TranslationMode?
-
-  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-    guard let value = value else {
-      writeInt(&buf, Int8(0))
-      return
-    }
-    writeInt(&buf, Int8(1))
-    FfiConverterTypeTranslationMode.write(value, into: &buf)
-  }
-
-  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-    switch try readInt(&buf) as Int8 {
-    case 0: return nil
-    case 1: return try FfiConverterTypeTranslationMode.read(from: &buf)
     default: throw UniffiInternalError.unexpectedOptionalTag
     }
   }
@@ -5606,6 +5571,11 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_generate_provider_id() != 9759 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_active_translation_targets()
+    != 22616
+  {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_advanced() != 3214 {
     return InitializationResult.apiChecksumMismatch
   }
@@ -5646,6 +5616,9 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_shortcuts() != 11504 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_detect_language() != 29752 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_translate() != 61207 {

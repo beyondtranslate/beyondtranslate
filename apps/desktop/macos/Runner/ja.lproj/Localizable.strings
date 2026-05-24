@@ -54,8 +54,6 @@
 "common.theme_mode.dark" = "ダーク";
 "common.theme_mode.light" = "ライト";
 "common.theme_mode.system" = "システム";
-"common.translation_mode.auto" = "自動";
-"common.translation_mode.manual" = "手動";
 "common.ui.button.add" = "追加";
 "common.ui.button.cancel" = "キャンセル";
 "common.ui.button.continue" = "続行";
@@ -71,6 +69,9 @@
 "mini_translator.button.translate" = "翻訳";
 "mini_translator.input.extracting_text" = "テキストを抽出中...";
 "mini_translator.input.hint" = "ここに単語またはテキストを入力";
+"mini_translator.language.auto_detect" = "自動検出";
+"mini_translator.language.auto_match" = "自動一致";
+"mini_translator.language.switch_config" = "ターゲット切替";
 "mini_translator.limited_banner.action.app_settings" = "アプリ設定";
 "mini_translator.limited_banner.action.recheck" = "再確認";
 "mini_translator.limited_banner.feedback.enabled" = "画面テキスト抽出が有効です。";
@@ -86,7 +87,6 @@
 "mini_translator.message.please_enter_word_or_text" = "テキストが入力されていないか、テキストが抽出されていません";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "クリップボードの内容を読み取る";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "画面領域をキャプチャしてテキストを認識";
-"mini_translator.toolbar.tooltip.translation_mode" = "現在の翻訳モード: {}";
 "settings.advanced.api_server" = "ローカルAPIサーバー";
 "settings.advanced.api_server_description" = "ローカルインテグレーションのために127.0.0.1で翻訳APIを公開します。";
 "settings.advanced.disabled" = "無効";
@@ -100,6 +100,9 @@
 "settings.general.button.add_provider" = "追加...";
 "settings.general.button.add_target" = "対象を追加";
 "settings.general.button.grant" = "許可";
+"settings.general.button.manage_targets" = "翻訳ターゲットを管理...";
+"settings.general.editor.row.source_language" = "ソース言語";
+"settings.general.editor.row.target_language" = "ターゲット言語";
 "settings.general.option.built_in_ocr" = "内蔵OCR";
 "settings.general.option.granted" = "許可済み";
 "settings.general.option.no_services_available" = "利用可能なサービスがありません";
@@ -117,7 +120,6 @@
 "settings.general.row.show_in_menu_bar" = "メニューバーに表示";
 "settings.general.row.submit_with_enter" = "Enterで送信";
 "settings.general.row.submit_with_meta_enter_mac" = "⌘ + Enterで送信";
-"settings.general.row.translation_mode" = "翻訳モード";
 "settings.general.section.directory" = "辞書";
 "settings.general.section.input" = "入力設定";
 "settings.general.section.ocr" = "テキスト認識";

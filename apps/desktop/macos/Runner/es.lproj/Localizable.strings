@@ -54,8 +54,6 @@
 "common.theme_mode.dark" = "Oscuro";
 "common.theme_mode.light" = "Claro";
 "common.theme_mode.system" = "Sistema";
-"common.translation_mode.auto" = "Automático";
-"common.translation_mode.manual" = "Manual";
 "common.ui.button.add" = "Agregar";
 "common.ui.button.cancel" = "Cancelar";
 "common.ui.button.continue" = "Continuar";
@@ -71,6 +69,9 @@
 "mini_translator.button.translate" = "Traducir";
 "mini_translator.input.extracting_text" = "Extrayendo texto...";
 "mini_translator.input.hint" = "Escribe la palabra o texto aquí";
+"mini_translator.language.auto_detect" = "Detección automática";
+"mini_translator.language.auto_match" = "Coincidencia auto";
+"mini_translator.language.switch_config" = "Cambiar destino";
 "mini_translator.limited_banner.action.app_settings" = "Configuración de la app";
 "mini_translator.limited_banner.action.recheck" = "Verificar de nuevo";
 "mini_translator.limited_banner.feedback.enabled" = "La extracción de texto de pantalla está habilitada.";
@@ -86,7 +87,6 @@
 "mini_translator.message.please_enter_word_or_text" = "No se ingresó texto o no se pudo extraer";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "Leer contenido del portapapeles";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "Capturar área de la pantalla y reconocer texto";
-"mini_translator.toolbar.tooltip.translation_mode" = "Modo de traducción actual: {}";
 "settings.advanced.api_server" = "Servidor de API local";
 "settings.advanced.api_server_description" = "Exponer la API de traducción en 127.0.0.1 para integraciones locales.";
 "settings.advanced.disabled" = "Deshabilitado";
@@ -100,6 +100,9 @@
 "settings.general.button.add_provider" = "Agregar...";
 "settings.general.button.add_target" = "Agregar destino";
 "settings.general.button.grant" = "Conceder";
+"settings.general.button.manage_targets" = "Gestionar destinos de traducción...";
+"settings.general.editor.row.source_language" = "Idioma de origen";
+"settings.general.editor.row.target_language" = "Idioma de destino";
 "settings.general.option.built_in_ocr" = "OCR integrado";
 "settings.general.option.granted" = "Concedido";
 "settings.general.option.no_services_available" = "No hay servicios disponibles";
@@ -117,7 +120,6 @@
 "settings.general.row.show_in_menu_bar" = "Mostrar en la barra de menú";
 "settings.general.row.submit_with_enter" = "Enviar con Enter";
 "settings.general.row.submit_with_meta_enter_mac" = "Enviar con ⌘ + Enter";
-"settings.general.row.translation_mode" = "Modo de traducción";
 "settings.general.section.directory" = "Directorio";
 "settings.general.section.input" = "Configuración de entrada";
 "settings.general.section.ocr" = "Reconocimiento de texto";
