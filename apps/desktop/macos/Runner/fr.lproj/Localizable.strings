@@ -105,6 +105,8 @@
 "settings.general.button.add_target" = "Ajouter une cible...";
 "settings.general.button.grant" = "Accorder";
 "settings.general.button.manage_targets" = "Gérer les cibles de traduction...";
+"settings.general.editor.add_target_title" = "Ajouter une cible de traduction";
+"settings.general.editor.edit_target_title" = "Modifier la cible de traduction";
 "settings.general.editor.row.source_language" = "Langue source";
 "settings.general.editor.row.target_language" = "Langue cible";
 "settings.general.option.built_in_ocr" = "OCR intégré";

@@ -186,6 +186,8 @@
         "youdao_ocr": "Youdao OCR"
       },
       "editor": {
+        "add_target_title": "번역 대상 추가",
+        "edit_target_title": "번역 대상 수정",
         "row": {
           "source_language": "소스 언어",
           "target_language": "대상 언어"

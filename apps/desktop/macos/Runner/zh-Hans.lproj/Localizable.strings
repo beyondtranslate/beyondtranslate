@@ -105,6 +105,8 @@
 "settings.general.button.add_target" = "添加目标...";
 "settings.general.button.grant" = "授权";
 "settings.general.button.manage_targets" = "管理翻译目标...";
+"settings.general.editor.add_target_title" = "添加翻译目标：";
+"settings.general.editor.edit_target_title" = "修改翻译目标：";
 "settings.general.editor.row.source_language" = "源语言";
 "settings.general.editor.row.target_language" = "目标语言";
 "settings.general.option.built_in_ocr" = "内置 OCR";

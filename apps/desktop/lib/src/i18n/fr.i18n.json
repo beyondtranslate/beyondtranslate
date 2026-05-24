@@ -186,6 +186,8 @@
         "youdao_ocr": "OCR Youdao"
       },
       "editor": {
+        "add_target_title": "Ajouter une cible de traduction",
+        "edit_target_title": "Modifier la cible de traduction",
         "row": {
           "source_language": "Langue source",
           "target_language": "Langue cible"

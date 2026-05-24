@@ -186,6 +186,8 @@
         "youdao_ocr": "有道 OCR"
       },
       "editor": {
+        "add_target_title": "添加翻译目标：",
+        "edit_target_title": "修改翻译目标：",
         "row": {
           "source_language": "源语言",
           "target_language": "目标语言"

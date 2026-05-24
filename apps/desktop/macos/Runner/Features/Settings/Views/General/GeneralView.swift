@@ -137,7 +137,7 @@ struct GeneralView: View {
     }
     .sheet(isPresented: $viewModel.showAddTargetSheet) {
       TranslationTargetEditorSheet(
-        title: LocaleKeys.settings.general.button.addTarget.tr(),
+        title: LocaleKeys.settings.general.editor.addTargetTitle.tr(),
         source: "auto",
         target: "zh-Hans",
         supportedLanguages: viewModel.supportedLanguages,
@@ -152,7 +152,7 @@ struct GeneralView: View {
     .sheet(isPresented: viewModel.showEditTargetSheet) {
       if let target = viewModel.editingTarget {
         TranslationTargetEditorSheet(
-          title: LocaleKeys.common.ui.button.edit.tr(),
+          title: LocaleKeys.settings.general.editor.editTargetTitle.tr(),
           source: target.source,
           target: target.target,
           supportedLanguages: viewModel.supportedLanguages,

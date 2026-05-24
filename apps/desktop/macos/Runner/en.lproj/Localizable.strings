@@ -105,6 +105,8 @@
 "settings.general.button.add_target" = "Add Target...";
 "settings.general.button.grant" = "Grant";
 "settings.general.button.manage_targets" = "Manage Translation Targets...";
+"settings.general.editor.add_target_title" = "Add Translation Target";
+"settings.general.editor.edit_target_title" = "Edit Translation Target";
 "settings.general.editor.row.source_language" = "Source Language";
 "settings.general.editor.row.target_language" = "Target Language";
 "settings.general.option.built_in_ocr" = "Built-in OCR";

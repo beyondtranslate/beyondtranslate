@@ -105,6 +105,8 @@
 "settings.general.button.add_target" = "Agregar destino...";
 "settings.general.button.grant" = "Conceder";
 "settings.general.button.manage_targets" = "Gestionar destinos de traducción...";
+"settings.general.editor.add_target_title" = "Agregar destino de traducción";
+"settings.general.editor.edit_target_title" = "Editar destino de traducción";
 "settings.general.editor.row.source_language" = "Idioma de origen";
 "settings.general.editor.row.target_language" = "Idioma de destino";
 "settings.general.option.built_in_ocr" = "OCR integrado";

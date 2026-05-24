@@ -105,6 +105,8 @@
 "settings.general.button.add_target" = "対象を追加...";
 "settings.general.button.grant" = "許可";
 "settings.general.button.manage_targets" = "翻訳ターゲットを管理...";
+"settings.general.editor.add_target_title" = "翻訳ターゲットを追加";
+"settings.general.editor.edit_target_title" = "翻訳ターゲットを編集";
 "settings.general.editor.row.source_language" = "ソース言語";
 "settings.general.editor.row.target_language" = "ターゲット言語";
 "settings.general.option.built_in_ocr" = "内蔵OCR";

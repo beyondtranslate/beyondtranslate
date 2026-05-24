@@ -186,6 +186,8 @@
         "youdao_ocr": "Youdao OCR"
       },
       "editor": {
+        "add_target_title": "Agregar destino de traducción",
+        "edit_target_title": "Editar destino de traducción",
         "row": {
           "source_language": "Idioma de origen",
           "target_language": "Idioma de destino"

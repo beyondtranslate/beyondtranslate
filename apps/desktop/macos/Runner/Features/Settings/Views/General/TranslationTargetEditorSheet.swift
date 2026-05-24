@@ -28,14 +28,6 @@ struct TranslationTargetEditorSheet: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      Text(title)
-        .foregroundStyle(.primary)
-        .multilineTextAlignment(.leading)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .padding(.bottom, 12)
-
       Form {
         Section {
           languagePicker(
@@ -48,6 +40,12 @@ struct TranslationTargetEditorSheet: View {
             selection: $target,
             showAutoDetect: false
           )
+        } header: {
+          Text(title)
+            .foregroundStyle(.primary)
+            .fontWeight(.regular)
+            .multilineTextAlignment(.leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
       }
       .formStyle(.grouped)

@@ -105,6 +105,8 @@
 "settings.general.button.add_target" = "대상 추가...";
 "settings.general.button.grant" = "허용";
 "settings.general.button.manage_targets" = "번역 대상 관리...";
+"settings.general.editor.add_target_title" = "번역 대상 추가";
+"settings.general.editor.edit_target_title" = "번역 대상 수정";
 "settings.general.editor.row.source_language" = "소스 언어";
 "settings.general.editor.row.target_language" = "대상 언어";
 "settings.general.option.built_in_ocr" = "내장 OCR";

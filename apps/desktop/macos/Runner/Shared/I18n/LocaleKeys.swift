@@ -207,6 +207,8 @@ enum LocaleKeys {
         static let manageTargets = LocaleKey("settings.general.button.manage_targets")
       }
       enum editor {
+        static let addTargetTitle = LocaleKey("settings.general.editor.add_target_title")
+        static let editTargetTitle = LocaleKey("settings.general.editor.edit_target_title")
         enum row {
           static let sourceLanguage = LocaleKey("settings.general.editor.row.source_language")
           static let targetLanguage = LocaleKey("settings.general.editor.row.target_language")
