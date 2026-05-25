@@ -37,7 +37,8 @@ export 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
         WordTense,
         ProviderCapability,
         ProviderType,
-        RuntimeApiServer;
+        RuntimeApiServer,
+        RuntimeTextExtractor;
 
 /// [ProviderCapability] is provided by the generated FFI bindings, not
 /// from provider_capability.dart which is no longer used.

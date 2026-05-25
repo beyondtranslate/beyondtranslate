@@ -12,3 +12,10 @@ PRODUCT_BUNDLE_IDENTIFIER = com.beyondtranslate.app
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2021 LiJianying. All rights reserved.
+
+// Native Swift code imports the uniffi-generated beyondtranslate_runtime
+// bindings, whose C symbols are provided by Flutter's native_assets framework.
+// Link the host app against that bundled framework so dyld resolves those
+// symbols before any Swift startup code runs.
+FRAMEWORK_SEARCH_PATHS = $(inherited) "$(BUILT_PRODUCTS_DIR)/native_assets"
+OTHER_LDFLAGS = $(inherited) -framework beyondtranslate_runtime

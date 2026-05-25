@@ -73,7 +73,7 @@ struct AdvancedView: View {
     }
     .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification))
     { _ in
-      viewModel.refreshPermissions()
+      Task { await viewModel.refreshPermissions() }
     }
     .onAppear {
       handlePermissionsHighlight(highlightCoordinator.pendingHighlightPermissionsSectionID)

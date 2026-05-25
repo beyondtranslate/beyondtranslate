@@ -13,7 +13,6 @@ import 'package:keypress_simulator/keypress_simulator.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
 import 'package:protocol_handler/protocol_handler.dart';
 import 'package:screen_capturer/screen_capturer.dart';
-import 'package:screen_text_extractor/screen_text_extractor.dart';
 
 import '../../extensions/window_controller.dart';
 import '../../i18n/i18n.dart';
@@ -153,7 +152,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _isAllowedScreenCaptureAccess =
           await ScreenCapturer.instance.isAccessAllowed();
       _isAllowedScreenSelectionAccess =
-          await screenTextExtractor.isAccessAllowed();
+          await runtime.textExtractor().isAccessAllowed();
     }
 
     ShortcutService.instance.start();
@@ -645,14 +644,18 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   void _handleExtractTextFromScreenSelection() async {
-    ExtractedData? extractedData = await screenTextExtractor.extract(
-      mode: ExtractMode.screenSelection,
-    );
+    String? text;
+    try {
+      text = await runtime.textExtractor().extractFromScreenSelection();
+    } catch (_) {
+      // extractFromScreenSelection may throw if no text is selected or
+      // operation fails (e.g. accessibility not granted on macOS).
+    }
 
     await _windowShow();
     await Future.delayed(const Duration(milliseconds: 10));
 
-    _handleTextChanged(extractedData?.text, isRequery: true);
+    _handleTextChanged(text, isRequery: true);
   }
 
   void _handleExtractTextFromScreenCapture() async {
@@ -710,10 +713,13 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       await Future.delayed(const Duration(milliseconds: 10));
     }
 
-    ExtractedData? extractedData = await screenTextExtractor.extract(
-      mode: ExtractMode.clipboard,
-    );
-    _handleTextChanged(extractedData?.text, isRequery: true);
+    String? text;
+    try {
+      text = await runtime.textExtractor().extractFromClipboard();
+    } catch (_) {
+      // extractFromClipboard may throw if clipboard is empty.
+    }
+    _handleTextChanged(text, isRequery: true);
   }
 
   void _handleButtonTappedClear() {
@@ -762,7 +768,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
                 _isAllowedScreenCaptureAccess =
                     await ScreenCapturer.instance.isAccessAllowed();
                 _isAllowedScreenSelectionAccess =
-                    await screenTextExtractor.isAccessAllowed();
+                    await runtime.textExtractor().isAccessAllowed();
 
                 _setStateAndScheduleWindowResize(() {});
 
@@ -1041,11 +1047,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     );
 
     try {
-      ExtractedData? extractedData = await screenTextExtractor.extract(
-        mode: ExtractMode.screenSelection,
-      );
+      String extractedText =
+          await runtime.textExtractor().extractFromScreenSelection();
 
-      if ((extractedData?.text ?? '').isEmpty) {
+      if (extractedText.isEmpty) {
         throw Exception('Extracted text is empty');
       }
 
@@ -1056,7 +1061,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       TranslateResponse translateResponse =
           await runtime.translation(providerId: providerId).translate(
                 request: TranslateRequest(
-                  text: extractedData?.text ?? '',
+                  text: extractedText,
                   sourceLanguage: defaultTargetLanguage,
                   targetLanguage: defaultSourceLanguage,
                 ),

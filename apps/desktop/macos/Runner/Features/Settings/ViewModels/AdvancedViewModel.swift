@@ -1,5 +1,4 @@
 import AppKit
-import ApplicationServices
 import SwiftUI
 import beyondtranslate_runtime
 
@@ -21,7 +20,7 @@ final class AdvancedViewModel: ObservableObject {
   }
 
   func load() async {
-    refreshPermissions()
+    await refreshPermissions()
 
     do {
       apply(try await repository.getAdvanced())
@@ -30,9 +29,9 @@ final class AdvancedViewModel: ObservableObject {
     }
   }
 
-  func refreshPermissions() {
+  func refreshPermissions() async {
     screenCaptureAllowed = CGPreflightScreenCaptureAccess()
-    accessibilityAllowed = AXIsProcessTrusted()
+    accessibilityAllowed = await RuntimeProvider.shared.textExtractor().isAccessAllowed()
   }
 
   func requestScreenCaptureAccess() {
@@ -40,16 +39,15 @@ final class AdvancedViewModel: ObservableObject {
       CGRequestScreenCaptureAccess()
     }
     openPrivacyPane("Privacy_ScreenCapture")
-    refreshPermissions()
+    Task { await refreshPermissions() }
   }
 
   func requestAccessibilityAccess() {
-    if !AXIsProcessTrusted() {
-      let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
-      AXIsProcessTrustedWithOptions(options as CFDictionary)
+    Task {
+      await RuntimeProvider.shared.textExtractor().requestAccess(onlyOpenPrefPane: false)
+      openPrivacyPane("Privacy_Accessibility")
+      await refreshPermissions()
     }
-    openPrivacyPane("Privacy_Accessibility")
-    refreshPermissions()
   }
 
   private func openPrivacyPane(_ anchor: String) {

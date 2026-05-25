@@ -568,6 +568,8 @@ public protocol RuntimeProtocol: AnyObject, Sendable {
 
   func startApiServer(host: String, port: UInt16) throws -> RuntimeApiServer
 
+  func textExtractor() -> RuntimeTextExtractor
+
   func translation(providerId: String) throws -> RuntimeTranslation
 
 }
@@ -689,6 +691,15 @@ open class Runtime: RuntimeProtocol, @unchecked Sendable {
           self.uniffiCloneHandle(),
           FfiConverterString.lower(host),
           FfiConverterUInt16.lower(port), $0
+        )
+      })
+  }
+
+  open func textExtractor() -> RuntimeTextExtractor {
+    return try! FfiConverterTypeRuntimeTextExtractor_lift(
+      try! rustCall {
+        uniffi_beyondtranslate_runtime_fn_method_runtime_text_extractor(
+          self.uniffiCloneHandle(), $0
         )
       })
   }
@@ -1541,6 +1552,232 @@ public func FfiConverterTypeRuntimeSettings_lift(_ handle: UInt64) throws -> Run
 #endif
 public func FfiConverterTypeRuntimeSettings_lower(_ value: RuntimeSettings) -> UInt64 {
   return FfiConverterTypeRuntimeSettings.lower(value)
+}
+
+/// Rust-native screen text extractor.
+///
+/// Provides clipboard reading and screen selection text extraction
+/// across all supported platforms.
+public protocol RuntimeTextExtractorProtocol: AnyObject, Sendable {
+
+  /**
+   * Read the current clipboard text.
+   */
+  func extractFromClipboard() async throws -> String
+
+  /**
+   * Extract text from the current screen selection.
+   *
+   * **macOS / Windows:** Simulates Cmd+C / Ctrl+C, polls the clipboard
+   * until content changes (or 3s timeout), then returns the text.
+   *
+   * **Linux:** Reads the PRIMARY selection directly via `xclip`.
+   */
+  func extractFromScreenSelection() async throws -> String
+
+  /**
+   * macOS only: check if accessibility permission is granted.
+   * Returns `true` on other platforms.
+   */
+  func isAccessAllowed() async -> Bool
+
+  /**
+   * macOS only: request accessibility permission.
+   * If `only_open_pref_pane` is true, just opens System Preferences.
+   * No-op on other platforms.
+   */
+  func requestAccess(onlyOpenPrefPane: Bool) async
+
+}
+/// Rust-native screen text extractor.
+///
+/// Provides clipboard reading and screen selection text extraction
+/// across all supported platforms.
+open class RuntimeTextExtractor: RuntimeTextExtractorProtocol, @unchecked Sendable {
+  fileprivate let handle: UInt64
+
+  /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public struct NoHandle {
+    public init() {}
+  }
+
+  // TODO: We'd like this to be `private` but for Swifty reasons,
+  // we can't implement `FfiConverter` without making this `required` and we can't
+  // make it `required` without making it `public`.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  required public init(unsafeFromHandle handle: UInt64) {
+    self.handle = handle
+  }
+
+  // This constructor can be used to instantiate a fake object.
+  // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+  //
+  // - Warning:
+  //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public init(noHandle: NoHandle) {
+    self.handle = 0
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public func uniffiCloneHandle() -> UInt64 {
+    return try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_clone_runtimetextextractor(self.handle, $0)
+    }
+  }
+  // No primary constructor declared for this class.
+
+  deinit {
+    if handle == 0 {
+      // Mock objects have handle=0 don't try to free them
+      return
+    }
+
+    try! rustCall { uniffi_beyondtranslate_runtime_fn_free_runtimetextextractor(handle, $0) }
+  }
+
+  /**
+   * Read the current clipboard text.
+   */
+  open func extractFromClipboard() async throws -> String {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_clipboard(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterString.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  /**
+   * Extract text from the current screen selection.
+   *
+   * **macOS / Windows:** Simulates Cmd+C / Ctrl+C, polls the clipboard
+   * until content changes (or 3s timeout), then returns the text.
+   *
+   * **Linux:** Reads the PRIMARY selection directly via `xclip`.
+   */
+  open func extractFromScreenSelection() async throws -> String {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_screen_selection(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterString.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  /**
+   * macOS only: check if accessibility permission is granted.
+   * Returns `true` on other platforms.
+   */
+  open func isAccessAllowed() async -> Bool {
+    return
+      try! await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_is_access_allowed(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_i8,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_i8,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_i8,
+        liftFunc: FfiConverterBool.lift,
+        errorHandler: nil
+
+      )
+  }
+
+  /**
+   * macOS only: request accessibility permission.
+   * If `only_open_pref_pane` is true, just opens System Preferences.
+   * No-op on other platforms.
+   */
+  open func requestAccess(onlyOpenPrefPane: Bool) async {
+    return
+      try! await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_request_access(
+            self.uniffiCloneHandle(),
+            FfiConverterBool.lower(onlyOpenPrefPane)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_void,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_void,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_void,
+        liftFunc: { $0 },
+        errorHandler: nil
+
+      )
+  }
+
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRuntimeTextExtractor: FfiConverter {
+  typealias FfiType = UInt64
+  typealias SwiftType = RuntimeTextExtractor
+
+  public static func lift(_ handle: UInt64) throws -> RuntimeTextExtractor {
+    return RuntimeTextExtractor(unsafeFromHandle: handle)
+  }
+
+  public static func lower(_ value: RuntimeTextExtractor) -> UInt64 {
+    return value.uniffiCloneHandle()
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> RuntimeTextExtractor
+  {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  public static func write(_ value: RuntimeTextExtractor, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeTextExtractor_lift(_ handle: UInt64) throws
+  -> RuntimeTextExtractor
+{
+  return try FfiConverterTypeRuntimeTextExtractor.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeTextExtractor_lower(_ value: RuntimeTextExtractor) -> UInt64 {
+  return FfiConverterTypeRuntimeTextExtractor.lower(value)
 }
 
 public protocol RuntimeTranslationProtocol: AnyObject, Sendable {
@@ -5575,6 +5812,9 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_start_api_server() != 26599 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtime_text_extractor() != 21355 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_translation() != 36886 {
     return InitializationResult.apiChecksumMismatch
   }
@@ -5635,6 +5875,24 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_shortcuts() != 11504 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_clipboard()
+    != 61343
+  {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_selection()
+    != 57900
+  {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_is_access_allowed()
+    != 12942
+  {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_request_access() != 62157 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_detect_language() != 29752 {

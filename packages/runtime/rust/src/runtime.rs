@@ -19,6 +19,7 @@ use crate::domain::settings::{
     AppearanceSettingsPatch, GeneralSettings, GeneralSettingsPatch, ProviderConfigEntry, Settings,
     ShortcutSettings, ShortcutSettingsPatch,
 };
+use crate::domain::text_extractor;
 use crate::RuntimeApiServer;
 use beyondtranslate_core::TranslationTarget;
 
@@ -133,6 +134,13 @@ pub struct RuntimeOcr {
     provider_id: String,
 }
 
+/// Rust-native screen text extractor.
+///
+/// Provides clipboard reading and screen selection text extraction
+/// across all supported platforms.
+#[derive(uniffi::Object)]
+pub struct RuntimeTextExtractor;
+
 /// Foreign-language handle for observing [`SettingsChange`] events.
 ///
 /// Obtain one via [`RuntimeSettings::subscribe`] and call
@@ -221,6 +229,10 @@ impl Runtime {
             runtime: (*self).clone(),
             provider_id,
         }))
+    }
+
+    pub fn text_extractor(self: Arc<Self>) -> Arc<RuntimeTextExtractor> {
+        Arc::new(RuntimeTextExtractor)
     }
 
     pub fn start_api_server(
@@ -740,6 +752,39 @@ impl RuntimeOcr {
         request: RecognizeTextRequest,
     ) -> Result<RecognizeTextResponse, RuntimeError> {
         self.recognize_text_impl(request).await.map_err(Into::into)
+    }
+}
+
+#[uniffi::export(async_runtime = "tokio")]
+impl RuntimeTextExtractor {
+    /// macOS only: check if accessibility permission is granted.
+    /// Returns `true` on other platforms.
+    pub async fn is_access_allowed(&self) -> bool {
+        text_extractor::is_access_allowed()
+    }
+
+    /// macOS only: request accessibility permission.
+    /// If `only_open_pref_pane` is true, just opens System Preferences.
+    /// No-op on other platforms.
+    pub async fn request_access(&self, only_open_pref_pane: bool) {
+        text_extractor::request_access(only_open_pref_pane);
+    }
+
+    /// Read the current clipboard text.
+    pub async fn extract_from_clipboard(&self) -> Result<String, RuntimeError> {
+        text_extractor::extract_from_clipboard()
+            .map_err(|e| RuntimeError::Error { msg: e.to_string() })
+    }
+
+    /// Extract text from the current screen selection.
+    ///
+    /// **macOS / Windows:** Simulates Cmd+C / Ctrl+C, polls the clipboard
+    /// until content changes (or 3s timeout), then returns the text.
+    ///
+    /// **Linux:** Reads the PRIMARY selection directly via `xclip`.
+    pub async fn extract_from_screen_selection(&self) -> Result<String, RuntimeError> {
+        text_extractor::extract_from_screen_selection()
+            .map_err(|e| RuntimeError::Error { msg: e.to_string() })
     }
 }
 

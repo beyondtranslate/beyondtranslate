@@ -2948,6 +2948,7 @@ abstract class RuntimeInterface {
     required String host,
     required int port,
   });
+  RuntimeTextExtractor textExtractor();
   RuntimeTranslation translation({
     required String providerId,
   });
@@ -3065,6 +3066,15 @@ class Runtime implements RuntimeInterface {
                 status),
         RuntimeApiServer.lift,
         runtimeExceptionErrorHandler);
+  }
+
+  RuntimeTextExtractor textExtractor() {
+    return rustCallWithLifter(
+        (status) =>
+            uniffi_beyondtranslate_runtime_fn_method_runtime_text_extractor(
+                uniffiClonePointer(), status),
+        RuntimeTextExtractor.lift,
+        null);
   }
 
   RuntimeTranslation translation({
@@ -3563,6 +3573,121 @@ class RuntimeSettings implements RuntimeSettingsInterface {
       ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
       FfiConverterShortcutSettings.lift,
       runtimeExceptionErrorHandler,
+    );
+  }
+}
+
+abstract class RuntimeTextExtractorInterface {
+  Future<String> extractFromClipboard();
+  Future<String> extractFromScreenSelection();
+  Future<bool> isAccessAllowed();
+  Future<void> requestAccess({
+    required bool onlyOpenPrefPane,
+  });
+}
+
+final _RuntimeTextExtractorFinalizer = Finalizer<Pointer<Void>>((ptr) {
+  rustCall((status) =>
+      uniffi_beyondtranslate_runtime_fn_free_runtimetextextractor(ptr, status));
+});
+
+class RuntimeTextExtractor implements RuntimeTextExtractorInterface {
+  late final Pointer<Void> _ptr;
+  RuntimeTextExtractor._(this._ptr) {
+    _RuntimeTextExtractorFinalizer.attach(this, _ptr, detach: this);
+  }
+  factory RuntimeTextExtractor.lift(Pointer<Void> ptr) {
+    return RuntimeTextExtractor._(ptr);
+  }
+  static Pointer<Void> lower(RuntimeTextExtractor value) {
+    return value.uniffiClonePointer();
+  }
+
+  Pointer<Void> uniffiClonePointer() {
+    return rustCall((status) =>
+        uniffi_beyondtranslate_runtime_fn_clone_runtimetextextractor(
+            _ptr, status));
+  }
+
+  static int allocationSize(RuntimeTextExtractor value) {
+    return 8;
+  }
+
+  static LiftRetVal<RuntimeTextExtractor> read(Uint8List buf) {
+    final handle = buf.buffer.asByteData(buf.offsetInBytes).getInt64(0);
+    final pointer = Pointer<Void>.fromAddress(handle);
+    return LiftRetVal(RuntimeTextExtractor.lift(pointer), 8);
+  }
+
+  static int write(RuntimeTextExtractor value, Uint8List buf) {
+    final handle = lower(value);
+    buf.buffer.asByteData(buf.offsetInBytes).setInt64(0, handle.address);
+    return 8;
+  }
+
+  void dispose() {
+    _RuntimeTextExtractorFinalizer.detach(this);
+    rustCall((status) =>
+        uniffi_beyondtranslate_runtime_fn_free_runtimetextextractor(
+            _ptr, status));
+  }
+
+  Future<String> extractFromClipboard() {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_clipboard(
+        uniffiClonePointer(),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterString.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<String> extractFromScreenSelection() {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_screen_selection(
+        uniffiClonePointer(),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterString.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<bool> isAccessAllowed() {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_is_access_allowed(
+        uniffiClonePointer(),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_i8,
+      ffi_beyondtranslate_runtime_rust_future_complete_i8,
+      ffi_beyondtranslate_runtime_rust_future_free_i8,
+      FfiConverterBool.lift,
+      null,
+    );
+  }
+
+  Future<void> requestAccess({
+    required bool onlyOpenPrefPane,
+  }) {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_request_access(
+        uniffiClonePointer(),
+        FfiConverterBool.lower(onlyOpenPrefPane),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_void,
+      ffi_beyondtranslate_runtime_rust_future_complete_void,
+      ffi_beyondtranslate_runtime_rust_future_free_void,
+      (_) {},
+      null,
     );
   }
 }
@@ -6353,6 +6478,12 @@ external Pointer<Void>
         int port,
         Pointer<RustCallStatus> uniffiStatus);
 
+@Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtime_text_extractor(
+        Pointer<Void> ptr, Pointer<RustCallStatus> uniffiStatus);
+
 @Native<
     Pointer<Void> Function(Pointer<Void>, RustBuffer,
         Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
@@ -6503,6 +6634,37 @@ external Pointer<Void>
 external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimesettings_update_shortcuts(
         Pointer<Void> ptr, RustBuffer patch);
+
+@Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_clone_runtimetextextractor(
+        Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Void Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external void uniffi_beyondtranslate_runtime_fn_free_runtimetextextractor(
+    Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_clipboard(
+        Pointer<Void> ptr);
+
+@Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_screen_selection(
+        Pointer<Void> ptr);
+
+@Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_is_access_allowed(
+        Pointer<Void> ptr);
+
+@Native<Pointer<Void> Function(Pointer<Void>, Int8)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_request_access(
+        Pointer<Void> ptr, int only_open_pref_pane);
 
 @Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
@@ -7094,6 +7256,10 @@ external int
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtime_text_extractor();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
     uniffi_beyondtranslate_runtime_checksum_method_runtime_translation();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -7171,6 +7337,22 @@ external int
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_shortcuts();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_clipboard();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_selection();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_is_access_allowed();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_request_access();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
@@ -7326,6 +7508,10 @@ void _checkApiChecksums() {
       26599) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtime_text_extractor() !=
+      21355) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtime_translation() !=
       36886) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
@@ -7404,6 +7590,22 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_shortcuts() !=
       11504) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_clipboard() !=
+      61343) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_selection() !=
+      57900) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_is_access_allowed() !=
+      12942) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_request_access() !=
+      62157) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_detect_language() !=

@@ -83,13 +83,32 @@ Future<void> main(List<String> args) async {
         file: cdylibFile,
       ),
     );
-    output.dependencies.addAll([
+    // Track all Rust source files so that the build hook is re-run
+    // whenever any source file changes.
+    final srcDir = rustDir.resolve('src/');
+    final srcFiles = <Uri>[
       rustDir.resolve('Cargo.toml'),
       rustDir.resolve('build.rs'),
       rustDir.resolve('uniffi.toml'),
-      rustDir.resolve('src/api.udl'),
-      rustDir.resolve('src/lib.rs'),
-    ]);
+    ];
+    void collectFiles(Uri dir) {
+      final entities = Directory.fromUri(dir).listSync();
+      for (final entity in entities) {
+        if (entity is File && entity.path.endsWith('.rs')) {
+          srcFiles.add(entity.uri);
+        }
+      }
+    }
+
+    collectFiles(srcDir);
+    // Recurse into subdirectories
+    final subDirs = [srcDir.resolve('domain/'), srcDir.resolve('bin/')];
+    for (final subDir in subDirs) {
+      if (Directory.fromUri(subDir).existsSync()) {
+        collectFiles(subDir);
+      }
+    }
+    output.dependencies.addAll(srcFiles);
   });
 }
 
