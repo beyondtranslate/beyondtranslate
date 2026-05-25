@@ -164,9 +164,13 @@
         "default_translation_service": "기본 번역 서비스",
         "translation_target_hint": "번역기에 사용할 언어 쌍을 설정합니다.",
         "common_languages": "자주 사용하는 언어",
+        "common_languages_description": "자주 사용하는 언어는 언어 선택기 상단에 표시됩니다.",
         "common_languages_hint": "자주 사용하는 언어를 선택하세요:",
+        "common_languages_sort": "코드로 정렬",
         "common_languages_reset": "기본값으로 재설정",
         "common_languages_reset_help": "기본 공용 언어 세트로 재설정",
+        "common_languages_search": "언어 검색...",
+        "common_languages_all": "모든 언어",
         "double_click_copy_result": "더블 클릭으로 번역 결과 복사",
         "submit_with_enter": "Enter로 제출",
         "submit_with_meta_enter_mac": "⌘ + Enter로 제출"

@@ -73,7 +73,7 @@ final class SettingsWindowController {
   }
 
   private func prepareForPresentation(_ window: NSWindow) {
-    let targetSize = NSSize(width: 720, height: 480)
+    let targetSize = NSSize(width: 720, height: 540)
     window.minSize = targetSize
 
     let screen = targetScreen(for: window)

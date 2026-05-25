@@ -35,9 +35,8 @@ final class GeneralViewModel: ObservableObject {
   /// Language codes that are marked as "common" (shown at top level).
   /// The order is preserved from settings; unsupported codes are dropped.
   var commonLanguageInfos: [LanguageInfo] {
-    let all = supportedLanguages
-    let codeSet = Set(commonLanguages)
-    return all.filter { codeSet.contains($0.code) }
+    let allDict = Dictionary(uniqueKeysWithValues: supportedLanguages.map { ($0.code, $0) })
+    return commonLanguages.compactMap { allDict[$0] }
   }
 
   /// Language codes NOT marked as common (shown in the "More..." section).

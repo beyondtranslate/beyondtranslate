@@ -164,9 +164,13 @@
         "default_translation_service": "デフォルトの翻訳サービス",
         "translation_target_hint": "翻訳で使用する言語ペアを設定します。",
         "common_languages": "よく使う言語",
+        "common_languages_description": "よく使う言語は言語選択リストの先頭に表示されます。",
         "common_languages_hint": "よく使う言語を選択してください：",
+        "common_languages_sort": "コードで並べ替え",
         "common_languages_reset": "デフォルトにリセット",
         "common_languages_reset_help": "デフォルトのよく使う言語セットにリセット",
+        "common_languages_search": "言語を検索...",
+        "common_languages_all": "すべての言語",
         "double_click_copy_result": "ダブルクリックで翻訳結果をコピー",
         "submit_with_enter": "Enterで送信",
         "submit_with_meta_enter_mac": "⌘ + Enterで送信"

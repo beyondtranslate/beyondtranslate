@@ -106,10 +106,13 @@ struct GeneralView: View {
           isOn: $viewModel.doubleClickCopyResult
         )
         .disabled(!hasTranslationServices)
+      }
 
+      Section {
         CommonLanguagesRow(
           count: viewModel.commonLanguages.count,
           total: viewModel.supportedLanguages.count,
+          commonLanguageInfos: viewModel.commonLanguageInfos,
           onEdit: { showCommonLanguagesSheet = true }
         )
       }
@@ -289,24 +292,76 @@ private struct ServiceUnavailableSettingRow: View {
 private struct CommonLanguagesRow: View {
   let count: Int
   let total: Int
+  let commonLanguageInfos: [LanguageInfo]
   let onEdit: () -> Void
 
+  private var previewLanguages: [LanguageInfo] {
+    Array(commonLanguageInfos.prefix(4))
+  }
+
+  private var remainingCount: Int {
+    max(0, commonLanguageInfos.count - 4)
+  }
+
   var body: some View {
-    HStack {
-      VStack(alignment: .leading) {
-        Text(LocaleKeys.settings.general.row.commonLanguages.tr())
-          .font(.system(size: 13))
-        Text("\(count) / \(total)")
-          .font(.system(size: 11))
-          .foregroundStyle(.secondary)
+    Group {
+      // Row 1: Title + description
+      HStack {
+        VStack(alignment: .leading, spacing: 2) {
+          HStack {
+            Text(LocaleKeys.settings.general.row.commonLanguages.tr())
+              .font(.system(size: 13))
+            Spacer()
+            Text("\(count) / \(total)")
+              .font(.system(size: 11))
+              .foregroundStyle(.secondary)
+          }
+          Text(LocaleKeys.settings.general.row.commonLanguagesDescription.tr())
+            .font(.system(size: 11))
+            .foregroundStyle(.secondary)
+        }
       }
-      Spacer()
-      Button(LocaleKeys.common.ui.button.edit.tr()) {
-        onEdit()
+
+      // Row 2: Language tags + Edit button
+      HStack(spacing: 8) {
+        if !commonLanguageInfos.isEmpty {
+          HStack(spacing: 6) {
+            ForEach(previewLanguages, id: \.code) { lang in
+              Text(lang.localName)
+                .font(.system(size: 11, weight: .medium))
+                .lineLimit(1)
+                .fixedSize()
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .foregroundStyle(Color(nsColor: .controlAccentColor))
+                .background(Color(nsColor: .controlAccentColor).opacity(0.1))
+                .cornerRadius(6)
+                .overlay(
+                  RoundedRectangle(cornerRadius: 6)
+                    .stroke(Color(nsColor: .controlAccentColor).opacity(0.2), lineWidth: 1)
+                )
+            }
+            if remainingCount > 0 {
+              Text("+\(remainingCount)")
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+                .padding(.leading, 2)
+            }
+          }
+          .fixedSize()
+        } else {
+          Text(LocaleKeys.settings.general.option.none.tr())
+            .font(.system(size: 11))
+            .foregroundStyle(.tertiary)
+        }
+
+        Spacer()
+
+        Button(LocaleKeys.common.ui.button.edit.tr()) {
+          onEdit()
+        }
       }
-      .buttonStyle(.link)
     }
-    .padding(.vertical, 2)
   }
 }
 

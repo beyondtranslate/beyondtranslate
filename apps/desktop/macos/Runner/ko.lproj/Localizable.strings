@@ -117,9 +117,13 @@
 "settings.general.option.youdao_ocr" = "Youdao OCR";
 "settings.general.row.auto_copy_detected_text" = "감지된 텍스트 자동 복사";
 "settings.general.row.common_languages" = "자주 사용하는 언어";
+"settings.general.row.common_languages_all" = "모든 언어";
+"settings.general.row.common_languages_description" = "자주 사용하는 언어는 언어 선택기 상단에 표시됩니다.";
 "settings.general.row.common_languages_hint" = "자주 사용하는 언어를 선택하세요:";
 "settings.general.row.common_languages_reset" = "기본값으로 재설정";
 "settings.general.row.common_languages_reset_help" = "기본 공용 언어 세트로 재설정";
+"settings.general.row.common_languages_search" = "언어 검색...";
+"settings.general.row.common_languages_sort" = "코드로 정렬";
 "settings.general.row.default_directory_service" = "기본 사전 서비스";
 "settings.general.row.default_ocr_service" = "기본 텍스트 인식 서비스";
 "settings.general.row.default_translation_service" = "기본 번역 서비스";

@@ -117,9 +117,13 @@
 "settings.general.option.youdao_ocr" = "Youdao OCR";
 "settings.general.row.auto_copy_detected_text" = "Auto copy detected text";
 "settings.general.row.common_languages" = "Common Languages";
+"settings.general.row.common_languages_all" = "All Languages";
+"settings.general.row.common_languages_description" = "Shown at the top of language pickers.";
 "settings.general.row.common_languages_hint" = "Select your common languages:";
 "settings.general.row.common_languages_reset" = "Reset to Defaults";
 "settings.general.row.common_languages_reset_help" = "Reset to the default set of common languages";
+"settings.general.row.common_languages_search" = "Search languages...";
+"settings.general.row.common_languages_sort" = "Sort by Code";
 "settings.general.row.default_directory_service" = "Default directory service";
 "settings.general.row.default_ocr_service" = "Default text recognition service";
 "settings.general.row.default_translation_service" = "Default translation service";

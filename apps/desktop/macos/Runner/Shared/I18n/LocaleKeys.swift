@@ -225,10 +225,15 @@ enum LocaleKeys {
       enum row {
         static let autoCopyDetectedText = LocaleKey("settings.general.row.auto_copy_detected_text")
         static let commonLanguages = LocaleKey("settings.general.row.common_languages")
+        static let commonLanguagesAll = LocaleKey("settings.general.row.common_languages_all")
+        static let commonLanguagesDescription = LocaleKey(
+          "settings.general.row.common_languages_description")
         static let commonLanguagesHint = LocaleKey("settings.general.row.common_languages_hint")
         static let commonLanguagesReset = LocaleKey("settings.general.row.common_languages_reset")
         static let commonLanguagesResetHelp = LocaleKey(
           "settings.general.row.common_languages_reset_help")
+        static let commonLanguagesSearch = LocaleKey("settings.general.row.common_languages_search")
+        static let commonLanguagesSort = LocaleKey("settings.general.row.common_languages_sort")
         static let defaultDirectoryService = LocaleKey(
           "settings.general.row.default_directory_service")
         static let defaultOcrService = LocaleKey("settings.general.row.default_ocr_service")

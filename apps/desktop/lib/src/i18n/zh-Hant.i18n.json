@@ -164,9 +164,13 @@
         "default_translation_service": "預設翻譯服務",
         "translation_target_hint": "設定翻譯器使用的語言目標。",
         "common_languages": "常用語言",
+        "common_languages_description": "顯示在語言選擇列表頂部。",
         "common_languages_hint": "選擇你常用的語言：",
+        "common_languages_sort": "按代碼排序",
         "common_languages_reset": "恢復預設",
         "common_languages_reset_help": "恢復為預設的常用語言集合",
+        "common_languages_search": "搜索語言...",
+        "common_languages_all": "所有語言",
         "double_click_copy_result": "雙擊複製翻譯結果",
         "submit_with_enter": "按 Enter 提交",
         "submit_with_meta_enter_mac": "按 ⌘ + Enter 提交"

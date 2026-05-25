@@ -117,9 +117,13 @@
 "settings.general.option.youdao_ocr" = "有道 OCR";
 "settings.general.row.auto_copy_detected_text" = "自動複製偵測到的文字";
 "settings.general.row.common_languages" = "常用語言";
+"settings.general.row.common_languages_all" = "所有語言";
+"settings.general.row.common_languages_description" = "顯示在語言選擇列表頂部。";
 "settings.general.row.common_languages_hint" = "選擇你常用的語言：";
 "settings.general.row.common_languages_reset" = "恢復預設";
 "settings.general.row.common_languages_reset_help" = "恢復為預設的常用語言集合";
+"settings.general.row.common_languages_search" = "搜索語言...";
+"settings.general.row.common_languages_sort" = "按代碼排序";
 "settings.general.row.default_directory_service" = "預設辭典服務";
 "settings.general.row.default_ocr_service" = "預設文字辨識服務";
 "settings.general.row.default_translation_service" = "預設翻譯服務";

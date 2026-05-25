@@ -117,9 +117,13 @@
 "settings.general.option.youdao_ocr" = "Youdao OCR";
 "settings.general.row.auto_copy_detected_text" = "検出したテキストを自動コピー";
 "settings.general.row.common_languages" = "よく使う言語";
+"settings.general.row.common_languages_all" = "すべての言語";
+"settings.general.row.common_languages_description" = "よく使う言語は言語選択リストの先頭に表示されます。";
 "settings.general.row.common_languages_hint" = "よく使う言語を選択してください：";
 "settings.general.row.common_languages_reset" = "デフォルトにリセット";
 "settings.general.row.common_languages_reset_help" = "デフォルトのよく使う言語セットにリセット";
+"settings.general.row.common_languages_search" = "言語を検索...";
+"settings.general.row.common_languages_sort" = "コードで並べ替え";
 "settings.general.row.default_directory_service" = "デフォルトの辞書サービス";
 "settings.general.row.default_ocr_service" = "デフォルトのテキスト認識サービス";
 "settings.general.row.default_translation_service" = "デフォルトの翻訳サービス";

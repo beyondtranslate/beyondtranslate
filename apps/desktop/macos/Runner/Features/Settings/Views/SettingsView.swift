@@ -59,7 +59,7 @@ struct SettingsView: View {
         SettingsEmptyStateView()
       }
     }
-    .frame(minWidth: 720, minHeight: 480)
+    .frame(minWidth: 720, minHeight: 540)
     .environment(\.locale, Locale(identifier: localization.languageCode))
     .onReceive(highlightCoordinator.$pendingHighlightPermissionsSectionID) { id in
       guard id != nil else { return }

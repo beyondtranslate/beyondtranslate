@@ -164,9 +164,13 @@
         "default_translation_service": "Service de traduction par défaut",
         "translation_target_hint": "Configurez les paires de langues utilisées par le traducteur.",
         "common_languages": "Langues courantes",
+        "common_languages_description": "Les langues courantes apparaissent en haut des sélecteurs de langue.",
         "common_languages_hint": "Sélectionnez vos langues courantes:",
+        "common_languages_sort": "Trier par code",
         "common_languages_reset": "Réinitialiser",
         "common_languages_reset_help": "Rétablir l'ensemble par défaut des langues courantes",
+        "common_languages_search": "Rechercher des langues...",
+        "common_languages_all": "Toutes les langues",
         "double_click_copy_result": "Double-cliquer pour copier le résultat de la traduction",
         "submit_with_enter": "Valider avec Entrée",
         "submit_with_meta_enter_mac": "Valider avec ⌘ + Entrée"

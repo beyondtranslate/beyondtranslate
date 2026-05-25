@@ -79,7 +79,7 @@ struct TranslationTargetEditorSheet: View {
       .padding(.top, 12)
       .padding(.bottom, 16)
     }
-    .frame(width: 420)
+    .frame(width: 380)
     .fixedSize(horizontal: false, vertical: true)
   }
 
