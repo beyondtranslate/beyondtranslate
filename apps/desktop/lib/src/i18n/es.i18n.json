@@ -154,7 +154,7 @@
         "input": "Configuración de entrada"
       },
       "row": {
-        "launch_at_startup": "Iniciar al iniciar sesión",
+        "launch_at_login": "Iniciar al iniciar sesión",
         "show_in_menu_bar": "Mostrar en la barra de menú",
         "screen_capture_access": "Conceder acceso de grabación de pantalla",
         "screen_selection_access": "Conceder acceso de accesibilidad",

@@ -154,7 +154,7 @@
         "input": "Paramètres de saisie"
       },
       "row": {
-        "launch_at_startup": "Lancer à l'ouverture de session",
+        "launch_at_login": "Lancer à l'ouverture de session",
         "show_in_menu_bar": "Afficher dans la barre de menus",
         "screen_capture_access": "Accorder l'accès à l'enregistrement d'écran",
         "screen_selection_access": "Accorder l'accès à l'accessibilité",

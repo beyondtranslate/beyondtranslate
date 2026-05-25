@@ -1556,14 +1556,26 @@ public func FfiConverterTypeRuntimeSettings_lower(_ value: RuntimeSettings) -> U
 
 /// Rust-native screen text extractor.
 ///
-/// Provides clipboard reading and screen selection text extraction
-/// across all supported platforms.
+/// Provides clipboard reading, screen selection text extraction,
+/// and screen capture with OCR across all supported platforms.
 public protocol RuntimeTextExtractorProtocol: AnyObject, Sendable {
 
   /**
    * Read the current clipboard text.
    */
   func extractFromClipboard() async throws -> String
+
+  /**
+   * Capture a screenshot and recognize text using the default OCR service.
+   *
+   * 1. Interactively captures a screen region (via `screencapture` on macOS
+   * or `import` on Linux; unsupported on Windows).
+   * 2. Sends the captured image to the configured default OCR service.
+   * 3. Returns the recognized text.
+   *
+   * The user must have a default OCR service configured in settings.
+   */
+  func extractFromScreenCapture() async throws -> String
 
   /**
    * Extract text from the current screen selection.
@@ -1591,8 +1603,8 @@ public protocol RuntimeTextExtractorProtocol: AnyObject, Sendable {
 }
 /// Rust-native screen text extractor.
 ///
-/// Provides clipboard reading and screen selection text extraction
-/// across all supported platforms.
+/// Provides clipboard reading, screen selection text extraction,
+/// and screen capture with OCR across all supported platforms.
 open class RuntimeTextExtractor: RuntimeTextExtractorProtocol, @unchecked Sendable {
   fileprivate let handle: UInt64
 
@@ -1653,6 +1665,33 @@ open class RuntimeTextExtractor: RuntimeTextExtractorProtocol, @unchecked Sendab
       try await uniffiRustCallAsync(
         rustFutureFunc: {
           uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_clipboard(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterString.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  /**
+   * Capture a screenshot and recognize text using the default OCR service.
+   *
+   * 1. Interactively captures a screen region (via `screencapture` on macOS
+   * or `import` on Linux; unsupported on Windows).
+   * 2. Sends the captured image to the configured default OCR service.
+   * 3. Returns the recognized text.
+   *
+   * The user must have a default OCR service configured in settings.
+   */
+  open func extractFromScreenCapture() async throws -> String {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_screen_capture(
             self.uniffiCloneHandle()
 
           )
@@ -5879,6 +5918,11 @@ private let initializationResult: InitializationResult = {
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_clipboard()
     != 61343
+  {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_capture()
+    != 38083
   {
     return InitializationResult.apiChecksumMismatch
   }

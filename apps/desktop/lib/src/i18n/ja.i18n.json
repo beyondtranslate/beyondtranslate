@@ -154,7 +154,7 @@
         "input": "入力設定"
       },
       "row": {
-        "launch_at_startup": "ログイン時に起動",
+        "launch_at_login": "ログイン時に起動",
         "show_in_menu_bar": "メニューバーに表示",
         "screen_capture_access": "画面収録へのアクセスを許可",
         "screen_selection_access": "アクセシビリティへのアクセスを許可",

@@ -128,7 +128,7 @@
 "settings.general.row.default_ocr_service" = "默认文字识别服务";
 "settings.general.row.default_translation_service" = "默认翻译服务";
 "settings.general.row.double_click_copy_result" = "双击复制翻译结果";
-"settings.general.row.launch_at_startup" = "登录时启动";
+"settings.general.row.launch_at_login" = "登录时启动";
 "settings.general.row.screen_capture_access" = "授予屏幕录制权限";
 "settings.general.row.screen_selection_access" = "授予辅助功能权限";
 "settings.general.row.show_in_menu_bar" = "在菜单栏中显示";

@@ -128,7 +128,7 @@
 "settings.general.row.default_ocr_service" = "預設文字辨識服務";
 "settings.general.row.default_translation_service" = "預設翻譯服務";
 "settings.general.row.double_click_copy_result" = "雙擊複製翻譯結果";
-"settings.general.row.launch_at_startup" = "登入時啟動";
+"settings.general.row.launch_at_login" = "登入時啟動";
 "settings.general.row.screen_capture_access" = "授予螢幕錄製權限";
 "settings.general.row.screen_selection_access" = "授予輔助功能權限";
 "settings.general.row.show_in_menu_bar" = "在選單列中顯示";

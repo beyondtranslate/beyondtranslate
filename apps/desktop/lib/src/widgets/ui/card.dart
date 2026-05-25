@@ -32,7 +32,7 @@ class Card extends StatelessWidget {
       height: height,
       constraints: constraints,
       decoration: BoxDecoration(
-        color: theme.canvasColor.withValues(alpha: 0.50),
+        color: theme.canvasColor.withValues(alpha: 0.60),
         borderRadius: borderRadius,
         border: Border.all(
           color: theme.dividerColor.withValues(alpha: 0.3),

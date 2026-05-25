@@ -457,6 +457,10 @@ class _TranslationsMiniTranslatorMessageZhHans
   String get please_enter_word_or_text => '未输入或未提取到文本';
   @override
   String get capture_screen_area_canceled => '截取屏幕区域已取消';
+  @override
+  String get ocr_service_not_configured => '未配置默认文字识别服务，请在设置中配置。';
+  @override
+  String get ocr_recognition_failed => '文字识别失败';
 }
 
 // Path: settings.general
@@ -817,7 +821,7 @@ class _TranslationsSettingsGeneralRowZhHans
 
   // Translations
   @override
-  String get launch_at_startup => '登录时启动';
+  String get launch_at_login => '登录时启动';
   @override
   String get show_in_menu_bar => '在菜单栏中显示';
   @override
@@ -1380,6 +1384,9 @@ extension on TranslationsZhHans {
       'mini_translator.language.add_target' => '添加翻译目标...',
       'mini_translator.message.please_enter_word_or_text' => '未输入或未提取到文本',
       'mini_translator.message.capture_screen_area_canceled' => '截取屏幕区域已取消',
+      'mini_translator.message.ocr_service_not_configured' =>
+        '未配置默认文字识别服务，请在设置中配置。',
+      'mini_translator.message.ocr_recognition_failed' => '文字识别失败',
       'settings.version' => '版本 {} BUILD {}',
       'settings.general.title' => '常规',
       'settings.general.section.permissions' => '权限',
@@ -1389,7 +1396,7 @@ extension on TranslationsZhHans {
       'settings.general.section.translation_target' => '翻译目标',
       'settings.general.section.languages' => '语言',
       'settings.general.section.input' => '输入设置',
-      'settings.general.row.launch_at_startup' => '登录时启动',
+      'settings.general.row.launch_at_login' => '登录时启动',
       'settings.general.row.show_in_menu_bar' => '在菜单栏中显示',
       'settings.general.row.screen_capture_access' => '授予屏幕录制权限',
       'settings.general.row.screen_selection_access' => '授予辅助功能权限',

@@ -128,7 +128,7 @@
 "settings.general.row.default_ocr_service" = "Service de reconnaissance de texte par défaut";
 "settings.general.row.default_translation_service" = "Service de traduction par défaut";
 "settings.general.row.double_click_copy_result" = "Double-cliquer pour copier le résultat de la traduction";
-"settings.general.row.launch_at_startup" = "Lancer à l'ouverture de session";
+"settings.general.row.launch_at_login" = "Lancer à l'ouverture de session";
 "settings.general.row.screen_capture_access" = "Accorder l'accès à l'enregistrement d'écran";
 "settings.general.row.screen_selection_access" = "Accorder l'accès à l'accessibilité";
 "settings.general.row.show_in_menu_bar" = "Afficher dans la barre de menus";

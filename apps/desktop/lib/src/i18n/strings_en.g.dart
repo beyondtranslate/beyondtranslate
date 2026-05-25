@@ -445,6 +445,13 @@ class TranslationsMiniTranslatorMessageEn {
   /// en: 'Capture screen area has been canceled'
   String get capture_screen_area_canceled =>
       'Capture screen area has been canceled';
+
+  /// en: 'No default text recognition service configured. Please set one in Settings.'
+  String get ocr_service_not_configured =>
+      'No default text recognition service configured. Please set one in Settings.';
+
+  /// en: 'Text recognition failed'
+  String get ocr_recognition_failed => 'Text recognition failed';
 }
 
 // Path: settings.general
@@ -789,7 +796,7 @@ class TranslationsSettingsGeneralRowEn {
   // Translations
 
   /// en: 'Launch when you log in'
-  String get launch_at_startup => 'Launch when you log in';
+  String get launch_at_login => 'Launch when you log in';
 
   /// en: 'Show in menu bar'
   String get show_in_menu_bar => 'Show in menu bar';
@@ -1353,6 +1360,10 @@ extension on Translations {
         'No text entered or text not extracted',
       'mini_translator.message.capture_screen_area_canceled' =>
         'Capture screen area has been canceled',
+      'mini_translator.message.ocr_service_not_configured' =>
+        'No default text recognition service configured. Please set one in Settings.',
+      'mini_translator.message.ocr_recognition_failed' =>
+        'Text recognition failed',
       'settings.version' => 'Version {} BUILD {}',
       'settings.general.title' => 'General',
       'settings.general.section.permissions' => 'Permissions',
@@ -1362,7 +1373,7 @@ extension on Translations {
       'settings.general.section.translation_target' => 'Translation Target',
       'settings.general.section.languages' => 'Languages',
       'settings.general.section.input' => 'Input Settings',
-      'settings.general.row.launch_at_startup' => 'Launch when you log in',
+      'settings.general.row.launch_at_login' => 'Launch when you log in',
       'settings.general.row.show_in_menu_bar' => 'Show in menu bar',
       'settings.general.row.screen_capture_access' =>
         'Grant screen recording access',

@@ -128,7 +128,7 @@
 "settings.general.row.default_ocr_service" = "기본 텍스트 인식 서비스";
 "settings.general.row.default_translation_service" = "기본 번역 서비스";
 "settings.general.row.double_click_copy_result" = "더블 클릭으로 번역 결과 복사";
-"settings.general.row.launch_at_startup" = "로그인할 때 시작";
+"settings.general.row.launch_at_login" = "로그인할 때 시작";
 "settings.general.row.screen_capture_access" = "화면 기록 접근 권한 부여";
 "settings.general.row.screen_selection_access" = "손쉬운 사용 접근 권한 부여";
 "settings.general.row.show_in_menu_bar" = "메뉴 막대에 표시";

@@ -3579,6 +3579,7 @@ class RuntimeSettings implements RuntimeSettingsInterface {
 
 abstract class RuntimeTextExtractorInterface {
   Future<String> extractFromClipboard();
+  Future<String> extractFromScreenCapture();
   Future<String> extractFromScreenSelection();
   Future<bool> isAccessAllowed();
   Future<void> requestAccess({
@@ -3636,6 +3637,20 @@ class RuntimeTextExtractor implements RuntimeTextExtractorInterface {
     return uniffiRustCallAsync(
       () =>
           uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_clipboard(
+        uniffiClonePointer(),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterString.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<String> extractFromScreenCapture() {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_screen_capture(
         uniffiClonePointer(),
       ),
       ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
@@ -6653,6 +6668,11 @@ external Pointer<Void>
 
 @Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
 external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_screen_capture(
+        Pointer<Void> ptr);
+
+@Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
+external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_screen_selection(
         Pointer<Void> ptr);
 
@@ -7344,6 +7364,10 @@ external int
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_capture();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_selection();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -7594,6 +7618,10 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_clipboard() !=
       61343) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_capture() !=
+      38083) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_selection() !=

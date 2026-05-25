@@ -241,7 +241,7 @@ enum LocaleKeys {
           "settings.general.row.default_translation_service")
         static let doubleClickCopyResult = LocaleKey(
           "settings.general.row.double_click_copy_result")
-        static let launchAtStartup = LocaleKey("settings.general.row.launch_at_startup")
+        static let launchAtLogin = LocaleKey("settings.general.row.launch_at_login")
         static let screenCaptureAccess = LocaleKey("settings.general.row.screen_capture_access")
         static let screenSelectionAccess = LocaleKey("settings.general.row.screen_selection_access")
         static let showInMenuBar = LocaleKey("settings.general.row.show_in_menu_bar")

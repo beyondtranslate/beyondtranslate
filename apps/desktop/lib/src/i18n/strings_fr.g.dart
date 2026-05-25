@@ -454,6 +454,11 @@ class _TranslationsMiniTranslatorMessageFr
   @override
   String get capture_screen_area_canceled =>
       'La capture de la zone d\'écran a été annulée';
+  @override
+  String get ocr_service_not_configured =>
+      'Aucun service de reconnaissance de texte par défaut configuré. Veuillez en définir un dans les Paramètres.';
+  @override
+  String get ocr_recognition_failed => 'La reconnaissance de texte a échoué';
 }
 
 // Path: settings.general
@@ -811,7 +816,7 @@ class _TranslationsSettingsGeneralRowFr
 
   // Translations
   @override
-  String get launch_at_startup => 'Lancer à l\'ouverture de session';
+  String get launch_at_login => 'Lancer à l\'ouverture de session';
   @override
   String get show_in_menu_bar => 'Afficher dans la barre de menus';
   @override
@@ -1400,6 +1405,10 @@ extension on TranslationsFr {
         'Aucun texte saisi ou texte non extrait',
       'mini_translator.message.capture_screen_area_canceled' =>
         'La capture de la zone d\'écran a été annulée',
+      'mini_translator.message.ocr_service_not_configured' =>
+        'Aucun service de reconnaissance de texte par défaut configuré. Veuillez en définir un dans les Paramètres.',
+      'mini_translator.message.ocr_recognition_failed' =>
+        'La reconnaissance de texte a échoué',
       'settings.version' => 'Version {} BUILD {}',
       'settings.general.title' => 'Général',
       'settings.general.section.permissions' => 'Autorisations',
@@ -1409,7 +1418,7 @@ extension on TranslationsFr {
       'settings.general.section.translation_target' => 'Cible de traduction',
       'settings.general.section.languages' => 'Langues',
       'settings.general.section.input' => 'Paramètres de saisie',
-      'settings.general.row.launch_at_startup' =>
+      'settings.general.row.launch_at_login' =>
         'Lancer à l\'ouverture de session',
       'settings.general.row.show_in_menu_bar' =>
         'Afficher dans la barre de menus',

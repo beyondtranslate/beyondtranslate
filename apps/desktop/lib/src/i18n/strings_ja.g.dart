@@ -452,6 +452,11 @@ class _TranslationsMiniTranslatorMessageJa
   String get please_enter_word_or_text => 'テキストが入力されていないか、テキストが抽出されていません';
   @override
   String get capture_screen_area_canceled => '画面領域のキャプチャがキャンセルされました';
+  @override
+  String get ocr_service_not_configured =>
+      'デフォルトのテキスト認識サービスが設定されていません。設定で設定してください。';
+  @override
+  String get ocr_recognition_failed => 'テキスト認識に失敗しました';
 }
 
 // Path: settings.general
@@ -804,7 +809,7 @@ class _TranslationsSettingsGeneralRowJa
 
   // Translations
   @override
-  String get launch_at_startup => 'ログイン時に起動';
+  String get launch_at_login => 'ログイン時に起動';
   @override
   String get show_in_menu_bar => 'メニューバーに表示';
   @override
@@ -1369,6 +1374,9 @@ extension on TranslationsJa {
         'テキストが入力されていないか、テキストが抽出されていません',
       'mini_translator.message.capture_screen_area_canceled' =>
         '画面領域のキャプチャがキャンセルされました',
+      'mini_translator.message.ocr_service_not_configured' =>
+        'デフォルトのテキスト認識サービスが設定されていません。設定で設定してください。',
+      'mini_translator.message.ocr_recognition_failed' => 'テキスト認識に失敗しました',
       'settings.version' => 'バージョン {} BUILD {}',
       'settings.general.title' => '一般',
       'settings.general.section.permissions' => '権限',
@@ -1378,7 +1386,7 @@ extension on TranslationsJa {
       'settings.general.section.translation_target' => '翻訳先',
       'settings.general.section.languages' => '言語',
       'settings.general.section.input' => '入力設定',
-      'settings.general.row.launch_at_startup' => 'ログイン時に起動',
+      'settings.general.row.launch_at_login' => 'ログイン時に起動',
       'settings.general.row.show_in_menu_bar' => 'メニューバーに表示',
       'settings.general.row.screen_capture_access' => '画面収録へのアクセスを許可',
       'settings.general.row.screen_selection_access' => 'アクセシビリティへのアクセスを許可',

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show ThemeMode;
-import 'package:launch_at_startup/launch_at_startup.dart';
+import 'package:nativeapi/nativeapi.dart';
 
 import '../utils/language_util.dart';
 import '../utils/platform_util.dart';
@@ -21,9 +21,12 @@ import 'runtime.dart' as runtime_service;
 /// It intentionally does **not** hold any data that does not exist in the
 /// runtime. Anything UI-only (e.g. window sizing) should live elsewhere.
 class SettingsStore extends ChangeNotifier {
-  SettingsStore._();
+  SettingsStore._() {
+    _launchAtLogin = LaunchAtLogin();
+  }
 
   static final SettingsStore instance = SettingsStore._();
+  late final LaunchAtLogin _launchAtLogin;
 
   /// Active subscription to runtime [SettingsChange] events. Started by
   /// [init] and stopped by [dispose]; while alive, every change made
@@ -160,6 +163,7 @@ class SettingsStore extends ChangeNotifier {
       } else {
         _didEnsureDefaultTranslationTarget = true;
       }
+      _applyLaunchAtLogin(_general.launchAtLogin);
       notifyListeners();
     } catch (_) {
       // keep cached defaults
@@ -204,14 +208,22 @@ class SettingsStore extends ChangeNotifier {
   Future<void> updateGeneral(GeneralSettingsPatch patch) async {
     final settings = runtime_service.runtime.settings();
     _general = await settings.updateGeneral(patch: patch);
-    if ((kIsMacOS || kIsWindows) && patch.launchAtLogin != null) {
-      if (patch.launchAtLogin!) {
-        await LaunchAtStartup.instance.enable();
-      } else {
-        await LaunchAtStartup.instance.disable();
-      }
+    if (patch.launchAtLogin != null) {
+      _applyLaunchAtLogin(patch.launchAtLogin!);
     }
     notifyListeners();
+  }
+
+  /// Enables or disables the OS-level launch-at-login feature.
+  ///
+  /// Only applies on macOS and Windows. No-op on other platforms.
+  void _applyLaunchAtLogin(bool value) {
+    if (!kIsMacOS && !kIsWindows) return;
+    if (value) {
+      _launchAtLogin.enable();
+    } else {
+      _launchAtLogin.disable();
+    }
   }
 
   Future<void> updateAppearance(AppearanceSettingsPatch patch) async {

@@ -452,6 +452,11 @@ class _TranslationsMiniTranslatorMessageKo
   String get please_enter_word_or_text => '입력된 텍스트가 없거나 텍스트를 추출하지 못했습니다';
   @override
   String get capture_screen_area_canceled => '화면 영역 캡처가 취소되었습니다';
+  @override
+  String get ocr_service_not_configured =>
+      '기본 텍스트 인식 서비스가 설정되지 않았습니다. 설정에서 설정해주세요.';
+  @override
+  String get ocr_recognition_failed => '텍스트 인식 실패';
 }
 
 // Path: settings.general
@@ -803,7 +808,7 @@ class _TranslationsSettingsGeneralRowKo
 
   // Translations
   @override
-  String get launch_at_startup => '로그인할 때 시작';
+  String get launch_at_login => '로그인할 때 시작';
   @override
   String get show_in_menu_bar => '메뉴 막대에 표시';
   @override
@@ -1369,6 +1374,9 @@ extension on TranslationsKo {
         '입력된 텍스트가 없거나 텍스트를 추출하지 못했습니다',
       'mini_translator.message.capture_screen_area_canceled' =>
         '화면 영역 캡처가 취소되었습니다',
+      'mini_translator.message.ocr_service_not_configured' =>
+        '기본 텍스트 인식 서비스가 설정되지 않았습니다. 설정에서 설정해주세요.',
+      'mini_translator.message.ocr_recognition_failed' => '텍스트 인식 실패',
       'settings.version' => '버전 {} 빌드 {}',
       'settings.general.title' => '일반',
       'settings.general.section.permissions' => '권한',
@@ -1378,7 +1386,7 @@ extension on TranslationsKo {
       'settings.general.section.translation_target' => '번역 대상',
       'settings.general.section.languages' => '언어',
       'settings.general.section.input' => '입력 설정',
-      'settings.general.row.launch_at_startup' => '로그인할 때 시작',
+      'settings.general.row.launch_at_login' => '로그인할 때 시작',
       'settings.general.row.show_in_menu_bar' => '메뉴 막대에 표시',
       'settings.general.row.screen_capture_access' => '화면 기록 접근 권한 부여',
       'settings.general.row.screen_selection_access' => '손쉬운 사용 접근 권한 부여',

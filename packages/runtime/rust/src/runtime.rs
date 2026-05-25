@@ -136,10 +136,12 @@ pub struct RuntimeOcr {
 
 /// Rust-native screen text extractor.
 ///
-/// Provides clipboard reading and screen selection text extraction
-/// across all supported platforms.
+/// Provides clipboard reading, screen selection text extraction,
+/// and screen capture with OCR across all supported platforms.
 #[derive(uniffi::Object)]
-pub struct RuntimeTextExtractor;
+pub struct RuntimeTextExtractor {
+    runtime: Runtime,
+}
 
 /// Foreign-language handle for observing [`SettingsChange`] events.
 ///
@@ -232,7 +234,9 @@ impl Runtime {
     }
 
     pub fn text_extractor(self: Arc<Self>) -> Arc<RuntimeTextExtractor> {
-        Arc::new(RuntimeTextExtractor)
+        Arc::new(RuntimeTextExtractor {
+            runtime: (*self).clone(),
+        })
     }
 
     pub fn start_api_server(
@@ -786,6 +790,76 @@ impl RuntimeTextExtractor {
         text_extractor::extract_from_screen_selection()
             .map_err(|e| RuntimeError::Error { msg: e.to_string() })
     }
+
+    /// Capture a screenshot and recognize text using the default OCR service.
+    ///
+    /// 1. Interactively captures a screen region (via `screencapture` on macOS
+    ///    or `import` on Linux; unsupported on Windows).
+    /// 2. Sends the captured image to the configured default OCR service.
+    /// 3. Returns the recognized text.
+    ///
+    /// The user must have a default OCR service configured in settings.
+    pub async fn extract_from_screen_capture(&self) -> Result<String, RuntimeError> {
+        let runtime = self.runtime.clone();
+
+        // 1. Take a screenshot to a temporary file.
+        let image_path =
+            capture_screenshot().map_err(|e| RuntimeError::Error { msg: e.to_string() })?;
+
+        // 2. Read settings to get the default OCR service ID.
+        let provider_id = {
+            let state = runtime.inner.state.read().await;
+            let ocr_service_id = state.settings.general.default_ocr_service.clone();
+            if ocr_service_id.is_empty() {
+                return Err(RuntimeError::Error {
+                    msg: "no default OCR service configured".into(),
+                });
+            }
+            ocr_service_id
+        };
+
+        // 3. Run OCR on the worker thread.
+        let result = run_on_worker_thread(move || async move {
+            let state = runtime.inner.state.read().await;
+            let ocr_service = state
+                .engine
+                .ocr(&provider_id)
+                .map_err(|error| error.to_string())?;
+
+            let request = RecognizeTextRequest {
+                image_path: Some(image_path),
+                base64_image: None,
+            };
+
+            let response = ocr_service
+                .recognize_text(request)
+                .await
+                .map_err(|error| error.to_string())?;
+
+            Ok(response.text)
+        })
+        .await;
+
+        result.map_err(|e| RuntimeError::Error { msg: e })
+    }
+}
+
+/// Capture a screenshot of a selected screen region and return the path.
+///
+/// Creates a temporary PNG file, invokes the platform-specific screen
+/// capture command, and returns the path to the saved image.
+fn capture_screenshot() -> Result<String, String> {
+    let timestamp = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_millis();
+    let file_name = format!("beyondtranslate-screenshot-{timestamp}.png");
+    let path = std::env::temp_dir().join(&file_name);
+    let path_str = path
+        .to_str()
+        .ok_or_else(|| "failed to convert screenshot path to string".to_owned())?;
+
+    text_extractor::capture_screen(path_str).map_err(|e| format!("screen capture failed: {e}"))
 }
 
 fn normalized_provider_entry(

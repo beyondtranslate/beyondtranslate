@@ -110,7 +110,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
         PreferenceListSection(
           children: [
             PreferenceListSwitchItem(
-              title: Text(general.row.launch_at_startup),
+              title: Text(general.row.launch_at_login),
               value: _general.launchAtLogin,
               onChanged: (v) async {
                 await settingsStore.updateGeneral(

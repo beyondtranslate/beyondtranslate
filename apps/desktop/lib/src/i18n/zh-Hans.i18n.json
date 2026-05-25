@@ -154,7 +154,7 @@
         "input": "输入设置"
       },
       "row": {
-        "launch_at_startup": "登录时启动",
+        "launch_at_login": "登录时启动",
         "show_in_menu_bar": "在菜单栏中显示",
         "screen_capture_access": "授予屏幕录制权限",
         "screen_selection_access": "授予辅助功能权限",

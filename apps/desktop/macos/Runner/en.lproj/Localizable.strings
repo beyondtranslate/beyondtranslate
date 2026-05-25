@@ -128,7 +128,7 @@
 "settings.general.row.default_ocr_service" = "Default text recognition service";
 "settings.general.row.default_translation_service" = "Default translation service";
 "settings.general.row.double_click_copy_result" = "Double click to copy translation result";
-"settings.general.row.launch_at_startup" = "Launch when you log in";
+"settings.general.row.launch_at_login" = "Launch when you log in";
 "settings.general.row.screen_capture_access" = "Grant screen recording access";
 "settings.general.row.screen_selection_access" = "Grant accessibility access";
 "settings.general.row.show_in_menu_bar" = "Show in menu bar";

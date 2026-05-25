@@ -154,7 +154,7 @@
         "input": "輸入設定"
       },
       "row": {
-        "launch_at_startup": "登入時啟動",
+        "launch_at_login": "登入時啟動",
         "show_in_menu_bar": "在選單列中顯示",
         "screen_capture_access": "授予螢幕錄製權限",
         "screen_selection_access": "授予輔助功能權限",

@@ -1,11 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +23,6 @@ import '../../services/settings_store.dart';
 import '../../services/shortcut_service/shortcut_service.dart';
 import '../../utils/language_util.dart';
 import '../../utils/platform_util.dart';
-import '../../utils/utils.dart';
 import '../../widgets/ui/button.dart';
 import '../app_router.dart'
     show
@@ -672,35 +669,16 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     await _windowHide();
 
-    String? imagePath;
-    if (!kIsWeb) {
-      Directory dataDirectory = await getAppDataDirectory();
-      int timestamp = DateTime.now().millisecondsSinceEpoch;
-      String fileName = 'Screenshot-$timestamp.png';
-      imagePath = '${dataDirectory.path}/Screenshots/$fileName';
-    }
-    _capturedData = await ScreenCapturer.instance.capture(
-      imagePath: imagePath,
-    );
-
-    await _windowShow();
-
-    if (_capturedData == null) {
-      BotToast.showText(
-        text: t.mini_translator.message.capture_screen_area_canceled,
-        align: Alignment.center,
-      );
-      _setStateAndScheduleWindowResize(() {});
-      return;
-    } else {
-      // OCR was previously performed by the in-app OCR client. The
-      // Rust runtime has not yet exposed a generic OCR endpoint, so for now we
-      // surface a toast to indicate the action is unsupported. The captured
-      // image is still stored on disk for future processing.
-      _isTextDetecting = false;
+    try {
+      final text = await runtime.textExtractor().extractFromScreenCapture();
+      await _windowShow();
+      _handleTextChanged(text, isRequery: true);
+    } catch (error) {
+      await _windowShow();
       _setStateAndScheduleWindowResize(() {});
       BotToast.showText(
-        text: 'Text extraction service is not configured.',
+        text:
+            '${t.mini_translator.message.ocr_recognition_failed}: ${error.toString()}',
         align: Alignment.center,
       );
     }

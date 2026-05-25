@@ -154,7 +154,7 @@
         "input": "Input Settings"
       },
       "row": {
-        "launch_at_startup": "Launch when you log in",
+        "launch_at_login": "Launch when you log in",
         "show_in_menu_bar": "Show in menu bar",
         "screen_capture_access": "Grant screen recording access",
         "screen_selection_access": "Grant accessibility access",

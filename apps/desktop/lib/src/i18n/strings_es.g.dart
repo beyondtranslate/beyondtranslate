@@ -454,6 +454,11 @@ class _TranslationsMiniTranslatorMessageEs
   @override
   String get capture_screen_area_canceled =>
       'La captura de área de pantalla ha sido cancelada';
+  @override
+  String get ocr_service_not_configured =>
+      'No hay un servicio de reconocimiento de texto predeterminado configurado. Configúrelo en Ajustes.';
+  @override
+  String get ocr_recognition_failed => 'El reconocimiento de texto falló';
 }
 
 // Path: settings.general
@@ -811,7 +816,7 @@ class _TranslationsSettingsGeneralRowEs
 
   // Translations
   @override
-  String get launch_at_startup => 'Iniciar al iniciar sesión';
+  String get launch_at_login => 'Iniciar al iniciar sesión';
   @override
   String get show_in_menu_bar => 'Mostrar en la barra de menú';
   @override
@@ -1398,6 +1403,10 @@ extension on TranslationsEs {
         'No se ingresó texto o no se pudo extraer',
       'mini_translator.message.capture_screen_area_canceled' =>
         'La captura de área de pantalla ha sido cancelada',
+      'mini_translator.message.ocr_service_not_configured' =>
+        'No hay un servicio de reconocimiento de texto predeterminado configurado. Configúrelo en Ajustes.',
+      'mini_translator.message.ocr_recognition_failed' =>
+        'El reconocimiento de texto falló',
       'settings.version' => 'Versión {} COMPILACIÓN {}',
       'settings.general.title' => 'General',
       'settings.general.section.permissions' => 'Permisos',
@@ -1407,7 +1416,7 @@ extension on TranslationsEs {
       'settings.general.section.translation_target' => 'Idioma de destino',
       'settings.general.section.languages' => 'Idiomas',
       'settings.general.section.input' => 'Configuración de entrada',
-      'settings.general.row.launch_at_startup' => 'Iniciar al iniciar sesión',
+      'settings.general.row.launch_at_login' => 'Iniciar al iniciar sesión',
       'settings.general.row.show_in_menu_bar' => 'Mostrar en la barra de menú',
       'settings.general.row.screen_capture_access' =>
         'Conceder acceso de grabación de pantalla',

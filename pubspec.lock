@@ -213,10 +213,10 @@ packages:
     dependency: transitive
     description:
       name: cnativeapi
-      sha256: "2d7f04868e9b9d66407b29633fabec6390709a23a4fcb45ba192959d3d8d7815"
+      sha256: "7b62b1e719d1d4e77051be1507c6b6889d8d3713014114008407c73550c9b330"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   code_assets:
     dependency: transitive
     description:
@@ -533,14 +533,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
-  launch_at_startup:
-    dependency: transitive
-    description:
-      name: launch_at_startup
-      sha256: "1f8a75520913d1038630049e6c44a2575a23ffd28cc8b14fdf37401d1d21de84"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -641,10 +633,10 @@ packages:
     dependency: transitive
     description:
       name: nativeapi
-      sha256: "609b9ab8ee166654dea59bc281bff46042c58f32fbe2c0d9ca5cc47be4f13d54"
+      sha256: "1757870f5593d3051b5a1169424c3aa696e22e9261798179c09132c45b22bc08"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   objective_c:
     dependency: transitive
     description:

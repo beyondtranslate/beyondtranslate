@@ -14,7 +14,7 @@ struct GeneralView: View {
     SettingsPage(title: LocaleKeys.settings.general.title.tr()) {
       Section {
         SettingToggle(
-          LocaleKeys.settings.general.row.launchAtStartup.tr(),
+          LocaleKeys.settings.general.row.launchAtLogin.tr(),
           isOn: Binding(
             get: { viewModel.launchAtLogin },
             set: { viewModel.setLaunchAtLogin($0) }

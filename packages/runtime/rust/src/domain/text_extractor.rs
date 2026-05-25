@@ -225,6 +225,33 @@ mod platform {
 
         Err(TextExtractorError::NoTextSelected)
     }
+
+    /// Capture a screenshot of a selected screen region.
+    ///
+    /// Uses the built-in `screencapture` CLI tool in interactive mode.
+    /// The user selects a region, and the image is saved to `path`.
+    /// Returns the path on success.
+    pub fn capture_screen(path: &str) -> Result<String, TextExtractorError> {
+        let output = Command::new("screencapture")
+            .args(["-i", "-x", path])
+            .output()
+            .map_err(|e| {
+                TextExtractorError::OperationFailed(format!("failed to run screencapture: {e}"))
+            })?;
+
+        if output.status.success() && std::path::Path::new(path).exists() {
+            Ok(path.to_owned())
+        } else {
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            if stderr.contains("canceled") || stderr.contains("Cancelled") {
+                Err(TextExtractorError::NoTextSelected)
+            } else {
+                Err(TextExtractorError::OperationFailed(format!(
+                    "screencapture failed: {stderr}"
+                )))
+            }
+        }
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -451,6 +478,16 @@ mod platform {
 
         Err(TextExtractorError::NoTextSelected)
     }
+
+    /// Capture a screenshot of a selected screen region.
+    ///
+    /// Screen capture is not natively supported on Windows via a standard
+    /// system CLI. Returns an unsupported error.
+    pub fn capture_screen(_path: &str) -> Result<String, TextExtractorError> {
+        Err(TextExtractorError::UnsupportedMethod(
+            "screen capture is not supported on Windows via the Rust runtime".into(),
+        ))
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -522,6 +559,26 @@ mod platform {
     pub fn simulate_copy_key_press() -> Result<(), TextExtractorError> {
         Ok(())
     }
+
+    /// Capture a screenshot of a selected screen region.
+    ///
+    /// Uses ImageMagick's `import` command in interactive mode.
+    /// The user draws a selection rectangle, and the image is saved to `path`.
+    /// Returns the path on success.
+    pub fn capture_screen(path: &str) -> Result<String, TextExtractorError> {
+        let output = Command::new("import").args([path]).output().map_err(|e| {
+            TextExtractorError::OperationFailed(format!("failed to run import (ImageMagick): {e}"))
+        })?;
+
+        if output.status.success() && std::path::Path::new(path).exists() {
+            Ok(path.to_owned())
+        } else {
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            Err(TextExtractorError::OperationFailed(format!(
+                "import (ImageMagick) failed: {stderr}"
+            )))
+        }
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -586,6 +643,27 @@ pub fn extract_from_clipboard() -> Result<String, TextExtractorError> {
     {
         Err(TextExtractorError::UnsupportedMethod(
             "clipboard is not supported on this platform".into(),
+        ))
+    }
+}
+
+/// Capture a screenshot of a selected screen region and return the image path.
+///
+/// **macOS:** Uses `screencapture -i` (interactive region selection).
+/// **Linux:** Uses ImageMagick's `import` command (interactive region selection).
+/// **Windows:** Not supported (returns [`TextExtractorError::UnsupportedMethod`]).
+///
+/// The user interactively selects a screen region. The resulting image is
+/// saved to `path`, which is then returned on success.
+pub fn capture_screen(path: &str) -> Result<String, TextExtractorError> {
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
+    {
+        platform::capture_screen(path)
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "linux")))]
+    {
+        Err(TextExtractorError::UnsupportedMethod(
+            "screen capture is not supported on this platform".into(),
         ))
     }
 }

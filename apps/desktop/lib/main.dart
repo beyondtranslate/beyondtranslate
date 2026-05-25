@@ -1,10 +1,6 @@
-import 'dart:io';
 import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
     as beyondtranslate_runtime;
 import 'package:flutter/material.dart';
-import 'package:launch_at_startup/launch_at_startup.dart';
-
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 
 import 'src/extensions/window_controller.dart';
@@ -22,11 +18,6 @@ Future<void> _ensureInitialized() async {
   await initRuntime();
 
   if (kIsMacOS || kIsWindows) {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    LaunchAtStartup.instance.setup(
-      appName: packageInfo.appName,
-      appPath: Platform.resolvedExecutable,
-    );
     await protocolHandler.register('beyondtranslate');
   }
 

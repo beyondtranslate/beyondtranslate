@@ -25,8 +25,7 @@ dependencies:
   hotkey_manager: ^0.2.3
   intl: ^0.20.2
   keypress_simulator: ^0.2.0
-  launch_at_startup: ^0.3.1
-  nativeapi: ^0.1.1
+  nativeapi: ^0.1.2
   package_info_plus: ^9.0.0
   path: ^1.8.3
   path_provider: ^2.1.1

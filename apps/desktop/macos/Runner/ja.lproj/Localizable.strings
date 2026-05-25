@@ -128,7 +128,7 @@
 "settings.general.row.default_ocr_service" = "デフォルトのテキスト認識サービス";
 "settings.general.row.default_translation_service" = "デフォルトの翻訳サービス";
 "settings.general.row.double_click_copy_result" = "ダブルクリックで翻訳結果をコピー";
-"settings.general.row.launch_at_startup" = "ログイン時に起動";
+"settings.general.row.launch_at_login" = "ログイン時に起動";
 "settings.general.row.screen_capture_access" = "画面収録へのアクセスを許可";
 "settings.general.row.screen_selection_access" = "アクセシビリティへのアクセスを許可";
 "settings.general.row.show_in_menu_bar" = "メニューバーに表示";

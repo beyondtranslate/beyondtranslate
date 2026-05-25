@@ -154,7 +154,7 @@
         "input": "입력 설정"
       },
       "row": {
-        "launch_at_startup": "로그인할 때 시작",
+        "launch_at_login": "로그인할 때 시작",
         "show_in_menu_bar": "메뉴 막대에 표시",
         "screen_capture_access": "화면 기록 접근 권한 부여",
         "screen_selection_access": "손쉬운 사용 접근 권한 부여",
