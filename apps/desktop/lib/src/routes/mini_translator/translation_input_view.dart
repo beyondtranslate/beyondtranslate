@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart' hide Card, TextField;
-import 'package:screen_capturer/screen_capturer.dart';
 
 import '../../i18n/i18n.dart';
 import '../../widgets/ui/button.dart';
@@ -17,7 +16,6 @@ class TranslationInputView extends StatelessWidget {
     required this.focusNode,
     required this.controller,
     required this.onChanged,
-    this.capturedData,
     required this.isTextDetecting,
     required this.inputSubmitMode,
     required this.onClickExtractTextFromScreenCapture,
@@ -30,7 +28,6 @@ class TranslationInputView extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
 
-  final CapturedData? capturedData;
   final bool isTextDetecting;
 
   final InputSubmitMode inputSubmitMode;

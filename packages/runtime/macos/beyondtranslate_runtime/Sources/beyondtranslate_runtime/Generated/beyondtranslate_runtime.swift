@@ -564,6 +564,8 @@ public protocol RuntimeProtocol: AnyObject, Sendable {
 
   func ocr(providerId: String) throws -> RuntimeOcr
 
+  func permission() -> RuntimePermission
+
   func settings() -> RuntimeSettings
 
   func startApiServer(host: String, port: UInt16) throws -> RuntimeApiServer
@@ -671,6 +673,15 @@ open class Runtime: RuntimeProtocol, @unchecked Sendable {
         uniffi_beyondtranslate_runtime_fn_method_runtime_ocr(
           self.uniffiCloneHandle(),
           FfiConverterString.lower(providerId), $0
+        )
+      })
+  }
+
+  open func permission() -> RuntimePermission {
+    return try! FfiConverterTypeRuntimePermission_lift(
+      try! rustCall {
+        uniffi_beyondtranslate_runtime_fn_method_runtime_permission(
+          self.uniffiCloneHandle(), $0
         )
       })
   }
@@ -1102,6 +1113,220 @@ public func FfiConverterTypeRuntimeOcr_lift(_ handle: UInt64) throws -> RuntimeO
 #endif
 public func FfiConverterTypeRuntimeOcr_lower(_ value: RuntimeOcr) -> UInt64 {
   return FfiConverterTypeRuntimeOcr.lower(value)
+}
+
+public protocol RuntimePermissionProtocol: AnyObject, Sendable {
+
+  /**
+   * macOS only: check if Accessibility permission is granted.
+   * Returns `true` on other platforms.
+   */
+  func isAccessibilityPermissionGranted() async -> Bool
+
+  /**
+   * macOS only: check if Screen Recording permission is granted.
+   * Returns `true` on other platforms.
+   */
+  func isScreenRecordingPermissionGranted() async -> Bool
+
+  /**
+   * macOS only: request Accessibility permission.
+   * If `only_open_system_settings` is true, just opens System Settings.
+   * No-op on other platforms.
+   */
+  func requestAccessibilityPermission(onlyOpenSystemSettings: Bool) async
+
+  /**
+   * macOS only: request Screen Recording permission.
+   * If `only_open_system_settings` is true, just opens System Settings.
+   * No-op on other platforms.
+   */
+  func requestScreenRecordingPermission(onlyOpenSystemSettings: Bool) async
+
+}
+open class RuntimePermission: RuntimePermissionProtocol, @unchecked Sendable {
+  fileprivate let handle: UInt64
+
+  /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public struct NoHandle {
+    public init() {}
+  }
+
+  // TODO: We'd like this to be `private` but for Swifty reasons,
+  // we can't implement `FfiConverter` without making this `required` and we can't
+  // make it `required` without making it `public`.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  required public init(unsafeFromHandle handle: UInt64) {
+    self.handle = handle
+  }
+
+  // This constructor can be used to instantiate a fake object.
+  // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+  //
+  // - Warning:
+  //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public init(noHandle: NoHandle) {
+    self.handle = 0
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public func uniffiCloneHandle() -> UInt64 {
+    return try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_clone_runtimepermission(self.handle, $0)
+    }
+  }
+  // No primary constructor declared for this class.
+
+  deinit {
+    if handle == 0 {
+      // Mock objects have handle=0 don't try to free them
+      return
+    }
+
+    try! rustCall { uniffi_beyondtranslate_runtime_fn_free_runtimepermission(handle, $0) }
+  }
+
+  /**
+   * macOS only: check if Accessibility permission is granted.
+   * Returns `true` on other platforms.
+   */
+  open func isAccessibilityPermissionGranted() async -> Bool {
+    return
+      try! await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimepermission_is_accessibility_permission_granted(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_i8,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_i8,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_i8,
+        liftFunc: FfiConverterBool.lift,
+        errorHandler: nil
+
+      )
+  }
+
+  /**
+   * macOS only: check if Screen Recording permission is granted.
+   * Returns `true` on other platforms.
+   */
+  open func isScreenRecordingPermissionGranted() async -> Bool {
+    return
+      try! await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimepermission_is_screen_recording_permission_granted(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_i8,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_i8,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_i8,
+        liftFunc: FfiConverterBool.lift,
+        errorHandler: nil
+
+      )
+  }
+
+  /**
+   * macOS only: request Accessibility permission.
+   * If `only_open_system_settings` is true, just opens System Settings.
+   * No-op on other platforms.
+   */
+  open func requestAccessibilityPermission(onlyOpenSystemSettings: Bool) async {
+    return
+      try! await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimepermission_request_accessibility_permission(
+            self.uniffiCloneHandle(),
+            FfiConverterBool.lower(onlyOpenSystemSettings)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_void,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_void,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_void,
+        liftFunc: { $0 },
+        errorHandler: nil
+
+      )
+  }
+
+  /**
+   * macOS only: request Screen Recording permission.
+   * If `only_open_system_settings` is true, just opens System Settings.
+   * No-op on other platforms.
+   */
+  open func requestScreenRecordingPermission(onlyOpenSystemSettings: Bool) async {
+    return
+      try! await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimepermission_request_screen_recording_permission(
+            self.uniffiCloneHandle(),
+            FfiConverterBool.lower(onlyOpenSystemSettings)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_void,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_void,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_void,
+        liftFunc: { $0 },
+        errorHandler: nil
+
+      )
+  }
+
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRuntimePermission: FfiConverter {
+  typealias FfiType = UInt64
+  typealias SwiftType = RuntimePermission
+
+  public static func lift(_ handle: UInt64) throws -> RuntimePermission {
+    return RuntimePermission(unsafeFromHandle: handle)
+  }
+
+  public static func lower(_ value: RuntimePermission) -> UInt64 {
+    return value.uniffiCloneHandle()
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> RuntimePermission
+  {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  public static func write(_ value: RuntimePermission, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimePermission_lift(_ handle: UInt64) throws -> RuntimePermission {
+  return try FfiConverterTypeRuntimePermission.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimePermission_lower(_ value: RuntimePermission) -> UInt64 {
+  return FfiConverterTypeRuntimePermission.lower(value)
 }
 
 public protocol RuntimeSettingsProtocol: AnyObject, Sendable {
@@ -1587,19 +1812,6 @@ public protocol RuntimeTextExtractorProtocol: AnyObject, Sendable {
    */
   func extractFromScreenSelection() async throws -> String
 
-  /**
-   * macOS only: check if accessibility permission is granted.
-   * Returns `true` on other platforms.
-   */
-  func isAccessAllowed() async -> Bool
-
-  /**
-   * macOS only: request accessibility permission.
-   * If `only_open_pref_pane` is true, just opens System Preferences.
-   * No-op on other platforms.
-   */
-  func requestAccess(onlyOpenPrefPane: Bool) async
-
 }
 /// Rust-native screen text extractor.
 ///
@@ -1726,51 +1938,6 @@ open class RuntimeTextExtractor: RuntimeTextExtractorProtocol, @unchecked Sendab
         freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
         liftFunc: FfiConverterString.lift,
         errorHandler: FfiConverterTypeRuntimeError_lift
-      )
-  }
-
-  /**
-   * macOS only: check if accessibility permission is granted.
-   * Returns `true` on other platforms.
-   */
-  open func isAccessAllowed() async -> Bool {
-    return
-      try! await uniffiRustCallAsync(
-        rustFutureFunc: {
-          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_is_access_allowed(
-            self.uniffiCloneHandle()
-
-          )
-        },
-        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_i8,
-        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_i8,
-        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_i8,
-        liftFunc: FfiConverterBool.lift,
-        errorHandler: nil
-
-      )
-  }
-
-  /**
-   * macOS only: request accessibility permission.
-   * If `only_open_pref_pane` is true, just opens System Preferences.
-   * No-op on other platforms.
-   */
-  open func requestAccess(onlyOpenPrefPane: Bool) async {
-    return
-      try! await uniffiRustCallAsync(
-        rustFutureFunc: {
-          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_request_access(
-            self.uniffiCloneHandle(),
-            FfiConverterBool.lower(onlyOpenPrefPane)
-          )
-        },
-        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_void,
-        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_void,
-        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_void,
-        liftFunc: { $0 },
-        errorHandler: nil
-
       )
   }
 
@@ -5845,6 +6012,9 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr() != 40076 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtime_permission() != 10201 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_settings() != 37764 {
     return InitializationResult.apiChecksumMismatch
   }
@@ -5861,6 +6031,26 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimeocr_recognize_text() != 10575 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_is_accessibility_permission_granted()
+    != 49819
+  {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_is_screen_recording_permission_granted()
+    != 57183
+  {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_request_accessibility_permission()
+    != 28036
+  {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_request_screen_recording_permission()
+    != 9096
+  {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_delete_provider() != 20557 {
@@ -5929,14 +6119,6 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_selection()
     != 57900
   {
-    return InitializationResult.apiChecksumMismatch
-  }
-  if uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_is_access_allowed()
-    != 12942
-  {
-    return InitializationResult.apiChecksumMismatch
-  }
-  if uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_request_access() != 62157 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_detect_language() != 29752 {

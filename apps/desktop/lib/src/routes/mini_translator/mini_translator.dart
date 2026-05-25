@@ -10,7 +10,6 @@ import 'package:go_router/go_router.dart';
 import 'package:keypress_simulator/keypress_simulator.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
 import 'package:protocol_handler/protocol_handler.dart';
-import 'package:screen_capturer/screen_capturer.dart';
 
 import '../../extensions/window_controller.dart';
 import '../../i18n/i18n.dart';
@@ -73,7 +72,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   bool _querySubmitted = false;
   String _text = '';
   String? _detectedLanguage;
-  CapturedData? _capturedData;
   bool _isTextDetecting = false;
   List<TranslationResult> _translationResultList = [];
 
@@ -147,9 +145,9 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   void _init() async {
     if (kIsMacOS) {
       _isAllowedScreenCaptureAccess =
-          await ScreenCapturer.instance.isAccessAllowed();
+          await runtime.permission().isScreenRecordingPermissionGranted();
       _isAllowedScreenSelectionAccess =
-          await runtime.textExtractor().isAccessAllowed();
+          await runtime.permission().isAccessibilityPermissionGranted();
     }
 
     ShortcutService.instance.start();
@@ -660,7 +658,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _querySubmitted = false;
       _text = '';
       _detectedLanguage = null;
-      _capturedData = null;
       _isTextDetecting = false;
       _translationResultList = [];
     });
@@ -705,7 +702,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _querySubmitted = false;
       _text = '';
       _detectedLanguage = null;
-      _capturedData = null;
       _isTextDetecting = false;
       _translationResultList = [];
     });
@@ -743,10 +739,12 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
               isAllowedScreenCaptureAccess: _isAllowedScreenCaptureAccess,
               isAllowedScreenSelectionAccess: _isAllowedScreenSelectionAccess,
               onTappedRecheckIsAllowedAllAccess: () async {
-                _isAllowedScreenCaptureAccess =
-                    await ScreenCapturer.instance.isAccessAllowed();
-                _isAllowedScreenSelectionAccess =
-                    await runtime.textExtractor().isAccessAllowed();
+                _isAllowedScreenCaptureAccess = await runtime
+                    .permission()
+                    .isScreenRecordingPermissionGranted();
+                _isAllowedScreenSelectionAccess = await runtime
+                    .permission()
+                    .isAccessibilityPermissionGranted();
 
                 _setStateAndScheduleWindowResize(() {});
 
@@ -781,7 +779,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             focusNode: _focusNode,
             controller: _textEditingController,
             onChanged: (newValue) => _handleTextChanged(newValue),
-            capturedData: _capturedData,
             isTextDetecting: _isTextDetecting,
             inputSubmitMode: settingsStore.inputSubmitMode,
             onClickExtractTextFromScreenCapture:

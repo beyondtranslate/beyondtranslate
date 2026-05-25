@@ -8,15 +8,12 @@ PODS:
     - FlutterMacOS
   - protocol_handler (0.0.1):
     - FlutterMacOS
-  - screen_capturer_macos (0.0.1):
-    - FlutterMacOS
 
 DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
   - hotkey_manager_macos (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos`)
   - keypress_simulator_macos (from `Flutter/ephemeral/.symlinks/plugins/keypress_simulator_macos/macos`)
   - protocol_handler (from `Flutter/ephemeral/.symlinks/plugins/protocol_handler/macos`)
-  - screen_capturer_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos`)
 
 SPEC REPOS:
   trunk:
@@ -31,8 +28,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/keypress_simulator_macos/macos
   protocol_handler:
     :path: Flutter/ephemeral/.symlinks/plugins/protocol_handler/macos
-  screen_capturer_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos
 
 SPEC CHECKSUMS:
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
@@ -40,7 +35,6 @@ SPEC CHECKSUMS:
   hotkey_manager_macos: a4317849af96d2430fa89944d3c58977ca089fbe
   keypress_simulator_macos: b5c87294b03ab5a2e743873a7dabe1ff5589129d
   protocol_handler: f4d1317b2b828d6370e140077be5155feb3f06c7
-  screen_capturer_macos: 229306903c56767a7c7d3a48167ba303e95c6d29
 
 PODFILE CHECKSUM: 89c84cf5c2351c1e554c6dea18d31a879fc3a19e
 

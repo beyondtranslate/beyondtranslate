@@ -5,7 +5,6 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
   hotkey_manager_linux
-  screen_capturer_linux
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

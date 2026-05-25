@@ -30,7 +30,6 @@ dependencies:
   path: ^1.8.3
   path_provider: ^2.1.1
   protocol_handler: ^0.1.6
-  screen_capturer: ^0.2.2
   slang: ^4.13.0
   slang_flutter: ^4.13.0
   sticky_headers: ^0.3.0+2

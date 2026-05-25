@@ -12,13 +12,13 @@ struct AdvancedView: View {
       Section(LocaleKeys.settings.general.section.permissions.tr()) {
         PermissionAccessRow(
           title: LocaleKeys.settings.general.row.screenCaptureAccess.tr(),
-          isAllowed: viewModel.screenCaptureAllowed,
-          onRequest: viewModel.requestScreenCaptureAccess
+          isAllowed: viewModel.screenRecordingAllowed,
+          onRequest: viewModel.requestScreenRecordingPermission
         )
         PermissionAccessRow(
           title: LocaleKeys.settings.general.row.screenSelectionAccess.tr(),
           isAllowed: viewModel.accessibilityAllowed,
-          onRequest: viewModel.requestAccessibilityAccess
+          onRequest: viewModel.requestAccessibilityPermission
         )
       }
       .background(

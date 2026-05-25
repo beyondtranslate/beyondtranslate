@@ -14,6 +14,7 @@ use struct_patch::Patch as ApplyPatch;
 use tokio::sync::{broadcast, Mutex as AsyncMutex, RwLock};
 
 use crate::domain::engine;
+use crate::domain::permission;
 use crate::domain::settings::{
     provider_entry_from_config, AdvancedSettings, AdvancedSettingsPatch, AppearanceSettings,
     AppearanceSettingsPatch, GeneralSettings, GeneralSettingsPatch, ProviderConfigEntry, Settings,
@@ -134,6 +135,9 @@ pub struct RuntimeOcr {
     provider_id: String,
 }
 
+#[derive(uniffi::Object)]
+pub struct RuntimePermission;
+
 /// Rust-native screen text extractor.
 ///
 /// Provides clipboard reading, screen selection text extraction,
@@ -237,6 +241,10 @@ impl Runtime {
         Arc::new(RuntimeTextExtractor {
             runtime: (*self).clone(),
         })
+    }
+
+    pub fn permission(self: Arc<Self>) -> Arc<RuntimePermission> {
+        Arc::new(RuntimePermission)
     }
 
     pub fn start_api_server(
@@ -760,20 +768,36 @@ impl RuntimeOcr {
 }
 
 #[uniffi::export(async_runtime = "tokio")]
-impl RuntimeTextExtractor {
-    /// macOS only: check if accessibility permission is granted.
+impl RuntimePermission {
+    /// macOS only: check if Screen Recording permission is granted.
     /// Returns `true` on other platforms.
-    pub async fn is_access_allowed(&self) -> bool {
-        text_extractor::is_access_allowed()
+    pub async fn is_screen_recording_permission_granted(&self) -> bool {
+        permission::is_screen_recording_permission_granted()
     }
 
-    /// macOS only: request accessibility permission.
-    /// If `only_open_pref_pane` is true, just opens System Preferences.
+    /// macOS only: request Screen Recording permission.
+    /// If `only_open_system_settings` is true, just opens System Settings.
     /// No-op on other platforms.
-    pub async fn request_access(&self, only_open_pref_pane: bool) {
-        text_extractor::request_access(only_open_pref_pane);
+    pub async fn request_screen_recording_permission(&self, only_open_system_settings: bool) {
+        permission::request_screen_recording_permission(only_open_system_settings);
     }
 
+    /// macOS only: check if Accessibility permission is granted.
+    /// Returns `true` on other platforms.
+    pub async fn is_accessibility_permission_granted(&self) -> bool {
+        permission::is_accessibility_permission_granted()
+    }
+
+    /// macOS only: request Accessibility permission.
+    /// If `only_open_system_settings` is true, just opens System Settings.
+    /// No-op on other platforms.
+    pub async fn request_accessibility_permission(&self, only_open_system_settings: bool) {
+        permission::request_accessibility_permission(only_open_system_settings);
+    }
+}
+
+#[uniffi::export(async_runtime = "tokio")]
+impl RuntimeTextExtractor {
     /// Read the current clipboard text.
     pub async fn extract_from_clipboard(&self) -> Result<String, RuntimeError> {
         text_extractor::extract_from_clipboard()

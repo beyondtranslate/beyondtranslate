@@ -2943,6 +2943,7 @@ abstract class RuntimeInterface {
   RuntimeOcr ocr({
     required String providerId,
   });
+  RuntimePermission permission();
   RuntimeSettings settings();
   RuntimeApiServer startApiServer({
     required String host,
@@ -3043,6 +3044,14 @@ class Runtime implements RuntimeInterface {
             uniffiClonePointer(), FfiConverterString.lower(providerId), status),
         RuntimeOcr.lift,
         runtimeExceptionErrorHandler);
+  }
+
+  RuntimePermission permission() {
+    return rustCallWithLifter(
+        (status) => uniffi_beyondtranslate_runtime_fn_method_runtime_permission(
+            uniffiClonePointer(), status),
+        RuntimePermission.lift,
+        null);
   }
 
   RuntimeSettings settings() {
@@ -3222,6 +3231,125 @@ class RuntimeOcr implements RuntimeOcrInterface {
       ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
       FfiConverterRecognizeTextResponse.lift,
       runtimeExceptionErrorHandler,
+    );
+  }
+}
+
+abstract class RuntimePermissionInterface {
+  Future<bool> isAccessibilityPermissionGranted();
+  Future<bool> isScreenRecordingPermissionGranted();
+  Future<void> requestAccessibilityPermission({
+    required bool onlyOpenSystemSettings,
+  });
+  Future<void> requestScreenRecordingPermission({
+    required bool onlyOpenSystemSettings,
+  });
+}
+
+final _RuntimePermissionFinalizer = Finalizer<Pointer<Void>>((ptr) {
+  rustCall((status) =>
+      uniffi_beyondtranslate_runtime_fn_free_runtimepermission(ptr, status));
+});
+
+class RuntimePermission implements RuntimePermissionInterface {
+  late final Pointer<Void> _ptr;
+  RuntimePermission._(this._ptr) {
+    _RuntimePermissionFinalizer.attach(this, _ptr, detach: this);
+  }
+  factory RuntimePermission.lift(Pointer<Void> ptr) {
+    return RuntimePermission._(ptr);
+  }
+  static Pointer<Void> lower(RuntimePermission value) {
+    return value.uniffiClonePointer();
+  }
+
+  Pointer<Void> uniffiClonePointer() {
+    return rustCall((status) =>
+        uniffi_beyondtranslate_runtime_fn_clone_runtimepermission(
+            _ptr, status));
+  }
+
+  static int allocationSize(RuntimePermission value) {
+    return 8;
+  }
+
+  static LiftRetVal<RuntimePermission> read(Uint8List buf) {
+    final handle = buf.buffer.asByteData(buf.offsetInBytes).getInt64(0);
+    final pointer = Pointer<Void>.fromAddress(handle);
+    return LiftRetVal(RuntimePermission.lift(pointer), 8);
+  }
+
+  static int write(RuntimePermission value, Uint8List buf) {
+    final handle = lower(value);
+    buf.buffer.asByteData(buf.offsetInBytes).setInt64(0, handle.address);
+    return 8;
+  }
+
+  void dispose() {
+    _RuntimePermissionFinalizer.detach(this);
+    rustCall((status) =>
+        uniffi_beyondtranslate_runtime_fn_free_runtimepermission(_ptr, status));
+  }
+
+  Future<bool> isAccessibilityPermissionGranted() {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimepermission_is_accessibility_permission_granted(
+        uniffiClonePointer(),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_i8,
+      ffi_beyondtranslate_runtime_rust_future_complete_i8,
+      ffi_beyondtranslate_runtime_rust_future_free_i8,
+      FfiConverterBool.lift,
+      null,
+    );
+  }
+
+  Future<bool> isScreenRecordingPermissionGranted() {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimepermission_is_screen_recording_permission_granted(
+        uniffiClonePointer(),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_i8,
+      ffi_beyondtranslate_runtime_rust_future_complete_i8,
+      ffi_beyondtranslate_runtime_rust_future_free_i8,
+      FfiConverterBool.lift,
+      null,
+    );
+  }
+
+  Future<void> requestAccessibilityPermission({
+    required bool onlyOpenSystemSettings,
+  }) {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimepermission_request_accessibility_permission(
+        uniffiClonePointer(),
+        FfiConverterBool.lower(onlyOpenSystemSettings),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_void,
+      ffi_beyondtranslate_runtime_rust_future_complete_void,
+      ffi_beyondtranslate_runtime_rust_future_free_void,
+      (_) {},
+      null,
+    );
+  }
+
+  Future<void> requestScreenRecordingPermission({
+    required bool onlyOpenSystemSettings,
+  }) {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimepermission_request_screen_recording_permission(
+        uniffiClonePointer(),
+        FfiConverterBool.lower(onlyOpenSystemSettings),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_void,
+      ffi_beyondtranslate_runtime_rust_future_complete_void,
+      ffi_beyondtranslate_runtime_rust_future_free_void,
+      (_) {},
+      null,
     );
   }
 }
@@ -3581,10 +3709,6 @@ abstract class RuntimeTextExtractorInterface {
   Future<String> extractFromClipboard();
   Future<String> extractFromScreenCapture();
   Future<String> extractFromScreenSelection();
-  Future<bool> isAccessAllowed();
-  Future<void> requestAccess({
-    required bool onlyOpenPrefPane,
-  });
 }
 
 final _RuntimeTextExtractorFinalizer = Finalizer<Pointer<Void>>((ptr) {
@@ -3672,37 +3796,6 @@ class RuntimeTextExtractor implements RuntimeTextExtractorInterface {
       ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
       FfiConverterString.lift,
       runtimeExceptionErrorHandler,
-    );
-  }
-
-  Future<bool> isAccessAllowed() {
-    return uniffiRustCallAsync(
-      () =>
-          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_is_access_allowed(
-        uniffiClonePointer(),
-      ),
-      ffi_beyondtranslate_runtime_rust_future_poll_i8,
-      ffi_beyondtranslate_runtime_rust_future_complete_i8,
-      ffi_beyondtranslate_runtime_rust_future_free_i8,
-      FfiConverterBool.lift,
-      null,
-    );
-  }
-
-  Future<void> requestAccess({
-    required bool onlyOpenPrefPane,
-  }) {
-    return uniffiRustCallAsync(
-      () =>
-          uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_request_access(
-        uniffiClonePointer(),
-        FfiConverterBool.lower(onlyOpenPrefPane),
-      ),
-      ffi_beyondtranslate_runtime_rust_future_poll_void,
-      ffi_beyondtranslate_runtime_rust_future_complete_void,
-      ffi_beyondtranslate_runtime_rust_future_free_void,
-      (_) {},
-      null,
     );
   }
 }
@@ -6480,6 +6573,12 @@ external Pointer<Void> uniffi_beyondtranslate_runtime_fn_method_runtime_ocr(
 @Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
 external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtime_permission(
+        Pointer<Void> ptr, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtime_settings(
         Pointer<Void> ptr, Pointer<RustCallStatus> uniffiStatus);
 
@@ -6540,6 +6639,37 @@ external void uniffi_beyondtranslate_runtime_fn_free_runtimeocr(
 external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimeocr_recognize_text(
         Pointer<Void> ptr, RustBuffer request);
+
+@Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_clone_runtimepermission(
+        Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Void Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external void uniffi_beyondtranslate_runtime_fn_free_runtimepermission(
+    Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimepermission_is_accessibility_permission_granted(
+        Pointer<Void> ptr);
+
+@Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimepermission_is_screen_recording_permission_granted(
+        Pointer<Void> ptr);
+
+@Native<Pointer<Void> Function(Pointer<Void>, Int8)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimepermission_request_accessibility_permission(
+        Pointer<Void> ptr, int only_open_system_settings);
+
+@Native<Pointer<Void> Function(Pointer<Void>, Int8)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimepermission_request_screen_recording_permission(
+        Pointer<Void> ptr, int only_open_system_settings);
 
 @Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
@@ -6675,16 +6805,6 @@ external Pointer<Void>
 external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_extract_from_screen_selection(
         Pointer<Void> ptr);
-
-@Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
-external Pointer<Void>
-    uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_is_access_allowed(
-        Pointer<Void> ptr);
-
-@Native<Pointer<Void> Function(Pointer<Void>, Int8)>(assetId: _uniffiAssetId)
-external Pointer<Void>
-    uniffi_beyondtranslate_runtime_fn_method_runtimetextextractor_request_access(
-        Pointer<Void> ptr, int only_open_pref_pane);
 
 @Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
@@ -7268,6 +7388,10 @@ external int
 external int uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtime_permission();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_checksum_method_runtime_settings();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -7289,6 +7413,22 @@ external int
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimeocr_recognize_text();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_is_accessibility_permission_granted();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_is_screen_recording_permission_granted();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_request_accessibility_permission();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_request_screen_recording_permission();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
@@ -7369,14 +7509,6 @@ external int
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_selection();
-
-@Native<Uint16 Function()>(assetId: _uniffiAssetId)
-external int
-    uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_is_access_allowed();
-
-@Native<Uint16 Function()>(assetId: _uniffiAssetId)
-external int
-    uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_request_access();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
@@ -7524,6 +7656,10 @@ void _checkApiChecksums() {
   if (uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr() != 40076) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtime_permission() !=
+      10201) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtime_settings() !=
       37764) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
@@ -7546,6 +7682,22 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimeocr_recognize_text() !=
       10575) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_is_accessibility_permission_granted() !=
+      49819) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_is_screen_recording_permission_granted() !=
+      57183) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_request_accessibility_permission() !=
+      28036) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimepermission_request_screen_recording_permission() !=
+      9096) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_delete_provider() !=
@@ -7626,14 +7778,6 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_extract_from_screen_selection() !=
       57900) {
-    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
-  }
-  if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_is_access_allowed() !=
-      12942) {
-    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
-  }
-  if (uniffi_beyondtranslate_runtime_checksum_method_runtimetextextractor_request_access() !=
-      62157) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimetranslation_detect_language() !=

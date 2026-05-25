@@ -1,4 +1,3 @@
-import AppKit
 import SwiftUI
 import beyondtranslate_runtime
 
@@ -7,7 +6,7 @@ final class AdvancedViewModel: ObservableObject {
   @Published var apiServerEnabled: Bool
   @Published var apiServerHost: String
   @Published var apiServerPort: UInt16
-  @Published var screenCaptureAllowed = false
+  @Published var screenRecordingAllowed = false
   @Published var accessibilityAllowed = false
 
   private let repository: SettingsRepository
@@ -30,35 +29,25 @@ final class AdvancedViewModel: ObservableObject {
   }
 
   func refreshPermissions() async {
-    screenCaptureAllowed = CGPreflightScreenCaptureAccess()
-    accessibilityAllowed = await RuntimeProvider.shared.textExtractor().isAccessAllowed()
+    let permission = RuntimeProvider.shared.permission()
+    screenRecordingAllowed = await permission.isScreenRecordingPermissionGranted()
+    accessibilityAllowed = await permission.isAccessibilityPermissionGranted()
   }
 
-  func requestScreenCaptureAccess() {
-    if !CGPreflightScreenCaptureAccess() {
-      CGRequestScreenCaptureAccess()
-    }
-    openPrivacyPane("Privacy_ScreenCapture")
-    Task { await refreshPermissions() }
-  }
-
-  func requestAccessibilityAccess() {
+  func requestScreenRecordingPermission() {
     Task {
-      await RuntimeProvider.shared.textExtractor().requestAccess(onlyOpenPrefPane: false)
-      openPrivacyPane("Privacy_Accessibility")
+      await RuntimeProvider.shared.permission().requestScreenRecordingPermission(
+        onlyOpenSystemSettings: false)
       await refreshPermissions()
     }
   }
 
-  private func openPrivacyPane(_ anchor: String) {
-    guard
-      let url = URL(
-        string: "x-apple.systempreferences:com.apple.preference.security?\(anchor)"
-      )
-    else {
-      return
+  func requestAccessibilityPermission() {
+    Task {
+      await RuntimeProvider.shared.permission().requestAccessibilityPermission(
+        onlyOpenSystemSettings: false)
+      await refreshPermissions()
     }
-    NSWorkspace.shared.open(url)
   }
 
   func setApiServerEnabled(_ value: Bool) {

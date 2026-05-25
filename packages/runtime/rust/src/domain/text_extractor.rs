@@ -85,12 +85,6 @@ mod platform {
         fn CFRelease(event: *mut c_void);
     }
 
-    #[link(name = "ApplicationServices", kind = "framework")]
-    extern "C" {
-        fn AXIsProcessTrusted() -> bool;
-        fn AXIsProcessTrustedWithOptions(options: *mut c_void) -> bool;
-    }
-
     // ── Constants ───────────────────────────────────────────────────────
 
     /// kCGHIDEventTap
@@ -101,36 +95,6 @@ mod platform {
     const CG_EVENT_FLAG_COMMAND: u64 = 1 << 20;
 
     // ── Public API ──────────────────────────────────────────────────────
-
-    /// Check if the application has accessibility permissions (macOS).
-    pub fn is_access_allowed() -> bool {
-        unsafe { AXIsProcessTrusted() }
-    }
-
-    /// Request accessibility permissions.
-    ///
-    /// If `only_open_pref_pane` is true, just opens the System Preferences
-    /// pane without re-prompting the authorization dialog.
-    pub fn request_access(only_open_pref_pane: bool) {
-        if only_open_pref_pane {
-            let _ = Command::new("open")
-                .arg(
-                    "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility",
-                )
-                .spawn();
-        } else {
-            unsafe {
-                let prompt_value: *mut AnyObject =
-                    msg_send![objc2::class!(NSNumber), numberWithBool: true];
-                let dict: *mut AnyObject = msg_send![
-                    objc2::class!(NSDictionary),
-                    dictionaryWithObject: prompt_value,
-                    forKey: ns_string("AXTrustedCheckOptionPrompt")
-                ];
-                AXIsProcessTrustedWithOptions(dict as *mut c_void);
-            }
-        }
-    }
 
     /// Read current clipboard text from NSPasteboard.
     pub fn read_clipboard_text() -> Result<String, TextExtractorError> {
@@ -547,14 +511,6 @@ mod platform {
         }
     }
 
-    /// Unused on Linux, but needed for API compatibility.
-    pub fn is_access_allowed() -> bool {
-        true
-    }
-
-    /// Unused on Linux.
-    pub fn request_access(_only_open_pref_pane: bool) {}
-
     /// Unused on Linux (no simulated copy needed).
     pub fn simulate_copy_key_press() -> Result<(), TextExtractorError> {
         Ok(())
@@ -584,32 +540,6 @@ mod platform {
 // ═══════════════════════════════════════════════════════════════════════════
 //  Public API (platform-agnostic)
 // ═══════════════════════════════════════════════════════════════════════════
-
-/// Check if accessibility permission is granted (macOS only).
-/// Returns `true` on other platforms.
-pub fn is_access_allowed() -> bool {
-    #[cfg(target_os = "macos")]
-    {
-        platform::is_access_allowed()
-    }
-    #[cfg(not(target_os = "macos"))]
-    {
-        true
-    }
-}
-
-/// Request accessibility permission (macOS only).
-/// No-op on other platforms.
-pub fn request_access(only_open_pref_pane: bool) {
-    #[cfg(target_os = "macos")]
-    {
-        platform::request_access(only_open_pref_pane);
-    }
-    #[cfg(not(target_os = "macos"))]
-    {
-        let _ = only_open_pref_pane;
-    }
-}
 
 /// Simulate Ctrl+C / Cmd+C key press.
 ///
