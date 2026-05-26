@@ -24,6 +24,7 @@
 		0135BD1CECDB3B64D190C611 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 921317546F1323EEECD70938 /* Pods_RunnerTests.framework */; };
 		2A0D6A402E0A100100A1B2C3 /* MacSettingsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0D6A3D2E0A100100A1B2C3 /* MacSettingsPlugin.swift */; };
 		2A0D6A422E0A100100A1B2C3 /* MacWindowAppearancePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0D6A412E0A100100A1B2C3 /* MacWindowAppearancePlugin.swift */; };
+		2A0D6A452E0A100100A1B2C3 /* NativeTextFieldPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0D6A442E0A100100A1B2C3 /* NativeTextFieldPlugin.swift */; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
 		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
@@ -97,6 +98,7 @@
 /* Begin PBXFileReference section */
 		2A0D6A3D2E0A100100A1B2C3 /* MacSettingsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSettingsPlugin.swift; sourceTree = "<group>"; };
 		2A0D6A412E0A100100A1B2C3 /* MacWindowAppearancePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWindowAppearancePlugin.swift; sourceTree = "<group>"; };
+		2A0D6A442E0A100100A1B2C3 /* NativeTextFieldPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeTextFieldPlugin.swift; sourceTree = "<group>"; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 			children = (
 				2A0D6A3D2E0A100100A1B2C3 /* MacSettingsPlugin.swift */,
 				2A0D6A412E0A100100A1B2C3 /* MacWindowAppearancePlugin.swift */,
+				2A0D6A442E0A100100A1B2C3 /* NativeTextFieldPlugin.swift */,
 			);
 			path = Plugins;
 			sourceTree = "<group>";
@@ -694,6 +697,7 @@
 				F5F222602FB8ABB40025B9D4 /* ShortcutRecorderView.swift in Sources */,
 				2A0D6A402E0A100100A1B2C3 /* MacSettingsPlugin.swift in Sources */,
 				2A0D6A422E0A100100A1B2C3 /* MacWindowAppearancePlugin.swift in Sources */,
+				2A0D6A452E0A100100A1B2C3 /* NativeTextFieldPlugin.swift in Sources */,
 				8F10003C2E0A100100A1B2C3 /* ProviderConfigField.swift in Sources */,
 				A10000000000000000000021 /* Settings+Extensions.swift in Sources */,
 				8F1000032E0A100100A1B2C3 /* SettingsView.swift in Sources */,

@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../utils/platform_util.dart';
+import 'native_text_field.dart';
+
 const EdgeInsets _kDefaultPadding = EdgeInsets.symmetric(
   horizontal: 12,
   vertical: 8,
@@ -132,6 +135,30 @@ class _TextFieldState extends State<TextField> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsMacOS) {
+      return NativeTextField(
+        controller: _effectiveController,
+        focusNode: _effectiveFocusNode,
+        placeholder: widget.placeholder,
+        placeholderStyle: widget.placeholderStyle,
+        style: widget.style,
+        padding: widget.padding,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
+        enabled: widget.enabled,
+        autofocus: widget.autofocus,
+        readOnly: widget.readOnly,
+        obscureText: widget.obscureText,
+        keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
+        textCapitalization: widget.textCapitalization,
+        selectionHeightStyle: widget.selectionHeightStyle,
+        onChanged: widget.onChanged,
+        onSubmitted: widget.onSubmitted,
+        onTap: widget.onTap,
+      );
+    }
+
     final TextStyle textStyle =
         widget.style ?? DefaultTextStyle.of(context).style;
     final Color textColor = textStyle.color ?? const Color(0xFF000000);

@@ -157,8 +157,11 @@ class TranslationInputView extends StatelessWidget {
                   style: textTheme.bodyMedium?.copyWith(
                     height: 1.3,
                   ),
-                  maxLines: inputSubmitMode == InputSubmitMode.enter ? 1 : 6,
+                  maxLines: 6,
                   minLines: 1,
+                  textInputAction: inputSubmitMode == InputSubmitMode.enter
+                      ? TextInputAction.done
+                      : TextInputAction.newline,
                   onChanged: onChanged,
                   onSubmitted: (newValue) {
                     onButtonTappedTrans();

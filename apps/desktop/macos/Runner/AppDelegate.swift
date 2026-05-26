@@ -28,6 +28,9 @@ class AppDelegate: FlutterAppDelegate {
     MacWindowAppearancePlugin.register(
       with: engine.registrar(forPlugin: "MacWindowAppearancePlugin")
     )
+    NativeTextFieldPlugin.register(
+      with: engine.registrar(forPlugin: "NativeTextFieldPlugin")
+    )
     smokeTestBeyondtranslateRuntime()
     self.engine = engine
     return engine
