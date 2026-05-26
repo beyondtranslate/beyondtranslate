@@ -5,9 +5,7 @@ import 'dart:async';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:keypress_simulator/keypress_simulator.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
 import 'package:protocol_handler/protocol_handler.dart';
 
@@ -1013,78 +1011,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     _handleButtonTappedTrans();
   }
 
-  List<ModifierKey> get _commandModifiers {
-    final modifier =
-        kIsMacOS ? ModifierKey.metaModifier : ModifierKey.controlModifier;
-    return [modifier];
-  }
-
   @override
-  void onShortcutKeyDownTranslateInputContent() async {
-    await keyPressSimulator.simulateKeyDown(
-      PhysicalKeyboardKey.keyA,
-      _commandModifiers,
-    );
-    await keyPressSimulator.simulateKeyUp(
-      PhysicalKeyboardKey.keyA,
-      _commandModifiers,
-    );
-
-    try {
-      String extractedText =
-          await runtime.textExtractor().extractFromScreenSelection();
-
-      if (extractedText.isEmpty) {
-        throw Exception('Extracted text is empty');
-      }
-
-      final settings = runtime.settings();
-      final generalSettings = await settings.getGeneral();
-      final providerId = _providerId(generalSettings.defaultTranslationService);
-
-      TranslateResponse translateResponse =
-          await runtime.translation(providerId: providerId).translate(
-                request: TranslateRequest(
-                  text: extractedText,
-                  sourceLanguage: defaultTargetLanguage,
-                  targetLanguage: defaultSourceLanguage,
-                ),
-              );
-
-      TextTranslation? textTranslation =
-          translateResponse.translations.firstOrNull;
-
-      if (textTranslation != null) {
-        Clipboard.setData(ClipboardData(text: textTranslation.text));
-      }
-    } catch (error) {
-      return;
-    }
-
-    await keyPressSimulator.simulateKeyDown(
-      PhysicalKeyboardKey.keyA,
-      _commandModifiers,
-    );
-    await keyPressSimulator.simulateKeyUp(
-      PhysicalKeyboardKey.keyA,
-      _commandModifiers,
-    );
-    await keyPressSimulator.simulateKeyDown(
-      PhysicalKeyboardKey.keyV,
-      _commandModifiers,
-    );
-    await keyPressSimulator.simulateKeyUp(
-      PhysicalKeyboardKey.keyV,
-      _commandModifiers,
-    );
+  void onShortcutKeyDownTranslateInputContent() {
+    // TODO: Reimplement when keypress_simulator dependency is restored
   }
 }
 
-String _providerId(String serviceId) {
-  for (final suffix in const ['+translation', '+dictionary', '+ocr']) {
-    if (serviceId.endsWith(suffix)) {
-      return serviceId.substring(0, serviceId.length - suffix.length);
-    }
-  }
-  return serviceId;
-}
+

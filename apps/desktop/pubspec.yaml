@@ -24,7 +24,6 @@ dependencies:
   go_router: ^17.2.1
   hotkey_manager: ^0.2.3
   intl: ^0.20.2
-  keypress_simulator: ^0.2.0
   nativeapi: ^0.1.2
   package_info_plus: ^9.0.0
   path: ^1.8.3

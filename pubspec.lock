@@ -501,38 +501,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.12.0"
-  keypress_simulator:
-    dependency: transitive
-    description:
-      name: keypress_simulator
-      sha256: d5aa5ed472b6b396f41fd6dcee99f4afb2c7ac6202af622b4cec7955de6ed7f6
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
-  keypress_simulator_macos:
-    dependency: transitive
-    description:
-      name: keypress_simulator_macos
-      sha256: babb698b1331cff0301de839c7bc6b051d84f98ddb137cf9a6dda6c6caeb78ac
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
-  keypress_simulator_platform_interface:
-    dependency: transitive
-    description:
-      name: keypress_simulator_platform_interface
-      sha256: "38c35fee6b107ff10cfb6bdb61e32eb0db17545ed64399a357794431212ca4b4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
-  keypress_simulator_windows:
-    dependency: transitive
-    description:
-      name: keypress_simulator_windows
-      sha256: b4ff055131a2e5ea920eb3b6a185e1889fe00749b027df3b83aa726ed590a9b5
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   leak_tracker:
     dependency: transitive
     description:
