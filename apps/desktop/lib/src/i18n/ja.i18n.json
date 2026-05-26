@@ -137,7 +137,9 @@
     },
     "message": {
       "please_enter_word_or_text": "テキストが入力されていないか、テキストが抽出されていません",
-      "capture_screen_area_canceled": "画面領域のキャプチャがキャンセルされました"
+      "capture_screen_area_canceled": "画面領域のキャプチャがキャンセルされました",
+      "ocr_service_not_configured": "デフォルトのテキスト認識サービスが設定されていません。設定で設定してください。",
+      "ocr_recognition_failed": "テキスト認識に失敗しました"
     }
   },
   "settings": {
@@ -179,6 +181,7 @@
         "add_provider": "追加...",
         "add_target": "対象を追加...",
         "manage_targets": "翻訳ターゲットを管理...",
+        "manage_languages": "よく使う言語を管理...",
         "grant": "許可"
       },
       "option": {

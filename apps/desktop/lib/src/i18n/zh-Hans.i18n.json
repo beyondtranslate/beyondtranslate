@@ -137,7 +137,9 @@
     },
     "message": {
       "please_enter_word_or_text": "未输入或未提取到文本",
-      "capture_screen_area_canceled": "截取屏幕区域已取消"
+      "capture_screen_area_canceled": "截取屏幕区域已取消",
+      "ocr_service_not_configured": "未配置默认文字识别服务，请在设置中配置。",
+      "ocr_recognition_failed": "文字识别失败"
     }
   },
   "settings": {
@@ -179,6 +181,7 @@
         "add_provider": "添加...",
         "add_target": "添加目标...",
         "manage_targets": "管理翻译目标...",
+        "manage_languages": "管理常用语言...",
         "grant": "授权"
       },
       "option": {

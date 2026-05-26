@@ -825,13 +825,23 @@ class _TranslationsSettingsGeneralRowJa
   @override
   String get default_translation_service => 'デフォルトの翻訳サービス';
   @override
+  String get translation_target_hint => '翻訳で使用する言語ペアを設定します。';
+  @override
   String get common_languages => 'よく使う言語';
   @override
-  String get common_languages_hint => '言語セレクターの上部に表示する言語を選択してください。';
+  String get common_languages_description => 'よく使う言語は言語選択リストの先頭に表示されます。';
+  @override
+  String get common_languages_hint => 'よく使う言語を選択してください：';
+  @override
+  String get common_languages_sort => 'コードで並べ替え';
   @override
   String get common_languages_reset => 'デフォルトにリセット';
   @override
   String get common_languages_reset_help => 'デフォルトのよく使う言語セットにリセット';
+  @override
+  String get common_languages_search => '言語を検索...';
+  @override
+  String get common_languages_all => 'すべての言語';
   @override
   String get double_click_copy_result => 'ダブルクリックで翻訳結果をコピー';
   @override
@@ -853,9 +863,11 @@ class _TranslationsSettingsGeneralButtonJa
   @override
   String get add_provider => '追加...';
   @override
-  String get add_target => '対象を追加';
+  String get add_target => '対象を追加...';
   @override
   String get manage_targets => '翻訳ターゲットを管理...';
+  @override
+  String get manage_languages => 'よく使う言語を管理...';
   @override
   String get grant => '許可';
 }
@@ -894,6 +906,10 @@ class _TranslationsSettingsGeneralEditorJa
   final TranslationsJa _root; // ignore: unused_field
 
   // Translations
+  @override
+  String get add_target_title => '翻訳ターゲットを追加';
+  @override
+  String get edit_target_title => '翻訳ターゲットを編集';
   @override
   late final _TranslationsSettingsGeneralEditorRowJa row =
       _TranslationsSettingsGeneralEditorRowJa._(_root);
@@ -1394,18 +1410,24 @@ extension on TranslationsJa {
       'settings.general.row.auto_copy_detected_text' => '検出したテキストを自動コピー',
       'settings.general.row.default_directory_service' => 'デフォルトの辞書サービス',
       'settings.general.row.default_translation_service' => 'デフォルトの翻訳サービス',
+      'settings.general.row.translation_target_hint' => '翻訳で使用する言語ペアを設定します。',
       'settings.general.row.common_languages' => 'よく使う言語',
-      'settings.general.row.common_languages_hint' =>
-        '言語セレクターの上部に表示する言語を選択してください。',
+      'settings.general.row.common_languages_description' =>
+        'よく使う言語は言語選択リストの先頭に表示されます。',
+      'settings.general.row.common_languages_hint' => 'よく使う言語を選択してください：',
+      'settings.general.row.common_languages_sort' => 'コードで並べ替え',
       'settings.general.row.common_languages_reset' => 'デフォルトにリセット',
       'settings.general.row.common_languages_reset_help' =>
         'デフォルトのよく使う言語セットにリセット',
+      'settings.general.row.common_languages_search' => '言語を検索...',
+      'settings.general.row.common_languages_all' => 'すべての言語',
       'settings.general.row.double_click_copy_result' => 'ダブルクリックで翻訳結果をコピー',
       'settings.general.row.submit_with_enter' => 'Enterで送信',
       'settings.general.row.submit_with_meta_enter_mac' => '⌘ + Enterで送信',
       'settings.general.button.add_provider' => '追加...',
-      'settings.general.button.add_target' => '対象を追加',
+      'settings.general.button.add_target' => '対象を追加...',
       'settings.general.button.manage_targets' => '翻訳ターゲットを管理...',
+      'settings.general.button.manage_languages' => 'よく使う言語を管理...',
       'settings.general.button.grant' => '許可',
       'settings.general.option.none' => 'なし',
       'settings.general.option.no_services_available' => '利用可能なサービスがありません',
@@ -1413,6 +1435,8 @@ extension on TranslationsJa {
       'settings.general.option.built_in_ocr' => '内蔵OCR',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => 'Youdao OCR',
+      'settings.general.editor.add_target_title' => '翻訳ターゲットを追加',
+      'settings.general.editor.edit_target_title' => '翻訳ターゲットを編集',
       'settings.general.editor.row.source_language' => 'ソース言語',
       'settings.general.editor.row.target_language' => 'ターゲット言語',
       'settings.appearance.title' => '外観',

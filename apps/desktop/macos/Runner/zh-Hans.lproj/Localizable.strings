@@ -88,6 +88,8 @@
 "mini_translator.limited_banner.permission.missing_screen_capture" = "请授予屏幕录制权限以启用完整功能。";
 "mini_translator.limited_banner.tooltip.help" = "查看帮助文档";
 "mini_translator.message.capture_screen_area_canceled" = "截取屏幕区域已取消";
+"mini_translator.message.ocr_recognition_failed" = "文字识别失败";
+"mini_translator.message.ocr_service_not_configured" = "未配置默认文字识别服务，请在设置中配置。";
 "mini_translator.message.please_enter_word_or_text" = "未输入或未提取到文本";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "读取剪切板内容";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "截取屏幕区域并识别文字";
@@ -104,6 +106,7 @@
 "settings.general.button.add_provider" = "添加...";
 "settings.general.button.add_target" = "添加目标...";
 "settings.general.button.grant" = "授权";
+"settings.general.button.manage_languages" = "管理常用语言...";
 "settings.general.button.manage_targets" = "管理翻译目标...";
 "settings.general.editor.add_target_title" = "添加翻译目标：";
 "settings.general.editor.edit_target_title" = "修改翻译目标：";

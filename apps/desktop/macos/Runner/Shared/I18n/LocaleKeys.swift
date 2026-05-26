@@ -170,6 +170,9 @@ enum LocaleKeys {
     enum message {
       static let captureScreenAreaCanceled = LocaleKey(
         "mini_translator.message.capture_screen_area_canceled")
+      static let ocrRecognitionFailed = LocaleKey("mini_translator.message.ocr_recognition_failed")
+      static let ocrServiceNotConfigured = LocaleKey(
+        "mini_translator.message.ocr_service_not_configured")
       static let pleaseEnterWordOrText = LocaleKey(
         "mini_translator.message.please_enter_word_or_text")
     }
@@ -204,6 +207,7 @@ enum LocaleKeys {
         static let addProvider = LocaleKey("settings.general.button.add_provider")
         static let addTarget = LocaleKey("settings.general.button.add_target")
         static let grant = LocaleKey("settings.general.button.grant")
+        static let manageLanguages = LocaleKey("settings.general.button.manage_languages")
         static let manageTargets = LocaleKey("settings.general.button.manage_targets")
       }
       enum editor {

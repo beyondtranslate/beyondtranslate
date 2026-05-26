@@ -837,13 +837,23 @@ class _TranslationsSettingsGeneralRowZhHans
   @override
   String get default_translation_service => '默认翻译服务';
   @override
+  String get translation_target_hint => '配置翻译器使用的语言目标。';
+  @override
   String get common_languages => '常用语言';
   @override
-  String get common_languages_hint => '选择要在语言选择器顶部显示的常用语言。';
+  String get common_languages_description => '显示在语言选择列表顶部。';
+  @override
+  String get common_languages_hint => '选择你常用的语言：';
+  @override
+  String get common_languages_sort => '按代码排序';
   @override
   String get common_languages_reset => '恢复默认';
   @override
   String get common_languages_reset_help => '恢复为默认的常用语言集合';
+  @override
+  String get common_languages_search => '搜索语言...';
+  @override
+  String get common_languages_all => '所有语言';
   @override
   String get double_click_copy_result => '双击复制翻译结果';
   @override
@@ -865,9 +875,11 @@ class _TranslationsSettingsGeneralButtonZhHans
   @override
   String get add_provider => '添加...';
   @override
-  String get add_target => '添加目标';
+  String get add_target => '添加目标...';
   @override
   String get manage_targets => '管理翻译目标...';
+  @override
+  String get manage_languages => '管理常用语言...';
   @override
   String get grant => '授权';
 }
@@ -906,6 +918,10 @@ class _TranslationsSettingsGeneralEditorZhHans
   final TranslationsZhHans _root; // ignore: unused_field
 
   // Translations
+  @override
+  String get add_target_title => '添加翻译目标：';
+  @override
+  String get edit_target_title => '修改翻译目标：';
   @override
   late final _TranslationsSettingsGeneralEditorRowZhHans row =
       _TranslationsSettingsGeneralEditorRowZhHans._(_root);
@@ -1404,16 +1420,22 @@ extension on TranslationsZhHans {
       'settings.general.row.auto_copy_detected_text' => '自动复制检测到的文本',
       'settings.general.row.default_directory_service' => '默认词典服务',
       'settings.general.row.default_translation_service' => '默认翻译服务',
+      'settings.general.row.translation_target_hint' => '配置翻译器使用的语言目标。',
       'settings.general.row.common_languages' => '常用语言',
-      'settings.general.row.common_languages_hint' => '选择要在语言选择器顶部显示的常用语言。',
+      'settings.general.row.common_languages_description' => '显示在语言选择列表顶部。',
+      'settings.general.row.common_languages_hint' => '选择你常用的语言：',
+      'settings.general.row.common_languages_sort' => '按代码排序',
       'settings.general.row.common_languages_reset' => '恢复默认',
       'settings.general.row.common_languages_reset_help' => '恢复为默认的常用语言集合',
+      'settings.general.row.common_languages_search' => '搜索语言...',
+      'settings.general.row.common_languages_all' => '所有语言',
       'settings.general.row.double_click_copy_result' => '双击复制翻译结果',
       'settings.general.row.submit_with_enter' => '按 Enter 提交',
       'settings.general.row.submit_with_meta_enter_mac' => '按 ⌘ + Enter 提交',
       'settings.general.button.add_provider' => '添加...',
-      'settings.general.button.add_target' => '添加目标',
+      'settings.general.button.add_target' => '添加目标...',
       'settings.general.button.manage_targets' => '管理翻译目标...',
+      'settings.general.button.manage_languages' => '管理常用语言...',
       'settings.general.button.grant' => '授权',
       'settings.general.option.none' => '无',
       'settings.general.option.no_services_available' => '暂无可用服务',
@@ -1421,6 +1443,8 @@ extension on TranslationsZhHans {
       'settings.general.option.built_in_ocr' => '内置 OCR',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => '有道 OCR',
+      'settings.general.editor.add_target_title' => '添加翻译目标：',
+      'settings.general.editor.edit_target_title' => '修改翻译目标：',
       'settings.general.editor.row.source_language' => '源语言',
       'settings.general.editor.row.target_language' => '目标语言',
       'settings.appearance.title' => '外观',

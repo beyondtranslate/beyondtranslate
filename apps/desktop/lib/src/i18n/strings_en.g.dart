@@ -819,12 +819,22 @@ class TranslationsSettingsGeneralRowEn {
   /// en: 'Default translation service'
   String get default_translation_service => 'Default translation service';
 
+  /// en: 'Configure language pairs used by the translator.'
+  String get translation_target_hint =>
+      'Configure language pairs used by the translator.';
+
   /// en: 'Common Languages'
   String get common_languages => 'Common Languages';
 
-  /// en: 'Select languages to show at the top of language pickers.'
-  String get common_languages_hint =>
-      'Select languages to show at the top of language pickers.';
+  /// en: 'Shown at the top of language pickers.'
+  String get common_languages_description =>
+      'Shown at the top of language pickers.';
+
+  /// en: 'Select your common languages:'
+  String get common_languages_hint => 'Select your common languages:';
+
+  /// en: 'Sort by Code'
+  String get common_languages_sort => 'Sort by Code';
 
   /// en: 'Double click to copy translation result'
   String get double_click_copy_result =>
@@ -836,6 +846,12 @@ class TranslationsSettingsGeneralRowEn {
   /// en: 'Reset to the default set of common languages'
   String get common_languages_reset_help =>
       'Reset to the default set of common languages';
+
+  /// en: 'Search languages...'
+  String get common_languages_search => 'Search languages...';
+
+  /// en: 'All Languages'
+  String get common_languages_all => 'All Languages';
 
   /// en: 'Submit with Enter'
   String get submit_with_enter => 'Submit with Enter';
@@ -855,11 +871,14 @@ class TranslationsSettingsGeneralButtonEn {
   /// en: 'Add...'
   String get add_provider => 'Add...';
 
-  /// en: 'Add Target'
-  String get add_target => 'Add Target';
+  /// en: 'Add Target...'
+  String get add_target => 'Add Target...';
 
   /// en: 'Manage Translation Targets...'
   String get manage_targets => 'Manage Translation Targets...';
+
+  /// en: 'Manage Common Languages...'
+  String get manage_languages => 'Manage Common Languages...';
 
   /// en: 'Grant'
   String get grant => 'Grant';
@@ -899,6 +918,13 @@ class TranslationsSettingsGeneralEditorEn {
   final Translations _root; // ignore: unused_field
 
   // Translations
+
+  /// en: 'Add Translation Target'
+  String get add_target_title => 'Add Translation Target';
+
+  /// en: 'Edit Translation Target'
+  String get edit_target_title => 'Edit Translation Target';
+
   late final TranslationsSettingsGeneralEditorRowEn row =
       TranslationsSettingsGeneralEditorRowEn.internal(_root);
 }
@@ -1387,21 +1413,30 @@ extension on Translations {
         'Default directory service',
       'settings.general.row.default_translation_service' =>
         'Default translation service',
+      'settings.general.row.translation_target_hint' =>
+        'Configure language pairs used by the translator.',
       'settings.general.row.common_languages' => 'Common Languages',
+      'settings.general.row.common_languages_description' =>
+        'Shown at the top of language pickers.',
       'settings.general.row.common_languages_hint' =>
-        'Select languages to show at the top of language pickers.',
+        'Select your common languages:',
+      'settings.general.row.common_languages_sort' => 'Sort by Code',
       'settings.general.row.double_click_copy_result' =>
         'Double click to copy translation result',
       'settings.general.row.common_languages_reset' => 'Reset to Defaults',
       'settings.general.row.common_languages_reset_help' =>
         'Reset to the default set of common languages',
+      'settings.general.row.common_languages_search' => 'Search languages...',
+      'settings.general.row.common_languages_all' => 'All Languages',
       'settings.general.row.submit_with_enter' => 'Submit with Enter',
       'settings.general.row.submit_with_meta_enter_mac' =>
         'Submit with ⌘ + Enter',
       'settings.general.button.add_provider' => 'Add...',
-      'settings.general.button.add_target' => 'Add Target',
+      'settings.general.button.add_target' => 'Add Target...',
       'settings.general.button.manage_targets' =>
         'Manage Translation Targets...',
+      'settings.general.button.manage_languages' =>
+        'Manage Common Languages...',
       'settings.general.button.grant' => 'Grant',
       'settings.general.option.none' => 'None',
       'settings.general.option.no_services_available' =>
@@ -1410,6 +1445,8 @@ extension on Translations {
       'settings.general.option.built_in_ocr' => 'Built-in OCR',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => 'Youdao OCR',
+      'settings.general.editor.add_target_title' => 'Add Translation Target',
+      'settings.general.editor.edit_target_title' => 'Edit Translation Target',
       'settings.general.editor.row.source_language' => 'Source Language',
       'settings.general.editor.row.target_language' => 'Target Language',
       'settings.appearance.title' => 'Appearance',

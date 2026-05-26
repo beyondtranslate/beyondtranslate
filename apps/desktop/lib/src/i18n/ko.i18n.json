@@ -137,7 +137,9 @@
     },
     "message": {
       "please_enter_word_or_text": "입력된 텍스트가 없거나 텍스트를 추출하지 못했습니다",
-      "capture_screen_area_canceled": "화면 영역 캡처가 취소되었습니다"
+      "capture_screen_area_canceled": "화면 영역 캡처가 취소되었습니다",
+      "ocr_service_not_configured": "기본 텍스트 인식 서비스가 설정되지 않았습니다. 설정에서 설정해주세요.",
+      "ocr_recognition_failed": "텍스트 인식 실패"
     }
   },
   "settings": {
@@ -179,6 +181,7 @@
         "add_provider": "추가...",
         "add_target": "대상 추가...",
         "manage_targets": "번역 대상 관리...",
+        "manage_languages": "자주 사용하는 언어 관리...",
         "grant": "허용"
       },
       "option": {

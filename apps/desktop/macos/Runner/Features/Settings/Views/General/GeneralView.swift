@@ -110,8 +110,6 @@ struct GeneralView: View {
 
       Section {
         CommonLanguagesRow(
-          count: viewModel.commonLanguages.count,
-          total: viewModel.supportedLanguages.count,
           commonLanguageInfos: viewModel.commonLanguageInfos,
           onEdit: { showCommonLanguagesSheet = true }
         )
@@ -290,78 +288,147 @@ private struct ServiceUnavailableSettingRow: View {
 }
 
 private struct CommonLanguagesRow: View {
-  let count: Int
-  let total: Int
   let commonLanguageInfos: [LanguageInfo]
   let onEdit: () -> Void
 
-  private var previewLanguages: [LanguageInfo] {
-    Array(commonLanguageInfos.prefix(4))
-  }
-
-  private var remainingCount: Int {
-    max(0, commonLanguageInfos.count - 4)
-  }
-
   var body: some View {
-    Group {
-      // Row 1: Title + description
-      HStack {
-        VStack(alignment: .leading, spacing: 2) {
-          HStack {
-            Text(LocaleKeys.settings.general.row.commonLanguages.tr())
-              .font(.system(size: 13))
-            Spacer()
-            Text("\(count) / \(total)")
-              .font(.system(size: 11))
-              .foregroundStyle(.secondary)
-          }
-          Text(LocaleKeys.settings.general.row.commonLanguagesDescription.tr())
-            .font(.system(size: 11))
-            .foregroundStyle(.secondary)
+    VStack(alignment: .leading, spacing: 2) {
+      Text(LocaleKeys.settings.general.row.commonLanguages.tr())
+        .font(.system(size: 13))
+      Text(LocaleKeys.settings.general.row.commonLanguagesDescription.tr())
+        .font(.system(size: 11))
+        .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+    .padding(.vertical, 2)
+
+    if !commonLanguageInfos.isEmpty {
+      WrappingTagsLayout(horizontalSpacing: 6, verticalSpacing: 6) {
+        ForEach(commonLanguageInfos, id: \.code) { lang in
+          CommonLanguageTag(title: lang.localName)
         }
       }
+    } else {
+      Text(LocaleKeys.settings.general.option.none.tr())
+        .font(.system(size: 11))
+        .foregroundStyle(.tertiary)
+        .padding(.leading, 8)
+    }
 
-      // Row 2: Language tags + Edit button
-      HStack(spacing: 8) {
-        if !commonLanguageInfos.isEmpty {
-          HStack(spacing: 6) {
-            ForEach(previewLanguages, id: \.code) { lang in
-              Text(lang.localName)
-                .font(.system(size: 11, weight: .medium))
-                .lineLimit(1)
-                .fixedSize()
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .foregroundStyle(Color(nsColor: .controlAccentColor))
-                .background(Color(nsColor: .controlAccentColor).opacity(0.1))
-                .cornerRadius(6)
-                .overlay(
-                  RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color(nsColor: .controlAccentColor).opacity(0.2), lineWidth: 1)
-                )
-            }
-            if remainingCount > 0 {
-              Text("+\(remainingCount)")
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
-                .padding(.leading, 2)
-            }
-          }
-          .fixedSize()
-        } else {
-          Text(LocaleKeys.settings.general.option.none.tr())
-            .font(.system(size: 11))
-            .foregroundStyle(.tertiary)
-        }
-
-        Spacer()
-
-        Button(LocaleKeys.common.ui.button.edit.tr()) {
-          onEdit()
-        }
+    HStack {
+      Spacer()
+      Button(LocaleKeys.settings.general.button.manageLanguages.tr()) {
+        onEdit()
       }
     }
+  }
+}
+
+private struct CommonLanguageTag: View {
+  let title: String
+
+  var body: some View {
+    Text(title)
+      .font(.system(size: 11, weight: .medium))
+      .lineLimit(1)
+      .fixedSize()
+      .padding(.horizontal, 8)
+      .padding(.vertical, 4)
+      .foregroundStyle(Color(nsColor: .controlAccentColor))
+      .background(Color(nsColor: .controlAccentColor).opacity(0.1))
+      .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+      .overlay(
+        RoundedRectangle(cornerRadius: 6, style: .continuous)
+          .stroke(Color(nsColor: .controlAccentColor).opacity(0.2), lineWidth: 1)
+      )
+  }
+}
+
+private struct WrappingTagsLayout: Layout {
+  var horizontalSpacing: CGFloat = 6
+  var verticalSpacing: CGFloat = 6
+
+  func sizeThatFits(
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout ()
+  ) -> CGSize {
+    let rows = arrangeSubviews(subviews, maxWidth: proposal.width)
+    let width = proposal.width ?? rows.map(\.width).max() ?? 0
+    let height =
+      rows.reduce(CGFloat.zero) { total, row in
+        total + row.height
+      } + CGFloat(max(0, rows.count - 1)) * verticalSpacing
+
+    return CGSize(width: width, height: height)
+  }
+
+  func placeSubviews(
+    in bounds: CGRect,
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout ()
+  ) {
+    let rows = arrangeSubviews(subviews, maxWidth: bounds.width)
+    var y = bounds.minY
+
+    for row in rows {
+      var x = bounds.minX
+
+      for item in row.items {
+        subviews[item.index].place(
+          at: CGPoint(x: x, y: y),
+          proposal: ProposedViewSize(item.size)
+        )
+        x += item.size.width + horizontalSpacing
+      }
+
+      y += row.height + verticalSpacing
+    }
+  }
+
+  private func arrangeSubviews(_ subviews: Subviews, maxWidth proposedMaxWidth: CGFloat?) -> [Row] {
+    let maxWidth = proposedMaxWidth ?? .greatestFiniteMagnitude
+    var rows: [Row] = []
+    var currentItems: [RowItem] = []
+    var currentWidth: CGFloat = 0
+    var currentHeight: CGFloat = 0
+
+    for index in subviews.indices {
+      let size = subviews[index].sizeThatFits(.unspecified)
+      let nextWidth =
+        currentItems.isEmpty
+        ? size.width
+        : currentWidth + horizontalSpacing + size.width
+
+      if !currentItems.isEmpty && nextWidth > maxWidth {
+        rows.append(Row(items: currentItems, width: currentWidth, height: currentHeight))
+        currentItems = [RowItem(index: index, size: size)]
+        currentWidth = size.width
+        currentHeight = size.height
+      } else {
+        currentItems.append(RowItem(index: index, size: size))
+        currentWidth = nextWidth
+        currentHeight = max(currentHeight, size.height)
+      }
+    }
+
+    if !currentItems.isEmpty {
+      rows.append(Row(items: currentItems, width: currentWidth, height: currentHeight))
+    }
+
+    return rows
+  }
+
+  private struct Row {
+    let items: [RowItem]
+    let width: CGFloat
+    let height: CGFloat
+  }
+
+  private struct RowItem {
+    let index: Int
+    let size: CGSize
   }
 }
 

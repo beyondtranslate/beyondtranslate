@@ -835,15 +835,26 @@ class _TranslationsSettingsGeneralRowFr
   @override
   String get default_translation_service => 'Service de traduction par défaut';
   @override
+  String get translation_target_hint =>
+      'Configurez les paires de langues utilisées par le traducteur.';
+  @override
   String get common_languages => 'Langues courantes';
   @override
-  String get common_languages_hint =>
-      'Sélectionnez les langues à afficher en haut des sélecteurs de langue.';
+  String get common_languages_description =>
+      'Les langues courantes apparaissent en haut des sélecteurs de langue.';
+  @override
+  String get common_languages_hint => 'Sélectionnez vos langues courantes:';
+  @override
+  String get common_languages_sort => 'Trier par code';
   @override
   String get common_languages_reset => 'Réinitialiser';
   @override
   String get common_languages_reset_help =>
       'Rétablir l\'ensemble par défaut des langues courantes';
+  @override
+  String get common_languages_search => 'Rechercher des langues...';
+  @override
+  String get common_languages_all => 'Toutes les langues';
   @override
   String get double_click_copy_result =>
       'Double-cliquer pour copier le résultat de la traduction';
@@ -866,9 +877,11 @@ class _TranslationsSettingsGeneralButtonFr
   @override
   String get add_provider => 'Ajouter...';
   @override
-  String get add_target => 'Ajouter une cible';
+  String get add_target => 'Ajouter une cible...';
   @override
   String get manage_targets => 'Gérer les cibles de traduction...';
+  @override
+  String get manage_languages => 'Gérer les langues courantes...';
   @override
   String get grant => 'Accorder';
 }
@@ -907,6 +920,10 @@ class _TranslationsSettingsGeneralEditorFr
   final TranslationsFr _root; // ignore: unused_field
 
   // Translations
+  @override
+  String get add_target_title => 'Ajouter une cible de traduction';
+  @override
+  String get edit_target_title => 'Modifier la cible de traduction';
   @override
   late final _TranslationsSettingsGeneralEditorRowFr row =
       _TranslationsSettingsGeneralEditorRowFr._(_root);
@@ -1434,21 +1451,31 @@ extension on TranslationsFr {
         'Service de répertoire par défaut',
       'settings.general.row.default_translation_service' =>
         'Service de traduction par défaut',
+      'settings.general.row.translation_target_hint' =>
+        'Configurez les paires de langues utilisées par le traducteur.',
       'settings.general.row.common_languages' => 'Langues courantes',
+      'settings.general.row.common_languages_description' =>
+        'Les langues courantes apparaissent en haut des sélecteurs de langue.',
       'settings.general.row.common_languages_hint' =>
-        'Sélectionnez les langues à afficher en haut des sélecteurs de langue.',
+        'Sélectionnez vos langues courantes:',
+      'settings.general.row.common_languages_sort' => 'Trier par code',
       'settings.general.row.common_languages_reset' => 'Réinitialiser',
       'settings.general.row.common_languages_reset_help' =>
         'Rétablir l\'ensemble par défaut des langues courantes',
+      'settings.general.row.common_languages_search' =>
+        'Rechercher des langues...',
+      'settings.general.row.common_languages_all' => 'Toutes les langues',
       'settings.general.row.double_click_copy_result' =>
         'Double-cliquer pour copier le résultat de la traduction',
       'settings.general.row.submit_with_enter' => 'Valider avec Entrée',
       'settings.general.row.submit_with_meta_enter_mac' =>
         'Valider avec ⌘ + Entrée',
       'settings.general.button.add_provider' => 'Ajouter...',
-      'settings.general.button.add_target' => 'Ajouter une cible',
+      'settings.general.button.add_target' => 'Ajouter une cible...',
       'settings.general.button.manage_targets' =>
         'Gérer les cibles de traduction...',
+      'settings.general.button.manage_languages' =>
+        'Gérer les langues courantes...',
       'settings.general.button.grant' => 'Accorder',
       'settings.general.option.none' => 'Aucun',
       'settings.general.option.no_services_available' =>
@@ -1457,6 +1484,10 @@ extension on TranslationsFr {
       'settings.general.option.built_in_ocr' => 'OCR intégré',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => 'OCR Youdao',
+      'settings.general.editor.add_target_title' =>
+        'Ajouter une cible de traduction',
+      'settings.general.editor.edit_target_title' =>
+        'Modifier la cible de traduction',
       'settings.general.editor.row.source_language' => 'Langue source',
       'settings.general.editor.row.target_language' => 'Langue cible',
       'settings.appearance.title' => 'Apparence',

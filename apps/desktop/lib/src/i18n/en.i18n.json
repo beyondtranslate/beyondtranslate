@@ -137,7 +137,9 @@
     },
     "message": {
       "please_enter_word_or_text": "No text entered or text not extracted",
-      "capture_screen_area_canceled": "Capture screen area has been canceled"
+      "capture_screen_area_canceled": "Capture screen area has been canceled",
+      "ocr_service_not_configured": "No default text recognition service configured. Please set one in Settings.",
+      "ocr_recognition_failed": "Text recognition failed"
     }
   },
   "settings": {
@@ -179,6 +181,7 @@
         "add_provider": "Add...",
         "add_target": "Add Target...",
         "manage_targets": "Manage Translation Targets...",
+        "manage_languages": "Manage Common Languages...",
         "grant": "Grant"
       },
       "option": {

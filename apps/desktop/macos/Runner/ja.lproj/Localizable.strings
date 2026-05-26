@@ -88,6 +88,8 @@
 "mini_translator.limited_banner.permission.missing_screen_capture" = "すべての機能を有効にするには、画面収録の許可を付与してください。";
 "mini_translator.limited_banner.tooltip.help" = "ヘルプを表示";
 "mini_translator.message.capture_screen_area_canceled" = "画面領域のキャプチャがキャンセルされました";
+"mini_translator.message.ocr_recognition_failed" = "テキスト認識に失敗しました";
+"mini_translator.message.ocr_service_not_configured" = "デフォルトのテキスト認識サービスが設定されていません。設定で設定してください。";
 "mini_translator.message.please_enter_word_or_text" = "テキストが入力されていないか、テキストが抽出されていません";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "クリップボードの内容を読み取る";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "画面領域をキャプチャしてテキストを認識";
@@ -104,6 +106,7 @@
 "settings.general.button.add_provider" = "追加...";
 "settings.general.button.add_target" = "対象を追加...";
 "settings.general.button.grant" = "許可";
+"settings.general.button.manage_languages" = "よく使う言語を管理...";
 "settings.general.button.manage_targets" = "翻訳ターゲットを管理...";
 "settings.general.editor.add_target_title" = "翻訳ターゲットを追加";
 "settings.general.editor.edit_target_title" = "翻訳ターゲットを編集";

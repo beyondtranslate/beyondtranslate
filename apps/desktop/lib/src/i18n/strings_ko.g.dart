@@ -824,13 +824,23 @@ class _TranslationsSettingsGeneralRowKo
   @override
   String get default_translation_service => '기본 번역 서비스';
   @override
+  String get translation_target_hint => '번역기에 사용할 언어 쌍을 설정합니다.';
+  @override
   String get common_languages => '자주 사용하는 언어';
   @override
-  String get common_languages_hint => '언어 선택기 상단에 표시할 언어를 선택하세요.';
+  String get common_languages_description => '자주 사용하는 언어는 언어 선택기 상단에 표시됩니다.';
+  @override
+  String get common_languages_hint => '자주 사용하는 언어를 선택하세요:';
+  @override
+  String get common_languages_sort => '코드로 정렬';
   @override
   String get common_languages_reset => '기본값으로 재설정';
   @override
   String get common_languages_reset_help => '기본 공용 언어 세트로 재설정';
+  @override
+  String get common_languages_search => '언어 검색...';
+  @override
+  String get common_languages_all => '모든 언어';
   @override
   String get double_click_copy_result => '더블 클릭으로 번역 결과 복사';
   @override
@@ -852,9 +862,11 @@ class _TranslationsSettingsGeneralButtonKo
   @override
   String get add_provider => '추가...';
   @override
-  String get add_target => '대상 추가';
+  String get add_target => '대상 추가...';
   @override
   String get manage_targets => '번역 대상 관리...';
+  @override
+  String get manage_languages => '자주 사용하는 언어 관리...';
   @override
   String get grant => '허용';
 }
@@ -893,6 +905,10 @@ class _TranslationsSettingsGeneralEditorKo
   final TranslationsKo _root; // ignore: unused_field
 
   // Translations
+  @override
+  String get add_target_title => '번역 대상 추가';
+  @override
+  String get edit_target_title => '번역 대상 수정';
   @override
   late final _TranslationsSettingsGeneralEditorRowKo row =
       _TranslationsSettingsGeneralEditorRowKo._(_root);
@@ -1394,17 +1410,23 @@ extension on TranslationsKo {
       'settings.general.row.auto_copy_detected_text' => '감지된 텍스트 자동 복사',
       'settings.general.row.default_directory_service' => '기본 사전 서비스',
       'settings.general.row.default_translation_service' => '기본 번역 서비스',
+      'settings.general.row.translation_target_hint' => '번역기에 사용할 언어 쌍을 설정합니다.',
       'settings.general.row.common_languages' => '자주 사용하는 언어',
-      'settings.general.row.common_languages_hint' =>
-        '언어 선택기 상단에 표시할 언어를 선택하세요.',
+      'settings.general.row.common_languages_description' =>
+        '자주 사용하는 언어는 언어 선택기 상단에 표시됩니다.',
+      'settings.general.row.common_languages_hint' => '자주 사용하는 언어를 선택하세요:',
+      'settings.general.row.common_languages_sort' => '코드로 정렬',
       'settings.general.row.common_languages_reset' => '기본값으로 재설정',
       'settings.general.row.common_languages_reset_help' => '기본 공용 언어 세트로 재설정',
+      'settings.general.row.common_languages_search' => '언어 검색...',
+      'settings.general.row.common_languages_all' => '모든 언어',
       'settings.general.row.double_click_copy_result' => '더블 클릭으로 번역 결과 복사',
       'settings.general.row.submit_with_enter' => 'Enter로 제출',
       'settings.general.row.submit_with_meta_enter_mac' => '⌘ + Enter로 제출',
       'settings.general.button.add_provider' => '추가...',
-      'settings.general.button.add_target' => '대상 추가',
+      'settings.general.button.add_target' => '대상 추가...',
       'settings.general.button.manage_targets' => '번역 대상 관리...',
+      'settings.general.button.manage_languages' => '자주 사용하는 언어 관리...',
       'settings.general.button.grant' => '허용',
       'settings.general.option.none' => '없음',
       'settings.general.option.no_services_available' => '사용 가능한 서비스가 없습니다',
@@ -1412,6 +1434,8 @@ extension on TranslationsKo {
       'settings.general.option.built_in_ocr' => '내장 OCR',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => 'Youdao OCR',
+      'settings.general.editor.add_target_title' => '번역 대상 추가',
+      'settings.general.editor.edit_target_title' => '번역 대상 수정',
       'settings.general.editor.row.source_language' => '소스 언어',
       'settings.general.editor.row.target_language' => '대상 언어',
       'settings.appearance.title' => '외관',

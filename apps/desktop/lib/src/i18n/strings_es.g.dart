@@ -837,15 +837,26 @@ class _TranslationsSettingsGeneralRowEs
   String get default_translation_service =>
       'Servicio de traducción predeterminado';
   @override
+  String get translation_target_hint =>
+      'Configura los pares de idiomas usados por el traductor.';
+  @override
   String get common_languages => 'Idiomas comunes';
   @override
-  String get common_languages_hint =>
-      'Selecciona los idiomas que se mostrarán al inicio de los selectores de idioma.';
+  String get common_languages_description =>
+      'Los idiomas comunes aparecen al principio de los selectores de idioma.';
+  @override
+  String get common_languages_hint => 'Selecciona tus idiomas comunes:';
+  @override
+  String get common_languages_sort => 'Ordenar por código';
   @override
   String get common_languages_reset => 'Restablecer valores predeterminados';
   @override
   String get common_languages_reset_help =>
       'Restablecer el conjunto predeterminado de idiomas comunes';
+  @override
+  String get common_languages_search => 'Buscar idiomas...';
+  @override
+  String get common_languages_all => 'Todos los idiomas';
   @override
   String get double_click_copy_result =>
       'Doble clic para copiar el resultado de la traducción';
@@ -868,9 +879,11 @@ class _TranslationsSettingsGeneralButtonEs
   @override
   String get add_provider => 'Agregar...';
   @override
-  String get add_target => 'Agregar destino';
+  String get add_target => 'Agregar destino...';
   @override
   String get manage_targets => 'Gestionar destinos de traducción...';
+  @override
+  String get manage_languages => 'Administrar idiomas comunes...';
   @override
   String get grant => 'Conceder';
 }
@@ -909,6 +922,10 @@ class _TranslationsSettingsGeneralEditorEs
   final TranslationsEs _root; // ignore: unused_field
 
   // Translations
+  @override
+  String get add_target_title => 'Agregar destino de traducción';
+  @override
+  String get edit_target_title => 'Editar destino de traducción';
   @override
   late final _TranslationsSettingsGeneralEditorRowEs row =
       _TranslationsSettingsGeneralEditorRowEs._(_root);
@@ -1430,22 +1447,31 @@ extension on TranslationsEs {
         'Servicio de diccionario predeterminado',
       'settings.general.row.default_translation_service' =>
         'Servicio de traducción predeterminado',
+      'settings.general.row.translation_target_hint' =>
+        'Configura los pares de idiomas usados por el traductor.',
       'settings.general.row.common_languages' => 'Idiomas comunes',
+      'settings.general.row.common_languages_description' =>
+        'Los idiomas comunes aparecen al principio de los selectores de idioma.',
       'settings.general.row.common_languages_hint' =>
-        'Selecciona los idiomas que se mostrarán al inicio de los selectores de idioma.',
+        'Selecciona tus idiomas comunes:',
+      'settings.general.row.common_languages_sort' => 'Ordenar por código',
       'settings.general.row.common_languages_reset' =>
         'Restablecer valores predeterminados',
       'settings.general.row.common_languages_reset_help' =>
         'Restablecer el conjunto predeterminado de idiomas comunes',
+      'settings.general.row.common_languages_search' => 'Buscar idiomas...',
+      'settings.general.row.common_languages_all' => 'Todos los idiomas',
       'settings.general.row.double_click_copy_result' =>
         'Doble clic para copiar el resultado de la traducción',
       'settings.general.row.submit_with_enter' => 'Enviar con Enter',
       'settings.general.row.submit_with_meta_enter_mac' =>
         'Enviar con ⌘ + Enter',
       'settings.general.button.add_provider' => 'Agregar...',
-      'settings.general.button.add_target' => 'Agregar destino',
+      'settings.general.button.add_target' => 'Agregar destino...',
       'settings.general.button.manage_targets' =>
         'Gestionar destinos de traducción...',
+      'settings.general.button.manage_languages' =>
+        'Administrar idiomas comunes...',
       'settings.general.button.grant' => 'Conceder',
       'settings.general.option.none' => 'Ninguno',
       'settings.general.option.no_services_available' =>
@@ -1454,6 +1480,10 @@ extension on TranslationsEs {
       'settings.general.option.built_in_ocr' => 'OCR integrado',
       'settings.general.option.tesseract' => 'Tesseract',
       'settings.general.option.youdao_ocr' => 'Youdao OCR',
+      'settings.general.editor.add_target_title' =>
+        'Agregar destino de traducción',
+      'settings.general.editor.edit_target_title' =>
+        'Editar destino de traducción',
       'settings.general.editor.row.source_language' => 'Idioma de origen',
       'settings.general.editor.row.target_language' => 'Idioma de destino',
       'settings.appearance.title' => 'Apariencia',

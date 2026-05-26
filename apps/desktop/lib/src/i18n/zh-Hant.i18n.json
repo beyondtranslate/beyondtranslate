@@ -137,7 +137,9 @@
     },
     "message": {
       "please_enter_word_or_text": "未輸入或未擷取到文字",
-      "capture_screen_area_canceled": "螢幕區域擷取已取消"
+      "capture_screen_area_canceled": "螢幕區域擷取已取消",
+      "ocr_service_not_configured": "未配置預設文字辨識服務，請在設定中配置。",
+      "ocr_recognition_failed": "文字辨識失敗"
     }
   },
   "settings": {
@@ -179,6 +181,7 @@
         "add_provider": "新增…",
         "add_target": "新增目標...",
         "manage_targets": "管理翻譯目標...",
+        "manage_languages": "管理常用語言...",
         "grant": "授權"
       },
       "option": {

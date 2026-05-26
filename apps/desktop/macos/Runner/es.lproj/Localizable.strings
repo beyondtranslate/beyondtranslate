@@ -88,6 +88,8 @@
 "mini_translator.limited_banner.permission.missing_screen_capture" = "Concede el permiso de Grabación de pantalla para habilitar todas las funciones.";
 "mini_translator.limited_banner.tooltip.help" = "Ver ayuda";
 "mini_translator.message.capture_screen_area_canceled" = "La captura de área de pantalla ha sido cancelada";
+"mini_translator.message.ocr_recognition_failed" = "El reconocimiento de texto falló";
+"mini_translator.message.ocr_service_not_configured" = "No hay un servicio de reconocimiento de texto predeterminado configurado. Configúrelo en Ajustes.";
 "mini_translator.message.please_enter_word_or_text" = "No se ingresó texto o no se pudo extraer";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "Leer contenido del portapapeles";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "Capturar área de la pantalla y reconocer texto";
@@ -104,6 +106,7 @@
 "settings.general.button.add_provider" = "Agregar...";
 "settings.general.button.add_target" = "Agregar destino...";
 "settings.general.button.grant" = "Conceder";
+"settings.general.button.manage_languages" = "Administrar idiomas comunes...";
 "settings.general.button.manage_targets" = "Gestionar destinos de traducción...";
 "settings.general.editor.add_target_title" = "Agregar destino de traducción";
 "settings.general.editor.edit_target_title" = "Editar destino de traducción";

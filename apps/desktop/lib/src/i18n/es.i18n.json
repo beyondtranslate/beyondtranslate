@@ -137,7 +137,9 @@
     },
     "message": {
       "please_enter_word_or_text": "No se ingresó texto o no se pudo extraer",
-      "capture_screen_area_canceled": "La captura de área de pantalla ha sido cancelada"
+      "capture_screen_area_canceled": "La captura de área de pantalla ha sido cancelada",
+      "ocr_service_not_configured": "No hay un servicio de reconocimiento de texto predeterminado configurado. Configúrelo en Ajustes.",
+      "ocr_recognition_failed": "El reconocimiento de texto falló"
     }
   },
   "settings": {
@@ -179,6 +181,7 @@
         "add_provider": "Agregar...",
         "add_target": "Agregar destino...",
         "manage_targets": "Gestionar destinos de traducción...",
+        "manage_languages": "Administrar idiomas comunes...",
         "grant": "Conceder"
       },
       "option": {

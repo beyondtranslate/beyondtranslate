@@ -137,7 +137,9 @@
     },
     "message": {
       "please_enter_word_or_text": "Aucun texte saisi ou texte non extrait",
-      "capture_screen_area_canceled": "La capture de la zone d'écran a été annulée"
+      "capture_screen_area_canceled": "La capture de la zone d'écran a été annulée",
+      "ocr_service_not_configured": "Aucun service de reconnaissance de texte par défaut configuré. Veuillez en définir un dans les Paramètres.",
+      "ocr_recognition_failed": "La reconnaissance de texte a échoué"
     }
   },
   "settings": {
@@ -179,6 +181,7 @@
         "add_provider": "Ajouter...",
         "add_target": "Ajouter une cible...",
         "manage_targets": "Gérer les cibles de traduction...",
+        "manage_languages": "Gérer les langues courantes...",
         "grant": "Accorder"
       },
       "option": {
