@@ -19,7 +19,6 @@ struct ProviderDetailView: View {
       Section {
         HStack(spacing: 10) {
           ProviderTypeIcon(providerType: currentProvider.type)
-            .frame(width: 28, height: 28)
 
           Text(currentProvider.name)
             .font(.system(size: 13, weight: .semibold))

@@ -334,12 +334,14 @@ private struct ProviderServiceRow: View {
 }
 
 private struct EmptyServicesRow: View {
+  private static let iconSize: CGFloat = 20
+
   var body: some View {
     HStack(spacing: 14) {
       Image(systemName: "bolt.horizontal.circle")
-        .font(.system(size: 20))
+        .font(.system(size: 16))
         .foregroundStyle(.tertiary)
-        .frame(width: 28, height: 28)
+        .frame(width: Self.iconSize, height: Self.iconSize)
       Text(LocaleKeys.settings.providers.item.noServices.tr())
         .font(.system(size: 13))
         .foregroundStyle(.secondary)
@@ -352,12 +354,14 @@ private struct EmptyServicesRow: View {
 // MARK: - Empty state
 
 private struct EmptyProviderRow: View {
+  private static let iconSize: CGFloat = 20
+
   var body: some View {
     HStack(spacing: 14) {
       Image(systemName: "square.stack.3d.up.slash")
-        .font(.system(size: 20))
+        .font(.system(size: 16))
         .foregroundStyle(.tertiary)
-        .frame(width: 28, height: 28)
+        .frame(width: Self.iconSize, height: Self.iconSize)
       Text(LocaleKeys.settings.providers.item.empty.tr())
         .font(.system(size: 13))
         .foregroundStyle(.secondary)
@@ -397,6 +401,7 @@ struct ProviderCapabilityTag: View {
 
 struct ProviderTypeIcon: View {
   let providerType: ProviderType
+  private static let iconSize: CGFloat = 20
 
   private var flutterAssetImage: NSImage? {
     let iconFileName = "\(providerType.wireValue).png"
@@ -413,17 +418,17 @@ struct ProviderTypeIcon: View {
         .resizable()
         .interpolation(.high)
         .antialiased(true)
-        .frame(width: 22, height: 22)
-        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+        .frame(width: Self.iconSize, height: Self.iconSize)
+        .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
     } else {
       ZStack {
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
+        RoundedRectangle(cornerRadius: 5, style: .continuous)
           .fill(Color.accentColor.opacity(0.15))
         Image(systemName: "server.rack")
-          .font(.system(size: 12, weight: .medium))
+          .font(.system(size: 11, weight: .medium))
           .foregroundStyle(Color.accentColor)
       }
-      .frame(width: 22, height: 22)
+      .frame(width: Self.iconSize, height: Self.iconSize)
     }
   }
 }

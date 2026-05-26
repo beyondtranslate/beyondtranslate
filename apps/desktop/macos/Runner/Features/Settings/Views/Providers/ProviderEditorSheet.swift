@@ -267,7 +267,6 @@ struct ProviderEditorHeader: View {
   var body: some View {
     HStack(spacing: 10) {
       ProviderTypeIcon(providerType: draft.type)
-        .frame(width: 28, height: 28)
 
       VStack(alignment: .leading, spacing: 3) {
         Text(draft.displayName)
