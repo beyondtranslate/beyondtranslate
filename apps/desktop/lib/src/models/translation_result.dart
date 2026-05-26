@@ -26,6 +26,7 @@ class TranslationResult {
             json['translationTarget']['sourceLanguage'],
         target: json['translationTarget']['target'] ??
             json['translationTarget']['targetLanguage'],
+        enabled: true,
       ),
       translationResultRecordList: translationResultRecordList,
       unsupportedEngineIdList: List<String>.from(

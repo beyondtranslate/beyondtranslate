@@ -205,10 +205,12 @@ struct GeneralView: View {
       Section {
         TranslationTargetsHeaderRow()
 
-        ForEach(viewModel.translationTargets) { item in
-          TranslationTargetRow(item: item) {
-            viewModel.editingTarget = item
-          }
+        ForEach(Array(viewModel.translationTargets.enumerated()), id: \.element.id) { index, item in
+          TranslationTargetRow(
+            item: item,
+            onEdit: { viewModel.editingTarget = item },
+            onToggleEnabled: { viewModel.toggleTranslationTargetEnabled(at: index) }
+          )
         }
 
         HStack {
@@ -240,29 +242,34 @@ private struct TranslationTargetsHeaderRow: View {
 private struct TranslationTargetRow: View {
   let item: TranslationTarget
   let onEdit: () -> Void
+  let onToggleEnabled: () -> Void
 
   var body: some View {
-    Button(action: onEdit) {
-      HStack(spacing: 8) {
-        Text(sourceTitle)
-        Image(systemName: "arrow.right")
-          .font(.system(size: 11, weight: .semibold))
-          .foregroundStyle(.secondary)
-        Text(localizedLanguageName(item.target))
-
-        Spacer()
-
-        Image(systemName: "exclamationmark.circle")
-          .foregroundStyle(.secondary)
-          .imageScale(.medium)
-
-        Toggle("", isOn: .constant(true))
-          .labelsHidden()
-          .allowsHitTesting(false)
+    HStack(spacing: 8) {
+      Button(action: onEdit) {
+        HStack(spacing: 8) {
+          Text(sourceTitle)
+          Image(systemName: "arrow.right")
+            .font(.system(size: 11, weight: .semibold))
+            .foregroundStyle(.secondary)
+          Text(localizedLanguageName(item.target))
+          Spacer()
+        }
+        .contentShape(Rectangle())
       }
-      .contentShape(Rectangle())
+      .buttonStyle(.plain)
+
+      Toggle(
+        "",
+        isOn: Binding(
+          get: { item.enabled },
+          set: { _ in onToggleEnabled() }
+        )
+      )
+      .labelsHidden()
+      .toggleStyle(.switch)
+      .scaleEffect(0.85)
     }
-    .buttonStyle(.plain)
   }
 
   private var sourceTitle: String {

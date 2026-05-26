@@ -156,6 +156,7 @@ class SettingsStore extends ChangeNotifier {
               TranslationTarget(
                 source: kAutoSource,
                 target: defaultTargetLanguage,
+                enabled: true,
               ),
             ],
           ),

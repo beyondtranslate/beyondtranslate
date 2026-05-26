@@ -351,6 +351,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
         TranslationTarget(
           source: source,
           target: target,
+          enabled: true,
         ),
       ];
       await settingsStore.updateGeneral(
@@ -439,6 +440,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
       newTargets[index] = TranslationTarget(
         source: source,
         target: targetLang,
+        enabled: true,
       );
       await settingsStore.updateGeneral(
         GeneralSettingsPatch(translationTargets: newTargets),

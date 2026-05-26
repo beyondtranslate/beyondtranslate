@@ -29,6 +29,7 @@ type TranslationTarget = core::TranslationTarget;
 pub struct TranslationTarget {
     pub source: String,
     pub target: String,
+    pub enabled: bool,
 }
 
 type ProviderCapability = core::ProviderCapability;

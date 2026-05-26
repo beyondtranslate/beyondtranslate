@@ -8,6 +8,14 @@ use serde::{Deserialize, Serialize};
 pub struct TranslationTarget {
     pub source: String,
     pub target: String,
+    /// Whether this translation target is enabled. Disabled targets are
+    /// skipped by [`filter_active`].
+    #[serde(default = "default_enabled")]
+    pub enabled: bool,
+}
+
+fn default_enabled() -> bool {
+    true
 }
 
 impl TranslationTarget {
@@ -15,10 +23,11 @@ impl TranslationTarget {
     pub const AUTO_SOURCE: &'static str = "auto";
 
     /// Returns the translation targets that should be used given the
-    /// detected source language.
+    /// detected source language. Only enabled targets are returned.
     pub fn filter_active(targets: &[Self], detected_language: Option<&str>) -> Vec<Self> {
         targets
             .iter()
+            .filter(|t| t.enabled)
             .filter(|t| {
                 t.source == Self::AUTO_SOURCE || detected_language.is_none_or(|dl| t.source == dl)
             })
@@ -36,6 +45,7 @@ mod tests {
         let targets = vec![TranslationTarget {
             source: TranslationTarget::AUTO_SOURCE.into(),
             target: "zh-Hans".into(),
+            enabled: true,
         }];
 
         let active = TranslationTarget::filter_active(&targets, Some("ja"));
@@ -48,6 +58,7 @@ mod tests {
         let targets = vec![TranslationTarget {
             source: "en".into(),
             target: "zh-Hans".into(),
+            enabled: true,
         }];
 
         let active = TranslationTarget::filter_active(&targets, Some("en"));
@@ -59,6 +70,7 @@ mod tests {
         let targets = vec![TranslationTarget {
             source: "en".into(),
             target: "zh-Hans".into(),
+            enabled: true,
         }];
 
         let active = TranslationTarget::filter_active(&targets, Some("ja"));
@@ -70,10 +82,23 @@ mod tests {
         let targets = vec![TranslationTarget {
             source: "en".into(),
             target: "zh-Hans".into(),
+            enabled: true,
         }];
 
         let active = TranslationTarget::filter_active(&targets, None);
         assert_eq!(active.len(), 1);
+    }
+
+    #[test]
+    fn filter_disabled_target_skipped() {
+        let targets = vec![TranslationTarget {
+            source: TranslationTarget::AUTO_SOURCE.into(),
+            target: "zh-Hans".into(),
+            enabled: false,
+        }];
+
+        let active = TranslationTarget::filter_active(&targets, Some("en"));
+        assert_eq!(active.len(), 0);
     }
 
     #[test]
@@ -88,14 +113,17 @@ mod tests {
             TranslationTarget {
                 source: "en".into(),
                 target: "zh-Hans".into(),
+                enabled: true,
             },
             TranslationTarget {
                 source: "ja".into(),
                 target: "zh-Hans".into(),
+                enabled: true,
             },
             TranslationTarget {
                 source: TranslationTarget::AUTO_SOURCE.into(),
                 target: "ja".into(),
+                enabled: true,
             },
         ];
 
@@ -104,5 +132,26 @@ mod tests {
         assert_eq!(active.len(), 2);
         assert!(active.iter().any(|t| t.target == "zh-Hans"));
         assert!(active.iter().any(|t| t.target == "ja"));
+    }
+
+    #[test]
+    fn filter_mixed_disabled_excluded() {
+        let targets = vec![
+            TranslationTarget {
+                source: "en".into(),
+                target: "zh-Hans".into(),
+                enabled: true,
+            },
+            TranslationTarget {
+                source: "en".into(),
+                target: "ja".into(),
+                enabled: false,
+            },
+        ];
+
+        // Only enabled targets should be returned.
+        let active = TranslationTarget::filter_active(&targets, Some("en"));
+        assert_eq!(active.len(), 1);
+        assert_eq!(active[0].target, "zh-Hans");
     }
 }

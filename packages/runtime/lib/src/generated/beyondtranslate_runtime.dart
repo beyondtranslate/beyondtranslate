@@ -1950,9 +1950,11 @@ class FfiConverterTranslateResponse {
 class TranslationTarget {
   final String source;
   final String target;
+  final bool enabled;
   TranslationTarget({
     required this.source,
     required this.target,
+    required this.enabled,
   });
 }
 
@@ -1971,10 +1973,15 @@ class FfiConverterTranslationTarget {
         FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
     final target = target_lifted.value;
     new_offset += target_lifted.bytesRead;
+    final enabled_lifted =
+        FfiConverterBool.read(Uint8List.view(buf.buffer, new_offset));
+    final enabled = enabled_lifted.value;
+    new_offset += enabled_lifted.bytesRead;
     return LiftRetVal(
         TranslationTarget(
           source: source,
           target: target,
+          enabled: enabled,
         ),
         new_offset - buf.offsetInBytes);
   }
@@ -1982,6 +1989,7 @@ class FfiConverterTranslationTarget {
   static RustBuffer lower(TranslationTarget value) {
     final total_length = FfiConverterString.allocationSize(value.source) +
         FfiConverterString.allocationSize(value.target) +
+        FfiConverterBool.allocationSize(value.enabled) +
         0;
     final buf = Uint8List(total_length);
     write(value, buf);
@@ -1994,12 +2002,15 @@ class FfiConverterTranslationTarget {
         value.source, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterString.write(
         value.target, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterBool.write(
+        value.enabled, Uint8List.view(buf.buffer, new_offset));
     return new_offset - buf.offsetInBytes;
   }
 
   static int allocationSize(TranslationTarget value) {
     return FfiConverterString.allocationSize(value.source) +
         FfiConverterString.allocationSize(value.target) +
+        FfiConverterBool.allocationSize(value.enabled) +
         0;
   }
 }

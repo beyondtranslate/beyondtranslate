@@ -175,7 +175,7 @@ final class GeneralViewModel: ObservableObject {
   }
 
   func addTranslationTarget(source: String, target: String) {
-    let newTarget = TranslationTarget(source: source, target: target)
+    let newTarget = TranslationTarget(source: source, target: target, enabled: true)
     translationTargets.append(newTarget)
     Task { await persist(.diff(translationTargets: translationTargets)) }
   }
@@ -183,6 +183,12 @@ final class GeneralViewModel: ObservableObject {
   func removeTranslationTarget(at index: Int) {
     guard translationTargets.indices.contains(index) else { return }
     translationTargets.remove(at: index)
+    Task { await persist(.diff(translationTargets: translationTargets)) }
+  }
+
+  func toggleTranslationTargetEnabled(at index: Int) {
+    guard translationTargets.indices.contains(index) else { return }
+    translationTargets[index].enabled.toggle()
     Task { await persist(.diff(translationTargets: translationTargets)) }
   }
 

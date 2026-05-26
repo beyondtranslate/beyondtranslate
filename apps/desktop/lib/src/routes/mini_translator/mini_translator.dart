@@ -528,6 +528,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
               TranslationTarget(
                 source: _sourceLanguage,
                 target: _selectedTargetLanguage!,
+                enabled: true,
               ),
             ];
     }
@@ -544,6 +545,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       TranslationTarget(
         source: _sourceLanguage,
         target: defaultTargetLanguage,
+        enabled: true,
       ),
     ];
   }
@@ -555,7 +557,10 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       if (_selectedTargetLanguage != null) {
         _fastTargets = [
           TranslationTarget(
-              source: newSource, target: _selectedTargetLanguage!),
+            source: newSource,
+            target: _selectedTargetLanguage!,
+            enabled: true,
+          ),
         ];
       }
     });
@@ -569,7 +574,11 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       _fastTargets = targetCode == null
           ? []
           : [
-              TranslationTarget(source: _sourceLanguage, target: targetCode),
+              TranslationTarget(
+                source: _sourceLanguage,
+                target: targetCode,
+                enabled: true,
+              ),
             ];
     });
     if (_text.isNotEmpty) _handleButtonTappedTrans();

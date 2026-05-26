@@ -3779,12 +3779,14 @@ public func FfiConverterTypeTranslateResponse_lower(_ value: TranslateResponse) 
 public struct TranslationTarget: Equatable, Hashable {
   public var source: String
   public var target: String
+  public var enabled: Bool
 
   // Default memberwise initializers are never public by default, so we
   // declare one manually.
-  public init(source: String, target: String) {
+  public init(source: String, target: String, enabled: Bool) {
     self.source = source
     self.target = target
+    self.enabled = enabled
   }
 
 }
@@ -3803,13 +3805,15 @@ public struct FfiConverterTypeTranslationTarget: FfiConverterRustBuffer {
     return
       try TranslationTarget(
         source: FfiConverterString.read(from: &buf),
-        target: FfiConverterString.read(from: &buf)
+        target: FfiConverterString.read(from: &buf),
+        enabled: FfiConverterBool.read(from: &buf)
       )
   }
 
   public static func write(_ value: TranslationTarget, into buf: inout [UInt8]) {
     FfiConverterString.write(value.source, into: &buf)
     FfiConverterString.write(value.target, into: &buf)
+    FfiConverterBool.write(value.enabled, into: &buf)
   }
 }
 
