@@ -227,7 +227,9 @@ class _TranslationTargetSelectViewState
       autoLabel,
       MenuItemType.checkbox,
     );
-    autoItem.state = widget.activeConfigIndex == -1
+    autoItem.state = widget.activeConfigIndex == -1 &&
+            isAutoSource(widget.sourceLanguage) &&
+            widget.selectedTargetLanguage == null
         ? MenuItemState.checked
         : MenuItemState.unchecked;
     autoItem.on<MenuItemClickedEvent>((_) {
@@ -273,31 +275,39 @@ class _TranslationTargetSelectViewState
     required GlobalKey key,
     required bool isMenuOpen,
     required String label,
-    required VoidCallback onPressed,
+    VoidCallback? onPressed,
     EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 8),
   }) {
     final textTheme = Theme.of(context).textTheme;
     final theme = Theme.of(context);
+    final isDisabled = onPressed == null && !isMenuOpen;
     final selectorButtonColor =
         textTheme.bodyMedium?.color?.withValues(alpha: 0.10) ??
             theme.dividerColor;
 
-    return Button(
-      key: key,
-      minSize: 32,
-      padding: padding,
-      color: isMenuOpen ? selectorButtonColor : null,
-      borderRadius: BorderRadius.circular(8),
-      trailingIcon: Icon(
-        FluentIcons.chevron_down_20_regular,
-        size: 14,
-        color: textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
-      ),
-      onPressed: onPressed,
-      child: Text(
-        label,
-        overflow: TextOverflow.ellipsis,
-        style: textTheme.bodyMedium,
+    return MouseRegion(
+      cursor: isDisabled ? SystemMouseCursors.forbidden : MouseCursor.defer,
+      child: Button(
+        key: key,
+        minSize: 32,
+        padding: padding,
+        color: isMenuOpen ? selectorButtonColor : null,
+        borderRadius: BorderRadius.circular(8),
+        trailingIcon: Icon(
+          FluentIcons.chevron_down_20_regular,
+          size: 14,
+          color: isDisabled
+              ? theme.disabledColor
+              : textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          label,
+          overflow: TextOverflow.ellipsis,
+          style: textTheme.bodyMedium?.copyWith(
+            color: isDisabled ? theme.disabledColor : textTheme.bodyMedium?.color,
+          ),
+        ),
       ),
     );
   }
@@ -355,8 +365,6 @@ class _TranslationTargetSelectViewState
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Card(
       constraints: const BoxConstraints(minHeight: 40),
       padding: const EdgeInsets.only(left: 4, top: 4, bottom: 4, right: 8),
@@ -375,33 +383,40 @@ class _TranslationTargetSelectViewState
               SizedBox(
                 width: 28,
                 height: 28,
-                child: Button(
-                  minSize: 0,
-                  padding: EdgeInsets.zero,
-                  borderRadius: BorderRadius.circular(14),
-                  onPressed: isAutoSource(widget.sourceLanguage)
-                      ? null
-                      : () {
-                          setState(() {
-                            _isRotated = !_isRotated;
-                          });
-                          widget.onSourceChanged(
-                            widget.selectedTargetLanguage ??
-                                defaultTargetLanguage,
-                          );
-                          widget.onTargetLanguageChanged(
-                            widget.sourceLanguage,
-                          );
-                        },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeInOut,
-                    transformAlignment: Alignment.center,
-                    transform: Matrix4.rotationZ(_isRotated ? math.pi : 0),
-                    child: Icon(
-                      FluentIcons.arrow_swap_20_regular,
-                      size: 18,
-                      color: theme.iconTheme.color?.withValues(alpha: 0.6),
+                child: MouseRegion(
+                  cursor: isAutoSource(widget.sourceLanguage)
+                      ? SystemMouseCursors.forbidden
+                      : MouseCursor.defer,
+                  child: Button(
+                    minSize: 0,
+                    padding: EdgeInsets.zero,
+                    borderRadius: BorderRadius.circular(14),
+                    onPressed: isAutoSource(widget.sourceLanguage)
+                        ? null
+                        : () {
+                            setState(() {
+                              _isRotated = !_isRotated;
+                            });
+                            widget.onSourceChanged(
+                              widget.selectedTargetLanguage ??
+                                  defaultTargetLanguage,
+                            );
+                            widget.onTargetLanguageChanged(
+                              widget.sourceLanguage,
+                            );
+                          },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      transformAlignment: Alignment.center,
+                      transform: Matrix4.rotationZ(_isRotated ? math.pi : 0),
+                      child: Icon(
+                          FluentIcons.arrow_swap_20_regular,
+                          size: 18,
+                          color: isAutoSource(widget.sourceLanguage)
+                              ? null
+                              : IconTheme.of(context).color?.withValues(alpha: 0.6),
+                        ),
                     ),
                   ),
                 ),
