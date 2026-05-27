@@ -58,11 +58,14 @@
       "system": "跟隨系統"
     },
     "provider": {
+      "anthropic": "Anthropic",
       "baidu": "百度",
       "caiyun": "彩雲小譯",
       "deepl": "DeepL",
       "google": "谷歌",
       "iciba": "愛詞霸",
+      "ollama": "Ollama",
+      "openai": "OpenAI",
       "sogou": "搜狗",
       "system": "系統",
       "tencent": "騰訊",

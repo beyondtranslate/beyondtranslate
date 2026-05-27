@@ -5,11 +5,22 @@ use std::{
     sync::Arc,
 };
 
-use beyondtranslate_core::{DictionaryService, OcrService, Provider, TranslationService};
+use beyondtranslate_core::{
+    DictionaryService, LlmService, OcrService, Provider, TranslationService,
+};
 use serde::{Deserialize, Serialize};
 use serde_yaml::{Mapping, Value};
 use thiserror::Error;
 
+#[cfg(feature = "anthropic")]
+use crate::provider::llm::AnthropicProvider;
+use crate::provider::llm::AnthropicProviderConfig;
+#[cfg(feature = "ollama")]
+use crate::provider::llm::OllamaProvider;
+use crate::provider::llm::OllamaProviderConfig;
+#[cfg(feature = "openai")]
+use crate::provider::llm::OpenAiProvider;
+use crate::provider::llm::OpenAiProviderConfig;
 #[cfg(feature = "baidu")]
 use crate::provider::BaiduProvider;
 use crate::provider::BaiduProviderConfig;
@@ -62,6 +73,8 @@ pub enum EngineError {
     DictionaryNotSupported(String),
     #[error("provider `{0}` does not support ocr")]
     OcrNotSupported(String),
+    #[error("provider `{0}` does not support llm")]
+    LlmNotSupported(String),
 }
 
 // ── Registry ──────────────────────────────────────────────────────────────────
@@ -105,6 +118,13 @@ impl Engine {
             .ok_or_else(|| EngineError::OcrNotSupported(name.to_owned()))
     }
 
+    /// Returns the llm service for the named provider.
+    pub fn llm(&self, name: &str) -> Result<&dyn LlmService, EngineError> {
+        self.require(name)?
+            .llm()
+            .ok_or_else(|| EngineError::LlmNotSupported(name.to_owned()))
+    }
+
     /// Returns the raw provider by name. Prefer [`translation`] or [`dictionary`] for normal use.
     pub fn require(&self, name: &str) -> Result<&Arc<dyn Provider>, EngineError> {
         self.providers
@@ -146,6 +166,12 @@ pub enum ProviderType {
     Tencent,
     #[serde(rename = "youdao")]
     Youdao,
+    #[serde(rename = "anthropic")]
+    Anthropic,
+    #[serde(rename = "openai")]
+    OpenAi,
+    #[serde(rename = "ollama")]
+    Ollama,
     #[serde(rename = "system")]
     System,
 }
@@ -160,6 +186,9 @@ impl ProviderType {
             Self::Iciba => "iciba",
             Self::Tencent => "tencent",
             Self::Youdao => "youdao",
+            Self::Anthropic => "anthropic",
+            Self::OpenAi => "openai",
+            Self::Ollama => "ollama",
             Self::System => "system",
         }
     }
@@ -226,6 +255,11 @@ fn build_provider(
         ProviderType::Iciba => build_iciba_provider(provider_id, config.decode(provider_id)?),
         ProviderType::Tencent => build_tencent_provider(provider_id, config.decode(provider_id)?),
         ProviderType::Youdao => build_youdao_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::Anthropic => {
+            build_anthropic_provider(provider_id, config.decode(provider_id)?)
+        }
+        ProviderType::OpenAi => build_openai_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::Ollama => build_ollama_provider(provider_id, config.decode(provider_id)?),
         ProviderType::System => build_system_provider(provider_id),
     }
 }
@@ -279,6 +313,69 @@ fn build_system_provider(provider_id: &str) -> Result<Arc<dyn Provider>, EngineE
         reason,
     })?;
     Ok(Arc::new(provider))
+}
+
+#[cfg(feature = "openai")]
+fn build_openai_provider(
+    provider_id: &str,
+    config: OpenAiProviderConfig,
+) -> Result<Arc<dyn Provider>, EngineError> {
+    let provider =
+        OpenAiProvider::new(config).map_err(|reason| EngineError::ConfigValidationFailed {
+            provider: provider_id.to_owned(),
+            reason,
+        })?;
+    Ok(Arc::new(provider))
+}
+
+#[cfg(not(feature = "openai"))]
+fn build_openai_provider(
+    provider_id: &str,
+    _config: OpenAiProviderConfig,
+) -> Result<Arc<dyn Provider>, EngineError> {
+    Err(EngineError::ProviderNotEnabled(provider_id.to_owned()))
+}
+
+#[cfg(feature = "anthropic")]
+fn build_anthropic_provider(
+    provider_id: &str,
+    config: AnthropicProviderConfig,
+) -> Result<Arc<dyn Provider>, EngineError> {
+    let provider =
+        AnthropicProvider::new(config).map_err(|reason| EngineError::ConfigValidationFailed {
+            provider: provider_id.to_owned(),
+            reason,
+        })?;
+    Ok(Arc::new(provider))
+}
+
+#[cfg(not(feature = "anthropic"))]
+fn build_anthropic_provider(
+    provider_id: &str,
+    _config: AnthropicProviderConfig,
+) -> Result<Arc<dyn Provider>, EngineError> {
+    Err(EngineError::ProviderNotEnabled(provider_id.to_owned()))
+}
+
+#[cfg(feature = "ollama")]
+fn build_ollama_provider(
+    provider_id: &str,
+    config: OllamaProviderConfig,
+) -> Result<Arc<dyn Provider>, EngineError> {
+    let provider =
+        OllamaProvider::new(config).map_err(|reason| EngineError::ConfigValidationFailed {
+            provider: provider_id.to_owned(),
+            reason,
+        })?;
+    Ok(Arc::new(provider))
+}
+
+#[cfg(not(feature = "ollama"))]
+fn build_ollama_provider(
+    provider_id: &str,
+    _config: OllamaProviderConfig,
+) -> Result<Arc<dyn Provider>, EngineError> {
+    Err(EngineError::ProviderNotEnabled(provider_id.to_owned()))
 }
 
 // ── Config ────────────────────────────────────────────────────────────────────

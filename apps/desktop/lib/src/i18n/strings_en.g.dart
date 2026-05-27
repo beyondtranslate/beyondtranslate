@@ -286,6 +286,9 @@ class TranslationsCommonProviderEn {
 
   // Translations
 
+  /// en: 'Anthropic'
+  String get anthropic => 'Anthropic';
+
   /// en: 'Baidu'
   String get baidu => 'Baidu';
 
@@ -300,6 +303,12 @@ class TranslationsCommonProviderEn {
 
   /// en: 'Iciba'
   String get iciba => 'Iciba';
+
+  /// en: 'Ollama'
+  String get ollama => 'Ollama';
+
+  /// en: 'OpenAI'
+  String get openai => 'OpenAI';
 
   /// en: 'Sogou'
   String get sogou => 'Sogou';
@@ -1327,11 +1336,14 @@ extension on Translations {
       'common.theme_mode.light' => 'Light',
       'common.theme_mode.dark' => 'Dark',
       'common.theme_mode.system' => 'System',
+      'common.provider.anthropic' => 'Anthropic',
       'common.provider.baidu' => 'Baidu',
       'common.provider.caiyun' => 'Caiyun',
       'common.provider.deepl' => 'DeepL',
       'common.provider.google' => 'Google',
       'common.provider.iciba' => 'Iciba',
+      'common.provider.ollama' => 'Ollama',
+      'common.provider.openai' => 'OpenAI',
       'common.provider.sogou' => 'Sogou',
       'common.provider.system' => 'System',
       'common.provider.tencent' => 'Tencent',

@@ -4,12 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-default = ["baidu", "caiyun", "deepl", "google", "iciba", "tencent", "youdao"]
+default = ["anthropic", "baidu", "caiyun", "deepl", "google", "iciba", "ollama", "openai", "tencent", "youdao"]
+anthropic = []
 baidu = []
 caiyun = []
 deepl = []
 google = []
 iciba = []
+ollama = []
+openai = []
 tencent = []
 youdao = []
 
@@ -20,6 +23,7 @@ base64.workspace = true
 getrandom.workspace = true
 hmac.workspace = true
 md5.workspace = true
+futures-util = "0.3"
 rand.workspace = true
 reqwest.workspace = true
 serde.workspace = true
@@ -28,6 +32,7 @@ serde_yaml.workspace = true
 sha1.workspace = true
 sha2.workspace = true
 thiserror.workspace = true
+tokio.workspace = true
 
 [target.'cfg(target_os = "macos")'.dependencies]
 objc2 = "0.6"

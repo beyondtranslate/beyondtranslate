@@ -58,11 +58,14 @@
       "system": "시스템"
     },
     "provider": {
+      "anthropic": "Anthropic",
       "baidu": "Baidu",
       "caiyun": "Caiyun",
       "deepl": "DeepL",
       "google": "Google",
       "iciba": "Iciba",
+      "ollama": "Ollama",
+      "openai": "OpenAI",
       "sogou": "Sogou",
       "system": "시스템",
       "tencent": "Tencent",

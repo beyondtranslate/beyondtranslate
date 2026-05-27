@@ -64,7 +64,8 @@ impl ApiError {
             }
             EngineError::TranslationNotSupported(name)
             | EngineError::DictionaryNotSupported(name)
-            | EngineError::OcrNotSupported(name) => Self::bad_request(
+            | EngineError::OcrNotSupported(name)
+            | EngineError::LlmNotSupported(name) => Self::bad_request(
                 "SERVICE_NOT_SUPPORTED",
                 format!("Provider `{name}` does not support this service"),
             ),

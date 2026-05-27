@@ -924,6 +924,278 @@ class FfiConverterShortcutSettingsPatch {
   }
 }
 
+class ChatChoice {
+  final int index;
+  final ChatMessage message;
+  final String? finishReason;
+  ChatChoice({
+    required this.index,
+    required this.message,
+    this.finishReason,
+  });
+}
+
+class FfiConverterChatChoice {
+  static ChatChoice lift(RustBuffer buf) {
+    return FfiConverterChatChoice.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<ChatChoice> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final index_lifted =
+        FfiConverterUInt32.read(Uint8List.view(buf.buffer, new_offset));
+    final index = index_lifted.value;
+    new_offset += index_lifted.bytesRead;
+    final message_lifted =
+        FfiConverterChatMessage.read(Uint8List.view(buf.buffer, new_offset));
+    final message = message_lifted.value;
+    new_offset += message_lifted.bytesRead;
+    final finishReason_lifted =
+        FfiConverterOptionalString.read(Uint8List.view(buf.buffer, new_offset));
+    final finishReason = finishReason_lifted.value;
+    new_offset += finishReason_lifted.bytesRead;
+    return LiftRetVal(
+        ChatChoice(
+          index: index,
+          message: message,
+          finishReason: finishReason,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(ChatChoice value) {
+    final total_length = FfiConverterUInt32.allocationSize(value.index) +
+        FfiConverterChatMessage.allocationSize(value.message) +
+        FfiConverterOptionalString.allocationSize(value.finishReason) +
+        0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(ChatChoice value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterUInt32.write(
+        value.index, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterChatMessage.write(
+        value.message, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalString.write(
+        value.finishReason, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(ChatChoice value) {
+    return FfiConverterUInt32.allocationSize(value.index) +
+        FfiConverterChatMessage.allocationSize(value.message) +
+        FfiConverterOptionalString.allocationSize(value.finishReason) +
+        0;
+  }
+}
+
+class ChatMessage {
+  final ChatRole role;
+  final String content;
+  ChatMessage({
+    required this.role,
+    required this.content,
+  });
+}
+
+class FfiConverterChatMessage {
+  static ChatMessage lift(RustBuffer buf) {
+    return FfiConverterChatMessage.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<ChatMessage> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final role_lifted =
+        FfiConverterChatRole.read(Uint8List.view(buf.buffer, new_offset));
+    final role = role_lifted.value;
+    new_offset += role_lifted.bytesRead;
+    final content_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final content = content_lifted.value;
+    new_offset += content_lifted.bytesRead;
+    return LiftRetVal(
+        ChatMessage(
+          role: role,
+          content: content,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(ChatMessage value) {
+    final total_length = FfiConverterChatRole.allocationSize(value.role) +
+        FfiConverterString.allocationSize(value.content) +
+        0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(ChatMessage value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterChatRole.write(
+        value.role, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterString.write(
+        value.content, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(ChatMessage value) {
+    return FfiConverterChatRole.allocationSize(value.role) +
+        FfiConverterString.allocationSize(value.content) +
+        0;
+  }
+}
+
+class ChatResponse {
+  final String? id;
+  final String model;
+  final List<ChatChoice> choices;
+  final ChatUsage? usage;
+  ChatResponse({
+    this.id,
+    required this.model,
+    required this.choices,
+    this.usage,
+  });
+}
+
+class FfiConverterChatResponse {
+  static ChatResponse lift(RustBuffer buf) {
+    return FfiConverterChatResponse.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<ChatResponse> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final id_lifted =
+        FfiConverterOptionalString.read(Uint8List.view(buf.buffer, new_offset));
+    final id = id_lifted.value;
+    new_offset += id_lifted.bytesRead;
+    final model_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final model = model_lifted.value;
+    new_offset += model_lifted.bytesRead;
+    final choices_lifted = FfiConverterSequenceChatChoice.read(
+        Uint8List.view(buf.buffer, new_offset));
+    final choices = choices_lifted.value;
+    new_offset += choices_lifted.bytesRead;
+    final usage_lifted = FfiConverterOptionalChatUsage.read(
+        Uint8List.view(buf.buffer, new_offset));
+    final usage = usage_lifted.value;
+    new_offset += usage_lifted.bytesRead;
+    return LiftRetVal(
+        ChatResponse(
+          id: id,
+          model: model,
+          choices: choices,
+          usage: usage,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(ChatResponse value) {
+    final total_length = FfiConverterOptionalString.allocationSize(value.id) +
+        FfiConverterString.allocationSize(value.model) +
+        FfiConverterSequenceChatChoice.allocationSize(value.choices) +
+        FfiConverterOptionalChatUsage.allocationSize(value.usage) +
+        0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(ChatResponse value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterOptionalString.write(
+        value.id, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterString.write(
+        value.model, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterSequenceChatChoice.write(
+        value.choices, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalChatUsage.write(
+        value.usage, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(ChatResponse value) {
+    return FfiConverterOptionalString.allocationSize(value.id) +
+        FfiConverterString.allocationSize(value.model) +
+        FfiConverterSequenceChatChoice.allocationSize(value.choices) +
+        FfiConverterOptionalChatUsage.allocationSize(value.usage) +
+        0;
+  }
+}
+
+class ChatUsage {
+  final int promptTokens;
+  final int completionTokens;
+  final int totalTokens;
+  ChatUsage({
+    required this.promptTokens,
+    required this.completionTokens,
+    required this.totalTokens,
+  });
+}
+
+class FfiConverterChatUsage {
+  static ChatUsage lift(RustBuffer buf) {
+    return FfiConverterChatUsage.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<ChatUsage> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final promptTokens_lifted =
+        FfiConverterUInt32.read(Uint8List.view(buf.buffer, new_offset));
+    final promptTokens = promptTokens_lifted.value;
+    new_offset += promptTokens_lifted.bytesRead;
+    final completionTokens_lifted =
+        FfiConverterUInt32.read(Uint8List.view(buf.buffer, new_offset));
+    final completionTokens = completionTokens_lifted.value;
+    new_offset += completionTokens_lifted.bytesRead;
+    final totalTokens_lifted =
+        FfiConverterUInt32.read(Uint8List.view(buf.buffer, new_offset));
+    final totalTokens = totalTokens_lifted.value;
+    new_offset += totalTokens_lifted.bytesRead;
+    return LiftRetVal(
+        ChatUsage(
+          promptTokens: promptTokens,
+          completionTokens: completionTokens,
+          totalTokens: totalTokens,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(ChatUsage value) {
+    final total_length = FfiConverterUInt32.allocationSize(value.promptTokens) +
+        FfiConverterUInt32.allocationSize(value.completionTokens) +
+        FfiConverterUInt32.allocationSize(value.totalTokens) +
+        0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(ChatUsage value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterUInt32.write(
+        value.promptTokens, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterUInt32.write(
+        value.completionTokens, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterUInt32.write(
+        value.totalTokens, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(ChatUsage value) {
+    return FfiConverterUInt32.allocationSize(value.promptTokens) +
+        FfiConverterUInt32.allocationSize(value.completionTokens) +
+        FfiConverterUInt32.allocationSize(value.totalTokens) +
+        0;
+  }
+}
+
 class DetectLanguageRequest {
   final List<String> texts;
   DetectLanguageRequest({
@@ -2591,6 +2863,56 @@ class FfiConverterInputSubmitMode {
   }
 }
 
+enum ChatRole {
+  system,
+  user,
+  assistant,
+  ;
+}
+
+class FfiConverterChatRole {
+  static LiftRetVal<ChatRole> read(Uint8List buf) {
+    final index = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    switch (index) {
+      case 1:
+        return LiftRetVal(
+          ChatRole.system,
+          4,
+        );
+      case 2:
+        return LiftRetVal(
+          ChatRole.user,
+          4,
+        );
+      case 3:
+        return LiftRetVal(
+          ChatRole.assistant,
+          4,
+        );
+      default:
+        throw UniffiInternalError(UniffiInternalError.unexpectedEnumCase,
+            "Unable to determine enum variant");
+    }
+  }
+
+  static ChatRole lift(RustBuffer buffer) {
+    return FfiConverterChatRole.read(buffer.asUint8List()).value;
+  }
+
+  static RustBuffer lower(ChatRole input) {
+    return toRustBuffer(createUint8ListFromInt(input.index + 1));
+  }
+
+  static int allocationSize(ChatRole _value) {
+    return 4;
+  }
+
+  static int write(ChatRole value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.index + 1);
+    return 4;
+  }
+}
+
 enum ProviderCapability {
   dictionary,
   ocr,
@@ -2642,11 +2964,14 @@ class FfiConverterProviderCapability {
 }
 
 enum ProviderType {
+  anthropic,
   baidu,
   caiyun,
   deepL,
   google,
   iciba,
+  openAi,
+  ollama,
   tencent,
   youdao,
   system,
@@ -2659,40 +2984,55 @@ class FfiConverterProviderType {
     switch (index) {
       case 1:
         return LiftRetVal(
-          ProviderType.baidu,
+          ProviderType.anthropic,
           4,
         );
       case 2:
         return LiftRetVal(
-          ProviderType.caiyun,
+          ProviderType.baidu,
           4,
         );
       case 3:
         return LiftRetVal(
-          ProviderType.deepL,
+          ProviderType.caiyun,
           4,
         );
       case 4:
         return LiftRetVal(
-          ProviderType.google,
+          ProviderType.deepL,
           4,
         );
       case 5:
         return LiftRetVal(
-          ProviderType.iciba,
+          ProviderType.google,
           4,
         );
       case 6:
         return LiftRetVal(
-          ProviderType.tencent,
+          ProviderType.iciba,
           4,
         );
       case 7:
         return LiftRetVal(
-          ProviderType.youdao,
+          ProviderType.openAi,
           4,
         );
       case 8:
+        return LiftRetVal(
+          ProviderType.ollama,
+          4,
+        );
+      case 9:
+        return LiftRetVal(
+          ProviderType.tencent,
+          4,
+        );
+      case 10:
+        return LiftRetVal(
+          ProviderType.youdao,
+          4,
+        );
+      case 11:
         return LiftRetVal(
           ProviderType.system,
           4,
@@ -2951,6 +3291,9 @@ abstract class RuntimeInterface {
   });
   List<LanguageInfo> listAppLanguages();
   List<LanguageInfo> listLanguages();
+  RuntimeLlm llm({
+    required String providerId,
+  });
   RuntimeOcr ocr({
     required String providerId,
   });
@@ -3045,6 +3388,16 @@ class Runtime implements RuntimeInterface {
                 uniffiClonePointer(), status),
         FfiConverterSequenceLanguageInfo.lift,
         null);
+  }
+
+  RuntimeLlm llm({
+    required String providerId,
+  }) {
+    return rustCallWithLifter(
+        (status) => uniffi_beyondtranslate_runtime_fn_method_runtime_llm(
+            uniffiClonePointer(), FfiConverterString.lower(providerId), status),
+        RuntimeLlm.lift,
+        runtimeExceptionErrorHandler);
   }
 
   RuntimeOcr ocr({
@@ -3176,6 +3529,174 @@ class RuntimeDictionary implements RuntimeDictionaryInterface {
       FfiConverterLookUpResponse.lift,
       runtimeExceptionErrorHandler,
     );
+  }
+}
+
+abstract class RuntimeLlmInterface {
+  Future<List<String>> alternatives({
+    required String text,
+    required String sourceLang,
+    required String targetLang,
+    required int count,
+    required String? style,
+  });
+  Future<ChatResponse> chat({
+    required String model,
+    required List<ChatMessage> messages,
+  });
+  Future<String> explain({
+    required String source,
+    required String translation,
+  });
+  Future<String> polish({
+    required String text,
+    required String style,
+  });
+  void translateStream({
+    required String sourceLang,
+    required String targetLang,
+    required String text,
+    required StreamCallback callback,
+  });
+}
+
+final _RuntimeLlmFinalizer = Finalizer<Pointer<Void>>((ptr) {
+  rustCall((status) =>
+      uniffi_beyondtranslate_runtime_fn_free_runtimellm(ptr, status));
+});
+
+class RuntimeLlm implements RuntimeLlmInterface {
+  late final Pointer<Void> _ptr;
+  RuntimeLlm._(this._ptr) {
+    _RuntimeLlmFinalizer.attach(this, _ptr, detach: this);
+  }
+  factory RuntimeLlm.lift(Pointer<Void> ptr) {
+    return RuntimeLlm._(ptr);
+  }
+  static Pointer<Void> lower(RuntimeLlm value) {
+    return value.uniffiClonePointer();
+  }
+
+  Pointer<Void> uniffiClonePointer() {
+    return rustCall((status) =>
+        uniffi_beyondtranslate_runtime_fn_clone_runtimellm(_ptr, status));
+  }
+
+  static int allocationSize(RuntimeLlm value) {
+    return 8;
+  }
+
+  static LiftRetVal<RuntimeLlm> read(Uint8List buf) {
+    final handle = buf.buffer.asByteData(buf.offsetInBytes).getInt64(0);
+    final pointer = Pointer<Void>.fromAddress(handle);
+    return LiftRetVal(RuntimeLlm.lift(pointer), 8);
+  }
+
+  static int write(RuntimeLlm value, Uint8List buf) {
+    final handle = lower(value);
+    buf.buffer.asByteData(buf.offsetInBytes).setInt64(0, handle.address);
+    return 8;
+  }
+
+  void dispose() {
+    _RuntimeLlmFinalizer.detach(this);
+    rustCall((status) =>
+        uniffi_beyondtranslate_runtime_fn_free_runtimellm(_ptr, status));
+  }
+
+  Future<List<String>> alternatives({
+    required String text,
+    required String sourceLang,
+    required String targetLang,
+    required int count,
+    required String? style,
+  }) {
+    return uniffiRustCallAsync(
+      () => uniffi_beyondtranslate_runtime_fn_method_runtimellm_alternatives(
+        uniffiClonePointer(),
+        FfiConverterString.lower(text),
+        FfiConverterString.lower(sourceLang),
+        FfiConverterString.lower(targetLang),
+        FfiConverterUInt32.lower(count),
+        FfiConverterOptionalString.lower(style),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterSequenceString.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<ChatResponse> chat({
+    required String model,
+    required List<ChatMessage> messages,
+  }) {
+    return uniffiRustCallAsync(
+      () => uniffi_beyondtranslate_runtime_fn_method_runtimellm_chat(
+        uniffiClonePointer(),
+        FfiConverterString.lower(model),
+        FfiConverterSequenceChatMessage.lower(messages),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterChatResponse.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<String> explain({
+    required String source,
+    required String translation,
+  }) {
+    return uniffiRustCallAsync(
+      () => uniffi_beyondtranslate_runtime_fn_method_runtimellm_explain(
+        uniffiClonePointer(),
+        FfiConverterString.lower(source),
+        FfiConverterString.lower(translation),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterString.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<String> polish({
+    required String text,
+    required String style,
+  }) {
+    return uniffiRustCallAsync(
+      () => uniffi_beyondtranslate_runtime_fn_method_runtimellm_polish(
+        uniffiClonePointer(),
+        FfiConverterString.lower(text),
+        FfiConverterString.lower(style),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterString.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  void translateStream({
+    required String sourceLang,
+    required String targetLang,
+    required String text,
+    required StreamCallback callback,
+  }) {
+    return rustCall((status) {
+      uniffi_beyondtranslate_runtime_fn_method_runtimellm_translate_stream(
+          uniffiClonePointer(),
+          FfiConverterString.lower(sourceLang),
+          FfiConverterString.lower(targetLang),
+          FfiConverterString.lower(text),
+          FfiConverterCallbackInterfaceStreamCallback.lower(callback).address,
+          status);
+    }, null);
   }
 }
 
@@ -4197,6 +4718,202 @@ class FfiConverterBool {
   }
 }
 
+abstract class StreamCallback {
+  void onChunk(
+    String content,
+  );
+  void onFinish(
+    String finishReason,
+  );
+  void onError(
+    String error,
+  );
+}
+
+class FfiConverterCallbackInterfaceStreamCallback {
+  static final _handleMap = UniffiHandleMap<StreamCallback>();
+  static bool _vtableInitialized = false;
+  static StreamCallback lift(Pointer<Void> handle) {
+    final rawHandle = handle.address;
+    if ((rawHandle & 0x1) == 0) {
+      throw UniffiInternalError(
+        UniffiInternalError.unexpectedStaleHandle,
+        "Rust-owned callback interface handle is not supported for \$cls_name",
+      );
+    }
+    return _handleMap.remove(rawHandle);
+  }
+
+  static Pointer<Void> lower(StreamCallback value) {
+    _ensureVTableInitialized();
+    final handle = _handleMap.insert(value);
+    return Pointer<Void>.fromAddress(handle);
+  }
+
+  static void _ensureVTableInitialized() {
+    if (!_vtableInitialized) {
+      initStreamCallbackVTable();
+      _vtableInitialized = true;
+    }
+  }
+
+  static LiftRetVal<StreamCallback> read(Uint8List buf) {
+    final handle = buf.buffer.asByteData(buf.offsetInBytes).getInt64(0);
+    final pointer = Pointer<Void>.fromAddress(handle);
+    return LiftRetVal(lift(pointer), 8);
+  }
+
+  static int write(StreamCallback value, Uint8List buf) {
+    final handle = lower(value);
+    buf.buffer.asByteData(buf.offsetInBytes).setInt64(0, handle.address);
+    return 8;
+  }
+
+  static int allocationSize(StreamCallback value) {
+    return 8;
+  }
+}
+
+typedef UniffiCallbackInterfaceStreamCallbackMethod0 = Void Function(
+    Uint64, RustBuffer, Pointer<Void>, Pointer<RustCallStatus>);
+typedef UniffiCallbackInterfaceStreamCallbackMethod0Dart = void Function(
+    int, RustBuffer, Pointer<Void>, Pointer<RustCallStatus>);
+typedef UniffiCallbackInterfaceStreamCallbackMethod1 = Void Function(
+    Uint64, RustBuffer, Pointer<Void>, Pointer<RustCallStatus>);
+typedef UniffiCallbackInterfaceStreamCallbackMethod1Dart = void Function(
+    int, RustBuffer, Pointer<Void>, Pointer<RustCallStatus>);
+typedef UniffiCallbackInterfaceStreamCallbackMethod2 = Void Function(
+    Uint64, RustBuffer, Pointer<Void>, Pointer<RustCallStatus>);
+typedef UniffiCallbackInterfaceStreamCallbackMethod2Dart = void Function(
+    int, RustBuffer, Pointer<Void>, Pointer<RustCallStatus>);
+typedef UniffiCallbackInterfaceStreamCallbackFree = Void Function(Uint64);
+typedef UniffiCallbackInterfaceStreamCallbackFreeDart = void Function(int);
+typedef UniffiCallbackInterfaceStreamCallbackClone = Uint64 Function(Uint64);
+typedef UniffiCallbackInterfaceStreamCallbackCloneDart = int Function(int);
+
+final class UniffiVTableCallbackInterfaceStreamCallback extends Struct {
+  external Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackFree>>
+      uniffiFree;
+  external Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackClone>>
+      uniffiClone;
+  external Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackMethod0>>
+      onChunk;
+  external Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackMethod1>>
+      onFinish;
+  external Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackMethod2>>
+      onError;
+}
+
+void streamCallbackOnChunk(int uniffiHandle, RustBuffer content,
+    Pointer<Void> outReturn, Pointer<RustCallStatus> callStatus) {
+  final status = callStatus.ref;
+  try {
+    final obj = FfiConverterCallbackInterfaceStreamCallback._handleMap
+        .get(uniffiHandle);
+    final arg0 = FfiConverterString.lift(content);
+    obj.onChunk(
+      arg0,
+    );
+    status.code = CALL_SUCCESS;
+  } catch (e) {
+    status.code = CALL_UNEXPECTED_ERROR;
+    status.errorBuf = FfiConverterString.lower(e.toString());
+  }
+}
+
+final Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackMethod0>>
+    streamCallbackOnChunkPointer =
+    Pointer.fromFunction<UniffiCallbackInterfaceStreamCallbackMethod0>(
+        streamCallbackOnChunk);
+void streamCallbackOnFinish(int uniffiHandle, RustBuffer finishReason,
+    Pointer<Void> outReturn, Pointer<RustCallStatus> callStatus) {
+  final status = callStatus.ref;
+  try {
+    final obj = FfiConverterCallbackInterfaceStreamCallback._handleMap
+        .get(uniffiHandle);
+    final arg0 = FfiConverterString.lift(finishReason);
+    obj.onFinish(
+      arg0,
+    );
+    status.code = CALL_SUCCESS;
+  } catch (e) {
+    status.code = CALL_UNEXPECTED_ERROR;
+    status.errorBuf = FfiConverterString.lower(e.toString());
+  }
+}
+
+final Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackMethod1>>
+    streamCallbackOnFinishPointer =
+    Pointer.fromFunction<UniffiCallbackInterfaceStreamCallbackMethod1>(
+        streamCallbackOnFinish);
+void streamCallbackOnException(int uniffiHandle, RustBuffer error,
+    Pointer<Void> outReturn, Pointer<RustCallStatus> callStatus) {
+  final status = callStatus.ref;
+  try {
+    final obj = FfiConverterCallbackInterfaceStreamCallback._handleMap
+        .get(uniffiHandle);
+    final arg0 = FfiConverterString.lift(error);
+    obj.onError(
+      arg0,
+    );
+    status.code = CALL_SUCCESS;
+  } catch (e) {
+    status.code = CALL_UNEXPECTED_ERROR;
+    status.errorBuf = FfiConverterString.lower(e.toString());
+  }
+}
+
+final Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackMethod2>>
+    streamCallbackOnExceptionPointer =
+    Pointer.fromFunction<UniffiCallbackInterfaceStreamCallbackMethod2>(
+        streamCallbackOnException);
+void streamCallbackFreeCallback(int handle) {
+  try {
+    FfiConverterCallbackInterfaceStreamCallback._handleMap.remove(handle);
+  } catch (e) {}
+}
+
+final Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackFree>>
+    streamCallbackFreePointer =
+    Pointer.fromFunction<UniffiCallbackInterfaceStreamCallbackFree>(
+        streamCallbackFreeCallback);
+int streamCallbackCloneCallback(int handle) {
+  try {
+    final obj =
+        FfiConverterCallbackInterfaceStreamCallback._handleMap.get(handle);
+    final newHandle =
+        FfiConverterCallbackInterfaceStreamCallback._handleMap.insert(obj);
+    return newHandle;
+  } catch (e) {
+    return 0;
+  }
+}
+
+final Pointer<NativeFunction<UniffiCallbackInterfaceStreamCallbackClone>>
+    streamCallbackClonePointer =
+    Pointer.fromFunction<UniffiCallbackInterfaceStreamCallbackClone>(
+        streamCallbackCloneCallback, 0);
+late final Pointer<UniffiVTableCallbackInterfaceStreamCallback>
+    streamCallbackVTable;
+void initStreamCallbackVTable() {
+  if (FfiConverterCallbackInterfaceStreamCallback._vtableInitialized) {
+    return;
+  }
+  streamCallbackVTable = calloc<UniffiVTableCallbackInterfaceStreamCallback>();
+  streamCallbackVTable.ref.uniffiFree = streamCallbackFreePointer;
+  streamCallbackVTable.ref.uniffiClone = streamCallbackClonePointer;
+  streamCallbackVTable.ref.onChunk = streamCallbackOnChunkPointer;
+  streamCallbackVTable.ref.onFinish = streamCallbackOnFinishPointer;
+  streamCallbackVTable.ref.onError = streamCallbackOnExceptionPointer;
+  rustCall((status) {
+    uniffi_beyondtranslate_runtime_fn_init_callback_vtable_streamcallback(
+      streamCallbackVTable,
+    );
+    checkCallStatus(NullRustCallStatusErrorHandler(), status);
+  });
+  FfiConverterCallbackInterfaceStreamCallback._vtableInitialized = true;
+}
+
 class FfiConverterDouble64 {
   static double lift(double value) => value;
   static LiftRetVal<double> read(Uint8List buf) {
@@ -4326,6 +5043,53 @@ class FfiConverterOptionalBool {
     }
     buf[0] = 1;
     return FfiConverterBool.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
+class FfiConverterOptionalChatUsage {
+  static ChatUsage? lift(RustBuffer buf) {
+    return FfiConverterOptionalChatUsage.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<ChatUsage?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterChatUsage.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<ChatUsage?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([ChatUsage? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterChatUsage.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(ChatUsage? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length = FfiConverterOptionalChatUsage.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalChatUsage.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(ChatUsage? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterChatUsage.write(
             value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
         1;
   }
@@ -5824,6 +6588,90 @@ class FfiConverterUInt64 {
   }
 }
 
+class FfiConverterSequenceChatChoice {
+  static List<ChatChoice> lift(RustBuffer buf) {
+    return FfiConverterSequenceChatChoice.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<ChatChoice>> read(Uint8List buf) {
+    List<ChatChoice> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterChatChoice.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<ChatChoice> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterChatChoice.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<ChatChoice> value) {
+    return value
+            .map((l) => FfiConverterChatChoice.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<ChatChoice> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterSequenceChatMessage {
+  static List<ChatMessage> lift(RustBuffer buf) {
+    return FfiConverterSequenceChatMessage.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<ChatMessage>> read(Uint8List buf) {
+    List<ChatMessage> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret =
+          FfiConverterChatMessage.read(Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<ChatMessage> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterChatMessage.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<ChatMessage> value) {
+    return value
+            .map((l) => FfiConverterChatMessage.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<ChatMessage> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
 class FfiConverterSequenceLanguageInfo {
   static List<LanguageInfo> lift(RustBuffer buf) {
     return FfiConverterSequenceLanguageInfo.read(buf.asUint8List()).value;
@@ -6122,6 +6970,29 @@ class FfiConverterUInt16 {
   static int write(int value, Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setUint16(0, lower(value));
     return 2;
+  }
+}
+
+class FfiConverterUInt32 {
+  static int lift(int value) => value;
+  static LiftRetVal<int> read(Uint8List buf) {
+    return LiftRetVal(buf.buffer.asByteData(buf.offsetInBytes).getUint32(0), 4);
+  }
+
+  static int lower(int value) {
+    if (value < 0 || value > 4294967295) {
+      throw ArgumentError("Value out of range for u32: " + value.toString());
+    }
+    return value;
+  }
+
+  static int allocationSize([int value = 0]) {
+    return 4;
+  }
+
+  static int write(int value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setUint32(0, lower(value));
+    return 4;
   }
 }
 
@@ -6576,6 +7447,14 @@ external RustBuffer
 @Native<
     Pointer<Void> Function(Pointer<Void>, RustBuffer,
         Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external Pointer<Void> uniffi_beyondtranslate_runtime_fn_method_runtime_llm(
+    Pointer<Void> ptr,
+    RustBuffer provider_id,
+    Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    Pointer<Void> Function(Pointer<Void>, RustBuffer,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
 external Pointer<Void> uniffi_beyondtranslate_runtime_fn_method_runtime_ocr(
     Pointer<Void> ptr,
     RustBuffer provider_id,
@@ -6634,6 +7513,57 @@ external void uniffi_beyondtranslate_runtime_fn_free_runtimedictionary(
 external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimedictionary_lookup(
         Pointer<Void> ptr, RustBuffer request);
+
+@Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void> uniffi_beyondtranslate_runtime_fn_clone_runtimellm(
+    Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<Void Function(Pointer<Void>, Pointer<RustCallStatus>)>(
+    assetId: _uniffiAssetId)
+external void uniffi_beyondtranslate_runtime_fn_free_runtimellm(
+    Pointer<Void> handle, Pointer<RustCallStatus> uniffiStatus);
+
+@Native<
+    Pointer<Void> Function(Pointer<Void>, RustBuffer, RustBuffer, RustBuffer,
+        Uint32, RustBuffer)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimellm_alternatives(
+        Pointer<Void> ptr,
+        RustBuffer text,
+        RustBuffer source_lang,
+        RustBuffer target_lang,
+        int count,
+        RustBuffer style);
+
+@Native<Pointer<Void> Function(Pointer<Void>, RustBuffer, RustBuffer)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void> uniffi_beyondtranslate_runtime_fn_method_runtimellm_chat(
+    Pointer<Void> ptr, RustBuffer model, RustBuffer messages);
+
+@Native<Pointer<Void> Function(Pointer<Void>, RustBuffer, RustBuffer)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimellm_explain(
+        Pointer<Void> ptr, RustBuffer source, RustBuffer translation);
+
+@Native<Pointer<Void> Function(Pointer<Void>, RustBuffer, RustBuffer)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimellm_polish(
+        Pointer<Void> ptr, RustBuffer text, RustBuffer style);
+
+@Native<
+    Void Function(Pointer<Void>, RustBuffer, RustBuffer, RustBuffer, Uint64,
+        Pointer<RustCallStatus>)>(assetId: _uniffiAssetId)
+external void
+    uniffi_beyondtranslate_runtime_fn_method_runtimellm_translate_stream(
+        Pointer<Void> ptr,
+        RustBuffer source_lang,
+        RustBuffer target_lang,
+        RustBuffer text,
+        int callback,
+        Pointer<RustCallStatus> uniffiStatus);
 
 @Native<Pointer<Void> Function(Pointer<Void>, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
@@ -6855,6 +7785,12 @@ external void uniffi_beyondtranslate_runtime_fn_free_settingssubscription(
 external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_settingssubscription_next(
         Pointer<Void> ptr);
+
+@Native<Void Function(Pointer<UniffiVTableCallbackInterfaceStreamCallback>)>(
+    assetId: _uniffiAssetId)
+external void
+    uniffi_beyondtranslate_runtime_fn_init_callback_vtable_streamcallback(
+        Pointer<UniffiVTableCallbackInterfaceStreamCallback> vtable);
 
 @Native<Int32 Function(Int32, Int32, Pointer<RustCallStatus>)>(
     assetId: _uniffiAssetId)
@@ -7396,6 +8332,9 @@ external int
     uniffi_beyondtranslate_runtime_checksum_method_runtime_list_languages();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_method_runtime_llm();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -7420,6 +8359,24 @@ external int
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimedictionary_lookup();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimellm_alternatives();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_method_runtimellm_chat();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimellm_explain();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int uniffi_beyondtranslate_runtime_checksum_method_runtimellm_polish();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimellm_translate_stream();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
@@ -7535,6 +8492,18 @@ external int
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int uniffi_beyondtranslate_runtime_checksum_constructor_runtime_new();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_chunk();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_finish();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_error();
 
 @Native<Uint32 Function()>(assetId: _uniffiAssetId)
 external int ffi_beyondtranslate_runtime_uniffi_contract_version();
@@ -7664,6 +8633,9 @@ void _checkApiChecksums() {
       58600) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtime_llm() != 58856) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr() != 40076) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
@@ -7689,6 +8661,26 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimedictionary_lookup() !=
       64628) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimellm_alternatives() !=
+      63979) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimellm_chat() !=
+      7344) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimellm_explain() !=
+      52876) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimellm_polish() !=
+      19556) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimellm_translate_stream() !=
+      30677) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimeocr_recognize_text() !=
@@ -7805,6 +8797,18 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_constructor_runtime_new() !=
       50884) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_chunk() !=
+      51178) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_finish() !=
+      14728) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_error() !=
+      63263) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
 }

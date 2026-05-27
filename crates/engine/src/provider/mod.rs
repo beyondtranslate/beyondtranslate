@@ -3,6 +3,7 @@ pub mod caiyun;
 pub mod deepl;
 pub mod google;
 pub mod iciba;
+pub mod llm;
 pub mod system;
 pub mod tencent;
 pub mod youdao;

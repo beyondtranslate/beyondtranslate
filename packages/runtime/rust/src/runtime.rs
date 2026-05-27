@@ -53,6 +53,21 @@ pub enum SettingsChange {
     Providers,
 }
 
+/// Callback invoked by the Rust runtime as LLM streaming chunks arrive.
+///
+/// Dart/Swift implement this trait and pass it to
+/// [`RuntimeLlm::translate_stream`]. The Rust side calls:
+///
+/// 1. `on_chunk(content)` — for each token delta (may be called many times)
+/// 2. `on_finish(reason)` — when the stream completes (`"stop"`, `"length"`, etc.)
+/// 3. `on_error(error)` — if the stream encounters an error
+#[uniffi::export(callback_interface)]
+pub trait StreamCallback: Send + Sync {
+    fn on_chunk(&self, content: String);
+    fn on_finish(&self, finish_reason: String);
+    fn on_error(&self, error: String);
+}
+
 /// Broadcast channel buffer size; settings updates are infrequent so 64
 /// is generous. If a subscriber falls more than this many events behind,
 /// they receive [`broadcast::error::RecvError::Lagged`] and we transparently
@@ -125,6 +140,12 @@ pub struct RuntimeTranslation {
 
 #[derive(uniffi::Object)]
 pub struct RuntimeDictionary {
+    runtime: Runtime,
+    provider_id: String,
+}
+
+#[derive(Clone, uniffi::Object)]
+pub struct RuntimeLlm {
     runtime: Runtime,
     provider_id: String,
 }
@@ -237,6 +258,15 @@ impl Runtime {
         }))
     }
 
+    pub fn llm(self: Arc<Self>, provider_id: String) -> Result<Arc<RuntimeLlm>, RuntimeError> {
+        let provider_id =
+            validate_service_provider_id(provider_id, "+llm").map_err(RuntimeError::from)?;
+        Ok(Arc::new(RuntimeLlm {
+            runtime: (*self).clone(),
+            provider_id,
+        }))
+    }
+
     pub fn text_extractor(self: Arc<Self>) -> Arc<RuntimeTextExtractor> {
         Arc::new(RuntimeTextExtractor {
             runtime: (*self).clone(),
@@ -273,11 +303,19 @@ impl Runtime {
         request: TranslateRequest,
     ) -> Result<TranslateResponse, beyondtranslate_api_core::ApiError> {
         let request = beyondtranslate_api_core::translate_request(request)?;
-        let state = self.inner.state.read().await;
-        let service = state
-            .engine
-            .translation(&provider_id)
-            .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?;
+        let provider = {
+            let state = self.inner.state.read().await;
+            state
+                .engine
+                .require(&provider_id)
+                .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?
+                .clone()
+        };
+        let service = provider.translation().ok_or_else(|| {
+            beyondtranslate_api_core::ApiError::from_engine_error(
+                beyondtranslate_engine::EngineError::TranslationNotSupported(provider_id.clone()),
+            )
+        })?;
 
         service.translate(request).await.map_err(Into::into)
     }
@@ -288,11 +326,19 @@ impl Runtime {
         request: DetectLanguageRequest,
     ) -> Result<DetectLanguageResponse, beyondtranslate_api_core::ApiError> {
         let request = beyondtranslate_api_core::detect_language_request(request)?;
-        let state = self.inner.state.read().await;
-        let service = state
-            .engine
-            .translation(&provider_id)
-            .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?;
+        let provider = {
+            let state = self.inner.state.read().await;
+            state
+                .engine
+                .require(&provider_id)
+                .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?
+                .clone()
+        };
+        let service = provider.translation().ok_or_else(|| {
+            beyondtranslate_api_core::ApiError::from_engine_error(
+                beyondtranslate_engine::EngineError::TranslationNotSupported(provider_id.clone()),
+            )
+        })?;
 
         service.detect_language(request).await.map_err(Into::into)
     }
@@ -301,11 +347,19 @@ impl Runtime {
         &self,
         provider_id: String,
     ) -> Result<Vec<LanguagePair>, beyondtranslate_api_core::ApiError> {
-        let state = self.inner.state.read().await;
-        let service = state
-            .engine
-            .translation(&provider_id)
-            .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?;
+        let provider = {
+            let state = self.inner.state.read().await;
+            state
+                .engine
+                .require(&provider_id)
+                .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?
+                .clone()
+        };
+        let service = provider.translation().ok_or_else(|| {
+            beyondtranslate_api_core::ApiError::from_engine_error(
+                beyondtranslate_engine::EngineError::TranslationNotSupported(provider_id.clone()),
+            )
+        })?;
 
         service
             .get_supported_language_pairs()
@@ -319,11 +373,19 @@ impl Runtime {
         request: LookUpRequest,
     ) -> Result<LookUpResponse, beyondtranslate_api_core::ApiError> {
         let request = beyondtranslate_api_core::lookup_request(request)?;
-        let state = self.inner.state.read().await;
-        let service = state
-            .engine
-            .dictionary(&provider_id)
-            .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?;
+        let provider = {
+            let state = self.inner.state.read().await;
+            state
+                .engine
+                .require(&provider_id)
+                .map_err(beyondtranslate_api_core::ApiError::from_engine_error)?
+                .clone()
+        };
+        let service = provider.dictionary().ok_or_else(|| {
+            beyondtranslate_api_core::ApiError::from_engine_error(
+                beyondtranslate_engine::EngineError::DictionaryNotSupported(provider_id.clone()),
+            )
+        })?;
 
         service.look_up(request).await.map_err(Into::into)
     }
@@ -632,11 +694,17 @@ impl RuntimeTranslation {
             let target_language =
                 validate_optional_required("target_language", request.target_language)?;
             let text = validate_required("text", request.text)?;
-            let state = runtime.inner.state.read().await;
-            let translation_service = state
-                .engine
-                .translation(&provider_id)
-                .map_err(|error| error.to_string())?;
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let translation_service = provider
+                .translation()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support translation"))?;
 
             translation_service
                 .translate(TranslateRequest {
@@ -668,11 +736,17 @@ impl RuntimeTranslation {
             if texts.is_empty() {
                 return Err("texts must not be empty".to_owned());
             }
-            let state = runtime.inner.state.read().await;
-            let translation_service = state
-                .engine
-                .translation(&provider_id)
-                .map_err(|error| error.to_string())?;
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let translation_service = provider
+                .translation()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support translation"))?;
 
             translation_service
                 .detect_language(DetectLanguageRequest { texts })
@@ -691,11 +765,17 @@ impl RuntimeDictionary {
             let source_language = validate_required("source_language", request.source_language)?;
             let target_language = validate_required("target_language", request.target_language)?;
             let word = validate_required("word", request.word)?;
-            let state = runtime.inner.state.read().await;
-            let dictionary_service = state
-                .engine
-                .dictionary(&provider_id)
-                .map_err(|error| error.to_string())?;
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let dictionary_service = provider
+                .dictionary()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support dictionary"))?;
 
             dictionary_service
                 .look_up(LookUpRequest {
@@ -734,6 +814,388 @@ impl RuntimeDictionary {
     }
 }
 
+impl RuntimeLlm {
+    async fn chat_impl(
+        &self,
+        model: String,
+        messages: Vec<beyondtranslate_core::ChatMessage>,
+    ) -> Result<beyondtranslate_core::ChatResponse, String> {
+        let provider_id = self.provider_id.clone();
+        let runtime = self.runtime.clone();
+        run_on_worker_thread(move || async move {
+            let model = validate_required("model", model)?;
+            if messages.is_empty() {
+                return Err("messages must not be empty".to_owned());
+            }
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let llm_service = provider
+                .llm()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
+
+            llm_service
+                .chat(beyondtranslate_core::ChatRequest {
+                    model,
+                    messages,
+                    temperature: None,
+                    max_tokens: None,
+                    stream: None,
+                })
+                .await
+                .map_err(|error| error.to_string())
+        })
+        .await
+    }
+
+    async fn polish_impl(&self, text: String, style: String) -> Result<String, String> {
+        let provider_id = self.provider_id.clone();
+        let runtime = self.runtime.clone();
+        run_on_worker_thread(move || async move {
+            let text = validate_required("text", text)?;
+            let style = validate_required("style", style)?;
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let llm_service = provider
+                .llm()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
+
+            let model = llm_service
+                .available_models()
+                .into_iter()
+                .next()
+                .ok_or_else(|| "llm default model must be configured".to_owned())?;
+
+            let system_prompt =
+                beyondtranslate_engine::prompt::polish_translation_system_prompt(&style);
+
+            let response = llm_service
+                .chat(beyondtranslate_core::ChatRequest {
+                    model,
+                    messages: vec![
+                        beyondtranslate_core::ChatMessage::system(system_prompt),
+                        beyondtranslate_core::ChatMessage::user(text),
+                    ],
+                    temperature: None,
+                    max_tokens: None,
+                    stream: None,
+                })
+                .await
+                .map_err(|error| error.to_string())?;
+
+            response
+                .choices
+                .first()
+                .map(|c| c.message.content.clone())
+                .ok_or_else(|| "no response from llm".to_owned())
+        })
+        .await
+    }
+
+    async fn explain_impl(&self, source: String, translation: String) -> Result<String, String> {
+        let provider_id = self.provider_id.clone();
+        let runtime = self.runtime.clone();
+        run_on_worker_thread(move || async move {
+            let source = validate_required("source", source)?;
+            let translation = validate_required("translation", translation)?;
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let llm_service = provider
+                .llm()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
+
+            let model = llm_service
+                .available_models()
+                .into_iter()
+                .next()
+                .ok_or_else(|| "llm default model must be configured".to_owned())?;
+
+            let system_prompt = beyondtranslate_engine::prompt::explain_translation_system_prompt();
+
+            let user_prompt = format!("Source text: {source}\n\nTranslation: {translation}");
+
+            let response = llm_service
+                .chat(beyondtranslate_core::ChatRequest {
+                    model,
+                    messages: vec![
+                        beyondtranslate_core::ChatMessage::system(system_prompt),
+                        beyondtranslate_core::ChatMessage::user(user_prompt),
+                    ],
+                    temperature: None,
+                    max_tokens: None,
+                    stream: None,
+                })
+                .await
+                .map_err(|error| error.to_string())?;
+
+            response
+                .choices
+                .first()
+                .map(|c| c.message.content.clone())
+                .ok_or_else(|| "no response from llm".to_owned())
+        })
+        .await
+    }
+
+    async fn alternatives_impl(
+        &self,
+        text: String,
+        source_lang: String,
+        target_lang: String,
+        count: u32,
+        style: Option<String>,
+    ) -> Result<Vec<String>, String> {
+        let provider_id = self.provider_id.clone();
+        let runtime = self.runtime.clone();
+        run_on_worker_thread(move || async move {
+            let text = validate_required("text", text)?;
+            let source_lang = validate_required("source_lang", source_lang)?;
+            let target_lang = validate_required("target_lang", target_lang)?;
+            if count == 0 {
+                return Err("count must be greater than 0".to_owned());
+            }
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let llm_service = provider
+                .llm()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
+
+            let model = llm_service
+                .available_models()
+                .into_iter()
+                .next()
+                .ok_or_else(|| "llm default model must be configured".to_owned())?;
+
+            let system_prompt =
+                beyondtranslate_engine::prompt::alternative_translations_system_prompt(
+                    count,
+                    style.as_deref(),
+                );
+
+            let user_prompt = format!(
+                "Source language: {source_lang}\nTarget language: {target_lang}\nText: {text}"
+            );
+
+            let response = llm_service
+                .chat(beyondtranslate_core::ChatRequest {
+                    model,
+                    messages: vec![
+                        beyondtranslate_core::ChatMessage::system(system_prompt),
+                        beyondtranslate_core::ChatMessage::user(user_prompt),
+                    ],
+                    temperature: None,
+                    max_tokens: None,
+                    stream: None,
+                })
+                .await
+                .map_err(|error| error.to_string())?;
+
+            let content = response
+                .choices
+                .first()
+                .map(|c| c.message.content.clone())
+                .ok_or_else(|| "no response from llm".to_owned())?;
+
+            parse_alternatives_json(&content)
+        })
+        .await
+    }
+
+    async fn translate_stream_impl(
+        &self,
+        source_lang: String,
+        target_lang: String,
+        text: String,
+        callback: Arc<dyn StreamCallback>,
+    ) -> Result<(), String> {
+        let provider_id = self.provider_id.clone();
+        let runtime = self.runtime.clone();
+        run_on_worker_thread(move || async move {
+            let text = validate_required("text", text)?;
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let llm_service = provider
+                .llm()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
+
+            let model = llm_service
+                .available_models()
+                .into_iter()
+                .next()
+                .ok_or_else(|| "llm default model must be configured".to_owned())?;
+
+            let system_prompt = beyondtranslate_engine::prompt::translate_text_system_prompt(
+                &source_lang,
+                &target_lang,
+                None,
+            );
+            let user_prompt = beyondtranslate_engine::prompt::translate_text_user_prompt(&text);
+
+            let receiver = llm_service
+                .chat_stream(beyondtranslate_core::ChatRequest {
+                    model,
+                    messages: vec![
+                        beyondtranslate_core::ChatMessage::system(system_prompt),
+                        beyondtranslate_core::ChatMessage::user(user_prompt),
+                    ],
+                    temperature: Some(0.3),
+                    max_tokens: Some(4096),
+                    stream: Some(true),
+                })
+                .await
+                .map_err(|error| error.to_string())?;
+
+            loop {
+                match receiver.rx.recv() {
+                    Ok(chunk) => {
+                        if let Some(reason) = chunk.finish_reason {
+                            if reason == "error" {
+                                callback.on_error(chunk.content);
+                            } else {
+                                callback.on_finish(reason);
+                            }
+                            break;
+                        }
+                        callback.on_chunk(chunk.content);
+                    }
+                    Err(_) => {
+                        callback.on_finish("stop".to_string());
+                        break;
+                    }
+                }
+            }
+
+            Ok(())
+        })
+        .await
+    }
+}
+
+#[uniffi::export(async_runtime = "tokio")]
+impl RuntimeLlm {
+    pub async fn chat(
+        &self,
+        model: String,
+        messages: Vec<beyondtranslate_core::ChatMessage>,
+    ) -> Result<beyondtranslate_core::ChatResponse, RuntimeError> {
+        self.chat_impl(model, messages).await.map_err(Into::into)
+    }
+
+    pub async fn polish(&self, text: String, style: String) -> Result<String, RuntimeError> {
+        self.polish_impl(text, style).await.map_err(Into::into)
+    }
+
+    pub async fn explain(
+        &self,
+        source: String,
+        translation: String,
+    ) -> Result<String, RuntimeError> {
+        self.explain_impl(source, translation)
+            .await
+            .map_err(Into::into)
+    }
+
+    pub async fn alternatives(
+        &self,
+        text: String,
+        source_lang: String,
+        target_lang: String,
+        count: u32,
+        style: Option<String>,
+    ) -> Result<Vec<String>, RuntimeError> {
+        self.alternatives_impl(text, source_lang, target_lang, count, style)
+            .await
+            .map_err(Into::into)
+    }
+}
+
+/// Fire-and-forget streaming translation. The callback will receive chunks
+/// as they arrive from the LLM provider.
+#[uniffi::export]
+impl RuntimeLlm {
+    pub fn translate_stream(
+        &self,
+        source_lang: String,
+        target_lang: String,
+        text: String,
+        callback: Box<dyn StreamCallback>,
+    ) {
+        let this = self.clone();
+        let callback: Arc<dyn StreamCallback> = callback.into();
+        let callback_for_worker = callback.clone();
+
+        if let Err(error) = thread::Builder::new()
+            .name("beyondtranslate-engine-bridge".to_owned())
+            .spawn(move || {
+                let result = tokio::runtime::Builder::new_current_thread()
+                    .enable_all()
+                    .build()
+                    .map_err(|error| format!("failed to build tokio runtime: {error}"))
+                    .and_then(|runtime| {
+                        runtime.block_on(this.translate_stream_impl(
+                            source_lang,
+                            target_lang,
+                            text,
+                            callback_for_worker.clone(),
+                        ))
+                    });
+
+                if let Err(error) = result {
+                    callback_for_worker.on_error(error);
+                }
+            })
+        {
+            callback.on_error(format!("failed to spawn runtime worker thread: {error}"));
+        }
+    }
+}
+
+fn parse_alternatives_json(content: &str) -> Result<Vec<String>, String> {
+    #[derive(serde::Deserialize)]
+    struct AlternativesContainer {
+        alternatives: Vec<AlternativeEntry>,
+    }
+
+    #[derive(serde::Deserialize)]
+    struct AlternativeEntry {
+        text: String,
+    }
+
+    let parsed: AlternativesContainer = serde_json::from_str(content)
+        .map_err(|error| format!("failed to parse alternatives response: {error}"))?;
+
+    Ok(parsed.alternatives.into_iter().map(|a| a.text).collect())
+}
+
 impl RuntimeOcr {
     async fn recognize_text_impl(
         &self,
@@ -742,11 +1204,17 @@ impl RuntimeOcr {
         let provider_id = self.provider_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
-            let state = runtime.inner.state.read().await;
-            let ocr_service = state
-                .engine
-                .ocr(&provider_id)
-                .map_err(|error| error.to_string())?;
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let ocr_service = provider
+                .ocr()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support ocr"))?;
 
             ocr_service
                 .recognize_text(request)
@@ -844,11 +1312,17 @@ impl RuntimeTextExtractor {
 
         // 3. Run OCR on the worker thread.
         let result = run_on_worker_thread(move || async move {
-            let state = runtime.inner.state.read().await;
-            let ocr_service = state
-                .engine
-                .ocr(&provider_id)
-                .map_err(|error| error.to_string())?;
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|error| error.to_string())?
+                    .clone()
+            };
+            let ocr_service = provider
+                .ocr()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support ocr"))?;
 
             let request = RecognizeTextRequest {
                 image_path: Some(image_path),

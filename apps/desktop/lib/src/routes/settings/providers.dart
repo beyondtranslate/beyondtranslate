@@ -365,11 +365,14 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
   late Map<String, TextEditingController> _fieldControllers;
 
   static const _knownProviderTypes = <ProviderType>[
+    ProviderType.anthropic,
     ProviderType.baidu,
     ProviderType.caiyun,
     ProviderType.deepL,
     ProviderType.google,
     ProviderType.iciba,
+    ProviderType.openAi,
+    ProviderType.ollama,
     ProviderType.system,
     ProviderType.tencent,
     ProviderType.youdao,
@@ -378,11 +381,14 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
   // Known field keys for each provider type. This intentionally mirrors the
   // `*ProviderConfig+Fields.swift` files (lowest common denominator).
   static const Map<ProviderType, List<String>> _providerFields = {
+    ProviderType.anthropic: ['apiKey', 'baseUrl', 'defaultModel'],
     ProviderType.baidu: ['appId', 'appKey'],
     ProviderType.caiyun: ['token'],
     ProviderType.deepL: ['authKey'],
     ProviderType.google: ['apiKey'],
     ProviderType.iciba: [],
+    ProviderType.openAi: ['apiKey', 'baseUrl', 'defaultModel'],
+    ProviderType.ollama: ['baseUrl', 'defaultModel'],
     ProviderType.system: [],
     ProviderType.tencent: ['secretId', 'secretKey'],
     ProviderType.youdao: ['appKey', 'appSecret'],
@@ -547,6 +553,8 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
 
 String _providerTypeValue(ProviderType type) {
   switch (type) {
+    case ProviderType.anthropic:
+      return 'anthropic';
     case ProviderType.baidu:
       return 'baidu';
     case ProviderType.caiyun:
@@ -557,6 +565,10 @@ String _providerTypeValue(ProviderType type) {
       return 'google';
     case ProviderType.iciba:
       return 'iciba';
+    case ProviderType.openAi:
+      return 'openai';
+    case ProviderType.ollama:
+      return 'ollama';
     case ProviderType.system:
       return 'system';
     case ProviderType.tencent:
@@ -568,21 +580,27 @@ String _providerTypeValue(ProviderType type) {
 
 String _providerTypeDisplayName(ProviderType type) {
   switch (type) {
+    case ProviderType.anthropic:
+      return t.common.provider.anthropic;
     case ProviderType.baidu:
-      return 'Baidu';
+      return t.common.provider.baidu;
     case ProviderType.caiyun:
-      return 'Caiyun';
+      return t.common.provider.caiyun;
     case ProviderType.deepL:
-      return 'DeepL';
+      return t.common.provider.deepl;
     case ProviderType.google:
-      return 'Google';
+      return t.common.provider.google;
     case ProviderType.iciba:
-      return 'Iciba';
+      return t.common.provider.iciba;
+    case ProviderType.openAi:
+      return t.common.provider.openai;
+    case ProviderType.ollama:
+      return t.common.provider.ollama;
     case ProviderType.system:
-      return 'System';
+      return t.common.provider.system;
     case ProviderType.tencent:
-      return 'Tencent';
+      return t.common.provider.tencent;
     case ProviderType.youdao:
-      return 'Youdao';
+      return t.common.provider.youdao;
   }
 }

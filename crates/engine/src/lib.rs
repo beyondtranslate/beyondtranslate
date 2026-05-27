@@ -3,6 +3,8 @@ mod engine;
 mod languages;
 mod provider;
 
+pub use provider::llm::prompt;
+
 pub use beyondtranslate_core::{
     DictionaryError, DictionaryService, OcrError, OcrService, Provider, ProviderCapability,
     TranslationError, TranslationService,

@@ -3,6 +3,8 @@ import './translation_engine_config.dart';
 
 String getTranslationEngineTypeName(String type) {
   switch (type) {
+    case 'anthropic':
+      return 'Anthropic';
     case 'baidu':
       return t.common.provider.baidu;
     case 'caiyun':
@@ -13,6 +15,10 @@ String getTranslationEngineTypeName(String type) {
       return t.common.provider.google;
     case 'iciba':
       return t.common.provider.iciba;
+    case 'ollama':
+      return 'Ollama';
+    case 'openai':
+      return 'OpenAI';
     case 'sogou':
       return t.common.provider.sogou;
     case 'tencent':

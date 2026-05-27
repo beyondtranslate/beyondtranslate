@@ -86,11 +86,14 @@ enum LocaleKeys {
       static let zhHant = LocaleKey("common.language.zh_hant")
     }
     enum provider {
+      static let anthropic = LocaleKey("common.provider.anthropic")
       static let baidu = LocaleKey("common.provider.baidu")
       static let caiyun = LocaleKey("common.provider.caiyun")
       static let deepl = LocaleKey("common.provider.deepl")
       static let google = LocaleKey("common.provider.google")
       static let iciba = LocaleKey("common.provider.iciba")
+      static let ollama = LocaleKey("common.provider.ollama")
+      static let openai = LocaleKey("common.provider.openai")
       static let sogou = LocaleKey("common.provider.sogou")
       static let system = LocaleKey("common.provider.system")
       static let tencent = LocaleKey("common.provider.tencent")

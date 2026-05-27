@@ -42,11 +42,14 @@
 "common.language.yo" = "Yoruba";
 "common.language.zh_hans" = "Chinese (Simplified)";
 "common.language.zh_hant" = "Chinese (Traditional)";
+"common.provider.anthropic" = "Anthropic";
 "common.provider.baidu" = "Baidu";
 "common.provider.caiyun" = "Caiyun";
 "common.provider.deepl" = "DeepL";
 "common.provider.google" = "Google";
 "common.provider.iciba" = "Iciba";
+"common.provider.ollama" = "Ollama";
+"common.provider.openai" = "OpenAI";
 "common.provider.sogou" = "Sogou";
 "common.provider.system" = "System";
 "common.provider.tencent" = "Tencent";

@@ -42,11 +42,14 @@
 "common.language.yo" = "約魯巴語";
 "common.language.zh_hans" = "中文（簡體）";
 "common.language.zh_hant" = "中文（繁體）";
+"common.provider.anthropic" = "Anthropic";
 "common.provider.baidu" = "百度";
 "common.provider.caiyun" = "彩雲小譯";
 "common.provider.deepl" = "DeepL";
 "common.provider.google" = "谷歌";
 "common.provider.iciba" = "愛詞霸";
+"common.provider.ollama" = "Ollama";
+"common.provider.openai" = "OpenAI";
 "common.provider.sogou" = "搜狗";
 "common.provider.system" = "系統";
 "common.provider.tencent" = "騰訊";

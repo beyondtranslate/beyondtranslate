@@ -292,6 +292,8 @@ class _TranslationsCommonProviderZhHant extends TranslationsCommonProviderEn {
 
   // Translations
   @override
+  String get anthropic => 'Anthropic';
+  @override
   String get baidu => '百度';
   @override
   String get caiyun => '彩雲小譯';
@@ -301,6 +303,10 @@ class _TranslationsCommonProviderZhHant extends TranslationsCommonProviderEn {
   String get google => '谷歌';
   @override
   String get iciba => '愛詞霸';
+  @override
+  String get ollama => 'Ollama';
+  @override
+  String get openai => 'OpenAI';
   @override
   String get sogou => '搜狗';
   @override
@@ -1349,11 +1355,14 @@ extension on TranslationsZhHant {
       'common.theme_mode.light' => '淺色',
       'common.theme_mode.dark' => '深色',
       'common.theme_mode.system' => '跟隨系統',
+      'common.provider.anthropic' => 'Anthropic',
       'common.provider.baidu' => '百度',
       'common.provider.caiyun' => '彩雲小譯',
       'common.provider.deepl' => 'DeepL',
       'common.provider.google' => '谷歌',
       'common.provider.iciba' => '愛詞霸',
+      'common.provider.ollama' => 'Ollama',
+      'common.provider.openai' => 'OpenAI',
       'common.provider.sogou' => '搜狗',
       'common.provider.system' => '系統',
       'common.provider.tencent' => '騰訊',

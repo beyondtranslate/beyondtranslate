@@ -1,4 +1,4 @@
-use crate::{DictionaryService, OcrService, TranslationService};
+use crate::{DictionaryService, LlmService, OcrService, TranslationService};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -37,6 +37,10 @@ pub trait Provider: Send + Sync {
     }
 
     fn ocr(&self) -> Option<&dyn OcrService> {
+        None
+    }
+
+    fn llm(&self) -> Option<&dyn LlmService> {
         None
     }
 }

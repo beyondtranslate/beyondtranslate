@@ -20,11 +20,13 @@ class TranslationEngineTag extends StatefulWidget {
 
 class _TranslationEngineTagState extends State<TranslationEngineTag> {
   static const Set<String> _iconTypes = {
+    'anthropic',
     'baidu',
     'caiyun',
     'deepl',
     'google',
     'iciba',
+    'ollama',
     'openai',
     'sogou',
     'tencent',
@@ -56,6 +58,8 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
 
   static String _providerTypeValue(ProviderType type) {
     switch (type) {
+      case ProviderType.anthropic:
+        return 'anthropic';
       case ProviderType.baidu:
         return 'baidu';
       case ProviderType.caiyun:
@@ -66,6 +70,10 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
         return 'google';
       case ProviderType.iciba:
         return 'iciba';
+      case ProviderType.openAi:
+        return 'openai';
+      case ProviderType.ollama:
+        return 'ollama';
       case ProviderType.system:
         return 'system';
       case ProviderType.tencent:

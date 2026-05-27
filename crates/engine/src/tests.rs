@@ -1,11 +1,12 @@
 use std::{
+    collections::BTreeMap,
     env, fs,
     time::{SystemTime, UNIX_EPOCH},
 };
 
 use beyondtranslate_core::ProviderCapability;
 
-use crate::{from_yaml_str, load_from_file, EngineError};
+use crate::{from_yaml_str, load_from_file, EngineConfig, EngineError, ProviderConfig};
 
 #[test]
 fn loads_configured_provider() {
@@ -76,6 +77,60 @@ providers:
     assert_eq!(registry.names(), vec!["baidu-main"]);
     let provider = registry.require("baidu-main").expect("baidu provider");
     assert_eq!(provider.name(), "baidu");
+}
+
+#[cfg(feature = "openai")]
+#[test]
+fn loads_openai_provider() {
+    let registry = from_yaml_str(
+        r#"
+providers:
+  openai-main:
+    type: openai
+    apiKey: sk-test-key
+    defaultModel: configured-model
+"#,
+    )
+    .expect("valid config");
+
+    assert_eq!(registry.names(), vec!["openai-main"]);
+    let provider = registry.require("openai-main").expect("openai provider");
+    assert_eq!(provider.name(), "openai");
+}
+
+#[cfg(feature = "openai")]
+#[test]
+fn loads_openai_provider_snake_case() {
+    let registry = from_yaml_str(
+        r#"
+providers:
+  openai-main:
+    type: openai
+    api_key: sk-test-key
+    default_model: configured-model
+"#,
+    )
+    .expect("valid config");
+
+    assert_eq!(registry.names(), vec!["openai-main"]);
+}
+
+#[cfg(feature = "openai")]
+#[test]
+fn openai_provider_settings_roundtrip() {
+    // Simulate what settings.json stores after user configures via UI
+    let settings_json = r#"{"type":"openai","apiKey":"sk-test","baseUrl":"https://api.openai.com","defaultModel":"configured-model"}"#;
+    let config: ProviderConfig = serde_json::from_str(settings_json).expect("parse settings JSON");
+
+    // Build engine config (same flow as engine::build_from_settings)
+    let mut providers = BTreeMap::new();
+    providers.insert("openai-main".to_string(), config);
+    let engine_config = EngineConfig { providers };
+    let yaml = serde_yaml::to_string(&engine_config).expect("serialize to yaml");
+
+    // Parse back (same as from_yaml_str)
+    let registry = from_yaml_str(&yaml).expect("parse yaml");
+    assert_eq!(registry.names(), vec!["openai-main"]);
 }
 
 #[test]

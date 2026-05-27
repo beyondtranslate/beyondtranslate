@@ -241,6 +241,38 @@ typedef void (*UniffiForeignFutureCompleteVoid)(uint64_t, UniffiForeignFutureRes
     );
 
 #endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_STREAM_CALLBACK_METHOD0
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_STREAM_CALLBACK_METHOD0
+typedef void (*UniffiCallbackInterfaceStreamCallbackMethod0)(uint64_t, RustBuffer, void* _Nonnull, 
+        RustCallStatus *_Nonnull uniffiCallStatus
+    );
+
+#endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_STREAM_CALLBACK_METHOD1
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_STREAM_CALLBACK_METHOD1
+typedef void (*UniffiCallbackInterfaceStreamCallbackMethod1)(uint64_t, RustBuffer, void* _Nonnull, 
+        RustCallStatus *_Nonnull uniffiCallStatus
+    );
+
+#endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_STREAM_CALLBACK_METHOD2
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_STREAM_CALLBACK_METHOD2
+typedef void (*UniffiCallbackInterfaceStreamCallbackMethod2)(uint64_t, RustBuffer, void* _Nonnull, 
+        RustCallStatus *_Nonnull uniffiCallStatus
+    );
+
+#endif
+#ifndef UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_STREAM_CALLBACK
+#define UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_STREAM_CALLBACK
+typedef struct UniffiVTableCallbackInterfaceStreamCallback {
+    UniffiCallbackInterfaceFree _Nonnull uniffiFree;
+    UniffiCallbackInterfaceClone _Nonnull uniffiClone;
+    UniffiCallbackInterfaceStreamCallbackMethod0 _Nonnull onChunk;
+    UniffiCallbackInterfaceStreamCallbackMethod1 _Nonnull onFinish;
+    UniffiCallbackInterfaceStreamCallbackMethod2 _Nonnull onError;
+} UniffiVTableCallbackInterfaceStreamCallback;
+
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_CLONE_RUNTIMEAPISERVER
 #define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_CLONE_RUNTIMEAPISERVER
 uint64_t uniffi_beyondtranslate_runtime_fn_clone_runtimeapiserver(uint64_t handle, RustCallStatus *_Nonnull out_status
@@ -291,6 +323,11 @@ RustBuffer uniffi_beyondtranslate_runtime_fn_method_runtime_list_app_languages(u
 RustBuffer uniffi_beyondtranslate_runtime_fn_method_runtime_list_languages(uint64_t ptr, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIME_LLM
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIME_LLM
+uint64_t uniffi_beyondtranslate_runtime_fn_method_runtime_llm(uint64_t ptr, RustBuffer provider_id, RustCallStatus *_Nonnull out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIME_OCR
 #define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIME_OCR
 uint64_t uniffi_beyondtranslate_runtime_fn_method_runtime_ocr(uint64_t ptr, RustBuffer provider_id, RustCallStatus *_Nonnull out_status
@@ -334,6 +371,41 @@ void uniffi_beyondtranslate_runtime_fn_free_runtimedictionary(uint64_t handle, R
 #ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMEDICTIONARY_LOOKUP
 #define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMEDICTIONARY_LOOKUP
 uint64_t uniffi_beyondtranslate_runtime_fn_method_runtimedictionary_lookup(uint64_t ptr, RustBuffer request
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_CLONE_RUNTIMELLM
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_CLONE_RUNTIMELLM
+uint64_t uniffi_beyondtranslate_runtime_fn_clone_runtimellm(uint64_t handle, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_FREE_RUNTIMELLM
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_FREE_RUNTIMELLM
+void uniffi_beyondtranslate_runtime_fn_free_runtimellm(uint64_t handle, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_ALTERNATIVES
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_ALTERNATIVES
+uint64_t uniffi_beyondtranslate_runtime_fn_method_runtimellm_alternatives(uint64_t ptr, RustBuffer text, RustBuffer source_lang, RustBuffer target_lang, uint32_t count, RustBuffer style
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_CHAT
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_CHAT
+uint64_t uniffi_beyondtranslate_runtime_fn_method_runtimellm_chat(uint64_t ptr, RustBuffer model, RustBuffer messages
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_EXPLAIN
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_EXPLAIN
+uint64_t uniffi_beyondtranslate_runtime_fn_method_runtimellm_explain(uint64_t ptr, RustBuffer source, RustBuffer translation
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_POLISH
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_POLISH
+uint64_t uniffi_beyondtranslate_runtime_fn_method_runtimellm_polish(uint64_t ptr, RustBuffer text, RustBuffer style
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_TRANSLATE_STREAM
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_RUNTIMELLM_TRANSLATE_STREAM
+void uniffi_beyondtranslate_runtime_fn_method_runtimellm_translate_stream(uint64_t ptr, RustBuffer source_lang, RustBuffer target_lang, RustBuffer text, uint64_t callback, RustCallStatus *_Nonnull out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_CLONE_RUNTIMEOCR
@@ -534,6 +606,11 @@ void uniffi_beyondtranslate_runtime_fn_free_settingssubscription(uint64_t handle
 #ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_SETTINGSSUBSCRIPTION_NEXT
 #define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_METHOD_SETTINGSSUBSCRIPTION_NEXT
 uint64_t uniffi_beyondtranslate_runtime_fn_method_settingssubscription_next(uint64_t ptr
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_INIT_CALLBACK_VTABLE_STREAMCALLBACK
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_INIT_CALLBACK_VTABLE_STREAMCALLBACK
+void uniffi_beyondtranslate_runtime_fn_init_callback_vtable_streamcallback(const UniffiVTableCallbackInterfaceStreamCallback* _Nonnull vtable
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_FN_FUNC_ADD
@@ -1102,6 +1179,12 @@ uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtime_list_languages(v
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIME_LLM
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIME_LLM
+uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtime_llm(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIME_OCR
 #define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIME_OCR
 uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr(void
@@ -1141,6 +1224,36 @@ uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtime_translation(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMEDICTIONARY_LOOKUP
 #define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMEDICTIONARY_LOOKUP
 uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtimedictionary_lookup(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_ALTERNATIVES
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_ALTERNATIVES
+uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtimellm_alternatives(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_CHAT
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_CHAT
+uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtimellm_chat(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_EXPLAIN
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_EXPLAIN
+uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtimellm_explain(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_POLISH
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_POLISH
+uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtimellm_polish(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_TRANSLATE_STREAM
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_RUNTIMELLM_TRANSLATE_STREAM
+uint16_t uniffi_beyondtranslate_runtime_checksum_method_runtimellm_translate_stream(void
     
 );
 #endif
@@ -1315,6 +1428,24 @@ uint16_t uniffi_beyondtranslate_runtime_checksum_method_settingssubscription_nex
 #ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_CONSTRUCTOR_RUNTIME_NEW
 #define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_CONSTRUCTOR_RUNTIME_NEW
 uint16_t uniffi_beyondtranslate_runtime_checksum_constructor_runtime_new(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_STREAMCALLBACK_ON_CHUNK
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_STREAMCALLBACK_ON_CHUNK
+uint16_t uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_chunk(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_STREAMCALLBACK_ON_FINISH
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_STREAMCALLBACK_ON_FINISH
+uint16_t uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_finish(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_STREAMCALLBACK_ON_ERROR
+#define UNIFFI_FFIDEF_UNIFFI_BEYONDTRANSLATE_RUNTIME_CHECKSUM_METHOD_STREAMCALLBACK_ON_ERROR
+uint16_t uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_error(void
     
 );
 #endif

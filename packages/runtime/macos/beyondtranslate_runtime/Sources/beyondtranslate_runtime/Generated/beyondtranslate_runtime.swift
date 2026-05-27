@@ -418,6 +418,13 @@ private final class UniffiHandleMap<T>: @unchecked Sendable {
 }
 
 // Public interface members begin here.
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
 #if swift(>=5.8)
   @_documentation(visibility: private)
@@ -427,6 +434,22 @@ private struct FfiConverterUInt16: FfiConverterPrimitive {
   typealias SwiftType = UInt16
 
   public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt16 {
+    return try lift(readInt(&buf))
+  }
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterUInt32: FfiConverterPrimitive {
+  typealias FfiType = UInt32
+  typealias SwiftType = UInt32
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt32 {
     return try lift(readInt(&buf))
   }
 
@@ -562,6 +585,8 @@ public protocol RuntimeProtocol: AnyObject, Sendable {
    */
   func listLanguages() -> [LanguageInfo]
 
+  func llm(providerId: String) throws -> RuntimeLlm
+
   func ocr(providerId: String) throws -> RuntimeOcr
 
   func permission() -> RuntimePermission
@@ -663,6 +688,16 @@ open class Runtime: RuntimeProtocol, @unchecked Sendable {
       try! rustCall {
         uniffi_beyondtranslate_runtime_fn_method_runtime_list_languages(
           self.uniffiCloneHandle(), $0
+        )
+      })
+  }
+
+  open func llm(providerId: String) throws -> RuntimeLlm {
+    return try FfiConverterTypeRuntimeLlm_lift(
+      try rustCallWithError(FfiConverterTypeRuntimeError_lift) {
+        uniffi_beyondtranslate_runtime_fn_method_runtime_llm(
+          self.uniffiCloneHandle(),
+          FfiConverterString.lower(providerId), $0
         )
       })
   }
@@ -1000,6 +1035,199 @@ public func FfiConverterTypeRuntimeDictionary_lift(_ handle: UInt64) throws -> R
 #endif
 public func FfiConverterTypeRuntimeDictionary_lower(_ value: RuntimeDictionary) -> UInt64 {
   return FfiConverterTypeRuntimeDictionary.lower(value)
+}
+
+public protocol RuntimeLlmProtocol: AnyObject, Sendable {
+
+  func alternatives(
+    text: String, sourceLang: String, targetLang: String, count: UInt32, style: String?
+  ) async throws -> [String]
+
+  func chat(model: String, messages: [ChatMessage]) async throws -> ChatResponse
+
+  func explain(source: String, translation: String) async throws -> String
+
+  func polish(text: String, style: String) async throws -> String
+
+  func translateStream(
+    sourceLang: String, targetLang: String, text: String, callback: StreamCallback)
+
+}
+open class RuntimeLlm: RuntimeLlmProtocol, @unchecked Sendable {
+  fileprivate let handle: UInt64
+
+  /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public struct NoHandle {
+    public init() {}
+  }
+
+  // TODO: We'd like this to be `private` but for Swifty reasons,
+  // we can't implement `FfiConverter` without making this `required` and we can't
+  // make it `required` without making it `public`.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  required public init(unsafeFromHandle handle: UInt64) {
+    self.handle = handle
+  }
+
+  // This constructor can be used to instantiate a fake object.
+  // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+  //
+  // - Warning:
+  //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public init(noHandle: NoHandle) {
+    self.handle = 0
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public func uniffiCloneHandle() -> UInt64 {
+    return try! rustCall { uniffi_beyondtranslate_runtime_fn_clone_runtimellm(self.handle, $0) }
+  }
+  // No primary constructor declared for this class.
+
+  deinit {
+    if handle == 0 {
+      // Mock objects have handle=0 don't try to free them
+      return
+    }
+
+    try! rustCall { uniffi_beyondtranslate_runtime_fn_free_runtimellm(handle, $0) }
+  }
+
+  open func alternatives(
+    text: String, sourceLang: String, targetLang: String, count: UInt32, style: String?
+  ) async throws -> [String] {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimellm_alternatives(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(text), FfiConverterString.lower(sourceLang),
+            FfiConverterString.lower(targetLang), FfiConverterUInt32.lower(count),
+            FfiConverterOptionString.lower(style)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterSequenceString.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func chat(model: String, messages: [ChatMessage]) async throws -> ChatResponse {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimellm_chat(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(model), FfiConverterSequenceTypeChatMessage.lower(messages)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeChatResponse_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func explain(source: String, translation: String) async throws -> String {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimellm_explain(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(source), FfiConverterString.lower(translation)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterString.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func polish(text: String, style: String) async throws -> String {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimellm_polish(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(text), FfiConverterString.lower(style)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterString.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func translateStream(
+    sourceLang: String, targetLang: String, text: String, callback: StreamCallback
+  ) {
+    try! rustCall {
+      uniffi_beyondtranslate_runtime_fn_method_runtimellm_translate_stream(
+        self.uniffiCloneHandle(),
+        FfiConverterString.lower(sourceLang),
+        FfiConverterString.lower(targetLang),
+        FfiConverterString.lower(text),
+        FfiConverterCallbackInterfaceStreamCallback_lower(callback), $0
+      )
+    }
+  }
+
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRuntimeLlm: FfiConverter {
+  typealias FfiType = UInt64
+  typealias SwiftType = RuntimeLlm
+
+  public static func lift(_ handle: UInt64) throws -> RuntimeLlm {
+    return RuntimeLlm(unsafeFromHandle: handle)
+  }
+
+  public static func lower(_ value: RuntimeLlm) -> UInt64 {
+    return value.uniffiCloneHandle()
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RuntimeLlm {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  public static func write(_ value: RuntimeLlm, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(value))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeLlm_lift(_ handle: UInt64) throws -> RuntimeLlm {
+  return try FfiConverterTypeRuntimeLlm.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRuntimeLlm_lower(_ value: RuntimeLlm) -> UInt64 {
+  return FfiConverterTypeRuntimeLlm.lower(value)
 }
 
 public protocol RuntimeOcrProtocol: AnyObject, Sendable {
@@ -2548,6 +2776,218 @@ public func FfiConverterTypeAppearanceSettingsPatch_lower(_ value: AppearanceSet
   -> RustBuffer
 {
   return FfiConverterTypeAppearanceSettingsPatch.lower(value)
+}
+
+public struct ChatChoice: Equatable, Hashable {
+  public var index: UInt32
+  public var message: ChatMessage
+  public var finishReason: String?
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(index: UInt32, message: ChatMessage, finishReason: String?) {
+    self.index = index
+    self.message = message
+    self.finishReason = finishReason
+  }
+
+}
+
+#if compiler(>=6)
+  extension ChatChoice: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeChatChoice: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ChatChoice {
+    return
+      try ChatChoice(
+        index: FfiConverterUInt32.read(from: &buf),
+        message: FfiConverterTypeChatMessage.read(from: &buf),
+        finishReason: FfiConverterOptionString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: ChatChoice, into buf: inout [UInt8]) {
+    FfiConverterUInt32.write(value.index, into: &buf)
+    FfiConverterTypeChatMessage.write(value.message, into: &buf)
+    FfiConverterOptionString.write(value.finishReason, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatChoice_lift(_ buf: RustBuffer) throws -> ChatChoice {
+  return try FfiConverterTypeChatChoice.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatChoice_lower(_ value: ChatChoice) -> RustBuffer {
+  return FfiConverterTypeChatChoice.lower(value)
+}
+
+public struct ChatMessage: Equatable, Hashable {
+  public var role: ChatRole
+  public var content: String
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(role: ChatRole, content: String) {
+    self.role = role
+    self.content = content
+  }
+
+}
+
+#if compiler(>=6)
+  extension ChatMessage: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeChatMessage: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ChatMessage {
+    return
+      try ChatMessage(
+        role: FfiConverterTypeChatRole.read(from: &buf),
+        content: FfiConverterString.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: ChatMessage, into buf: inout [UInt8]) {
+    FfiConverterTypeChatRole.write(value.role, into: &buf)
+    FfiConverterString.write(value.content, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatMessage_lift(_ buf: RustBuffer) throws -> ChatMessage {
+  return try FfiConverterTypeChatMessage.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatMessage_lower(_ value: ChatMessage) -> RustBuffer {
+  return FfiConverterTypeChatMessage.lower(value)
+}
+
+public struct ChatResponse: Equatable, Hashable {
+  public var id: String?
+  public var model: String
+  public var choices: [ChatChoice]
+  public var usage: ChatUsage?
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(id: String?, model: String, choices: [ChatChoice], usage: ChatUsage?) {
+    self.id = id
+    self.model = model
+    self.choices = choices
+    self.usage = usage
+  }
+
+}
+
+#if compiler(>=6)
+  extension ChatResponse: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeChatResponse: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ChatResponse {
+    return
+      try ChatResponse(
+        id: FfiConverterOptionString.read(from: &buf),
+        model: FfiConverterString.read(from: &buf),
+        choices: FfiConverterSequenceTypeChatChoice.read(from: &buf),
+        usage: FfiConverterOptionTypeChatUsage.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: ChatResponse, into buf: inout [UInt8]) {
+    FfiConverterOptionString.write(value.id, into: &buf)
+    FfiConverterString.write(value.model, into: &buf)
+    FfiConverterSequenceTypeChatChoice.write(value.choices, into: &buf)
+    FfiConverterOptionTypeChatUsage.write(value.usage, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatResponse_lift(_ buf: RustBuffer) throws -> ChatResponse {
+  return try FfiConverterTypeChatResponse.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatResponse_lower(_ value: ChatResponse) -> RustBuffer {
+  return FfiConverterTypeChatResponse.lower(value)
+}
+
+public struct ChatUsage: Equatable, Hashable {
+  public var promptTokens: UInt32
+  public var completionTokens: UInt32
+  public var totalTokens: UInt32
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(promptTokens: UInt32, completionTokens: UInt32, totalTokens: UInt32) {
+    self.promptTokens = promptTokens
+    self.completionTokens = completionTokens
+    self.totalTokens = totalTokens
+  }
+
+}
+
+#if compiler(>=6)
+  extension ChatUsage: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeChatUsage: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ChatUsage {
+    return
+      try ChatUsage(
+        promptTokens: FfiConverterUInt32.read(from: &buf),
+        completionTokens: FfiConverterUInt32.read(from: &buf),
+        totalTokens: FfiConverterUInt32.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: ChatUsage, into buf: inout [UInt8]) {
+    FfiConverterUInt32.write(value.promptTokens, into: &buf)
+    FfiConverterUInt32.write(value.completionTokens, into: &buf)
+    FfiConverterUInt32.write(value.totalTokens, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatUsage_lift(_ buf: RustBuffer) throws -> ChatUsage {
+  return try FfiConverterTypeChatUsage.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatUsage_lower(_ value: ChatUsage) -> RustBuffer {
+  return FfiConverterTypeChatUsage.lower(value)
 }
 
 public struct DetectLanguageRequest: Equatable, Hashable {
@@ -4287,6 +4727,71 @@ public func FfiConverterTypeWordTense_lower(_ value: WordTense) -> RustBuffer {
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
+public enum ChatRole: Equatable, Hashable {
+
+  case system
+  case user
+  case assistant
+
+}
+
+#if compiler(>=6)
+  extension ChatRole: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeChatRole: FfiConverterRustBuffer {
+  typealias SwiftType = ChatRole
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ChatRole {
+    let variant: Int32 = try readInt(&buf)
+    switch variant {
+
+    case 1: return .system
+
+    case 2: return .user
+
+    case 3: return .assistant
+
+    default: throw UniffiInternalError.unexpectedEnumCase
+    }
+  }
+
+  public static func write(_ value: ChatRole, into buf: inout [UInt8]) {
+    switch value {
+
+    case .system:
+      writeInt(&buf, Int32(1))
+
+    case .user:
+      writeInt(&buf, Int32(2))
+
+    case .assistant:
+      writeInt(&buf, Int32(3))
+
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatRole_lift(_ buf: RustBuffer) throws -> ChatRole {
+  return try FfiConverterTypeChatRole.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeChatRole_lower(_ value: ChatRole) -> RustBuffer {
+  return FfiConverterTypeChatRole.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 public enum InputSubmitMode: Equatable, Hashable {
 
   case enter
@@ -4418,11 +4923,14 @@ public func FfiConverterTypeProviderCapability_lower(_ value: ProviderCapability
 
 public enum ProviderType: Equatable, Hashable {
 
+  case anthropic
   case baidu
   case caiyun
   case deepL
   case google
   case iciba
+  case openAi
+  case ollama
   case tencent
   case youdao
   case system
@@ -4443,21 +4951,27 @@ public struct FfiConverterTypeProviderType: FfiConverterRustBuffer {
     let variant: Int32 = try readInt(&buf)
     switch variant {
 
-    case 1: return .baidu
+    case 1: return .anthropic
 
-    case 2: return .caiyun
+    case 2: return .baidu
 
-    case 3: return .deepL
+    case 3: return .caiyun
 
-    case 4: return .google
+    case 4: return .deepL
 
-    case 5: return .iciba
+    case 5: return .google
 
-    case 6: return .tencent
+    case 6: return .iciba
 
-    case 7: return .youdao
+    case 7: return .openAi
 
-    case 8: return .system
+    case 8: return .ollama
+
+    case 9: return .tencent
+
+    case 10: return .youdao
+
+    case 11: return .system
 
     default: throw UniffiInternalError.unexpectedEnumCase
     }
@@ -4466,29 +4980,38 @@ public struct FfiConverterTypeProviderType: FfiConverterRustBuffer {
   public static func write(_ value: ProviderType, into buf: inout [UInt8]) {
     switch value {
 
-    case .baidu:
+    case .anthropic:
       writeInt(&buf, Int32(1))
 
-    case .caiyun:
+    case .baidu:
       writeInt(&buf, Int32(2))
 
-    case .deepL:
+    case .caiyun:
       writeInt(&buf, Int32(3))
 
-    case .google:
+    case .deepL:
       writeInt(&buf, Int32(4))
 
-    case .iciba:
+    case .google:
       writeInt(&buf, Int32(5))
 
-    case .tencent:
+    case .iciba:
       writeInt(&buf, Int32(6))
 
-    case .youdao:
+    case .openAi:
       writeInt(&buf, Int32(7))
 
-    case .system:
+    case .ollama:
       writeInt(&buf, Int32(8))
+
+    case .tencent:
+      writeInt(&buf, Int32(9))
+
+    case .youdao:
+      writeInt(&buf, Int32(10))
+
+    case .system:
+      writeInt(&buf, Int32(11))
 
     }
   }
@@ -4656,6 +5179,207 @@ public func FfiConverterTypeSettingsChange_lower(_ value: SettingsChange) -> Rus
   return FfiConverterTypeSettingsChange.lower(value)
 }
 
+/// Callback invoked by the Rust runtime as LLM streaming chunks arrive.
+///
+/// Dart/Swift implement this trait and pass it to
+/// [`RuntimeLlm::translate_stream`]. The Rust side calls:
+///
+/// 1. `on_chunk(content)` — for each token delta (may be called many times)
+/// 2. `on_finish(reason)` — when the stream completes (`"stop"`, `"length"`, etc.)
+/// 3. `on_error(error)` — if the stream encounters an error
+public protocol StreamCallback: AnyObject, Sendable {
+
+  func onChunk(content: String)
+
+  func onFinish(finishReason: String)
+
+  func onError(error: String)
+
+}
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+private struct UniffiCallbackInterfaceStreamCallback {
+
+  // Create the VTable using a series of closures.
+  // Swift automatically converts these into C callback functions.
+  //
+  // Store the vtable directly.
+  static let vtable: UniffiVTableCallbackInterfaceStreamCallback =
+    UniffiVTableCallbackInterfaceStreamCallback(
+      uniffiFree: { (uniffiHandle: UInt64) -> Void in
+        do {
+          try FfiConverterCallbackInterfaceStreamCallback.handleMap.remove(handle: uniffiHandle)
+        } catch {
+          print("Uniffi callback interface StreamCallback: handle missing in uniffiFree")
+        }
+      },
+      uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+        do {
+          return try FfiConverterCallbackInterfaceStreamCallback.handleMap.clone(
+            handle: uniffiHandle)
+        } catch {
+          fatalError("Uniffi callback interface StreamCallback: handle missing in uniffiClone")
+        }
+      },
+      onChunk: {
+        (
+          uniffiHandle: UInt64,
+          content: RustBuffer,
+          uniffiOutReturn: UnsafeMutableRawPointer,
+          uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+        let makeCall = {
+          () throws -> Void in
+          guard
+            let uniffiObj = try? FfiConverterCallbackInterfaceStreamCallback.handleMap.get(
+              handle: uniffiHandle)
+          else {
+            throw UniffiInternalError.unexpectedStaleHandle
+          }
+          return uniffiObj.onChunk(
+            content: try FfiConverterString.lift(content)
+          )
+        }
+
+        let writeReturn = { () }
+        uniffiTraitInterfaceCall(
+          callStatus: uniffiCallStatus,
+          makeCall: makeCall,
+          writeReturn: writeReturn
+        )
+      },
+      onFinish: {
+        (
+          uniffiHandle: UInt64,
+          finishReason: RustBuffer,
+          uniffiOutReturn: UnsafeMutableRawPointer,
+          uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+        let makeCall = {
+          () throws -> Void in
+          guard
+            let uniffiObj = try? FfiConverterCallbackInterfaceStreamCallback.handleMap.get(
+              handle: uniffiHandle)
+          else {
+            throw UniffiInternalError.unexpectedStaleHandle
+          }
+          return uniffiObj.onFinish(
+            finishReason: try FfiConverterString.lift(finishReason)
+          )
+        }
+
+        let writeReturn = { () }
+        uniffiTraitInterfaceCall(
+          callStatus: uniffiCallStatus,
+          makeCall: makeCall,
+          writeReturn: writeReturn
+        )
+      },
+      onError: {
+        (
+          uniffiHandle: UInt64,
+          error: RustBuffer,
+          uniffiOutReturn: UnsafeMutableRawPointer,
+          uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+        let makeCall = {
+          () throws -> Void in
+          guard
+            let uniffiObj = try? FfiConverterCallbackInterfaceStreamCallback.handleMap.get(
+              handle: uniffiHandle)
+          else {
+            throw UniffiInternalError.unexpectedStaleHandle
+          }
+          return uniffiObj.onError(
+            error: try FfiConverterString.lift(error)
+          )
+        }
+
+        let writeReturn = { () }
+        uniffiTraitInterfaceCall(
+          callStatus: uniffiCallStatus,
+          makeCall: makeCall,
+          writeReturn: writeReturn
+        )
+      }
+    )
+
+  // Rust stores this pointer for future callback invocations, so it must live
+  // for the process lifetime (not just for the init function call).
+  static let vtablePtr: UnsafePointer<UniffiVTableCallbackInterfaceStreamCallback> = {
+    let ptr = UnsafeMutablePointer<UniffiVTableCallbackInterfaceStreamCallback>.allocate(
+      capacity: 1)
+    ptr.initialize(to: vtable)
+    return UnsafePointer(ptr)
+  }()
+}
+
+private func uniffiCallbackInitStreamCallback() {
+  uniffi_beyondtranslate_runtime_fn_init_callback_vtable_streamcallback(
+    UniffiCallbackInterfaceStreamCallback.vtablePtr)
+}
+
+// FfiConverter protocol for callback interfaces
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterCallbackInterfaceStreamCallback {
+  fileprivate static let handleMap = UniffiHandleMap<StreamCallback>()
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+extension FfiConverterCallbackInterfaceStreamCallback: FfiConverter {
+  typealias SwiftType = StreamCallback
+  typealias FfiType = UInt64
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public static func lift(_ handle: UInt64) throws -> SwiftType {
+    try handleMap.get(handle: handle)
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    let handle: UInt64 = try readInt(&buf)
+    return try lift(handle)
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public static func lower(_ v: SwiftType) -> UInt64 {
+    return handleMap.insert(obj: v)
+  }
+
+  #if swift(>=5.8)
+    @_documentation(visibility: private)
+  #endif
+  public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
+    writeInt(&buf, lower(v))
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterCallbackInterfaceStreamCallback_lift(_ handle: UInt64) throws
+  -> StreamCallback
+{
+  return try FfiConverterCallbackInterfaceStreamCallback.lift(handle)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterCallbackInterfaceStreamCallback_lower(_ v: StreamCallback) -> UInt64 {
+  return FfiConverterCallbackInterfaceStreamCallback.lower(v)
+}
+
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
@@ -4771,6 +5495,30 @@ private struct FfiConverterOptionString: FfiConverterRustBuffer {
     switch try readInt(&buf) as Int8 {
     case 0: return nil
     case 1: return try FfiConverterString.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionTypeChatUsage: FfiConverterRustBuffer {
+  typealias SwiftType = ChatUsage?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterTypeChatUsage.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterTypeChatUsage.read(from: &buf)
     default: throw UniffiInternalError.unexpectedOptionalTag
     }
   }
@@ -5204,6 +5952,57 @@ private struct FfiConverterSequenceString: FfiConverterRustBuffer {
     seq.reserveCapacity(Int(len))
     for _ in 0..<len {
       seq.append(try FfiConverterString.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterSequenceTypeChatChoice: FfiConverterRustBuffer {
+  typealias SwiftType = [ChatChoice]
+
+  public static func write(_ value: [ChatChoice], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterTypeChatChoice.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [ChatChoice] {
+    let len: Int32 = try readInt(&buf)
+    var seq = [ChatChoice]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterTypeChatChoice.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterSequenceTypeChatMessage: FfiConverterRustBuffer {
+  typealias SwiftType = [ChatMessage]
+
+  public static func write(_ value: [ChatMessage], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterTypeChatMessage.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [ChatMessage]
+  {
+    let len: Int32 = try readInt(&buf)
+    var seq = [ChatMessage]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterTypeChatMessage.read(from: &buf))
     }
     return seq
   }
@@ -6013,6 +6812,9 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_list_languages() != 58600 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtime_llm() != 58856 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_method_runtime_ocr() != 40076 {
     return InitializationResult.apiChecksumMismatch
   }
@@ -6032,6 +6834,21 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimedictionary_lookup() != 64628 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimellm_alternatives() != 63979 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimellm_chat() != 7344 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimellm_explain() != 52876 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimellm_polish() != 19556 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimellm_translate_stream() != 30677 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimeocr_recognize_text() != 10575 {
@@ -6137,7 +6954,17 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_constructor_runtime_new() != 50884 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_chunk() != 51178 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_finish() != 14728 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_streamcallback_on_error() != 63263 {
+    return InitializationResult.apiChecksumMismatch
+  }
 
+  uniffiCallbackInitStreamCallback()
   return InitializationResult.ok
 }()
 

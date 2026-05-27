@@ -8,6 +8,7 @@ import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
+import '../ai_action_bar.dart';
 import '../ui/card.dart' as ui;
 import '../ui/loading_indicator.dart';
 import 'translation_engine_tag.dart';
@@ -21,6 +22,10 @@ class TranslationResultRecordView extends StatelessWidget {
   final TranslationResultRecord translationResultRecord;
   final ValueChanged<String> onTextTapped;
   final EdgeInsetsGeometry margin;
+
+  /// The original source text, used for AI actions.
+  final String? sourceText;
+
   const TranslationResultRecordView({
     Key? key,
     required this.translationResult,
@@ -31,6 +36,7 @@ class TranslationResultRecordView extends StatelessWidget {
       right: 12,
       bottom: _kSectionGap,
     ),
+    this.sourceText,
   }) : super(key: key);
 
   bool get _isErrorOccurred {
@@ -308,6 +314,9 @@ class TranslationResultRecordView extends StatelessWidget {
                 ],
               ),
             ),
+          // AI actions
+          if (sourceText != null && sourceText!.isNotEmpty)
+            _buildAiActions(context),
         ],
       ),
     );
@@ -502,6 +511,88 @@ class TranslationResultRecordView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Returns the translated text for AI actions, prioritizing translate
+  /// response over dictionary lookup.
+  String? get _translatedText {
+    final translateResp = translationResultRecord.translateResponse;
+    if (translateResp != null && translateResp.translations.isNotEmpty) {
+      return translateResp.translations.first.text;
+    }
+    final lookUpResp = translationResultRecord.lookUpResponse;
+    if (lookUpResp != null && lookUpResp.translations.isNotEmpty) {
+      return lookUpResp.translations.first.text;
+    }
+    return null;
+  }
+
+  /// Finds the first LLM-capable provider ID from settings.
+  String? _findLlmProviderId() {
+    for (final p in settingsStore.providers) {
+      if (p.type == ProviderType.openAi ||
+          p.type == ProviderType.anthropic ||
+          p.type == ProviderType.ollama) {
+        return p.id;
+      }
+    }
+    return null;
+  }
+
+  Widget _buildAiActions(BuildContext context) {
+    final llmProviderId = _findLlmProviderId();
+    if (llmProviderId == null) return const SizedBox.shrink();
+
+    final translated = _translatedText;
+    if (translated == null || translated.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: AiActionBar(
+        translatedText: translated,
+        sourceText: sourceText!,
+        llmProviderId: llmProviderId,
+        sourceLang: translationResult.translationTarget?.source ?? 'auto',
+        targetLang: translationResult.translationTarget?.target ?? 'en',
+        compact: true,
+        onPolish: (polished) {
+          _showResultDialog(context, 'Polished Translation', polished);
+        },
+        onAlternatives: (alternatives) {
+          _showResultDialog(
+            context,
+            'Alternative Translations',
+            alternatives.join('\n\n---\n\n'),
+          );
+        },
+        onExplain: (explanation) {
+          _showResultDialog(context, 'Translation Explanation', explanation);
+        },
+      ),
+    );
+  }
+
+  void _showResultDialog(BuildContext context, String title, String content) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(title),
+        content: SizedBox(
+          width: 400,
+          child: SingleChildScrollView(
+            child: SelectableText(content),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Close'),
+          ),
+        ],
       ),
     );
   }

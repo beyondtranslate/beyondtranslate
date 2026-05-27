@@ -289,6 +289,8 @@ class _TranslationsCommonProviderEs extends TranslationsCommonProviderEn {
 
   // Translations
   @override
+  String get anthropic => 'Anthropic';
+  @override
   String get baidu => 'Baidu';
   @override
   String get caiyun => 'Caiyun';
@@ -298,6 +300,10 @@ class _TranslationsCommonProviderEs extends TranslationsCommonProviderEn {
   String get google => 'Google';
   @override
   String get iciba => 'Iciba';
+  @override
+  String get ollama => 'Ollama';
+  @override
+  String get openai => 'OpenAI';
   @override
   String get sogou => 'Sogou';
   @override
@@ -1359,11 +1365,14 @@ extension on TranslationsEs {
       'common.theme_mode.light' => 'Claro',
       'common.theme_mode.dark' => 'Oscuro',
       'common.theme_mode.system' => 'Sistema',
+      'common.provider.anthropic' => 'Anthropic',
       'common.provider.baidu' => 'Baidu',
       'common.provider.caiyun' => 'Caiyun',
       'common.provider.deepl' => 'DeepL',
       'common.provider.google' => 'Google',
       'common.provider.iciba' => 'Iciba',
+      'common.provider.ollama' => 'Ollama',
+      'common.provider.openai' => 'OpenAI',
       'common.provider.sogou' => 'Sogou',
       'common.provider.system' => 'Sistema',
       'common.provider.tencent' => 'Tencent',

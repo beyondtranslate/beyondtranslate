@@ -42,11 +42,14 @@
 "common.language.yo" = "요루바어";
 "common.language.zh_hans" = "중국어(간체)";
 "common.language.zh_hant" = "중국어(번체)";
+"common.provider.anthropic" = "Anthropic";
 "common.provider.baidu" = "Baidu";
 "common.provider.caiyun" = "Caiyun";
 "common.provider.deepl" = "DeepL";
 "common.provider.google" = "Google";
 "common.provider.iciba" = "Iciba";
+"common.provider.ollama" = "Ollama";
+"common.provider.openai" = "OpenAI";
 "common.provider.sogou" = "Sogou";
 "common.provider.system" = "시스템";
 "common.provider.tencent" = "Tencent";

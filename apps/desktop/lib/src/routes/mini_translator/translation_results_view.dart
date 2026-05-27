@@ -96,6 +96,7 @@ class TranslationResultsView extends StatelessWidget {
                     translationResultRecord:
                         resultRecordList[resultRecordIndex],
                     onTextTapped: onTextTapped,
+                    sourceText: text,
                     margin: EdgeInsets.only(
                       left: _kEdgePadding,
                       right: _kEdgePadding,

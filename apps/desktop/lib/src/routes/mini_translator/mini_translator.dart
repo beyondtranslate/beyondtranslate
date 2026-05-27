@@ -14,6 +14,7 @@ import '../../i18n/i18n.dart';
 import '../../models/translation_result.dart';
 import '../../models/translation_result_record.dart';
 import '../../routes/settings/general.dart' show GeneralSettingsPage;
+import '../../services/llm_stream.dart';
 import '../../services/mac_settings.dart';
 import '../../services/runtime.dart';
 import '../../services/settings_store.dart';
@@ -477,28 +478,80 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             message: error.toString(),
           );
         }
+        if (mounted) _setStateAndScheduleWindowResize(() {});
       }());
     }
 
     if (provider.capabilities.contains(ProviderCapability.translation)) {
-      futures.add(() async {
-        try {
-          final translateRequest = TranslateRequest(
-            sourceLanguage: sourceLanguage,
-            targetLanguage: targetLanguage,
-            text: _text,
-          );
-          final translateResponse = await runtime
-              .translation(providerId: provider.id)
-              .translate(request: translateRequest);
-          translationResultRecord.translateRequest = translateRequest;
-          translationResultRecord.translateResponse = translateResponse;
-        } catch (error) {
-          translationResultRecord.translateError = TranslationError(
-            message: error.toString(),
-          );
-        }
-      }());
+      final isLlmProvider = provider.type == ProviderType.openAi ||
+          provider.type == ProviderType.anthropic ||
+          provider.type == ProviderType.ollama;
+
+      if (isLlmProvider) {
+        // Streaming LLM translation — update UI progressively
+        futures.add(() async {
+          try {
+            final translateRequest = TranslateRequest(
+              sourceLanguage: sourceLanguage,
+              targetLanguage: targetLanguage,
+              text: _text,
+            );
+            translationResultRecord.translateRequest = translateRequest;
+
+            final buffer = StringBuffer();
+            final stream = LlmStream.translate(
+              providerId: provider.id,
+              sourceLang: sourceLanguage ?? 'auto',
+              targetLang: targetLanguage ?? 'en',
+              text: _text,
+            );
+
+            await for (final chunk in stream) {
+              if (chunk.content.isNotEmpty) {
+                buffer.write(chunk.content);
+                // Update the record with accumulated text so far
+                translationResultRecord.translateResponse = TranslateResponse(
+                  translations: [
+                    TextTranslation(
+                      text: buffer.toString(),
+                      detectedSourceLanguage: null,
+                      audioUrl: null,
+                    ),
+                  ],
+                );
+                if (mounted) {
+                  _setStateAndScheduleWindowResize(() {});
+                }
+              }
+            }
+          } catch (error) {
+            translationResultRecord.translateError = TranslationError(
+              message: error.toString(),
+            );
+            if (mounted) _setStateAndScheduleWindowResize(() {});
+          }
+        }());
+      } else {
+        // Traditional non-streaming translation
+        futures.add(() async {
+          try {
+            final translateRequest = TranslateRequest(
+              sourceLanguage: sourceLanguage,
+              targetLanguage: targetLanguage,
+              text: _text,
+            );
+            final translateResponse = await runtime
+                .translation(providerId: provider.id)
+                .translate(request: translateRequest);
+            translationResultRecord.translateRequest = translateRequest;
+            translationResultRecord.translateResponse = translateResponse;
+          } catch (error) {
+            translationResultRecord.translateError = TranslationError(
+              message: error.toString(),
+            );
+          }
+        }());
+      }
     }
 
     await Future.wait(futures);
@@ -1016,5 +1069,3 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     // TODO: Reimplement when keypress_simulator dependency is restored
   }
 }
-
-

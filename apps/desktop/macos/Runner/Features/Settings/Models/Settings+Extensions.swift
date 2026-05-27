@@ -94,7 +94,10 @@ extension ProviderCapability: Identifiable {
 
 extension ProviderType: CaseIterable {
   public static var allCases: [ProviderType] {
-    [.baidu, .caiyun, .deepL, .google, .iciba, .system, .tencent, .youdao]
+    [
+      .anthropic, .baidu, .caiyun, .deepL, .google, .iciba, .ollama, .openAi, .system, .tencent,
+      .youdao,
+    ]
   }
 }
 
@@ -108,11 +111,14 @@ extension ProviderType {
   /// The wire string used by the Rust backend ("baidu", "deepl", …).
   var wireValue: String {
     switch self {
+    case .anthropic: return "anthropic"
     case .baidu: return "baidu"
     case .caiyun: return "caiyun"
     case .deepL: return "deepl"
     case .google: return "google"
     case .iciba: return "iciba"
+    case .openAi: return "openai"
+    case .ollama: return "ollama"
     case .system: return "system"
     case .tencent: return "tencent"
     case .youdao: return "youdao"
@@ -122,6 +128,18 @@ extension ProviderType {
   /// Provider-specific configuration fields (API keys, endpoints, etc.).
   var configFields: [ProviderConfigField] {
     switch self {
+    case .anthropic:
+      return [
+        ProviderConfigField(
+          key: "apiKey", label: "API Key", placeholder: "sk-ant-…", isSecret: true,
+          isOptional: false),
+        ProviderConfigField(
+          key: "baseUrl", label: "Base URL", placeholder: "https://api.anthropic.com",
+          isSecret: false, isOptional: true),
+        ProviderConfigField(
+          key: "defaultModel", label: "Default Model",
+          placeholder: "claude-sonnet-4-20250514", isSecret: false, isOptional: true),
+      ]
     case .baidu:
       return [
         ProviderConfigField(
@@ -166,6 +184,27 @@ extension ProviderType {
           key: "appKey", label: "API Key", placeholder: "", isSecret: true, isOptional: false),
         ProviderConfigField(
           key: "baseUrl", label: "Base URL", placeholder: "", isSecret: false, isOptional: true),
+      ]
+    case .openAi:
+      return [
+        ProviderConfigField(
+          key: "apiKey", label: "API Key", placeholder: "sk-…", isSecret: true,
+          isOptional: false),
+        ProviderConfigField(
+          key: "baseUrl", label: "Base URL", placeholder: "https://api.openai.com",
+          isSecret: false, isOptional: true),
+        ProviderConfigField(
+          key: "defaultModel", label: "Default Model", placeholder: "gpt-4o-mini",
+          isSecret: false, isOptional: true),
+      ]
+    case .ollama:
+      return [
+        ProviderConfigField(
+          key: "baseUrl", label: "Base URL", placeholder: "http://localhost:11434",
+          isSecret: false, isOptional: true),
+        ProviderConfigField(
+          key: "defaultModel", label: "Default Model", placeholder: "llama3",
+          isSecret: false, isOptional: true),
       ]
     case .tencent:
       return [

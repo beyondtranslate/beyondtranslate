@@ -412,8 +412,7 @@ fn normalize_provider_config_keys(value: &mut Value) {
     };
 
     for (from, to) in [
-        ("api_key", "appKey"),
-        ("apiKey", "appKey"),
+        ("api_key", "apiKey"),
         ("app_key", "appKey"),
         ("app_id", "appId"),
         ("base_url", "baseUrl"),

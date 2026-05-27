@@ -323,7 +323,8 @@ private final class NativeTextFieldView: NSView, NSTextFieldDelegate, NSTextView
 
     layoutManager.ensureLayout(for: textContainer)
     let usedRect = layoutManager.usedRect(for: textContainer)
-    let contentHeight = ceil(max(textStyle.font.ascender - textStyle.font.descender, usedRect.height))
+    let contentHeight = ceil(
+      max(textStyle.font.ascender - textStyle.font.descender, usedRect.height))
     guard abs(contentHeight - lastReportedContentHeight) >= 0.5 else { return }
 
     lastReportedContentHeight = contentHeight
@@ -371,7 +372,7 @@ private struct NativeTextStyle {
     let args = arguments ?? [:]
     let fontSize = CGFloat(NativeTextStyle.decodeDouble(args["fontSize"]) ?? 14)
     if let family = args["fontFamily"] as? String,
-       let customFont = NSFont(name: family, size: fontSize)
+      let customFont = NSFont(name: family, size: fontSize)
     {
       font = customFont
     } else {

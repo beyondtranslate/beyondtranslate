@@ -43,11 +43,14 @@ pub enum ProviderCapability {
 type ProviderType = engine::ProviderType;
 #[uniffi::remote(Enum)]
 pub enum ProviderType {
+    Anthropic,
     Baidu,
     Caiyun,
     DeepL,
     Google,
     Iciba,
+    OpenAi,
+    Ollama,
     Tencent,
     Youdao,
     System,
@@ -232,4 +235,44 @@ type RecognizeTextResponse = core::RecognizeTextResponse;
 pub struct RecognizeTextResponse {
     pub text: String,
     pub recognitions: Option<Vec<TextRecognition>>,
+}
+
+type ChatRole = core::ChatRole;
+#[uniffi::remote(Enum)]
+pub enum ChatRole {
+    System,
+    User,
+    Assistant,
+}
+
+type ChatMessage = core::ChatMessage;
+#[uniffi::remote(Record)]
+pub struct ChatMessage {
+    pub role: ChatRole,
+    pub content: String,
+}
+
+type ChatChoice = core::ChatChoice;
+#[uniffi::remote(Record)]
+pub struct ChatChoice {
+    pub index: u32,
+    pub message: ChatMessage,
+    pub finish_reason: Option<String>,
+}
+
+type ChatUsage = core::ChatUsage;
+#[uniffi::remote(Record)]
+pub struct ChatUsage {
+    pub prompt_tokens: u32,
+    pub completion_tokens: u32,
+    pub total_tokens: u32,
+}
+
+type ChatResponse = core::ChatResponse;
+#[uniffi::remote(Record)]
+pub struct ChatResponse {
+    pub id: Option<String>,
+    pub model: String,
+    pub choices: Vec<ChatChoice>,
+    pub usage: Option<ChatUsage>,
 }

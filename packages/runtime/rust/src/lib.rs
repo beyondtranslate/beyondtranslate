@@ -4,8 +4,9 @@ mod remote;
 pub mod runtime;
 pub use api_server::{ApiServerInfo, RuntimeApiServer};
 pub use runtime::{
-    Runtime, RuntimeDictionary, RuntimeError, RuntimeOcr, RuntimePermission, RuntimeSettings,
-    RuntimeTextExtractor, RuntimeTranslation, SettingsChange, SettingsSubscription,
+    Runtime, RuntimeDictionary, RuntimeError, RuntimeLlm, RuntimeOcr, RuntimePermission,
+    RuntimeSettings, RuntimeTextExtractor, RuntimeTranslation, SettingsChange,
+    SettingsSubscription, StreamCallback,
 };
 
 use beyondtranslate_core::{

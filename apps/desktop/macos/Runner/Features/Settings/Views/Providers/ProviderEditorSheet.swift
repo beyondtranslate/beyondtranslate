@@ -337,11 +337,14 @@ extension ProviderConfigEntry {
 extension ProviderType {
   fileprivate var defaultCapabilities: [ProviderCapability] {
     switch self {
+    case .anthropic: return [.dictionary, .translation]
     case .baidu: return [.dictionary, .translation]
     case .caiyun: return [.translation]
     case .deepL: return [.translation]
     case .google: return [.dictionary, .translation]
     case .iciba: return [.dictionary]
+    case .ollama: return [.dictionary, .translation]
+    case .openAi: return [.dictionary, .translation]
     case .tencent: return [.translation]
     case .system: return [.dictionary, .ocr, .translation]
     case .youdao: return [.dictionary, .translation]
@@ -350,11 +353,14 @@ extension ProviderType {
 
   var displayName: String {
     switch self {
+    case .anthropic: return LocaleKeys.common.provider.anthropic.tr()
     case .baidu: return LocaleKeys.common.provider.baidu.tr()
     case .caiyun: return LocaleKeys.common.provider.caiyun.tr()
     case .deepL: return LocaleKeys.common.provider.deepl.tr()
     case .google: return LocaleKeys.common.provider.google.tr()
     case .iciba: return LocaleKeys.common.provider.iciba.tr()
+    case .ollama: return LocaleKeys.common.provider.ollama.tr()
+    case .openAi: return LocaleKeys.common.provider.openai.tr()
     case .tencent: return LocaleKeys.common.provider.tencent.tr()
     case .system: return LocaleKeys.common.provider.system.tr()
     case .youdao: return LocaleKeys.common.provider.youdao.tr()
