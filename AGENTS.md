@@ -86,7 +86,6 @@ beyondtranslate/
 - **bot_toast** — Toast notifications
 - **dio** — HTTP client
 - **screen_text_extractor / screen_capturer** — Screen text extraction
-- **hotkey_manager** — Global hotkeys
 - **audioplayers** — Audio playback
 - **uniffi** (0.31.1) — Rust FFI bindings generation (Swift via `uniffi-bindgen`)
 - **uniffi-dart** (0.2.0) — Dart FFI bindings generation (via `uniffi-bindgen-dart`)

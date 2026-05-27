@@ -22,13 +22,11 @@ dependencies:
     sdk: flutter
 
   go_router: ^17.2.1
-  hotkey_manager: ^0.2.3
   intl: ^0.20.2
   nativeapi: ^0.1.2
   package_info_plus: ^9.0.0
   path: ^1.8.3
   path_provider: ^2.1.1
-  protocol_handler: ^0.1.6
   slang: ^4.13.0
   slang_flutter: ^4.13.0
   sticky_headers: ^0.3.0+2

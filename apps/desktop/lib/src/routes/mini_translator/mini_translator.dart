@@ -7,7 +7,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nativeapi/nativeapi.dart' as nativeapi;
-import 'package:protocol_handler/protocol_handler.dart';
 
 import '../../extensions/window_controller.dart';
 import '../../i18n/i18n.dart';
@@ -40,7 +39,7 @@ class MiniTranslatorPage extends StatefulWidget {
 }
 
 class _MiniTranslatorPageState extends State<MiniTranslatorPage>
-    with WidgetsBindingObserver, ProtocolListener, ShortcutListener {
+    with WidgetsBindingObserver, ShortcutListener {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -89,7 +88,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     settingsStore.addListener(_handleChanged);
     WidgetsBinding.instance.addObserver(this);
     if (kIsLinux || kIsMacOS || kIsWindows) {
-      protocolHandler.addListener(this);
       ShortcutService.instance.setListener(this);
       _registerWindowEvents();
       _init();
@@ -107,7 +105,6 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     settingsStore.removeListener(_handleChanged);
     WidgetsBinding.instance.removeObserver(this);
     if (kIsLinux || kIsMacOS || kIsWindows) {
-      protocolHandler.removeListener(this);
       ShortcutService.instance.setListener(null);
       _unregisterWindowEvents();
       _uninit();
@@ -1016,20 +1013,21 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     );
   }
 
-  @override
-  void onProtocolUrlReceived(String url) async {
-    Uri uri = Uri.parse(url);
-    if (uri.scheme != 'beyondtranslate') return;
-
-    if (uri.authority == 'translate') {
-      if (_text.isNotEmpty) _handleButtonTappedClear();
-      String? text = uri.queryParameters['text'];
-      if (text != null && text.isNotEmpty) {
-        _handleTextChanged(text, isRequery: true);
-      }
-    }
-    await _windowShow();
-  }
+  // TODO: Re-implement protocol URL handling when protocol_handler is restored
+  // @override
+  // void onProtocolUrlReceived(String url) async {
+  //   Uri uri = Uri.parse(url);
+  //   if (uri.scheme != 'beyondtranslate') return;
+  //
+  //   if (uri.authority == 'translate') {
+  //     if (_text.isNotEmpty) _handleButtonTappedClear();
+  //     String? text = uri.queryParameters['text'];
+  //     if (text != null && text.isNotEmpty) {
+  //       _handleTextChanged(text, isRequery: true);
+  //     }
+  //   }
+  //   await _windowShow();
+  // }
 
   @override
   void onShortcutKeyDownToggleMiniTranslator() async {

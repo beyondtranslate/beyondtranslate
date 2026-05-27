@@ -81,7 +81,6 @@ $ flutter run -d linux / macos / windows
 ## Related Links
 
 - https://github.com/beyondtranslate/beyondtranslate
-- https://github.com/leanflutter/hotkey_manager
 - https://github.com/leanflutter/screen_text_extractor
 
 ## License

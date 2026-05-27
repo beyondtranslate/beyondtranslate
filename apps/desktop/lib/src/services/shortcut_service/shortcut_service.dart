@@ -1,5 +1,3 @@
-import 'package:hotkey_manager/hotkey_manager.dart';
-
 abstract mixin class ShortcutListener {
   void onShortcutKeyDownToggleMiniTranslator();
   void onShortcutKeyDownExtractFromScreenSelection();
@@ -32,11 +30,11 @@ class ShortcutService {
   // source of truth for shortcut bindings, but no platform registration is
   // performed here yet.
   void start() async {
-    await hotKeyManager.unregisterAll();
+    // TODO: Implement global hotkey registration via Rust runtime
   }
 
   void stop() {
-    hotKeyManager.unregisterAll();
+    // TODO: Implement global hotkey unregistration via Rust runtime
   }
 
   // Hooks for tests / future direct invocation.
