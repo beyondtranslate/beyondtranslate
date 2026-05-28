@@ -89,7 +89,7 @@ class TranslationInputView extends StatelessWidget {
   Widget _buildActionButtons(BuildContext context) {
     final theme = Theme.of(context);
     final secondaryButtonColor =
-        theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.12) ??
+        theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.45) ??
             theme.dividerColor;
 
     return Row(

@@ -305,7 +305,8 @@ class _TranslationTargetSelectViewState
           label,
           overflow: TextOverflow.ellipsis,
           style: textTheme.bodyMedium?.copyWith(
-            color: isDisabled ? theme.disabledColor : textTheme.bodyMedium?.color,
+            color:
+                isDisabled ? theme.disabledColor : textTheme.bodyMedium?.color,
           ),
         ),
       ),
@@ -411,12 +412,14 @@ class _TranslationTargetSelectViewState
                       transformAlignment: Alignment.center,
                       transform: Matrix4.rotationZ(_isRotated ? math.pi : 0),
                       child: Icon(
-                          FluentIcons.arrow_swap_20_regular,
-                          size: 18,
-                          color: isAutoSource(widget.sourceLanguage)
-                              ? null
-                              : IconTheme.of(context).color?.withValues(alpha: 0.6),
-                        ),
+                        FluentIcons.arrow_swap_20_regular,
+                        size: 18,
+                        color: isAutoSource(widget.sourceLanguage)
+                            ? null
+                            : IconTheme.of(context)
+                                .color
+                                ?.withValues(alpha: 0.6),
+                      ),
                     ),
                   ),
                 ),

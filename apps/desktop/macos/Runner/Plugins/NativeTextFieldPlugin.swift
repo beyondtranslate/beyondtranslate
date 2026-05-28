@@ -42,9 +42,9 @@ private final class NativeTextFieldView: NSView, NSTextFieldDelegate, NSTextView
   private let isMultiline: Bool
   private let obscureText: Bool
   private let submitOnEnter: Bool
-  private let placeholder: String
+  private var placeholder: String
   private let textStyle: NativeTextStyle
-  private let placeholderStyle: NativeTextStyle
+  private var placeholderStyle: NativeTextStyle
 
   private var textField: NSTextField?
   private var textView: NSTextView?
@@ -52,6 +52,7 @@ private final class NativeTextFieldView: NSView, NSTextFieldDelegate, NSTextView
   private var placeholderLabel: NSTextField?
   private var isUpdatingFromFlutter = false
   private var lastReportedContentHeight: CGFloat = 0
+  private var trackingArea: NSTrackingArea?
 
   init(
     viewId: Int64,
@@ -110,6 +111,33 @@ private final class NativeTextFieldView: NSView, NSTextFieldDelegate, NSTextView
     placeholderLabel?.frame = inputFrame
     updateTextContainerSize(width: inputFrame.width)
     reportContentHeightIfNeeded()
+  }
+
+  override func updateTrackingAreas() {
+    if let trackingArea {
+      removeTrackingArea(trackingArea)
+    }
+    let newArea = NSTrackingArea(
+      rect: bounds,
+      options: [.mouseEnteredAndExited, .activeInActiveApp, .inVisibleRect],
+      owner: self,
+      userInfo: nil
+    )
+    addTrackingArea(newArea)
+    trackingArea = newArea
+    super.updateTrackingAreas()
+  }
+
+  override func mouseEntered(with event: NSEvent) {
+    super.mouseEntered(with: event)
+    if textField != nil || textView != nil {
+      NSCursor.iBeam.set()
+    }
+  }
+
+  override func mouseExited(with event: NSEvent) {
+    super.mouseExited(with: event)
+    NSCursor.arrow.set()
   }
 
   override func mouseDown(with event: NSEvent) {
@@ -251,6 +279,9 @@ private final class NativeTextFieldView: NSView, NSTextFieldDelegate, NSTextView
       case "blur":
         self.window?.makeFirstResponder(nil)
         result(nil)
+      case "setPlaceholder":
+        self.setPlaceholder(call.arguments as? [String: Any] ?? [:])
+        result(nil)
       case "setEditableState":
         let args = call.arguments as? [String: Any] ?? [:]
         self.applyEditableState(
@@ -283,6 +314,30 @@ private final class NativeTextFieldView: NSView, NSTextFieldDelegate, NSTextView
     updatePlaceholderVisibility()
     reportContentHeightIfNeeded()
     isUpdatingFromFlutter = false
+  }
+
+  private func setPlaceholder(_ args: [String: Any]) {
+    let newPlaceholder = args["placeholder"] as? String ?? ""
+    placeholder = newPlaceholder
+    if let argsStyle = args["style"] as? [String: Any] {
+      placeholderStyle = NativeTextStyle(arguments: argsStyle)
+    }
+
+    if let field = textField {
+      field.placeholderString = newPlaceholder
+      field.placeholderAttributedString = NSAttributedString(
+        string: newPlaceholder,
+        attributes: [
+          .font: placeholderStyle.font,
+          .foregroundColor: placeholderStyle.color,
+        ]
+      )
+    } else if let label = placeholderLabel {
+      label.stringValue = newPlaceholder
+      label.font = placeholderStyle.font
+      label.textColor = placeholderStyle.color
+    }
+    updatePlaceholderVisibility()
   }
 
   private func focus() {

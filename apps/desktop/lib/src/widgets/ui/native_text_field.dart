@@ -90,6 +90,24 @@ class _NativeTextFieldState extends State<NativeTextField> {
         'readOnly': widget.readOnly,
       });
     }
+    if (widget.placeholder != oldWidget.placeholder ||
+        widget.placeholderStyle != oldWidget.placeholderStyle) {
+      _updatePlaceholder();
+    }
+  }
+
+  void _updatePlaceholder() {
+    if (_channel == null) return;
+    final textStyle = widget.style ?? DefaultTextStyle.of(context).style;
+    final placeholderStyle = widget.placeholderStyle ??
+        textStyle.copyWith(
+          color: (textStyle.color ?? const Color(0xFF000000))
+              .withValues(alpha: 0.5),
+        );
+    _channel!.invokeMethod<void>('setPlaceholder', <String, Object?>{
+      'placeholder': widget.placeholder ?? '',
+      'style': _encodeTextStyle(placeholderStyle),
+    });
   }
 
   @override
