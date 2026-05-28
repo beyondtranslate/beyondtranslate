@@ -19,13 +19,17 @@ melos:
       run: melos exec -c 10 -- flutter analyze --fatal-infos
       description: Run `flutter analyze` for all packages.
 
+    codegen:
+      run: python3 scripts/codegen.py
+      description: Regenerate Dart/Swift FFI bindings and macOS localization files.
+
     format:
-      exec: dart format .
-      description: Run `dart format` for all packages.
+      run: python3 scripts/format.py
+      description: Format Dart, Rust, and Swift source files.
 
     format-check:
-      exec: dart format . --set-exit-if-changed
-      description: Run `dart format` checks for all packages.
+      run: python3 scripts/format.py --check
+      description: Check formatting of Dart, Rust, and Swift source files.
 
     fix:
       exec: dart fix . --apply

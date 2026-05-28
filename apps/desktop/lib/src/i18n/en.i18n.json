@@ -146,7 +146,7 @@
     }
   },
   "settings": {
-    "version": "Version {} BUILD {}",
+    "version": "v{} (Build {})",
     "general": {
       "title": "General",
       "section": {
@@ -302,6 +302,18 @@
         "title": "Select a Category",
         "message": "Choose a settings section from the sidebar."
       }
+    },
+    "about": {
+      "title": "About",
+      "copy_version_info": "Copy Version Info",
+      "up_to_date": "You're up to date.",
+      "check_again": "Check Again",
+      "links": "Links",
+      "website": "Website",
+      "github": "GitHub",
+      "report_issue": "Report an Issue",
+      "license": "License",
+      "open_changelog": "Open Changelog"
     }
   }
 }

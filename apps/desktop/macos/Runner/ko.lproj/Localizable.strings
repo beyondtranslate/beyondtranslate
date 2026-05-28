@@ -96,6 +96,16 @@
 "mini_translator.message.please_enter_word_or_text" = "입력된 텍스트가 없거나 텍스트를 추출하지 못했습니다";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "클립보드 내용 읽기";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "화면 영역을 캡처하여 텍스트 인식";
+"settings.about.check_again" = "다시 확인";
+"settings.about.copy_version_info" = "버전 정보 복사";
+"settings.about.github" = "GitHub";
+"settings.about.license" = "라이선스";
+"settings.about.links" = "링크";
+"settings.about.open_changelog" = "변경 내역 열기";
+"settings.about.report_issue" = "문제 보고";
+"settings.about.title" = "정보";
+"settings.about.up_to_date" = "최신 버전입니다.";
+"settings.about.website" = "웹사이트";
 "settings.advanced.api_server" = "로컬 API 서버";
 "settings.advanced.api_server_description" = "로컬 통합을 위해 127.0.0.1에서 번역 API를 노출합니다.";
 "settings.advanced.disabled" = "비활성화됨";
@@ -188,4 +198,4 @@
 "settings.shortcuts.section.input_assist" = "입력 보조 기능";
 "settings.shortcuts.section.text_extraction" = "텍스트 추출";
 "settings.shortcuts.title" = "단축키";
-"settings.version" = "버전 {} 빌드 {}";
+"settings.version" = "v{} (Build {})";

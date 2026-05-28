@@ -146,7 +146,7 @@
     }
   },
   "settings": {
-    "version": "버전 {} 빌드 {}",
+    "version": "v{} (Build {})",
     "general": {
       "title": "일반",
       "section": {
@@ -302,6 +302,18 @@
         "title": "카테고리 선택",
         "message": "사이드바에서 설정 섹션을 선택하세요."
       }
+    },
+    "about": {
+      "title": "정보",
+      "copy_version_info": "버전 정보 복사",
+      "up_to_date": "최신 버전입니다.",
+      "check_again": "다시 확인",
+      "links": "링크",
+      "website": "웹사이트",
+      "github": "GitHub",
+      "report_issue": "문제 보고",
+      "license": "라이선스",
+      "open_changelog": "변경 내역 열기"
     }
   }
 }

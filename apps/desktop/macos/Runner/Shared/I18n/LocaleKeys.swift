@@ -189,6 +189,18 @@ enum LocaleKeys {
     }
   }
   enum settings {
+    enum about {
+      static let checkAgain = LocaleKey("settings.about.check_again")
+      static let copyVersionInfo = LocaleKey("settings.about.copy_version_info")
+      static let github = LocaleKey("settings.about.github")
+      static let license = LocaleKey("settings.about.license")
+      static let links = LocaleKey("settings.about.links")
+      static let openChangelog = LocaleKey("settings.about.open_changelog")
+      static let reportIssue = LocaleKey("settings.about.report_issue")
+      static let title = LocaleKey("settings.about.title")
+      static let upToDate = LocaleKey("settings.about.up_to_date")
+      static let website = LocaleKey("settings.about.website")
+    }
     enum advanced {
       static let apiServer = LocaleKey("settings.advanced.api_server")
       static let apiServerDescription = LocaleKey("settings.advanced.api_server_description")

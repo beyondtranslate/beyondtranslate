@@ -49,6 +49,7 @@ final class SettingsViewModel: ObservableObject {
   let shortcuts: ShortcutsViewModel
   let providers: ProvidersViewModel
   let advanced: AdvancedViewModel
+  let about: AboutViewModel
 
   private let repository: SettingsRepository
 
@@ -67,6 +68,7 @@ final class SettingsViewModel: ObservableObject {
     shortcuts = ShortcutsViewModel(repository: repository)
     providers = ProvidersViewModel(repository: repository)
     advanced = AdvancedViewModel(repository: repository)
+    about = AboutViewModel()
 
     Task {
       await general.load()
@@ -75,6 +77,8 @@ final class SettingsViewModel: ObservableObject {
       await providers.load()
       await advanced.load()
     }
+
+    // About doesn't load from settings; version info is static.
 
     startListeningForChanges()
   }

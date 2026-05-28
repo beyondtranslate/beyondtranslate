@@ -6,6 +6,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
   case shortcuts
   case providers
   case advanced
+  case about
 
   var id: String { rawValue }
 
@@ -16,6 +17,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     case .shortcuts: return LocaleKeys.settings.shortcuts.title.tr()
     case .providers: return LocaleKeys.settings.providers.title.tr()
     case .advanced: return LocaleKeys.settings.advanced.title.tr()
+    case .about: return LocaleKeys.settings.about.title.tr()
     }
   }
 
@@ -26,6 +28,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     case .shortcuts: return "keyboard"
     case .providers: return "server.rack"
     case .advanced: return "slider.horizontal.3"
+    case .about: return "info.circle"
     }
   }
 }
@@ -91,6 +94,8 @@ private struct SettingsSectionDetailView: View {
       ProvidersView(viewModel: viewModel.providers)
     case .advanced:
       AdvancedView(viewModel: viewModel.advanced)
+    case .about:
+      AboutView()
     }
   }
 }

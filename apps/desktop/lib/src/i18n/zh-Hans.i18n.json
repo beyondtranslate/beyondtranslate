@@ -146,7 +146,7 @@
     }
   },
   "settings": {
-    "version": "版本 {} BUILD {}",
+    "version": "v{} (Build {})",
     "general": {
       "title": "常规",
       "section": {
@@ -302,6 +302,18 @@
         "title": "选择一个分类",
         "message": "从侧边栏选择一个设置分类。"
       }
+    },
+    "about": {
+      "title": "关于",
+      "copy_version_info": "复制版本信息",
+      "up_to_date": "已是最新版本。",
+      "check_again": "重新检查",
+      "links": "链接",
+      "website": "网站",
+      "github": "GitHub",
+      "report_issue": "提交问题",
+      "license": "许可证",
+      "open_changelog": "查看更新日志"
     }
   }
 }

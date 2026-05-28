@@ -96,6 +96,16 @@
 "mini_translator.message.please_enter_word_or_text" = "No se ingresó texto o no se pudo extraer";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "Leer contenido del portapapeles";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "Capturar área de la pantalla y reconocer texto";
+"settings.about.check_again" = "Verificar de nuevo";
+"settings.about.copy_version_info" = "Copiar información de versión";
+"settings.about.github" = "GitHub";
+"settings.about.license" = "Licencia";
+"settings.about.links" = "Enlaces";
+"settings.about.open_changelog" = "Abrir registro de cambios";
+"settings.about.report_issue" = "Informar de un problema";
+"settings.about.title" = "Acerca de";
+"settings.about.up_to_date" = "Está actualizado.";
+"settings.about.website" = "Sitio web";
 "settings.advanced.api_server" = "Servidor de API local";
 "settings.advanced.api_server_description" = "Exponer la API de traducción en 127.0.0.1 para integraciones locales.";
 "settings.advanced.disabled" = "Deshabilitado";
@@ -188,4 +198,4 @@
 "settings.shortcuts.section.input_assist" = "Función de asistencia de entrada";
 "settings.shortcuts.section.text_extraction" = "Extracción de texto";
 "settings.shortcuts.title" = "Atajos";
-"settings.version" = "Versión {} COMPILACIÓN {}";
+"settings.version" = "v{} (Build {})";

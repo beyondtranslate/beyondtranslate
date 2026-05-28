@@ -146,7 +146,7 @@
     }
   },
   "settings": {
-    "version": "Version {} BUILD {}",
+    "version": "v{} (Build {})",
     "general": {
       "title": "Général",
       "section": {
@@ -302,6 +302,18 @@
         "title": "Sélectionnez une catégorie",
         "message": "Choisissez une section de paramètres dans la barre latérale."
       }
+    },
+    "about": {
+      "title": "À propos",
+      "copy_version_info": "Copier les informations de version",
+      "up_to_date": "Vous êtes à jour.",
+      "check_again": "Vérifier à nouveau",
+      "links": "Liens",
+      "website": "Site web",
+      "github": "GitHub",
+      "report_issue": "Signaler un problème",
+      "license": "Licence",
+      "open_changelog": "Ouvrir le journal des modifications"
     }
   }
 }

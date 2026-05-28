@@ -96,6 +96,16 @@
 "mini_translator.message.please_enter_word_or_text" = "テキストが入力されていないか、テキストが抽出されていません";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "クリップボードの内容を読み取る";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "画面領域をキャプチャしてテキストを認識";
+"settings.about.check_again" = "再確認";
+"settings.about.copy_version_info" = "バージョン情報をコピー";
+"settings.about.github" = "GitHub";
+"settings.about.license" = "ライセンス";
+"settings.about.links" = "リンク";
+"settings.about.open_changelog" = "更新履歴を開く";
+"settings.about.report_issue" = "問題を報告";
+"settings.about.title" = "情報";
+"settings.about.up_to_date" = "最新の状態です。";
+"settings.about.website" = "ウェブサイト";
 "settings.advanced.api_server" = "ローカルAPIサーバー";
 "settings.advanced.api_server_description" = "ローカルインテグレーションのために127.0.0.1で翻訳APIを公開します。";
 "settings.advanced.disabled" = "無効";
@@ -188,4 +198,4 @@
 "settings.shortcuts.section.input_assist" = "入力補助機能";
 "settings.shortcuts.section.text_extraction" = "テキスト抽出";
 "settings.shortcuts.title" = "ショートカット";
-"settings.version" = "バージョン {} BUILD {}";
+"settings.version" = "v{} (Build {})";

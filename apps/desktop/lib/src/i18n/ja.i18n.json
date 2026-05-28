@@ -146,7 +146,7 @@
     }
   },
   "settings": {
-    "version": "バージョン {} BUILD {}",
+    "version": "v{} (Build {})",
     "general": {
       "title": "一般",
       "section": {
@@ -302,6 +302,18 @@
         "title": "カテゴリを選択",
         "message": "サイドバーから設定セクションを選択してください。"
       }
+    },
+    "about": {
+      "title": "情報",
+      "copy_version_info": "バージョン情報をコピー",
+      "up_to_date": "最新の状態です。",
+      "check_again": "再確認",
+      "links": "リンク",
+      "website": "ウェブサイト",
+      "github": "GitHub",
+      "report_issue": "問題を報告",
+      "license": "ライセンス",
+      "open_changelog": "更新履歴を開く"
     }
   }
 }

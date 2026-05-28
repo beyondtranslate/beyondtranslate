@@ -146,7 +146,7 @@
     }
   },
   "settings": {
-    "version": "版本 {} BUILD {}",
+    "version": "v{} (Build {})",
     "general": {
       "title": "一般",
       "section": {
@@ -302,6 +302,18 @@
         "title": "選擇一個分類",
         "message": "從側邊欄選擇一個設定分類。"
       }
+    },
+    "about": {
+      "title": "關於",
+      "copy_version_info": "複製版本資訊",
+      "up_to_date": "已是最新版本。",
+      "check_again": "重新檢查",
+      "links": "連結",
+      "website": "網站",
+      "github": "GitHub",
+      "report_issue": "回報問題",
+      "license": "授權條款",
+      "open_changelog": "查看更新日誌"
     }
   }
 }

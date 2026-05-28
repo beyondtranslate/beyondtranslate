@@ -96,6 +96,16 @@
 "mini_translator.message.please_enter_word_or_text" = "未輸入或未擷取到文字";
 "mini_translator.toolbar.tooltip.extract_text_from_clipboard" = "讀取剪貼簿內容";
 "mini_translator.toolbar.tooltip.extract_text_from_screen_capture" = "擷取螢幕區域並辨識文字";
+"settings.about.check_again" = "重新檢查";
+"settings.about.copy_version_info" = "複製版本資訊";
+"settings.about.github" = "GitHub";
+"settings.about.license" = "授權條款";
+"settings.about.links" = "連結";
+"settings.about.open_changelog" = "查看更新日誌";
+"settings.about.report_issue" = "回報問題";
+"settings.about.title" = "關於";
+"settings.about.up_to_date" = "已是最新版本。";
+"settings.about.website" = "網站";
 "settings.advanced.api_server" = "本機 API 服務";
 "settings.advanced.api_server_description" = "在 127.0.0.1 上開放翻譯 API，供本機整合使用。";
 "settings.advanced.disabled" = "已關閉";
@@ -188,4 +198,4 @@
 "settings.shortcuts.section.input_assist" = "輸入輔助功能";
 "settings.shortcuts.section.text_extraction" = "文字擷取";
 "settings.shortcuts.title" = "快捷鍵";
-"settings.version" = "版本 {} BUILD {}";
+"settings.version" = "v{} (Build {})";

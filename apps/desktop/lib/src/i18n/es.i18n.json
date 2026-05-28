@@ -146,7 +146,7 @@
     }
   },
   "settings": {
-    "version": "Versión {} COMPILACIÓN {}",
+    "version": "v{} (Build {})",
     "general": {
       "title": "General",
       "section": {
@@ -302,6 +302,18 @@
         "title": "Selecciona una categoría",
         "message": "Elige una sección de configuración de la barra lateral."
       }
+    },
+    "about": {
+      "title": "Acerca de",
+      "copy_version_info": "Copiar información de versión",
+      "up_to_date": "Está actualizado.",
+      "check_again": "Verificar de nuevo",
+      "links": "Enlaces",
+      "website": "Sitio web",
+      "github": "GitHub",
+      "report_issue": "Informar de un problema",
+      "license": "Licencia",
+      "open_changelog": "Abrir registro de cambios"
     }
   }
 }

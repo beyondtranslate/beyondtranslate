@@ -41,6 +41,8 @@
 		A10000000000000000000004 /* ShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000004 /* ShortcutsView.swift */; };
 		A10000000000000000000005 /* ProvidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000005 /* ProvidersView.swift */; };
 		A10000000000000000000006 /* AdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000006 /* AdvancedView.swift */; };
+		A1000000000000000000000D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000D /* AboutView.swift */; };
+		A1000000000000000000000E /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000E /* AboutViewModel.swift */; };
 		A10000000000000000000007 /* GeneralViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000007 /* GeneralViewModel.swift */; };
 		A10000000000000000000008 /* AppearanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000008 /* AppearanceViewModel.swift */; };
 		A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000009 /* ShortcutsViewModel.swift */; };
@@ -126,6 +128,8 @@
 		A11000000000000000000004 /* ShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsView.swift; sourceTree = "<group>"; };
 		A11000000000000000000005 /* ProvidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersView.swift; sourceTree = "<group>"; };
 		A11000000000000000000006 /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
+		A1100000000000000000000D /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		A1100000000000000000000E /* AboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
 		A11000000000000000000007 /* GeneralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralViewModel.swift; sourceTree = "<group>"; };
 		A11000000000000000000008 /* AppearanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewModel.swift; sourceTree = "<group>"; };
 		A11000000000000000000009 /* ShortcutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsViewModel.swift; sourceTree = "<group>"; };
@@ -284,6 +288,7 @@
 			isa = PBXGroup;
 			children = (
 				8F1000132E0A100100A1B2C3 /* SettingsView.swift */,
+				A2000000000000000000000F /* About */,
 				A20000000000000000000006 /* Advanced */,
 				A20000000000000000000003 /* Appearance */,
 				A20000000000000000000002 /* General */,
@@ -337,6 +342,14 @@
 			path = Advanced;
 			sourceTree = "<group>";
 		};
+		A2000000000000000000000F /* About */ = {
+			isa = PBXGroup;
+			children = (
+				A1100000000000000000000D /* AboutView.swift */,
+			);
+			path = About;
+			sourceTree = "<group>";
+		};
 		A20000000000000000000007 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -352,6 +365,7 @@
 		A20000000000000000000008 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				A1100000000000000000000E /* AboutViewModel.swift */,
 				A1100000000000000000000B /* AdvancedViewModel.swift */,
 				A11000000000000000000008 /* AppearanceViewModel.swift */,
 				A11000000000000000000007 /* GeneralViewModel.swift */,
@@ -621,6 +635,8 @@
 				A10000000000000000000005 /* ProvidersView.swift in Sources */,
 				A100000000000000000000F /* ProviderDetailView.swift in Sources */,
 				A10000000000000000000006 /* AdvancedView.swift in Sources */,
+				A1000000000000000000000D /* AboutView.swift in Sources */,
+				A1000000000000000000000E /* AboutViewModel.swift in Sources */,
 				A10000000000000000000007 /* GeneralViewModel.swift in Sources */,
 				F5ACAEDB2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift in Sources */,
 				A10000000000000000000008 /* AppearanceViewModel.swift in Sources */,
