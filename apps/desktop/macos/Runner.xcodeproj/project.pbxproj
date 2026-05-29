@@ -37,18 +37,16 @@
 		8F10003C2E0A100100A1B2C3 /* ProviderConfigField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F10003D2E0A100100A1B2C3 /* ProviderConfigField.swift */; };
 		A10000000000000000000001 /* SettingPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000001 /* SettingPicker.swift */; };
 		A10000000000000000000002 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000002 /* GeneralView.swift */; };
-		A10000000000000000000003 /* AppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000003 /* AppearanceView.swift */; };
 		A10000000000000000000004 /* ShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000004 /* ShortcutsView.swift */; };
 		A10000000000000000000005 /* ProvidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000005 /* ProvidersView.swift */; };
 		A10000000000000000000006 /* AdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000006 /* AdvancedView.swift */; };
-		A1000000000000000000000D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000D /* AboutView.swift */; };
-		A1000000000000000000000E /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000E /* AboutViewModel.swift */; };
 		A10000000000000000000007 /* GeneralViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000007 /* GeneralViewModel.swift */; };
-		A10000000000000000000008 /* AppearanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000008 /* AppearanceViewModel.swift */; };
 		A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000009 /* ShortcutsViewModel.swift */; };
 		A1000000000000000000000A /* ProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000A /* ProvidersViewModel.swift */; };
 		A1000000000000000000000B /* AdvancedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000B /* AdvancedViewModel.swift */; };
 		A1000000000000000000000C /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000C /* SettingsRepository.swift */; };
+		A1000000000000000000000D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000D /* AboutView.swift */; };
+		A1000000000000000000000E /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100000000000000000000E /* AboutViewModel.swift */; };
 		A10000000000000000000010 /* LocaleKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000010 /* LocaleKeys.swift */; };
 		A10000000000000000000011 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* Localizable.strings */; };
 		A10000000000000000000012 /* AppLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000013 /* AppLocale.swift */; };
@@ -124,18 +122,16 @@
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		A11000000000000000000001 /* SettingPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPicker.swift; sourceTree = "<group>"; };
 		A11000000000000000000002 /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
-		A11000000000000000000003 /* AppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceView.swift; sourceTree = "<group>"; };
 		A11000000000000000000004 /* ShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsView.swift; sourceTree = "<group>"; };
 		A11000000000000000000005 /* ProvidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersView.swift; sourceTree = "<group>"; };
 		A11000000000000000000006 /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
-		A1100000000000000000000D /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		A1100000000000000000000E /* AboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
 		A11000000000000000000007 /* GeneralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralViewModel.swift; sourceTree = "<group>"; };
-		A11000000000000000000008 /* AppearanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewModel.swift; sourceTree = "<group>"; };
 		A11000000000000000000009 /* ShortcutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsViewModel.swift; sourceTree = "<group>"; };
 		A1100000000000000000000A /* ProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersViewModel.swift; sourceTree = "<group>"; };
 		A1100000000000000000000B /* AdvancedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedViewModel.swift; sourceTree = "<group>"; };
 		A1100000000000000000000C /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
+		A1100000000000000000000D /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		A1100000000000000000000E /* AboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
 		A11000000000000000000010 /* LocaleKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleKeys.swift; sourceTree = "<group>"; };
 		A11000000000000000000011 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Runner/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A11000000000000000000012 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "Runner/zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -290,7 +286,6 @@
 				8F1000132E0A100100A1B2C3 /* SettingsView.swift */,
 				A2000000000000000000000F /* About */,
 				A20000000000000000000006 /* Advanced */,
-				A20000000000000000000003 /* Appearance */,
 				A20000000000000000000002 /* General */,
 				A20000000000000000000005 /* Providers */,
 				A20000000000000000000004 /* Shortcuts */,
@@ -306,14 +301,6 @@
 				A11000000000000000000002 /* GeneralView.swift */,
 			);
 			path = General;
-			sourceTree = "<group>";
-		};
-		A20000000000000000000003 /* Appearance */ = {
-			isa = PBXGroup;
-			children = (
-				A11000000000000000000003 /* AppearanceView.swift */,
-			);
-			path = Appearance;
 			sourceTree = "<group>";
 		};
 		A20000000000000000000004 /* Shortcuts */ = {
@@ -342,14 +329,6 @@
 			path = Advanced;
 			sourceTree = "<group>";
 		};
-		A2000000000000000000000F /* About */ = {
-			isa = PBXGroup;
-			children = (
-				A1100000000000000000000D /* AboutView.swift */,
-			);
-			path = About;
-			sourceTree = "<group>";
-		};
 		A20000000000000000000007 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -367,7 +346,6 @@
 			children = (
 				A1100000000000000000000E /* AboutViewModel.swift */,
 				A1100000000000000000000B /* AdvancedViewModel.swift */,
-				A11000000000000000000008 /* AppearanceViewModel.swift */,
 				A11000000000000000000007 /* GeneralViewModel.swift */,
 				A1100000000000000000000A /* ProvidersViewModel.swift */,
 				8F1000142E0A100100A1B2C3 /* SettingsViewModel.swift */,
@@ -419,6 +397,14 @@
 				A11000000000000000000013 /* AppLocale.swift */,
 			);
 			path = I18n;
+			sourceTree = "<group>";
+		};
+		A2000000000000000000000F /* About */ = {
+			isa = PBXGroup;
+			children = (
+				A1100000000000000000000D /* AboutView.swift */,
+			);
+			path = About;
 			sourceTree = "<group>";
 		};
 		A20000000000000000000020 /* Services */ = {
@@ -528,7 +514,7 @@
 			);
 			mainGroup = 33CC10E42044A3C60003C045;
 			packageReferences = (
-				781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "FlutterGeneratedPluginSwiftPackage" */,
+				781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */,
 			);
 			productRefGroup = 33CC10EE2044A3C60003C045 /* Products */;
 			projectDirPath = "";
@@ -630,7 +616,6 @@
 				F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */,
 				A10000000000000000000002 /* GeneralView.swift in Sources */,
 				F5ACAED92FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift in Sources */,
-				A10000000000000000000003 /* AppearanceView.swift in Sources */,
 				A10000000000000000000004 /* ShortcutsView.swift in Sources */,
 				A10000000000000000000005 /* ProvidersView.swift in Sources */,
 				A100000000000000000000F /* ProviderDetailView.swift in Sources */,
@@ -639,7 +624,6 @@
 				A1000000000000000000000E /* AboutViewModel.swift in Sources */,
 				A10000000000000000000007 /* GeneralViewModel.swift in Sources */,
 				F5ACAEDB2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift in Sources */,
-				A10000000000000000000008 /* AppearanceViewModel.swift in Sources */,
 				A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */,
 				A1000000000000000000000A /* ProvidersViewModel.swift in Sources */,
 				A1000000000000000000000B /* AdvancedViewModel.swift in Sources */,
@@ -1030,7 +1014,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "FlutterGeneratedPluginSwiftPackage" */ = {
+		781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage;
 		};

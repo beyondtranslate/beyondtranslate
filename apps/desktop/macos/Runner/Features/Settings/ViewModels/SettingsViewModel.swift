@@ -45,7 +45,6 @@ final class SettingsHighlightCoordinator: ObservableObject {
 @MainActor
 final class SettingsViewModel: ObservableObject {
   let general: GeneralViewModel
-  let appearance: AppearanceViewModel
   let shortcuts: ShortcutsViewModel
   let providers: ProvidersViewModel
   let advanced: AdvancedViewModel
@@ -64,7 +63,6 @@ final class SettingsViewModel: ObservableObject {
     self.repository = repository
 
     general = GeneralViewModel(repository: repository)
-    appearance = AppearanceViewModel(repository: repository)
     shortcuts = ShortcutsViewModel(repository: repository)
     providers = ProvidersViewModel(repository: repository)
     advanced = AdvancedViewModel(repository: repository)
@@ -72,7 +70,6 @@ final class SettingsViewModel: ObservableObject {
 
     Task {
       await general.load()
-      await appearance.load()
       await shortcuts.load()
       await providers.load()
       await advanced.load()
@@ -112,7 +109,7 @@ final class SettingsViewModel: ObservableObject {
     case .general:
       await general.load()
     case .appearance:
-      await appearance.load()
+      await general.load()
     case .shortcuts:
       await shortcuts.load()
     case .providers:

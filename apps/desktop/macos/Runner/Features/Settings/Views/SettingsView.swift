@@ -2,7 +2,6 @@ import SwiftUI
 
 enum SettingsSection: String, CaseIterable, Identifiable {
   case general
-  case appearance
   case shortcuts
   case providers
   case advanced
@@ -13,7 +12,6 @@ enum SettingsSection: String, CaseIterable, Identifiable {
   var title: String {
     switch self {
     case .general: return LocaleKeys.settings.general.title.tr()
-    case .appearance: return LocaleKeys.settings.appearance.title.tr()
     case .shortcuts: return LocaleKeys.settings.shortcuts.title.tr()
     case .providers: return LocaleKeys.settings.providers.title.tr()
     case .advanced: return LocaleKeys.settings.advanced.title.tr()
@@ -24,7 +22,6 @@ enum SettingsSection: String, CaseIterable, Identifiable {
   var icon: String {
     switch self {
     case .general: return "gearshape"
-    case .appearance: return "paintbrush"
     case .shortcuts: return "keyboard"
     case .providers: return "server.rack"
     case .advanced: return "slider.horizontal.3"
@@ -86,8 +83,6 @@ private struct SettingsSectionDetailView: View {
           viewModel.providers.requestPresentProviderEditorSheet()
         }
       )
-    case .appearance:
-      AppearanceView(viewModel: viewModel.appearance)
     case .shortcuts:
       ShortcutsView(viewModel: viewModel.shortcuts)
     case .providers:

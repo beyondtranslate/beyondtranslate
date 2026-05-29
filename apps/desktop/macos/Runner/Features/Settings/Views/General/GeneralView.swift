@@ -27,6 +27,34 @@ struct GeneralView: View {
           ))
       }
 
+      Section(LocaleKeys.settings.appearance.title.tr()) {
+        SettingPicker(
+          LocaleKeys.settings.appearance.section.appLanguage.tr(),
+          selection: Binding(
+            get: { viewModel.appLanguage },
+            set: { viewModel.setAppLanguage($0) }
+          )
+        ) {
+          ForEach(viewModel.languageOptions, id: \.code) { language in
+            Text(language.localName).tag(language.code)
+          }
+        }
+        .pickerStyle(.menu)
+
+        SettingPicker(
+          LocaleKeys.settings.appearance.section.themeMode.tr(),
+          selection: Binding(
+            get: { viewModel.themeMode },
+            set: { viewModel.setThemeMode($0) }
+          )
+        ) {
+          ForEach(viewModel.themeModeOptions) { option in
+            Text(option.title).tag(option.mode)
+          }
+        }
+        .pickerStyle(.menu)
+      }
+
       Section(LocaleKeys.settings.general.section.ocr.tr()) {
         let hasOcrServices = !viewModel.ocrServiceOptions.isEmpty
 

@@ -6,6 +6,15 @@ struct ServiceOption: Identifiable, Hashable {
   let name: String
 }
 
+struct ThemeModeOption: Identifiable {
+  let mode: ThemeMode
+  let title: String
+
+  var id: String {
+    "\(mode.rawValue)-\(title)"
+  }
+}
+
 @MainActor
 final class GeneralViewModel: ObservableObject {
   // Rust-backed settings
@@ -19,6 +28,12 @@ final class GeneralViewModel: ObservableObject {
   @Published var inputSubmitMode: InputSubmitMode
   @Published var doubleClickCopyResult: Bool
   @Published var commonLanguages: [String]
+
+  // Appearance settings
+  @Published var appLanguage: String
+  @Published var themeMode: ThemeMode
+  @Published private(set) var themeModeOptions: [ThemeModeOption]
+  @Published private(set) var languageOptions: [LanguageInfo] = []
 
   // Runtime providers
   @Published var providers: [ProviderConfigEntry] = []
@@ -66,12 +81,26 @@ final class GeneralViewModel: ObservableObject {
     inputSubmitMode = .enter
     doubleClickCopyResult = true
     commonLanguages = []
+
+    // Appearance defaults
+    appLanguage = "en"
+    themeMode = .system
+    themeModeOptions = Self.localizedThemeModeOptions()
+    languageOptions = RuntimeProvider.shared.listAppLanguages()
+
     self.repository = repository
   }
 
   func load() async {
     do {
       apply(try await repository.getGeneral())
+    } catch {
+      // Keep defaults when Rust-backed settings cannot be loaded.
+    }
+
+    do {
+      let appearance = try await repository.getAppearance()
+      apply(appearance: appearance)
     } catch {
       // Keep defaults when Rust-backed settings cannot be loaded.
     }
@@ -174,6 +203,35 @@ final class GeneralViewModel: ObservableObject {
     Task { await persist(.diff(doubleClickCopyResult: value)) }
   }
 
+  // MARK: - Appearance
+
+  func setAppLanguage(_ value: String) {
+    appLanguage = value
+    AppLocale.shared.setLocale(value)
+    themeModeOptions = Self.localizedThemeModeOptions()
+    Task {
+      do {
+        let updated = try await repository.updateAppearance(.diff(language: value))
+        apply(appearance: updated)
+      } catch {
+        await load()
+      }
+    }
+  }
+
+  func setThemeMode(_ value: ThemeMode) {
+    themeMode = value
+    ThemeAppearanceController.apply(value)
+    Task {
+      do {
+        let updated = try await repository.updateAppearance(.diff(themeMode: value.rawValue))
+        apply(appearance: updated)
+      } catch {
+        await load()
+      }
+    }
+  }
+
   func addTranslationTarget(source: String, target: String) {
     let newTarget = TranslationTarget(source: source, target: target, enabled: true)
     translationTargets.append(newTarget)
@@ -216,6 +274,21 @@ final class GeneralViewModel: ObservableObject {
     inputSubmitMode = settings.inputSubmitMode
     doubleClickCopyResult = settings.doubleClickCopyResult
     commonLanguages = settings.commonLanguages
+  }
+
+  private func apply(appearance settings: AppearanceSettings) {
+    appLanguage = settings.language
+    AppLocale.shared.setLocale(appLanguage)
+    themeModeOptions = Self.localizedThemeModeOptions()
+    let mode = ThemeMode(rawValue: settings.themeMode) ?? .system
+    themeMode = mode
+    ThemeAppearanceController.apply(mode)
+  }
+
+  private static func localizedThemeModeOptions() -> [ThemeModeOption] {
+    ThemeMode.allCases.map { mode in
+      ThemeModeOption(mode: mode, title: mode.title)
+    }
   }
 
   private static func providerID(fromServiceID serviceID: String) -> String {
