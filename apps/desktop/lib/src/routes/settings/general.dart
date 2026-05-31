@@ -71,9 +71,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
 
   GeneralSettings get _general => settingsStore.general;
 
-  // Service options (mirrors Swift `dictionaryServiceOptions` /
-  // `translationServiceOptions`). The id is the provider id consumed by the
-  // runtime.
+  // Service options. The id is the service id consumed by the runtime.
   List<_ServiceOption> get _ocrServiceOptions {
     return [
       _ServiceOption(
@@ -85,16 +83,22 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
   }
 
   List<_ServiceOption> get _dictionaryServiceOptions {
-    return settingsStore.providers
-        .where((p) => p.capabilities.contains(ProviderCapability.dictionary))
-        .map((p) => _ServiceOption(id: p.id, name: p.id))
+    return settingsStore.services
+        .where((service) => service.type == ServiceType.dictionary)
+        .map((service) => _ServiceOption(
+              id: service.id,
+              name: service.name.isEmpty ? service.id : service.name,
+            ))
         .toList();
   }
 
   List<_ServiceOption> get _translationServiceOptions {
-    return settingsStore.providers
-        .where((p) => p.capabilities.contains(ProviderCapability.translation))
-        .map((p) => _ServiceOption(id: p.id, name: p.id))
+    return settingsStore.services
+        .where((service) => service.type == ServiceType.translation)
+        .map((service) => _ServiceOption(
+              id: service.id,
+              name: service.name.isEmpty ? service.id : service.name,
+            ))
         .toList();
   }
 

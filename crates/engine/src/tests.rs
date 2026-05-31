@@ -4,8 +4,6 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
-use beyondtranslate_core::ProviderCapability;
-
 use crate::{from_yaml_str, load_from_file, EngineConfig, EngineError, ProviderConfig};
 
 #[test]
@@ -228,11 +226,10 @@ providers:
     .expect("valid config");
 
     let provider = registry.require("system").expect("system provider");
-    let capabilities = provider.capabilities();
 
-    assert!(capabilities.contains(&ProviderCapability::Translation));
-    assert!(capabilities.contains(&ProviderCapability::Ocr));
-    assert!(capabilities.contains(&ProviderCapability::Dictionary));
+    assert!(provider.translation().is_some());
+    assert!(provider.ocr().is_some());
+    assert!(provider.dictionary().is_some());
 }
 
 #[cfg(not(feature = "baidu"))]

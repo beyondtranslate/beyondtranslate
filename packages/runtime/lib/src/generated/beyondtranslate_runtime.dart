@@ -639,13 +639,11 @@ class ProviderConfigEntry {
   final String id;
   final ProviderType type;
   final Map<String, String> fields;
-  final List<ProviderCapability> capabilities;
   final int? createdAt;
   ProviderConfigEntry({
     required this.id,
     required this.type,
     required this.fields,
-    required this.capabilities,
     this.createdAt,
   });
 }
@@ -669,10 +667,6 @@ class FfiConverterProviderConfigEntry {
         Uint8List.view(buf.buffer, new_offset));
     final fields = fields_lifted.value;
     new_offset += fields_lifted.bytesRead;
-    final capabilities_lifted = FfiConverterSequenceProviderCapability.read(
-        Uint8List.view(buf.buffer, new_offset));
-    final capabilities = capabilities_lifted.value;
-    new_offset += capabilities_lifted.bytesRead;
     final createdAt_lifted =
         FfiConverterOptionalUInt64.read(Uint8List.view(buf.buffer, new_offset));
     final createdAt = createdAt_lifted.value;
@@ -682,7 +676,6 @@ class FfiConverterProviderConfigEntry {
           id: id,
           type: type,
           fields: fields,
-          capabilities: capabilities,
           createdAt: createdAt,
         ),
         new_offset - buf.offsetInBytes);
@@ -692,8 +685,6 @@ class FfiConverterProviderConfigEntry {
     final total_length = FfiConverterString.allocationSize(value.id) +
         FfiConverterProviderType.allocationSize(value.type) +
         FfiConverterMapStringToString.allocationSize(value.fields) +
-        FfiConverterSequenceProviderCapability.allocationSize(
-            value.capabilities) +
         FfiConverterOptionalUInt64.allocationSize(value.createdAt) +
         0;
     final buf = Uint8List(total_length);
@@ -709,8 +700,6 @@ class FfiConverterProviderConfigEntry {
         value.type, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterMapStringToString.write(
         value.fields, Uint8List.view(buf.buffer, new_offset));
-    new_offset += FfiConverterSequenceProviderCapability.write(
-        value.capabilities, Uint8List.view(buf.buffer, new_offset));
     new_offset += FfiConverterOptionalUInt64.write(
         value.createdAt, Uint8List.view(buf.buffer, new_offset));
     return new_offset - buf.offsetInBytes;
@@ -720,8 +709,107 @@ class FfiConverterProviderConfigEntry {
     return FfiConverterString.allocationSize(value.id) +
         FfiConverterProviderType.allocationSize(value.type) +
         FfiConverterMapStringToString.allocationSize(value.fields) +
-        FfiConverterSequenceProviderCapability.allocationSize(
-            value.capabilities) +
+        FfiConverterOptionalUInt64.allocationSize(value.createdAt) +
+        0;
+  }
+}
+
+class ServiceConfigEntry {
+  final String id;
+  final String providerId;
+  final ServiceType type;
+  final String name;
+  final Map<String, String> fields;
+  final int? createdAt;
+  ServiceConfigEntry({
+    required this.id,
+    required this.providerId,
+    required this.type,
+    required this.name,
+    required this.fields,
+    this.createdAt,
+  });
+}
+
+class FfiConverterServiceConfigEntry {
+  static ServiceConfigEntry lift(RustBuffer buf) {
+    return FfiConverterServiceConfigEntry.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<ServiceConfigEntry> read(Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    final id_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final id = id_lifted.value;
+    new_offset += id_lifted.bytesRead;
+    final providerId_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final providerId = providerId_lifted.value;
+    new_offset += providerId_lifted.bytesRead;
+    final type_lifted =
+        FfiConverterServiceType.read(Uint8List.view(buf.buffer, new_offset));
+    final type = type_lifted.value;
+    new_offset += type_lifted.bytesRead;
+    final name_lifted =
+        FfiConverterString.read(Uint8List.view(buf.buffer, new_offset));
+    final name = name_lifted.value;
+    new_offset += name_lifted.bytesRead;
+    final fields_lifted = FfiConverterMapStringToString.read(
+        Uint8List.view(buf.buffer, new_offset));
+    final fields = fields_lifted.value;
+    new_offset += fields_lifted.bytesRead;
+    final createdAt_lifted =
+        FfiConverterOptionalUInt64.read(Uint8List.view(buf.buffer, new_offset));
+    final createdAt = createdAt_lifted.value;
+    new_offset += createdAt_lifted.bytesRead;
+    return LiftRetVal(
+        ServiceConfigEntry(
+          id: id,
+          providerId: providerId,
+          type: type,
+          name: name,
+          fields: fields,
+          createdAt: createdAt,
+        ),
+        new_offset - buf.offsetInBytes);
+  }
+
+  static RustBuffer lower(ServiceConfigEntry value) {
+    final total_length = FfiConverterString.allocationSize(value.id) +
+        FfiConverterString.allocationSize(value.providerId) +
+        FfiConverterServiceType.allocationSize(value.type) +
+        FfiConverterString.allocationSize(value.name) +
+        FfiConverterMapStringToString.allocationSize(value.fields) +
+        FfiConverterOptionalUInt64.allocationSize(value.createdAt) +
+        0;
+    final buf = Uint8List(total_length);
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+
+  static int write(ServiceConfigEntry value, Uint8List buf) {
+    int new_offset = buf.offsetInBytes;
+    new_offset += FfiConverterString.write(
+        value.id, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterString.write(
+        value.providerId, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterServiceType.write(
+        value.type, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterString.write(
+        value.name, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterMapStringToString.write(
+        value.fields, Uint8List.view(buf.buffer, new_offset));
+    new_offset += FfiConverterOptionalUInt64.write(
+        value.createdAt, Uint8List.view(buf.buffer, new_offset));
+    return new_offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(ServiceConfigEntry value) {
+    return FfiConverterString.allocationSize(value.id) +
+        FfiConverterString.allocationSize(value.providerId) +
+        FfiConverterServiceType.allocationSize(value.type) +
+        FfiConverterString.allocationSize(value.name) +
+        FfiConverterMapStringToString.allocationSize(value.fields) +
         FfiConverterOptionalUInt64.allocationSize(value.createdAt) +
         0;
   }
@@ -2863,6 +2951,62 @@ class FfiConverterInputSubmitMode {
   }
 }
 
+enum ServiceType {
+  dictionary,
+  ocr,
+  translation,
+  llm,
+  ;
+}
+
+class FfiConverterServiceType {
+  static LiftRetVal<ServiceType> read(Uint8List buf) {
+    final index = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    switch (index) {
+      case 1:
+        return LiftRetVal(
+          ServiceType.dictionary,
+          4,
+        );
+      case 2:
+        return LiftRetVal(
+          ServiceType.ocr,
+          4,
+        );
+      case 3:
+        return LiftRetVal(
+          ServiceType.translation,
+          4,
+        );
+      case 4:
+        return LiftRetVal(
+          ServiceType.llm,
+          4,
+        );
+      default:
+        throw UniffiInternalError(UniffiInternalError.unexpectedEnumCase,
+            "Unable to determine enum variant");
+    }
+  }
+
+  static ServiceType lift(RustBuffer buffer) {
+    return FfiConverterServiceType.read(buffer.asUint8List()).value;
+  }
+
+  static RustBuffer lower(ServiceType input) {
+    return toRustBuffer(createUint8ListFromInt(input.index + 1));
+  }
+
+  static int allocationSize(ServiceType _value) {
+    return 4;
+  }
+
+  static int write(ServiceType value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.index + 1);
+    return 4;
+  }
+}
+
 enum ChatRole {
   system,
   user,
@@ -2908,56 +3052,6 @@ class FfiConverterChatRole {
   }
 
   static int write(ChatRole value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.index + 1);
-    return 4;
-  }
-}
-
-enum ProviderCapability {
-  dictionary,
-  ocr,
-  translation,
-  ;
-}
-
-class FfiConverterProviderCapability {
-  static LiftRetVal<ProviderCapability> read(Uint8List buf) {
-    final index = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    switch (index) {
-      case 1:
-        return LiftRetVal(
-          ProviderCapability.dictionary,
-          4,
-        );
-      case 2:
-        return LiftRetVal(
-          ProviderCapability.ocr,
-          4,
-        );
-      case 3:
-        return LiftRetVal(
-          ProviderCapability.translation,
-          4,
-        );
-      default:
-        throw UniffiInternalError(UniffiInternalError.unexpectedEnumCase,
-            "Unable to determine enum variant");
-    }
-  }
-
-  static ProviderCapability lift(RustBuffer buffer) {
-    return FfiConverterProviderCapability.read(buffer.asUint8List()).value;
-  }
-
-  static RustBuffer lower(ProviderCapability input) {
-    return toRustBuffer(createUint8ListFromInt(input.index + 1));
-  }
-
-  static int allocationSize(ProviderCapability _value) {
-    return 4;
-  }
-
-  static int write(ProviderCapability value, Uint8List buf) {
     buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.index + 1);
     return 4;
   }
@@ -3890,6 +3984,9 @@ abstract class RuntimeSettingsInterface {
   Future<ProviderConfigEntry?> deleteProvider({
     required String providerId,
   });
+  Future<ServiceConfigEntry?> deleteService({
+    required String serviceId,
+  });
   Future<String> generateProviderId({
     required String providerType,
   });
@@ -3904,8 +4001,15 @@ abstract class RuntimeSettingsInterface {
   Future<ProviderConfigEntry?> getProvider({
     required String providerId,
   });
+  Future<ServiceConfigEntry?> getService({
+    required String serviceId,
+  });
   Future<ShortcutSettings> getShortcuts();
+  Future<List<String>> listModels({
+    required String providerId,
+  });
   Future<List<ProviderConfigEntry>> listProviders();
+  Future<List<ServiceConfigEntry>> listServices();
   Future<ShortcutSettings> resetShortcuts();
   SettingsSubscription subscribe();
   Future<AdvancedSettings> updateAdvanced({
@@ -3920,6 +4024,13 @@ abstract class RuntimeSettingsInterface {
   Future<ProviderConfigEntry> updateProvider({
     required String providerId,
     required String providerType,
+    required Map<String, String> fields,
+  });
+  Future<ServiceConfigEntry> updateService({
+    required String serviceId,
+    required String providerId,
+    required ServiceType serviceType,
+    required String name,
     required Map<String, String> fields,
   });
   Future<ShortcutSettings> updateShortcuts({
@@ -3984,6 +4095,23 @@ class RuntimeSettings implements RuntimeSettingsInterface {
       ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
       ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
       FfiConverterOptionalProviderConfigEntry.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<ServiceConfigEntry?> deleteService({
+    required String serviceId,
+  }) {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_delete_service(
+        uniffiClonePointer(),
+        FfiConverterString.lower(serviceId),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterOptionalServiceConfigEntry.lift,
       runtimeExceptionErrorHandler,
     );
   }
@@ -4096,6 +4224,23 @@ class RuntimeSettings implements RuntimeSettingsInterface {
     );
   }
 
+  Future<ServiceConfigEntry?> getService({
+    required String serviceId,
+  }) {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_service(
+        uniffiClonePointer(),
+        FfiConverterString.lower(serviceId),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterOptionalServiceConfigEntry.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
   Future<ShortcutSettings> getShortcuts() {
     return uniffiRustCallAsync(
       () =>
@@ -4110,6 +4255,23 @@ class RuntimeSettings implements RuntimeSettingsInterface {
     );
   }
 
+  Future<List<String>> listModels({
+    required String providerId,
+  }) {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_list_models(
+        uniffiClonePointer(),
+        FfiConverterString.lower(providerId),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterSequenceString.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
   Future<List<ProviderConfigEntry>> listProviders() {
     return uniffiRustCallAsync(
       () =>
@@ -4120,6 +4282,20 @@ class RuntimeSettings implements RuntimeSettingsInterface {
       ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
       ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
       FfiConverterSequenceProviderConfigEntry.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<List<ServiceConfigEntry>> listServices() {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_list_services(
+        uniffiClonePointer(),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterSequenceServiceConfigEntry.lift,
       runtimeExceptionErrorHandler,
     );
   }
@@ -4215,6 +4391,31 @@ class RuntimeSettings implements RuntimeSettingsInterface {
       ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
       ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
       FfiConverterProviderConfigEntry.lift,
+      runtimeExceptionErrorHandler,
+    );
+  }
+
+  Future<ServiceConfigEntry> updateService({
+    required String serviceId,
+    required String providerId,
+    required ServiceType serviceType,
+    required String name,
+    required Map<String, String> fields,
+  }) {
+    return uniffiRustCallAsync(
+      () =>
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_update_service(
+        uniffiClonePointer(),
+        FfiConverterString.lower(serviceId),
+        FfiConverterString.lower(providerId),
+        FfiConverterServiceType.lower(serviceType),
+        FfiConverterString.lower(name),
+        FfiConverterMapStringToString.lower(fields),
+      ),
+      ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+      ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+      FfiConverterServiceConfigEntry.lift,
       runtimeExceptionErrorHandler,
     );
   }
@@ -6377,6 +6578,53 @@ class FfiConverterSequenceWordTense {
   }
 }
 
+class FfiConverterOptionalServiceConfigEntry {
+  static ServiceConfigEntry? lift(RustBuffer buf) {
+    return FfiConverterOptionalServiceConfigEntry.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<ServiceConfigEntry?> read(Uint8List buf) {
+    if (ByteData.view(buf.buffer, buf.offsetInBytes).getInt8(0) == 0) {
+      return LiftRetVal(null, 1);
+    }
+    final result = FfiConverterServiceConfigEntry.read(
+        Uint8List.view(buf.buffer, buf.offsetInBytes + 1));
+    return LiftRetVal<ServiceConfigEntry?>(result.value, result.bytesRead + 1);
+  }
+
+  static int allocationSize([ServiceConfigEntry? value]) {
+    if (value == null) {
+      return 1;
+    }
+    return FfiConverterServiceConfigEntry.allocationSize(value) + 1;
+  }
+
+  static RustBuffer lower(ServiceConfigEntry? value) {
+    if (value == null) {
+      return toRustBuffer(Uint8List.fromList([0]));
+    }
+    final length = FfiConverterOptionalServiceConfigEntry.allocationSize(value);
+    final Pointer<Uint8> frameData = calloc<Uint8>(length);
+    final buf = frameData.asTypedList(length);
+    FfiConverterOptionalServiceConfigEntry.write(value, buf);
+    final bytes = calloc<ForeignBytes>();
+    bytes.ref.len = length;
+    bytes.ref.data = frameData;
+    return RustBuffer.fromBytes(bytes.ref);
+  }
+
+  static int write(ServiceConfigEntry? value, Uint8List buf) {
+    if (value == null) {
+      buf[0] = 0;
+      return 1;
+    }
+    buf[0] = 1;
+    return FfiConverterServiceConfigEntry.write(
+            value, Uint8List.view(buf.buffer, buf.offsetInBytes + 1)) +
+        1;
+  }
+}
+
 class FfiConverterOptionalSettingsChange {
   static SettingsChange? lift(RustBuffer buf) {
     return FfiConverterOptionalSettingsChange.read(buf.asUint8List()).value;
@@ -6714,48 +6962,6 @@ class FfiConverterSequenceLanguageInfo {
   }
 }
 
-class FfiConverterSequenceProviderCapability {
-  static List<ProviderCapability> lift(RustBuffer buf) {
-    return FfiConverterSequenceProviderCapability.read(buf.asUint8List()).value;
-  }
-
-  static LiftRetVal<List<ProviderCapability>> read(Uint8List buf) {
-    List<ProviderCapability> res = [];
-    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < length; i++) {
-      final ret = FfiConverterProviderCapability.read(
-          Uint8List.view(buf.buffer, offset));
-      offset += ret.bytesRead;
-      res.add(ret.value);
-    }
-    return LiftRetVal(res, offset - buf.offsetInBytes);
-  }
-
-  static int write(List<ProviderCapability> value, Uint8List buf) {
-    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
-    int offset = buf.offsetInBytes + 4;
-    for (var i = 0; i < value.length; i++) {
-      offset += FfiConverterProviderCapability.write(
-          value[i], Uint8List.view(buf.buffer, offset));
-    }
-    return offset - buf.offsetInBytes;
-  }
-
-  static int allocationSize(List<ProviderCapability> value) {
-    return value
-            .map((l) => FfiConverterProviderCapability.allocationSize(l))
-            .fold(0, (a, b) => a + b) +
-        4;
-  }
-
-  static RustBuffer lower(List<ProviderCapability> value) {
-    final buf = Uint8List(allocationSize(value));
-    write(value, buf);
-    return toRustBuffer(buf);
-  }
-}
-
 class FfiConverterSequenceProviderConfigEntry {
   static List<ProviderConfigEntry> lift(RustBuffer buf) {
     return FfiConverterSequenceProviderConfigEntry.read(buf.asUint8List())
@@ -6793,6 +6999,48 @@ class FfiConverterSequenceProviderConfigEntry {
   }
 
   static RustBuffer lower(List<ProviderConfigEntry> value) {
+    final buf = Uint8List(allocationSize(value));
+    write(value, buf);
+    return toRustBuffer(buf);
+  }
+}
+
+class FfiConverterSequenceServiceConfigEntry {
+  static List<ServiceConfigEntry> lift(RustBuffer buf) {
+    return FfiConverterSequenceServiceConfigEntry.read(buf.asUint8List()).value;
+  }
+
+  static LiftRetVal<List<ServiceConfigEntry>> read(Uint8List buf) {
+    List<ServiceConfigEntry> res = [];
+    final length = buf.buffer.asByteData(buf.offsetInBytes).getInt32(0);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < length; i++) {
+      final ret = FfiConverterServiceConfigEntry.read(
+          Uint8List.view(buf.buffer, offset));
+      offset += ret.bytesRead;
+      res.add(ret.value);
+    }
+    return LiftRetVal(res, offset - buf.offsetInBytes);
+  }
+
+  static int write(List<ServiceConfigEntry> value, Uint8List buf) {
+    buf.buffer.asByteData(buf.offsetInBytes).setInt32(0, value.length);
+    int offset = buf.offsetInBytes + 4;
+    for (var i = 0; i < value.length; i++) {
+      offset += FfiConverterServiceConfigEntry.write(
+          value[i], Uint8List.view(buf.buffer, offset));
+    }
+    return offset - buf.offsetInBytes;
+  }
+
+  static int allocationSize(List<ServiceConfigEntry> value) {
+    return value
+            .map((l) => FfiConverterServiceConfigEntry.allocationSize(l))
+            .fold(0, (a, b) => a + b) +
+        4;
+  }
+
+  static RustBuffer lower(List<ServiceConfigEntry> value) {
     final buf = Uint8List(allocationSize(value));
     write(value, buf);
     return toRustBuffer(buf);
@@ -7631,6 +7879,12 @@ external Pointer<Void>
 @Native<Pointer<Void> Function(Pointer<Void>, RustBuffer)>(
     assetId: _uniffiAssetId)
 external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimesettings_delete_service(
+        Pointer<Void> ptr, RustBuffer service_id);
+
+@Native<Pointer<Void> Function(Pointer<Void>, RustBuffer)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimesettings_generate_provider_id(
         Pointer<Void> ptr, RustBuffer provider_type);
 
@@ -7666,14 +7920,31 @@ external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_provider(
         Pointer<Void> ptr, RustBuffer provider_id);
 
+@Native<Pointer<Void> Function(Pointer<Void>, RustBuffer)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_service(
+        Pointer<Void> ptr, RustBuffer service_id);
+
 @Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
 external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_shortcuts(
         Pointer<Void> ptr);
 
+@Native<Pointer<Void> Function(Pointer<Void>, RustBuffer)>(
+    assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimesettings_list_models(
+        Pointer<Void> ptr, RustBuffer provider_id);
+
 @Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
 external Pointer<Void>
     uniffi_beyondtranslate_runtime_fn_method_runtimesettings_list_providers(
+        Pointer<Void> ptr);
+
+@Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimesettings_list_services(
         Pointer<Void> ptr);
 
 @Native<Pointer<Void> Function(Pointer<Void>)>(assetId: _uniffiAssetId)
@@ -7713,6 +7984,18 @@ external Pointer<Void>
         Pointer<Void> ptr,
         RustBuffer provider_id,
         RustBuffer provider_type,
+        RustBuffer fields);
+
+@Native<
+    Pointer<Void> Function(Pointer<Void>, RustBuffer, RustBuffer, RustBuffer,
+        RustBuffer, RustBuffer)>(assetId: _uniffiAssetId)
+external Pointer<Void>
+    uniffi_beyondtranslate_runtime_fn_method_runtimesettings_update_service(
+        Pointer<Void> ptr,
+        RustBuffer service_id,
+        RustBuffer provider_id,
+        RustBuffer service_type,
+        RustBuffer name,
         RustBuffer fields);
 
 @Native<Pointer<Void> Function(Pointer<Void>, RustBuffer)>(
@@ -8404,6 +8687,10 @@ external int
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_delete_service();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_generate_provider_id();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
@@ -8432,11 +8719,23 @@ external int
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_service();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_shortcuts();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_models();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_providers();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_services();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
@@ -8461,6 +8760,10 @@ external int
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
     uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_provider();
+
+@Native<Uint16 Function()>(assetId: _uniffiAssetId)
+external int
+    uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_service();
 
 @Native<Uint16 Function()>(assetId: _uniffiAssetId)
 external int
@@ -8707,6 +9010,10 @@ void _checkApiChecksums() {
       20557) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_delete_service() !=
+      34145) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_generate_provider_id() !=
       9759) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
@@ -8735,12 +9042,24 @@ void _checkApiChecksums() {
       21807) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_service() !=
+      11319) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_shortcuts() !=
       44721) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_models() !=
+      22292) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_providers() !=
       34940) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_services() !=
+      5637) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_reset_shortcuts() !=
@@ -8765,6 +9084,10 @@ void _checkApiChecksums() {
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_provider() !=
       46276) {
+    throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
+  }
+  if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_service() !=
+      22489) {
     throw UniffiInternalError.panicked("UniFFI API checksum mismatch");
   }
   if (uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_shortcuts() !=

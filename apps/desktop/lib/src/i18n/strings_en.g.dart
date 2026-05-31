@@ -116,8 +116,8 @@ class TranslationsSettingsEn {
 
   // Translations
 
-  /// en: 'Version {} BUILD {}'
-  String get version => 'Version {} BUILD {}';
+  /// en: 'v{} (Build {})'
+  String get version => 'v{} (Build {})';
 
   late final TranslationsSettingsGeneralEn general =
       TranslationsSettingsGeneralEn.internal(_root);
@@ -127,10 +127,14 @@ class TranslationsSettingsEn {
       TranslationsSettingsShortcutsEn.internal(_root);
   late final TranslationsSettingsAdvancedEn advanced =
       TranslationsSettingsAdvancedEn.internal(_root);
+  late final TranslationsSettingsServicesEn services =
+      TranslationsSettingsServicesEn.internal(_root);
   late final TranslationsSettingsProvidersEn providers =
       TranslationsSettingsProvidersEn.internal(_root);
   late final TranslationsSettingsLayoutEn layout =
       TranslationsSettingsLayoutEn.internal(_root);
+  late final TranslationsSettingsAboutEn about =
+      TranslationsSettingsAboutEn.internal(_root);
 }
 
 // Path: common.ui
@@ -551,6 +555,25 @@ class TranslationsSettingsAdvancedEn {
   String get disabled => 'Disabled';
 }
 
+// Path: settings.services
+class TranslationsSettingsServicesEn {
+  TranslationsSettingsServicesEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Services'
+  String get title => 'Services';
+
+  late final TranslationsSettingsServicesButtonEn button =
+      TranslationsSettingsServicesButtonEn.internal(_root);
+  late final TranslationsSettingsServicesSectionEn section =
+      TranslationsSettingsServicesSectionEn.internal(_root);
+  late final TranslationsSettingsServicesEditorEn editor =
+      TranslationsSettingsServicesEditorEn.internal(_root);
+}
+
 // Path: settings.providers
 class TranslationsSettingsProvidersEn {
   TranslationsSettingsProvidersEn.internal(this._root);
@@ -597,6 +620,45 @@ class TranslationsSettingsLayoutEn {
 
   late final TranslationsSettingsLayoutEmptyEn empty =
       TranslationsSettingsLayoutEmptyEn.internal(_root);
+}
+
+// Path: settings.about
+class TranslationsSettingsAboutEn {
+  TranslationsSettingsAboutEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'About'
+  String get title => 'About';
+
+  /// en: 'Copy Version Info'
+  String get copy_version_info => 'Copy Version Info';
+
+  /// en: 'You're up to date.'
+  String get up_to_date => 'You\'re up to date.';
+
+  /// en: 'Check Again'
+  String get check_again => 'Check Again';
+
+  /// en: 'Links'
+  String get links => 'Links';
+
+  /// en: 'Website'
+  String get website => 'Website';
+
+  /// en: 'GitHub'
+  String get github => 'GitHub';
+
+  /// en: 'Report an Issue'
+  String get report_issue => 'Report an Issue';
+
+  /// en: 'License'
+  String get license => 'License';
+
+  /// en: 'Open Changelog'
+  String get open_changelog => 'Open Changelog';
 }
 
 // Path: common.ui.button
@@ -1016,6 +1078,46 @@ class TranslationsSettingsShortcutsResetDialogEn {
   String get cancel => 'Cancel';
 }
 
+// Path: settings.services.button
+class TranslationsSettingsServicesButtonEn {
+  TranslationsSettingsServicesButtonEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Add Service...'
+  String get add_service => 'Add Service...';
+}
+
+// Path: settings.services.section
+class TranslationsSettingsServicesSectionEn {
+  TranslationsSettingsServicesSectionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Available Services'
+  String get available_services => 'Available Services';
+}
+
+// Path: settings.services.editor
+class TranslationsSettingsServicesEditorEn {
+  TranslationsSettingsServicesEditorEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: '🚧 Coming Soon'
+  String get coming_soon => '🚧 Coming Soon';
+
+  /// en: 'Service configuration is not yet available. You can manage service providers from the providers tab.'
+  String get coming_soon_description =>
+      'Service configuration is not yet available. You can manage service providers from the providers tab.';
+}
+
 // Path: settings.providers.section
 class TranslationsSettingsProvidersSectionEn {
   TranslationsSettingsProvidersSectionEn.internal(this._root);
@@ -1117,6 +1219,10 @@ class TranslationsSettingsProvidersDetailEn {
   // Translations
   late final TranslationsSettingsProvidersDetailTooltipEn tooltip =
       TranslationsSettingsProvidersDetailTooltipEn.internal(_root);
+  late final TranslationsSettingsProvidersDetailSectionEn section =
+      TranslationsSettingsProvidersDetailSectionEn.internal(_root);
+  late final TranslationsSettingsProvidersDetailModelsEn models =
+      TranslationsSettingsProvidersDetailModelsEn.internal(_root);
 }
 
 // Path: settings.providers.capability
@@ -1255,6 +1361,12 @@ class TranslationsSettingsProvidersEditorTypePickerEn {
 
   /// en: 'Select the type of provider you would like to add:'
   String get prompt => 'Select the type of provider you would like to add:';
+
+  /// en: 'LLM'
+  String get section_llm => 'LLM';
+
+  /// en: 'Traditional'
+  String get section_traditional => 'Traditional';
 }
 
 // Path: settings.providers.editor.tooltip
@@ -1279,6 +1391,54 @@ class TranslationsSettingsProvidersDetailTooltipEn {
 
   /// en: 'Edit provider'
   String get edit => 'Edit provider';
+}
+
+// Path: settings.providers.detail.section
+class TranslationsSettingsProvidersDetailSectionEn {
+  TranslationsSettingsProvidersDetailSectionEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Configuration'
+  String get configuration => 'Configuration';
+
+  /// en: 'Models'
+  String get models => 'Models';
+}
+
+// Path: settings.providers.detail.models
+class TranslationsSettingsProvidersDetailModelsEn {
+  TranslationsSettingsProvidersDetailModelsEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// en: 'Loading models...'
+  String get loading => 'Loading models...';
+
+  /// en: 'No models found.'
+  String get empty => 'No models found.';
+
+  /// en: 'Retry'
+  String get retry => 'Retry';
+
+  /// en: 'Add Model…'
+  String get add => 'Add Model…';
+
+  /// en: 'Add Model'
+  String get add_title => 'Add Model';
+
+  /// en: 'e.g. gpt-4o'
+  String get add_placeholder => 'e.g. gpt-4o';
+
+  /// en: 'Default'
+  String get default_badge => 'Default';
+
+  /// en: 'Could not fetch models from provider API.'
+  String get fetch_error => 'Could not fetch models from provider API.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1402,7 +1562,7 @@ extension on Translations {
         'No default text recognition service configured. Please set one in Settings.',
       'mini_translator.message.ocr_recognition_failed' =>
         'Text recognition failed',
-      'settings.version' => 'Version {} BUILD {}',
+      'settings.version' => 'v{} (Build {})',
       'settings.general.title' => 'General',
       'settings.general.section.permissions' => 'Permissions',
       'settings.general.section.ocr' => 'Text Recognition',
@@ -1488,6 +1648,12 @@ extension on Translations {
       'settings.advanced.port' => 'Port',
       'settings.advanced.running_at' => 'Running at {url}',
       'settings.advanced.disabled' => 'Disabled',
+      'settings.services.title' => 'Services',
+      'settings.services.button.add_service' => 'Add Service...',
+      'settings.services.section.available_services' => 'Available Services',
+      'settings.services.editor.coming_soon' => '🚧 Coming Soon',
+      'settings.services.editor.coming_soon_description' =>
+        'Service configuration is not yet available. You can manage service providers from the providers tab.',
       'settings.providers.title' => 'Providers',
       'settings.providers.section.services' => 'Available Services',
       'settings.providers.section.services_description' =>
@@ -1506,8 +1672,22 @@ extension on Translations {
       'settings.providers.editor.placeholder.id' => 'e.g. deepl-main',
       'settings.providers.editor.type_picker.prompt' =>
         'Select the type of provider you would like to add:',
+      'settings.providers.editor.type_picker.section_llm' => 'LLM',
+      'settings.providers.editor.type_picker.section_traditional' =>
+        'Traditional',
       'settings.providers.editor.tooltip.help' => 'Help',
       'settings.providers.detail.tooltip.edit' => 'Edit provider',
+      'settings.providers.detail.section.configuration' => 'Configuration',
+      'settings.providers.detail.section.models' => 'Models',
+      'settings.providers.detail.models.loading' => 'Loading models...',
+      'settings.providers.detail.models.empty' => 'No models found.',
+      'settings.providers.detail.models.retry' => 'Retry',
+      'settings.providers.detail.models.add' => 'Add Model…',
+      'settings.providers.detail.models.add_title' => 'Add Model',
+      'settings.providers.detail.models.add_placeholder' => 'e.g. gpt-4o',
+      'settings.providers.detail.models.default_badge' => 'Default',
+      'settings.providers.detail.models.fetch_error' =>
+        'Could not fetch models from provider API.',
       'settings.providers.capability.translation' => 'Translation',
       'settings.providers.capability.dictionary' => 'Dictionary',
       'settings.providers.capability.ocr' => 'OCR',
@@ -1526,6 +1706,16 @@ extension on Translations {
       'settings.layout.empty.title' => 'Select a Category',
       'settings.layout.empty.message' =>
         'Choose a settings section from the sidebar.',
+      'settings.about.title' => 'About',
+      'settings.about.copy_version_info' => 'Copy Version Info',
+      'settings.about.up_to_date' => 'You\'re up to date.',
+      'settings.about.check_again' => 'Check Again',
+      'settings.about.links' => 'Links',
+      'settings.about.website' => 'Website',
+      'settings.about.github' => 'GitHub',
+      'settings.about.report_issue' => 'Report an Issue',
+      'settings.about.license' => 'License',
+      'settings.about.open_changelog' => 'Open Changelog',
       _ => null,
     };
   }

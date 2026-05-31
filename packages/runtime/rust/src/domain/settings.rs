@@ -3,7 +3,7 @@ use std::fs;
 use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use beyondtranslate_core::{ProviderCapability, TranslationTarget};
+use beyondtranslate_core::TranslationTarget;
 use beyondtranslate_engine::{ProviderConfig, ProviderType};
 use serde::de::Error as DeError;
 use serde::ser::SerializeMap;
@@ -187,10 +187,6 @@ pub struct ProviderConfigEntry {
     pub r#type: ProviderType,
     #[serde(default)]
     pub fields: HashMap<String, String>,
-    /// Provider capabilities, populated at runtime from the engine instance.
-    /// Not written to the settings file.
-    #[serde(default, skip_serializing)]
-    pub capabilities: Vec<ProviderCapability>,
     /// Creation timestamp (Unix epoch seconds). Set automatically when a
     /// provider is first created; `None` for providers migrated from an
     /// older version of the settings file.
@@ -204,7 +200,46 @@ impl Default for ProviderConfigEntry {
             id: String::default(),
             r#type: ProviderType::System,
             fields: HashMap::default(),
-            capabilities: Vec::default(),
+            created_at: None,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Eq, Serialize, uniffi::Enum)]
+#[serde(rename_all = "camelCase")]
+pub enum ServiceType {
+    Dictionary,
+    Ocr,
+    #[default]
+    Translation,
+    Llm,
+}
+
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, uniffi::Record)]
+pub struct ServiceConfigEntry {
+    #[serde(default)]
+    pub id: String,
+    #[serde(default, rename = "providerId")]
+    pub provider_id: String,
+    #[serde(default)]
+    #[serde(rename = "type")]
+    pub r#type: ServiceType,
+    #[serde(default)]
+    pub name: String,
+    #[serde(default)]
+    pub fields: HashMap<String, String>,
+    #[serde(default, rename = "createdAt", skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<u64>,
+}
+
+impl Default for ServiceConfigEntry {
+    fn default() -> Self {
+        Self {
+            id: String::default(),
+            provider_id: String::default(),
+            r#type: ServiceType::Translation,
+            name: String::default(),
+            fields: HashMap::default(),
             created_at: None,
         }
     }
@@ -221,6 +256,8 @@ pub struct Settings {
         deserialize_with = "deserialize_providers"
     )]
     pub providers: HashMap<String, ProviderConfigEntry>,
+    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
+    pub services: HashMap<String, ServiceConfigEntry>,
     #[serde(default)]
     pub general: GeneralSettings,
     #[serde(default)]
@@ -244,7 +281,7 @@ impl Settings {
             format!("failed to read settings file `{}`: {error}", path.display())
         })?;
 
-        let settings: Self = serde_json::from_str(&content).map_err(|error| {
+        let mut settings: Self = serde_json::from_str(&content).map_err(|error| {
             format!(
                 "failed to parse settings file `{}`: {error}",
                 path.display()
@@ -254,6 +291,10 @@ impl Settings {
             "[Settings::load] loaded {} providers",
             settings.providers.len()
         );
+
+        // Strip any persisted system provider — it is auto-injected at runtime.
+        settings.providers.remove("system");
+
         Ok(settings)
     }
 
@@ -379,7 +420,6 @@ pub fn provider_entry_from_config(
         id: provider_id.to_owned(),
         r#type: config.provider_type,
         fields,
-        capabilities: Vec::new(),
         created_at: None,
     })
 }
@@ -608,7 +648,6 @@ mod tests {
                 id: "deepl-main".to_owned(),
                 r#type: ProviderType::DeepL,
                 fields: HashMap::from([("appKey".to_owned(), "test-key".to_owned())]),
-                capabilities: Vec::new(),
                 created_at: None,
             },
         );

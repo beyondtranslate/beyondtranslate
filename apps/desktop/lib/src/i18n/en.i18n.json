@@ -240,6 +240,19 @@
       "running_at": "Running at {url}",
       "disabled": "Disabled"
     },
+    "services": {
+      "title": "Services",
+      "button": {
+        "add_service": "Add Service..."
+      },
+      "section": {
+        "available_services": "Available Services"
+      },
+      "editor": {
+        "coming_soon": "🚧 Coming Soon",
+        "coming_soon_description": "Service configuration is not yet available. You can manage service providers from the providers tab."
+      }
+    },
     "providers": {
       "title": "Providers",
       "section": {
@@ -269,7 +282,9 @@
           "id": "e.g. deepl-main"
         },
         "type_picker": {
-          "prompt": "Select the type of provider you would like to add:"
+          "prompt": "Select the type of provider you would like to add:",
+          "section_llm": "LLM",
+          "section_traditional": "Traditional"
         },
         "tooltip": {
           "help": "Help"
@@ -278,6 +293,20 @@
       "detail": {
         "tooltip": {
           "edit": "Edit provider"
+        },
+        "section": {
+          "configuration": "Configuration",
+          "models": "Models"
+        },
+        "models": {
+          "loading": "Loading models...",
+          "empty": "No models found.",
+          "retry": "Retry",
+          "add": "Add Model…",
+          "add_title": "Add Model",
+          "add_placeholder": "e.g. gpt-4o",
+          "default_badge": "Default",
+          "fetch_error": "Could not fetch models from provider API."
         }
       },
       "capability": {

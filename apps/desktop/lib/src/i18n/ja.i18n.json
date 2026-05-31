@@ -240,6 +240,19 @@
       "running_at": "{url} で実行中",
       "disabled": "無効"
     },
+    "services": {
+      "title": "サービス",
+      "button": {
+        "add_service": "サービスを追加..."
+      },
+      "section": {
+        "available_services": "利用可能なサービス"
+      },
+      "editor": {
+        "coming_soon": "🚧 近日公開",
+        "coming_soon_description": "サービスの設定はまだ利用できません。プロバイダータブからサービスプロバイダーを管理できます。"
+      }
+    },
     "providers": {
       "title": "プロバイダー",
       "section": {
@@ -269,7 +282,9 @@
           "id": "例: deepl-main"
         },
         "type_picker": {
-          "prompt": "追加するプロバイダーの種類を選択してください："
+          "prompt": "追加するプロバイダーの種類を選択してください：",
+          "section_llm": "LLM",
+          "section_traditional": "従来型"
         },
         "tooltip": {
           "help": "ヘルプ"
@@ -278,6 +293,20 @@
       "detail": {
         "tooltip": {
           "edit": "プロバイダーを編集"
+        },
+        "section": {
+          "configuration": "設定",
+          "models": "モデル"
+        },
+        "models": {
+          "loading": "モデルを読み込み中...",
+          "empty": "モデルが見つかりません。",
+          "retry": "再試行",
+          "add": "モデルを追加…",
+          "add_title": "モデルを追加",
+          "add_placeholder": "例: gpt-4o",
+          "default_badge": "デフォルト",
+          "fetch_error": "プロバイダーAPIからモデルを取得できませんでした。"
         }
       },
       "capability": {

@@ -15,6 +15,8 @@ export 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
         GeneralSettingsPatch,
         InputSubmitMode,
         ProviderConfigEntry,
+        ServiceConfigEntry,
+        ServiceType,
         ShortcutSettings,
         ShortcutSettingsPatch,
         TranslationTarget,
@@ -35,17 +37,12 @@ export 'package:beyondtranslate_runtime/beyondtranslate_runtime.dart'
         WordSynonym,
         WordTag,
         WordTense,
-        ProviderCapability,
         ProviderType,
         RecognizeTextRequest,
         RecognizeTextResponse,
         RuntimeApiServer,
         RuntimeOcr,
         RuntimeTextExtractor;
-
-/// [ProviderCapability] is provided by the generated FFI bindings, not
-/// from provider_capability.dart which is no longer used.
-// export 'provider_capability.dart' show ProviderCapability;
 
 /// Singleton [Runtime] handle, backed by the Rust native library.
 ///

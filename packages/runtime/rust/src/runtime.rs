@@ -6,8 +6,8 @@ use std::thread;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use beyondtranslate_core::{
-    DetectLanguageRequest, DetectLanguageResponse, LanguageInfo, LanguagePair, LookUpRequest,
-    LookUpResponse, RecognizeTextRequest, RecognizeTextResponse, TranslateRequest,
+    ChatMessage, DetectLanguageRequest, DetectLanguageResponse, LanguageInfo, LanguagePair,
+    LookUpRequest, LookUpResponse, RecognizeTextRequest, RecognizeTextResponse, TranslateRequest,
     TranslateResponse,
 };
 use struct_patch::Patch as ApplyPatch;
@@ -17,8 +17,8 @@ use crate::domain::engine;
 use crate::domain::permission;
 use crate::domain::settings::{
     provider_entry_from_config, AdvancedSettings, AdvancedSettingsPatch, AppearanceSettings,
-    AppearanceSettingsPatch, GeneralSettings, GeneralSettingsPatch, ProviderConfigEntry, Settings,
-    ShortcutSettings, ShortcutSettingsPatch,
+    AppearanceSettingsPatch, GeneralSettings, GeneralSettingsPatch, ProviderConfigEntry,
+    ServiceConfigEntry, ServiceType, Settings, ShortcutSettings, ShortcutSettingsPatch,
 };
 use crate::domain::text_extractor;
 use crate::RuntimeApiServer;
@@ -80,7 +80,20 @@ struct RuntimeState {
 }
 
 impl RuntimeState {
-    fn new(settings: Settings) -> Result<Self, String> {
+    fn new(mut settings: Settings) -> Result<Self, String> {
+        // Auto-register the internal system provider; it is stripped before
+        // persisting to file and excluded from list APIs.
+        if !settings.providers.contains_key("system") {
+            settings.providers.insert(
+                "system".to_owned(),
+                ProviderConfigEntry {
+                    id: "system".to_owned(),
+                    r#type: beyondtranslate_engine::ProviderType::System,
+                    fields: HashMap::new(),
+                    created_at: None,
+                },
+            );
+        }
         let engine = engine::build_from_settings(&settings)?;
         Ok(Self { settings, engine })
     }
@@ -135,25 +148,25 @@ pub struct RuntimeSettings {
 #[derive(uniffi::Object)]
 pub struct RuntimeTranslation {
     runtime: Runtime,
-    provider_id: String,
+    service_id: String,
 }
 
 #[derive(uniffi::Object)]
 pub struct RuntimeDictionary {
     runtime: Runtime,
-    provider_id: String,
+    service_id: String,
 }
 
 #[derive(Clone, uniffi::Object)]
 pub struct RuntimeLlm {
     runtime: Runtime,
-    provider_id: String,
+    service_id: String,
 }
 
 #[derive(uniffi::Object)]
 pub struct RuntimeOcr {
     runtime: Runtime,
-    provider_id: String,
+    service_id: String,
 }
 
 #[derive(uniffi::Object)]
@@ -229,11 +242,11 @@ impl Runtime {
         self: Arc<Self>,
         provider_id: String,
     ) -> Result<Arc<RuntimeTranslation>, RuntimeError> {
-        let provider_id = validate_service_provider_id(provider_id, "+translation")
+        let service_id = validate_service_provider_id(provider_id, "+translation")
             .map_err(RuntimeError::from)?;
         Ok(Arc::new(RuntimeTranslation {
             runtime: (*self).clone(),
-            provider_id,
+            service_id,
         }))
     }
 
@@ -241,29 +254,29 @@ impl Runtime {
         self: Arc<Self>,
         provider_id: String,
     ) -> Result<Arc<RuntimeDictionary>, RuntimeError> {
-        let provider_id =
+        let service_id =
             validate_service_provider_id(provider_id, "+dictionary").map_err(RuntimeError::from)?;
         Ok(Arc::new(RuntimeDictionary {
             runtime: (*self).clone(),
-            provider_id,
+            service_id,
         }))
     }
 
     pub fn ocr(self: Arc<Self>, provider_id: String) -> Result<Arc<RuntimeOcr>, RuntimeError> {
-        let provider_id =
+        let service_id =
             validate_service_provider_id(provider_id, "+ocr").map_err(RuntimeError::from)?;
         Ok(Arc::new(RuntimeOcr {
             runtime: (*self).clone(),
-            provider_id,
+            service_id,
         }))
     }
 
     pub fn llm(self: Arc<Self>, provider_id: String) -> Result<Arc<RuntimeLlm>, RuntimeError> {
-        let provider_id =
+        let service_id =
             validate_service_provider_id(provider_id, "+llm").map_err(RuntimeError::from)?;
         Ok(Arc::new(RuntimeLlm {
             runtime: (*self).clone(),
-            provider_id,
+            service_id,
         }))
     }
 
@@ -389,6 +402,101 @@ impl Runtime {
 
         service.look_up(request).await.map_err(Into::into)
     }
+
+    async fn resolve_service(
+        &self,
+        service_id: &str,
+        expected_type: ServiceType,
+    ) -> Result<ResolvedService, String> {
+        let state = self.inner.state.read().await;
+        if let Some(service) = state.settings.services.get(service_id) {
+            if service.r#type != expected_type {
+                return Err(format!(
+                    "service `{service_id}` is not a {expected_type:?} service"
+                ));
+            }
+            if !state.settings.providers.contains_key(&service.provider_id) {
+                return Err(format!(
+                    "service `{service_id}` references unknown provider `{}`",
+                    service.provider_id
+                ));
+            }
+            let mut entry = service.clone();
+            entry.id = service_id.to_owned();
+            return Ok(ResolvedService {
+                provider_id: entry.provider_id.clone(),
+                entry,
+            });
+        }
+
+        let provider = state
+            .settings
+            .providers
+            .get(service_id)
+            .ok_or_else(|| format!("service or provider `{service_id}` does not exist"))?;
+        let engine_provider = state
+            .engine
+            .require(service_id)
+            .map_err(|error| error.to_string())?;
+        let supported = match expected_type {
+            ServiceType::Dictionary => engine_provider.dictionary().is_some(),
+            ServiceType::Ocr => engine_provider.ocr().is_some(),
+            ServiceType::Translation => engine_provider.translation().is_some(),
+            ServiceType::Llm => engine_provider.llm().is_some(),
+        };
+        if !supported {
+            return Err(format!(
+                "provider `{service_id}` does not support {expected_type:?}"
+            ));
+        }
+        Ok(ResolvedService {
+            provider_id: service_id.to_owned(),
+            entry: service_entry_for_provider_type(
+                service_id,
+                &normalized_provider_entry(service_id, provider),
+                expected_type,
+            ),
+        })
+    }
+
+    async fn resolve_llm_service(&self, service_id: &str) -> Result<ResolvedService, String> {
+        match self.resolve_service(service_id, ServiceType::Llm).await {
+            Ok(service) => Ok(service),
+            Err(_) => {
+                let state = self.inner.state.read().await;
+                let Some(service) = state.settings.services.get(service_id) else {
+                    return Err(format!("service or provider `{service_id}` does not exist"));
+                };
+                if service.r#type != ServiceType::Translation
+                    && service.r#type != ServiceType::Dictionary
+                {
+                    return Err(format!("service `{service_id}` is not an llm service"));
+                }
+                if !state.settings.providers.contains_key(&service.provider_id) {
+                    return Err(format!(
+                        "service `{service_id}` references unknown provider `{}`",
+                        service.provider_id
+                    ));
+                }
+                let provider = state
+                    .engine
+                    .require(&service.provider_id)
+                    .map_err(|error| error.to_string())?;
+                if provider.llm().is_none() {
+                    return Err(format!(
+                        "provider `{}` does not support llm",
+                        service.provider_id
+                    ));
+                }
+                let mut entry = service.clone();
+                entry.id = service_id.to_owned();
+                Ok(ResolvedService {
+                    provider_id: entry.provider_id.clone(),
+                    entry,
+                })
+            }
+        }
+    }
 }
 
 impl RuntimeSettings {
@@ -428,7 +536,12 @@ impl RuntimeSettings {
         let result = update(&mut next_settings)?;
         next_settings.touch_last_updated()?;
 
-        let engine_changed = next_settings.providers != state.settings.providers;
+        // Strip the internal system provider before persisting to file.
+        next_settings.providers.remove("system");
+        let mut prev_settings = state.settings.clone();
+        prev_settings.providers.remove("system");
+
+        let engine_changed = next_settings.providers != prev_settings.providers;
 
         let settings_file_path = self.runtime.inner.settings_file_path.as_ref();
         if engine_changed {
@@ -453,6 +566,49 @@ impl RuntimeSettings {
 
         Ok(result)
     }
+}
+
+#[derive(Clone)]
+struct ResolvedService {
+    provider_id: String,
+    entry: ServiceConfigEntry,
+}
+
+impl ResolvedService {
+    fn field(&self, key: &str) -> Option<&str> {
+        self.entry
+            .fields
+            .get(key)
+            .map(|value| value.trim())
+            .filter(|value| !value.is_empty())
+    }
+}
+
+fn service_entry_for_provider_type(
+    service_id: &str,
+    provider: &ProviderConfigEntry,
+    service_type: ServiceType,
+) -> ServiceConfigEntry {
+    ServiceConfigEntry {
+        id: service_id.to_owned(),
+        provider_id: provider.id.clone(),
+        r#type: service_type,
+        name: provider.id.clone(),
+        fields: HashMap::new(),
+        created_at: provider.created_at,
+    }
+}
+
+fn render_prompt_template(
+    template: &str,
+    source_language: &str,
+    target_language: &str,
+    text: &str,
+) -> String {
+    template
+        .replace("{{sourceLanguage}}", source_language)
+        .replace("{{targetLanguage}}", target_language)
+        .replace("{{text}}", text)
 }
 
 #[uniffi::export(async_runtime = "tokio")]
@@ -570,16 +726,118 @@ impl RuntimeSettings {
             .settings
             .providers
             .iter()
-            .map(|(provider_id, provider)| {
-                let mut entry = normalized_provider_entry(provider_id, provider);
-                entry.capabilities = state
-                    .engine
-                    .require(provider_id)
-                    .map(|p| p.capabilities())
-                    .unwrap_or_default();
-                entry
-            })
+            .filter(|(provider_id, _)| *provider_id != "system")
+            .map(|(provider_id, provider)| normalized_provider_entry(provider_id, provider))
             .collect())
+    }
+
+    pub async fn list_services(&self) -> Result<Vec<ServiceConfigEntry>, RuntimeError> {
+        let state = self.runtime.inner.state.read().await;
+        let mut services = Vec::new();
+
+        for (provider_id, provider) in &state.settings.providers {
+            if provider_id == "system" {
+                continue;
+            }
+            let entry = normalized_provider_entry(provider_id, provider);
+            if let Ok(engine_provider) = state.engine.require(provider_id) {
+                if engine_provider.dictionary().is_some() {
+                    services.push(service_entry_for_provider_type(
+                        provider_id,
+                        &entry,
+                        ServiceType::Dictionary,
+                    ));
+                }
+                if engine_provider.translation().is_some() {
+                    services.push(service_entry_for_provider_type(
+                        provider_id,
+                        &entry,
+                        ServiceType::Translation,
+                    ));
+                }
+                if engine_provider.ocr().is_some() {
+                    services.push(service_entry_for_provider_type(
+                        provider_id,
+                        &entry,
+                        ServiceType::Ocr,
+                    ));
+                }
+                if engine_provider.llm().is_some() {
+                    services.push(service_entry_for_provider_type(
+                        &format!("{provider_id}+llm"),
+                        &entry,
+                        ServiceType::Llm,
+                    ));
+                }
+            }
+        }
+
+        for (service_id, service) in &state.settings.services {
+            if !state.settings.providers.contains_key(&service.provider_id) {
+                continue;
+            }
+            let mut entry = service.clone();
+            entry.id = service_id.clone();
+            services.push(entry);
+        }
+
+        services.sort_by(|a, b| a.id.cmp(&b.id));
+        Ok(services)
+    }
+
+    pub async fn list_models(&self, provider_id: String) -> Result<Vec<String>, RuntimeError> {
+        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        let runtime = self.runtime.clone();
+        run_on_worker_thread(move || async move {
+            let provider = {
+                let state = runtime.inner.state.read().await;
+                state
+                    .engine
+                    .require(&provider_id)
+                    .map_err(|e| e.to_string())?
+                    .clone()
+            };
+            let llm_service = provider
+                .llm()
+                .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
+            llm_service.list_models().await.map_err(|e| e.to_string())
+        })
+        .await
+        .map_err(|e: String| RuntimeError::from(e))
+    }
+
+    pub async fn get_service(
+        &self,
+        service_id: String,
+    ) -> Result<Option<ServiceConfigEntry>, RuntimeError> {
+        let service_id = validate_provider_id(service_id).map_err(RuntimeError::from)?;
+        let state = self.runtime.inner.state.read().await;
+        if let Some(service) = state.settings.services.get(&service_id) {
+            let mut entry = service.clone();
+            entry.id = service_id;
+            return Ok(Some(entry));
+        }
+
+        let Some(provider) = state.settings.providers.get(&service_id) else {
+            return Ok(None);
+        };
+        let entry = normalized_provider_entry(&service_id, provider);
+        let service_type = state.engine.require(&service_id).ok().and_then(|provider| {
+            if provider.translation().is_some() {
+                Some(ServiceType::Translation)
+            } else if provider.dictionary().is_some() {
+                Some(ServiceType::Dictionary)
+            } else if provider.ocr().is_some() {
+                Some(ServiceType::Ocr)
+            } else if provider.llm().is_some() {
+                Some(ServiceType::Llm)
+            } else {
+                None
+            }
+        });
+
+        Ok(service_type
+            .map(|service_type| service_entry_for_provider_type(&service_id, &entry, service_type)))
     }
 
     pub async fn get_provider(
@@ -588,15 +846,11 @@ impl RuntimeSettings {
     ) -> Result<Option<ProviderConfigEntry>, RuntimeError> {
         let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
         let state = self.runtime.inner.state.read().await;
-        Ok(state.settings.providers.get(&provider_id).map(|provider| {
-            let mut entry = normalized_provider_entry(&provider_id, provider);
-            entry.capabilities = state
-                .engine
-                .require(&provider_id)
-                .map(|p| p.capabilities())
-                .unwrap_or_default();
-            entry
-        }))
+        Ok(state
+            .settings
+            .providers
+            .get(&provider_id)
+            .map(|provider| normalized_provider_entry(&provider_id, provider)))
     }
 
     pub async fn update_provider(
@@ -606,6 +860,11 @@ impl RuntimeSettings {
         fields: HashMap<String, String>,
     ) -> Result<ProviderConfigEntry, RuntimeError> {
         let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        if provider_id == "system" {
+            return Err(RuntimeError::from(
+                "the built-in system provider cannot be modified".to_owned(),
+            ));
+        }
         let provider_type =
             validate_required("provider_type", provider_type).map_err(RuntimeError::from)?;
         let provider_type = crate::domain::settings::parse_provider_type(&provider_type)
@@ -614,7 +873,6 @@ impl RuntimeSettings {
             id: provider_id.clone(),
             r#type: provider_type,
             fields,
-            capabilities: Vec::new(),
             created_at: None,
         };
         let config = crate::domain::settings::provider_config_from_settings(&entry)
@@ -642,16 +900,88 @@ impl RuntimeSettings {
         .map_err(Into::into)
     }
 
+    pub async fn update_service(
+        &self,
+        service_id: String,
+        provider_id: String,
+        service_type: ServiceType,
+        name: String,
+        fields: HashMap<String, String>,
+    ) -> Result<ServiceConfigEntry, RuntimeError> {
+        let service_id = validate_provider_id(service_id).map_err(RuntimeError::from)?;
+        let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        let name = name.trim().to_owned();
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .ok();
+
+        self.commit_settings(SettingsChange::Providers, move |settings| {
+            let provider = settings
+                .providers
+                .get(&provider_id)
+                .ok_or_else(|| format!("provider `{provider_id}` does not exist"))?;
+            if provider.r#type == beyondtranslate_engine::ProviderType::System {
+                return Err("system provider services cannot be customized".to_owned());
+            }
+            if service_id == provider_id {
+                return Err("custom service id must be different from provider id".to_owned());
+            }
+
+            let mut entry = ServiceConfigEntry {
+                id: service_id.clone(),
+                provider_id,
+                r#type: service_type,
+                name,
+                fields,
+                created_at: None,
+            };
+            if let Some(existing) = settings.services.get(&service_id) {
+                entry.created_at = existing.created_at.or(now);
+            } else {
+                entry.created_at = now;
+            }
+            settings.services.insert(service_id, entry.clone());
+            Ok(entry)
+        })
+        .await
+        .map_err(Into::into)
+    }
+
     pub async fn delete_provider(
         &self,
         provider_id: String,
     ) -> Result<Option<ProviderConfigEntry>, RuntimeError> {
         let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
+        if provider_id == "system" {
+            return Err(RuntimeError::from(
+                "the built-in system provider cannot be deleted".to_owned(),
+            ));
+        }
         self.commit_settings(SettingsChange::Providers, move |settings| {
-            Ok(settings
+            let removed = settings
                 .providers
                 .remove(&provider_id)
-                .map(|provider| normalized_provider_entry(&provider_id, &provider)))
+                .map(|provider| normalized_provider_entry(&provider_id, &provider));
+            settings
+                .services
+                .retain(|_, service| service.provider_id != provider_id);
+            Ok(removed)
+        })
+        .await
+        .map_err(Into::into)
+    }
+
+    pub async fn delete_service(
+        &self,
+        service_id: String,
+    ) -> Result<Option<ServiceConfigEntry>, RuntimeError> {
+        let service_id = validate_provider_id(service_id).map_err(RuntimeError::from)?;
+        self.commit_settings(SettingsChange::Providers, move |settings| {
+            Ok(settings.services.remove(&service_id).map(|mut service| {
+                service.id = service_id;
+                service
+            }))
         })
         .await
         .map_err(Into::into)
@@ -688,12 +1018,17 @@ impl SettingsSubscription {
 
 impl RuntimeTranslation {
     async fn translate_impl(&self, request: TranslateRequest) -> Result<TranslateResponse, String> {
-        let provider_id = self.provider_id.clone();
+        let service_id = self.service_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
             let target_language =
                 validate_optional_required("target_language", request.target_language)?;
             let text = validate_required("text", request.text)?;
+            let source_language = optional_trimmed(request.source_language);
+            let resolved = runtime
+                .resolve_service(&service_id, ServiceType::Translation)
+                .await?;
+            let provider_id = resolved.provider_id.clone();
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -702,13 +1037,52 @@ impl RuntimeTranslation {
                     .map_err(|error| error.to_string())?
                     .clone()
             };
+
+            if let (Some(system_prompt), Some(llm_service)) =
+                (resolved.field("systemPrompt"), provider.llm())
+            {
+                let model = resolved
+                    .field("model")
+                    .map(str::to_owned)
+                    .or_else(|| llm_service.available_models().into_iter().next())
+                    .ok_or_else(|| "llm default model must be configured".to_owned())?;
+                let system_prompt = render_prompt_template(
+                    system_prompt,
+                    source_language.as_deref().unwrap_or("auto"),
+                    &target_language,
+                    &text,
+                );
+                let response = llm_service
+                    .chat(beyondtranslate_core::ChatRequest {
+                        model,
+                        messages: vec![ChatMessage::system(system_prompt), ChatMessage::user(text)],
+                        temperature: Some(0.3),
+                        max_tokens: Some(4096),
+                        stream: None,
+                    })
+                    .await
+                    .map_err(|error| error.to_string())?;
+                let text = response
+                    .choices
+                    .first()
+                    .map(|choice| choice.message.content.clone())
+                    .ok_or_else(|| "no response from llm".to_owned())?;
+                return Ok(TranslateResponse {
+                    translations: vec![beyondtranslate_core::TextTranslation {
+                        text,
+                        detected_source_language: None,
+                        audio_url: None,
+                    }],
+                });
+            }
+
             let translation_service = provider
                 .translation()
                 .ok_or_else(|| format!("provider `{provider_id}` does not support translation"))?;
 
             translation_service
                 .translate(TranslateRequest {
-                    source_language: optional_trimmed(request.source_language),
+                    source_language,
                     target_language: Some(target_language),
                     text,
                 })
@@ -724,7 +1098,7 @@ impl RuntimeTranslation {
         &self,
         request: DetectLanguageRequest,
     ) -> Result<DetectLanguageResponse, String> {
-        let provider_id = self.provider_id.clone();
+        let service_id = self.service_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
             let texts = request
@@ -736,6 +1110,10 @@ impl RuntimeTranslation {
             if texts.is_empty() {
                 return Err("texts must not be empty".to_owned());
             }
+            let resolved = runtime
+                .resolve_service(&service_id, ServiceType::Translation)
+                .await?;
+            let provider_id = resolved.provider_id;
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -759,12 +1137,16 @@ impl RuntimeTranslation {
 
 impl RuntimeDictionary {
     async fn lookup_impl(&self, request: LookUpRequest) -> Result<LookUpResponse, String> {
-        let provider_id = self.provider_id.clone();
+        let service_id = self.service_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
             let source_language = validate_required("source_language", request.source_language)?;
             let target_language = validate_required("target_language", request.target_language)?;
             let word = validate_required("word", request.word)?;
+            let resolved = runtime
+                .resolve_service(&service_id, ServiceType::Dictionary)
+                .await?;
+            let provider_id = resolved.provider_id.clone();
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -820,13 +1202,15 @@ impl RuntimeLlm {
         model: String,
         messages: Vec<beyondtranslate_core::ChatMessage>,
     ) -> Result<beyondtranslate_core::ChatResponse, String> {
-        let provider_id = self.provider_id.clone();
+        let service_id = self.service_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
             let model = validate_required("model", model)?;
             if messages.is_empty() {
                 return Err("messages must not be empty".to_owned());
             }
+            let resolved = runtime.resolve_llm_service(&service_id).await?;
+            let provider_id = resolved.provider_id;
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -854,11 +1238,13 @@ impl RuntimeLlm {
     }
 
     async fn polish_impl(&self, text: String, style: String) -> Result<String, String> {
-        let provider_id = self.provider_id.clone();
+        let service_id = self.service_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
             let text = validate_required("text", text)?;
             let style = validate_required("style", style)?;
+            let resolved = runtime.resolve_llm_service(&service_id).await?;
+            let provider_id = resolved.provider_id.clone();
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -871,12 +1257,11 @@ impl RuntimeLlm {
                 .llm()
                 .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
 
-            let model = llm_service
-                .available_models()
-                .into_iter()
-                .next()
+            let model = resolved
+                .field("model")
+                .map(str::to_owned)
+                .or_else(|| llm_service.available_models().into_iter().next())
                 .ok_or_else(|| "llm default model must be configured".to_owned())?;
-
             let system_prompt =
                 beyondtranslate_engine::prompt::polish_translation_system_prompt(&style);
 
@@ -904,11 +1289,13 @@ impl RuntimeLlm {
     }
 
     async fn explain_impl(&self, source: String, translation: String) -> Result<String, String> {
-        let provider_id = self.provider_id.clone();
+        let service_id = self.service_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
             let source = validate_required("source", source)?;
             let translation = validate_required("translation", translation)?;
+            let resolved = runtime.resolve_llm_service(&service_id).await?;
+            let provider_id = resolved.provider_id.clone();
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -921,14 +1308,12 @@ impl RuntimeLlm {
                 .llm()
                 .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
 
-            let model = llm_service
-                .available_models()
-                .into_iter()
-                .next()
+            let model = resolved
+                .field("model")
+                .map(str::to_owned)
+                .or_else(|| llm_service.available_models().into_iter().next())
                 .ok_or_else(|| "llm default model must be configured".to_owned())?;
-
             let system_prompt = beyondtranslate_engine::prompt::explain_translation_system_prompt();
-
             let user_prompt = format!("Source text: {source}\n\nTranslation: {translation}");
 
             let response = llm_service
@@ -962,7 +1347,7 @@ impl RuntimeLlm {
         count: u32,
         style: Option<String>,
     ) -> Result<Vec<String>, String> {
-        let provider_id = self.provider_id.clone();
+        let service_id = self.service_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
             let text = validate_required("text", text)?;
@@ -971,6 +1356,8 @@ impl RuntimeLlm {
             if count == 0 {
                 return Err("count must be greater than 0".to_owned());
             }
+            let resolved = runtime.resolve_llm_service(&service_id).await?;
+            let provider_id = resolved.provider_id.clone();
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -983,18 +1370,16 @@ impl RuntimeLlm {
                 .llm()
                 .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
 
-            let model = llm_service
-                .available_models()
-                .into_iter()
-                .next()
+            let model = resolved
+                .field("model")
+                .map(str::to_owned)
+                .or_else(|| llm_service.available_models().into_iter().next())
                 .ok_or_else(|| "llm default model must be configured".to_owned())?;
-
             let system_prompt =
                 beyondtranslate_engine::prompt::alternative_translations_system_prompt(
                     count,
                     style.as_deref(),
                 );
-
             let user_prompt = format!(
                 "Source language: {source_lang}\nTarget language: {target_lang}\nText: {text}"
             );
@@ -1031,10 +1416,18 @@ impl RuntimeLlm {
         text: String,
         callback: Arc<dyn StreamCallback>,
     ) -> Result<(), String> {
-        let provider_id = self.provider_id.clone();
+        let service_id = self.service_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
             let text = validate_required("text", text)?;
+            let resolved = match runtime
+                .resolve_service(&service_id, ServiceType::Translation)
+                .await
+            {
+                Ok(service) => service,
+                Err(_) => runtime.resolve_llm_service(&service_id).await?,
+            };
+            let provider_id = resolved.provider_id.clone();
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -1047,17 +1440,20 @@ impl RuntimeLlm {
                 .llm()
                 .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
 
-            let model = llm_service
-                .available_models()
-                .into_iter()
-                .next()
+            let model = resolved
+                .field("model")
+                .map(str::to_owned)
+                .or_else(|| llm_service.available_models().into_iter().next())
                 .ok_or_else(|| "llm default model must be configured".to_owned())?;
-
-            let system_prompt = beyondtranslate_engine::prompt::translate_text_system_prompt(
-                &source_lang,
-                &target_lang,
-                None,
-            );
+            let system_prompt = if let Some(system_prompt) = resolved.field("systemPrompt") {
+                render_prompt_template(system_prompt, &source_lang, &target_lang, &text)
+            } else {
+                beyondtranslate_engine::prompt::translate_text_system_prompt(
+                    &source_lang,
+                    &target_lang,
+                    None,
+                )
+            };
             let user_prompt = beyondtranslate_engine::prompt::translate_text_user_prompt(&text);
 
             let receiver = llm_service
@@ -1138,8 +1534,6 @@ impl RuntimeLlm {
     }
 }
 
-/// Fire-and-forget streaming translation. The callback will receive chunks
-/// as they arrive from the LLM provider.
 #[uniffi::export]
 impl RuntimeLlm {
     pub fn translate_stream(
@@ -1201,9 +1595,13 @@ impl RuntimeOcr {
         &self,
         request: RecognizeTextRequest,
     ) -> Result<RecognizeTextResponse, String> {
-        let provider_id = self.provider_id.clone();
+        let service_id = self.service_id.clone();
         let runtime = self.runtime.clone();
         run_on_worker_thread(move || async move {
+            let resolved = runtime
+                .resolve_service(&service_id, ServiceType::Ocr)
+                .await?;
+            let provider_id = resolved.provider_id;
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -1299,7 +1697,7 @@ impl RuntimeTextExtractor {
             capture_screenshot().map_err(|e| RuntimeError::Error { msg: e.to_string() })?;
 
         // 2. Read settings to get the default OCR service ID.
-        let provider_id = {
+        let service_id = {
             let state = runtime.inner.state.read().await;
             let ocr_service_id = state.settings.general.default_ocr_service.clone();
             if ocr_service_id.is_empty() {
@@ -1312,6 +1710,10 @@ impl RuntimeTextExtractor {
 
         // 3. Run OCR on the worker thread.
         let result = run_on_worker_thread(move || async move {
+            let resolved = runtime
+                .resolve_service(&service_id, ServiceType::Ocr)
+                .await?;
+            let provider_id = resolved.provider_id;
             let provider = {
                 let state = runtime.inner.state.read().await;
                 state
@@ -1618,12 +2020,6 @@ mod tests {
             .block_on(async {
                 runtime
                     .clone()
-                    .settings()
-                    .update_provider("system".to_owned(), "system".to_owned(), HashMap::new())
-                    .await
-                    .expect("failed to add system provider");
-
-                runtime
                     .dictionary("system".to_owned())
                     .expect("failed to get dictionary")
                     .lookup(LookUpRequest {

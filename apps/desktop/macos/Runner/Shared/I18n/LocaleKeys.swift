@@ -310,6 +310,20 @@ enum LocaleKeys {
         static let translation = LocaleKey("settings.providers.description.translation")
       }
       enum detail {
+        enum models {
+          static let add = LocaleKey("settings.providers.detail.models.add")
+          static let addPlaceholder = LocaleKey("settings.providers.detail.models.add_placeholder")
+          static let addTitle = LocaleKey("settings.providers.detail.models.add_title")
+          static let defaultBadge = LocaleKey("settings.providers.detail.models.default_badge")
+          static let empty = LocaleKey("settings.providers.detail.models.empty")
+          static let fetchError = LocaleKey("settings.providers.detail.models.fetch_error")
+          static let loading = LocaleKey("settings.providers.detail.models.loading")
+          static let retry = LocaleKey("settings.providers.detail.models.retry")
+        }
+        enum section {
+          static let configuration = LocaleKey("settings.providers.detail.section.configuration")
+          static let models = LocaleKey("settings.providers.detail.section.models")
+        }
         enum tooltip {
           static let edit = LocaleKey("settings.providers.detail.tooltip.edit")
         }
@@ -326,6 +340,9 @@ enum LocaleKeys {
         }
         enum typePicker {
           static let prompt = LocaleKey("settings.providers.editor.type_picker.prompt")
+          static let sectionLlm = LocaleKey("settings.providers.editor.type_picker.section_llm")
+          static let sectionTraditional = LocaleKey(
+            "settings.providers.editor.type_picker.section_traditional")
         }
       }
       enum intro {
@@ -343,6 +360,20 @@ enum LocaleKeys {
           "settings.providers.section.services_description")
       }
       static let title = LocaleKey("settings.providers.title")
+    }
+    enum services {
+      enum button {
+        static let addService = LocaleKey("settings.services.button.add_service")
+      }
+      enum editor {
+        static let comingSoon = LocaleKey("settings.services.editor.coming_soon")
+        static let comingSoonDescription = LocaleKey(
+          "settings.services.editor.coming_soon_description")
+      }
+      enum section {
+        static let availableServices = LocaleKey("settings.services.section.available_services")
+      }
+      static let title = LocaleKey("settings.services.title")
     }
     enum shortcuts {
       enum resetDialog {

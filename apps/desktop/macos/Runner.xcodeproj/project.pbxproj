@@ -52,12 +52,16 @@
 		A10000000000000000000012 /* AppLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000013 /* AppLocale.swift */; };
 		A10000000000000000000020 /* RuntimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000020 /* RuntimeProvider.swift */; };
 		A10000000000000000000021 /* Settings+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000021 /* Settings+Extensions.swift */; };
-		A100000000000000000000F /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110000000000000000000F /* ProviderDetailView.swift */; };
+		F562C6A62FCBBF8900F83335 /* ServicesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562C6A52FCBBF8900F83335 /* ServicesViewModel.swift */; };
+		F562C6AA2FCBBF9700F83335 /* ServicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562C6A82FCBBF9700F83335 /* ServicesView.swift */; };
+		F562C6AB2FCBBF9700F83335 /* ServiceEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562C6A72FCBBF9700F83335 /* ServiceEditorSheet.swift */; };
+		F562C6AE2FCC7AA900F83335 /* ProviderTypePickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562C6AD2FCC7AA900F83335 /* ProviderTypePickerSheet.swift */; };
+		F562C6AF2FCC7AA900F83335 /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562C6AC2FCC7AA900F83335 /* ProviderDetailView.swift */; };
+		F562C6B12FCC863000F83335 /* ServiceRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562C6B02FCC863000F83335 /* ServiceRowView.swift */; };
 		F5ACAED92FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5ACAED82FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift */; };
 		F5ACAEDB2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5ACAEDA2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift */; };
 		F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */; };
 		F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */; };
-		F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */; };
 		F5F2225E2FB81BE70025B9D4 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F2225D2FB81BE70025B9D4 /* SettingsPage.swift */; };
 		F5F222602FB8ABB40025B9D4 /* ShortcutRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F2225F2FB8ABB40025B9D4 /* ShortcutRecorderView.swift */; };
 		F5F222622FB900000025B9D4 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222612FB900000025B9D4 /* SettingsWindowController.swift */; };
@@ -143,12 +147,16 @@
 		A11000000000000000000024 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "Runner/zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A11000000000000000000025 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Runner/fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A11000000000000000000031 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = Runner/ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		A110000000000000000000F /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
+		F562C6A52FCBBF8900F83335 /* ServicesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewModel.swift; sourceTree = "<group>"; };
+		F562C6A72FCBBF9700F83335 /* ServiceEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceEditorSheet.swift; sourceTree = "<group>"; };
+		F562C6A82FCBBF9700F83335 /* ServicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesView.swift; sourceTree = "<group>"; };
+		F562C6AC2FCC7AA900F83335 /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
+		F562C6AD2FCC7AA900F83335 /* ProviderTypePickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderTypePickerSheet.swift; sourceTree = "<group>"; };
+		F562C6B02FCC863000F83335 /* ServiceRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceRowView.swift; sourceTree = "<group>"; };
 		F5ACAED82FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTargetEditorSheet.swift; sourceTree = "<group>"; };
 		F5ACAEDA2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonLanguagesEditorSheet.swift; sourceTree = "<group>"; };
 		F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode.swift; sourceTree = "<group>"; };
 		F5F222572FB75C3C0025B9D4 /* ThemeAppearanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeAppearanceController.swift; sourceTree = "<group>"; };
-		F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderEditorSheet.swift; sourceTree = "<group>"; };
 		F5F2225D2FB81BE70025B9D4 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		F5F2225F2FB8ABB40025B9D4 /* ShortcutRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRecorderView.swift; sourceTree = "<group>"; };
 		F5F222612FB900000025B9D4 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
@@ -283,6 +291,7 @@
 		A20000000000000000000001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F562C6A92FCBBF9700F83335 /* Services */,
 				8F1000132E0A100100A1B2C3 /* SettingsView.swift */,
 				A2000000000000000000000F /* About */,
 				A20000000000000000000006 /* Advanced */,
@@ -314,9 +323,7 @@
 		A20000000000000000000005 /* Providers */ = {
 			isa = PBXGroup;
 			children = (
-				F5F222592FB76F9E0025B9D4 /* ProviderEditorSheet.swift */,
 				A11000000000000000000005 /* ProvidersView.swift */,
-				A110000000000000000000F /* ProviderDetailView.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -332,6 +339,7 @@
 		A20000000000000000000007 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				F562C6B02FCC863000F83335 /* ServiceRowView.swift */,
 				F5F2225F2FB8ABB40025B9D4 /* ShortcutRecorderView.swift */,
 				F5F2225D2FB81BE70025B9D4 /* SettingsPage.swift */,
 				8F1000152E0A100100A1B2C3 /* SettingRow.swift */,
@@ -344,6 +352,7 @@
 		A20000000000000000000008 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				F562C6A52FCBBF8900F83335 /* ServicesViewModel.swift */,
 				A1100000000000000000000E /* AboutViewModel.swift */,
 				A1100000000000000000000B /* AdvancedViewModel.swift */,
 				A11000000000000000000007 /* GeneralViewModel.swift */,
@@ -422,6 +431,17 @@
 			children = (
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		F562C6A92FCBBF9700F83335 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				F562C6AC2FCC7AA900F83335 /* ProviderDetailView.swift */,
+				F562C6AD2FCC7AA900F83335 /* ProviderTypePickerSheet.swift */,
+				F562C6A72FCBBF9700F83335 /* ServiceEditorSheet.swift */,
+				F562C6A82FCBBF9700F83335 /* ServicesView.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -603,6 +623,8 @@
 			files = (
 				F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */,
 				F5F222602FB8ABB40025B9D4 /* ShortcutRecorderView.swift in Sources */,
+				F562C6AE2FCC7AA900F83335 /* ProviderTypePickerSheet.swift in Sources */,
+				F562C6AF2FCC7AA900F83335 /* ProviderDetailView.swift in Sources */,
 				2A0D6A402E0A100100A1B2C3 /* MacSettingsPlugin.swift in Sources */,
 				2A0D6A422E0A100100A1B2C3 /* MacWindowAppearancePlugin.swift in Sources */,
 				2A0D6A452E0A100100A1B2C3 /* NativeTextFieldPlugin.swift in Sources */,
@@ -613,12 +635,10 @@
 				8F1000052E0A100100A1B2C3 /* SettingRow.swift in Sources */,
 				8F1000072E0A100100A1B2C3 /* SettingToggle.swift in Sources */,
 				A10000000000000000000001 /* SettingPicker.swift in Sources */,
-				F5F2225A2FB76F9E0025B9D4 /* ProviderEditorSheet.swift in Sources */,
 				A10000000000000000000002 /* GeneralView.swift in Sources */,
 				F5ACAED92FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift in Sources */,
 				A10000000000000000000004 /* ShortcutsView.swift in Sources */,
 				A10000000000000000000005 /* ProvidersView.swift in Sources */,
-				A100000000000000000000F /* ProviderDetailView.swift in Sources */,
 				A10000000000000000000006 /* AdvancedView.swift in Sources */,
 				A1000000000000000000000D /* AboutView.swift in Sources */,
 				A1000000000000000000000E /* AboutViewModel.swift in Sources */,
@@ -627,9 +647,13 @@
 				A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */,
 				A1000000000000000000000A /* ProvidersViewModel.swift in Sources */,
 				A1000000000000000000000B /* AdvancedViewModel.swift in Sources */,
+				F562C6A62FCBBF8900F83335 /* ServicesViewModel.swift in Sources */,
 				F5F2225E2FB81BE70025B9D4 /* SettingsPage.swift in Sources */,
+				F562C6AA2FCBBF9700F83335 /* ServicesView.swift in Sources */,
+				F562C6AB2FCBBF9700F83335 /* ServiceEditorSheet.swift in Sources */,
 				F5F222622FB900000025B9D4 /* SettingsWindowController.swift in Sources */,
 				F5F222582FB75C3C0025B9D4 /* ThemeAppearanceController.swift in Sources */,
+				F562C6B12FCC863000F83335 /* ServiceRowView.swift in Sources */,
 				A1000000000000000000000C /* SettingsRepository.swift in Sources */,
 				A10000000000000000000010 /* LocaleKeys.swift in Sources */,
 				A10000000000000000000012 /* AppLocale.swift in Sources */,

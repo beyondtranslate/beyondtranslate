@@ -143,7 +143,7 @@ class _TranslationsSettingsEs extends TranslationsSettingsEn {
 
   // Translations
   @override
-  String get version => 'Versión {} COMPILACIÓN {}';
+  String get version => 'v{} (Build {})';
   @override
   late final _TranslationsSettingsGeneralEs general =
       _TranslationsSettingsGeneralEs._(_root);
@@ -157,11 +157,17 @@ class _TranslationsSettingsEs extends TranslationsSettingsEn {
   late final _TranslationsSettingsAdvancedEs advanced =
       _TranslationsSettingsAdvancedEs._(_root);
   @override
+  late final _TranslationsSettingsServicesEs services =
+      _TranslationsSettingsServicesEs._(_root);
+  @override
   late final _TranslationsSettingsProvidersEs providers =
       _TranslationsSettingsProvidersEs._(_root);
   @override
   late final _TranslationsSettingsLayoutEs layout =
       _TranslationsSettingsLayoutEs._(_root);
+  @override
+  late final _TranslationsSettingsAboutEs about =
+      _TranslationsSettingsAboutEs._(_root);
 }
 
 // Path: common.ui
@@ -560,6 +566,28 @@ class _TranslationsSettingsAdvancedEs extends TranslationsSettingsAdvancedEn {
   String get disabled => 'Deshabilitado';
 }
 
+// Path: settings.services
+class _TranslationsSettingsServicesEs extends TranslationsSettingsServicesEn {
+  _TranslationsSettingsServicesEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Servicios';
+  @override
+  late final _TranslationsSettingsServicesButtonEs button =
+      _TranslationsSettingsServicesButtonEs._(_root);
+  @override
+  late final _TranslationsSettingsServicesSectionEs section =
+      _TranslationsSettingsServicesSectionEs._(_root);
+  @override
+  late final _TranslationsSettingsServicesEditorEs editor =
+      _TranslationsSettingsServicesEditorEs._(_root);
+}
+
 // Path: settings.providers
 class _TranslationsSettingsProvidersEs extends TranslationsSettingsProvidersEn {
   _TranslationsSettingsProvidersEs._(TranslationsEs root)
@@ -617,6 +645,37 @@ class _TranslationsSettingsLayoutEs extends TranslationsSettingsLayoutEn {
   @override
   late final _TranslationsSettingsLayoutEmptyEs empty =
       _TranslationsSettingsLayoutEmptyEs._(_root);
+}
+
+// Path: settings.about
+class _TranslationsSettingsAboutEs extends TranslationsSettingsAboutEn {
+  _TranslationsSettingsAboutEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Acerca de';
+  @override
+  String get copy_version_info => 'Copiar información de versión';
+  @override
+  String get up_to_date => 'Está actualizado.';
+  @override
+  String get check_again => 'Verificar de nuevo';
+  @override
+  String get links => 'Enlaces';
+  @override
+  String get website => 'Sitio web';
+  @override
+  String get github => 'GitHub';
+  @override
+  String get report_issue => 'Informar de un problema';
+  @override
+  String get license => 'Licencia';
+  @override
+  String get open_changelog => 'Abrir registro de cambios';
 }
 
 // Path: common.ui.button
@@ -1014,6 +1073,51 @@ class _TranslationsSettingsShortcutsResetDialogEs
   String get cancel => 'Cancelar';
 }
 
+// Path: settings.services.button
+class _TranslationsSettingsServicesButtonEs
+    extends TranslationsSettingsServicesButtonEn {
+  _TranslationsSettingsServicesButtonEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get add_service => 'Agregar Servicio...';
+}
+
+// Path: settings.services.section
+class _TranslationsSettingsServicesSectionEs
+    extends TranslationsSettingsServicesSectionEn {
+  _TranslationsSettingsServicesSectionEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get available_services => 'Servicios Disponibles';
+}
+
+// Path: settings.services.editor
+class _TranslationsSettingsServicesEditorEs
+    extends TranslationsSettingsServicesEditorEn {
+  _TranslationsSettingsServicesEditorEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get coming_soon => '🚧 Próximamente';
+  @override
+  String get coming_soon_description =>
+      'La configuración del servicio aún no está disponible. Puede administrar los proveedores de servicios desde la pestaña de proveedores.';
+}
+
 // Path: settings.providers.section
 class _TranslationsSettingsProvidersSectionEs
     extends TranslationsSettingsProvidersSectionEn {
@@ -1132,6 +1236,12 @@ class _TranslationsSettingsProvidersDetailEs
   @override
   late final _TranslationsSettingsProvidersDetailTooltipEs tooltip =
       _TranslationsSettingsProvidersDetailTooltipEs._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailSectionEs section =
+      _TranslationsSettingsProvidersDetailSectionEs._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailModelsEs models =
+      _TranslationsSettingsProvidersDetailModelsEs._(_root);
 }
 
 // Path: settings.providers.capability
@@ -1280,6 +1390,10 @@ class _TranslationsSettingsProvidersEditorTypePickerEs
   // Translations
   @override
   String get prompt => 'Selecciona el tipo de proveedor que deseas agregar:';
+  @override
+  String get section_llm => 'LLM';
+  @override
+  String get section_traditional => 'Tradicional';
 }
 
 // Path: settings.providers.editor.tooltip
@@ -1308,6 +1422,51 @@ class _TranslationsSettingsProvidersDetailTooltipEs
   // Translations
   @override
   String get edit => 'Editar proveedor';
+}
+
+// Path: settings.providers.detail.section
+class _TranslationsSettingsProvidersDetailSectionEs
+    extends TranslationsSettingsProvidersDetailSectionEn {
+  _TranslationsSettingsProvidersDetailSectionEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get configuration => 'Configuración';
+  @override
+  String get models => 'Modelos';
+}
+
+// Path: settings.providers.detail.models
+class _TranslationsSettingsProvidersDetailModelsEs
+    extends TranslationsSettingsProvidersDetailModelsEn {
+  _TranslationsSettingsProvidersDetailModelsEs._(TranslationsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get loading => 'Cargando modelos...';
+  @override
+  String get empty => 'No se encontraron modelos.';
+  @override
+  String get retry => 'Reintentar';
+  @override
+  String get add => 'Añadir modelo…';
+  @override
+  String get add_title => 'Añadir modelo';
+  @override
+  String get add_placeholder => 'ej. gpt-4o';
+  @override
+  String get default_badge => 'Predeterminado';
+  @override
+  String get fetch_error =>
+      'No se pudieron obtener los modelos de la API del proveedor.';
 }
 
 /// The flat map containing all translations for locale <es>.
@@ -1433,7 +1592,7 @@ extension on TranslationsEs {
         'No hay un servicio de reconocimiento de texto predeterminado configurado. Configúrelo en Ajustes.',
       'mini_translator.message.ocr_recognition_failed' =>
         'El reconocimiento de texto falló',
-      'settings.version' => 'Versión {} COMPILACIÓN {}',
+      'settings.version' => 'v{} (Build {})',
       'settings.general.title' => 'General',
       'settings.general.section.permissions' => 'Permisos',
       'settings.general.section.ocr' => 'Reconocimiento de texto',
@@ -1525,6 +1684,12 @@ extension on TranslationsEs {
       'settings.advanced.port' => 'Puerto',
       'settings.advanced.running_at' => 'Ejecutándose en {url}',
       'settings.advanced.disabled' => 'Deshabilitado',
+      'settings.services.title' => 'Servicios',
+      'settings.services.button.add_service' => 'Agregar Servicio...',
+      'settings.services.section.available_services' => 'Servicios Disponibles',
+      'settings.services.editor.coming_soon' => '🚧 Próximamente',
+      'settings.services.editor.coming_soon_description' =>
+        'La configuración del servicio aún no está disponible. Puede administrar los proveedores de servicios desde la pestaña de proveedores.',
       'settings.providers.title' => 'Proveedores',
       'settings.providers.section.services' => 'Servicios disponibles',
       'settings.providers.section.services_description' =>
@@ -1543,8 +1708,22 @@ extension on TranslationsEs {
       'settings.providers.editor.placeholder.id' => 'ej. deepl-main',
       'settings.providers.editor.type_picker.prompt' =>
         'Selecciona el tipo de proveedor que deseas agregar:',
+      'settings.providers.editor.type_picker.section_llm' => 'LLM',
+      'settings.providers.editor.type_picker.section_traditional' =>
+        'Tradicional',
       'settings.providers.editor.tooltip.help' => 'Ayuda',
       'settings.providers.detail.tooltip.edit' => 'Editar proveedor',
+      'settings.providers.detail.section.configuration' => 'Configuración',
+      'settings.providers.detail.section.models' => 'Modelos',
+      'settings.providers.detail.models.loading' => 'Cargando modelos...',
+      'settings.providers.detail.models.empty' => 'No se encontraron modelos.',
+      'settings.providers.detail.models.retry' => 'Reintentar',
+      'settings.providers.detail.models.add' => 'Añadir modelo…',
+      'settings.providers.detail.models.add_title' => 'Añadir modelo',
+      'settings.providers.detail.models.add_placeholder' => 'ej. gpt-4o',
+      'settings.providers.detail.models.default_badge' => 'Predeterminado',
+      'settings.providers.detail.models.fetch_error' =>
+        'No se pudieron obtener los modelos de la API del proveedor.',
       'settings.providers.capability.translation' => 'Traducción',
       'settings.providers.capability.dictionary' => 'Diccionario',
       'settings.providers.capability.ocr' => 'OCR',
@@ -1563,6 +1742,16 @@ extension on TranslationsEs {
       'settings.layout.empty.title' => 'Selecciona una categoría',
       'settings.layout.empty.message' =>
         'Elige una sección de configuración de la barra lateral.',
+      'settings.about.title' => 'Acerca de',
+      'settings.about.copy_version_info' => 'Copiar información de versión',
+      'settings.about.up_to_date' => 'Está actualizado.',
+      'settings.about.check_again' => 'Verificar de nuevo',
+      'settings.about.links' => 'Enlaces',
+      'settings.about.website' => 'Sitio web',
+      'settings.about.github' => 'GitHub',
+      'settings.about.report_issue' => 'Informar de un problema',
+      'settings.about.license' => 'Licencia',
+      'settings.about.open_changelog' => 'Abrir registro de cambios',
       _ => null,
     };
   }

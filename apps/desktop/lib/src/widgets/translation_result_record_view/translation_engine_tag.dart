@@ -35,6 +35,7 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
 
   bool _isHovered = false;
   ProviderConfigEntry? _providerConfigEntry;
+  ServiceConfigEntry? _serviceConfigEntry;
 
   String? get _translationEngineId {
     return widget.translationResultRecord.translationEngineId;
@@ -51,6 +52,10 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
   String get _translationEngineName {
     final providerType = _providerConfigEntry?.type;
     if (providerType != null) {
+      final serviceName = _serviceConfigEntry?.name;
+      if (serviceName != null && serviceName.isNotEmpty) {
+        return serviceName;
+      }
       return getTranslationEngineTypeName(_providerTypeValue(providerType));
     }
     return _translationEngineId ?? '';
@@ -95,6 +100,7 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
     if (oldWidget.translationResultRecord.translationEngineId !=
         widget.translationResultRecord.translationEngineId) {
       _providerConfigEntry = null;
+      _serviceConfigEntry = null;
       _loadProviderConfigEntry();
     }
   }
@@ -106,13 +112,21 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
     }
 
     try {
-      final providerConfigEntry = await runtime.settings().getProvider(
-            providerId: translationEngineId,
+      final serviceConfigEntry = await runtime.settings().getService(
+            serviceId: translationEngineId,
           );
+      final providerConfigEntry = serviceConfigEntry == null
+          ? await runtime
+              .settings()
+              .getProvider(providerId: translationEngineId)
+          : await runtime
+              .settings()
+              .getProvider(providerId: serviceConfigEntry.providerId);
       if (!mounted || translationEngineId != _translationEngineId) {
         return;
       }
       setState(() {
+        _serviceConfigEntry = serviceConfigEntry;
         _providerConfigEntry = providerConfigEntry;
       });
     } catch (error) {

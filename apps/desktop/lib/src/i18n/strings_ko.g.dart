@@ -143,7 +143,7 @@ class _TranslationsSettingsKo extends TranslationsSettingsEn {
 
   // Translations
   @override
-  String get version => '버전 {} 빌드 {}';
+  String get version => 'v{} (Build {})';
   @override
   late final _TranslationsSettingsGeneralKo general =
       _TranslationsSettingsGeneralKo._(_root);
@@ -157,11 +157,17 @@ class _TranslationsSettingsKo extends TranslationsSettingsEn {
   late final _TranslationsSettingsAdvancedKo advanced =
       _TranslationsSettingsAdvancedKo._(_root);
   @override
+  late final _TranslationsSettingsServicesKo services =
+      _TranslationsSettingsServicesKo._(_root);
+  @override
   late final _TranslationsSettingsProvidersKo providers =
       _TranslationsSettingsProvidersKo._(_root);
   @override
   late final _TranslationsSettingsLayoutKo layout =
       _TranslationsSettingsLayoutKo._(_root);
+  @override
+  late final _TranslationsSettingsAboutKo about =
+      _TranslationsSettingsAboutKo._(_root);
 }
 
 // Path: common.ui
@@ -557,6 +563,28 @@ class _TranslationsSettingsAdvancedKo extends TranslationsSettingsAdvancedEn {
   String get disabled => '비활성화됨';
 }
 
+// Path: settings.services
+class _TranslationsSettingsServicesKo extends TranslationsSettingsServicesEn {
+  _TranslationsSettingsServicesKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '서비스';
+  @override
+  late final _TranslationsSettingsServicesButtonKo button =
+      _TranslationsSettingsServicesButtonKo._(_root);
+  @override
+  late final _TranslationsSettingsServicesSectionKo section =
+      _TranslationsSettingsServicesSectionKo._(_root);
+  @override
+  late final _TranslationsSettingsServicesEditorKo editor =
+      _TranslationsSettingsServicesEditorKo._(_root);
+}
+
 // Path: settings.providers
 class _TranslationsSettingsProvidersKo extends TranslationsSettingsProvidersEn {
   _TranslationsSettingsProvidersKo._(TranslationsKo root)
@@ -614,6 +642,37 @@ class _TranslationsSettingsLayoutKo extends TranslationsSettingsLayoutEn {
   @override
   late final _TranslationsSettingsLayoutEmptyKo empty =
       _TranslationsSettingsLayoutEmptyKo._(_root);
+}
+
+// Path: settings.about
+class _TranslationsSettingsAboutKo extends TranslationsSettingsAboutEn {
+  _TranslationsSettingsAboutKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '정보';
+  @override
+  String get copy_version_info => '버전 정보 복사';
+  @override
+  String get up_to_date => '최신 버전입니다.';
+  @override
+  String get check_again => '다시 확인';
+  @override
+  String get links => '링크';
+  @override
+  String get website => '웹사이트';
+  @override
+  String get github => 'GitHub';
+  @override
+  String get report_issue => '문제 보고';
+  @override
+  String get license => '라이선스';
+  @override
+  String get open_changelog => '변경 내역 열기';
 }
 
 // Path: common.ui.button
@@ -994,6 +1053,51 @@ class _TranslationsSettingsShortcutsResetDialogKo
   String get cancel => '취소';
 }
 
+// Path: settings.services.button
+class _TranslationsSettingsServicesButtonKo
+    extends TranslationsSettingsServicesButtonEn {
+  _TranslationsSettingsServicesButtonKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get add_service => '서비스 추가...';
+}
+
+// Path: settings.services.section
+class _TranslationsSettingsServicesSectionKo
+    extends TranslationsSettingsServicesSectionEn {
+  _TranslationsSettingsServicesSectionKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get available_services => '사용 가능한 서비스';
+}
+
+// Path: settings.services.editor
+class _TranslationsSettingsServicesEditorKo
+    extends TranslationsSettingsServicesEditorEn {
+  _TranslationsSettingsServicesEditorKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get coming_soon => '🚧 곧 출시 예정';
+  @override
+  String get coming_soon_description =>
+      '서비스 구성이 아직 제공되지 않습니다. 제공자 탭에서 서비스 제공자를 관리할 수 있습니다.';
+}
+
 // Path: settings.providers.section
 class _TranslationsSettingsProvidersSectionKo
     extends TranslationsSettingsProvidersSectionEn {
@@ -1111,6 +1215,12 @@ class _TranslationsSettingsProvidersDetailKo
   @override
   late final _TranslationsSettingsProvidersDetailTooltipKo tooltip =
       _TranslationsSettingsProvidersDetailTooltipKo._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailSectionKo section =
+      _TranslationsSettingsProvidersDetailSectionKo._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailModelsKo models =
+      _TranslationsSettingsProvidersDetailModelsKo._(_root);
 }
 
 // Path: settings.providers.capability
@@ -1257,6 +1367,10 @@ class _TranslationsSettingsProvidersEditorTypePickerKo
   // Translations
   @override
   String get prompt => '추가할 제공자 유형을 선택하세요:';
+  @override
+  String get section_llm => 'LLM';
+  @override
+  String get section_traditional => '전통';
 }
 
 // Path: settings.providers.editor.tooltip
@@ -1285,6 +1399,50 @@ class _TranslationsSettingsProvidersDetailTooltipKo
   // Translations
   @override
   String get edit => '제공자 편집';
+}
+
+// Path: settings.providers.detail.section
+class _TranslationsSettingsProvidersDetailSectionKo
+    extends TranslationsSettingsProvidersDetailSectionEn {
+  _TranslationsSettingsProvidersDetailSectionKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get configuration => '구성';
+  @override
+  String get models => '모델';
+}
+
+// Path: settings.providers.detail.models
+class _TranslationsSettingsProvidersDetailModelsKo
+    extends TranslationsSettingsProvidersDetailModelsEn {
+  _TranslationsSettingsProvidersDetailModelsKo._(TranslationsKo root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsKo _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get loading => '모델 로딩 중...';
+  @override
+  String get empty => '모델을 찾을 수 없습니다.';
+  @override
+  String get retry => '재시도';
+  @override
+  String get add => '모델 추가…';
+  @override
+  String get add_title => '모델 추가';
+  @override
+  String get add_placeholder => '예: gpt-4o';
+  @override
+  String get default_badge => '기본값';
+  @override
+  String get fetch_error => '제공자 API에서 모델을 가져올 수 없습니다.';
 }
 
 /// The flat map containing all translations for locale <ko>.
@@ -1402,7 +1560,7 @@ extension on TranslationsKo {
       'mini_translator.message.ocr_service_not_configured' =>
         '기본 텍스트 인식 서비스가 설정되지 않았습니다. 설정에서 설정해주세요.',
       'mini_translator.message.ocr_recognition_failed' => '텍스트 인식 실패',
-      'settings.version' => '버전 {} 빌드 {}',
+      'settings.version' => 'v{} (Build {})',
       'settings.general.title' => '일반',
       'settings.general.section.permissions' => '권한',
       'settings.general.section.ocr' => '텍스트 인식',
@@ -1472,6 +1630,12 @@ extension on TranslationsKo {
       'settings.advanced.port' => '포트',
       'settings.advanced.running_at' => '{url}에서 실행 중',
       'settings.advanced.disabled' => '비활성화됨',
+      'settings.services.title' => '서비스',
+      'settings.services.button.add_service' => '서비스 추가...',
+      'settings.services.section.available_services' => '사용 가능한 서비스',
+      'settings.services.editor.coming_soon' => '🚧 곧 출시 예정',
+      'settings.services.editor.coming_soon_description' =>
+        '서비스 구성이 아직 제공되지 않습니다. 제공자 탭에서 서비스 제공자를 관리할 수 있습니다.',
       'settings.providers.title' => '제공자',
       'settings.providers.section.services' => '사용 가능한 서비스',
       'settings.providers.section.services_description' =>
@@ -1487,8 +1651,21 @@ extension on TranslationsKo {
       'settings.providers.editor.row.id' => '제공자 ID',
       'settings.providers.editor.placeholder.id' => '예: deepl-main',
       'settings.providers.editor.type_picker.prompt' => '추가할 제공자 유형을 선택하세요:',
+      'settings.providers.editor.type_picker.section_llm' => 'LLM',
+      'settings.providers.editor.type_picker.section_traditional' => '전통',
       'settings.providers.editor.tooltip.help' => '도움말',
       'settings.providers.detail.tooltip.edit' => '제공자 편집',
+      'settings.providers.detail.section.configuration' => '구성',
+      'settings.providers.detail.section.models' => '모델',
+      'settings.providers.detail.models.loading' => '모델 로딩 중...',
+      'settings.providers.detail.models.empty' => '모델을 찾을 수 없습니다.',
+      'settings.providers.detail.models.retry' => '재시도',
+      'settings.providers.detail.models.add' => '모델 추가…',
+      'settings.providers.detail.models.add_title' => '모델 추가',
+      'settings.providers.detail.models.add_placeholder' => '예: gpt-4o',
+      'settings.providers.detail.models.default_badge' => '기본값',
+      'settings.providers.detail.models.fetch_error' =>
+        '제공자 API에서 모델을 가져올 수 없습니다.',
       'settings.providers.capability.translation' => '번역',
       'settings.providers.capability.dictionary' => '사전',
       'settings.providers.capability.ocr' => 'OCR',
@@ -1501,6 +1678,16 @@ extension on TranslationsKo {
       'settings.layout.title' => '설정',
       'settings.layout.empty.title' => '카테고리 선택',
       'settings.layout.empty.message' => '사이드바에서 설정 섹션을 선택하세요.',
+      'settings.about.title' => '정보',
+      'settings.about.copy_version_info' => '버전 정보 복사',
+      'settings.about.up_to_date' => '최신 버전입니다.',
+      'settings.about.check_again' => '다시 확인',
+      'settings.about.links' => '링크',
+      'settings.about.website' => '웹사이트',
+      'settings.about.github' => 'GitHub',
+      'settings.about.report_issue' => '문제 보고',
+      'settings.about.license' => '라이선스',
+      'settings.about.open_changelog' => '변경 내역 열기',
       _ => null,
     };
   }

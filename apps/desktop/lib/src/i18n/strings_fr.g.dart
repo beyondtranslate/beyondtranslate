@@ -143,7 +143,7 @@ class _TranslationsSettingsFr extends TranslationsSettingsEn {
 
   // Translations
   @override
-  String get version => 'Version {} BUILD {}';
+  String get version => 'v{} (Build {})';
   @override
   late final _TranslationsSettingsGeneralFr general =
       _TranslationsSettingsGeneralFr._(_root);
@@ -157,11 +157,17 @@ class _TranslationsSettingsFr extends TranslationsSettingsEn {
   late final _TranslationsSettingsAdvancedFr advanced =
       _TranslationsSettingsAdvancedFr._(_root);
   @override
+  late final _TranslationsSettingsServicesFr services =
+      _TranslationsSettingsServicesFr._(_root);
+  @override
   late final _TranslationsSettingsProvidersFr providers =
       _TranslationsSettingsProvidersFr._(_root);
   @override
   late final _TranslationsSettingsLayoutFr layout =
       _TranslationsSettingsLayoutFr._(_root);
+  @override
+  late final _TranslationsSettingsAboutFr about =
+      _TranslationsSettingsAboutFr._(_root);
 }
 
 // Path: common.ui
@@ -560,6 +566,28 @@ class _TranslationsSettingsAdvancedFr extends TranslationsSettingsAdvancedEn {
   String get disabled => 'Désactivé';
 }
 
+// Path: settings.services
+class _TranslationsSettingsServicesFr extends TranslationsSettingsServicesEn {
+  _TranslationsSettingsServicesFr._(TranslationsFr root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFr _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Services';
+  @override
+  late final _TranslationsSettingsServicesButtonFr button =
+      _TranslationsSettingsServicesButtonFr._(_root);
+  @override
+  late final _TranslationsSettingsServicesSectionFr section =
+      _TranslationsSettingsServicesSectionFr._(_root);
+  @override
+  late final _TranslationsSettingsServicesEditorFr editor =
+      _TranslationsSettingsServicesEditorFr._(_root);
+}
+
 // Path: settings.providers
 class _TranslationsSettingsProvidersFr extends TranslationsSettingsProvidersEn {
   _TranslationsSettingsProvidersFr._(TranslationsFr root)
@@ -617,6 +645,37 @@ class _TranslationsSettingsLayoutFr extends TranslationsSettingsLayoutEn {
   @override
   late final _TranslationsSettingsLayoutEmptyFr empty =
       _TranslationsSettingsLayoutEmptyFr._(_root);
+}
+
+// Path: settings.about
+class _TranslationsSettingsAboutFr extends TranslationsSettingsAboutEn {
+  _TranslationsSettingsAboutFr._(TranslationsFr root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFr _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'À propos';
+  @override
+  String get copy_version_info => 'Copier les informations de version';
+  @override
+  String get up_to_date => 'Vous êtes à jour.';
+  @override
+  String get check_again => 'Vérifier à nouveau';
+  @override
+  String get links => 'Liens';
+  @override
+  String get website => 'Site web';
+  @override
+  String get github => 'GitHub';
+  @override
+  String get report_issue => 'Signaler un problème';
+  @override
+  String get license => 'Licence';
+  @override
+  String get open_changelog => 'Ouvrir le journal des modifications';
 }
 
 // Path: common.ui.button
@@ -1013,6 +1072,51 @@ class _TranslationsSettingsShortcutsResetDialogFr
   String get cancel => 'Annuler';
 }
 
+// Path: settings.services.button
+class _TranslationsSettingsServicesButtonFr
+    extends TranslationsSettingsServicesButtonEn {
+  _TranslationsSettingsServicesButtonFr._(TranslationsFr root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFr _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get add_service => 'Ajouter un service...';
+}
+
+// Path: settings.services.section
+class _TranslationsSettingsServicesSectionFr
+    extends TranslationsSettingsServicesSectionEn {
+  _TranslationsSettingsServicesSectionFr._(TranslationsFr root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFr _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get available_services => 'Services disponibles';
+}
+
+// Path: settings.services.editor
+class _TranslationsSettingsServicesEditorFr
+    extends TranslationsSettingsServicesEditorEn {
+  _TranslationsSettingsServicesEditorFr._(TranslationsFr root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFr _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get coming_soon => '🚧 Prochainement';
+  @override
+  String get coming_soon_description =>
+      'La configuration du service n\'est pas encore disponible. Vous pouvez gérer les fournisseurs de services depuis l\'onglet fournisseurs.';
+}
+
 // Path: settings.providers.section
 class _TranslationsSettingsProvidersSectionFr
     extends TranslationsSettingsProvidersSectionEn {
@@ -1132,6 +1236,12 @@ class _TranslationsSettingsProvidersDetailFr
   @override
   late final _TranslationsSettingsProvidersDetailTooltipFr tooltip =
       _TranslationsSettingsProvidersDetailTooltipFr._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailSectionFr section =
+      _TranslationsSettingsProvidersDetailSectionFr._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailModelsFr models =
+      _TranslationsSettingsProvidersDetailModelsFr._(_root);
 }
 
 // Path: settings.providers.capability
@@ -1282,6 +1392,10 @@ class _TranslationsSettingsProvidersEditorTypePickerFr
   @override
   String get prompt =>
       'Sélectionnez le type de fournisseur que vous souhaitez ajouter :';
+  @override
+  String get section_llm => 'LLM';
+  @override
+  String get section_traditional => 'Traditionnel';
 }
 
 // Path: settings.providers.editor.tooltip
@@ -1310,6 +1424,51 @@ class _TranslationsSettingsProvidersDetailTooltipFr
   // Translations
   @override
   String get edit => 'Modifier le fournisseur';
+}
+
+// Path: settings.providers.detail.section
+class _TranslationsSettingsProvidersDetailSectionFr
+    extends TranslationsSettingsProvidersDetailSectionEn {
+  _TranslationsSettingsProvidersDetailSectionFr._(TranslationsFr root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFr _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get configuration => 'Configuration';
+  @override
+  String get models => 'Modèles';
+}
+
+// Path: settings.providers.detail.models
+class _TranslationsSettingsProvidersDetailModelsFr
+    extends TranslationsSettingsProvidersDetailModelsEn {
+  _TranslationsSettingsProvidersDetailModelsFr._(TranslationsFr root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFr _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get loading => 'Chargement des modèles...';
+  @override
+  String get empty => 'Aucun modèle trouvé.';
+  @override
+  String get retry => 'Réessayer';
+  @override
+  String get add => 'Ajouter un modèle…';
+  @override
+  String get add_title => 'Ajouter un modèle';
+  @override
+  String get add_placeholder => 'ex. gpt-4o';
+  @override
+  String get default_badge => 'Par défaut';
+  @override
+  String get fetch_error =>
+      'Impossible de récupérer les modèles depuis l\'API du fournisseur.';
 }
 
 /// The flat map containing all translations for locale <fr>.
@@ -1435,7 +1594,7 @@ extension on TranslationsFr {
         'Aucun service de reconnaissance de texte par défaut configuré. Veuillez en définir un dans les Paramètres.',
       'mini_translator.message.ocr_recognition_failed' =>
         'La reconnaissance de texte a échoué',
-      'settings.version' => 'Version {} BUILD {}',
+      'settings.version' => 'v{} (Build {})',
       'settings.general.title' => 'Général',
       'settings.general.section.permissions' => 'Autorisations',
       'settings.general.section.ocr' => 'Reconnaissance de texte',
@@ -1528,6 +1687,12 @@ extension on TranslationsFr {
       'settings.advanced.port' => 'Port',
       'settings.advanced.running_at' => 'En cours d\'exécution à {url}',
       'settings.advanced.disabled' => 'Désactivé',
+      'settings.services.title' => 'Services',
+      'settings.services.button.add_service' => 'Ajouter un service...',
+      'settings.services.section.available_services' => 'Services disponibles',
+      'settings.services.editor.coming_soon' => '🚧 Prochainement',
+      'settings.services.editor.coming_soon_description' =>
+        'La configuration du service n\'est pas encore disponible. Vous pouvez gérer les fournisseurs de services depuis l\'onglet fournisseurs.',
       'settings.providers.title' => 'Fournisseurs',
       'settings.providers.section.services' => 'Services disponibles',
       'settings.providers.section.services_description' =>
@@ -1546,8 +1711,22 @@ extension on TranslationsFr {
       'settings.providers.editor.placeholder.id' => 'p. ex. deepl-main',
       'settings.providers.editor.type_picker.prompt' =>
         'Sélectionnez le type de fournisseur que vous souhaitez ajouter :',
+      'settings.providers.editor.type_picker.section_llm' => 'LLM',
+      'settings.providers.editor.type_picker.section_traditional' =>
+        'Traditionnel',
       'settings.providers.editor.tooltip.help' => 'Aide',
       'settings.providers.detail.tooltip.edit' => 'Modifier le fournisseur',
+      'settings.providers.detail.section.configuration' => 'Configuration',
+      'settings.providers.detail.section.models' => 'Modèles',
+      'settings.providers.detail.models.loading' => 'Chargement des modèles...',
+      'settings.providers.detail.models.empty' => 'Aucun modèle trouvé.',
+      'settings.providers.detail.models.retry' => 'Réessayer',
+      'settings.providers.detail.models.add' => 'Ajouter un modèle…',
+      'settings.providers.detail.models.add_title' => 'Ajouter un modèle',
+      'settings.providers.detail.models.add_placeholder' => 'ex. gpt-4o',
+      'settings.providers.detail.models.default_badge' => 'Par défaut',
+      'settings.providers.detail.models.fetch_error' =>
+        'Impossible de récupérer les modèles depuis l\'API du fournisseur.',
       'settings.providers.capability.translation' => 'Traduction',
       'settings.providers.capability.dictionary' => 'Dictionnaire',
       'settings.providers.capability.ocr' => 'OCR',
@@ -1566,6 +1745,17 @@ extension on TranslationsFr {
       'settings.layout.empty.title' => 'Sélectionnez une catégorie',
       'settings.layout.empty.message' =>
         'Choisissez une section de paramètres dans la barre latérale.',
+      'settings.about.title' => 'À propos',
+      'settings.about.copy_version_info' =>
+        'Copier les informations de version',
+      'settings.about.up_to_date' => 'Vous êtes à jour.',
+      'settings.about.check_again' => 'Vérifier à nouveau',
+      'settings.about.links' => 'Liens',
+      'settings.about.website' => 'Site web',
+      'settings.about.github' => 'GitHub',
+      'settings.about.report_issue' => 'Signaler un problème',
+      'settings.about.license' => 'Licence',
+      'settings.about.open_changelog' => 'Ouvrir le journal des modifications',
       _ => null,
     };
   }

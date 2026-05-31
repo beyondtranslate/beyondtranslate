@@ -4,9 +4,9 @@ use async_trait::async_trait;
 use beyondtranslate_core::{
     ChatMessage, ChatRequest, ChatResponse, ChatRole, DetectLanguageRequest,
     DetectLanguageResponse, DictionaryError, DictionaryService, LlmError, LlmService,
-    LlmStreamReceiver, LookUpRequest, LookUpResponse, Provider, ProviderCapability, StreamChunk,
-    TextDetection, TextTranslation, TranslateRequest, TranslateResponse, TranslationError,
-    TranslationService, WordDefinition, WordEtymology, WordPhrase, WordPronunciation, WordSynonym,
+    LlmStreamReceiver, LookUpRequest, LookUpResponse, Provider, StreamChunk, TextDetection,
+    TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
+    WordDefinition, WordEtymology, WordPhrase, WordPronunciation, WordSynonym,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -81,13 +81,6 @@ impl OpenAiProvider {
 impl Provider for OpenAiProvider {
     fn name(&self) -> &'static str {
         "openai"
-    }
-
-    fn capabilities(&self) -> Vec<ProviderCapability> {
-        vec![
-            ProviderCapability::Translation,
-            ProviderCapability::Dictionary,
-        ]
     }
 
     fn translation(&self) -> Option<&dyn TranslationService> {
@@ -195,6 +188,43 @@ impl LlmService for OpenAiLlmService {
 
     fn available_models(&self) -> Vec<String> {
         vec![self.default_model.clone()]
+    }
+
+    async fn list_models(&self) -> Result<Vec<String>, LlmError> {
+        let response = self
+            .http
+            .client
+            .get(self.http.join_url("/v1/models"))
+            .header("Authorization", format!("Bearer {}", self.api_key))
+            .header("Content-Type", "application/json")
+            .send()
+            .await
+            .map_err(|e| LlmError::NetworkError(e.to_string()))?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let body = response.text().await.unwrap_or_default();
+            return Err(match status.as_u16() {
+                401 | 403 => LlmError::AuthError(body),
+                _ => LlmError::NetworkError(format!("HTTP {status}: {body}")),
+            });
+        }
+
+        let json: serde_json::Value = response
+            .json()
+            .await
+            .map_err(|e| LlmError::SerializationError(e.to_string()))?;
+
+        let models = json["data"]
+            .as_array()
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|m| m["id"].as_str().map(String::from))
+                    .collect::<Vec<_>>()
+            })
+            .unwrap_or_default();
+
+        Ok(models)
     }
 
     async fn chat(&self, request: ChatRequest) -> Result<ChatResponse, LlmError> {

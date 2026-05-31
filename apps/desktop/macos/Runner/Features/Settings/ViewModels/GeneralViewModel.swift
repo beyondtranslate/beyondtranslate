@@ -22,7 +22,7 @@ final class GeneralViewModel: ObservableObject {
   @Published var showInMenuBar: Bool
   @Published var defaultOcrService: String
   @Published var autoCopyDetectedText: Bool
-  @Published var defaultDirectoryService: String
+  // @Published var defaultDirectoryService: String
   @Published var defaultTranslationService: String
   @Published var translationTargets: [TranslationTarget]
   @Published var inputSubmitMode: InputSubmitMode
@@ -37,6 +37,7 @@ final class GeneralViewModel: ObservableObject {
 
   // Runtime providers
   @Published var providers: [ProviderConfigEntry] = []
+  @Published var services: [ServiceConfigEntry] = []
 
   // Sheet state
   @Published var showAddTargetSheet = false
@@ -75,7 +76,7 @@ final class GeneralViewModel: ObservableObject {
     showInMenuBar = true
     defaultOcrService = ""
     autoCopyDetectedText = true
-    defaultDirectoryService = ""
+    // defaultDirectoryService = ""
     defaultTranslationService = ""
     translationTargets = []
     inputSubmitMode = .enter
@@ -107,6 +108,7 @@ final class GeneralViewModel: ObservableObject {
 
     do {
       providers = try await repository.listProviders()
+      services = try await repository.listServices()
     } catch {
       // Keep existing providers on error.
     }
@@ -114,31 +116,31 @@ final class GeneralViewModel: ObservableObject {
 
   // Ocr service options.
   var ocrServiceOptions: [ServiceOption] {
-    providers
-      .filter { $0.capabilities.contains(.ocr) }
-      .map { ServiceOption(id: $0.id, name: $0.id) }
+    services
+      .filter { $0.type == .ocr }
+      .map { ServiceOption(id: $0.id, name: $0.name.isEmpty ? $0.id : $0.name) }
   }
 
   var validDefaultOcrService: String {
     isDefaultOcrServiceValid ? defaultOcrService : ""
   }
 
-  // Directory service options.
-  var dictionaryServiceOptions: [ServiceOption] {
-    providers
-      .filter { $0.capabilities.contains(.dictionary) }
-      .map { ServiceOption(id: $0.id, name: $0.id) }
-  }
+  // // Directory service options.
+  // var dictionaryServiceOptions: [ServiceOption] {
+  //   services
+  //     .filter { $0.type == .dictionary }
+  //     .map { ServiceOption(id: $0.id, name: $0.name.isEmpty ? $0.id : $0.name) }
+  // }
 
-  var validDefaultDirectoryService: String {
-    isDefaultDirectoryServiceValid ? defaultDirectoryService : ""
-  }
+  // var validDefaultDirectoryService: String {
+  //   isDefaultDirectoryServiceValid ? defaultDirectoryService : ""
+  // }
 
   // Translation service options.
   var translationServiceOptions: [ServiceOption] {
-    providers
-      .filter { $0.capabilities.contains(.translation) }
-      .map { ServiceOption(id: $0.id, name: $0.id) }
+    services
+      .filter { $0.type == .translation }
+      .map { ServiceOption(id: $0.id, name: $0.name.isEmpty ? $0.id : $0.name) }
   }
 
   var validDefaultTranslationService: String {
@@ -150,10 +152,10 @@ final class GeneralViewModel: ObservableObject {
       || ocrServiceOptions.contains { $0.id == defaultOcrService }
   }
 
-  private var isDefaultDirectoryServiceValid: Bool {
-    defaultDirectoryService.isEmpty
-      || dictionaryServiceOptions.contains { $0.id == defaultDirectoryService }
-  }
+  // private var isDefaultDirectoryServiceValid: Bool {
+  //   defaultDirectoryService.isEmpty
+  //     || dictionaryServiceOptions.contains { $0.id == defaultDirectoryService }
+  // }
 
   private var isDefaultTranslationServiceValid: Bool {
     defaultTranslationService.isEmpty
@@ -171,9 +173,8 @@ final class GeneralViewModel: ObservableObject {
   }
 
   func setDefaultOcrService(_ value: String) {
-    let providerID = Self.providerID(fromServiceID: value)
-    defaultOcrService = providerID
-    Task { await persist(.diff(defaultOcrService: providerID)) }
+    defaultOcrService = value
+    Task { await persist(.diff(defaultOcrService: value)) }
   }
 
   func setAutoCopyDetectedText(_ value: Bool) {
@@ -181,16 +182,14 @@ final class GeneralViewModel: ObservableObject {
     Task { await persist(.diff(autoCopyDetectedText: value)) }
   }
 
-  func setDefaultDirectoryService(_ value: String) {
-    let providerID = Self.providerID(fromServiceID: value)
-    defaultDirectoryService = providerID
-    Task { await persist(.diff(defaultDirectoryService: providerID)) }
-  }
+  // func setDefaultDirectoryService(_ value: String) {
+  //   defaultDirectoryService = value
+  //   Task { await persist(.diff(defaultDirectoryService: value)) }
+  // }
 
   func setDefaultTranslationService(_ value: String) {
-    let providerID = Self.providerID(fromServiceID: value)
-    defaultTranslationService = providerID
-    Task { await persist(.diff(defaultTranslationService: providerID)) }
+    defaultTranslationService = value
+    Task { await persist(.diff(defaultTranslationService: value)) }
   }
 
   func setInputSubmitMode(_ value: InputSubmitMode) {
@@ -266,10 +265,10 @@ final class GeneralViewModel: ObservableObject {
   private func apply(_ settings: GeneralSettings) {
     launchAtLogin = settings.launchAtLogin
     showInMenuBar = settings.showInMenuBar
-    defaultOcrService = Self.providerID(fromServiceID: settings.defaultOcrService)
+    defaultOcrService = settings.defaultOcrService
     autoCopyDetectedText = settings.autoCopyDetectedText
-    defaultDirectoryService = Self.providerID(fromServiceID: settings.defaultDirectoryService)
-    defaultTranslationService = Self.providerID(fromServiceID: settings.defaultTranslationService)
+    // defaultDirectoryService = settings.defaultDirectoryService
+    defaultTranslationService = settings.defaultTranslationService
     translationTargets = settings.translationTargets
     inputSubmitMode = settings.inputSubmitMode
     doubleClickCopyResult = settings.doubleClickCopyResult
@@ -291,12 +290,4 @@ final class GeneralViewModel: ObservableObject {
     }
   }
 
-  private static func providerID(fromServiceID serviceID: String) -> String {
-    for suffix in ["+translation", "+dictionary", "+ocr"] {
-      if serviceID.hasSuffix(suffix) {
-        return String(serviceID.dropLast(suffix.count))
-      }
-    }
-    return serviceID
-  }
 }

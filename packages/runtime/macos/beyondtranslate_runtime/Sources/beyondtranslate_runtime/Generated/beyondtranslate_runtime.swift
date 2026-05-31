@@ -1561,6 +1561,8 @@ public protocol RuntimeSettingsProtocol: AnyObject, Sendable {
 
   func deleteProvider(providerId: String) async throws -> ProviderConfigEntry?
 
+  func deleteService(serviceId: String) async throws -> ServiceConfigEntry?
+
   func generateProviderId(providerType: String) async throws -> String
 
   /**
@@ -1584,9 +1586,15 @@ public protocol RuntimeSettingsProtocol: AnyObject, Sendable {
 
   func getProvider(providerId: String) async throws -> ProviderConfigEntry?
 
+  func getService(serviceId: String) async throws -> ServiceConfigEntry?
+
   func getShortcuts() async throws -> ShortcutSettings
 
+  func listModels(providerId: String) async throws -> [String]
+
   func listProviders() async throws -> [ProviderConfigEntry]
+
+  func listServices() async throws -> [ServiceConfigEntry]
 
   func resetShortcuts() async throws -> ShortcutSettings
 
@@ -1606,6 +1614,11 @@ public protocol RuntimeSettingsProtocol: AnyObject, Sendable {
 
   func updateProvider(providerId: String, providerType: String, fields: [String: String])
     async throws -> ProviderConfigEntry
+
+  func updateService(
+    serviceId: String, providerId: String, serviceType: ServiceType, name: String,
+    fields: [String: String]
+  ) async throws -> ServiceConfigEntry
 
   func updateShortcuts(patch: ShortcutSettingsPatch) async throws -> ShortcutSettings
 
@@ -1675,6 +1688,23 @@ open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
         completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
         freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
         liftFunc: FfiConverterOptionTypeProviderConfigEntry.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func deleteService(serviceId: String) async throws -> ServiceConfigEntry? {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_delete_service(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(serviceId)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterOptionTypeServiceConfigEntry.lift,
         errorHandler: FfiConverterTypeRuntimeError_lift
       )
   }
@@ -1810,6 +1840,23 @@ open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
       )
   }
 
+  open func getService(serviceId: String) async throws -> ServiceConfigEntry? {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_get_service(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(serviceId)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterOptionTypeServiceConfigEntry.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
   open func getShortcuts() async throws -> ShortcutSettings {
     return
       try await uniffiRustCallAsync(
@@ -1827,6 +1874,23 @@ open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
       )
   }
 
+  open func listModels(providerId: String) async throws -> [String] {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_list_models(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(providerId)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterSequenceString.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
   open func listProviders() async throws -> [ProviderConfigEntry] {
     return
       try await uniffiRustCallAsync(
@@ -1840,6 +1904,23 @@ open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
         completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
         freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
         liftFunc: FfiConverterSequenceTypeProviderConfigEntry.lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func listServices() async throws -> [ServiceConfigEntry] {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_list_services(
+            self.uniffiCloneHandle()
+
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterSequenceTypeServiceConfigEntry.lift,
         errorHandler: FfiConverterTypeRuntimeError_lift
       )
   }
@@ -1943,6 +2024,28 @@ open class RuntimeSettings: RuntimeSettingsProtocol, @unchecked Sendable {
         completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
         freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
         liftFunc: FfiConverterTypeProviderConfigEntry_lift,
+        errorHandler: FfiConverterTypeRuntimeError_lift
+      )
+  }
+
+  open func updateService(
+    serviceId: String, providerId: String, serviceType: ServiceType, name: String,
+    fields: [String: String]
+  ) async throws -> ServiceConfigEntry {
+    return
+      try await uniffiRustCallAsync(
+        rustFutureFunc: {
+          uniffi_beyondtranslate_runtime_fn_method_runtimesettings_update_service(
+            self.uniffiCloneHandle(),
+            FfiConverterString.lower(serviceId), FfiConverterString.lower(providerId),
+            FfiConverterTypeServiceType_lower(serviceType), FfiConverterString.lower(name),
+            FfiConverterDictionaryStringString.lower(fields)
+          )
+        },
+        pollFunc: ffi_beyondtranslate_runtime_rust_future_poll_rust_buffer,
+        completeFunc: ffi_beyondtranslate_runtime_rust_future_complete_rust_buffer,
+        freeFunc: ffi_beyondtranslate_runtime_rust_future_free_rust_buffer,
+        liftFunc: FfiConverterTypeServiceConfigEntry_lift,
         errorHandler: FfiConverterTypeRuntimeError_lift
       )
   }
@@ -3548,11 +3651,6 @@ public struct ProviderConfigEntry: Equatable, Hashable {
   public var type: ProviderType
   public var fields: [String: String]
   /**
-   * Provider capabilities, populated at runtime from the engine instance.
-   * Not written to the settings file.
-   */
-  public var capabilities: [ProviderCapability]
-  /**
    * Creation timestamp (Unix epoch seconds). Set automatically when a
    * provider is first created; `None` for providers migrated from an
    * older version of the settings file.
@@ -3568,11 +3666,6 @@ public struct ProviderConfigEntry: Equatable, Hashable {
      */
     type: ProviderType, fields: [String: String],
     /**
-     * Provider capabilities, populated at runtime from the engine instance.
-     * Not written to the settings file.
-     */
-    capabilities: [ProviderCapability],
-    /**
      * Creation timestamp (Unix epoch seconds). Set automatically when a
      * provider is first created; `None` for providers migrated from an
      * older version of the settings file.
@@ -3582,7 +3675,6 @@ public struct ProviderConfigEntry: Equatable, Hashable {
     self.id = id
     self.type = type
     self.fields = fields
-    self.capabilities = capabilities
     self.createdAt = createdAt
   }
 
@@ -3604,7 +3696,6 @@ public struct FfiConverterTypeProviderConfigEntry: FfiConverterRustBuffer {
         id: FfiConverterString.read(from: &buf),
         type: FfiConverterTypeProviderType.read(from: &buf),
         fields: FfiConverterDictionaryStringString.read(from: &buf),
-        capabilities: FfiConverterSequenceTypeProviderCapability.read(from: &buf),
         createdAt: FfiConverterOptionUInt64.read(from: &buf)
       )
   }
@@ -3613,7 +3704,6 @@ public struct FfiConverterTypeProviderConfigEntry: FfiConverterRustBuffer {
     FfiConverterString.write(value.id, into: &buf)
     FfiConverterTypeProviderType.write(value.type, into: &buf)
     FfiConverterDictionaryStringString.write(value.fields, into: &buf)
-    FfiConverterSequenceTypeProviderCapability.write(value.capabilities, into: &buf)
     FfiConverterOptionUInt64.write(value.createdAt, into: &buf)
   }
 }
@@ -3818,6 +3908,77 @@ public func FfiConverterTypeRecognizedRect_lift(_ buf: RustBuffer) throws -> Rec
 #endif
 public func FfiConverterTypeRecognizedRect_lower(_ value: RecognizedRect) -> RustBuffer {
   return FfiConverterTypeRecognizedRect.lower(value)
+}
+
+public struct ServiceConfigEntry: Equatable, Hashable {
+  public var id: String
+  public var providerId: String
+  public var type: ServiceType
+  public var name: String
+  public var fields: [String: String]
+  public var createdAt: UInt64?
+
+  // Default memberwise initializers are never public by default, so we
+  // declare one manually.
+  public init(
+    id: String, providerId: String, type: ServiceType, name: String, fields: [String: String],
+    createdAt: UInt64?
+  ) {
+    self.id = id
+    self.providerId = providerId
+    self.type = type
+    self.name = name
+    self.fields = fields
+    self.createdAt = createdAt
+  }
+
+}
+
+#if compiler(>=6)
+  extension ServiceConfigEntry: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeServiceConfigEntry: FfiConverterRustBuffer {
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> ServiceConfigEntry
+  {
+    return
+      try ServiceConfigEntry(
+        id: FfiConverterString.read(from: &buf),
+        providerId: FfiConverterString.read(from: &buf),
+        type: FfiConverterTypeServiceType.read(from: &buf),
+        name: FfiConverterString.read(from: &buf),
+        fields: FfiConverterDictionaryStringString.read(from: &buf),
+        createdAt: FfiConverterOptionUInt64.read(from: &buf)
+      )
+  }
+
+  public static func write(_ value: ServiceConfigEntry, into buf: inout [UInt8]) {
+    FfiConverterString.write(value.id, into: &buf)
+    FfiConverterString.write(value.providerId, into: &buf)
+    FfiConverterTypeServiceType.write(value.type, into: &buf)
+    FfiConverterString.write(value.name, into: &buf)
+    FfiConverterDictionaryStringString.write(value.fields, into: &buf)
+    FfiConverterOptionUInt64.write(value.createdAt, into: &buf)
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeServiceConfigEntry_lift(_ buf: RustBuffer) throws -> ServiceConfigEntry
+{
+  return try FfiConverterTypeServiceConfigEntry.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeServiceConfigEntry_lower(_ value: ServiceConfigEntry) -> RustBuffer {
+  return FfiConverterTypeServiceConfigEntry.lower(value)
 }
 
 public struct ShortcutSettings: Equatable, Hashable {
@@ -4853,74 +5014,6 @@ public func FfiConverterTypeInputSubmitMode_lower(_ value: InputSubmitMode) -> R
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum ProviderCapability: Equatable, Hashable {
-
-  case dictionary
-  case ocr
-  case translation
-
-}
-
-#if compiler(>=6)
-  extension ProviderCapability: Sendable {}
-#endif
-
-#if swift(>=5.8)
-  @_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeProviderCapability: FfiConverterRustBuffer {
-  typealias SwiftType = ProviderCapability
-
-  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
-    -> ProviderCapability
-  {
-    let variant: Int32 = try readInt(&buf)
-    switch variant {
-
-    case 1: return .dictionary
-
-    case 2: return .ocr
-
-    case 3: return .translation
-
-    default: throw UniffiInternalError.unexpectedEnumCase
-    }
-  }
-
-  public static func write(_ value: ProviderCapability, into buf: inout [UInt8]) {
-    switch value {
-
-    case .dictionary:
-      writeInt(&buf, Int32(1))
-
-    case .ocr:
-      writeInt(&buf, Int32(2))
-
-    case .translation:
-      writeInt(&buf, Int32(3))
-
-    }
-  }
-}
-
-#if swift(>=5.8)
-  @_documentation(visibility: private)
-#endif
-public func FfiConverterTypeProviderCapability_lift(_ buf: RustBuffer) throws -> ProviderCapability
-{
-  return try FfiConverterTypeProviderCapability.lift(buf)
-}
-
-#if swift(>=5.8)
-  @_documentation(visibility: private)
-#endif
-public func FfiConverterTypeProviderCapability_lower(_ value: ProviderCapability) -> RustBuffer {
-  return FfiConverterTypeProviderCapability.lower(value)
-}
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-
 public enum ProviderType: Equatable, Hashable {
 
   case anthropic
@@ -5090,6 +5183,77 @@ public func FfiConverterTypeRuntimeError_lift(_ buf: RustBuffer) throws -> Runti
 #endif
 public func FfiConverterTypeRuntimeError_lower(_ value: RuntimeError) -> RustBuffer {
   return FfiConverterTypeRuntimeError.lower(value)
+}
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum ServiceType: Equatable, Hashable {
+
+  case dictionary
+  case ocr
+  case translation
+  case llm
+
+}
+
+#if compiler(>=6)
+  extension ServiceType: Sendable {}
+#endif
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeServiceType: FfiConverterRustBuffer {
+  typealias SwiftType = ServiceType
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ServiceType {
+    let variant: Int32 = try readInt(&buf)
+    switch variant {
+
+    case 1: return .dictionary
+
+    case 2: return .ocr
+
+    case 3: return .translation
+
+    case 4: return .llm
+
+    default: throw UniffiInternalError.unexpectedEnumCase
+    }
+  }
+
+  public static func write(_ value: ServiceType, into buf: inout [UInt8]) {
+    switch value {
+
+    case .dictionary:
+      writeInt(&buf, Int32(1))
+
+    case .ocr:
+      writeInt(&buf, Int32(2))
+
+    case .translation:
+      writeInt(&buf, Int32(3))
+
+    case .llm:
+      writeInt(&buf, Int32(4))
+
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeServiceType_lift(_ buf: RustBuffer) throws -> ServiceType {
+  return try FfiConverterTypeServiceType.lift(buf)
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeServiceType_lower(_ value: ServiceType) -> RustBuffer {
+  return FfiConverterTypeServiceType.lower(value)
 }
 
 // Note that we don't yet support `indirect` for enums.
@@ -5567,6 +5731,30 @@ private struct FfiConverterOptionTypeRecognizedRect: FfiConverterRustBuffer {
     switch try readInt(&buf) as Int8 {
     case 0: return nil
     case 1: return try FfiConverterTypeRecognizedRect.read(from: &buf)
+    default: throw UniffiInternalError.unexpectedOptionalTag
+    }
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
+private struct FfiConverterOptionTypeServiceConfigEntry: FfiConverterRustBuffer {
+  typealias SwiftType = ServiceConfigEntry?
+
+  public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+    guard let value = value else {
+      writeInt(&buf, Int8(0))
+      return
+    }
+    writeInt(&buf, Int8(1))
+    FfiConverterTypeServiceConfigEntry.write(value, into: &buf)
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+    switch try readInt(&buf) as Int8 {
+    case 0: return nil
+    case 1: return try FfiConverterTypeServiceConfigEntry.read(from: &buf)
     default: throw UniffiInternalError.unexpectedOptionalTag
     }
   }
@@ -6064,6 +6252,33 @@ private struct FfiConverterSequenceTypeProviderConfigEntry: FfiConverterRustBuff
 #if swift(>=5.8)
   @_documentation(visibility: private)
 #endif
+private struct FfiConverterSequenceTypeServiceConfigEntry: FfiConverterRustBuffer {
+  typealias SwiftType = [ServiceConfigEntry]
+
+  public static func write(_ value: [ServiceConfigEntry], into buf: inout [UInt8]) {
+    let len = Int32(value.count)
+    writeInt(&buf, len)
+    for item in value {
+      FfiConverterTypeServiceConfigEntry.write(item, into: &buf)
+    }
+  }
+
+  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
+    -> [ServiceConfigEntry]
+  {
+    let len: Int32 = try readInt(&buf)
+    var seq = [ServiceConfigEntry]()
+    seq.reserveCapacity(Int(len))
+    for _ in 0..<len {
+      seq.append(try FfiConverterTypeServiceConfigEntry.read(from: &buf))
+    }
+    return seq
+  }
+}
+
+#if swift(>=5.8)
+  @_documentation(visibility: private)
+#endif
 private struct FfiConverterSequenceTypeTextDetection: FfiConverterRustBuffer {
   typealias SwiftType = [TextDetection]
 
@@ -6397,33 +6612,6 @@ private struct FfiConverterSequenceTypeWordTense: FfiConverterRustBuffer {
     seq.reserveCapacity(Int(len))
     for _ in 0..<len {
       seq.append(try FfiConverterTypeWordTense.read(from: &buf))
-    }
-    return seq
-  }
-}
-
-#if swift(>=5.8)
-  @_documentation(visibility: private)
-#endif
-private struct FfiConverterSequenceTypeProviderCapability: FfiConverterRustBuffer {
-  typealias SwiftType = [ProviderCapability]
-
-  public static func write(_ value: [ProviderCapability], into buf: inout [UInt8]) {
-    let len = Int32(value.count)
-    writeInt(&buf, len)
-    for item in value {
-      FfiConverterTypeProviderCapability.write(item, into: &buf)
-    }
-  }
-
-  public static func read(from buf: inout (data: Data, offset: Data.Index)) throws
-    -> [ProviderCapability]
-  {
-    let len: Int32 = try readInt(&buf)
-    var seq = [ProviderCapability]()
-    seq.reserveCapacity(Int(len))
-    for _ in 0..<len {
-      seq.append(try FfiConverterTypeProviderCapability.read(from: &buf))
     }
     return seq
   }
@@ -6877,6 +7065,9 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_delete_provider() != 20557 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_delete_service() != 34145 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_generate_provider_id() != 9759 {
     return InitializationResult.apiChecksumMismatch
   }
@@ -6900,10 +7091,19 @@ private let initializationResult: InitializationResult = {
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_provider() != 21807 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_service() != 11319 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_get_shortcuts() != 44721 {
     return InitializationResult.apiChecksumMismatch
   }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_models() != 22292 {
+    return InitializationResult.apiChecksumMismatch
+  }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_providers() != 34940 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_list_services() != 5637 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_reset_shortcuts() != 46222 {
@@ -6922,6 +7122,9 @@ private let initializationResult: InitializationResult = {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_provider() != 46276 {
+    return InitializationResult.apiChecksumMismatch
+  }
+  if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_service() != 22489 {
     return InitializationResult.apiChecksumMismatch
   }
   if uniffi_beyondtranslate_runtime_checksum_method_runtimesettings_update_shortcuts() != 11504 {

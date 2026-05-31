@@ -15,6 +15,6 @@ struct SettingsPage<Content: View>: View {
     }
     .formStyle(.grouped)
     .navigationTitle(title)
-    .padding(.top, -16)
+    .padding(.top, -12)
   }
 }

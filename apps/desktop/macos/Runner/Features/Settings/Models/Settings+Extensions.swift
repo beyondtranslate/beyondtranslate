@@ -82,14 +82,6 @@ extension ShortcutSettingsPatch {
   }
 }
 
-// MARK: - ProviderCapability
-
-extension ProviderCapability: Identifiable {
-  public var id: String {
-    String(describing: self)
-  }
-}
-
 // MARK: - ProviderType
 
 extension ProviderType: CaseIterable {
@@ -246,3 +238,68 @@ extension ProviderConfigEntry: Identifiable {
     fields["baseUrl"] ?? ""
   }
 }
+
+extension ProviderType {
+  /// Whether this provider type is an LLM-based provider.
+  var isLlm: Bool {
+    switch self {
+    case .anthropic, .openAi, .ollama, .system:
+      return true
+    case .baidu, .caiyun, .deepL, .google, .iciba, .tencent, .youdao:
+      return false
+    }
+  }
+
+  static var llmProviders: [ProviderType] {
+    allCases.filter { $0.isLlm }
+  }
+
+  static var traditionalProviders: [ProviderType] {
+    allCases.filter { !$0.isLlm }
+  }
+
+  var providerDescription: String {
+    switch self {
+    case .anthropic, .ollama, .openAi, .system, .youdao:
+      return LocaleKeys.settings.providers.description.all.tr()
+    case .baidu, .caiyun, .deepL, .google, .tencent:
+      return LocaleKeys.settings.providers.description.translation.tr()
+    case .iciba:
+      return LocaleKeys.settings.providers.description.dictionary.tr()
+    }
+  }
+}
+
+// MARK: - Display names and descriptions
+
+extension ProviderType {
+  var displayName: String {
+    switch self {
+    case .anthropic: return LocaleKeys.common.provider.anthropic.tr()
+    case .baidu: return LocaleKeys.common.provider.baidu.tr()
+    case .caiyun: return LocaleKeys.common.provider.caiyun.tr()
+    case .deepL: return LocaleKeys.common.provider.deepl.tr()
+    case .google: return LocaleKeys.common.provider.google.tr()
+    case .iciba: return LocaleKeys.common.provider.iciba.tr()
+    case .ollama: return LocaleKeys.common.provider.ollama.tr()
+    case .openAi: return LocaleKeys.common.provider.openai.tr()
+    case .tencent: return LocaleKeys.common.provider.tencent.tr()
+    case .system: return LocaleKeys.common.provider.system.tr()
+    case .youdao: return LocaleKeys.common.provider.youdao.tr()
+    }
+  }
+
+  /// Short description of the hosting/feature scope.
+  var hostingDescription: String {
+    switch self {
+    case .anthropic, .ollama, .openAi, .system, .youdao:
+      return LocaleKeys.settings.providers.description.all.tr()
+    case .baidu, .caiyun, .deepL, .google, .tencent:
+      return LocaleKeys.settings.providers.description.translation.tr()
+    case .iciba:
+      return LocaleKeys.settings.providers.description.dictionary.tr()
+    }
+  }
+}
+
+extension ServiceConfigEntry: Identifiable {}

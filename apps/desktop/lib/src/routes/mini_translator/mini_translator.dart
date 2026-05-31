@@ -23,7 +23,7 @@ import '../../utils/platform_util.dart';
 import '../../widgets/ui/button.dart';
 import '../app_router.dart'
     show
-        miniTranslatorPositionBelowTray,
+        miniTranslatorPositionAtCursorScreenTopRight,
         miniTranslatorWindowController,
         showSettingsWindow;
 import 'limited_functionality_banner.dart';
@@ -160,7 +160,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       }
       _window.setPosition(_lastShownPosition.dx, _lastShownPosition.dy);
     } else if (kIsMacOS) {
-      final position = miniTranslatorPositionBelowTray(
+      final position = miniTranslatorPositionAtCursorScreenTopRight(
         windowSize: _window.size,
       );
       if (position != null) {
@@ -169,9 +169,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       }
     }
     await Future.delayed(const Duration(milliseconds: 100));
-    await _windowShow(
-      isShowBelowTray: kIsMacOS,
-    );
+    await _windowShow();
     _setStateAndScheduleWindowResize(() {});
   }
 
@@ -218,9 +216,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     ShortcutService.instance.stop();
   }
 
-  Future<void> _windowShow({
-    bool isShowBelowTray = false,
-  }) async {
+  Future<void> _windowShow() async {
     final isAlwaysOnTop = _window.isAlwaysOnTop;
     // final windowSize = _window.size;
 
@@ -367,16 +363,25 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     final settings = runtime.settings();
     final providers = await settings.listProviders();
+    final services = await settings.listServices();
     final generalSettings = await settings.getGeneral();
+    final providersById = {
+      for (final provider in providers) provider.id: provider
+    };
+    final queryServices = services
+        .where((service) =>
+            service.type == ServiceType.dictionary ||
+            service.type == ServiceType.translation)
+        .toList();
 
     // Detect source language for translation target matching.
     if (_text.isNotEmpty) {
       try {
-        final translationProvider = providers.firstWhere(
-          (p) => p.capabilities.contains(ProviderCapability.translation),
+        final translationService = services.firstWhere(
+          (service) => service.type == ServiceType.translation,
         );
         final detectResponse = await runtime
-            .translation(providerId: translationProvider.id)
+            .translation(providerId: translationService.id)
             .detectLanguage(
               request: DetectLanguageRequest(texts: [_text]),
             );
@@ -395,7 +400,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
     final activeTargets = await _activeTranslationTargets(generalSettings);
     final nextTranslationResultList =
-        _createPendingTranslationResults(activeTargets, providers);
+        _createPendingTranslationResults(activeTargets, queryServices);
 
     _setStateAndScheduleWindowResize(
       () {
@@ -415,7 +420,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
       for (int j = 0; j < translationResultRecordList.length; j++) {
         futures.add(_queryProvider(
-          provider: providers[j],
+          service: queryServices[j],
+          provider: providersById[queryServices[j].providerId],
           translationTarget: translationTarget,
           translationResultRecord: translationResultRecordList[j],
         ));
@@ -427,16 +433,16 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
   List<TranslationResult> _createPendingTranslationResults(
     List<TranslationTarget> activeTargets,
-    List<ProviderConfigEntry> providers,
+    List<ServiceConfigEntry> services,
   ) {
     return [
       for (final translationTarget in activeTargets)
         TranslationResult(
           translationTarget: translationTarget,
           translationResultRecordList: [
-            for (final provider in providers)
+            for (final service in services)
               TranslationResultRecord(
-                translationEngineId: provider.id,
+                translationEngineId: service.id,
               ),
           ],
           unsupportedEngineIdList: [],
@@ -445,7 +451,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
   }
 
   Future<bool> _queryProvider({
-    required ProviderConfigEntry provider,
+    required ServiceConfigEntry service,
+    required ProviderConfigEntry? provider,
     required TranslationTarget? translationTarget,
     required TranslationResultRecord translationResultRecord,
   }) async {
@@ -453,7 +460,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
     final targetLanguage = translationTarget?.target;
     final futures = <Future<void>>[];
 
-    if (provider.capabilities.contains(ProviderCapability.dictionary)) {
+    if (service.type == ServiceType.dictionary) {
       futures.add(() async {
         try {
           if (sourceLanguage == null || targetLanguage == null) {
@@ -466,7 +473,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
             word: _text,
           );
           final lookUpResponse = await runtime
-              .dictionary(providerId: provider.id)
+              .dictionary(providerId: service.id)
               .lookup(request: lookUpRequest);
           translationResultRecord.lookUpRequest = lookUpRequest;
           translationResultRecord.lookUpResponse = lookUpResponse;
@@ -479,10 +486,11 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       }());
     }
 
-    if (provider.capabilities.contains(ProviderCapability.translation)) {
-      final isLlmProvider = provider.type == ProviderType.openAi ||
-          provider.type == ProviderType.anthropic ||
-          provider.type == ProviderType.ollama;
+    if (service.type == ServiceType.translation) {
+      final providerType = provider?.type;
+      final isLlmProvider = providerType == ProviderType.openAi ||
+          providerType == ProviderType.anthropic ||
+          providerType == ProviderType.ollama;
 
       if (isLlmProvider) {
         // Streaming LLM translation — update UI progressively
@@ -497,7 +505,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
 
             final buffer = StringBuffer();
             final stream = LlmStream.translate(
-              providerId: provider.id,
+              providerId: service.id,
               sourceLang: sourceLanguage ?? 'auto',
               targetLang: targetLanguage ?? 'en',
               text: _text,
@@ -538,7 +546,7 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
               text: _text,
             );
             final translateResponse = await runtime
-                .translation(providerId: provider.id)
+                .translation(providerId: service.id)
                 .translate(request: translateRequest);
             translationResultRecord.translateRequest = translateRequest;
             translationResultRecord.translateResponse = translateResponse;

@@ -6,8 +6,8 @@ mod provider;
 pub use provider::llm::prompt;
 
 pub use beyondtranslate_core::{
-    DictionaryError, DictionaryService, OcrError, OcrService, Provider, ProviderCapability,
-    TranslationError, TranslationService,
+    DictionaryError, DictionaryService, OcrError, OcrService, Provider, TranslationError,
+    TranslationService,
 };
 pub use engine::{
     from_yaml_str, load_from_file, Engine, EngineConfig, EngineError, ProviderConfig, ProviderType,

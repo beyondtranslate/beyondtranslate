@@ -240,6 +240,19 @@
       "running_at": "En cours d'exécution à {url}",
       "disabled": "Désactivé"
     },
+    "services": {
+      "title": "Services",
+      "button": {
+        "add_service": "Ajouter un service..."
+      },
+      "section": {
+        "available_services": "Services disponibles"
+      },
+      "editor": {
+        "coming_soon": "🚧 Prochainement",
+        "coming_soon_description": "La configuration du service n'est pas encore disponible. Vous pouvez gérer les fournisseurs de services depuis l'onglet fournisseurs."
+      }
+    },
     "providers": {
       "title": "Fournisseurs",
       "section": {
@@ -269,7 +282,9 @@
           "id": "p. ex. deepl-main"
         },
         "type_picker": {
-          "prompt": "Sélectionnez le type de fournisseur que vous souhaitez ajouter :"
+          "prompt": "Sélectionnez le type de fournisseur que vous souhaitez ajouter :",
+          "section_llm": "LLM",
+          "section_traditional": "Traditionnel"
         },
         "tooltip": {
           "help": "Aide"
@@ -278,6 +293,20 @@
       "detail": {
         "tooltip": {
           "edit": "Modifier le fournisseur"
+        },
+        "section": {
+          "configuration": "Configuration",
+          "models": "Modèles"
+        },
+        "models": {
+          "loading": "Chargement des modèles...",
+          "empty": "Aucun modèle trouvé.",
+          "retry": "Réessayer",
+          "add": "Ajouter un modèle…",
+          "add_title": "Ajouter un modèle",
+          "add_placeholder": "ex. gpt-4o",
+          "default_badge": "Par défaut",
+          "fetch_error": "Impossible de récupérer les modèles depuis l'API du fournisseur."
         }
       },
       "capability": {

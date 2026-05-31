@@ -143,7 +143,7 @@ class _TranslationsSettingsJa extends TranslationsSettingsEn {
 
   // Translations
   @override
-  String get version => 'バージョン {} BUILD {}';
+  String get version => 'v{} (Build {})';
   @override
   late final _TranslationsSettingsGeneralJa general =
       _TranslationsSettingsGeneralJa._(_root);
@@ -157,11 +157,17 @@ class _TranslationsSettingsJa extends TranslationsSettingsEn {
   late final _TranslationsSettingsAdvancedJa advanced =
       _TranslationsSettingsAdvancedJa._(_root);
   @override
+  late final _TranslationsSettingsServicesJa services =
+      _TranslationsSettingsServicesJa._(_root);
+  @override
   late final _TranslationsSettingsProvidersJa providers =
       _TranslationsSettingsProvidersJa._(_root);
   @override
   late final _TranslationsSettingsLayoutJa layout =
       _TranslationsSettingsLayoutJa._(_root);
+  @override
+  late final _TranslationsSettingsAboutJa about =
+      _TranslationsSettingsAboutJa._(_root);
 }
 
 // Path: common.ui
@@ -558,6 +564,28 @@ class _TranslationsSettingsAdvancedJa extends TranslationsSettingsAdvancedEn {
   String get disabled => '無効';
 }
 
+// Path: settings.services
+class _TranslationsSettingsServicesJa extends TranslationsSettingsServicesEn {
+  _TranslationsSettingsServicesJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'サービス';
+  @override
+  late final _TranslationsSettingsServicesButtonJa button =
+      _TranslationsSettingsServicesButtonJa._(_root);
+  @override
+  late final _TranslationsSettingsServicesSectionJa section =
+      _TranslationsSettingsServicesSectionJa._(_root);
+  @override
+  late final _TranslationsSettingsServicesEditorJa editor =
+      _TranslationsSettingsServicesEditorJa._(_root);
+}
+
 // Path: settings.providers
 class _TranslationsSettingsProvidersJa extends TranslationsSettingsProvidersEn {
   _TranslationsSettingsProvidersJa._(TranslationsJa root)
@@ -615,6 +643,37 @@ class _TranslationsSettingsLayoutJa extends TranslationsSettingsLayoutEn {
   @override
   late final _TranslationsSettingsLayoutEmptyJa empty =
       _TranslationsSettingsLayoutEmptyJa._(_root);
+}
+
+// Path: settings.about
+class _TranslationsSettingsAboutJa extends TranslationsSettingsAboutEn {
+  _TranslationsSettingsAboutJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '情報';
+  @override
+  String get copy_version_info => 'バージョン情報をコピー';
+  @override
+  String get up_to_date => '最新の状態です。';
+  @override
+  String get check_again => '再確認';
+  @override
+  String get links => 'リンク';
+  @override
+  String get website => 'ウェブサイト';
+  @override
+  String get github => 'GitHub';
+  @override
+  String get report_issue => '問題を報告';
+  @override
+  String get license => 'ライセンス';
+  @override
+  String get open_changelog => '更新履歴を開く';
 }
 
 // Path: common.ui.button
@@ -995,6 +1054,51 @@ class _TranslationsSettingsShortcutsResetDialogJa
   String get cancel => 'キャンセル';
 }
 
+// Path: settings.services.button
+class _TranslationsSettingsServicesButtonJa
+    extends TranslationsSettingsServicesButtonEn {
+  _TranslationsSettingsServicesButtonJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get add_service => 'サービスを追加...';
+}
+
+// Path: settings.services.section
+class _TranslationsSettingsServicesSectionJa
+    extends TranslationsSettingsServicesSectionEn {
+  _TranslationsSettingsServicesSectionJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get available_services => '利用可能なサービス';
+}
+
+// Path: settings.services.editor
+class _TranslationsSettingsServicesEditorJa
+    extends TranslationsSettingsServicesEditorEn {
+  _TranslationsSettingsServicesEditorJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get coming_soon => '🚧 近日公開';
+  @override
+  String get coming_soon_description =>
+      'サービスの設定はまだ利用できません。プロバイダータブからサービスプロバイダーを管理できます。';
+}
+
 // Path: settings.providers.section
 class _TranslationsSettingsProvidersSectionJa
     extends TranslationsSettingsProvidersSectionEn {
@@ -1111,6 +1215,12 @@ class _TranslationsSettingsProvidersDetailJa
   @override
   late final _TranslationsSettingsProvidersDetailTooltipJa tooltip =
       _TranslationsSettingsProvidersDetailTooltipJa._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailSectionJa section =
+      _TranslationsSettingsProvidersDetailSectionJa._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailModelsJa models =
+      _TranslationsSettingsProvidersDetailModelsJa._(_root);
 }
 
 // Path: settings.providers.capability
@@ -1257,6 +1367,10 @@ class _TranslationsSettingsProvidersEditorTypePickerJa
   // Translations
   @override
   String get prompt => '追加するプロバイダーの種類を選択してください：';
+  @override
+  String get section_llm => 'LLM';
+  @override
+  String get section_traditional => '従来型';
 }
 
 // Path: settings.providers.editor.tooltip
@@ -1285,6 +1399,50 @@ class _TranslationsSettingsProvidersDetailTooltipJa
   // Translations
   @override
   String get edit => 'プロバイダーを編集';
+}
+
+// Path: settings.providers.detail.section
+class _TranslationsSettingsProvidersDetailSectionJa
+    extends TranslationsSettingsProvidersDetailSectionEn {
+  _TranslationsSettingsProvidersDetailSectionJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get configuration => '設定';
+  @override
+  String get models => 'モデル';
+}
+
+// Path: settings.providers.detail.models
+class _TranslationsSettingsProvidersDetailModelsJa
+    extends TranslationsSettingsProvidersDetailModelsEn {
+  _TranslationsSettingsProvidersDetailModelsJa._(TranslationsJa root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsJa _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get loading => 'モデルを読み込み中...';
+  @override
+  String get empty => 'モデルが見つかりません。';
+  @override
+  String get retry => '再試行';
+  @override
+  String get add => 'モデルを追加…';
+  @override
+  String get add_title => 'モデルを追加';
+  @override
+  String get add_placeholder => '例: gpt-4o';
+  @override
+  String get default_badge => 'デフォルト';
+  @override
+  String get fetch_error => 'プロバイダーAPIからモデルを取得できませんでした。';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -1402,7 +1560,7 @@ extension on TranslationsJa {
       'mini_translator.message.ocr_service_not_configured' =>
         'デフォルトのテキスト認識サービスが設定されていません。設定で設定してください。',
       'mini_translator.message.ocr_recognition_failed' => 'テキスト認識に失敗しました',
-      'settings.version' => 'バージョン {} BUILD {}',
+      'settings.version' => 'v{} (Build {})',
       'settings.general.title' => '一般',
       'settings.general.section.permissions' => '権限',
       'settings.general.section.ocr' => 'テキスト認識',
@@ -1475,6 +1633,12 @@ extension on TranslationsJa {
       'settings.advanced.port' => 'ポート',
       'settings.advanced.running_at' => '{url} で実行中',
       'settings.advanced.disabled' => '無効',
+      'settings.services.title' => 'サービス',
+      'settings.services.button.add_service' => 'サービスを追加...',
+      'settings.services.section.available_services' => '利用可能なサービス',
+      'settings.services.editor.coming_soon' => '🚧 近日公開',
+      'settings.services.editor.coming_soon_description' =>
+        'サービスの設定はまだ利用できません。プロバイダータブからサービスプロバイダーを管理できます。',
       'settings.providers.title' => 'プロバイダー',
       'settings.providers.section.services' => '利用可能なサービス',
       'settings.providers.section.services_description' =>
@@ -1492,8 +1656,21 @@ extension on TranslationsJa {
       'settings.providers.editor.placeholder.id' => '例: deepl-main',
       'settings.providers.editor.type_picker.prompt' =>
         '追加するプロバイダーの種類を選択してください：',
+      'settings.providers.editor.type_picker.section_llm' => 'LLM',
+      'settings.providers.editor.type_picker.section_traditional' => '従来型',
       'settings.providers.editor.tooltip.help' => 'ヘルプ',
       'settings.providers.detail.tooltip.edit' => 'プロバイダーを編集',
+      'settings.providers.detail.section.configuration' => '設定',
+      'settings.providers.detail.section.models' => 'モデル',
+      'settings.providers.detail.models.loading' => 'モデルを読み込み中...',
+      'settings.providers.detail.models.empty' => 'モデルが見つかりません。',
+      'settings.providers.detail.models.retry' => '再試行',
+      'settings.providers.detail.models.add' => 'モデルを追加…',
+      'settings.providers.detail.models.add_title' => 'モデルを追加',
+      'settings.providers.detail.models.add_placeholder' => '例: gpt-4o',
+      'settings.providers.detail.models.default_badge' => 'デフォルト',
+      'settings.providers.detail.models.fetch_error' =>
+        'プロバイダーAPIからモデルを取得できませんでした。',
       'settings.providers.capability.translation' => '翻訳',
       'settings.providers.capability.dictionary' => '辞書',
       'settings.providers.capability.ocr' => 'OCR',
@@ -1506,6 +1683,16 @@ extension on TranslationsJa {
       'settings.layout.title' => '設定',
       'settings.layout.empty.title' => 'カテゴリを選択',
       'settings.layout.empty.message' => 'サイドバーから設定セクションを選択してください。',
+      'settings.about.title' => '情報',
+      'settings.about.copy_version_info' => 'バージョン情報をコピー',
+      'settings.about.up_to_date' => '最新の状態です。',
+      'settings.about.check_again' => '再確認',
+      'settings.about.links' => 'リンク',
+      'settings.about.website' => 'ウェブサイト',
+      'settings.about.github' => 'GitHub',
+      'settings.about.report_issue' => '問題を報告',
+      'settings.about.license' => 'ライセンス',
+      'settings.about.open_changelog' => '更新履歴を開く',
       _ => null,
     };
   }

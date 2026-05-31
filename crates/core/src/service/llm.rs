@@ -61,8 +61,11 @@ pub trait LlmService: Send + Sync {
     /// Returns the display name of this LLM provider (e.g. "openai", "anthropic").
     fn provider_name(&self) -> &'static str;
 
-    /// Returns the list of available model identifiers.
+    /// Returns the list of available model identifiers (from config, sync).
     fn available_models(&self) -> Vec<String>;
+
+    /// Fetches the list of available models from the provider's API.
+    async fn list_models(&self) -> Result<Vec<String>, LlmError>;
 
     /// Send a chat completion request and receive the full response.
     async fn chat(&self, request: ChatRequest) -> Result<ChatResponse, LlmError>;

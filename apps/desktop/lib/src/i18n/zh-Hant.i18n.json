@@ -240,6 +240,19 @@
       "running_at": "執行於 {url}",
       "disabled": "已關閉"
     },
+    "services": {
+      "title": "服務",
+      "button": {
+        "add_service": "新增服務..."
+      },
+      "section": {
+        "available_services": "可用服務"
+      },
+      "editor": {
+        "coming_soon": "🚧 即將推出",
+        "coming_soon_description": "服務配置尚不可用。您可以在提供者標籤頁中管理服務提供者。"
+      }
+    },
     "providers": {
       "title": "提供者",
       "section": {
@@ -269,7 +282,9 @@
           "id": "例如 deepl-main"
         },
         "type_picker": {
-          "prompt": "請選擇要新增的提供者類型："
+          "prompt": "請選擇要新增的提供者類型：",
+          "section_llm": "LLM",
+          "section_traditional": "傳統"
         },
         "tooltip": {
           "help": "說明"
@@ -278,6 +293,20 @@
       "detail": {
         "tooltip": {
           "edit": "編輯提供者"
+        },
+        "section": {
+          "configuration": "配置",
+          "models": "模型"
+        },
+        "models": {
+          "loading": "正在載入模型...",
+          "empty": "找不到模型。",
+          "retry": "重試",
+          "add": "新增模型…",
+          "add_title": "新增模型",
+          "add_placeholder": "例如：gpt-4o",
+          "default_badge": "預設",
+          "fetch_error": "無法從提供者 API 取得模型。"
         }
       },
       "capability": {

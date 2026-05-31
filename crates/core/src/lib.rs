@@ -10,7 +10,7 @@ pub use model::{
     TranslationTarget, WordDefinition, WordEtymology, WordImage, WordPhrase, WordPronunciation,
     WordSentence, WordSynonym, WordTag, WordTense,
 };
-pub use provider::{Provider, ProviderCapability};
+pub use provider::Provider;
 pub use service::{
     DictionaryError, DictionaryService, LlmError, LlmService, LlmStreamReceiver, OcrError,
     OcrService, TranslationError, TranslationService,

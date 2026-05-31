@@ -13,7 +13,9 @@ protocol SettingsRepository {
   func getAdvanced() async throws -> AdvancedSettings
   func updateAdvanced(_ patch: AdvancedSettingsPatch) async throws -> AdvancedSettings
   func generateProviderId(providerType: ProviderType) async throws -> String
+  func listModels(providerId: String) async throws -> [String]
   func listProviders() async throws -> [ProviderConfigEntry]
+  func listServices() async throws -> [ServiceConfigEntry]
   @discardableResult
   func updateProvider(
     id: String,
@@ -75,8 +77,16 @@ final class DefaultSettingsRepository: SettingsRepository {
     try await settings.generateProviderId(providerType: providerType.wireValue)
   }
 
+  func listModels(providerId: String) async throws -> [String] {
+    try await settings.listModels(providerId: providerId)
+  }
+
   func listProviders() async throws -> [ProviderConfigEntry] {
     try await settings.listProviders()
+  }
+
+  func listServices() async throws -> [ServiceConfigEntry] {
+    try await settings.listServices()
   }
 
   func updateProvider(

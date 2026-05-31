@@ -146,7 +146,7 @@ class _TranslationsSettingsZhHans extends TranslationsSettingsEn {
 
   // Translations
   @override
-  String get version => '版本 {} BUILD {}';
+  String get version => 'v{} (Build {})';
   @override
   late final _TranslationsSettingsGeneralZhHans general =
       _TranslationsSettingsGeneralZhHans._(_root);
@@ -160,11 +160,17 @@ class _TranslationsSettingsZhHans extends TranslationsSettingsEn {
   late final _TranslationsSettingsAdvancedZhHans advanced =
       _TranslationsSettingsAdvancedZhHans._(_root);
   @override
+  late final _TranslationsSettingsServicesZhHans services =
+      _TranslationsSettingsServicesZhHans._(_root);
+  @override
   late final _TranslationsSettingsProvidersZhHans providers =
       _TranslationsSettingsProvidersZhHans._(_root);
   @override
   late final _TranslationsSettingsLayoutZhHans layout =
       _TranslationsSettingsLayoutZhHans._(_root);
+  @override
+  late final _TranslationsSettingsAboutZhHans about =
+      _TranslationsSettingsAboutZhHans._(_root);
 }
 
 // Path: common.ui
@@ -563,6 +569,29 @@ class _TranslationsSettingsAdvancedZhHans
   String get disabled => '已关闭';
 }
 
+// Path: settings.services
+class _TranslationsSettingsServicesZhHans
+    extends TranslationsSettingsServicesEn {
+  _TranslationsSettingsServicesZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '服务';
+  @override
+  late final _TranslationsSettingsServicesButtonZhHans button =
+      _TranslationsSettingsServicesButtonZhHans._(_root);
+  @override
+  late final _TranslationsSettingsServicesSectionZhHans section =
+      _TranslationsSettingsServicesSectionZhHans._(_root);
+  @override
+  late final _TranslationsSettingsServicesEditorZhHans editor =
+      _TranslationsSettingsServicesEditorZhHans._(_root);
+}
+
 // Path: settings.providers
 class _TranslationsSettingsProvidersZhHans
     extends TranslationsSettingsProvidersEn {
@@ -621,6 +650,37 @@ class _TranslationsSettingsLayoutZhHans extends TranslationsSettingsLayoutEn {
   @override
   late final _TranslationsSettingsLayoutEmptyZhHans empty =
       _TranslationsSettingsLayoutEmptyZhHans._(_root);
+}
+
+// Path: settings.about
+class _TranslationsSettingsAboutZhHans extends TranslationsSettingsAboutEn {
+  _TranslationsSettingsAboutZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '关于';
+  @override
+  String get copy_version_info => '复制版本信息';
+  @override
+  String get up_to_date => '已是最新版本。';
+  @override
+  String get check_again => '重新检查';
+  @override
+  String get links => '链接';
+  @override
+  String get website => '网站';
+  @override
+  String get github => 'GitHub';
+  @override
+  String get report_issue => '提交问题';
+  @override
+  String get license => '许可证';
+  @override
+  String get open_changelog => '查看更新日志';
 }
 
 // Path: common.ui.button
@@ -1007,6 +1067,50 @@ class _TranslationsSettingsShortcutsResetDialogZhHans
   String get cancel => '取消';
 }
 
+// Path: settings.services.button
+class _TranslationsSettingsServicesButtonZhHans
+    extends TranslationsSettingsServicesButtonEn {
+  _TranslationsSettingsServicesButtonZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get add_service => '添加服务...';
+}
+
+// Path: settings.services.section
+class _TranslationsSettingsServicesSectionZhHans
+    extends TranslationsSettingsServicesSectionEn {
+  _TranslationsSettingsServicesSectionZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get available_services => '可用服务';
+}
+
+// Path: settings.services.editor
+class _TranslationsSettingsServicesEditorZhHans
+    extends TranslationsSettingsServicesEditorEn {
+  _TranslationsSettingsServicesEditorZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get coming_soon => '🚧 即将推出';
+  @override
+  String get coming_soon_description => '服务配置尚不可用。您可以在提供商标签页中管理服务提供商。';
+}
+
 // Path: settings.providers.section
 class _TranslationsSettingsProvidersSectionZhHans
     extends TranslationsSettingsProvidersSectionEn {
@@ -1122,6 +1226,12 @@ class _TranslationsSettingsProvidersDetailZhHans
   @override
   late final _TranslationsSettingsProvidersDetailTooltipZhHans tooltip =
       _TranslationsSettingsProvidersDetailTooltipZhHans._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailSectionZhHans section =
+      _TranslationsSettingsProvidersDetailSectionZhHans._(_root);
+  @override
+  late final _TranslationsSettingsProvidersDetailModelsZhHans models =
+      _TranslationsSettingsProvidersDetailModelsZhHans._(_root);
 }
 
 // Path: settings.providers.capability
@@ -1270,6 +1380,10 @@ class _TranslationsSettingsProvidersEditorTypePickerZhHans
   // Translations
   @override
   String get prompt => '请选择要添加的提供商类型：';
+  @override
+  String get section_llm => 'LLM';
+  @override
+  String get section_traditional => '传统';
 }
 
 // Path: settings.providers.editor.tooltip
@@ -1298,6 +1412,50 @@ class _TranslationsSettingsProvidersDetailTooltipZhHans
   // Translations
   @override
   String get edit => '编辑提供商';
+}
+
+// Path: settings.providers.detail.section
+class _TranslationsSettingsProvidersDetailSectionZhHans
+    extends TranslationsSettingsProvidersDetailSectionEn {
+  _TranslationsSettingsProvidersDetailSectionZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get configuration => '配置';
+  @override
+  String get models => '模型';
+}
+
+// Path: settings.providers.detail.models
+class _TranslationsSettingsProvidersDetailModelsZhHans
+    extends TranslationsSettingsProvidersDetailModelsEn {
+  _TranslationsSettingsProvidersDetailModelsZhHans._(TranslationsZhHans root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhHans _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get loading => '正在加载模型...';
+  @override
+  String get empty => '未找到模型。';
+  @override
+  String get retry => '重试';
+  @override
+  String get add => '添加模型…';
+  @override
+  String get add_title => '添加模型';
+  @override
+  String get add_placeholder => '例如：gpt-4o';
+  @override
+  String get default_badge => '默认';
+  @override
+  String get fetch_error => '无法从提供商 API 获取模型。';
 }
 
 /// The flat map containing all translations for locale <zh-Hans>.
@@ -1412,7 +1570,7 @@ extension on TranslationsZhHans {
       'mini_translator.message.ocr_service_not_configured' =>
         '未配置默认文字识别服务，请在设置中配置。',
       'mini_translator.message.ocr_recognition_failed' => '文字识别失败',
-      'settings.version' => '版本 {} BUILD {}',
+      'settings.version' => 'v{} (Build {})',
       'settings.general.title' => '常规',
       'settings.general.section.permissions' => '权限',
       'settings.general.section.ocr' => '文字识别',
@@ -1480,6 +1638,12 @@ extension on TranslationsZhHans {
       'settings.advanced.port' => '端口',
       'settings.advanced.running_at' => '运行于 {url}',
       'settings.advanced.disabled' => '已关闭',
+      'settings.services.title' => '服务',
+      'settings.services.button.add_service' => '添加服务...',
+      'settings.services.section.available_services' => '可用服务',
+      'settings.services.editor.coming_soon' => '🚧 即将推出',
+      'settings.services.editor.coming_soon_description' =>
+        '服务配置尚不可用。您可以在提供商标签页中管理服务提供商。',
       'settings.providers.title' => '提供商',
       'settings.providers.section.services' => '可用服务',
       'settings.providers.section.services_description' =>
@@ -1494,8 +1658,20 @@ extension on TranslationsZhHans {
       'settings.providers.editor.row.id' => '提供商 ID',
       'settings.providers.editor.placeholder.id' => '例如 deepl-main',
       'settings.providers.editor.type_picker.prompt' => '请选择要添加的提供商类型：',
+      'settings.providers.editor.type_picker.section_llm' => 'LLM',
+      'settings.providers.editor.type_picker.section_traditional' => '传统',
       'settings.providers.editor.tooltip.help' => '帮助',
       'settings.providers.detail.tooltip.edit' => '编辑提供商',
+      'settings.providers.detail.section.configuration' => '配置',
+      'settings.providers.detail.section.models' => '模型',
+      'settings.providers.detail.models.loading' => '正在加载模型...',
+      'settings.providers.detail.models.empty' => '未找到模型。',
+      'settings.providers.detail.models.retry' => '重试',
+      'settings.providers.detail.models.add' => '添加模型…',
+      'settings.providers.detail.models.add_title' => '添加模型',
+      'settings.providers.detail.models.add_placeholder' => '例如：gpt-4o',
+      'settings.providers.detail.models.default_badge' => '默认',
+      'settings.providers.detail.models.fetch_error' => '无法从提供商 API 获取模型。',
       'settings.providers.capability.translation' => '翻译',
       'settings.providers.capability.dictionary' => '词典',
       'settings.providers.capability.ocr' => 'OCR',
@@ -1508,6 +1684,16 @@ extension on TranslationsZhHans {
       'settings.layout.title' => '设置',
       'settings.layout.empty.title' => '选择一个分类',
       'settings.layout.empty.message' => '从侧边栏选择一个设置分类。',
+      'settings.about.title' => '关于',
+      'settings.about.copy_version_info' => '复制版本信息',
+      'settings.about.up_to_date' => '已是最新版本。',
+      'settings.about.check_again' => '重新检查',
+      'settings.about.links' => '链接',
+      'settings.about.website' => '网站',
+      'settings.about.github' => 'GitHub',
+      'settings.about.report_issue' => '提交问题',
+      'settings.about.license' => '许可证',
+      'settings.about.open_changelog' => '查看更新日志',
       _ => null,
     };
   }

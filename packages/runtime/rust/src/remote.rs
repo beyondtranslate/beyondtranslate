@@ -32,14 +32,6 @@ pub struct TranslationTarget {
     pub enabled: bool,
 }
 
-type ProviderCapability = core::ProviderCapability;
-#[uniffi::remote(Enum)]
-pub enum ProviderCapability {
-    Dictionary,
-    Ocr,
-    Translation,
-}
-
 type ProviderType = engine::ProviderType;
 #[uniffi::remote(Enum)]
 pub enum ProviderType {

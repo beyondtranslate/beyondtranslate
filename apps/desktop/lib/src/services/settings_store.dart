@@ -66,12 +66,14 @@ class SettingsStore extends ChangeNotifier {
     apiServerPort: 0,
   );
   List<ProviderConfigEntry> _providers = const [];
+  List<ServiceConfigEntry> _services = const [];
 
   GeneralSettings get general => _general;
   AppearanceSettings get appearance => _appearance;
   ShortcutSettings get shortcuts => _shortcuts;
   AdvancedSettings get advanced => _advanced;
   List<ProviderConfigEntry> get providers => List.unmodifiable(_providers);
+  List<ServiceConfigEntry> get services => List.unmodifiable(_services);
 
   String get appLanguage => _appearance.language;
   ThemeMode get themeMode {
@@ -99,6 +101,7 @@ class SettingsStore extends ChangeNotifier {
       reloadShortcuts(),
       reloadAdvanced(),
       reloadProviders(),
+      reloadServices(),
     ]);
     _startListeningForChanges();
   }
@@ -136,7 +139,7 @@ class SettingsStore extends ChangeNotifier {
         case SettingsChange.shortcuts:
           await reloadShortcuts();
         case SettingsChange.providers:
-          await reloadProviders();
+          await Future.wait([reloadProviders(), reloadServices()]);
         case SettingsChange.advanced:
           await reloadAdvanced();
       }
@@ -191,6 +194,14 @@ class SettingsStore extends ChangeNotifier {
     final settings = runtime_service.runtime.settings();
     try {
       _providers = await settings.listProviders();
+      notifyListeners();
+    } catch (_) {}
+  }
+
+  Future<void> reloadServices() async {
+    final settings = runtime_service.runtime.settings();
+    try {
+      _services = await settings.listServices();
       notifyListeners();
     } catch (_) {}
   }

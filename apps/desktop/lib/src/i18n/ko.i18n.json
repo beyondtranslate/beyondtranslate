@@ -240,6 +240,19 @@
       "running_at": "{url}에서 실행 중",
       "disabled": "비활성화됨"
     },
+    "services": {
+      "title": "서비스",
+      "button": {
+        "add_service": "서비스 추가..."
+      },
+      "section": {
+        "available_services": "사용 가능한 서비스"
+      },
+      "editor": {
+        "coming_soon": "🚧 곧 출시 예정",
+        "coming_soon_description": "서비스 구성이 아직 제공되지 않습니다. 제공자 탭에서 서비스 제공자를 관리할 수 있습니다."
+      }
+    },
     "providers": {
       "title": "제공자",
       "section": {
@@ -269,7 +282,9 @@
           "id": "예: deepl-main"
         },
         "type_picker": {
-          "prompt": "추가할 제공자 유형을 선택하세요:"
+          "prompt": "추가할 제공자 유형을 선택하세요:",
+          "section_llm": "LLM",
+          "section_traditional": "전통"
         },
         "tooltip": {
           "help": "도움말"
@@ -278,6 +293,20 @@
       "detail": {
         "tooltip": {
           "edit": "제공자 편집"
+        },
+        "section": {
+          "configuration": "구성",
+          "models": "모델"
+        },
+        "models": {
+          "loading": "모델 로딩 중...",
+          "empty": "모델을 찾을 수 없습니다.",
+          "retry": "재시도",
+          "add": "모델 추가…",
+          "add_title": "모델 추가",
+          "add_placeholder": "예: gpt-4o",
+          "default_badge": "기본값",
+          "fetch_error": "제공자 API에서 모델을 가져올 수 없습니다."
         }
       },
       "capability": {

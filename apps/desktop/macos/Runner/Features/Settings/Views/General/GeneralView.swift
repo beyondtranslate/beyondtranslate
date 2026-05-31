@@ -8,7 +8,7 @@ struct GeneralView: View {
   @State private var showCommonLanguagesSheet = false
 
   var body: some View {
-    let hasDirectoryServices = !viewModel.dictionaryServiceOptions.isEmpty
+    // let hasDirectoryServices = !viewModel.dictionaryServiceOptions.isEmpty
     let hasTranslationServices = !viewModel.translationServiceOptions.isEmpty
 
     SettingsPage(title: LocaleKeys.settings.general.title.tr()) {
@@ -84,28 +84,28 @@ struct GeneralView: View {
           isOn: $viewModel.autoCopyDetectedText)
       }
 
-      Section(LocaleKeys.settings.general.section.directory.tr()) {
-        if hasDirectoryServices {
-          SettingPicker(
-            LocaleKeys.settings.general.row.defaultDirectoryService.tr(),
-            selection: Binding(
-              get: { viewModel.validDefaultDirectoryService },
-              set: { viewModel.setDefaultDirectoryService($0) }
-            )
-          ) {
-            Text(LocaleKeys.settings.general.option.none.tr()).tag("")
-            ForEach(viewModel.dictionaryServiceOptions) { option in
-              Text(option.name).tag(option.id)
-            }
-          }
-          .pickerStyle(.menu)
-        } else {
-          ServiceUnavailableSettingRow(
-            title: LocaleKeys.settings.general.row.defaultDirectoryService.tr(),
-            onAddProvider: onAddProvider
-          )
-        }
-      }
+      // Section(LocaleKeys.settings.general.section.directory.tr()) {
+      //   if hasDirectoryServices {
+      //     SettingPicker(
+      //       LocaleKeys.settings.general.row.defaultDirectoryService.tr(),
+      //       selection: Binding(
+      //         get: { viewModel.validDefaultDirectoryService },
+      //         set: { viewModel.setDefaultDirectoryService($0) }
+      //       )
+      //     ) {
+      //       Text(LocaleKeys.settings.general.option.none.tr()).tag("")
+      //       ForEach(viewModel.dictionaryServiceOptions) { option in
+      //         Text(option.name).tag(option.id)
+      //       }
+      //     }
+      //     .pickerStyle(.menu)
+      //   } else {
+      //     ServiceUnavailableSettingRow(
+      //       title: LocaleKeys.settings.general.row.defaultDirectoryService.tr(),
+      //       onAddProvider: onAddProvider
+      //     )
+      //   }
+      // }
 
       Section(LocaleKeys.settings.general.section.translation.tr()) {
         if hasTranslationServices {

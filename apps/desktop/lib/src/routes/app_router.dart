@@ -145,6 +145,40 @@ Offset? miniTranslatorPositionBelowTray({Size? windowSize}) {
   return _clampPositionToDisplay(position, size, anchor.display);
 }
 
+/// Positions the mini translator at the top-right corner (50, 50) of the
+/// display that currently contains the mouse cursor.
+Offset? miniTranslatorPositionAtCursorScreenTopRight({Size? windowSize}) {
+  final cursorPosition = DisplayManager.instance.getCursorPosition();
+  final displays = DisplayManager.instance.getAll();
+  if (displays.isEmpty) return null;
+
+  // Find the display that contains the cursor position
+  Display? cursorDisplay;
+  for (final display in displays) {
+    final displayRect = Rect.fromLTWH(
+      display.position.dx,
+      display.position.dy,
+      display.size.width,
+      display.size.height,
+    );
+    if (displayRect.contains(cursorPosition)) {
+      cursorDisplay = display;
+      break;
+    }
+  }
+
+  cursorDisplay ??= displays.first;
+  final size = windowSize ?? miniTranslatorWindowController.window.size;
+
+  // Top-right corner of the cursor's display, offset by (50, 50)
+  final position = Offset(
+    cursorDisplay.position.dx + cursorDisplay.size.width - size.width - 50,
+    cursorDisplay.position.dy + 50,
+  );
+
+  return _clampPositionToDisplay(position, size, cursorDisplay);
+}
+
 Offset _clampPositionToDisplay(
   Offset position,
   Size windowSize,
