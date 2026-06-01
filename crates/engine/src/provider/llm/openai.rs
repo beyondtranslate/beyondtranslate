@@ -2,16 +2,11 @@ use std::sync::{mpsc, Arc};
 
 use async_trait::async_trait;
 use beyondtranslate_core::{
-    ChatMessage, ChatRequest, ChatResponse, ChatRole, DetectLanguageRequest,
-    DetectLanguageResponse, DictionaryError, DictionaryService, LlmError, LlmService,
-    LlmStreamReceiver, LookUpRequest, LookUpResponse, Provider, StreamChunk, TextDetection,
-    TextTranslation, TranslateRequest, TranslateResponse, TranslationError, TranslationService,
-    WordDefinition, WordEtymology, WordPhrase, WordPronunciation, WordSynonym,
+    ChatRequest, ChatResponse, ChatRole, LlmError, LlmService, LlmStreamReceiver, Provider,
+    StreamChunk,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-
-use super::prompt;
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
@@ -39,8 +34,6 @@ pub struct OpenAiProvider {
     #[allow(dead_code)]
     config: OpenAiProviderConfig,
     llm_service: Arc<OpenAiLlmService>,
-    translation_service: OpenAiTranslationService,
-    dictionary_service: OpenAiDictionaryService,
 }
 
 impl OpenAiProvider {
@@ -66,33 +59,22 @@ impl OpenAiProvider {
         Ok(Self {
             config: config.clone(),
             llm_service: llm_service.clone(),
-            translation_service: OpenAiTranslationService {
-                llm: llm_service.clone(),
-                default_model: default_model.clone(),
-            },
-            dictionary_service: OpenAiDictionaryService {
-                llm: llm_service,
-                default_model,
-            },
         })
     }
 }
 
+#[async_trait]
 impl Provider for OpenAiProvider {
     fn name(&self) -> &'static str {
         "openai"
     }
 
-    fn translation(&self) -> Option<&dyn TranslationService> {
-        Some(&self.translation_service)
-    }
-
-    fn dictionary(&self) -> Option<&dyn DictionaryService> {
-        Some(&self.dictionary_service)
-    }
-
     fn llm(&self) -> Option<&dyn LlmService> {
         Some(self.llm_service.as_ref())
+    }
+
+    async fn list_models(&self) -> Result<Vec<String>, LlmError> {
+        self.llm_service.list_models().await
     }
 }
 
@@ -180,16 +162,7 @@ impl OpenAiLlmService {
     }
 }
 
-#[async_trait]
-impl LlmService for OpenAiLlmService {
-    fn provider_name(&self) -> &'static str {
-        "openai"
-    }
-
-    fn available_models(&self) -> Vec<String> {
-        vec![self.default_model.clone()]
-    }
-
+impl OpenAiLlmService {
     async fn list_models(&self) -> Result<Vec<String>, LlmError> {
         let response = self
             .http
@@ -225,6 +198,17 @@ impl LlmService for OpenAiLlmService {
             .unwrap_or_default();
 
         Ok(models)
+    }
+}
+
+#[async_trait]
+impl LlmService for OpenAiLlmService {
+    fn provider_name(&self) -> &'static str {
+        "openai"
+    }
+
+    fn available_models(&self) -> Vec<String> {
+        vec![self.default_model.clone()]
     }
 
     async fn chat(&self, request: ChatRequest) -> Result<ChatResponse, LlmError> {
@@ -344,282 +328,4 @@ impl LlmService for OpenAiLlmService {
 
         Ok(LlmStreamReceiver { rx })
     }
-}
-
-// ── Translation Service (delegates to LLM) ────────────────────────────────────
-
-pub struct OpenAiTranslationService {
-    llm: Arc<OpenAiLlmService>,
-    default_model: String,
-}
-
-impl OpenAiTranslationService {
-    fn llm(&self) -> &OpenAiLlmService {
-        self.llm.as_ref()
-    }
-}
-
-#[async_trait(?Send)]
-impl TranslationService for OpenAiTranslationService {
-    async fn translate(
-        &self,
-        request: TranslateRequest,
-    ) -> Result<TranslateResponse, TranslationError> {
-        let source_lang = request.source_language.as_deref().unwrap_or("auto");
-        let target_lang = request.target_language.as_deref().unwrap_or("English");
-
-        let system_prompt = prompt::translate_text_system_prompt(source_lang, target_lang, None);
-        let user_prompt = prompt::translate_text_user_prompt(&request.text);
-
-        let chat_req = ChatRequest {
-            model: self.default_model.clone(),
-            messages: vec![
-                ChatMessage::system(system_prompt),
-                ChatMessage::user(user_prompt),
-            ],
-            temperature: Some(0.3),
-            max_tokens: Some(4096),
-            stream: None,
-        };
-
-        let chat_response = self
-            .llm()
-            .chat(chat_req)
-            .await
-            .map_err(|e| TranslationError::NetworkError(e.to_string()))?;
-
-        let content = chat_response
-            .choices
-            .first()
-            .map(|c| c.message.content.clone())
-            .unwrap_or_default();
-
-        let translations = parse_translation_json(&content).unwrap_or_else(|| {
-            vec![TextTranslation {
-                text: content,
-                detected_source_language: None,
-                audio_url: None,
-            }]
-        });
-
-        Ok(TranslateResponse { translations })
-    }
-
-    async fn detect_language(
-        &self,
-        request: DetectLanguageRequest,
-    ) -> Result<DetectLanguageResponse, TranslationError> {
-        // Take the first text for detection
-        let text = request.texts.first().cloned().unwrap_or_default();
-
-        let chat_req = ChatRequest {
-            model: self.default_model.clone(),
-            messages: vec![
-                ChatMessage::system(
-                    "You are a language detection expert. Identify the language of the given text. \
-                     Return ONLY a JSON object: {\"language\": \"<language name in English>\", \"confidence\": 0.0-1.0}",
-                ),
-                ChatMessage::user(format!("Detect the language: \"{}\"", text)),
-            ],
-            temperature: Some(0.0),
-            max_tokens: Some(256),
-            stream: None,
-        };
-
-        let chat_response = self
-            .llm()
-            .chat(chat_req)
-            .await
-            .map_err(|e| TranslationError::NetworkError(e.to_string()))?;
-
-        let content = chat_response
-            .choices
-            .first()
-            .map(|c| c.message.content.clone())
-            .unwrap_or_default();
-
-        let detected: Value = serde_json::from_str(&content).unwrap_or_default();
-        let language = detected["language"]
-            .as_str()
-            .unwrap_or("unknown")
-            .to_string();
-
-        Ok(DetectLanguageResponse {
-            detections: Some(vec![TextDetection {
-                detected_language: language,
-                text,
-            }]),
-        })
-    }
-}
-
-fn parse_translation_json(content: &str) -> Option<Vec<TextTranslation>> {
-    let json_str = content
-        .strip_prefix("```json")
-        .and_then(|s| s.strip_suffix("```"))
-        .map(|s| s.trim())
-        .unwrap_or(content.trim());
-
-    serde_json::from_str::<Value>(json_str).ok().and_then(|v| {
-        v["translations"].as_array().map(|arr| {
-            arr.iter()
-                .map(|item: &Value| TextTranslation {
-                    text: item["text"].as_str().unwrap_or("").to_string(),
-                    detected_source_language: None,
-                    audio_url: None,
-                })
-                .collect()
-        })
-    })
-}
-
-// ── Dictionary Service (delegates to LLM) ─────────────────────────────────────
-
-pub struct OpenAiDictionaryService {
-    llm: Arc<OpenAiLlmService>,
-    default_model: String,
-}
-
-impl OpenAiDictionaryService {
-    fn llm(&self) -> &OpenAiLlmService {
-        self.llm.as_ref()
-    }
-}
-
-#[async_trait(?Send)]
-impl DictionaryService for OpenAiDictionaryService {
-    async fn look_up(&self, request: LookUpRequest) -> Result<LookUpResponse, DictionaryError> {
-        let chat_req = ChatRequest {
-            model: self.default_model.clone(),
-            messages: vec![
-                ChatMessage::system(prompt::dictionary_lookup_system_prompt(
-                    &request.source_language,
-                    &request.target_language,
-                )),
-                ChatMessage::user(prompt::dictionary_lookup_user_prompt(&request.word)),
-            ],
-            temperature: Some(0.3),
-            max_tokens: Some(2048),
-            stream: None,
-        };
-
-        let chat_response = self
-            .llm()
-            .chat(chat_req)
-            .await
-            .map_err(|e| DictionaryError::NetworkError(e.to_string()))?;
-
-        let content = chat_response
-            .choices
-            .first()
-            .map(|c| c.message.content.clone())
-            .unwrap_or_default();
-
-        parse_dictionary_json(&content, &request.word)
-    }
-}
-
-fn parse_dictionary_json(
-    content: &str,
-    fallback_word: &str,
-) -> Result<LookUpResponse, DictionaryError> {
-    let json_str = content
-        .strip_prefix("```json")
-        .and_then(|s| s.strip_suffix("```"))
-        .map(|s| s.trim())
-        .unwrap_or(content.trim());
-
-    let v: Value = serde_json::from_str(json_str)
-        .map_err(|e| DictionaryError::SerializationError(e.to_string()))?;
-
-    let word = v["word"]
-        .as_str()
-        .map(|s| s.to_string())
-        .or(Some(fallback_word.to_string()));
-
-    let pronunciations: Option<Vec<WordPronunciation>> =
-        v["pronunciations"].as_array().map(|arr: &Vec<Value>| {
-            arr.iter()
-                .map(|p: &Value| WordPronunciation {
-                    r#type: p["type"].as_str().map(|s| s.to_string()),
-                    phonetic_symbol: p["phonetic"].as_str().map(|s| s.to_string()),
-                    audio_url: p["audio_url"].as_str().map(|s| s.to_string()),
-                })
-                .collect()
-        });
-
-    let definitions: Option<Vec<WordDefinition>> =
-        v["definitions"].as_array().map(|arr: &Vec<Value>| {
-            arr.iter()
-                .map(|d: &Value| WordDefinition {
-                    r#type: d["type"].as_str().map(|s| s.to_string()),
-                    name: d["meaning"].as_str().map(|s| s.to_string()),
-                    values: d["examples"].as_array().map(|exs: &Vec<Value>| {
-                        exs.iter()
-                            .filter_map(|e: &Value| e.as_str().map(|s: &str| s.to_string()))
-                            .collect()
-                    }),
-                })
-                .collect()
-        });
-
-    let translations: Vec<TextTranslation> = v["translations"]
-        .as_array()
-        .map(|arr: &Vec<Value>| {
-            arr.iter()
-                .filter_map(|t: &Value| {
-                    t.as_str().map(|s: &str| TextTranslation {
-                        text: s.to_string(),
-                        detected_source_language: None,
-                        audio_url: None,
-                    })
-                })
-                .collect()
-        })
-        .unwrap_or_default();
-
-    let synonyms: Option<Vec<WordSynonym>> = v["synonyms"].as_array().map(|arr: &Vec<Value>| {
-        arr.iter()
-            .filter_map(|s: &Value| s.as_str())
-            .map(|syn: &str| WordSynonym {
-                r#type: None,
-                word: syn.to_string(),
-                definitions: None,
-            })
-            .collect()
-    });
-
-    let phrases: Option<Vec<WordPhrase>> = v["phrases"].as_array().map(|arr: &Vec<Value>| {
-        arr.iter()
-            .map(|p: &Value| WordPhrase {
-                text: p["text"].as_str().unwrap_or("").to_string(),
-                translations: p["translation"]
-                    .as_str()
-                    .map(|t: &str| vec![t.to_string()])
-                    .unwrap_or_default(),
-            })
-            .collect()
-    });
-
-    let etymology: Option<Vec<WordEtymology>> = v["etymology"].as_str().map(|s: &str| {
-        vec![WordEtymology {
-            origin: Some(s.to_string()),
-            root: None,
-        }]
-    });
-
-    Ok(LookUpResponse {
-        translations,
-        word,
-        tip: v["usage_notes"].as_str().map(|s: &str| s.to_string()),
-        tags: None,
-        pronunciations,
-        definitions,
-        images: None,
-        phrases,
-        tenses: None,
-        sentences: None,
-        etymology,
-        synonyms,
-    })
 }

@@ -47,12 +47,12 @@
 "common.provider.caiyun" = "Caiyun";
 "common.provider.deepl" = "DeepL";
 "common.provider.google" = "Google";
-"common.provider.iciba" = "Iciba";
 "common.provider.ollama" = "Ollama";
 "common.provider.openai" = "OpenAI";
 "common.provider.sogou" = "Sogou";
 "common.provider.system" = "システム";
 "common.provider.tencent" = "Tencent";
+"common.provider.xai" = "xAI";
 "common.provider.youdao" = "Youda";
 "common.theme_mode.dark" = "ダーク";
 "common.theme_mode.light" = "ライト";
@@ -173,9 +173,6 @@
 "settings.providers.description.dictionary" = "辞書検索と単語定義を提供";
 "settings.providers.description.fallback" = "翻訳サービスを提供";
 "settings.providers.description.translation" = "言語間のテキスト翻訳を提供";
-"settings.providers.detail.models.add" = "モデルを追加…";
-"settings.providers.detail.models.add_placeholder" = "例: gpt-4o";
-"settings.providers.detail.models.add_title" = "モデルを追加";
 "settings.providers.detail.models.default_badge" = "デフォルト";
 "settings.providers.detail.models.empty" = "モデルが見つかりません。";
 "settings.providers.detail.models.fetch_error" = "プロバイダーAPIからモデルを取得できませんでした。";

@@ -20,7 +20,7 @@ struct ProviderTypePicker: View {
         .padding(.bottom, 12)
 
       List(selection: $localSelection) {
-        let llmProviders = ProviderType.llmProviders.filter { $0 != .system }
+        let llmProviders = ProviderType.llmProviders
         let traditionalProviders = ProviderType.traditionalProviders
 
         ForEach(llmProviders, id: \.id) { type in
@@ -56,8 +56,9 @@ struct ProviderTypePicker: View {
         Button(LocaleKeys.common.ui.button.continue.tr()) {
           guard let id = localSelection,
             let type =
-              (ProviderType.llmProviders.filter { $0 != .system }
-              + ProviderType.traditionalProviders).first(where: { $0.id == id })
+              (ProviderType.llmProviders + ProviderType.traditionalProviders).first(where: {
+                $0.id == id
+              })
           else { return }
           onNext(type)
         }

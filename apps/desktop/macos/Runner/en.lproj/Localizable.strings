@@ -47,12 +47,12 @@
 "common.provider.caiyun" = "Caiyun";
 "common.provider.deepl" = "DeepL";
 "common.provider.google" = "Google";
-"common.provider.iciba" = "Iciba";
 "common.provider.ollama" = "Ollama";
 "common.provider.openai" = "OpenAI";
 "common.provider.sogou" = "Sogou";
 "common.provider.system" = "System";
 "common.provider.tencent" = "Tencent";
+"common.provider.xai" = "xAI";
 "common.provider.youdao" = "Youda";
 "common.theme_mode.dark" = "Dark";
 "common.theme_mode.light" = "Light";
@@ -173,9 +173,6 @@
 "settings.providers.description.dictionary" = "Provides dictionary lookup and word definitions";
 "settings.providers.description.fallback" = "Provides translation services";
 "settings.providers.description.translation" = "Provides text translation between languages";
-"settings.providers.detail.models.add" = "Add Model…";
-"settings.providers.detail.models.add_placeholder" = "e.g. gpt-4o";
-"settings.providers.detail.models.add_title" = "Add Model";
 "settings.providers.detail.models.default_badge" = "Default";
 "settings.providers.detail.models.empty" = "No models found.";
 "settings.providers.detail.models.fetch_error" = "Could not fetch models from provider API.";

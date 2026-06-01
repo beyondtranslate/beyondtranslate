@@ -100,6 +100,5 @@ export class DictionariesApi extends runtime.BaseAPI {
  * @export
  */
 export const LookupDictionaryEntryProviderEnum = {
-    Iciba: 'iciba'
 } as const;
 export type LookupDictionaryEntryProviderEnum = typeof LookupDictionaryEntryProviderEnum[keyof typeof LookupDictionaryEntryProviderEnum];

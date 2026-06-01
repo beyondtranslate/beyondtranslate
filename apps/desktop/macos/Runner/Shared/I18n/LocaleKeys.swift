@@ -91,12 +91,12 @@ enum LocaleKeys {
       static let caiyun = LocaleKey("common.provider.caiyun")
       static let deepl = LocaleKey("common.provider.deepl")
       static let google = LocaleKey("common.provider.google")
-      static let iciba = LocaleKey("common.provider.iciba")
       static let ollama = LocaleKey("common.provider.ollama")
       static let openai = LocaleKey("common.provider.openai")
       static let sogou = LocaleKey("common.provider.sogou")
       static let system = LocaleKey("common.provider.system")
       static let tencent = LocaleKey("common.provider.tencent")
+      static let xai = LocaleKey("common.provider.xai")
       static let youdao = LocaleKey("common.provider.youdao")
     }
     enum themeMode {
@@ -311,9 +311,6 @@ enum LocaleKeys {
       }
       enum detail {
         enum models {
-          static let add = LocaleKey("settings.providers.detail.models.add")
-          static let addPlaceholder = LocaleKey("settings.providers.detail.models.add_placeholder")
-          static let addTitle = LocaleKey("settings.providers.detail.models.add_title")
           static let defaultBadge = LocaleKey("settings.providers.detail.models.default_badge")
           static let empty = LocaleKey("settings.providers.detail.models.empty")
           static let fetchError = LocaleKey("settings.providers.detail.models.fetch_error")

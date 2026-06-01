@@ -52,6 +52,7 @@ flutter:
 
   assets:
     - resources/images/
+    - resources/images/ai_provider_icons/
     - resources/images/translation_engine_icons/
 
   fonts:

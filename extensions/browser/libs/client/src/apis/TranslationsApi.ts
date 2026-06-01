@@ -224,20 +224,17 @@ export class TranslationsApi extends runtime.BaseAPI {
  * @export
  */
 export const DetectLanguageOperationProviderEnum = {
-    Iciba: 'iciba'
 } as const;
 export type DetectLanguageOperationProviderEnum = typeof DetectLanguageOperationProviderEnum[keyof typeof DetectLanguageOperationProviderEnum];
 /**
  * @export
  */
 export const GetSupportedLanguagePairsProviderEnum = {
-    Iciba: 'iciba'
 } as const;
 export type GetSupportedLanguagePairsProviderEnum = typeof GetSupportedLanguagePairsProviderEnum[keyof typeof GetSupportedLanguagePairsProviderEnum];
 /**
  * @export
  */
 export const TranslateTextProviderEnum = {
-    Iciba: 'iciba'
 } as const;
 export type TranslateTextProviderEnum = typeof TranslateTextProviderEnum[keyof typeof TranslateTextProviderEnum];

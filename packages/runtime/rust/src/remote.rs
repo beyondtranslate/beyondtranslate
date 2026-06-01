@@ -40,10 +40,10 @@ pub enum ProviderType {
     Caiyun,
     DeepL,
     Google,
-    Iciba,
     OpenAi,
     Ollama,
     Tencent,
+    XAi,
     Youdao,
     System,
 }

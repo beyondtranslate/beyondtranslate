@@ -63,10 +63,10 @@
       "caiyun": "彩云小译",
       "deepl": "DeepL",
       "google": "谷歌",
-      "iciba": "爱词霸",
       "ollama": "Ollama",
       "openai": "OpenAI",
       "sogou": "搜狗",
+      "xai": "xAI",
       "system": "系统",
       "tencent": "腾讯",
       "youdao": "有道"
@@ -302,9 +302,6 @@
           "loading": "正在加载模型...",
           "empty": "未找到模型。",
           "retry": "重试",
-          "add": "添加模型…",
-          "add_title": "添加模型",
-          "add_placeholder": "例如：gpt-4o",
           "default_badge": "默认",
           "fetch_error": "无法从提供商 API 获取模型。"
         }

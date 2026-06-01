@@ -63,10 +63,10 @@
       "caiyun": "Caiyun",
       "deepl": "DeepL",
       "google": "Google",
-      "iciba": "Iciba",
       "ollama": "Ollama",
       "openai": "OpenAI",
       "sogou": "Sogou",
+      "xai": "xAI",
       "system": "System",
       "tencent": "Tencent",
       "youdao": "Youda"
@@ -302,9 +302,6 @@
           "loading": "Loading models...",
           "empty": "No models found.",
           "retry": "Retry",
-          "add": "Add Model…",
-          "add_title": "Add Model",
-          "add_placeholder": "e.g. gpt-4o",
           "default_badge": "Default",
           "fetch_error": "Could not fetch models from provider API."
         }

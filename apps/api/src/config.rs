@@ -81,11 +81,10 @@ mod tests {
         let rendered = render_runtime_config(include_str!("../config.yaml"), |key| match key {
             "BAIDU_APP_ID" => Some("20191221000368303".to_owned()),
             "BAIDU_API_KEY" => Some("baidu-key".to_owned()),
-            "ICIBA_API_KEY" => Some("iciba-key".to_owned()),
             _ => None,
         });
 
         let engine = beyondtranslate_engine::from_yaml_str(&rendered).expect("valid config");
-        assert_eq!(engine.names(), vec!["baidu", "iciba"]);
+        assert_eq!(engine.names(), vec!["baidu"]);
     }
 }

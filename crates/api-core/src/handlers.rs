@@ -115,13 +115,6 @@ pub fn lookup_request(request: LookUpRequest) -> Result<LookUpRequest, ApiError>
         ));
     }
 
-    if source_language != "en" || target_language != "zh" {
-        return Err(ApiError::bad_request(
-            "INVALID_REQUEST",
-            "Iciba lookup only supports sourceLanguage=en and targetLanguage=zh",
-        ));
-    }
-
     Ok(LookUpRequest {
         source_language,
         target_language,

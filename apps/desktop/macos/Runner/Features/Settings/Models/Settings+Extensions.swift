@@ -87,8 +87,8 @@ extension ShortcutSettingsPatch {
 extension ProviderType: CaseIterable {
   public static var allCases: [ProviderType] {
     [
-      .anthropic, .baidu, .caiyun, .deepL, .google, .iciba, .ollama, .openAi, .system, .tencent,
-      .youdao,
+      .anthropic, .baidu, .caiyun, .deepL, .google, .ollama, .openAi, .system, .tencent,
+      .xAi, .youdao,
     ]
   }
 }
@@ -108,9 +108,9 @@ extension ProviderType {
     case .caiyun: return "caiyun"
     case .deepL: return "deepl"
     case .google: return "google"
-    case .iciba: return "iciba"
     case .openAi: return "openai"
     case .ollama: return "ollama"
+    case .xAi: return "xai"
     case .system: return "system"
     case .tencent: return "tencent"
     case .youdao: return "youdao"
@@ -170,13 +170,6 @@ extension ProviderType {
           key: "baseUrl", label: "Base URL", placeholder: "https://translation.googleapis.com",
           isSecret: false, isOptional: true),
       ]
-    case .iciba:
-      return [
-        ProviderConfigField(
-          key: "appKey", label: "API Key", placeholder: "", isSecret: true, isOptional: false),
-        ProviderConfigField(
-          key: "baseUrl", label: "Base URL", placeholder: "", isSecret: false, isOptional: true),
-      ]
     case .openAi:
       return [
         ProviderConfigField(
@@ -196,6 +189,18 @@ extension ProviderType {
           isSecret: false, isOptional: true),
         ProviderConfigField(
           key: "defaultModel", label: "Default Model", placeholder: "llama3",
+          isSecret: false, isOptional: true),
+      ]
+    case .xAi:
+      return [
+        ProviderConfigField(
+          key: "apiKey", label: "API Key", placeholder: "xai-…", isSecret: true,
+          isOptional: false),
+        ProviderConfigField(
+          key: "baseUrl", label: "Base URL", placeholder: "https://api.x.ai",
+          isSecret: false, isOptional: true),
+        ProviderConfigField(
+          key: "defaultModel", label: "Default Model", placeholder: "grok-2-latest",
           isSecret: false, isOptional: true),
       ]
     case .tencent:
@@ -243,9 +248,9 @@ extension ProviderType {
   /// Whether this provider type is an LLM-based provider.
   var isLlm: Bool {
     switch self {
-    case .anthropic, .openAi, .ollama, .system:
+    case .anthropic, .openAi, .ollama, .xAi:
       return true
-    case .baidu, .caiyun, .deepL, .google, .iciba, .tencent, .youdao:
+    case .baidu, .caiyun, .deepL, .google, .system, .tencent, .youdao:
       return false
     }
   }
@@ -260,12 +265,10 @@ extension ProviderType {
 
   var providerDescription: String {
     switch self {
-    case .anthropic, .ollama, .openAi, .system, .youdao:
+    case .anthropic, .ollama, .openAi, .system, .xAi, .youdao:
       return LocaleKeys.settings.providers.description.all.tr()
     case .baidu, .caiyun, .deepL, .google, .tencent:
       return LocaleKeys.settings.providers.description.translation.tr()
-    case .iciba:
-      return LocaleKeys.settings.providers.description.dictionary.tr()
     }
   }
 }
@@ -280,9 +283,9 @@ extension ProviderType {
     case .caiyun: return LocaleKeys.common.provider.caiyun.tr()
     case .deepL: return LocaleKeys.common.provider.deepl.tr()
     case .google: return LocaleKeys.common.provider.google.tr()
-    case .iciba: return LocaleKeys.common.provider.iciba.tr()
     case .ollama: return LocaleKeys.common.provider.ollama.tr()
     case .openAi: return LocaleKeys.common.provider.openai.tr()
+    case .xAi: return LocaleKeys.common.provider.xai.tr()
     case .tencent: return LocaleKeys.common.provider.tencent.tr()
     case .system: return LocaleKeys.common.provider.system.tr()
     case .youdao: return LocaleKeys.common.provider.youdao.tr()
@@ -292,12 +295,10 @@ extension ProviderType {
   /// Short description of the hosting/feature scope.
   var hostingDescription: String {
     switch self {
-    case .anthropic, .ollama, .openAi, .system, .youdao:
+    case .anthropic, .ollama, .openAi, .system, .xAi, .youdao:
       return LocaleKeys.settings.providers.description.all.tr()
     case .baidu, .caiyun, .deepL, .google, .tencent:
       return LocaleKeys.settings.providers.description.translation.tr()
-    case .iciba:
-      return LocaleKeys.settings.providers.description.dictionary.tr()
     }
   }
 }

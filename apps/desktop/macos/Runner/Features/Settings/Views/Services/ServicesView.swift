@@ -66,10 +66,10 @@ struct ServicesView: View {
 
         // ── Provider List ─────────────────────────────────────────
         Section {
-          if viewModel.providers.filter({ $0.id != "system" }).isEmpty {
+          if viewModel.providers.isEmpty {
             EmptyProviderRow()
           } else {
-            ForEach(viewModel.providers.filter { $0.id != "system" }) { provider in
+            ForEach(viewModel.providers) { provider in
               ProviderRow(
                 provider: provider,
                 onDelete: { viewModel.deleteProvider(provider.id) }

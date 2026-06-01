@@ -1,5 +1,8 @@
-use crate::{DictionaryService, LlmService, OcrService, TranslationService};
+use async_trait::async_trait;
 
+use crate::{DictionaryService, LlmError, LlmService, OcrService, TranslationService};
+
+#[async_trait]
 pub trait Provider: Send + Sync {
     fn name(&self) -> &'static str;
 
@@ -17,5 +20,10 @@ pub trait Provider: Send + Sync {
 
     fn llm(&self) -> Option<&dyn LlmService> {
         None
+    }
+
+    /// Fetches the list of available models from this provider's API.
+    async fn list_models(&self) -> Result<Vec<String>, LlmError> {
+        Err(LlmError::UnsupportedOperation("list_models".to_string()))
     }
 }

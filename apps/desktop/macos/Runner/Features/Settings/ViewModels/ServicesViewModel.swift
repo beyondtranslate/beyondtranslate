@@ -8,14 +8,14 @@ final class ServicesViewModel: ObservableObject {
   @Published var errorMessage: String?
   @Published private(set) var pendingPresentProviderEditorSheetID: Int? = nil
 
-  /// Translation services (excluding system provider).
+  /// Translation services.
   var translationServices: [ServiceConfigEntry] {
-    services.filter { $0.type == .translation && $0.providerId != "system" }
+    services.filter { $0.type == .translation }
   }
 
-  /// OCR services (excluding system provider).
+  /// OCR services.
   var ocrServices: [ServiceConfigEntry] {
-    services.filter { $0.type == .ocr && $0.providerId != "system" }
+    services.filter { $0.type == .ocr }
   }
 
   /// Shared ProvidersViewModel used for ProviderDetailView navigation.

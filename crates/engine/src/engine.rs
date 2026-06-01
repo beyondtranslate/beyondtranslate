@@ -21,6 +21,9 @@ use crate::provider::llm::OllamaProviderConfig;
 #[cfg(feature = "openai")]
 use crate::provider::llm::OpenAiProvider;
 use crate::provider::llm::OpenAiProviderConfig;
+#[cfg(feature = "xai")]
+use crate::provider::llm::XAiProvider;
+use crate::provider::llm::XAiProviderConfig;
 #[cfg(feature = "baidu")]
 use crate::provider::BaiduProvider;
 use crate::provider::BaiduProviderConfig;
@@ -32,9 +35,7 @@ use crate::provider::DeepLProviderConfig;
 #[cfg(feature = "google")]
 use crate::provider::GoogleProvider;
 use crate::provider::GoogleProviderConfig;
-#[cfg(feature = "iciba")]
-use crate::provider::IcibaProvider;
-use crate::provider::IcibaProviderConfig;
+
 use crate::provider::SystemProvider;
 #[cfg(feature = "tencent")]
 use crate::provider::TencentProvider;
@@ -160,8 +161,7 @@ pub enum ProviderType {
     DeepL,
     #[serde(rename = "google")]
     Google,
-    #[serde(rename = "iciba")]
-    Iciba,
+
     #[serde(rename = "tencent")]
     Tencent,
     #[serde(rename = "youdao")]
@@ -172,6 +172,8 @@ pub enum ProviderType {
     OpenAi,
     #[serde(rename = "ollama")]
     Ollama,
+    #[serde(rename = "xai")]
+    XAi,
     #[serde(rename = "system")]
     System,
 }
@@ -183,12 +185,13 @@ impl ProviderType {
             Self::Caiyun => "caiyun",
             Self::DeepL => "deepl",
             Self::Google => "google",
-            Self::Iciba => "iciba",
+
             Self::Tencent => "tencent",
             Self::Youdao => "youdao",
             Self::Anthropic => "anthropic",
             Self::OpenAi => "openai",
             Self::Ollama => "ollama",
+            Self::XAi => "xai",
             Self::System => "system",
         }
     }
@@ -252,7 +255,7 @@ fn build_provider(
         ProviderType::Caiyun => build_caiyun_provider(provider_id, config.decode(provider_id)?),
         ProviderType::DeepL => build_deepl_provider(provider_id, config.decode(provider_id)?),
         ProviderType::Google => build_google_provider(provider_id, config.decode(provider_id)?),
-        ProviderType::Iciba => build_iciba_provider(provider_id, config.decode(provider_id)?),
+
         ProviderType::Tencent => build_tencent_provider(provider_id, config.decode(provider_id)?),
         ProviderType::Youdao => build_youdao_provider(provider_id, config.decode(provider_id)?),
         ProviderType::Anthropic => {
@@ -260,6 +263,7 @@ fn build_provider(
         }
         ProviderType::OpenAi => build_openai_provider(provider_id, config.decode(provider_id)?),
         ProviderType::Ollama => build_ollama_provider(provider_id, config.decode(provider_id)?),
+        ProviderType::XAi => build_xai_provider(provider_id, config.decode(provider_id)?),
         ProviderType::System => build_system_provider(provider_id),
     }
 }
@@ -288,12 +292,7 @@ build_provider_fn!(
     GoogleProvider,
     GoogleProviderConfig
 );
-build_provider_fn!(
-    build_iciba_provider,
-    "iciba",
-    IcibaProvider,
-    IcibaProviderConfig
-);
+
 build_provider_fn!(
     build_tencent_provider,
     "tencent",
@@ -306,6 +305,7 @@ build_provider_fn!(
     YoudaoProvider,
     YoudaoProviderConfig
 );
+build_provider_fn!(build_xai_provider, "xai", XAiProvider, XAiProviderConfig);
 
 fn build_system_provider(provider_id: &str) -> Result<Arc<dyn Provider>, EngineError> {
     let provider = SystemProvider::new().map_err(|reason| EngineError::ConfigValidationFailed {

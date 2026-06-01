@@ -3,7 +3,4 @@ providers:
     type: baidu
     appId: ${BAIDU_APP_ID}
     appKey: ${BAIDU_API_KEY}
-  iciba:
-    type: iciba
-    appKey: ${ICIBA_API_KEY}
-    baseUrl: ${ICIBA_BASE_URL}
+

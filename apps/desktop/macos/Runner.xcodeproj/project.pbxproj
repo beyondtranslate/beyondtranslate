@@ -38,7 +38,6 @@
 		A10000000000000000000001 /* SettingPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000001 /* SettingPicker.swift */; };
 		A10000000000000000000002 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000002 /* GeneralView.swift */; };
 		A10000000000000000000004 /* ShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000004 /* ShortcutsView.swift */; };
-		A10000000000000000000005 /* ProvidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000005 /* ProvidersView.swift */; };
 		A10000000000000000000006 /* AdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000006 /* AdvancedView.swift */; };
 		A10000000000000000000007 /* GeneralViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000007 /* GeneralViewModel.swift */; };
 		A10000000000000000000009 /* ShortcutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11000000000000000000009 /* ShortcutsViewModel.swift */; };
@@ -58,6 +57,7 @@
 		F562C6AE2FCC7AA900F83335 /* ProviderTypePickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562C6AD2FCC7AA900F83335 /* ProviderTypePickerSheet.swift */; };
 		F562C6AF2FCC7AA900F83335 /* ProviderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562C6AC2FCC7AA900F83335 /* ProviderDetailView.swift */; };
 		F562C6B12FCC863000F83335 /* ServiceRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F562C6B02FCC863000F83335 /* ServiceRowView.swift */; };
+		F59C04E92FCDD48700231C9B /* ProviderTypeIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59C04E82FCDD48700231C9B /* ProviderTypeIcon.swift */; };
 		F5ACAED92FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5ACAED82FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift */; };
 		F5ACAEDB2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5ACAEDA2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift */; };
 		F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */; };
@@ -127,7 +127,6 @@
 		A11000000000000000000001 /* SettingPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPicker.swift; sourceTree = "<group>"; };
 		A11000000000000000000002 /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
 		A11000000000000000000004 /* ShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsView.swift; sourceTree = "<group>"; };
-		A11000000000000000000005 /* ProvidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersView.swift; sourceTree = "<group>"; };
 		A11000000000000000000006 /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
 		A11000000000000000000007 /* GeneralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralViewModel.swift; sourceTree = "<group>"; };
 		A11000000000000000000009 /* ShortcutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsViewModel.swift; sourceTree = "<group>"; };
@@ -153,6 +152,7 @@
 		F562C6AC2FCC7AA900F83335 /* ProviderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetailView.swift; sourceTree = "<group>"; };
 		F562C6AD2FCC7AA900F83335 /* ProviderTypePickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderTypePickerSheet.swift; sourceTree = "<group>"; };
 		F562C6B02FCC863000F83335 /* ServiceRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceRowView.swift; sourceTree = "<group>"; };
+		F59C04E82FCDD48700231C9B /* ProviderTypeIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderTypeIcon.swift; sourceTree = "<group>"; };
 		F5ACAED82FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTargetEditorSheet.swift; sourceTree = "<group>"; };
 		F5ACAEDA2FC2E16B00D1BCA8 /* CommonLanguagesEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonLanguagesEditorSheet.swift; sourceTree = "<group>"; };
 		F5F222542FB75BFD0025B9D4 /* ThemeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode.swift; sourceTree = "<group>"; };
@@ -236,7 +236,6 @@
 				33CEB47122A05771004F2AC0 /* Flutter */,
 				331C80D6294CF71000263BE5 /* RunnerTests */,
 				33CC10EE2044A3C60003C045 /* Products */,
-				DA8F1EAD036A679C3E89AEE9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -296,7 +295,6 @@
 				A2000000000000000000000F /* About */,
 				A20000000000000000000006 /* Advanced */,
 				A20000000000000000000002 /* General */,
-				A20000000000000000000005 /* Providers */,
 				A20000000000000000000004 /* Shortcuts */,
 			);
 			path = Views;
@@ -318,14 +316,6 @@
 				A11000000000000000000004 /* ShortcutsView.swift */,
 			);
 			path = Shortcuts;
-			sourceTree = "<group>";
-		};
-		A20000000000000000000005 /* Providers */ = {
-			isa = PBXGroup;
-			children = (
-				A11000000000000000000005 /* ProvidersView.swift */,
-			);
-			path = Providers;
 			sourceTree = "<group>";
 		};
 		A20000000000000000000006 /* Advanced */ = {
@@ -426,16 +416,10 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		DA8F1EAD036A679C3E89AEE9 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		F562C6A92FCBBF9700F83335 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F59C04E82FCDD48700231C9B /* ProviderTypeIcon.swift */,
 				F562C6AC2FCC7AA900F83335 /* ProviderDetailView.swift */,
 				F562C6AD2FCC7AA900F83335 /* ProviderTypePickerSheet.swift */,
 				F562C6A72FCBBF9700F83335 /* ServiceEditorSheet.swift */,
@@ -621,6 +605,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F59C04E92FCDD48700231C9B /* ProviderTypeIcon.swift in Sources */,
 				F5F222562FB75BFD0025B9D4 /* ThemeMode.swift in Sources */,
 				F5F222602FB8ABB40025B9D4 /* ShortcutRecorderView.swift in Sources */,
 				F562C6AE2FCC7AA900F83335 /* ProviderTypePickerSheet.swift in Sources */,
@@ -638,7 +623,6 @@
 				A10000000000000000000002 /* GeneralView.swift in Sources */,
 				F5ACAED92FC271C500D1BCA8 /* TranslationTargetEditorSheet.swift in Sources */,
 				A10000000000000000000004 /* ShortcutsView.swift in Sources */,
-				A10000000000000000000005 /* ProvidersView.swift in Sources */,
 				A10000000000000000000006 /* AdvancedView.swift in Sources */,
 				A1000000000000000000000D /* AboutView.swift in Sources */,
 				A1000000000000000000000E /* AboutViewModel.swift in Sources */,

@@ -63,10 +63,10 @@
       "caiyun": "Caiyun",
       "deepl": "DeepL",
       "google": "Google",
-      "iciba": "Iciba",
       "ollama": "Ollama",
       "openai": "OpenAI",
       "sogou": "Sogou",
+      "xai": "xAI",
       "system": "システム",
       "tencent": "Tencent",
       "youdao": "Youda"
@@ -302,9 +302,6 @@
           "loading": "モデルを読み込み中...",
           "empty": "モデルが見つかりません。",
           "retry": "再試行",
-          "add": "モデルを追加…",
-          "add_title": "モデルを追加",
-          "add_placeholder": "例: gpt-4o",
           "default_badge": "デフォルト",
           "fetch_error": "プロバイダーAPIからモデルを取得できませんでした。"
         }

@@ -292,8 +292,7 @@ impl Settings {
             settings.providers.len()
         );
 
-        // Strip any persisted system provider — it is auto-injected at runtime.
-        settings.providers.remove("system");
+        // System provider is now a normal provider; no special handling needed.
 
         Ok(settings)
     }

@@ -305,13 +305,13 @@ class _TranslationsCommonProviderFr extends TranslationsCommonProviderEn {
   @override
   String get google => 'Google';
   @override
-  String get iciba => 'Iciba';
-  @override
   String get ollama => 'Ollama';
   @override
   String get openai => 'OpenAI';
   @override
   String get sogou => 'Sogou';
+  @override
+  String get xai => 'xAI';
   @override
   String get system => 'Système';
   @override
@@ -1459,12 +1459,6 @@ class _TranslationsSettingsProvidersDetailModelsFr
   @override
   String get retry => 'Réessayer';
   @override
-  String get add => 'Ajouter un modèle…';
-  @override
-  String get add_title => 'Ajouter un modèle';
-  @override
-  String get add_placeholder => 'ex. gpt-4o';
-  @override
   String get default_badge => 'Par défaut';
   @override
   String get fetch_error =>
@@ -1531,10 +1525,10 @@ extension on TranslationsFr {
       'common.provider.caiyun' => 'Caiyun',
       'common.provider.deepl' => 'DeepL',
       'common.provider.google' => 'Google',
-      'common.provider.iciba' => 'Iciba',
       'common.provider.ollama' => 'Ollama',
       'common.provider.openai' => 'OpenAI',
       'common.provider.sogou' => 'Sogou',
+      'common.provider.xai' => 'xAI',
       'common.provider.system' => 'Système',
       'common.provider.tencent' => 'Tencent',
       'common.provider.youdao' => 'Youdao',
@@ -1721,9 +1715,6 @@ extension on TranslationsFr {
       'settings.providers.detail.models.loading' => 'Chargement des modèles...',
       'settings.providers.detail.models.empty' => 'Aucun modèle trouvé.',
       'settings.providers.detail.models.retry' => 'Réessayer',
-      'settings.providers.detail.models.add' => 'Ajouter un modèle…',
-      'settings.providers.detail.models.add_title' => 'Ajouter un modèle',
-      'settings.providers.detail.models.add_placeholder' => 'ex. gpt-4o',
       'settings.providers.detail.models.default_badge' => 'Par défaut',
       'settings.providers.detail.models.fetch_error' =>
         'Impossible de récupérer les modèles depuis l\'API du fournisseur.',

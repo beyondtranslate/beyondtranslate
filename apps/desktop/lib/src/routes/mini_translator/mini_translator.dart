@@ -490,7 +490,8 @@ class _MiniTranslatorPageState extends State<MiniTranslatorPage>
       final providerType = provider?.type;
       final isLlmProvider = providerType == ProviderType.openAi ||
           providerType == ProviderType.anthropic ||
-          providerType == ProviderType.ollama;
+          providerType == ProviderType.ollama ||
+          providerType == ProviderType.xAi;
 
       if (isLlmProvider) {
         // Streaming LLM translation — update UI progressively

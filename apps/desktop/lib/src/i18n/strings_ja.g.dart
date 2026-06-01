@@ -305,13 +305,13 @@ class _TranslationsCommonProviderJa extends TranslationsCommonProviderEn {
   @override
   String get google => 'Google';
   @override
-  String get iciba => 'Iciba';
-  @override
   String get ollama => 'Ollama';
   @override
   String get openai => 'OpenAI';
   @override
   String get sogou => 'Sogou';
+  @override
+  String get xai => 'xAI';
   @override
   String get system => 'システム';
   @override
@@ -1434,12 +1434,6 @@ class _TranslationsSettingsProvidersDetailModelsJa
   @override
   String get retry => '再試行';
   @override
-  String get add => 'モデルを追加…';
-  @override
-  String get add_title => 'モデルを追加';
-  @override
-  String get add_placeholder => '例: gpt-4o';
-  @override
   String get default_badge => 'デフォルト';
   @override
   String get fetch_error => 'プロバイダーAPIからモデルを取得できませんでした。';
@@ -1505,10 +1499,10 @@ extension on TranslationsJa {
       'common.provider.caiyun' => 'Caiyun',
       'common.provider.deepl' => 'DeepL',
       'common.provider.google' => 'Google',
-      'common.provider.iciba' => 'Iciba',
       'common.provider.ollama' => 'Ollama',
       'common.provider.openai' => 'OpenAI',
       'common.provider.sogou' => 'Sogou',
+      'common.provider.xai' => 'xAI',
       'common.provider.system' => 'システム',
       'common.provider.tencent' => 'Tencent',
       'common.provider.youdao' => 'Youda',
@@ -1665,9 +1659,6 @@ extension on TranslationsJa {
       'settings.providers.detail.models.loading' => 'モデルを読み込み中...',
       'settings.providers.detail.models.empty' => 'モデルが見つかりません。',
       'settings.providers.detail.models.retry' => '再試行',
-      'settings.providers.detail.models.add' => 'モデルを追加…',
-      'settings.providers.detail.models.add_title' => 'モデルを追加',
-      'settings.providers.detail.models.add_placeholder' => '例: gpt-4o',
       'settings.providers.detail.models.default_badge' => 'デフォルト',
       'settings.providers.detail.models.fetch_error' =>
         'プロバイダーAPIからモデルを取得できませんでした。',

@@ -289,7 +289,6 @@ apps/desktop/macos/
 │       ├── Models/                    # Data models (ProviderConfigField, SettingOption, etc.)
 │       └── Repository/SettingsRepository.swift  # Wraps Rust Runtime API calls
 ├── Flutter/                           # Flutter framework integration
-├── Podfile                            # CocoaPods (for Flutter plugin dependencies)
 └── Runner.xcodeproj / Runner.xcworkspace
 ```
 

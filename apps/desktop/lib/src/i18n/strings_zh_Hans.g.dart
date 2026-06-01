@@ -308,13 +308,13 @@ class _TranslationsCommonProviderZhHans extends TranslationsCommonProviderEn {
   @override
   String get google => '谷歌';
   @override
-  String get iciba => '爱词霸';
-  @override
   String get ollama => 'Ollama';
   @override
   String get openai => 'OpenAI';
   @override
   String get sogou => '搜狗';
+  @override
+  String get xai => 'xAI';
   @override
   String get system => '系统';
   @override
@@ -1447,12 +1447,6 @@ class _TranslationsSettingsProvidersDetailModelsZhHans
   @override
   String get retry => '重试';
   @override
-  String get add => '添加模型…';
-  @override
-  String get add_title => '添加模型';
-  @override
-  String get add_placeholder => '例如：gpt-4o';
-  @override
   String get default_badge => '默认';
   @override
   String get fetch_error => '无法从提供商 API 获取模型。';
@@ -1518,10 +1512,10 @@ extension on TranslationsZhHans {
       'common.provider.caiyun' => '彩云小译',
       'common.provider.deepl' => 'DeepL',
       'common.provider.google' => '谷歌',
-      'common.provider.iciba' => '爱词霸',
       'common.provider.ollama' => 'Ollama',
       'common.provider.openai' => 'OpenAI',
       'common.provider.sogou' => '搜狗',
+      'common.provider.xai' => 'xAI',
       'common.provider.system' => '系统',
       'common.provider.tencent' => '腾讯',
       'common.provider.youdao' => '有道',
@@ -1667,9 +1661,6 @@ extension on TranslationsZhHans {
       'settings.providers.detail.models.loading' => '正在加载模型...',
       'settings.providers.detail.models.empty' => '未找到模型。',
       'settings.providers.detail.models.retry' => '重试',
-      'settings.providers.detail.models.add' => '添加模型…',
-      'settings.providers.detail.models.add_title' => '添加模型',
-      'settings.providers.detail.models.add_placeholder' => '例如：gpt-4o',
       'settings.providers.detail.models.default_badge' => '默认',
       'settings.providers.detail.models.fetch_error' => '无法从提供商 API 获取模型。',
       'settings.providers.capability.translation' => '翻译',

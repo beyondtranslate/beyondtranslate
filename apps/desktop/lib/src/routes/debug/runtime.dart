@@ -47,7 +47,6 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
   bool _loadingProviders = true;
   bool _submitting = false;
   TranslateResponse? _response;
-  LookUpResponse? _lookupResponse;
   String? _errorText;
 
   @override
@@ -99,53 +98,32 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
       _submitting = true;
       _errorText = null;
       _response = null;
-      _lookupResponse = null;
     });
 
     try {
-      if (_isLookupProvider) {
-        final response =
-            await runtime.dictionary(providerId: providerId).lookup(
-                  request: LookUpRequest(
-                    sourceLanguage: _sourceLanguageController.text.trim(),
-                    targetLanguage: _targetLanguageController.text.trim(),
-                    word: _textController.text,
-                  ),
-                );
+      final response =
+          await runtime.translation(providerId: providerId).translate(
+                request: TranslateRequest(
+                  sourceLanguage: _sourceLanguageController.text.trim().isEmpty
+                      ? null
+                      : _sourceLanguageController.text.trim(),
+                  targetLanguage: _targetLanguageController.text.trim(),
+                  text: _textController.text,
+                ),
+              );
 
-        if (!mounted) {
-          return;
-        }
-        setState(() {
-          _lookupResponse = response;
-        });
-      } else {
-        final response =
-            await runtime.translation(providerId: providerId).translate(
-                  request: TranslateRequest(
-                    sourceLanguage:
-                        _sourceLanguageController.text.trim().isEmpty
-                            ? null
-                            : _sourceLanguageController.text.trim(),
-                    targetLanguage: _targetLanguageController.text.trim(),
-                    text: _textController.text,
-                  ),
-                );
-
-        if (!mounted) {
-          return;
-        }
-        setState(() {
-          _response = response;
-        });
+      if (!mounted) {
+        return;
       }
+      setState(() {
+        _response = response;
+      });
     } catch (error) {
       if (!mounted) {
         return;
       }
       setState(() {
         _response = null;
-        _lookupResponse = null;
         _errorText = error.toString();
       });
     } finally {
@@ -198,7 +176,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
 
   Widget _buildResultCard(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final hasResult = _response != null || _lookupResponse != null;
+    final hasResult = _response != null;
     final isError = _errorText != null;
 
     final title = isError
@@ -210,9 +188,7 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
         ? _errorText!
         : _response != null
             ? _formatResponse(_response!)
-            : _lookupResponse != null
-                ? _formatLookupResponse(_lookupResponse!)
-                : 'Submit a request to see the Rust runtime response here.';
+            : 'Submit a request to see the Rust runtime response here.';
 
     return Container(
       width: double.infinity,
@@ -262,77 +238,6 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
     return buffer.toString().trimRight();
   }
 
-  String _formatLookupResponse(LookUpResponse response) {
-    final buffer = StringBuffer()
-      ..writeln('provider: ${_providerId ?? 'null'}')
-      ..writeln('word: ${response.word ?? 'null'}');
-
-    final definitions = response.definitions ?? const [];
-    if (definitions.isNotEmpty) {
-      buffer.writeln('definitions:');
-      for (final definition in definitions) {
-        final name = definition.name ?? '';
-        final values = (definition.values ?? const []).join(', ');
-        final line = <String>[
-          name,
-          values,
-        ].where((item) => item.isNotEmpty).join(' ');
-        if (line.isNotEmpty) {
-          buffer.writeln('- $line');
-        }
-      }
-    }
-
-    final pronunciations = response.pronunciations ?? const [];
-    if (pronunciations.isNotEmpty) {
-      buffer.writeln('pronunciations:');
-      for (final pronunciation in pronunciations) {
-        final parts = [
-          pronunciation.type,
-          pronunciation.phoneticSymbol,
-          pronunciation.audioUrl,
-        ].whereType<String>().where((item) => item.isNotEmpty);
-        final line = parts.join(' | ');
-        if (line.isNotEmpty) {
-          buffer.writeln('- $line');
-        }
-      }
-    }
-
-    final tenses = response.tenses ?? const [];
-    if (tenses.isNotEmpty) {
-      buffer.writeln('tenses:');
-      for (final tense in tenses) {
-        final name = tense.name ?? '';
-        final values = (tense.values ?? const []).join(', ');
-        final line = <String>[
-          name,
-          values,
-        ].where((item) => item.isNotEmpty).join(': ');
-        if (line.isNotEmpty) {
-          buffer.writeln('- $line');
-        }
-      }
-    }
-
-    return buffer.toString().trimRight();
-  }
-
-  ProviderType? get _selectedProviderType {
-    final providerId = _providerId;
-    if (providerId == null) {
-      return null;
-    }
-    for (final provider in _providers) {
-      if (provider.id == providerId) {
-        return provider.type;
-      }
-    }
-    return null;
-  }
-
-  bool get _isLookupProvider => _selectedProviderType == ProviderType.iciba;
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -371,10 +276,6 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
               'Source language (optional)',
             ),
             validator: (value) {
-              if (_isLookupProvider &&
-                  (value == null || value.trim().isEmpty)) {
-                return 'Source language is required';
-              }
               return null;
             },
           ),
@@ -399,13 +300,11 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
             maxLines: 8,
             decoration: _decoration(
               context,
-              _isLookupProvider ? 'Word' : 'Text',
+              'Text',
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return _isLookupProvider
-                    ? 'Word is required'
-                    : 'Text is required';
+                return 'Text is required';
               }
               return null;
             },
@@ -419,10 +318,8 @@ class _RuntimeDebugPageState extends State<RuntimeDebugPage> {
                     _submitting || _loadingProviders || _providerId == null
                         ? null
                         : _submit,
-                child: Text(
-                  _isLookupProvider
-                      ? 'Look up with Rust runtime'
-                      : 'Translate with Rust runtime',
+                child: const Text(
+                  'Translate with Rust runtime',
                 ),
               ),
             ],

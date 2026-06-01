@@ -305,13 +305,13 @@ class _TranslationsCommonProviderKo extends TranslationsCommonProviderEn {
   @override
   String get google => 'Google';
   @override
-  String get iciba => 'Iciba';
-  @override
   String get ollama => 'Ollama';
   @override
   String get openai => 'OpenAI';
   @override
   String get sogou => 'Sogou';
+  @override
+  String get xai => 'xAI';
   @override
   String get system => '시스템';
   @override
@@ -1434,12 +1434,6 @@ class _TranslationsSettingsProvidersDetailModelsKo
   @override
   String get retry => '재시도';
   @override
-  String get add => '모델 추가…';
-  @override
-  String get add_title => '모델 추가';
-  @override
-  String get add_placeholder => '예: gpt-4o';
-  @override
   String get default_badge => '기본값';
   @override
   String get fetch_error => '제공자 API에서 모델을 가져올 수 없습니다.';
@@ -1505,10 +1499,10 @@ extension on TranslationsKo {
       'common.provider.caiyun' => 'Caiyun',
       'common.provider.deepl' => 'DeepL',
       'common.provider.google' => 'Google',
-      'common.provider.iciba' => 'Iciba',
       'common.provider.ollama' => 'Ollama',
       'common.provider.openai' => 'OpenAI',
       'common.provider.sogou' => 'Sogou',
+      'common.provider.xai' => 'xAI',
       'common.provider.system' => '시스템',
       'common.provider.tencent' => 'Tencent',
       'common.provider.youdao' => 'Youdao',
@@ -1660,9 +1654,6 @@ extension on TranslationsKo {
       'settings.providers.detail.models.loading' => '모델 로딩 중...',
       'settings.providers.detail.models.empty' => '모델을 찾을 수 없습니다.',
       'settings.providers.detail.models.retry' => '재시도',
-      'settings.providers.detail.models.add' => '모델 추가…',
-      'settings.providers.detail.models.add_title' => '모델 추가',
-      'settings.providers.detail.models.add_placeholder' => '예: gpt-4o',
       'settings.providers.detail.models.default_badge' => '기본값',
       'settings.providers.detail.models.fetch_error' =>
         '제공자 API에서 모델을 가져올 수 없습니다.',

@@ -4,16 +4,17 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-default = ["anthropic", "baidu", "caiyun", "deepl", "google", "iciba", "ollama", "openai", "tencent", "youdao"]
+default = ["anthropic", "baidu", "caiyun", "deepl", "google", "ollama", "openai", "tencent", "xai", "youdao"]
 anthropic = []
 baidu = []
 caiyun = []
 deepl = []
 google = []
-iciba = []
+
 ollama = []
 openai = []
 tencent = []
+xai = []
 youdao = []
 
 [dependencies]

@@ -4,7 +4,6 @@ const settingsKey = 'pageTranslationSettings';
 
 export const pageTranslationProviderOptions = [
   { id: 'baidu', label: 'Baidu' },
-  { id: 'iciba', label: 'Iciba' },
   { id: 'system', label: 'System' },
 ] as const;
 

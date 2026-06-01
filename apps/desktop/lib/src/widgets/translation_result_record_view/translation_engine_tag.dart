@@ -25,11 +25,12 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
     'caiyun',
     'deepl',
     'google',
-    'iciba',
     'ollama',
     'openai',
     'sogou',
+    'system',
     'tencent',
+    'xai',
     'youdao',
   };
 
@@ -73,12 +74,12 @@ class _TranslationEngineTagState extends State<TranslationEngineTag> {
         return 'deepl';
       case ProviderType.google:
         return 'google';
-      case ProviderType.iciba:
-        return 'iciba';
       case ProviderType.openAi:
         return 'openai';
       case ProviderType.ollama:
         return 'ollama';
+      case ProviderType.xAi:
+        return 'xai';
       case ProviderType.system:
         return 'system';
       case ProviderType.tencent:

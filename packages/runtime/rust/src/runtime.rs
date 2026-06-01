@@ -81,8 +81,9 @@ struct RuntimeState {
 
 impl RuntimeState {
     fn new(mut settings: Settings) -> Result<Self, String> {
-        // Auto-register the internal system provider; it is stripped before
-        // persisting to file and excluded from list APIs.
+        // Auto-create the system provider on first launch so it appears in
+        // the provider list like any other provider. Users can modify or
+        // delete it freely; it will persist to settings.json.
         if !settings.providers.contains_key("system") {
             settings.providers.insert(
                 "system".to_owned(),
@@ -441,7 +442,9 @@ impl Runtime {
         let supported = match expected_type {
             ServiceType::Dictionary => engine_provider.dictionary().is_some(),
             ServiceType::Ocr => engine_provider.ocr().is_some(),
-            ServiceType::Translation => engine_provider.translation().is_some(),
+            ServiceType::Translation => {
+                engine_provider.translation().is_some() || engine_provider.llm().is_some()
+            }
             ServiceType::Llm => engine_provider.llm().is_some(),
         };
         if !supported {
@@ -536,10 +539,7 @@ impl RuntimeSettings {
         let result = update(&mut next_settings)?;
         next_settings.touch_last_updated()?;
 
-        // Strip the internal system provider before persisting to file.
-        next_settings.providers.remove("system");
         let mut prev_settings = state.settings.clone();
-        prev_settings.providers.remove("system");
 
         let engine_changed = next_settings.providers != prev_settings.providers;
 
@@ -589,11 +589,14 @@ fn service_entry_for_provider_type(
     provider: &ProviderConfigEntry,
     service_type: ServiceType,
 ) -> ServiceConfigEntry {
+    let name = match provider.r#type {
+        _ => provider.id.clone(),
+    };
     ServiceConfigEntry {
         id: service_id.to_owned(),
         provider_id: provider.id.clone(),
         r#type: service_type,
-        name: provider.id.clone(),
+        name,
         fields: HashMap::new(),
         created_at: provider.created_at,
     }
@@ -726,7 +729,6 @@ impl RuntimeSettings {
             .settings
             .providers
             .iter()
-            .filter(|(provider_id, _)| *provider_id != "system")
             .map(|(provider_id, provider)| normalized_provider_entry(provider_id, provider))
             .collect())
     }
@@ -736,28 +738,25 @@ impl RuntimeSettings {
         let mut services = Vec::new();
 
         for (provider_id, provider) in &state.settings.providers {
-            if provider_id == "system" {
-                continue;
-            }
             let entry = normalized_provider_entry(provider_id, provider);
             if let Ok(engine_provider) = state.engine.require(provider_id) {
                 if engine_provider.dictionary().is_some() {
                     services.push(service_entry_for_provider_type(
-                        provider_id,
+                        &format!("{provider_id}+dictionary"),
                         &entry,
                         ServiceType::Dictionary,
                     ));
                 }
-                if engine_provider.translation().is_some() {
+                if engine_provider.translation().is_some() || engine_provider.llm().is_some() {
                     services.push(service_entry_for_provider_type(
-                        provider_id,
+                        &format!("{provider_id}+translation"),
                         &entry,
                         ServiceType::Translation,
                     ));
                 }
                 if engine_provider.ocr().is_some() {
                     services.push(service_entry_for_provider_type(
-                        provider_id,
+                        &format!("{provider_id}+ocr"),
                         &entry,
                         ServiceType::Ocr,
                     ));
@@ -797,10 +796,7 @@ impl RuntimeSettings {
                     .map_err(|e| e.to_string())?
                     .clone()
             };
-            let llm_service = provider
-                .llm()
-                .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
-            llm_service.list_models().await.map_err(|e| e.to_string())
+            provider.list_models().await.map_err(|e| e.to_string())
         })
         .await
         .map_err(|e: String| RuntimeError::from(e))
@@ -823,14 +819,12 @@ impl RuntimeSettings {
         };
         let entry = normalized_provider_entry(&service_id, provider);
         let service_type = state.engine.require(&service_id).ok().and_then(|provider| {
-            if provider.translation().is_some() {
+            if provider.translation().is_some() || provider.llm().is_some() {
                 Some(ServiceType::Translation)
             } else if provider.dictionary().is_some() {
                 Some(ServiceType::Dictionary)
             } else if provider.ocr().is_some() {
                 Some(ServiceType::Ocr)
-            } else if provider.llm().is_some() {
-                Some(ServiceType::Llm)
             } else {
                 None
             }
@@ -860,11 +854,6 @@ impl RuntimeSettings {
         fields: HashMap<String, String>,
     ) -> Result<ProviderConfigEntry, RuntimeError> {
         let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
-        if provider_id == "system" {
-            return Err(RuntimeError::from(
-                "the built-in system provider cannot be modified".to_owned(),
-            ));
-        }
         let provider_type =
             validate_required("provider_type", provider_type).map_err(RuntimeError::from)?;
         let provider_type = crate::domain::settings::parse_provider_type(&provider_type)
@@ -917,12 +906,8 @@ impl RuntimeSettings {
             .ok();
 
         self.commit_settings(SettingsChange::Providers, move |settings| {
-            let provider = settings
-                .providers
-                .get(&provider_id)
-                .ok_or_else(|| format!("provider `{provider_id}` does not exist"))?;
-            if provider.r#type == beyondtranslate_engine::ProviderType::System {
-                return Err("system provider services cannot be customized".to_owned());
+            if !settings.providers.contains_key(&provider_id) {
+                return Err(format!("provider `{provider_id}` does not exist"));
             }
             if service_id == provider_id {
                 return Err("custom service id must be different from provider id".to_owned());
@@ -953,11 +938,6 @@ impl RuntimeSettings {
         provider_id: String,
     ) -> Result<Option<ProviderConfigEntry>, RuntimeError> {
         let provider_id = validate_provider_id(provider_id).map_err(RuntimeError::from)?;
-        if provider_id == "system" {
-            return Err(RuntimeError::from(
-                "the built-in system provider cannot be deleted".to_owned(),
-            ));
-        }
         self.commit_settings(SettingsChange::Providers, move |settings| {
             let removed = settings
                 .providers
@@ -1038,56 +1018,68 @@ impl RuntimeTranslation {
                     .clone()
             };
 
-            if let (Some(system_prompt), Some(llm_service)) =
-                (resolved.field("systemPrompt"), provider.llm())
-            {
+            if let Some(translation_service) = provider.translation() {
+                // Use the dedicated translation service.
+                translation_service
+                    .translate(TranslateRequest {
+                        source_language,
+                        target_language: Some(target_language),
+                        text,
+                    })
+                    .await
+                    .map_err(|error| error.to_string())
+            } else if let Some(llm_service) = provider.llm() {
+                // LLM-based translation via prompts.
                 let model = resolved
                     .field("model")
                     .map(str::to_owned)
                     .or_else(|| llm_service.available_models().into_iter().next())
                     .ok_or_else(|| "llm default model must be configured".to_owned())?;
-                let system_prompt = render_prompt_template(
-                    system_prompt,
-                    source_language.as_deref().unwrap_or("auto"),
-                    &target_language,
-                    &text,
-                );
+                let system_prompt = if let Some(system_prompt) = resolved.field("systemPrompt") {
+                    render_prompt_template(
+                        system_prompt,
+                        source_language.as_deref().unwrap_or("auto"),
+                        &target_language,
+                        &text,
+                    )
+                } else {
+                    beyondtranslate_engine::prompt::translate_text_system_prompt(
+                        source_language.as_deref().unwrap_or("auto"),
+                        &target_language,
+                        None,
+                    )
+                };
+                let user_prompt = beyondtranslate_engine::prompt::translate_text_user_prompt(&text);
                 let response = llm_service
                     .chat(beyondtranslate_core::ChatRequest {
                         model,
-                        messages: vec![ChatMessage::system(system_prompt), ChatMessage::user(text)],
+                        messages: vec![
+                            ChatMessage::system(system_prompt),
+                            ChatMessage::user(user_prompt),
+                        ],
                         temperature: Some(0.3),
                         max_tokens: Some(4096),
                         stream: None,
                     })
                     .await
                     .map_err(|error| error.to_string())?;
-                let text = response
+                let content = response
                     .choices
                     .first()
                     .map(|choice| choice.message.content.clone())
                     .ok_or_else(|| "no response from llm".to_owned())?;
-                return Ok(TranslateResponse {
+                Ok(TranslateResponse {
                     translations: vec![beyondtranslate_core::TextTranslation {
-                        text,
+                        text: content,
                         detected_source_language: None,
                         audio_url: None,
                     }],
-                });
-            }
-
-            let translation_service = provider
-                .translation()
-                .ok_or_else(|| format!("provider `{provider_id}` does not support translation"))?;
-
-            translation_service
-                .translate(TranslateRequest {
-                    source_language,
-                    target_language: Some(target_language),
-                    text,
                 })
-                .await
-                .map_err(|error| error.to_string())
+            } else {
+                Err(format!(
+                    "provider `{provider_id}` does not support translation"
+                ))
+            }
         })
         .await
     }
@@ -1436,58 +1428,74 @@ impl RuntimeLlm {
                     .map_err(|error| error.to_string())?
                     .clone()
             };
-            let llm_service = provider
-                .llm()
-                .ok_or_else(|| format!("provider `{provider_id}` does not support llm"))?;
+            if let Some(llm_service) = provider.llm() {
+                // LLM-based streaming translation
+                let model = resolved
+                    .field("model")
+                    .map(str::to_owned)
+                    .or_else(|| llm_service.available_models().into_iter().next())
+                    .ok_or_else(|| "llm default model must be configured".to_owned())?;
+                let system_prompt = if let Some(system_prompt) = resolved.field("systemPrompt") {
+                    render_prompt_template(system_prompt, &source_lang, &target_lang, &text)
+                } else {
+                    beyondtranslate_engine::prompt::translate_text_system_prompt(
+                        &source_lang,
+                        &target_lang,
+                        None,
+                    )
+                };
+                let user_prompt = beyondtranslate_engine::prompt::translate_text_user_prompt(&text);
 
-            let model = resolved
-                .field("model")
-                .map(str::to_owned)
-                .or_else(|| llm_service.available_models().into_iter().next())
-                .ok_or_else(|| "llm default model must be configured".to_owned())?;
-            let system_prompt = if let Some(system_prompt) = resolved.field("systemPrompt") {
-                render_prompt_template(system_prompt, &source_lang, &target_lang, &text)
-            } else {
-                beyondtranslate_engine::prompt::translate_text_system_prompt(
-                    &source_lang,
-                    &target_lang,
-                    None,
-                )
-            };
-            let user_prompt = beyondtranslate_engine::prompt::translate_text_user_prompt(&text);
+                let receiver = llm_service
+                    .chat_stream(beyondtranslate_core::ChatRequest {
+                        model,
+                        messages: vec![
+                            beyondtranslate_core::ChatMessage::system(system_prompt),
+                            beyondtranslate_core::ChatMessage::user(user_prompt),
+                        ],
+                        temperature: Some(0.3),
+                        max_tokens: Some(4096),
+                        stream: Some(true),
+                    })
+                    .await
+                    .map_err(|error| error.to_string())?;
 
-            let receiver = llm_service
-                .chat_stream(beyondtranslate_core::ChatRequest {
-                    model,
-                    messages: vec![
-                        beyondtranslate_core::ChatMessage::system(system_prompt),
-                        beyondtranslate_core::ChatMessage::user(user_prompt),
-                    ],
-                    temperature: Some(0.3),
-                    max_tokens: Some(4096),
-                    stream: Some(true),
-                })
-                .await
-                .map_err(|error| error.to_string())?;
-
-            loop {
-                match receiver.rx.recv() {
-                    Ok(chunk) => {
-                        if let Some(reason) = chunk.finish_reason {
-                            if reason == "error" {
-                                callback.on_error(chunk.content);
-                            } else {
-                                callback.on_finish(reason);
+                loop {
+                    match receiver.rx.recv() {
+                        Ok(chunk) => {
+                            if let Some(reason) = chunk.finish_reason {
+                                if reason == "error" {
+                                    callback.on_error(chunk.content);
+                                } else {
+                                    callback.on_finish(reason);
+                                }
+                                break;
                             }
+                            callback.on_chunk(chunk.content);
+                        }
+                        Err(_) => {
+                            callback.on_finish("stop".to_string());
                             break;
                         }
-                        callback.on_chunk(chunk.content);
-                    }
-                    Err(_) => {
-                        callback.on_finish("stop".to_string());
-                        break;
                     }
                 }
+            } else {
+                // Fallback to non-streaming translation via the translation service
+                let translation_service = provider.translation().ok_or_else(|| {
+                    format!("provider `{provider_id}` does not support translation")
+                })?;
+                let response = translation_service
+                    .translate(beyondtranslate_core::TranslateRequest {
+                        source_language: Some(source_lang.clone()),
+                        target_language: Some(target_lang),
+                        text: text.clone(),
+                    })
+                    .await
+                    .map_err(|error| error.to_string())?;
+                for translation in response.translations {
+                    callback.on_chunk(translation.text);
+                }
+                callback.on_finish("stop".to_string());
             }
 
             Ok(())
@@ -2013,6 +2021,20 @@ mod tests {
     fn system_dictionary_lookup_returns_structured_definitions() {
         let runtime = create_runtime();
 
+        // Add the system provider explicitly (it is no longer auto-injected).
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(async {
+                runtime
+                    .clone()
+                    .settings()
+                    .update_provider("system".to_owned(), "system".to_owned(), HashMap::new())
+                    .await
+                    .expect("failed to add system provider");
+            });
+
         let response = tokio::runtime::Builder::new_current_thread()
             .enable_all()
             .build()
@@ -2268,6 +2290,21 @@ mod tests {
     #[test]
     fn lookup_requires_word() {
         let runtime = create_runtime();
+
+        // Add the system provider explicitly.
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(async {
+                runtime
+                    .clone()
+                    .settings()
+                    .update_provider("system".to_owned(), "system".to_owned(), HashMap::new())
+                    .await
+                    .expect("failed to add system provider");
+            });
+
         let error = tokio::runtime::Builder::new_current_thread()
             .enable_all()
             .build()
@@ -2275,7 +2312,7 @@ mod tests {
             .block_on(async {
                 runtime
                     .clone()
-                    .dictionary("iciba".to_owned())
+                    .dictionary("system".to_owned())
                     .unwrap()
                     .lookup(LookUpRequest {
                         source_language: "en".to_owned(),

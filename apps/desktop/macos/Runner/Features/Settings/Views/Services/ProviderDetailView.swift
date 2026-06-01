@@ -18,8 +18,6 @@ struct ProviderDetailView: View {
   @State private var isLoadingModels = false
   @State private var modelsLoadError: String?
   @State private var hasLoadedModels = false
-  @State private var showAddModelSheet = false
-
   private var currentProvider: ProviderConfigEntry {
     viewModel.providers.first(where: { $0.id == provider.id }) ?? provider
   }
@@ -103,10 +101,10 @@ struct ProviderDetailView: View {
         }
       }
 
-      // ── Models (LLM only, skip fetching when creating) ─────────
-      if isLlm {
+      // ── Models (LLM only, existing providers only) ────────────
+      if isLlm && !isCreating {
         Section(LocaleKeys.settings.providers.detail.section.models.tr()) {
-          if !isCreating && isLoadingModels {
+          if isLoadingModels {
             HStack(spacing: 10) {
               ProgressView()
                 .controlSize(.small)
@@ -114,7 +112,7 @@ struct ProviderDetailView: View {
                 .font(.system(size: 12))
                 .foregroundStyle(.secondary)
             }
-          } else if !isCreating, let error = modelsLoadError {
+          } else if let error = modelsLoadError {
             VStack(alignment: .leading, spacing: 10) {
               Label(error, systemImage: "exclamationmark.triangle")
                 .font(.system(size: 12))
@@ -126,7 +124,7 @@ struct ProviderDetailView: View {
               }
               .controlSize(.small)
             }
-          } else if !isCreating && fetchedModels.isEmpty && enabledModels.isEmpty {
+          } else if fetchedModels.isEmpty && enabledModels.isEmpty {
             HStack(spacing: 8) {
               Image(systemName: "sparkle.magnifyingglass")
                 .font(.system(size: 14))
@@ -145,13 +143,6 @@ struct ProviderDetailView: View {
                   if isOn { addModel(model) } else { removeModel(model) }
                 }
               )
-            }
-          }
-
-          HStack {
-            Spacer()
-            Button(LocaleKeys.settings.providers.detail.models.add.tr()) {
-              showAddModelSheet = true
             }
           }
         }
@@ -174,44 +165,28 @@ struct ProviderDetailView: View {
         }
       }
 
-      // ── Bottom Actions ──────────────────────────────────────────
-      Section {
-        HStack(spacing: 8) {
-          if !currentProvider.type.configFields.isEmpty {
-            Button {
-            } label: {
-              Image(systemName: "questionmark.circle")
-                .font(.system(size: 16))
-                .foregroundStyle(.secondary)
-            }
-            .buttonStyle(.plain)
-            .help(LocaleKeys.settings.providers.editor.tooltip.help.tr())
+    }
+    .toolbar {
+      if !isCreating {
+        ToolbarItem(placement: .automatic) {
+          Button(role: .destructive) {
+            showDeleteConfirm = true
+          } label: {
+            Text(LocaleKeys.common.ui.button.delete.tr())
           }
-
-          if !isCreating {
-            Button(role: .destructive) {
-              showDeleteConfirm = true
-            } label: {
-              Text(LocaleKeys.settings.providers.deleteDialog.title.tr())
-            }
-            .buttonStyle(.bordered)
-            .tint(.red)
-          }
-
-          Spacer()
-
-          Button(
-            isCreating
-              ? LocaleKeys.common.ui.button.add.tr()
-              : LocaleKeys.common.ui.button.save.tr()
-          ) {
-            saveChanges()
-            if isCreating { dismiss() }
-          }
-          .buttonStyle(.borderedProminent)
-          .disabled(!canSave || (!isCreating && !hasChanges))
         }
-        .padding(.vertical, 4)
+      }
+
+      ToolbarItem(placement: .primaryAction) {
+        Button(
+          isCreating
+            ? LocaleKeys.common.ui.button.add.tr()
+            : LocaleKeys.common.ui.button.save.tr()
+        ) {
+          saveChanges()
+          if isCreating { dismiss() }
+        }
+        .disabled(!canSave || (!isCreating && !hasChanges))
       }
     }
     .onAppear {
@@ -223,15 +198,6 @@ struct ProviderDetailView: View {
     }
     .onChange(of: currentProvider) { newProvider in
       editedFields = newProvider.fields
-    }
-    .sheet(isPresented: $showAddModelSheet) {
-      AddModelSheet { modelName in
-        addModel(modelName)
-        showAddModelSheet = false
-      } onCancel: {
-        showAddModelSheet = false
-      }
-      .frame(width: 360)
     }
     .confirmationDialog(
       LocaleKeys.settings.providers.deleteDialog.title.tr(currentProvider.type.displayName),
@@ -401,56 +367,5 @@ private struct ModelRow: View {
       .controlSize(.small)
     }
     .padding(.vertical, 2)
-  }
-}
-
-// MARK: - Add Model Sheet
-
-private struct AddModelSheet: View {
-  let onAdd: (String) -> Void
-  let onCancel: () -> Void
-
-  @State private var modelName = ""
-  @FocusState private var isFocused: Bool
-
-  var body: some View {
-    VStack(spacing: 0) {
-      Text(LocaleKeys.settings.providers.detail.models.addTitle.tr())
-        .font(.headline)
-        .padding(.top, 20)
-        .padding(.bottom, 16)
-
-      TextField(
-        "",
-        text: $modelName,
-        prompt: Text(LocaleKeys.settings.providers.detail.models.addPlaceholder.tr())
-      )
-      .textFieldStyle(.roundedBorder)
-      .focused($isFocused)
-      .padding(.horizontal, 20)
-
-      HStack(spacing: 8) {
-        Spacer()
-
-        Button(LocaleKeys.common.ui.button.cancel.tr()) {
-          onCancel()
-        }
-        .keyboardShortcut(.cancelAction)
-
-        Button(LocaleKeys.common.ui.button.add.tr()) {
-          let trimmed = modelName.trimmingCharacters(in: .whitespaces)
-          guard !trimmed.isEmpty else { return }
-          onAdd(trimmed)
-        }
-        .keyboardShortcut(.defaultAction)
-        .disabled(modelName.trimmingCharacters(in: .whitespaces).isEmpty)
-      }
-      .padding(.horizontal, 20)
-      .padding(.top, 16)
-      .padding(.bottom, 20)
-    }
-    .onAppear {
-      isFocused = true
-    }
   }
 }

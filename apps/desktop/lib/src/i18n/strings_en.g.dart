@@ -305,9 +305,6 @@ class TranslationsCommonProviderEn {
   /// en: 'Google'
   String get google => 'Google';
 
-  /// en: 'Iciba'
-  String get iciba => 'Iciba';
-
   /// en: 'Ollama'
   String get ollama => 'Ollama';
 
@@ -316,6 +313,9 @@ class TranslationsCommonProviderEn {
 
   /// en: 'Sogou'
   String get sogou => 'Sogou';
+
+  /// en: 'xAI'
+  String get xai => 'xAI';
 
   /// en: 'System'
   String get system => 'System';
@@ -1425,15 +1425,6 @@ class TranslationsSettingsProvidersDetailModelsEn {
   /// en: 'Retry'
   String get retry => 'Retry';
 
-  /// en: 'Add Model…'
-  String get add => 'Add Model…';
-
-  /// en: 'Add Model'
-  String get add_title => 'Add Model';
-
-  /// en: 'e.g. gpt-4o'
-  String get add_placeholder => 'e.g. gpt-4o';
-
   /// en: 'Default'
   String get default_badge => 'Default';
 
@@ -1501,10 +1492,10 @@ extension on Translations {
       'common.provider.caiyun' => 'Caiyun',
       'common.provider.deepl' => 'DeepL',
       'common.provider.google' => 'Google',
-      'common.provider.iciba' => 'Iciba',
       'common.provider.ollama' => 'Ollama',
       'common.provider.openai' => 'OpenAI',
       'common.provider.sogou' => 'Sogou',
+      'common.provider.xai' => 'xAI',
       'common.provider.system' => 'System',
       'common.provider.tencent' => 'Tencent',
       'common.provider.youdao' => 'Youda',
@@ -1682,9 +1673,6 @@ extension on Translations {
       'settings.providers.detail.models.loading' => 'Loading models...',
       'settings.providers.detail.models.empty' => 'No models found.',
       'settings.providers.detail.models.retry' => 'Retry',
-      'settings.providers.detail.models.add' => 'Add Model…',
-      'settings.providers.detail.models.add_title' => 'Add Model',
-      'settings.providers.detail.models.add_placeholder' => 'e.g. gpt-4o',
       'settings.providers.detail.models.default_badge' => 'Default',
       'settings.providers.detail.models.fetch_error' =>
         'Could not fetch models from provider API.',

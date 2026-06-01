@@ -7,9 +7,6 @@ use crate::domain::settings::{provider_config_from_settings, Settings};
 pub fn build_from_settings(settings: &Settings) -> Result<Engine, String> {
     let mut providers = BTreeMap::new();
     for (provider_id, provider) in &settings.providers {
-        if provider_id == "system" {
-            continue;
-        }
         let provider_id = provider_id.trim();
         if provider_id.is_empty() {
             return Err("provider id is required".to_owned());
@@ -18,17 +15,6 @@ pub fn build_from_settings(settings: &Settings) -> Result<Engine, String> {
         providers.insert(
             provider_id.to_owned(),
             provider_config_from_settings(provider)?,
-        );
-    }
-
-    // Always inject the system provider as an internal anonymous provider.
-    if !providers.contains_key("system") {
-        providers.insert(
-            "system".to_owned(),
-            ProviderConfig {
-                provider_type: ProviderType::System,
-                options: BTreeMap::new(),
-            },
         );
     }
 

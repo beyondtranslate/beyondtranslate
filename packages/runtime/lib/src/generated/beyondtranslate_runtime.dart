@@ -3063,10 +3063,10 @@ enum ProviderType {
   caiyun,
   deepL,
   google,
-  iciba,
   openAi,
   ollama,
   tencent,
+  xAi,
   youdao,
   system,
   ;
@@ -3103,22 +3103,22 @@ class FfiConverterProviderType {
         );
       case 6:
         return LiftRetVal(
-          ProviderType.iciba,
+          ProviderType.openAi,
           4,
         );
       case 7:
         return LiftRetVal(
-          ProviderType.openAi,
+          ProviderType.ollama,
           4,
         );
       case 8:
         return LiftRetVal(
-          ProviderType.ollama,
+          ProviderType.tencent,
           4,
         );
       case 9:
         return LiftRetVal(
-          ProviderType.tencent,
+          ProviderType.xAi,
           4,
         );
       case 10:

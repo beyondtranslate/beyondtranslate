@@ -2,7 +2,7 @@ pub mod baidu;
 pub mod caiyun;
 pub mod deepl;
 pub mod google;
-pub mod iciba;
+
 pub mod llm;
 pub mod system;
 pub mod tencent;
@@ -18,9 +18,7 @@ pub use deepl::{DeepLProvider, DeepLProviderConfig};
 #[cfg(feature = "google")]
 pub use google::GoogleProvider;
 pub use google::GoogleProviderConfig;
-#[cfg(feature = "iciba")]
-pub use iciba::IcibaProvider;
-pub use iciba::IcibaProviderConfig;
+
 pub use system::SystemProvider;
 pub use system::SystemTranslationService;
 #[cfg(feature = "tencent")]

@@ -3,7 +3,7 @@ mod engine;
 mod languages;
 mod provider;
 
-pub use provider::llm::prompt;
+pub use provider::llm::{prompt, XAiProviderConfig};
 
 pub use beyondtranslate_core::{
     DictionaryError, DictionaryService, OcrError, OcrService, Provider, TranslationError,
@@ -20,8 +20,9 @@ pub use provider::CaiyunProvider;
 pub use provider::DeepLProvider;
 #[cfg(feature = "google")]
 pub use provider::GoogleProvider;
-#[cfg(feature = "iciba")]
-pub use provider::IcibaProvider;
+
+#[cfg(feature = "xai")]
+pub use provider::llm::XAiProvider;
 pub use provider::SystemProvider;
 pub use provider::SystemTranslationService;
 #[cfg(feature = "tencent")]
@@ -30,7 +31,7 @@ pub use provider::TencentProvider;
 pub use provider::YoudaoProvider;
 pub use provider::{
     BaiduProviderConfig, CaiyunProviderConfig, DeepLProviderConfig, GoogleProviderConfig,
-    IcibaProviderConfig, TencentProviderConfig, YoudaoProviderConfig,
+    TencentProviderConfig, YoudaoProviderConfig,
 };
 
 #[cfg(test)]

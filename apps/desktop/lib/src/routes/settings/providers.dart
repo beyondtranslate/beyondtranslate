@@ -682,11 +682,11 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
     ProviderType.caiyun,
     ProviderType.deepL,
     ProviderType.google,
-    ProviderType.iciba,
     ProviderType.openAi,
     ProviderType.ollama,
     ProviderType.system,
     ProviderType.tencent,
+    ProviderType.xAi,
     ProviderType.youdao,
   ];
 
@@ -698,9 +698,9 @@ class _ProviderEditorDialogState extends State<_ProviderEditorDialog> {
     ProviderType.caiyun: ['token'],
     ProviderType.deepL: ['authKey'],
     ProviderType.google: ['apiKey'],
-    ProviderType.iciba: [],
     ProviderType.openAi: ['apiKey', 'baseUrl', 'defaultModel'],
     ProviderType.ollama: ['baseUrl', 'defaultModel'],
+    ProviderType.xAi: ['apiKey', 'baseUrl', 'defaultModel'],
     ProviderType.system: [],
     ProviderType.tencent: ['secretId', 'secretKey'],
     ProviderType.youdao: ['appKey', 'appSecret'],
@@ -875,12 +875,12 @@ String _providerTypeValue(ProviderType type) {
       return 'deepl';
     case ProviderType.google:
       return 'google';
-    case ProviderType.iciba:
-      return 'iciba';
     case ProviderType.openAi:
       return 'openai';
     case ProviderType.ollama:
       return 'ollama';
+    case ProviderType.xAi:
+      return 'xai';
     case ProviderType.system:
       return 'system';
     case ProviderType.tencent:
@@ -902,12 +902,12 @@ String _providerTypeDisplayName(ProviderType type) {
       return t.common.provider.deepl;
     case ProviderType.google:
       return t.common.provider.google;
-    case ProviderType.iciba:
-      return t.common.provider.iciba;
     case ProviderType.openAi:
       return t.common.provider.openai;
     case ProviderType.ollama:
       return t.common.provider.ollama;
+    case ProviderType.xAi:
+      return t.common.provider.xai;
     case ProviderType.system:
       return t.common.provider.system;
     case ProviderType.tencent:

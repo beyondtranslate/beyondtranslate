@@ -305,13 +305,13 @@ class _TranslationsCommonProviderEs extends TranslationsCommonProviderEn {
   @override
   String get google => 'Google';
   @override
-  String get iciba => 'Iciba';
-  @override
   String get ollama => 'Ollama';
   @override
   String get openai => 'OpenAI';
   @override
   String get sogou => 'Sogou';
+  @override
+  String get xai => 'xAI';
   @override
   String get system => 'Sistema';
   @override
@@ -1457,12 +1457,6 @@ class _TranslationsSettingsProvidersDetailModelsEs
   @override
   String get retry => 'Reintentar';
   @override
-  String get add => 'Añadir modelo…';
-  @override
-  String get add_title => 'Añadir modelo';
-  @override
-  String get add_placeholder => 'ej. gpt-4o';
-  @override
   String get default_badge => 'Predeterminado';
   @override
   String get fetch_error =>
@@ -1529,10 +1523,10 @@ extension on TranslationsEs {
       'common.provider.caiyun' => 'Caiyun',
       'common.provider.deepl' => 'DeepL',
       'common.provider.google' => 'Google',
-      'common.provider.iciba' => 'Iciba',
       'common.provider.ollama' => 'Ollama',
       'common.provider.openai' => 'OpenAI',
       'common.provider.sogou' => 'Sogou',
+      'common.provider.xai' => 'xAI',
       'common.provider.system' => 'Sistema',
       'common.provider.tencent' => 'Tencent',
       'common.provider.youdao' => 'Youdao',
@@ -1718,9 +1712,6 @@ extension on TranslationsEs {
       'settings.providers.detail.models.loading' => 'Cargando modelos...',
       'settings.providers.detail.models.empty' => 'No se encontraron modelos.',
       'settings.providers.detail.models.retry' => 'Reintentar',
-      'settings.providers.detail.models.add' => 'Añadir modelo…',
-      'settings.providers.detail.models.add_title' => 'Añadir modelo',
-      'settings.providers.detail.models.add_placeholder' => 'ej. gpt-4o',
       'settings.providers.detail.models.default_badge' => 'Predeterminado',
       'settings.providers.detail.models.fetch_error' =>
         'No se pudieron obtener los modelos de la API del proveedor.',

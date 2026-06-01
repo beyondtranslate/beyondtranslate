@@ -52,10 +52,6 @@ Request body:
 }
 ```
 
-Currently configured dictionary provider:
-
-- `iciba`
-
 ### `POST /translations/{provider}/translate`
 
 Request body:
@@ -67,10 +63,6 @@ Request body:
   "text": "hello"
 }
 ```
-
-Currently accepted translation path provider:
-
-- `iciba`
 
 ### `POST /translations/{provider}/detect-language`
 
@@ -85,29 +77,6 @@ Request body:
 ### `GET /translations/{provider}/supported-language-pairs`
 
 Returns the provider's supported language pairs.
-
-## Provider config
-
-The Worker loads providers from [`config.yaml`](./config.yaml), which is bundled
-into the Worker at build time. Because Cloudflare Workers does not expose a
-normal filesystem at runtime, the API resolves `${ENV_VAR}` placeholders from
-Worker environment variables before handing the rendered YAML to
-`beyondtranslate-runtime`.
-
-Current config template:
-
-```yaml
-providers:
-  iciba:
-    type: iciba
-    appKey: ${ICIBA_API_KEY}
-    baseUrl: ${ICIBA_BASE_URL}
-```
-
-## Environment variables
-
-- `ICIBA_API_KEY` (required)
-- `ICIBA_BASE_URL` (optional)
 
 ## Local development
 
@@ -124,14 +93,6 @@ cd apps/api
 npx wrangler dev
 ```
 
-Wrangler supports loading local variables from `.env` during development. Create
-`apps/api/.env` first:
-
-```dotenv
-ICIBA_API_KEY="your-iciba-api-key"
-# ICIBA_BASE_URL="http://dict-co.iciba.com"
-```
-
 You can also copy the template:
 
 ```bash
@@ -146,13 +107,7 @@ cd apps/api
 npx wrangler deploy
 ```
 
-`.env` is only for local development. For deployed Workers, configure the secret
-in Cloudflare before running deploy:
-
-```bash
-cd apps/api
-npx wrangler secret put ICIBA_API_KEY
-```
+.env is only for local development.
 
 ## Cloudflare Builds
 

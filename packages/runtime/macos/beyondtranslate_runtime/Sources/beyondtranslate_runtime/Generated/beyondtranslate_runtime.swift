@@ -5021,10 +5021,10 @@ public enum ProviderType: Equatable, Hashable {
   case caiyun
   case deepL
   case google
-  case iciba
   case openAi
   case ollama
   case tencent
+  case xAi
   case youdao
   case system
 
@@ -5054,13 +5054,13 @@ public struct FfiConverterTypeProviderType: FfiConverterRustBuffer {
 
     case 5: return .google
 
-    case 6: return .iciba
+    case 6: return .openAi
 
-    case 7: return .openAi
+    case 7: return .ollama
 
-    case 8: return .ollama
+    case 8: return .tencent
 
-    case 9: return .tencent
+    case 9: return .xAi
 
     case 10: return .youdao
 
@@ -5088,16 +5088,16 @@ public struct FfiConverterTypeProviderType: FfiConverterRustBuffer {
     case .google:
       writeInt(&buf, Int32(5))
 
-    case .iciba:
+    case .openAi:
       writeInt(&buf, Int32(6))
 
-    case .openAi:
+    case .ollama:
       writeInt(&buf, Int32(7))
 
-    case .ollama:
+    case .tencent:
       writeInt(&buf, Int32(8))
 
-    case .tencent:
+    case .xAi:
       writeInt(&buf, Int32(9))
 
     case .youdao:

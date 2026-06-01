@@ -39,25 +39,6 @@ providers:
     assert_eq!(registry.names(), vec!["deepl"]);
 }
 
-#[cfg(feature = "iciba")]
-#[test]
-fn loads_multiple_providers() {
-    let registry = from_yaml_str(
-        r#"
-providers:
-  deepl-main:
-    type: deepl
-    api_key: deepl-key
-  iciba-main:
-    type: iciba
-    api_key: iciba-key
-"#,
-    )
-    .expect("valid config");
-
-    assert_eq!(registry.names(), vec!["deepl-main", "iciba-main"]);
-}
-
 #[cfg(feature = "baidu")]
 #[test]
 fn loads_baidu_provider() {

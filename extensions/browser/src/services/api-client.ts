@@ -36,7 +36,7 @@ export class ApiClientService {
     targetLanguage?: string;
   }): Promise<TranslateResponseEnvelope> {
     return this.translationsApi.translateText({
-      provider: params.provider as 'iciba',
+      provider: params.provider,
       translateRequest: {
         sourceLanguage: params.sourceLanguage || undefined,
         targetLanguage: params.targetLanguage || undefined,
@@ -50,7 +50,7 @@ export class ApiClientService {
     texts: string[];
   }): Promise<DetectLanguageResponseEnvelope> {
     return this.translationsApi.detectLanguage({
-      provider: params.provider as 'iciba',
+      provider: params.provider,
       detectLanguageRequest: {
         texts: params.texts,
       },
@@ -61,7 +61,7 @@ export class ApiClientService {
     provider: string;
   }): Promise<LanguagePairListEnvelope> {
     return this.translationsApi.getSupportedLanguagePairs({
-      provider: params.provider as 'iciba',
+      provider: params.provider,
     });
   }
 
@@ -72,7 +72,7 @@ export class ApiClientService {
     targetLanguage: string;
   }): Promise<LookUpResponseEnvelope> {
     return this.dictionariesApi.lookupDictionaryEntry({
-      provider: params.provider as 'iciba',
+      provider: params.provider,
       lookUpRequest: {
         sourceLanguage: params.sourceLanguage,
         targetLanguage: params.targetLanguage,
